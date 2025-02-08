@@ -1,6 +1,6 @@
 const slugify = require("slugify");
 const { format } = require("date-fns");
-const { parseMinsToMs } = require("./utils");
+const { parseMinsToMs } = require("../../common/utils");
 const normalizeTitle = require("./normalize-title");
 const {
   searchForBestMatch,
@@ -17,30 +17,30 @@ const getMovieTitleAndYearFrom = (title) => {
   return { title };
 };
 
-async function hydrate(shows) {
-  const hydratedShows = [];
-  for (const show of shows) {
-    const title = normalizeTitle(show.title, { retainYear: true });
+async function findMatchesOnTheMovieDb(movies) {
+  const processedMovies = [];
+  for (const movie of movies) {
+    const title = normalizeTitle(movie.title, { retainYear: true });
     const { title: normalizedTitle, year } = getMovieTitleAndYearFrom(title);
     const slug = slugify(normalizedTitle, { strict: true }).toLowerCase();
     const result = await searchForBestMatch({
       normalizedTitle,
       slug,
-      show,
-      year: year || show.overview.year,
+      movie,
+      year: year || movie.overview.year,
     });
 
     // If there's no best match, just move on
     if (!result) {
-      hydratedShows.push(show);
+      processedMovies.push(movie);
       continue;
     }
 
-    if (!show.overview.duration) {
+    if (!movie.overview.duration) {
       try {
         const movieInfo = await getMovieInfoAndCacheResults({ id: result.id });
         if (movieInfo.runtime) {
-          show.overview.duration = parseMinsToMs(movieInfo.runtime);
+          movie.overview.duration = parseMinsToMs(movieInfo.runtime);
         }
       } catch {
         // Nothing to be done if the movieBD is having an issue!
@@ -52,12 +52,12 @@ async function hydrate(shows) {
     // If the result doesn't have a release date, default it to the date of
     // the first performance.
     const defaultReleaseDate = format(
-      new Date(show.performances[0].time),
+      new Date(movie.performances[0].time),
       "yyyy-MM-dd",
     );
-    hydratedShows.push({
-      ...show,
-      moviedb: {
+    processedMovies.push({
+      ...movie,
+      themoviedb: {
         id: result.id,
         title: result.title,
         releaseDate: result.release_date || defaultReleaseDate,
@@ -65,7 +65,7 @@ async function hydrate(shows) {
       },
     });
   }
-  return hydratedShows;
+  return processedMovies;
 }
 
-module.exports = hydrate;
+module.exports = findMatchesOnTheMovieDb;

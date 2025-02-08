@@ -7,9 +7,8 @@ async function retrieve(location) {
   try {
     const start = Date.now();
     output = await retrieve();
-    console.log(
-      ` - ✅ Retrieved (${Math.round((Date.now() - start) / 1000)}s)`,
-    );
+    const duration = Math.round((Date.now() - start) / 1000);
+    console.log(` - ✅ Retrieved (${duration}s)`);
   } catch (e) {
     console.log(` - ❌ Error retrieving`);
     throw e;

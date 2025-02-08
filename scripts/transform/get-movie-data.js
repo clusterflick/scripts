@@ -1,8 +1,8 @@
 const { MovieDb } = require("moviedb-promise");
 const diff = require("fast-diff");
 const normalizeTitle = require("./normalize-title");
-const normalizeName = require("./normalize-name");
-const { dailyCache } = require("./cache");
+const normalizeName = require("../../common/normalize-name");
+const { dailyCache } = require("../../common/cache");
 require("dotenv").config();
 
 const moviedb = new MovieDb(process.env.MOVIEDB_API_KEY);
@@ -22,7 +22,7 @@ const compareAsSimilar = (firstString, secondString) => {
   return lettersChanges <= 4;
 };
 
-const matchesExpectedCastCrew = async (match, show) => {
+const matchesExpectedCastCrew = async (match, movie) => {
   let movieInfo;
   try {
     movieInfo = await getMovieInfoAndCacheResults(match);
@@ -41,7 +41,7 @@ const matchesExpectedCastCrew = async (match, show) => {
 
   // Only attepmpt to match if there's crew information to check against
   if (crew.length > 0) {
-    const directors = show.overview.directors.map((name) =>
+    const directors = movie.overview.directors.map((name) =>
       normalizeName(name),
     );
 
@@ -64,7 +64,7 @@ const matchesExpectedCastCrew = async (match, show) => {
 
   // Only attepmpt to match if there's cast information to check against
   if (cast.length > 0) {
-    const actors = show.overview.actors.map((name) => normalizeName(name));
+    const actors = movie.overview.actors.map((name) => normalizeName(name));
 
     const actorMatches = cast.filter((member) =>
       actors.some((actor) => compareAsSimilar(actor, member)),
@@ -75,21 +75,21 @@ const matchesExpectedCastCrew = async (match, show) => {
   return false;
 };
 
-const hasCrewFor = (show) =>
-  show.overview.directors.length > 0 || show.overview.actors.length > 0;
+const hasCrewFor = (movie) =>
+  movie.overview.directors.length > 0 || movie.overview.actors.length > 0;
 
-async function getBestMatch(titleQuery, rawResults = [], show) {
+async function getBestMatch(titleQuery, rawResults = [], movie) {
   if (rawResults.length === 0) return undefined;
 
-  const hasCrewForShow = hasCrewFor(show);
+  const hasCrewForMovie = hasCrewFor(movie);
 
   // If there's only one result ...
   if (rawResults.length === 1) {
     const result = rawResults[0];
     // ... and there's no crew info, pick the result
-    if (!hasCrewForShow) return result;
+    if (!hasCrewForMovie) return result;
     // ... and there's crew info, use it to match the result
-    const hasCastCrewMatch = await matchesExpectedCastCrew(result, show);
+    const hasCastCrewMatch = await matchesExpectedCastCrew(result, movie);
     return hasCastCrewMatch ? result : undefined;
   }
 
@@ -103,10 +103,10 @@ async function getBestMatch(titleQuery, rawResults = [], show) {
   // If there's only a few results remaining ...
   if (resultsWithReleaseDate.length <= 3) {
     // ... and there's no crew info, pick the first as the most likely
-    if (!hasCrewForShow) return resultsWithReleaseDate[0];
+    if (!hasCrewForMovie) return resultsWithReleaseDate[0];
     // ... and there's crew info, use it to match a result ...
     for (const result of resultsWithReleaseDate) {
-      const hasCastCrewMatch = await matchesExpectedCastCrew(result, show);
+      const hasCastCrewMatch = await matchesExpectedCastCrew(result, movie);
       if (hasCastCrewMatch) return result;
     }
     // ... or reject the results if we can't match against any of them
@@ -126,14 +126,14 @@ async function getBestMatch(titleQuery, rawResults = [], show) {
   if (resultsWithSameTitle.length === 1) {
     const result = resultsWithSameTitle[0];
     // ... and there's no crew info, pick the result
-    if (!hasCrewForShow) return result;
+    if (!hasCrewForMovie) return result;
     // ... and there's crew info, use it to match the result
-    const hasCastCrewMatch = await matchesExpectedCastCrew(result, show);
+    const hasCastCrewMatch = await matchesExpectedCastCrew(result, movie);
     return hasCastCrewMatch ? result : undefined;
   }
 
   // As we still have more than 1 result ...
-  if (!hasCrewForShow) {
+  if (!hasCrewForMovie) {
     // If there's no crew info, pick the most popular so long as it's has a
     // relatively high level of popularity.
     const relativelyHighPopularity = 15;
@@ -144,7 +144,7 @@ async function getBestMatch(titleQuery, rawResults = [], show) {
   } else {
     // If there's crew info, use it to match the result
     for (const result of resultsWithSameTitle) {
-      const hasCastCrewMatch = await matchesExpectedCastCrew(result, show);
+      const hasCastCrewMatch = await matchesExpectedCastCrew(result, movie);
       if (hasCastCrewMatch) return result;
     }
   }
@@ -156,7 +156,7 @@ async function getBestMatch(titleQuery, rawResults = [], show) {
 const searchForBestMatch = async ({
   normalizedTitle,
   slug,
-  show,
+  movie,
   year: yearValue,
 }) => {
   const cacheKeySuffix = `${yearValue || "no-year"}-${slug}`;
@@ -174,7 +174,7 @@ const searchForBestMatch = async ({
     const bestTitleMatch = await getBestMatch(
       normalizedTitle,
       searchTitle.results,
-      show,
+      movie,
     );
     return bestTitleMatch || null;
   }
@@ -201,7 +201,7 @@ const searchForBestMatch = async ({
   const bestMatchPrimaryYear = await getBestMatch(
     normalizedTitle,
     searchPrimaryYear.results,
-    show,
+    movie,
   );
   if (bestMatchPrimaryYear) return bestMatchPrimaryYear;
 
@@ -218,7 +218,7 @@ const searchForBestMatch = async ({
     const bestMatchPreviousYear = await getBestMatch(
       normalizedTitle,
       searchPreviousYear.results,
-      show,
+      movie,
     );
     if (bestMatchPreviousYear) return bestMatchPreviousYear;
   }
@@ -231,7 +231,7 @@ const searchForBestMatch = async ({
   const bestMatchRelatedYear = await getBestMatch(
     normalizedTitle,
     seachRelatedYear.results,
-    show,
+    movie,
   );
   if (bestMatchRelatedYear) return bestMatchRelatedYear;
 
@@ -244,13 +244,13 @@ const searchForBestMatch = async ({
   const bestMatchNextYear = await getBestMatch(
     normalizedTitle,
     searchNextYear.results,
-    show,
+    movie,
   );
   if (bestMatchNextYear) return bestMatchNextYear;
 
-  // If we have crew information for the show, maybe the year is wrong so let's
+  // If we have crew information for the movie, maybe the year is wrong so let's
   // try matching without it
-  if (hasCrewFor(show)) {
+  if (hasCrewFor(movie)) {
     const searchWithoutYear = await searchMovieAndCacheResults(
       `moviedb-search-without-year-${cacheKeySuffix}`,
       getPayload(),
@@ -258,7 +258,7 @@ const searchForBestMatch = async ({
     const bestWithoutYearMatch = await getBestMatch(
       normalizedTitle,
       searchWithoutYear.results,
-      show,
+      movie,
     );
     if (bestWithoutYearMatch) return bestWithoutYearMatch;
   }

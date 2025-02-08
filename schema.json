@@ -114,7 +114,7 @@
           "required": ["time", "notes", "bookingUrl", "status", "accessibility"]
         }
       },
-      "moviedb": {
+      "themoviedb": {
         "type": "object",
         "properties": {
           "id": {
@@ -136,6 +136,7 @@
         "required": ["id", "title", "releaseDate", "summary"]
       },
       "additionalProperties": false
-    }
+    },
+    "additionalProperties": false
   }
 }
