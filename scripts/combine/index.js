@@ -56,9 +56,8 @@ async function combine() {
   const cinemas = await getModuleNamesFor(cinemasPath);
   for (const cinema of cinemas) {
     try {
-      const root = path.join(__dirname, "..", "..");
-      const attributesPath = path.join(root, "cinemas", cinema, "attributes");
-      const dataPath = path.join(root, "retrieved-data", cinema);
+      const attributesPath = path.join(cinemasPath, cinema, "attributes");
+      const dataPath = path.join(process.cwd(), "transformed-data", cinema);
       data[cinema] = {
         attributes: require(attributesPath),
         movies: await readJSON(dataPath),
