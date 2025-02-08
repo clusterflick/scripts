@@ -17,7 +17,7 @@ function clearCacheStats() {
 }
 
 function getCachePath(filename) {
-  return path.join(".", "cache", filename);
+  return path.join(__dirname, "..", "cache", filename);
 }
 
 function getPathDaily(filename) {
