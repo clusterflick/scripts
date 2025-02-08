@@ -5,7 +5,7 @@ const path = require("node:path");
 const { readJSON, writeJSON } = require("./common/utils");
 
 const setupDirectory = async (type) => {
-  const directoryPath = path.join(__dirname, type);
+  const directoryPath = path.join(process.cwd(), type);
   let needsCreated = false;
   try {
     needsCreated = !(await fs.stat(directoryPath)).isDirectory();
@@ -18,7 +18,7 @@ const setupDirectory = async (type) => {
 (async function () {
   const [, , action, location, ...parameters] = process.argv;
 
-  const getPath = (type) => path.join(__dirname, type, location);
+  const getPath = (type) => path.join(process.cwd(), type, location);
   if (!location) throw new Error("No location provided");
 
   if (action.toLowerCase() === "retrieve") {

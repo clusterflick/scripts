@@ -37,7 +37,12 @@ function uniqueEvents(events) {
 async function findEvents(cinema) {
   const root = path.join(__dirname, "..", "..");
   const dataSrc = path.join(root, "retrieved-data", "eventbrite.co.uk");
-  const data = await readJSON(dataSrc);
+  let data = [];
+  try {
+    data = await readJSON(dataSrc);
+  } catch {
+    // Source data may not always be available or required
+  }
 
   const events = uniqueEvents(
     data.flatMap(
