@@ -2,7 +2,7 @@ const { sortAndFilterMovies } = require("../../common/utils");
 const getSourcedEventsFor = require("./get-sourced-events-for");
 
 async function transform(location, input) {
-  const { transform, attributes } = require(`../cinemas/${location}`);
+  const { transform, attributes } = require(`../../cinemas/${location}`);
   const sourcedEvents = await getSourcedEventsFor(attributes);
 
   console.log(`[🎞️  Cinema: ${location}] Transforming data ...`);

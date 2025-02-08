@@ -1,5 +1,5 @@
 async function retrieve(location) {
-  const { retrieve } = require(`../cinemas/${location}`);
+  const { retrieve } = require(`../../cinemas/${location}`);
 
   console.log(`[🎞️  Cinema: ${location}] Retrieving data ...`);
 

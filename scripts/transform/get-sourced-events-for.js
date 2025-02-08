@@ -1,12 +1,11 @@
 const fs = require("node:fs").promises;
 const path = require("node:path");
 
-async function getModuleNamesFor(directory) {
-  const srcpath = path.join(".", directory);
+async function getModuleNamesFor(directoryPath) {
   return (
     await Promise.all(
-      (await fs.readdir(srcpath)).map(async (file) => {
-        const stats = await fs.stat(path.join(srcpath, file));
+      (await fs.readdir(directoryPath)).map(async (file) => {
+        const stats = await fs.stat(path.join(directoryPath, file));
         return stats.isDirectory() ? file : null;
       }),
     )
@@ -14,10 +13,11 @@ async function getModuleNamesFor(directory) {
 }
 
 async function getSourcedEventsFor(attributes) {
-  const sources = await getModuleNamesFor("sources");
+  const directoryPath = path.join(__dirname, "..", "..", "sources");
+  const sources = await getModuleNamesFor(directoryPath);
   const sourcedEvents = {};
   for (const source of sources) {
-    const { findEvents } = require(`../sources/${source}`);
+    const { findEvents } = require(path.join(directoryPath, source));
     sourcedEvents[source] = await findEvents(attributes);
   }
   return sourcedEvents;
