@@ -28,7 +28,7 @@ async function transform(location, input) {
   try {
     const start = Date.now();
     matchedData = await findMatchesOnTheMovieDb(transformedData);
-    const matches = matchedData.filter(({ moviedb }) => !!moviedb).length;
+    const matches = matchedData.filter(({ themoviedb }) => !!themoviedb).length;
     const total = matchedData.length;
     const duration = Math.round((Date.now() - start) / 1000);
     console.log(` - ✅ Matched (${matches}/${total} in ${duration}s)`);

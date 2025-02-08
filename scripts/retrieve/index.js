@@ -1,12 +1,13 @@
 async function retrieve(location) {
   const { retrieve } = require(`../../cinemas/${location}`);
 
-  console.log(`[🎞️  Cinema: ${location}] Retrieving data ...`);
+  console.log(`[🎞️  Cinema: ${location}]`);
 
-  let output;
+  console.log("Retrieving data ...");
+  let retrievedData;
   try {
     const start = Date.now();
-    output = await retrieve();
+    retrievedData = await retrieve();
     const duration = Math.round((Date.now() - start) / 1000);
     console.log(` - ✅ Retrieved (${duration}s)`);
   } catch (e) {
@@ -14,7 +15,7 @@ async function retrieve(location) {
     throw e;
   }
 
-  return output;
+  return retrievedData;
 }
 
 module.exports = retrieve;
