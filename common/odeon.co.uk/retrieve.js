@@ -8,7 +8,7 @@ async function retrieve(attributes) {
     async (page) => {
       await page.waitForLoadState();
       await page.locator(".header-container").waitFor({ strict: false });
-      return page.evaluate(() => window.initialData);
+      return page.evaluate(() => /* global window */ window.initialData);
     },
   );
   return ocapiv1Retrieve(attributes, inititialiseData.api);

@@ -1,5 +1,3 @@
-const { address } = require("../bfi.org.uk-imax/attributes");
-
 module.exports = {
   name: "Greenwich Picturehouse",
   domain: "https://www.picturehouses.com",

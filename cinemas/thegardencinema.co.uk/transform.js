@@ -74,7 +74,7 @@ function getPerformances($, $filmScreenings) {
   return performances;
 }
 
-async function transform({ movieListPage, moviePages }, sourcedEvents) {
+async function transform({ moviePages }, sourcedEvents) {
   const movies = moviePages.map((moviePages) => {
     const $ = cheerio.load(moviePages);
 

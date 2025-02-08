@@ -13,7 +13,7 @@ async function retrieve() {
       cacheKey,
       async (page) => {
         await page.waitForLoadState();
-        return page.evaluate(() => window.__SERVER_DATA__);
+        return page.evaluate(() => /* global window */ window.__SERVER_DATA__);
       },
     );
 

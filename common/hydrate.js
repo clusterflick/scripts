@@ -19,7 +19,7 @@ const getMovieTitleAndYearFrom = (title) => {
 
 async function hydrate(shows) {
   const hydratedShows = [];
-  for (show of shows) {
+  for (const show of shows) {
     const title = normalizeTitle(show.title, { retainYear: true });
     const { title: normalizedTitle, year } = getMovieTitleAndYearFrom(title);
     const slug = slugify(normalizedTitle, { strict: true }).toLowerCase();
@@ -42,7 +42,7 @@ async function hydrate(shows) {
         if (movieInfo.runtime) {
           show.overview.duration = parseMinsToMs(movieInfo.runtime);
         }
-      } catch (e) {
+      } catch {
         // Nothing to be done if the movieBD is having an issue!
         // This can happen if the match has been removed, but is still being
         // returned by the search API - looking up the movie will return 404

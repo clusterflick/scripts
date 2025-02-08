@@ -26,7 +26,7 @@ const matchesExpectedCastCrew = async (match, show) => {
   let movieInfo;
   try {
     movieInfo = await getMovieInfoAndCacheResults(match);
-  } catch (e) {
+  } catch {
     // Nothing to be done if the movieBD is having an issue!
     // This can happen if the match has been removed, but is still being
     // returned by the search API - looking up the movie will return 404
@@ -105,7 +105,7 @@ async function getBestMatch(titleQuery, rawResults = [], show) {
     // ... and there's no crew info, pick the first as the most likely
     if (!hasCrewForShow) return resultsWithReleaseDate[0];
     // ... and there's crew info, use it to match a result ...
-    for (result of resultsWithReleaseDate) {
+    for (const result of resultsWithReleaseDate) {
       const hasCastCrewMatch = await matchesExpectedCastCrew(result, show);
       if (hasCastCrewMatch) return result;
     }
@@ -143,7 +143,7 @@ async function getBestMatch(titleQuery, rawResults = [], show) {
     if (popularResults.length > 0) return popularResults[0];
   } else {
     // If there's crew info, use it to match the result
-    for (result of resultsWithSameTitle) {
+    for (const result of resultsWithSameTitle) {
       const hasCastCrewMatch = await matchesExpectedCastCrew(result, show);
       if (hasCastCrewMatch) return result;
     }

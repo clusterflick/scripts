@@ -43,7 +43,7 @@ function normalizeTitle(title, options) {
     title = hasPresented[1];
   }
 
-  const hasSeparator = title.match(/^(.*?)\s+(?:\+|\-|\/|\||•)\s*/);
+  const hasSeparator = title.match(/^(.*?)\s+(?:\+|-|\/|\||•)\s*/);
   if (hasSeparator) {
     title = hasSeparator[1];
   }

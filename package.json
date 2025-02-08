@@ -9,7 +9,8 @@
   },
   "scripts": {
     "test": "jest",
-    "format": "prettier \"./**/*.js(on)?\" --write --write && prettier \"./**/*.md\" --write --prose-wrap=always",
+    "lint": "eslint .",
+    "format": "prettier \"./**/*.(m)?js(on)?\" --write --write && prettier \"./**/*.md\" --write --prose-wrap=always",
     "retrieve": "TZ=Europe/London node index.js retrieve",
     "transform": "TZ=Europe/London node index.js transform",
     "clear:cache": "rm -rf ./cache",
@@ -35,10 +36,16 @@
     "slugify": "^1.6.6"
   },
   "devDependencies": {
+    "@eslint/js": "^9.20.0",
     "@pollyjs/adapter-fetch": "^6.0.6",
     "@pollyjs/adapter-node-http": "^6.0.6",
     "@pollyjs/core": "^6.0.6",
     "@pollyjs/persister-fs": "^6.0.6",
+    "eslint": "^9.20.0",
+    "eslint-config-prettier": "^10.0.1",
+    "eslint-plugin-jest": "^28.11.0",
+    "eslint-plugin-prettier": "^5.2.3",
+    "globals": "^15.14.0",
     "jest": "^29.7.0",
     "prettier": "^3.3.3",
     "setup-polly-jest": "^0.11.0"

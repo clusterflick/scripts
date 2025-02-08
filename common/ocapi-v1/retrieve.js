@@ -13,7 +13,7 @@ async function retrieve({ cinemaId }, { url, apiUrl, authToken }) {
 
   const moviePages = [];
 
-  for ({ businessDate } of filmScreeningDates) {
+  for (const { businessDate } of filmScreeningDates) {
     const showtimesResponse = await fetch(
       `${prefix}/ocapi/v1/showtimes/by-business-date/${businessDate}?siteIds=${cinemaId}`,
       { headers: getHeaders() },

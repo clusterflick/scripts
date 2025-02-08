@@ -17,7 +17,7 @@ describe(attributes.name, () => {
       // Make sure the input looks roughly correct
       expect(movieListPage).toBeTruthy();
       expect(moviePages).toBeTruthy();
-      expect(Object.keys(moviePages).length).toBe(21);
+      expect(Object.keys(moviePages)).toHaveLength(21);
 
       const output = sortAndFilterMovies(
         await transform({ movieListPage, moviePages }, {}),
@@ -25,7 +25,7 @@ describe(attributes.name, () => {
       const data = JSON.parse(JSON.stringify(output));
 
       // Make sure the data looks roughly correct
-      expect(data.length).toBe(21);
+      expect(data).toHaveLength(21);
 
       expect(schemaValidate(data)).toBe(true);
       expect(data).toMatchSnapshot();

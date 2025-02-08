@@ -5,7 +5,7 @@ const yearSuffixMatcher = /\(\d{4}\)$/;
 const ownerMatcher = /:\s+[^\s]+['|’]s/;
 
 // Les Miserables
-function standardizePrefixingForLesMiserablesPerformances(title, options) {
+function standardizePrefixingForLesMiserablesPerformances(title) {
   // Cineworld Enfield have done a bad job with the title of this listing.
   // Replace it with what it should be.
   if (title === "Les Miserables (40th Anniversary)") {
@@ -25,7 +25,7 @@ function standardizePrefixingForLesMiserablesPerformances(title, options) {
 // National Theatre
 const nationalTheatrePrefixes = [/NT Live[:|\s]/i];
 
-function standardizePrefixingForNationalTheatrePerformances(title, options) {
+function standardizePrefixingForNationalTheatrePerformances(title) {
   title = title.replace(/\s+&\s+/, " and ").replace(/\s+-\s+/, ": ");
 
   let updatedPrefixTitle = nationalTheatrePrefixes.reduce(

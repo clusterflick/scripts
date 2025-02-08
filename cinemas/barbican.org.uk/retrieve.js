@@ -33,7 +33,7 @@ async function retrieve() {
   }
 
   const moviePages = [];
-  for (movieId of movieIds) {
+  for (const movieId of movieIds) {
     const [performancePage, listingPage] = await Promise.all([
       fetchText(`${domain}/whats-on/event/${movieId}/performances`),
       fetchText(`${domain}/node/${movieId}`),

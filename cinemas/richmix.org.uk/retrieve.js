@@ -6,7 +6,7 @@ async function retrieve() {
   const movieListPage = await fetchJson(url);
 
   const moviePages = {};
-  for (movie of movieListPage) {
+  for (const movie of movieListPage) {
     const moviePageUrl = `https://richmix.org.uk/cinema/${movie.slug}/`;
     moviePages[movie.id] = await fetchText(moviePageUrl);
   }

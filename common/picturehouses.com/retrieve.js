@@ -23,7 +23,7 @@ async function retrieve({ domain, cinemaId }) {
   }, []);
 
   const moviePages = {};
-  for (movieId of moviesIdsAtCinema) {
+  for (const movieId of moviesIdsAtCinema) {
     const url = `${domain}/movie-details/${cinemaId}/${movieId}/-`;
     moviePages[movieId] = await fetchText(url);
   }

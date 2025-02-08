@@ -78,7 +78,7 @@ function getPerformancesFor(url, { title, performances, html }) {
   }
 
   const showPerformances = [];
-  for (performance of performances) {
+  for (const performance of performances) {
     const $ = cheerio.load(performance);
     const key =
       `${getText($(".start-date")).replace(/\d{4}/, "")} ${getText($(".item-venue"))}`
@@ -109,7 +109,7 @@ function getPerformancesFor(url, { title, performances, html }) {
 async function transform({ url }, { moviePages }, sourcedEvents) {
   const shows = [];
 
-  for (showPath in moviePages) {
+  for (const showPath in moviePages) {
     const show = moviePages[showPath];
     shows.push({
       title: show.title,

@@ -25,7 +25,7 @@ async function retrieve() {
   });
 
   const moviePages = {};
-  for (moviePageUrl of [...moviePageUrls]) {
+  for (const moviePageUrl of [...moviePageUrls]) {
     moviePages[moviePageUrl] = await fetchText(moviePageUrl);
   }
 

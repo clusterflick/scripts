@@ -16,7 +16,7 @@ async function getModuleNamesFor(directory) {
 async function getSourcedEventsFor(attributes) {
   const sources = await getModuleNamesFor("sources");
   const sourcedEvents = {};
-  for (source of sources) {
+  for (const source of sources) {
     const { findEvents } = require(`../sources/${source}`);
     sourcedEvents[source] = await findEvents(attributes);
   }

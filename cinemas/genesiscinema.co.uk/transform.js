@@ -85,7 +85,7 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
         .find("a.perfButton,span.perfButton");
 
       $performances.each(function () {
-        $performance = $(this);
+        const $performance = $(this);
         const $bookingButton =
           $performance.children().length > 0
             ? $performance.children().last()

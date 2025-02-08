@@ -28,7 +28,7 @@ async function processSearchResultPage(
     moviePages[showUrl].title = getText($showLink);
   });
 
-  for (showUrl in moviePages) {
+  for (const showUrl in moviePages) {
     const showData = moviePages[showUrl];
     if (showData.html) continue;
 
@@ -45,7 +45,7 @@ async function processSearchResultPage(
         // Wait until the page is finished everything
         try {
           await page.waitForLoadState("networkidle");
-        } catch (e) {
+        } catch {
           // If this fails, it'll be because it timed out. At that point, we
           // might as well keep going and see if the next waitFor passes.
         }
@@ -95,7 +95,7 @@ async function retrieve(attributes) {
         // Wait until the page is finished everything
         try {
           await page.waitForLoadState("networkidle");
-        } catch (e) {
+        } catch {
           // If this fails, it'll be because it timed out. At that point, we
           // might as well keep going and see if the next waitFor passes.
         }
@@ -135,7 +135,7 @@ async function retrieve(attributes) {
     `    - [${Date.now()}] Processing ${movieListPage.length} search results pages ... `,
   );
   let moviePages = {};
-  for (searchResultPage of movieListPage) {
+  for (const searchResultPage of movieListPage) {
     moviePages = await processSearchResultPage(
       attributes,
       moviePages,

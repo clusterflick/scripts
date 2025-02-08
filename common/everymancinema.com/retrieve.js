@@ -7,7 +7,7 @@ async function retrieve({ domain, url, cinemaId }) {
   const mainPage = await fetchText(url);
 
   // Extract the CMS hash URL from the main page
-  const requestPrefix = mainPage.match(/src=\"([^"]+)webpack-runtime-/i)[1];
+  const requestPrefix = mainPage.match(/src="([^"]+)webpack-runtime-/i)[1];
   const suffix = url.replace(domain, "");
   const pageData = await fetchJson(
     `${requestPrefix}page-data${suffix}page-data.json`,
@@ -16,7 +16,7 @@ async function retrieve({ domain, url, cinemaId }) {
   let movieData = null;
   let attributeData = null;
   // Run through all page data blobs until we find the ones we want to keep
-  for (hash of pageData.staticQueryHashes) {
+  for (const hash of pageData.staticQueryHashes) {
     const data = await fetchJson(`${requestPrefix}page-data/sq/d/${hash}.json`);
     if (data?.data?.allMovie) movieData = data.data.allMovie.nodes;
     if (data?.data?.allAttribute) attributeData = data.data.allAttribute.nodes;

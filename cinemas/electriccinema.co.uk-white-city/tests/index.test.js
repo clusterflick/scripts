@@ -16,13 +16,13 @@ describe(attributes.name, () => {
 
       // Make sure the input looks roughly correct
       expect(moviePages).toBeTruthy();
-      expect(Object.keys(moviePages.filmData.films).length).toBe(7);
+      expect(Object.keys(moviePages.filmData.films)).toHaveLength(7);
 
       const output = sortAndFilterMovies(await transform(moviePages, {}));
       const data = JSON.parse(JSON.stringify(output));
 
       // Make sure the data looks roughly correct
-      expect(data.length).toBe(6); // One of the entries has no performances
+      expect(data).toHaveLength(6); // One of the entries has no performances
 
       expect(schemaValidate(data)).toBe(true);
       expect(data).toMatchSnapshot();

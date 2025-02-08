@@ -23,7 +23,7 @@ describe(attributes.name, () => {
       const data = JSON.parse(JSON.stringify(output));
 
       // Make sure the data looks roughly correct
-      expect(data.length).toBe(8);
+      expect(data).toHaveLength(8);
       expect(data).toMatchSnapshot();
     },
     isRecording ? 120_000 : undefined,

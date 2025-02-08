@@ -11,7 +11,7 @@ async function retrieve({ cinemaId }) {
   );
 
   const movieListPage = [];
-  for (activeDate of activeDates.body.dates) {
+  for (const activeDate of activeDates.body.dates) {
     const showingsOnDate = await fetchJson(
       `${apiUrl}/quickbook/${tenantId}/film-events/in-cinema/${cinemaId}/at-date/${activeDate}?attr=&lang=en_GB`,
     );
@@ -23,7 +23,7 @@ async function retrieve({ cinemaId }) {
   ];
 
   const moviePages = {};
-  for (filmId of filmIds) {
+  for (const filmId of filmIds) {
     const url = `${apiUrl}/${tenantId}/films/byDistributorCode/${filmId}`;
     const additionalFilmData = await fetchJson(url);
     moviePages[filmId] = additionalFilmData.body;

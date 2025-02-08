@@ -44,7 +44,7 @@ function readCache(filename, getPath) {
   const data = fs.readFileSync(getPath(filename), "utf8");
   try {
     return JSON.parse(data);
-  } catch (e) {
+  } catch {
     return data;
   }
 }
@@ -54,7 +54,7 @@ function writeCache(filename, value, getPath) {
   let data;
   try {
     data = JSON.stringify(value, null, 2);
-  } catch (e) {
+  } catch {
     data = value;
   }
   fs.writeFileSync(getPath(filename), data);
