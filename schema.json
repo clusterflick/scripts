@@ -1,0 +1,141 @@
+{
+  "type": "array",
+  "description": "Structure of common cinema calendar JSON data",
+  "minItems": 0,
+  "uniqueItems": true,
+  "items": {
+    "type": "object",
+    "required": ["title", "url", "overview", "performances"],
+    "properties": {
+      "title": {
+        "type": "string",
+        "minLength": 1
+      },
+      "url": {
+        "type": "string",
+        "format": "uri"
+      },
+      "overview": {
+        "type": "object",
+        "properties": {
+          "categories": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "year": {
+            "type": "string",
+            "minLength": 4,
+            "maxLength": 4
+          },
+          "duration": {
+            "type": "number"
+          },
+          "directors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "actors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "classification": {
+            "type": "string",
+            "minLength": 1
+          },
+          "trailer": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "additionalProperties": false,
+        "required": ["categories", "directors", "actors"]
+      },
+      "performances": {
+        "type": "array",
+        "uniqueItems": true,
+        "minItems": 1,
+        "items": {
+          "type": "object",
+          "properties": {
+            "time": {
+              "type": "number"
+            },
+            "screen": {
+              "type": "string",
+              "minLength": 1
+            },
+            "notes": {
+              "type": "string",
+              "minLength": 0
+            },
+            "bookingUrl": {
+              "type": "string",
+              "format": "uri"
+            },
+            "status": {
+              "type": "object",
+              "properties": {
+                "soldOut": {
+                  "type": "boolean"
+                }
+              },
+              "additionalProperties": false
+            },
+            "accessibility": {
+              "type": "object",
+              "properties": {
+                "audioDescription": {
+                  "type": "boolean"
+                },
+                "babyFriendly": {
+                  "type": "boolean"
+                },
+                "hardOfHearing": {
+                  "type": "boolean"
+                },
+                "relaxed": {
+                  "type": "boolean"
+                },
+                "subtitled": {
+                  "type": "boolean"
+                }
+              },
+              "additionalProperties": false
+            },
+            "additionalProperties": false
+          },
+          "additionalProperties": false,
+          "required": ["time", "notes", "bookingUrl", "status", "accessibility"]
+        }
+      },
+      "moviedb": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "releaseDate": {
+            "type": "string",
+            "minLength": 1
+          },
+          "summary": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": ["id", "title", "releaseDate", "summary"]
+      },
+      "additionalProperties": false
+    }
+  }
+}
