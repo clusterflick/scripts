@@ -112,15 +112,18 @@ const getScreen = (screen) => {
     .replace("nft", "")
     .replace("kia", "")
     .replace("(unreserved)", "")
+    .replace(/^s(\d+)$/i, "$1")
     .trim();
+
+  const mappedScreenNumber = screenNumberMapping[screenNumber.toLowerCase()];
+  if (mappedScreenNumber) return `${mappedScreenNumber}`;
 
   // If we couldn't condense the screen down to a number, it's probably got a
   // name like "Cinema 1" (Barbicon) or "Reuben Library" (BFI), so just return
   // the original value
   if (`${parseInt(screenNumber, 10)}` !== screenNumber) return screen;
 
-  const mappedScreenNumber = screenNumberMapping[screenNumber.toLowerCase()];
-  return mappedScreenNumber ? `${mappedScreenNumber}` : screenNumber;
+  return screenNumber;
 };
 
 const createPerformance = ({
