@@ -10,12 +10,12 @@
   "scripts": {
     "test": "jest",
     "format": "prettier \"./**/*.js(on)?\" --write --write && prettier \"./**/*.md\" --write --prose-wrap=always",
-    "populate:output": "./scripts/get-latest-release-assets.sh",
     "retrieve": "TZ=Europe/London node index.js retrieve",
-    "transform": "TZ=Europe/London node index.js retrieve transform",
-    "clear:cache": "rm -rf ./cache && git checkout ./cache",
-    "clear:output": "rm -rf ./output && git checkout ./output",
-    "clear:all": "npm run clear:cache && npm run clear:output"
+    "transform": "TZ=Europe/London node index.js transform",
+    "clear:cache": "rm -rf ./cache",
+    "clear:retrieved-data": "rm -rf ./retrieved-data",
+    "clear:transformed-data": "rm -rf ./transformed-data",
+    "clear:all": "npm run clear:cache && npm run clear:retrieved-data && npm run clear:transformed-data"
   },
   "author": "Alistair Brown <github@alistairjcbrown.com>",
   "license": "MIT",

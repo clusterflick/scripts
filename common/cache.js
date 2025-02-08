@@ -25,11 +25,22 @@ function getPathDaily(filename) {
   return getCachePath(`${filename}-${suffix}`);
 }
 
+const setupCacheDirectory = async () => {
+  const directoryPath = getCachePath("");
+  if (
+    !fs.existsSync(directoryPath) ||
+    !fs.statSync(directoryPath).isDirectory()
+  ) {
+    fs.mkdirSync(directoryPath, { recursive: true });
+  }
+};
+
 function checkCache(filename, getPath) {
   return fs.existsSync(getPath(filename));
 }
 
 function readCache(filename, getPath) {
+  setupCacheDirectory();
   const data = fs.readFileSync(getPath(filename), "utf8");
   try {
     return JSON.parse(data);
@@ -39,6 +50,7 @@ function readCache(filename, getPath) {
 }
 
 function writeCache(filename, value, getPath) {
+  setupCacheDirectory();
   let data;
   try {
     data = JSON.stringify(value, null, 2);
