@@ -57,8 +57,8 @@ function parseMovieProperties($, $movieProperties) {
   return properties;
 }
 
-async function transform(data, sourcedEvents) {
-  const $ = cheerio.load(data);
+async function transform({ movieListPage }, sourcedEvents) {
+  const $ = cheerio.load(movieListPage);
   const $entries = $(".jacro-event");
 
   const movies = [];

@@ -49,8 +49,10 @@ This function transforms retriueved data from supported cinemas, and saves it as
 a single JSON file.
 
 ℹ️ **Note:** Before running this script, please make sure you have:
- * Set up a `.env` file containing your Movie DB API key (`MOVIEDB_API_KEY`)
- * retrieved the necessary cinema and source data using the `retrieve` script (above)
+
+- Set up a `.env` file containing your Movie DB API key (`MOVIEDB_API_KEY`)
+- retrieved the necessary cinema and source data using the `retrieve` script
+  (above)
 
 To run this script:
 
