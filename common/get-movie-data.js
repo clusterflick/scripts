@@ -1,8 +1,8 @@
 const { MovieDb } = require("moviedb-promise");
 const diff = require("fast-diff");
 const normalizeTitle = require("./normalize-title");
-const normalizeName = require("../../common/normalize-name");
-const { dailyCache } = require("../../common/cache");
+const normalizeName = require("./normalize-name");
+const { dailyCache } = require("./cache");
 require("dotenv").config();
 
 const moviedb = new MovieDb(process.env.MOVIEDB_API_KEY);

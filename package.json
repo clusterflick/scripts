@@ -13,6 +13,7 @@
     "format": "prettier \"./**/*.(m)?js(on)?\" --write --write && prettier \"./**/*.md\" --write --prose-wrap=always",
     "retrieve": "TZ=Europe/London node index.js retrieve",
     "transform": "TZ=Europe/London node index.js transform",
+    "combine": "TZ=Europe/London node index.js combine",
     "clear:cache": "rm -rf ./cache",
     "clear:retrieved-data": "rm -rf ./retrieved-data",
     "clear:transformed-data": "rm -rf ./transformed-data",
@@ -21,6 +22,7 @@
   "author": "Alistair Brown <github@alistairjcbrown.com>",
   "license": "MIT",
   "dependencies": {
+    "@sindresorhus/slugify": "^2.2.1",
     "ajv": "^8.17.1",
     "ajv-formats": "^3.0.1",
     "cheerio": "^1.0.0-rc.12",

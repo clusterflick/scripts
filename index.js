@@ -18,6 +18,17 @@ const setupDirectory = async (type) => {
 (async function () {
   const [, , action, location, ...parameters] = process.argv;
 
+  if (action.toLowerCase() === "combine") {
+    const combine = require("./scripts/combine");
+    const output = await combine();
+    await setupDirectory("combined-data");
+    await writeJSON(
+      path.join(process.cwd(), "combined-data", "combined-data.json"),
+      output,
+    );
+    return;
+  }
+
   const getPath = (type) => path.join(process.cwd(), type, location);
   if (!location) throw new Error("No location provided");
 
