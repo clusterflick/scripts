@@ -1,7 +1,21 @@
-async function retrieve(location) {
-  const { retrieve } = require(`../../cinemas/${location}`);
+// Support retrieving both cinemas and sources
+const getModule = (location) => {
+  try {
+    return require(`../../cinemas/${location}`);
+  } catch {
+    try {
+      return require(`../../sources/${location}`);
+    } catch {
+      return {};
+    }
+  }
+};
 
-  console.log(`[🎞️  Cinema: ${location}]`);
+async function retrieve(location) {
+  console.log(`[🎞️  Location: ${location}]`);
+
+  const { retrieve } = getModule(location);
+  if (!retrieve) throw new Error(`No module for location ${retrieve}`);
 
   console.log("Retrieving data ...");
   let retrievedData;

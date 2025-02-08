@@ -1,5 +1,16 @@
+const fs = require("node:fs").promises;
 const { decode } = require("html-entities");
 const { isAfter, startOfDay } = require("date-fns");
+
+const readJSON = async (filePath) => {
+  const data = await fs.readFile(filePath, "utf8");
+  return JSON.parse(data);
+};
+
+const writeJSON = async (filePath, value) => {
+  const data = JSON.stringify(value, null, 2);
+  return await fs.writeFile(filePath, data);
+};
 
 const sortAndFilterMovies = (movies) => {
   const startOfToday = startOfDay(new Date());
@@ -146,6 +157,8 @@ const createAccessibility = (accessibility) =>
   }, {});
 
 module.exports = {
+  readJSON,
+  writeJSON,
   sortAndFilterMovies,
   convertToList,
   splitConjoinedItemsInList,

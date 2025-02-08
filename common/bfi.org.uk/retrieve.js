@@ -83,7 +83,7 @@ async function retrieve(attributes) {
   ];
 
   console.log("");
-  console.log(`    - [${Date.now()}] Retriving search results pages ... `);
+  console.log(`    - [${Date.now()}] Retrieving search results pages ... `);
 
   const cacheKey = `bfi.org.uk-${articleId}`;
   const movieListPage = await getPageWithPlaywright(

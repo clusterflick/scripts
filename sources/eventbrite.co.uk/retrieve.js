@@ -7,7 +7,7 @@ async function retrieve() {
   const data = [];
 
   while (page <= lastPage) {
-    const cacheKey = `${attributes.cacheKey}-${page}`;
+    const cacheKey = `eventbrite.co.uk-london-screening-page-${page}`;
     const pageData = await getPageWithPlaywright(
       `${attributes.url}${page}`,
       cacheKey,

@@ -21,7 +21,7 @@ async function retrieve({ cinemaId }, { url, apiUrl, authToken }) {
     const showtimesData = await showtimesResponse.json();
     if (showtimesData.status === 404) {
       throw new Error(
-        `Something went wrong retriving data for showing on "${businessDate}" at cinema "${cinemaId}"`,
+        `Something went wrong retrieving data for showing on "${businessDate}" at cinema "${cinemaId}"`,
       );
     }
     moviePages.push(showtimesData);

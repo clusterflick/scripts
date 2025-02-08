@@ -1,11 +1,23 @@
 /** @jest-environment setup-polly-jest/jest-environment-node */
-const { setupPolly, setupCacheMock } = require("../../../common/test-utils");
+const { setupPolly } = require("../../../common/test-utils");
+const { readJSON } = require("../../../common/utils");
 const { attributes, findEvents } = require("..");
 
 const isRecording = false;
 
-jest.mock("../../../common/cache");
-setupCacheMock(__dirname, "2025-01-24");
+jest.mock("../../../common/utils", () => ({
+  ...jest.requireActual("../../../common/utils"),
+  readJSON: jest.fn(),
+}));
+readJSON.mockImplementation(() => {
+  const path = require("node:path");
+  const dataPath = path.join(
+    __dirname,
+    "__manual-recordings__",
+    "eventbrite.co.uk-london-screening-page-2025-01-24",
+  );
+  return jest.requireActual("../../../common/utils").readJSON(dataPath);
+});
 
 const cinema = {
   name: "Genesis Cinema",

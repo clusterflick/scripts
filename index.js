@@ -2,16 +2,7 @@
 
 const fs = require("node:fs").promises;
 const path = require("node:path");
-
-const readJSON = async (filePath) => {
-  const data = await fs.readFile(filePath, "utf8");
-  return JSON.parse(data);
-};
-
-const writeJSON = async (filePath, value) => {
-  const data = JSON.stringify(value, null, 2);
-  return await fs.writeFile(filePath, data);
-};
+const { readJSON, writeJSON } = require("./common/utils");
 
 const setupDirectory = async (type) => {
   const directoryPath = path.join(".", type);

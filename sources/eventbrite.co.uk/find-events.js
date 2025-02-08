@@ -1,9 +1,9 @@
-const { readDailyCache } = require("../../common/cache");
+const path = require("node:path");
+const { readJSON } = require("../../common/utils");
 const normalizeName = require("../../common/normalize-name");
 const distanceInKmBetweenCoordinates = require("../../common/distance-in-km-between-coordinates");
 const { createOverview, createPerformance } = require("../../common/utils");
 const { parseDate } = require("./utils");
-const { cacheKey } = require("./attributes");
 
 function convertEventbriteEvent(event) {
   const startDate = parseDate(`${event.start_date}T${event.start_time}`);
@@ -35,7 +35,13 @@ function uniqueEvents(events) {
 }
 
 async function findEvents(cinema) {
-  const data = readDailyCache(cacheKey) || [];
+  let data = [];
+  try {
+    const dataSrc = path.join("..", "..", "retrieved-data", "eventbrite.co.uk");
+    data = await readJSON(dataSrc);
+  } catch {
+    // Default to empty list
+  }
 
   const events = uniqueEvents(
     data.flatMap(
