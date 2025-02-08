@@ -17,7 +17,8 @@
     "clear:cache": "rm -rf ./cache",
     "clear:retrieved-data": "rm -rf ./retrieved-data",
     "clear:transformed-data": "rm -rf ./transformed-data",
-    "clear:all": "npm run clear:cache && npm run clear:retrieved-data && npm run clear:transformed-data"
+    "clear:combined-data": "rm -rf ./combined-data",
+    "clear:all": "npm run clear:cache && npm run clear:retrieved-data && npm run clear:transformed-data && npm run clear:combined-data"
   },
   "author": "Alistair Brown <github@alistairjcbrown.com>",
   "license": "MIT",
