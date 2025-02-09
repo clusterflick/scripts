@@ -71,6 +71,10 @@ async function transform(
         const { screenId, schedule } = performance;
         const movie = movies[performance.filmId];
 
+        // Bail if we've performances for a movie we've skipped previously
+        // e.g. a private hire event
+        if (!movie) return;
+
         const notesList = [];
         const accessibility = {};
         if (performance.requires3dGlasses) {
