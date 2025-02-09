@@ -1,3 +1,4 @@
+const path = require("node:path");
 const { chromium } = require("playwright-extra");
 const { dailyCache } = require("./cache");
 
@@ -20,7 +21,11 @@ async function getPageWithPlaywright(url, cacheKey, callback) {
     } catch (error) {
       try {
         await page.screenshot({
-          path: `./playwright-failures/error--${cacheKey}.png`,
+          path: path.join(
+            process.cwd(),
+            "playwright-failures",
+            `error--${cacheKey}.png`,
+          ),
         });
       } catch (screenshotError) {
         console.log(
