@@ -13,7 +13,11 @@ async function retrieve() {
       cacheKey,
       async (page) => {
         await page.waitForLoadState();
-        return page.evaluate(() => /* global window */ window.__SERVER_DATA__);
+        const data = await page.evaluate(
+          () => /* global window */ window.__SERVER_DATA__,
+        );
+        if (!data) throw new Error(`Data not available, "${data}"`);
+        return data;
       },
     );
 
