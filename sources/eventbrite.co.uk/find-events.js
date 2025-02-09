@@ -35,8 +35,11 @@ function uniqueEvents(events) {
 }
 
 async function findEvents(cinema) {
-  const root = path.join(__dirname, "..", "..");
-  const dataSrc = path.join(root, "retrieved-data", "eventbrite.co.uk");
+  const dataSrc = path.join(
+    process.cwd(),
+    "retrieved-data",
+    "eventbrite.co.uk",
+  );
   let data = [];
   try {
     data = await readJSON(dataSrc);
