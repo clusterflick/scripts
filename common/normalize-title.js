@@ -14,6 +14,7 @@ function normalizeTitle(title, options) {
     "Hitchcock: The Gainsborough Days -",
     "Bar Screening x Muse:",
     "Kung Fu Cinema:",
+    "a Preview Screening of",
     "Preview Screening of",
     "70th anniversary screening:",
     "uk premiere of:",
@@ -86,6 +87,7 @@ function normalizeTitle(title, options) {
       .replace("eftihia", "eftyhia")
       .replace("10180", "1080")
       .replace("unknwon", "unknown")
+      .replace("Frozen 2", "Frozen II")
       .replace(/^fire walk with me$/, "twin peaks fire walk with me")
       .replace(/^(.+),\s+the$/, "the $1")
       .trim()
