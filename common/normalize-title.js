@@ -30,6 +30,9 @@ function normalizeTitle(title, options) {
     "+ LIVE RECORDING OF ‘PAST PRESENT FUTURE’ PODCAST WITH DAVID RUNCIMAN & HELEN LEWIS",
   ];
 
+  title = title
+    .replace('twin peaks - ', 'twin peaks ');
+
   removablePrefixes.forEach((phrase) => {
     title = title.replace(phrase.toLowerCase(), "");
   });
