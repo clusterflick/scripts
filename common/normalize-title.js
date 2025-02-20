@@ -23,6 +23,7 @@ function normalizeTitle(title, options) {
     ["Pierre Boulez - Boulez", "Pierre Boulez "],
     ["twin peaks - ", "twin peaks "],
     ["- Part ", "Part "],
+    ["- FREE ENTRY", "FREE ENTRY"],
     // Fix spelling which causes missed match
     [/^seven$/i, "se7en"],
     ["Vasthunnam", "Vasthunam"],
