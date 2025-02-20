@@ -34,6 +34,7 @@ function normalizeTitle(title, options) {
     ["behaviour", "behavior"],
     ["Lynch: Fire Walk With Me", "Lynch: Twin Peaks Fire Walk With Me"],
     ["Big Night Out: New Moon", "Big Night Out: The Twilight Saga: New Moon"],
+    ["The Dawn of Impressionism", "Dawn of Impressionism"],
     [" - Paris, 1874", ": Paris 1874"],
     [" - Poets and Lovers", ": Poets and Lovers"],
     // Sanitise use of "PRESENT" which is confused with "X presents"

@@ -156,9 +156,11 @@ const knownRemovablePhrases = [
   "Introducing",
   "Director's Cut",
   "Extended Cut",
+  "premiere screening",
   "premiere",
   "IMAX Preview",
-  "Preview",
+  "preview screening",
+  "preview",
   "()",
   " .",
 ];
