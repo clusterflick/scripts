@@ -136,7 +136,7 @@ async function getBestMatch(titleQuery, rawResults = [], movie) {
   if (!hasCrewForMovie) {
     // If there's no crew info, pick the most popular so long as it's has a
     // relatively high level of popularity.
-    const relativelyHighPopularity = 15;
+    const relativelyHighPopularity = 10;
     const popularResults = resultsWithSameTitle
       .filter(({ popularity }) => popularity > relativelyHighPopularity)
       .sort((a, b) => b.popularity - a.popularity);

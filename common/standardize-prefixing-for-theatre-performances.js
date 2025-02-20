@@ -75,6 +75,7 @@ function standardizePrefixingForMetropolitanOperaPerformances(title, options) {
   }
 
   return updatedPrefixTitle
+    .replace(/(\(\))+/, "")
     .replace(/Live in HD/i, "")
     .replace(/\s+:\s+/, " ")
     .replace(/\s+/g, " ")
@@ -131,6 +132,7 @@ function standardizePrefixingForRoyalBalletOperaPerformances(title, options) {
   }
 
   return updatedPrefixTitle
+    .replace(/(\(\))+/, "")
     .replace(/\s+:\s+/, " ")
     .replace(/\s+/g, " ")
     .replace(/\s+and\s+/gi, " & ")
