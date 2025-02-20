@@ -18,7 +18,8 @@
     "clear:retrieved-data": "rm -rf ./retrieved-data",
     "clear:transformed-data": "rm -rf ./transformed-data",
     "clear:combined-data": "rm -rf ./combined-data",
-    "clear:all": "npm run clear:cache && npm run clear:retrieved-data && npm run clear:transformed-data && npm run clear:combined-data"
+    "clear:all": "npm run clear:cache && npm run clear:retrieved-data && npm run clear:transformed-data && npm run clear:combined-data",
+    "helper:update-test-titles": "npm run clear:transformed-data && ./helpers/get-latest-transformed-data.sh && node common/tests/utils/update-test-titles.js"
   },
   "author": "Alistair Brown <github@alistairjcbrown.com>",
   "license": "MIT",

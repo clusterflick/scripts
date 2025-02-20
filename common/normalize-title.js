@@ -20,6 +20,7 @@ function normalizeTitle(title, options) {
     ["Hitchcock: The Gainsborough Days -", "Hitchcock: The Gainsborough Days "],
     ["Sky Original -", "Sky Original "],
     ["CELLULOID JAM! –", "CELLULOID JAM! "],
+    ["Saturday night at the movies -", "Saturday night at the movies:"],
     ["Pierre Boulez - Boulez", "Pierre Boulez "],
     ["twin peaks - ", "twin peaks "],
     ["- Part ", "Part "],

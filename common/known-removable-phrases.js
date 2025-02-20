@@ -114,6 +114,7 @@ const knownRemovablePhrases = [
   "Silent Film & Live Music:",
   "SLA:",
   "SLA:",
+  "She Connects; Saturday night at the movies",
   "The Dead Carpet :",
   "tlor:",
   "Valentine's Day:",
