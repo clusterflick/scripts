@@ -119,6 +119,7 @@ const knownRemovablePhrases = [
   "SHORTIES:",
   "The Dead Carpet :",
   "Thrill Seekers:",
+  "Thrill Seekers :",
   "tlor:",
   "Valentine's Day:",
   "International Women's Day:",
