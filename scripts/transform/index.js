@@ -61,7 +61,7 @@ async function transform(location, input, historicData) {
     try {
       const response = await fetch(movie.url);
       if (!response.ok || response.url.includes("/not-found")) continue;
-    } catch (e) {
+    } catch {
       // If something goes wrong checking the the URL, assume it's been removed
       continue;
     }

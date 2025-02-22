@@ -9,7 +9,7 @@ const { fetchJson } = require("../../common/utils");
 async function getYesterdaysRelease(location) {
   const { Octokit } = await import("@octokit/core");
 
-  const octokit = new Octokit();
+  const octokit = new Octokit({ auth: process.env.PAT });
   const response = await octokit.request(
     "GET /repos/clusterflick/data-transformed/releases",
   );
