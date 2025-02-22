@@ -25,6 +25,7 @@ function normalizeTitle(title, options) {
     ["twin peaks - ", "twin peaks "],
     ["- Part ", "Part "],
     ["- FREE ENTRY", "FREE ENTRY"],
+    ["- Year of the Rabbit", "Year of the Rabbit"],
     // Fix spelling which causes missed match
     [/^seven$/i, "se7en"],
     ["Vasthunnam", "Vasthunam"],

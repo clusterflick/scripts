@@ -115,9 +115,12 @@ const knownRemovablePhrases = [
   "SLA:",
   "SLA:",
   "She Connects; Saturday night at the movies",
+  "SHORTIES:",
   "The Dead Carpet :",
+  "Thrill Seekers:",
   "tlor:",
   "Valentine's Day:",
+  "International Women's Day:",
   "Scared To Dance -",
 
   // Weirdly specific fixes
@@ -128,6 +131,7 @@ const knownRemovablePhrases = [
   ", d.c",
   "1994 version",
   "3rd annual screening",
+  "Documentary Screening :",
   "aka daughters of darkness",
   "aka The Devil’s Bride",
   "David Tennant & Cush Jumbo",
