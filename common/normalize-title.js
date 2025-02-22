@@ -28,6 +28,7 @@ function normalizeTitle(title, options) {
     ["- Year of the Rabbit", "Year of the Rabbit"],
     // Fix spelling which causes missed match
     [/^seven$/i, "se7en"],
+    [/\s+du$/i, ""],
     ["Vasthunnam", "Vasthunam"],
     ["Eftihia", "Eftyhia"],
     ["10180", "1080"],

@@ -40,13 +40,6 @@ async function transform(location, input, historicData) {
 
   // If a movie matches the following, it's been delisted but is still valid:
   for (const movie of historicData) {
-    // The movie was in yesterdays data but is missing from todays data.
-    // If there's a match, we already have the data; continue
-    const match = matchedData.find(
-      ({ url }) => basicNormalize(url) === basicNormalize(movie.url),
-    );
-    if (match) continue;
-
     // The movie data from yesterday contains future performances .
     // If there's no future performances, it's a past movie; continue
     const now = new Date();
@@ -55,16 +48,33 @@ async function transform(location, input, historicData) {
     );
     if (futurePerformances.length === 0) continue;
 
+    // The movie was in yesterdays data but is missing from todays data.
+    // If there's a match, we already have the data; continue
+    const match = matchedData.find(({ url, performances }) => {
+      if (basicNormalize(url) === basicNormalize(movie.url)) return true;
+
+      return futurePerformances.every(
+        (performance) =>
+          !!performances.find(
+            ({ bookingUrl }) =>
+              basicNormalize(bookingUrl) ===
+              basicNormalize(performance.bookingUrl),
+          ),
+      );
+    });
+    if (match) continue;
+
     // The movie listing page is still up advertising the movie.
     // If we can't get the page or the page has a "not found" URL, then it's
     // been removed; continue
+    let response;
     try {
-      const response = await fetch(movie.url);
-      if (!response.ok || response.url.includes("/not-found")) continue;
+      response = await fetch(movie.url);
     } catch {
       // If something goes wrong checking the the URL, assume it's been removed
       continue;
     }
+    if (!response.ok || response.url.includes("/not-found")) continue;
 
     // Otherwise, add the movie into the transformed data
     console.log(" - Found missing movie:", movie.title, movie.url);
