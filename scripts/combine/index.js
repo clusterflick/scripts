@@ -6,10 +6,12 @@ const {
   getMovieInfoAndCacheResults,
   getMovieGenresAndCacheResults,
 } = require("../../common/get-movie-data");
-const { parseMinsToMs, readJSON } = require("../../common/utils");
+const {
+  parseMinsToMs,
+  readJSON,
+  basicNormalize,
+} = require("../../common/utils");
 const standardizePrefixingForTheatrePerformances = require("../../common/standardize-prefixing-for-theatre-performances");
-
-const basicNormalize = (value) => value.toLowerCase().trim();
 
 const getId = (value) =>
   crypto.createHash("sha256").update(value).digest("hex").slice(0, 8);

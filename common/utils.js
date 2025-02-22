@@ -12,6 +12,8 @@ const writeJSON = async (filePath, value) => {
   return await fs.writeFile(filePath, data);
 };
 
+const basicNormalize = (value) => value.toLowerCase().trim();
+
 const sortAndFilterMovies = (movies) => {
   const startOfToday = startOfDay(new Date());
 
@@ -159,6 +161,7 @@ const createAccessibility = (accessibility) =>
 module.exports = {
   readJSON,
   writeJSON,
+  basicNormalize,
   sortAndFilterMovies,
   convertToList,
   splitConjoinedItemsInList,

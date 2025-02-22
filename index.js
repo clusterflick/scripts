@@ -41,10 +41,17 @@ const setupDirectory = async (type) => {
   }
 
   if (action.toLowerCase() === "transform") {
+    await setupDirectory("transformed-data");
+    const getYesterdaysRelease = require("./scripts/transform/get-yesterdays-release");
+    const historicData = await getYesterdaysRelease(location);
     const transform = require("./scripts/transform");
     const input = await readJSON(getPath("retrieved-data"));
-    const output = await transform(location, input, ...parameters);
-    await setupDirectory("transformed-data");
+    const output = await transform(
+      location,
+      input,
+      historicData,
+      ...parameters,
+    );
     await writeJSON(getPath("transformed-data"), output);
     return;
   }
