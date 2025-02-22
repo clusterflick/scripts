@@ -58,8 +58,13 @@ async function transform(location, input, historicData) {
     // The movie listing page is still up advertising the movie.
     // If we can't get the page or the page has a "not found" URL, then it's
     // been removed; continue
-    const response = await fetch(movie.url);
-    if (!response.ok || response.url.includes("/not-found")) continue;
+    try {
+      const response = await fetch(movie.url);
+      if (!response.ok || response.url.includes("/not-found")) continue;
+    } catch (e) {
+      // If something goes wrong checking the the URL, assume it's been removed
+      continue;
+    }
 
     // Otherwise, add the movie into the transformed data
     console.log(" - Found missing movie:", movie.title, movie.url);
