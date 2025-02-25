@@ -31,6 +31,7 @@ function normalizeTitle(title, options) {
     [/^seven$/i, "se7en"],
     [/\s+du$/i, ""],
     ["Vasthunnam", "Vasthunam"],
+    ["Melagaon", "Malegaon"],
     ["Eftihia", "Eftyhia"],
     ["10180", "1080"],
     ["unknwon", "unknown"],

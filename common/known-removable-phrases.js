@@ -56,6 +56,7 @@ const knownRemovablePhrases = [
 
   // Prefixes
   "(4DX) ",
+  "(4DX 3D) ",
   "(IMAX) ",
   "(SS) ",
   "Animation at War:",
