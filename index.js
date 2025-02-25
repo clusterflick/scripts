@@ -52,7 +52,10 @@ const setupDirectory = async (type) => {
       historicData,
       ...parameters,
     );
-    await writeJSON(getPath("transformed-data"), output);
+    await writeJSON(
+      getPath("transformed-data"),
+      output.sort((a, b) => a.title.localeCompare(b.title)),
+    );
     return;
   }
 

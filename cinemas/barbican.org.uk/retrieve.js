@@ -7,13 +7,14 @@ async function retrieve() {
   const movieIds = new Set();
   const movieTitles = new Map();
 
-  let page = 1;
+  let page = 0;
   while (true) {
     const responseData = await fetchJson(
       `${domain}/views/ajax?${getParams(page)}`,
     );
     const { data } = responseData.find(
-      ({ method }) => method === "infiniteScrollInsertView",
+      ({ method }) =>
+        method === "infiniteScrollInsertView" || method === "replaceWith",
     );
 
     const $ = cheerio.load(data);

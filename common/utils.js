@@ -1,6 +1,7 @@
 const fs = require("node:fs").promises;
 const { decode } = require("html-entities");
 const { isAfter, startOfDay } = require("date-fns");
+const stringify = require("json-stable-stringify");
 
 const readJSON = async (filePath) => {
   const data = await fs.readFile(filePath, "utf8");
@@ -8,7 +9,7 @@ const readJSON = async (filePath) => {
 };
 
 const writeJSON = async (filePath, value) => {
-  const data = JSON.stringify(value, null, 2);
+  const data = stringify(value, { space: 2 });
   return await fs.writeFile(filePath, data);
 };
 
