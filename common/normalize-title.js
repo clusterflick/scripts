@@ -172,7 +172,7 @@ function normalizeTitle(title, options) {
     .replace(/\s+and\s+/gi, " ")
     .replace(/\s+&\s+/gi, " ")
     .replace(/:$/, "")
-    .replace(/'|’|"/g, "")
+    .replace(/'|’|"|“|”/g, "")
     .replace(/\s+(-|–)(\s|$)/g, " ")
     .replace(/:/g, "")
     .replace(/\s+/g, " ")
