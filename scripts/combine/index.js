@@ -16,7 +16,8 @@ const standardizePrefixingForTheatrePerformances = require("../../common/standar
 const getId = (value) =>
   crypto.createHash("sha256").update(value).digest("hex").slice(0, 8);
 
-const getClassification = ({ release_dates: { results } }) => {
+const getClassification = (movie) => {
+  const results = movie.release_dates?.results ?? [];
   const result = results.find(({ iso_3166_1: locale }) => locale === "GB");
   if (!result) return undefined;
 
@@ -29,21 +30,26 @@ const getClassification = ({ release_dates: { results } }) => {
   return releaseDateWithClassification.certification;
 };
 
-const getDirectors = ({ credits: { crew } }) =>
-  crew
+const getDirectors = (movie) => {
+  const crew = movie.credits?.crew ?? [];
+  return crew
     .filter(({ job }) => basicNormalize(job) === "director")
     .map(({ id, name }) => ({ id: `${id}`, name }));
+};
 
-const getActors = ({ credits: { cast } }) =>
-  cast
+const getActors = (movie) => {
+  const cast = movie.credits?.cast ?? [];
+  return cast
     .slice(0, 10)
     .filter(({ popularity }) => popularity >= 5)
     .map(({ id, name }) => ({ id: `${id}`, name }));
+};
 
 const getGenres = ({ genres }) =>
   genres.map(({ id, name }) => ({ id: `${id}`, name }));
 
-const getYoutubeTrailer = ({ videos: { results } }) => {
+const getYoutubeTrailer = (movie) => {
+  const results = movie.videos?.results ?? [];
   const trailer = results.find(
     ({ type, site }) =>
       basicNormalize(type) === "trailer" && basicNormalize(site) === "youtube",
