@@ -19,6 +19,7 @@ function normalizeTitle(title, options) {
     ["Scared To Dance -", "Scared To Dance "],
     ["Hitchcock: The Gainsborough Days -", "Hitchcock: The Gainsborough Days "],
     ["Sky Original -", "Sky Original "],
+    ["Mamma Mia-", "Mamma Mia -"],
     ["CELLULOID JAM! –", "CELLULOID JAM! "],
     ["Saturday night at the movies -", "Saturday night at the movies:"],
     ["Pierre Boulez - Boulez", "Pierre Boulez "],
@@ -29,7 +30,8 @@ function normalizeTitle(title, options) {
     ["- Drunken Scorpion Presents ", "- Drunken Scorpion "],
     // Fix spelling which causes missed match
     [/^seven$/i, "se7en"],
-    [/\s+du$/i, ""],
+    [/\s+du$/i, ""], // Dubbed
+    [/\s+su$/i, ""], // subbed
     ["Vasthunnam", "Vasthunam"],
     ["Melagaon", "Malegaon"],
     ["Eftihia", "Eftyhia"],
@@ -42,6 +44,7 @@ function normalizeTitle(title, options) {
     ["The Dawn of Impressionism", "Dawn of Impressionism"],
     [" - Paris, 1874", ": Paris 1874"],
     [" - Poets and Lovers", ": Poets and Lovers"],
+    ["Last Supper Part 1", "Last Supper"],
     // Sanitise use of "PRESENT" which is confused with "X presents"
     ["‘PAST PRESENT FUTURE’ PODCAST", "‘PAST+PRESENT+FUTURE’ PODCAST"],
   ];
