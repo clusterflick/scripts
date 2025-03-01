@@ -46,6 +46,7 @@ function normalizeTitle(title, options) {
     [" - Paris, 1874", ": Paris 1874"],
     [" - Poets and Lovers", ": Poets and Lovers"],
     ["Last Supper Part 1", "Last Supper"],
+    ["Mulholland Dr.", "Mulholland Drive"], // Otherwise we match the TV pilot of the same name
     // Sanitise use of "PRESENT" which is confused with "X presents"
     ["‘PAST PRESENT FUTURE’ PODCAST", "‘PAST+PRESENT+FUTURE’ PODCAST"],
   ];
@@ -178,7 +179,7 @@ function normalizeTitle(title, options) {
     .replace(/:$/, "")
     .replace(/'|’|"|“|”/g, "")
     .replace(/\s+(-|–)(\s|$)/g, " ")
-    .replace(/:/g, "")
+    .replace(/!|:/g, "")
     .replace(/\s+/g, " ")
     .replace(/^(.+),\s+the$/, "the $1")
     .trim();

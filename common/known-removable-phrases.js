@@ -52,6 +52,7 @@ const knownRemovablePhrases = [
   "Live Q&A with Cynthia Erivo",
   " x Flower Workshop",
   " x FIST CLUB for IWD",
+  " x Gala Screening",
   "COCKTAIL PARTY",
   "(Black & White) Version",
 
@@ -154,6 +155,7 @@ const knownRemovablePhrases = [
   "60th Anniversary: Aleksandar Petrović's",
   "Comrade Tambo's",
   "Restored: Goran Marković's",
+  ": Pastor. Spy. Assassin",
 
   // Common superfluous pieces
   "Double Feature",

@@ -1,7 +1,9 @@
 const { MovieDb } = require("moviedb-promise");
 const diff = require("fast-diff");
+const slugify = require("slugify");
 const normalizeTitle = require("./normalize-title");
 const normalizeName = require("./normalize-name");
+const { basicNormalize } = require("./utils");
 const { dailyCache } = require("./cache");
 require("dotenv").config();
 
@@ -46,7 +48,10 @@ const matchesExpectedCastCrew = async (match, movie) => {
     );
 
     // Don't bother checking the Opera listings, they're usualy wrong
-    if (directors.length && directors[0] === "themetropolitanopera") {
+    if (
+      directors.length &&
+      basicNormalize(directors[0]) === "themetropolitanopera"
+    ) {
       return true;
     }
 
@@ -75,8 +80,50 @@ const matchesExpectedCastCrew = async (match, movie) => {
   return false;
 };
 
+async function findMovieByDirector(normalizedTitle, movie) {
+  if (movie.overview.directors.length === 0) return;
+  const directorsName = movie.overview.directors[0];
+  const peopleMatches = await searchPersonAndCacheResults(
+    `moviedb-search-person-${slugify(basicNormalize(directorsName))}`,
+    directorsName,
+  );
+  let directors = peopleMatches.results.filter(
+    ({ known_for_department: department }) =>
+      department && basicNormalize(department) === "directing",
+  );
+
+  // If we can't find someone known for directing, let's take a punt in
+  // production, in case they're branching out
+  if (directors.length === 0) {
+    directors = peopleMatches.results.filter(
+      ({ known_for_department: department }) =>
+        department && basicNormalize(department) === "production",
+    );
+  }
+  if (directors.length === 0) return;
+  const director = directors[0];
+
+  // Get the full list of movie credits for the director, filter down to just
+  // their directing credits, and match against those
+  const credits = await getPersonMovieCreditsAndCacheResults(director.id);
+  const directorCredits = credits.crew.filter(
+    ({ job }) => job && basicNormalize(job) === "director",
+  );
+  const resultsWithSameTitle = directorCredits.filter(
+    matchesMovieTitle(normalizedTitle),
+  );
+  if (resultsWithSameTitle.length === 1) return resultsWithSameTitle[0];
+}
+
 const hasCrewFor = (movie) =>
   movie.overview.directors.length > 0 || movie.overview.actors.length > 0;
+
+const matchesMovieTitle =
+  (normalizedTitle) =>
+  ({ title, original_title: originalTitle }) =>
+    title && // Check for title - may contain TV shows which use "name"
+    (normalizeTitle(title) === normalizedTitle ||
+      normalizeTitle(originalTitle) === normalizedTitle);
 
 async function getBestMatch(titleQuery, rawResults = [], movie) {
   if (rawResults.length === 0) return undefined;
@@ -117,9 +164,7 @@ async function getBestMatch(titleQuery, rawResults = [], movie) {
   // which don't have the same normalized title as our query (this will probbaly
   // fail for foreign language films where the title may not match).
   const resultsWithSameTitle = resultsWithReleaseDate.filter(
-    ({ title, original_title: originalTitle }) =>
-      normalizeTitle(title) === titleQuery ||
-      normalizeTitle(originalTitle) === titleQuery,
+    matchesMovieTitle(titleQuery),
   );
 
   // If there's only one result ...
@@ -159,6 +204,9 @@ const searchForBestMatch = async ({
   movie,
   year: yearValue,
 }) => {
+  const matchByDirector = await findMovieByDirector(normalizedTitle, movie);
+  if (matchByDirector) return matchByDirector;
+
   const cacheKeySuffix = `${yearValue || "no-year"}-${slug}`;
   const getPayload = (additional = {}) => ({
     query: normalizedTitle,
@@ -282,6 +330,14 @@ const getMovieGenresAndCacheResults = () =>
 
 const searchMovieAndCacheResults = (cacheKey, payload) =>
   dailyCache(cacheKey, async () => moviedb.searchMovie(payload));
+
+const searchPersonAndCacheResults = (cacheKey, query) =>
+  dailyCache(cacheKey, async () => moviedb.searchPerson({ query }));
+
+const getPersonMovieCreditsAndCacheResults = (id) =>
+  dailyCache(`moviedb-person-movie-credits-${id}`, async () =>
+    moviedb.personMovieCredits({ id }),
+  );
 
 module.exports = {
   searchForBestMatch,

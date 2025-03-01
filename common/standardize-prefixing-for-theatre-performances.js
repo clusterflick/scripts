@@ -1,6 +1,6 @@
 const yearMatcher = /(\d{4})/;
-const yearRangeMatcher = /(\d{2})\d{2}-(\d{2})/;
-const shortYearRangeMatcher = /\d{2}-(\d{2})/;
+const yearRangeMatcher = /(\d{2})\d{2}[-|/](\d{2})/;
+const shortYearRangeMatcher = /\d{2}[-|/](\d{2})/;
 const yearSuffixMatcher = /\(\d{4}\)$/;
 const ownerMatcher = /:\s+[^\s]+['|’]s/;
 
@@ -168,6 +168,7 @@ function standardizePrefixingForTheatrePerformances(
   }
 
   if (
+    lowercaseTitle.startsWith("rb&o ") ||
     lowercaseTitle.startsWith("rbo ") ||
     lowercaseTitle.startsWith("rbo:") ||
     lowercaseTitle.startsWith("royal opera") ||
