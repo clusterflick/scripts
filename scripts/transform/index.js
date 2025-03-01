@@ -100,6 +100,15 @@ async function transform(location, input, historicData) {
       }
       if (!response.ok || response.url.includes("/not-found")) continue;
 
+      // The movie may have been renamed, which would cause the title and URL to
+      // change. Usually the old URL will redirect to the new URL, so let's
+      // check if we can get a match with the new URL.
+      // If there's a match, we already have the data; continue
+      const redirectMatch = matchedData.find(
+        ({ url }) => basicNormalize(url) === basicNormalize(response.url),
+      );
+      if (redirectMatch) continue;
+
       // Otherwise, add the movie into the transformed data
       console.log(" - Found missing movie:", movie.title, movie.url);
       matchedData.push(movie);
