@@ -38,6 +38,7 @@ function normalizeTitle(title, options) {
     ["10180", "1080"],
     ["unknwon", "unknown"],
     ["Frozen 2", "Frozen II"],
+    [/\s+terminator 2$/i, " Terminator 2 Judgment Day"],
     ["behaviour", "behavior"],
     ["Lynch: Fire Walk With Me", "Lynch: Twin Peaks Fire Walk With Me"],
     ["Big Night Out: New Moon", "Big Night Out: The Twilight Saga: New Moon"],
