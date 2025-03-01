@@ -29,6 +29,8 @@ async function getYesterdaysRelease(location) {
   const yesterdayData = yesterdayRelease.assets.find(
     ({ name }) => name === location,
   );
+  if (!yesterdayData) return;
+
   const assetData = await fetchJson(yesterdayData.browser_download_url);
   return assetData;
 }

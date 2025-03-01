@@ -4,7 +4,7 @@ const findMatchesOnTheMovieDb = require("./find-matches-on-the-movie-db");
 const getSourcedEventsFor = require("./get-sourced-events-for");
 const validateAgainstSchema = require("./validate-against-schema");
 
-async function transform(location, input, historicData) {
+async function transform(location, input, historicData = []) {
   const { transform, attributes } = require(`../../cinemas/${location}`);
   const sourcedEvents = await getSourcedEventsFor(attributes);
 
