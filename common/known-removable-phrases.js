@@ -96,6 +96,8 @@ const knownRemovablePhrases = [
   "Film Screening & Live Q&A:",
   "Funday:",
   "gff:",
+  "green screen:",
+  "green screen;",
   "GIF:",
   "Horror with Hitchcock:",
   "IFF 2024:",

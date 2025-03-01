@@ -83,7 +83,7 @@ function normalizeTitle(title, options) {
     title = hasClub[1];
   }
 
-  const hasScreen = matchesOpenPrefix(title, "screen");
+  const hasScreen = matchesOpenPrefix(title, "on screen");
   if (hasScreen) {
     title = hasScreen[1];
   }
