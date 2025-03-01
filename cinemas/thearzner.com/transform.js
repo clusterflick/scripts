@@ -4,7 +4,7 @@ const attributes = require("./attributes");
 async function transform(movieData, sourcedEvents) {
   return savoySystemsTransform(
     attributes,
-    "TheLexiCinema.dll",
+    "TheArzner.dll",
     movieData,
     sourcedEvents,
   );

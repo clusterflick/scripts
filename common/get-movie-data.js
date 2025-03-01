@@ -177,17 +177,8 @@ async function getBestMatch(titleQuery, rawResults = [], movie) {
     return hasCastCrewMatch ? result : undefined;
   }
 
-  // As we still have more than 1 result ...
-  if (!hasCrewForMovie) {
-    // If there's no crew info, pick the most popular so long as it's has a
-    // relatively high level of popularity.
-    const relativelyHighPopularity = 10;
-    const popularResults = resultsWithSameTitle
-      .filter(({ popularity }) => popularity > relativelyHighPopularity)
-      .sort((a, b) => b.popularity - a.popularity);
-    if (popularResults.length > 0) return popularResults[0];
-  } else {
-    // If there's crew info, use it to match the result
+  // As we still have more than 1 result and there's crew info, use it to match the result
+  if (hasCrewForMovie) {
     for (const result of resultsWithSameTitle) {
       const hasCastCrewMatch = await matchesExpectedCastCrew(result, movie);
       if (hasCastCrewMatch) return result;
