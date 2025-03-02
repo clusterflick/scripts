@@ -148,7 +148,7 @@ function normalizeTitle(title, options) {
     title = hasSeparator[1];
   }
 
-  title = title.split(" plus q&a")[0];
+  title = title.split(/ plus q(?:&|\+)a/i)[0];
 
   const hasSquareBracketDate = title.trim().match(/^(.*?)\[(\d{4})\](.*?)$/);
   if (hasSquareBracketDate) {
