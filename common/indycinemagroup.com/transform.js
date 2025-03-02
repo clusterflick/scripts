@@ -10,10 +10,21 @@ const screenMapping = {
   116: "2", // riocinema.org.uk
   117: "1", // regentstreetcinema.com
   122: "Ludski Bar", // riocinema.org.uk
-  318: "1", // phoenixcinema.co.uk
-  317: "2", // phoenixcinema.co.uk
+  131: "1", // sidcupstoryteller.co.uk
+  132: "2", // sidcupstoryteller.co.uk
+  133: "3", // sidcupstoryteller.co.uk
   140: "1", // actonecinema.co.uk
   141: "2", // actonecinema.co.uk
+  162: "1", // ealingproject.co.uk
+  163: "2", // ealingproject.co.uk
+  164: "3", // ealingproject.co.uk
+  236: "1", // throwleyyardcinema.co.uk
+  237: "2", // throwleyyardcinema.co.uk
+  238: "3", // throwleyyardcinema.co.uk
+  240: "4", // throwleyyardcinema.co.uk
+  295: "Stage", // throwleyyardcinema.co.uk
+  318: "1", // phoenixcinema.co.uk
+  317: "2", // phoenixcinema.co.uk
 };
 
 const isCastPlaceholder = (value) =>
