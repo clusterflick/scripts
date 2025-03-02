@@ -1,21 +1,14 @@
 const slugify = require("slugify");
 const { format } = require("date-fns");
-const { parseMinsToMs } = require("../../common/utils");
+const {
+  parseMinsToMs,
+  getMovieTitleAndYearFrom,
+} = require("../../common/utils");
 const normalizeTitle = require("../../common/normalize-title");
 const {
   searchForBestMatch,
   getMovieInfoAndCacheResults,
 } = require("../../common/get-movie-data");
-
-const getMovieTitleAndYearFrom = (title) => {
-  const hasYear = title.trim().match(/^(.*?)\s*\((\d{4})\)$/);
-  if (hasYear)
-    return {
-      title: hasYear[1].trim(),
-      year: hasYear[2],
-    };
-  return { title };
-};
 
 async function findMatchesOnTheMovieDb(movies) {
   const processedMovies = [];

@@ -31,6 +31,16 @@ const sortAndFilterMovies = (movies) => {
   return updatesMovies.sort((a, b) => a.title.localeCompare(b.title));
 };
 
+const getMovieTitleAndYearFrom = (title) => {
+  const hasYear = title.trim().match(/^(.*?)\s*\((\d{4})\)$/);
+  if (hasYear)
+    return {
+      title: hasYear[1].trim(),
+      year: hasYear[2],
+    };
+  return { title };
+};
+
 const convertToList = (value) => {
   if (!value) return [];
   const list = value
@@ -164,6 +174,7 @@ module.exports = {
   writeJSON,
   basicNormalize,
   sortAndFilterMovies,
+  getMovieTitleAndYearFrom,
   convertToList,
   splitConjoinedItemsInList,
   parseMinsToMs,

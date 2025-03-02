@@ -1,6 +1,8 @@
 const knownRemovablePhrases = [
   // Suffixes
   "[35mm]",
+  "on 16mm film",
+  "on 16mm",
   ": The Final Cut",
   ": stu spasm",
   ": Special Early Screening",
@@ -39,6 +41,7 @@ const knownRemovablePhrases = [
   "Dog-Friendly ",
   "' Screening",
   "for Halloween",
+  "with intro and Q&A",
   "with intro",
   "with Dr Catherine Lester",
   "with Tim Robey",
@@ -77,6 +80,7 @@ const knownRemovablePhrases = [
   "Call To Action:",
   "Carers & Babies:",
   "Celebrating David Lynch:",
+  "Celebrating Peter Sellers:",
   "CELLULOID JAM:",
   "CELLULOID JAM!",
   "Cinema Restored:",
@@ -123,6 +127,7 @@ const knownRemovablePhrases = [
   "Play for Today:",
   "Rebel Reel:",
   "ScreenTalk:",
+  "Screening of ",
   "Silent Film & Live Music:",
   "SLA:",
   "SLA:",
