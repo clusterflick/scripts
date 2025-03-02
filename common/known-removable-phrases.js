@@ -3,6 +3,7 @@ const knownRemovablePhrases = [
   "[35mm]",
   "on 16mm film",
   "on 16mm",
+  ": The Movie",
   ": The Final Cut",
   ": stu spasm",
   ": Special Early Screening",
