@@ -59,6 +59,7 @@ const knownRemovablePhrases = [
   " x Gala Screening",
   "COCKTAIL PARTY",
   "(Black & White) Version",
+  "Episode Showcase",
 
   // Prefixes
   "(4DX) ",
@@ -111,6 +112,7 @@ const knownRemovablePhrases = [
   "Late Nights:",
   "LD Friendly ",
   "LOTR:",
+  "London Breeze:",
   "LPFF:",
   "LSF 2025:",
   "Lynchspirations:",
