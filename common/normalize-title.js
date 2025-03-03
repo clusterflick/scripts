@@ -27,6 +27,7 @@ function normalizeTitle(title, options) {
     ["- Part ", "Part "],
     ["- FREE ENTRY", "FREE ENTRY"],
     ["- Year of the Rabbit", "Year of the Rabbit"],
+    ["- Live Arena Tour", "Live Arena Tour"],
     ["- Drunken Scorpion Presents ", "- Drunken Scorpion "],
     ["Baby + 1 ", "Baby & 1 "],
     ["BABY+1 ", "Baby & 1 "],
