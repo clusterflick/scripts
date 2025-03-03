@@ -185,6 +185,22 @@ async function getBestMatch(titleQuery, rawResults = [], movie) {
     }
   }
 
+  // As we still have more than 1 result and we've been provided some additional
+  // data from the transform phase to help, use it to match the result
+  if (movie.matchingHints) {
+    for (const result of resultsWithSameTitle) {
+      // Check if there's a matching overview.
+      // (This specifically helps match movies at thearzner.com, which provides
+      // very little data to match against except an overview which very often
+      // matches the data from TheMovieDB)
+      if (movie.matchingHints.overview && result.overview) {
+        const hint = basicNormalize(movie.matchingHints.overview);
+        const overview = basicNormalize(result.overview).slice(0, 200);
+        if (hint.includes(overview)) return result;
+      }
+    }
+  }
+
   // Reject the results if there are none that we can match confidently
   return undefined;
 }

@@ -60,6 +60,9 @@ async function transform({ domain }, urlSlug, movieData, sourcedEvents) {
           accessibility: createAccessibility(getAccessibility(performance)),
         }),
       ),
+      matchingHints: {
+        overview: movie.Synopsis,
+      },
     };
   });
 

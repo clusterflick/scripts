@@ -13,7 +13,8 @@ const writeJSON = async (filePath, value) => {
   return await fs.writeFile(filePath, data);
 };
 
-const basicNormalize = (value = "") => value.toLowerCase().trim();
+const basicNormalize = (value = "") =>
+  value.toLowerCase().replaceAll(",", "").replace(/\s+/g, " ").trim();
 
 const sortAndFilterMovies = (movies) => {
   const startOfToday = startOfDay(new Date());
@@ -169,6 +170,9 @@ const createAccessibility = (accessibility) =>
     return { ...mapping, [key]: true };
   }, {});
 
+// eslint-disable-next-line no-unused-vars
+const removeMatchingHints = ({ matchingHints, ...movie }) => movie;
+
 module.exports = {
   readJSON,
   writeJSON,
@@ -185,4 +189,5 @@ module.exports = {
   createPerformance,
   createOverview,
   createAccessibility,
+  removeMatchingHints,
 };

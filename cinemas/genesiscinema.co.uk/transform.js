@@ -33,6 +33,15 @@ function getAdditionalDataFor(data) {
   return addiitionalData;
 }
 
+function getOverviewFrom(data) {
+  const $ = cheerio.load(data);
+  const $overview = $(".container .grid h1").parent().next().find("p");
+  $overview.find("*").each(function () {
+    $(this).prepend(" ").append(" ");
+  });
+  return $overview.text().trim();
+}
+
 async function transform({ movieListPage, moviePages }, sourcedEvents) {
   const $ = cheerio.load(movieListPage);
   const $days = $(".whatson_panel");
@@ -70,12 +79,16 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
           ...getAdditionalDataFor(moviePages[movieUrl]),
         });
 
+        let matchingHintsOverview = getOverviewFrom(moviePages[movieUrl]);
         movies[id] = {
           // Fix for special characters not encoding correctly in calendar
           title: title.replace(/’/g, "'").replace(/–/g, "-"),
           url: movieUrl,
           overview,
           performances: [],
+          ...(matchingHintsOverview
+            ? { matchingHints: { overview: matchingHintsOverview } }
+            : {}),
         };
       }
 
