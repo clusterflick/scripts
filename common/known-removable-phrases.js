@@ -65,6 +65,7 @@ const knownRemovablePhrases = [
   "(4DX 3D) ",
   "(IMAX) ",
   "(SS) ",
+  "Academy Awards Best Picture 2025:",
   "Animation at War:",
   "Art of Action:",
   "ATOMIC ORIGINS:",

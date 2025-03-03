@@ -30,6 +30,7 @@ function normalizeTitle(title, options) {
     ["- Drunken Scorpion Presents ", "- Drunken Scorpion "],
     ["Baby + 1 ", "Baby & 1 "],
     ["BABY+1 ", "Baby & 1 "],
+    [" + Short Film: ", " + Short Film "],
     // Fix spelling which causes missed match
     [/^seven$/i, "se7en"],
     [/\s+du$/i, ""], // Dubbed
