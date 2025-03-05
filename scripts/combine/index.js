@@ -201,7 +201,7 @@ async function combine() {
         id: showingId,
         venueId,
         title:
-          normalizeTitle(title) !== normalizeTitle(movie.title)
+          basicNormalize(title) !== basicNormalize(movie.title)
             ? title
             : undefined,
         url,
