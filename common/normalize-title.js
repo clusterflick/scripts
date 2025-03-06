@@ -48,6 +48,7 @@ function normalizeTitle(title, options) {
     [/^Relaxed Mufasa/i, "Relaxed screening: Mufasa"],
     ["behaviour", "behavior"],
     ["Lynch: Fire Walk With Me", "Lynch: Twin Peaks Fire Walk With Me"],
+    ["War Paint: Woman at War", "War Paint: Women at War"],
     ["Big Night Out: New Moon", "Big Night Out: The Twilight Saga: New Moon"],
     ["David Lynch: The Short Films", "The Short Films of David Lynch"],
     ["Battleground + intro and Q&A", "Battlefield + intro and Q&A"], // BFI gets the name of the movie wrong
@@ -56,6 +57,8 @@ function normalizeTitle(title, options) {
     [" - Poets and Lovers", ": Poets and Lovers"],
     ["Last Supper Part 1", "Last Supper"],
     ["Mulholland Dr.", "Mulholland Drive"], // Otherwise we match the TV pilot of the same name
+    ["W&G:", "Wallace & Gromit:"],
+    ["14 Days (Girlfriend Intlo)", "14 Days Girlfriend Intlo"],
     // Sanitise use of "PRESENT" which is confused with "X presents"
     ["‘PAST PRESENT FUTURE’ PODCAST", "‘PAST+PRESENT+FUTURE’ PODCAST"],
   ];
@@ -190,6 +193,7 @@ function normalizeTitle(title, options) {
     .replace(/:$/, "")
     .replace(/'|‘|’|"|“|”/g, "")
     .replace(/\s+(-|–)(\s|$)/g, " ")
+    .replace(/(-|–)$/g, "")
     .replace(/!|:/g, "")
     .replace(/\s+/g, " ")
     .replace(/^(.+),\s+the$/, "the $1")

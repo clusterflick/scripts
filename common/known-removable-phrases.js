@@ -1,8 +1,11 @@
 const knownRemovablePhrases = [
   // Suffixes
+  "[16mm]",
   "[35mm]",
   "on 16mm film",
+  "on 35mm film",
   "on 16mm",
+  "on 35mm",
   ": Black & White Version",
   ": The Movie",
   ": The Final Cut",
@@ -103,6 +106,7 @@ const knownRemovablePhrases = [
   "EOS:",
   "Film Africa:",
   "Film Screening & Live Q&A:",
+  "French Sundaes:",
   "Funday:",
   "gff:",
   "green screen:",
