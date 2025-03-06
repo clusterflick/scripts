@@ -173,6 +173,8 @@ const knownRemovablePhrases = [
   "Comrade Tambo's",
   "Restored: Goran Marković's",
   ": Pastor. Spy. Assassin",
+  ": 20 Years’ New Taiwan Cinema",
+  " and the Cultural Networks of Weimar Berlin with Dr Jon Hughes",
 
   // Common superfluous pieces
   "Double Feature",
