@@ -98,9 +98,11 @@ async function transform({ moviePages }, sourcedEvents) {
 
     if (stats.length > 1) {
       directors = isCatchAll(stats[0]) ? "" : stats[0];
-      year = isCatchAll(stats[stats.length - 2])
-        ? undefined
-        : stats[stats.length - 2];
+      year =
+        isCatchAll(stats[stats.length - 2]) ||
+        stats[stats.length - 2].includes("-") // ignore year ranges
+          ? undefined
+          : stats[stats.length - 2];
     }
 
     const $cast = $(".film-detail__cast");
