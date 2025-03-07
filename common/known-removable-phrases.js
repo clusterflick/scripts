@@ -31,6 +31,7 @@ const knownRemovablePhrases = [
   "- PSYMPHONY",
   "- Filum Film Club",
   "- christmas at genesis",
+  "– Family Screening",
   "| The Ritzy",
   "‘Bloody Mary' Encore",
   " Encore",
