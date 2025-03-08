@@ -26,6 +26,7 @@ const knownRemovablePhrases = [
   ": BNW",
   ": black & neurodiverse movie club launch",
   ": ANI DiFRANCO",
+  ": Watch Party",
   "– In Concert",
   "- UK PREMIERE",
   "- PSYMPHONY",

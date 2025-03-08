@@ -51,7 +51,7 @@ function normalizeTitle(title, options) {
     ["War Paint: Woman at War", "War Paint: Women at War"],
     ["Big Night Out: New Moon", "Big Night Out: The Twilight Saga: New Moon"],
     ["David Lynch: The Short Films", "The Short Films of David Lynch"],
-    ["Battleground + intro and Q&A", "Battlefield + intro and Q&A"], // BFI gets the name of the movie wrong
+    ["Battleground + intro ", "Battlefield + intro "], // BFI gets the name of the movie wrong
     ["The Dawn of Impressionism", "Dawn of Impressionism"],
     [" - Paris, 1874", ": Paris 1874"],
     [" - Poets and Lovers", ": Poets and Lovers"],
@@ -61,6 +61,7 @@ function normalizeTitle(title, options) {
     ["14 Days (Girlfriend Intlo)", "14 Days Girlfriend Intlo"],
     // Sanitise use of "PRESENT" which is confused with "X presents"
     ["‘PAST PRESENT FUTURE’ PODCAST", "‘PAST+PRESENT+FUTURE’ PODCAST"],
+    ["seventeen [right here]", "seventeen right here"], // remove brackets from this band name
   ];
 
   corrections.forEach(([phrase, replacement]) => {
