@@ -33,6 +33,7 @@ const knownRemovablePhrases = [
   "- Filum Film Club",
   "- christmas at genesis",
   "– Family Screening",
+  "– OperaGlass Works",
   "| The Ritzy",
   "‘Bloody Mary' Encore",
   " Encore",

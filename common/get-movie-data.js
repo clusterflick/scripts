@@ -75,6 +75,14 @@ const matchesExpectedCastCrew = async (match, movie) => {
       actors.some((actor) => compareAsSimilar(actor, member)),
     );
     if (actorMatches.length > 0) return true;
+
+    // Sometimes cinemas will mistakenly put the director in as cast. If we
+    // haven't found a match yet, let's try checking the crew against the
+    // actors list to see if we find a match.
+    const directorMatches = crew.filter((member) =>
+      actors.some((actor) => compareAsSimilar(actor, member)),
+    );
+    if (directorMatches.length > 0) return true;
   }
 
   return false;
@@ -87,10 +95,19 @@ async function findMovieByDirector(normalizedTitle, movie) {
     `moviedb-search-person-${slugify(basicNormalize(directorsName))}`,
     directorsName,
   );
-  let directors = peopleMatches.results.filter(
-    ({ known_for_department: department }) =>
-      department && basicNormalize(department) === "directing",
-  );
+
+  // Start off with all results. If we've only 1 result, we'll pass through the
+  // filters below and get returned.
+  let directors = peopleMatches.results;
+
+  // If the name matches lots of people, let's filter them down by just those
+  // known for directing
+  if (peopleMatches.results.length > 1) {
+    directors = peopleMatches.results.filter(
+      ({ known_for_department: department }) =>
+        department && basicNormalize(department) === "directing",
+    );
+  }
 
   // If we can't find someone known for directing, let's take a punt in
   // production, in case they're branching out
@@ -100,6 +117,7 @@ async function findMovieByDirector(normalizedTitle, movie) {
         department && basicNormalize(department) === "production",
     );
   }
+
   if (directors.length === 0) return;
   const director = directors[0];
 
@@ -148,9 +166,7 @@ async function getBestMatch(titleQuery, rawResults = [], movie) {
   );
 
   // If there's only a few results remaining ...
-  if (resultsWithReleaseDate.length <= 3) {
-    // ... and there's no crew info, pick the first as the most likely
-    if (!hasCrewForMovie) return resultsWithReleaseDate[0];
+  if (resultsWithReleaseDate.length <= 3 && hasCrewForMovie) {
     // ... and there's crew info, use it to match a result ...
     for (const result of resultsWithReleaseDate) {
       const hasCastCrewMatch = await matchesExpectedCastCrew(result, movie);
