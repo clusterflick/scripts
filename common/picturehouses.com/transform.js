@@ -1,4 +1,5 @@
 const cheerio = require("cheerio");
+const nlp = require("compromise");
 const slugify = require("slugify");
 const {
   getText,
@@ -27,6 +28,18 @@ function getAdditionalDataFor(data) {
   return addiitionalData;
 }
 
+function getCharacters(data) {
+  const $ = cheerio.load(data);
+  const synopsis = $(".synopsisDiv").text();
+  if (!synopsis) return null;
+
+  const doc = nlp(synopsis);
+  const people = doc.people().json();
+  if (people.length === 0) return;
+
+  return people.map(({ text }) => text);
+}
+
 async function transform(
   { domain, cinemaId },
   { movieListPage: { movies: moviesData }, moviePages },
@@ -51,6 +64,9 @@ async function transform(
       trailer: movie.TrailerUrl,
       ...getAdditionalDataFor(moviePages[movie.ScheduledFilmId]),
     });
+
+    const characters = getCharacters(moviePages[movie.ScheduledFilmId]);
+    const matchingHints = characters ? { characters } : undefined;
 
     const transformedMovie = {
       title: movie.Title,
@@ -95,6 +111,7 @@ async function transform(
           accessibility,
         });
       }),
+      matchingHints,
     };
 
     return moviesAtCinema.concat(transformedMovie);

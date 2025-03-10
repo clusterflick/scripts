@@ -214,6 +214,22 @@ async function getBestMatch(titleQuery, rawResults = [], movie) {
         const overview = basicNormalize(result.overview).slice(0, 200);
         if (hint.includes(overview)) return result;
       }
+
+      // Check if there are matching characters in the overview.
+      // (This specifically helps match throwback movies from Picturehouse where
+      // very little data is provided to match against except an overview (which
+      // _never_ matches the data from TheMovieDB)
+      if (movie.matchingHints.characters && result.overview) {
+        const hasAllCharacters = movie.matchingHints.characters.every(
+          (character) => {
+            const removeBrackets = character.replace(/\([^)]+\)/g, "").trim();
+            const hint = normalizeName(removeBrackets);
+            const overview = normalizeName(result.overview);
+            return overview.includes(hint);
+          },
+        );
+        if (hasAllCharacters) return result;
+      }
     }
   }
 
