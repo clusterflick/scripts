@@ -87,10 +87,15 @@ async function retrieve(attributes) {
 
   const cacheKey = `bfi.org.uk-${articleId}`;
   const movieListPage = await getPageWithPlaywright(
-    `${url}?${urlQuery.join("&")}`,
+    url,
     cacheKey,
     async (page) => {
       const pages = [];
+
+      // Go to the main page first, let it load, and then get the search results
+      await page.waitForLoadState("networkidle");
+      await page.goto(`${url}?${urlQuery.join("&")}`);
+
       while (true) {
         // Wait until the page is finished everything
         try {
