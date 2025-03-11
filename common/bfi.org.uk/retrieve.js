@@ -7,7 +7,7 @@ const { getText } = require("../utils");
 const dateFormat = "yyyy-MM-dd";
 
 async function processSearchResultPage(
-  { domain, articleId },
+  { url, domain, articleId },
   moviePages,
   html,
 ) {
@@ -39,9 +39,13 @@ async function processSearchResultPage(
     const slug = slugify(showData.title, { strict: true }).toLowerCase();
     const cacheKey = `bfi.org.uk-${articleId}-${slug}`;
     moviePages[showUrl].html = await getPageWithPlaywright(
-      `${domain}${showUrl}`,
+      url,
       cacheKey,
       async (page) => {
+        // Go to the main page first, let it load, and then get the show page
+        await page.waitForLoadState("networkidle");
+        await page.goto(`${domain}${showUrl}`);
+
         // Wait until the page is finished everything
         try {
           await page.waitForLoadState("networkidle");
