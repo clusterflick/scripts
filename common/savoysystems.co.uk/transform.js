@@ -40,13 +40,17 @@ function getNotesList(performance) {
 }
 
 async function transform({ domain }, urlSlug, movieData, sourcedEvents) {
-  const movies = movieData.Events.map((movie) => {
-    return {
+  const movies = movieData.Events.reduce((events, movie) => {
+    if (basicNormalize(movie.Title) === basicNormalize("Private Event")) {
+      return events;
+    }
+
+    return events.concat({
       title: sanitizeRichText(movie.Title),
       url: movie.URL,
       overview: createOverview({
         duration: movie.RunningTime,
-        classification: movie.Rating.match(/bbfc\/lrg\/([^.]+)\./)[1],
+        classification: movie.Rating.match(/bbfc\/lrg\/([^.]+)\./)?.[1],
         directors: movie.Director,
         actors: movie.Cast,
       }),
@@ -63,8 +67,8 @@ async function transform({ domain }, urlSlug, movieData, sourcedEvents) {
       matchingHints: {
         overview: movie.Synopsis,
       },
-    };
-  });
+    });
+  }, []);
 
   const listOfSourcedEvents = Object.values(sourcedEvents).flatMap(
     (events) => events,
