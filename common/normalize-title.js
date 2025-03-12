@@ -19,8 +19,11 @@ function normalizeTitle(title, options) {
     ["Scared To Dance -", "Scared To Dance "],
     ["Hitchcock: The Gainsborough Days -", "Hitchcock: The Gainsborough Days "],
     ["Sky Original -", "Sky Original "],
+    ["Green Screen -", "Green Screen "],
     ["SILVER SCREEN -", "SILVER SCREEN"],
     ["SUBTITLED -", "SUBTITLED "],
+    [/^RELAXED -/i, "Relaxed screening: "],
+    ["RELAXED Disney's", "Relaxed screening: Disney's"],
     ["Mamma Mia-", "Mamma Mia -"],
     ["CELLULOID JAM! –", "CELLULOID JAM! "],
     ["Saturday night at the movies -", "Saturday night at the movies:"],
@@ -34,6 +37,7 @@ function normalizeTitle(title, options) {
     ["Baby + 1 ", "Baby & 1 "],
     ["BABY+1 ", "Baby & 1 "],
     [" + Short Film: ", " + Short Film "],
+    ["- Celebrating", " - Celebrating"],
     // Fix spelling which causes missed match
     [/^seven$/i, "se7en"],
     [/\s+du$/i, ""], // Dubbed
@@ -59,9 +63,11 @@ function normalizeTitle(title, options) {
     ["Mulholland Dr.", "Mulholland Drive"], // Otherwise we match the TV pilot of the same name
     ["W&G:", "Wallace & Gromit:"],
     ["14 Days (Girlfriend Intlo)", "14 Days Girlfriend Intlo"],
+    ["SCSEVENTEEN", "SEVENTEEN"],
     // Sanitise use of "PRESENT" which is confused with "X presents"
     ["‘PAST PRESENT FUTURE’ PODCAST", "‘PAST+PRESENT+FUTURE’ PODCAST"],
     ["seventeen [right here]", "seventeen right here"], // remove brackets from this band name
+    ["Exclusive Screening of Highly Acclaimed Bengali Feature Film - ", ""],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
