@@ -38,6 +38,7 @@ function normalizeTitle(title, options) {
     ["BABY+1 ", "Baby & 1 "],
     [" + Short Film: ", " + Short Film "],
     ["- Celebrating", " - Celebrating"],
+    ["- International", " - International"],
     // Fix spelling which causes missed match
     [/^seven$/i, "se7en"],
     [/\s+du$/i, ""], // Dubbed
@@ -196,7 +197,7 @@ function normalizeTitle(title, options) {
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/\s*:\s+/g, ": ")
     .replace(/\s+and\s+/gi, " ")
-    .replace(/\s+&\s+/gi, " ")
+    .replace(/(?:\s+|^)&\s+/gi, " ")
     .replace(/:$/, "")
     .replace(/'|‘|’|"|“|”/g, "")
     .replace(/\s+(-|–)(\s|$)/g, " ")
