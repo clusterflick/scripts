@@ -217,7 +217,7 @@ async function getBestMatch(titleQuery, rawResults = [], movie) {
 
       // Check if there are matching characters in the overview.
       // (This specifically helps match throwback movies from Picturehouse where
-      // very little data is provided to match against except an overview (which
+      // very little data is provided to match against except an overview, which
       // _never_ matches the data from TheMovieDB)
       if (movie.matchingHints.characters && result.overview) {
         const hasAllCharacters = movie.matchingHints.characters.every(
@@ -229,6 +229,26 @@ async function getBestMatch(titleQuery, rawResults = [], movie) {
           },
         );
         if (hasAllCharacters) return result;
+      }
+
+      // Check if there are matching cast derrived from the synopsis. This may
+      // contain garbage, or references to cast not in the movie, but it's some
+      // kind of signal if we've failed on every other type of match.
+      // (This specifically helps match throwback movies from Picturehouse where
+      // very little data is provided to match against except an overview)
+      if (movie.matchingHints.cast) {
+        const updatedMovie = {
+          ...movie,
+          overview: {
+            ...movie.overview,
+            actors: movie.matchingHints.cast,
+          },
+        };
+        const matchesPossibleCast = await matchesExpectedCastCrew(
+          result,
+          updatedMovie,
+        );
+        if (matchesPossibleCast) return result;
       }
     }
   }

@@ -1,3 +1,4 @@
+const nlp = require("compromise");
 const {
   sanitizeRichText,
   createPerformance,
@@ -18,6 +19,14 @@ function getAccessibility(performance) {
     babyFriendly: basicNormalize(performance.BF) === "y",
     relaxed: basicNormalize(performance.RS) === "y",
   };
+}
+
+function getCharacters(synopsis) {
+  const doc = nlp(synopsis);
+  const people = doc.people().json();
+  if (people.length === 0) return;
+
+  return people.map(({ text }) => text);
 }
 
 function getNotesList(performance) {
@@ -66,6 +75,7 @@ async function transform({ domain }, urlSlug, movieData, sourcedEvents) {
       ),
       matchingHints: {
         overview: movie.Synopsis,
+        characters: getCharacters(movie.Synopsis),
       },
     });
   }, []);

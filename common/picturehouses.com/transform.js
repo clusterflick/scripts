@@ -28,16 +28,29 @@ function getAdditionalDataFor(data) {
   return addiitionalData;
 }
 
-function getCharacters(data) {
+function getSynopsis(data) {
   const $ = cheerio.load(data);
-  const synopsis = $(".synopsisDiv").text();
-  if (!synopsis) return null;
+  return getText($(".synopsisDiv"));
+}
 
+function getCharacters(synopsis) {
   const doc = nlp(synopsis);
   const people = doc.people().json();
   if (people.length === 0) return;
 
   return people.map(({ text }) => text);
+}
+
+function getCast(synopsis) {
+  const doc = nlp(synopsis);
+  const people = doc.people().json();
+  if (people.length === 0) return;
+
+  return people.reduce((cast, { text }) => {
+    const bracketedName = text.trim().match(/^[^(]+\s+\(([^)]+)\)/i);
+    if (!bracketedName) return cast;
+    return cast.concat(bracketedName[1].trim());
+  }, []);
 }
 
 async function transform(
@@ -65,8 +78,7 @@ async function transform(
       ...getAdditionalDataFor(moviePages[movie.ScheduledFilmId]),
     });
 
-    const characters = getCharacters(moviePages[movie.ScheduledFilmId]);
-    const matchingHints = characters ? { characters } : undefined;
+    const synopsis = getSynopsis(moviePages[movie.ScheduledFilmId]);
 
     const transformedMovie = {
       title: movie.Title,
@@ -111,7 +123,10 @@ async function transform(
           accessibility,
         });
       }),
-      matchingHints,
+      matchingHints: {
+        characters: synopsis ? getCharacters(synopsis) : undefined,
+        cast: synopsis ? getCast(synopsis) : undefined,
+      },
     };
 
     return moviesAtCinema.concat(transformedMovie);
