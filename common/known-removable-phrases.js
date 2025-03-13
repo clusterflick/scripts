@@ -129,6 +129,7 @@ const knownRemovablePhrases = [
   "LD Friendly ",
   "LOTR:",
   "London Breeze:",
+  "London Bengali Film Festival 2025:",
   "LPFF:",
   "LSF 2025:",
   "Lynchspirations:",
