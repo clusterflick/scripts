@@ -108,6 +108,8 @@ const knownRemovablePhrases = [
   "Doc’n Roll Film Festival 2024:",
   "DOC'N ROLL:",
   "DocHouse:",
+  "Disney's ",
+  "Disney’s ",
   "DH:",
   "Dog-Friendly:",
   "EOS:",
