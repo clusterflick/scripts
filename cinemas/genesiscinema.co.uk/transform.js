@@ -1,4 +1,5 @@
 const cheerio = require("cheerio");
+const nlp = require("compromise");
 const slugify = require("slugify");
 const {
   getText,
@@ -40,6 +41,19 @@ function getOverviewFrom(data) {
     $(this).prepend(" ").append(" ");
   });
   return $overview.text().trim();
+}
+
+function getCharacters(synopsis) {
+  const doc = nlp(synopsis);
+  const people = doc.people().json();
+  if (people.length === 0) return;
+
+  return people.reduce((characters, { text }) => {
+    // make sure it's at least first + last name. Won't work for all movies
+    // but solves the immediate problem based on the synopsis from this cinema
+    if (!text.includes(" ")) return characters;
+    return characters.concat(text.replace(/,/g, ""));
+  }, []);
 }
 
 async function transform({ movieListPage, moviePages }, sourcedEvents) {
@@ -86,9 +100,10 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
           url: movieUrl,
           overview,
           performances: [],
-          ...(matchingHintsOverview
-            ? { matchingHints: { overview: matchingHintsOverview } }
-            : {}),
+          matchingHints: {
+            overview: matchingHintsOverview,
+            characters: getCharacters(matchingHintsOverview),
+          },
         };
       }
 

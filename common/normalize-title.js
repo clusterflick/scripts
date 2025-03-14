@@ -63,6 +63,7 @@ function normalizeTitle(title, options) {
     ["Last Supper Part 1", "Last Supper"],
     ["Mulholland Dr.", "Mulholland Drive"], // Otherwise we match the TV pilot of the same name
     ["W&G:", "Wallace & Gromit:"],
+    [": Curse Of The Were-Rabbit", ": The Curse Of The Were-Rabbit"],
     ["14 Days (Girlfriend Intlo)", "14 Days Girlfriend Intlo"],
     ["SCSEVENTEEN", "SEVENTEEN"],
     // Sanitise use of "PRESENT" which is confused with "X presents"

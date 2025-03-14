@@ -48,6 +48,7 @@ const knownRemovablePhrases = [
   "Special Screening + Q&A",
   "special screening",
   "Film Screening in London",
+  "Fan First Premiere exclusively in IMAX",
   "Dog-Friendly Screening",
   "Dog-Friendly ",
   "' Screening",
