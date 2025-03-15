@@ -122,6 +122,7 @@ const knownRemovablePhrases = [
   "green screen:",
   "green screen;",
   "green screen ",
+  "World Earth Day ",
   "GIF:",
   "Horror with Hitchcock:",
   "IFF 2024:",
