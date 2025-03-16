@@ -124,6 +124,7 @@ async function transform(
         });
       }),
       matchingHints: {
+        overview: synopsis,
         characters: synopsis ? getCharacters(synopsis) : undefined,
         cast: synopsis ? getCast(synopsis) : undefined,
       },

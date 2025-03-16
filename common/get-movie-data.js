@@ -5,6 +5,7 @@ const normalizeTitle = require("./normalize-title");
 const normalizeName = require("./normalize-name");
 const { basicNormalize } = require("./utils");
 const { dailyCache } = require("./cache");
+const askLlm = require("./ask-llm");
 require("dotenv").config();
 
 const moviedb = new MovieDb(process.env.MOVIEDB_API_KEY);
@@ -22,6 +23,17 @@ const compareAsSimilar = (firstString, secondString) => {
   // The threshold of 4 below allows for 2 characters to mismatch (a character
   // deleted and then another added), or a difference of 4 characters in length.
   return lettersChanges <= 4;
+};
+
+const updateMovie = (movie, update) => {
+  return {
+    ...movie,
+    ...update,
+    overview: {
+      ...movie.overview,
+      ...update.overview,
+    },
+  };
 };
 
 const matchesExpectedCastCrew = async (match, movie) => {
@@ -237,13 +249,9 @@ async function getBestMatch(titleQuery, rawResults = [], movie) {
       // (This specifically helps match throwback movies from Picturehouse where
       // very little data is provided to match against except an overview)
       if (movie.matchingHints.cast) {
-        const updatedMovie = {
-          ...movie,
-          overview: {
-            ...movie.overview,
-            actors: movie.matchingHints.cast,
-          },
-        };
+        const updatedMovie = updateMovie(movie, {
+          overview: { actors: movie.matchingHints.cast },
+        });
         const matchesPossibleCast = await matchesExpectedCastCrew(
           result,
           updatedMovie,
@@ -257,12 +265,36 @@ async function getBestMatch(titleQuery, rawResults = [], movie) {
   return undefined;
 }
 
+const tryFindingMatchUsingLlm = async (movie) => {
+  const { isMovie, confidence, matches } = await askLlm(movie);
+
+  // If we're confidence it's a movie, and it's a movie the LLM actually
+  // knows of, then we can search again with updated information.
+  if (isMovie && confidence >= 8 && matches[0].isKnownMovie) {
+    const updatedMovie = updateMovie(movie, {
+      title: matches[0].title,
+      overview: {
+        actors: matches[0].cast,
+        directors: matches[0].directors,
+      },
+    });
+
+    return await searchForBestMatch({
+      normalizedTitle: normalizeTitle(updatedMovie.title),
+      movie: updatedMovie,
+      year: matches[0].year,
+      isUsingLlmData: true,
+    });
+  }
+};
+
 const searchForBestMatch = async ({
   normalizedTitle,
-  slug,
   movie,
   year: yearValue,
+  isUsingLlmData = false,
 }) => {
+  const slug = slugify(normalizedTitle, { strict: true }).toLowerCase();
   const matchByDirector = await findMovieByDirector(normalizedTitle, movie);
   if (matchByDirector) return matchByDirector;
 
@@ -283,7 +315,16 @@ const searchForBestMatch = async ({
       searchTitle.results,
       movie,
     );
-    return bestTitleMatch || null;
+
+    if (bestTitleMatch) return bestTitleMatch;
+
+    // Only run the LLM on this is we haven't already done so
+    if (!isUsingLlmData) {
+      const bestLlmMatch = await tryFindingMatchUsingLlm(movie);
+      if (bestLlmMatch) return bestLlmMatch;
+    }
+
+    return null;
   }
 
   const year = parseInt(yearValue, 10);
@@ -368,6 +409,12 @@ const searchForBestMatch = async ({
       movie,
     );
     if (bestWithoutYearMatch) return bestWithoutYearMatch;
+  }
+
+  // Only run the LLM on this is we haven't already done so
+  if (!isUsingLlmData) {
+    const bestLlmMatch = await tryFindingMatchUsingLlm(movie);
+    if (bestLlmMatch) return bestLlmMatch;
   }
 
   return null;

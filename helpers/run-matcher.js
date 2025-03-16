@@ -1,4 +1,3 @@
-const slugify = require("slugify");
 const normalizeTitle = require("../common/normalize-title");
 const {
   createOverview,
@@ -23,10 +22,8 @@ const [name, year, directors = "", actors = "", matchingHints = "{}"] = args;
   const title = normalizeTitle(movie.title, { retainYear: true });
   const { title: normalizedTitle, year: titleYear } =
     getMovieTitleAndYearFrom(title);
-  const slug = slugify(normalizedTitle, { strict: true }).toLowerCase();
   const result = await searchForBestMatch({
     normalizedTitle,
-    slug,
     movie,
     year: titleYear || movie.overview.year,
   });

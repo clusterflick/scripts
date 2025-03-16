@@ -1,4 +1,3 @@
-const slugify = require("slugify");
 const { format } = require("date-fns");
 const {
   parseMinsToMs,
@@ -16,10 +15,8 @@ async function findMatchesOnTheMovieDb(movies) {
   for (const movie of movies) {
     const title = normalizeTitle(movie.title, { retainYear: true });
     const { title: normalizedTitle, year } = getMovieTitleAndYearFrom(title);
-    const slug = slugify(normalizedTitle, { strict: true }).toLowerCase();
     const result = await searchForBestMatch({
       normalizedTitle,
-      slug,
       movie,
       year: year || movie.overview.year,
     });
