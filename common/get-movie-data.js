@@ -266,7 +266,15 @@ async function getBestMatch(titleQuery, rawResults = [], movie) {
 }
 
 const tryFindingMatchUsingLlm = async (movie) => {
-  const { isMovie, confidence, matches } = await askLlm(movie);
+  let isMovie, confidence, matches;
+  try {
+    ({ isMovie, confidence, matches } = await askLlm(movie));
+  } catch {
+    console.log("Error asking LLM; retrying in 60 seconds...");
+    // Most likely a rate limint was met; wait for 1 minute before trying again
+    await new Promise((resolve) => setTimeout(resolve, 60000));
+    ({ isMovie, confidence, matches } = await askLlm(movie));
+  }
 
   // If we're confidence it's a movie, and it's a movie the LLM actually
   // knows of, then we can search again with updated information.

@@ -3,8 +3,7 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
 const { dailyCache } = require("./cache");
 require("dotenv").config();
 
-const apiKey = process.env.GEMINI_API_KEY;
-const genAI = new GoogleGenerativeAI(apiKey);
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 const systemInstruction = `
   Given the following details from a cinema listing, provide a response with no introduction or summary, just JSON response.
@@ -37,6 +36,8 @@ module.exports = async function askLlm(movie) {
   if (!movie.matchingHints?.overview) {
     return { isMovie: false, confidence: 0 };
   }
+
+  console.log(`Asking LLM to help match "${movie.title}"`);
   const prompt = convertToPrompt(movie);
 
   return dailyCache(`ask-llm-${getId(prompt)}`, async () => {
