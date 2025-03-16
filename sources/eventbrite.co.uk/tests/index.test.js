@@ -1,6 +1,6 @@
 /** @jest-environment setup-polly-jest/jest-environment-node */
 const { setupPolly } = require("../../../common/test-utils");
-const { readJSON } = require("../../../common/utils");
+const { readJSON, removeMatchingHints } = require("../../../common/utils");
 const { attributes, findEvents } = require("..");
 
 const isRecording = false;
@@ -32,7 +32,7 @@ describe(attributes.name, () => {
     "find-events",
     async () => {
       const output = await findEvents(cinema);
-      const data = JSON.parse(JSON.stringify(output));
+      const data = JSON.parse(JSON.stringify(output)).map(removeMatchingHints);
 
       // Make sure the data looks roughly correct
       expect(data).toHaveLength(8);

@@ -1,9 +1,23 @@
 const path = require("node:path");
+const nlp = require("compromise");
 const { readJSON } = require("../../common/utils");
 const normalizeName = require("../../common/normalize-name");
 const distanceInKmBetweenCoordinates = require("../../common/distance-in-km-between-coordinates");
 const { createOverview, createPerformance } = require("../../common/utils");
 const { parseDate } = require("./utils");
+
+function getNames(synopsis) {
+  const doc = nlp(synopsis);
+  const people = doc.people().json();
+  if (people.length === 0) return;
+
+  return people.map(({ text }) =>
+    text
+      .replace(/nominee/i, "")
+      .replace(/[,!]/g, "")
+      .trim(),
+  );
+}
 
 function convertEventbriteEvent(event) {
   const startDate = parseDate(`${event.start_date}T${event.start_time}`);
@@ -22,6 +36,10 @@ function convertEventbriteEvent(event) {
         url: event.tickets_url,
       }),
     ],
+    matchingHints: {
+      characters: getNames(event.summary),
+      cast: getNames(event.summary),
+    },
   };
 }
 

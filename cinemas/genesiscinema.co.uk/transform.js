@@ -40,7 +40,7 @@ function getOverviewFrom(data) {
   $overview.find("*").each(function () {
     $(this).prepend(" ").append(" ");
   });
-  return $overview.text().trim();
+  return $overview.text().split("About the festival")[0].trim();
 }
 
 function getCharacters(synopsis) {
