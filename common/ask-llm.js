@@ -28,8 +28,14 @@ const getId = (value) =>
   crypto.createHash("sha256").update(value).digest("hex").slice(0, 8);
 
 function convertToPrompt(movie) {
-  return `${movie.title} (${movie.year}) [${movie.classification}]
-${movie.matchingHints.overview}`;
+  const movieYear = movie.year ? ` (${movie.year})` : "";
+  const movieClassification = movie.classification
+    ? `[${movie.classification}]`
+    : "";
+  return `
+${movie.title}${movieYear}${movieClassification}
+${movie.matchingHints.overview}
+`.trim();
 }
 
 module.exports = async function askLlm(movie) {

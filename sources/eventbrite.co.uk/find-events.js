@@ -37,7 +37,7 @@ function convertEventbriteEvent(event) {
       }),
     ],
     matchingHints: {
-      characters: getNames(event.summary),
+      overview: event.summary,
       cast: getNames(event.summary),
     },
   };
