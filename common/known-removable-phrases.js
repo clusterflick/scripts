@@ -24,6 +24,7 @@ const knownRemovablePhrases = [
   ": english language version",
   ": Director's Definitive Edition",
   ": charity screening",
+  ": Medicinema Charity Screening",
   ": BNW",
   ": black & neurodiverse movie club launch",
   ": ANI DiFRANCO",
