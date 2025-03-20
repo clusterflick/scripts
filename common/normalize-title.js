@@ -169,6 +169,7 @@ function normalizeTitle(title, options) {
   }
 
   title = title.split(/ plus q(?:&|\+)a/i)[0];
+  title = title.split(/ followed by q(?:&|\+)a/i)[0];
 
   const hasSquareBracketDate = title.trim().match(/^(.*?)\[(\d{4})\](.*?)$/);
   if (hasSquareBracketDate) {
@@ -199,7 +200,7 @@ function normalizeTitle(title, options) {
     .replace(/\s+and\s+/gi, " ")
     .replace(/(?:\s+|^)&\s+/gi, " ")
     .replace(/:$/, "")
-    .replace(/'|‘|’|"|“|”/g, "")
+    .replace(/'|`|​|‘|’|"|“|”/g, "")
     .replace(/\s+(-|–)(\s|$)/g, " ")
     .replace(/(-|–)$/g, "")
     .replace(/!|:/g, "")
