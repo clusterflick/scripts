@@ -40,6 +40,7 @@ function normalizeTitle(title, options) {
     ["- International", " - International"],
     // Fix spelling which causes missed match
     [/^seven$/i, "se7en"],
+    ["The Return The Return", "The Return"],
     [/\s+du$/i, ""], // Dubbed
     [/\s+su$/i, ""], // subbed
     ["Vasthunnam", "Vasthunam"],
