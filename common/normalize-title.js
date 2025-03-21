@@ -45,6 +45,7 @@ function normalizeTitle(title, options) {
     [/\s+su$/i, ""], // subbed
     ["Vasthunnam", "Vasthunam"],
     ["Melagaon", "Malegaon"],
+    ["Carvaggio", "Caravaggio"],
     ["Eftihia", "Eftyhia"],
     ["10180", "1080"],
     ["unknwon", "unknown"],
