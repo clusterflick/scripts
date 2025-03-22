@@ -112,7 +112,9 @@ async function findMovieByDirector(normalizedTitle, movie) {
 
   // Start off with all results. If we've only 1 result, we'll pass through the
   // filters below and get returned.
-  let directors = peopleMatches.results;
+  let directors = peopleMatches.results.sort(
+    (a, b) => b.popularity - a.popularity,
+  );
 
   // If the name matches lots of people, let's filter them down by just those
   // known for directing
@@ -133,18 +135,20 @@ async function findMovieByDirector(normalizedTitle, movie) {
   }
 
   if (directors.length === 0) return;
-  const director = directors[0];
 
-  // Get the full list of movie credits for the director, filter down to just
-  // their directing credits, and match against those
-  const credits = await getPersonMovieCreditsAndCacheResults(director.id);
-  const directorCredits = credits.crew.filter(
-    ({ job }) => job && basicNormalize(job) === "director",
-  );
-  const resultsWithSameTitle = directorCredits.filter(
-    matchesMovieTitle(normalizedTitle),
-  );
-  if (resultsWithSameTitle.length === 1) return resultsWithSameTitle[0];
+  // Limit queries to just 3 matches
+  for (const director of directors.slice(0, 3)) {
+    // Get the full list of movie credits for the director, filter down to just
+    // their directing credits, and match against those
+    const credits = await getPersonMovieCreditsAndCacheResults(director.id);
+    const directorCredits = credits.crew.filter(
+      ({ job }) => job && basicNormalize(job) === "director",
+    );
+    const resultsWithSameTitle = directorCredits.filter(
+      matchesMovieTitle(normalizedTitle),
+    );
+    if (resultsWithSameTitle.length === 1) return resultsWithSameTitle[0];
+  }
 }
 
 const hasCrewFor = (movie) =>
@@ -284,7 +288,7 @@ const tryFindingMatchUsingLlm = async (movie) => {
     ({ isMovie, confidence, matches } = await askLlm(movie));
   }
 
-  // If we're confidence it's a movie, and it's a movie the LLM actually
+  // If we've confidence it's a movie, and it's a movie the LLM actually
   // knows of, then we can search again with updated information.
   if (isMovie && confidence >= 8 && matches[0].isKnownMovie) {
     const updatedMovie = updateMovie(movie, {

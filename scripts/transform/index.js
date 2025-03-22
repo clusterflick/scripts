@@ -94,6 +94,9 @@ async function transform(location, input, historicData = []) {
 
     // If a movie matches the following, it's been delisted but is still valid:
     for (const movie of yesterdaysData) {
+      // Don't bring unbookable events back in
+      if (movie.title.toLowerCase().includes("(do not book")) continue;
+
       // The movie data from yesterday contains future performances .
       // If there's no future performances, it's a past movie; continue
       const now = new Date();
