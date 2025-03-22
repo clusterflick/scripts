@@ -73,7 +73,7 @@ async function transform({ movieListPage }, sourcedEvents) {
     const url = $movieTitle.attr("href");
 
     // Don't pull data for entries which aren't bookable films
-    if (title.toLowerCase().includes("(do not book)")) {
+    if (title.toLowerCase().includes("(do not book")) {
       return;
     }
 

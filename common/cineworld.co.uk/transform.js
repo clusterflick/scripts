@@ -35,8 +35,15 @@ async function transform(venue, { movieListPage, moviePages }, sourcedEvents) {
     dayData.films.forEach((film) => {
       const additionalData = moviePages[film.id].filmDetails;
 
+      let year;
+      const parsedYear = parseInt(film.releaseYear, 10);
+      if (parsedYear && parsedYear < new Date().getFullYear()) {
+        year = film.releaseYear;
+      }
+
       const overview = createOverview({
         duration: film.length,
+        year,
         categories: getCategories(film.attributeIds),
         directors: additionalData.directors,
         actors: additionalData.cast,

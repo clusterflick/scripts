@@ -6,7 +6,7 @@ const {
 } = require("../../common/utils");
 const { parseDate } = require("./utils");
 
-const infoMatcher = /^([^,]+),\s+(\d{4}),\s+(\d+)\s+min(\s+|$)/i;
+const infoMatcher = /^([^,]+),\s+(\d{4}),\s+(\d+)\s+min(\s+|$|,)/i;
 
 const parseDetailsFrom = (info) => {
   const match = info.match(infoMatcher);

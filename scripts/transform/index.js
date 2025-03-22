@@ -42,24 +42,55 @@ async function transform(location, input, historicData = []) {
   try {
     const start = Date.now();
 
-    // Don't check for missing data for the following locations
-    const optedOut = [
-      // For cineworld, we've no way of determining if the movie is missing or
-      // deleted, so don't try.
-      "cineworld.co.uk-bexleyheath",
-      "cineworld.co.uk-enfield",
-      "cineworld.co.uk-feltham",
-      "cineworld.co.uk-hounslow",
-      "cineworld.co.uk-ilford",
-      "cineworld.co.uk-leicester-square",
-      "cineworld.co.uk-south-ruislip",
-      "cineworld.co.uk-the-o2-greenwich",
-      "cineworld.co.uk-wandsworth",
-      "cineworld.co.uk-wembley",
-      "cineworld.co.uk-west-india-quay",
-      "cineworld.co.uk-wood-green",
+    // Only check for missing data for the following locations
+    const optedIn = [
+      "barbican.org.uk",
+      "beermerchantstap.com",
+      "bfi.org.uk-imax",
+      "bfi.org.uk-southbank",
+      "cinemamuseum.org.uk",
+      "closeupfilmcentre.com",
+      "electriccinema.co.uk-portobello",
+      "electriccinema.co.uk-white-city",
+      "freud.org.uk",
+      "genesiscinema.co.uk",
+      "myvue.com-finchley-road",
+      "myvue.com-fulham-broadway",
+      "myvue.com-islington",
+      "myvue.com-leicester-square",
+      "myvue.com-north-finchley",
+      "myvue.com-piccadilly",
+      "myvue.com-shepherds-bush",
+      "myvue.com-westfield",
+      "myvue.com-westfield-stratford-city",
+      "odeon.co.uk-acton",
+      "odeon.co.uk-beckenham",
+      "odeon.co.uk-camden",
+      "odeon.co.uk-greenwich",
+      "odeon.co.uk-haymarket",
+      "odeon.co.uk-holloway",
+      "odeon.co.uk-islington",
+      "odeon.co.uk-kingston",
+      "odeon.co.uk-lee-valley",
+      "odeon.co.uk-leicester-square",
+      "odeon.co.uk-putney",
+      "odeon.co.uk-richmond",
+      "odeon.co.uk-south-woodford",
+      "odeon.co.uk-streatham",
+      "odeon.co.uk-swiss-cottage",
+      "odeon.co.uk-tottenham-court-road",
+      "odeon.co.uk-uxbridge",
+      "odeon.co.uk-west-end",
+      "odeon.co.uk-wimbledon",
+      "princecharlescinema.com",
+      "richmix.org.uk",
+      "riversidestudios.co.uk",
+      "thearzner.com",
+      "thecastlecinema.com",
+      "thegardencinema.co.uk",
+      "thelexicinema.co.uk",
     ];
-    const yesterdaysData = optedOut.includes(location) ? [] : historicData;
+    const yesterdaysData = optedIn.includes(location) ? historicData : [];
 
     // If a movie matches the following, it's been delisted but is still valid:
     for (const movie of yesterdaysData) {
@@ -92,13 +123,19 @@ async function transform(location, input, historicData = []) {
       // If we can't get the page or the page has a "not found" URL, then it's
       // been removed; continue
       let response;
+      let content;
       try {
         response = await fetch(movie.url);
+        content = await response.text();
       } catch {
         // If something goes wrong checking the the URL, assume it's been removed
         continue;
       }
       if (!response.ok || response.url.includes("/not-found")) continue;
+
+      // Check response content in case the service is misconfigured to respond
+      // ok status with not found content
+      if (content.toLowerCase().includes("page not found")) continue;
 
       // The movie may have been renamed, which would cause the title and URL to
       // change. Usually the old URL will redirect to the new URL, so let's
@@ -115,7 +152,7 @@ async function transform(location, input, historicData = []) {
     }
     const duration = Math.round((Date.now() - start) / 1000);
     console.log(
-      ` - ✅ ${optedOut.includes(location) ? "Skipped" : "Checked"} (${duration}s)`,
+      ` - ✅ ${optedIn.includes(location) ? "Checked" : "Skipped"} (${duration}s)`,
     );
   } catch (e) {
     console.log(` - ❌ Error checking`);

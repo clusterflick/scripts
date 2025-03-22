@@ -10,6 +10,8 @@ require("dotenv").config();
 
 const moviedb = new MovieDb(process.env.MOVIEDB_API_KEY);
 
+const comparableChunk = (value) => value.replace(/\s+/g, "").slice(0, 200);
+
 const compareAsSimilar = (firstString, secondString) => {
   if (firstString === secondString) return true;
 
@@ -221,10 +223,16 @@ async function getBestMatch(titleQuery, rawResults = [], movie) {
       // (This specifically helps match movies at thearzner.com, which provides
       // very little data to match against except an overview which very often
       // matches the data from TheMovieDB)
-      if (movie.matchingHints.overview && result.overview) {
-        const hint = basicNormalize(movie.matchingHints.overview);
-        const overview = basicNormalize(result.overview).slice(0, 200);
-        if (hint.includes(overview)) return result;
+      const hintOverview = movie.matchingHints.overview;
+      if (hintOverview && result.overview) {
+        const hint = comparableChunk(basicNormalize(hintOverview));
+        const overview = comparableChunk(basicNormalize(result.overview));
+        if (
+          hint.length >= 50 &&
+          overview.length >= 50 &&
+          (hint.includes(overview) || overview.includes(hint))
+        )
+          return result;
       }
 
       // Check if there are matching characters in the overview.

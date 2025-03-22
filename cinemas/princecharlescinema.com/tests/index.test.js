@@ -21,7 +21,7 @@ describe(attributes.name, () => {
       const data = JSON.parse(JSON.stringify(output));
 
       // Make sure the data looks roughly correct
-      expect(data).toHaveLength(226);
+      expect(data).toHaveLength(225);
 
       expect(schemaValidate(data)).toBe(true);
       expect(data).toMatchSnapshot();

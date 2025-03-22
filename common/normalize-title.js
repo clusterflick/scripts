@@ -16,6 +16,8 @@ function normalizeTitle(title, options) {
   // Specific corrections
   const corrections = [
     // Remove prefix separators which will cause later processing to strip the wrong section
+    ["Closing Night + Awards", "Closing Night and Awards"],
+    ["Poetry Slam", "Event: Poetry Slam"],
     ["Scared To Dance -", "Scared To Dance "],
     ["Hitchcock: The Gainsborough Days -", "Hitchcock: The Gainsborough Days "],
     ["Sky Original -", "Sky Original "],
@@ -62,6 +64,7 @@ function normalizeTitle(title, options) {
     [" - Paris, 1874", ": Paris 1874"],
     [" - Poets and Lovers", ": Poets and Lovers"],
     ["Last Supper Part 1", "Last Supper"],
+    ["Veera Dheera Sooran: Part 2", "Veera Dheera Sooran"],
     ["Mulholland Dr.", "Mulholland Drive"], // Otherwise we match the TV pilot of the same name
     ["W&G:", "Wallace & Gromit:"],
     [": Curse Of The Were-Rabbit", ": The Curse Of The Were-Rabbit"],
@@ -212,7 +215,7 @@ function normalizeTitle(title, options) {
     .replace(/\s+and\s+/gi, " ")
     .replace(/(?:\s+|^)&\s+/gi, " ")
     .replace(/:$/, "")
-    .replace(/'|`|​|‘|’|"|“|”/g, "")
+    .replace(/'|`|\u200B|‘|’|"|“|”/g, "")
     .replace(/\s+(-|–)(\s|$)/g, " ")
     .replace(/(-|–)$/g, "")
     .replace(/!|:/g, " ")
