@@ -178,7 +178,6 @@ const knownRemovablePhrases = [
   "Thrill Seekers:",
   "Thrill Seekers :",
   "tlor:",
-  "Ukraine Fundraiser:",
   "Valentine's Day:",
   "International Women's Day:",
   "Scared To Dance -",

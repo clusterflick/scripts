@@ -165,6 +165,11 @@ function normalizeTitle(title, options) {
     title = hasMember[1];
   }
 
+  const hasFundraiser = matchesStartingPrefix(title, "fundraiser");
+  if (hasFundraiser) {
+    title = hasFundraiser[1];
+  }
+
   const hasSeparator = title.match(/^(.*?)\s+(?:\+|-|\/|\||•)\s*/);
   if (hasSeparator) {
     title = hasSeparator[1];
@@ -181,6 +186,11 @@ function normalizeTitle(title, options) {
   const hasBrackets = title.match(/^(.*?)\s+\[/);
   if (hasBrackets) {
     title = hasBrackets[1];
+  }
+
+  const hasSlavicPremier = title.match(/Кинопремиера на "([^"]+)" /i);
+  if (hasSlavicPremier) {
+    title = hasSlavicPremier[1];
   }
 
   title = title.replace(/(^|\s+)\d+th anniversary( screenings?)?(\s+|$)/i, " ");
@@ -205,7 +215,7 @@ function normalizeTitle(title, options) {
     .replace(/'|`|​|‘|’|"|“|”/g, "")
     .replace(/\s+(-|–)(\s|$)/g, " ")
     .replace(/(-|–)$/g, "")
-    .replace(/!|:/g, "")
+    .replace(/!|:/g, " ")
     .replace(/\s+/g, " ")
     .replace(/^(.+),\s+the$/, "the $1")
     .trim();
