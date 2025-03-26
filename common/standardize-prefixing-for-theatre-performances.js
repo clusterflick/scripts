@@ -23,7 +23,7 @@ function standardizePrefixingForLesMiserablesPerformances(title) {
 }
 
 // National Theatre
-const nationalTheatrePrefixes = [/NT Live[:|\s]/i];
+const nationalTheatrePrefixes = [/NT Live Broadcast[:|\s]/i, /NT Live[:|\s]/i];
 
 function standardizePrefixingForNationalTheatrePerformances(title) {
   title = title.replace(/\s+&\s+/, " and ").replace(/\s+-\s+/, ": ");
@@ -154,7 +154,10 @@ function standardizePrefixingForTheatrePerformances(
     return standardizePrefixingForLesMiserablesPerformances(title, options);
   }
 
-  if (lowercaseTitle.startsWith("nt live:")) {
+  if (
+    lowercaseTitle.startsWith("nt live:") ||
+    lowercaseTitle.startsWith("nt live broadcast:")
+  ) {
     return standardizePrefixingForNationalTheatrePerformances(title, options);
   }
 

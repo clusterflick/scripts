@@ -103,6 +103,13 @@ function normalizeTitle(title, options) {
     title = hasScreenings[1];
   }
 
+  const hasRetrospectiveScreening = title.match(
+    /\s+retrospective screening(?:\s+of|:|;)?\s+(.*?)$/i,
+  );
+  if (hasRetrospectiveScreening) {
+    title = hasRetrospectiveScreening[1];
+  }
+
   const hasClub = matchesOpenPrefix(title, "club");
   if (hasClub) {
     title = hasClub[1];
@@ -194,6 +201,11 @@ function normalizeTitle(title, options) {
   const hasSlavicPremier = title.match(/Кинопремиера на "([^"]+)" /i);
   if (hasSlavicPremier) {
     title = hasSlavicPremier[1];
+  }
+
+  const hasUkranianFilm = title.match(/Ukrainian Film "([^"]+)" /i);
+  if (hasUkranianFilm) {
+    title = hasUkranianFilm[1];
   }
 
   title = title.replace(/(^|\s+)\d+th anniversary( screenings?)?(\s+|$)/i, " ");

@@ -73,6 +73,7 @@ const knownRemovablePhrases = [
   "COCKTAIL PARTY",
   "(Black & White) Version",
   "Episode Showcase",
+  " by Joshua Oppenheimer",
 
   // Prefixes
   "(4DX) ",
@@ -173,6 +174,7 @@ const knownRemovablePhrases = [
   "SILVERSCREEN: ",
   "SILVERSCREEN ",
   "SUBTITLED ",
+  "SUBTITLED:",
   "Street Celebration: Pre",
   "The Dead Carpet :",
   "Thrill Seekers:",
