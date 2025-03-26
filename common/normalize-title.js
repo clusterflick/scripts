@@ -15,7 +15,9 @@ function normalizeTitle(title, options) {
 
   // Specific corrections
   const corrections = [
+    [/^LD:/i, "LD Friendly:"],
     // Remove prefix separators which will cause later processing to strip the wrong section
+    ["Rafadan Tayfa - Kapadokya", "Rafadan Tayfa: Kapadokya"],
     ["Closing Night + Awards", "Closing Night and Awards"],
     ["Poetry Slam", "Event: Poetry Slam"],
     ["Scared To Dance -", "Scared To Dance "],
