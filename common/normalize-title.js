@@ -72,6 +72,7 @@ function normalizeTitle(title, options) {
     [": Curse Of The Were-Rabbit", ": The Curse Of The Were-Rabbit"],
     ["14 Days (Girlfriend Intlo)", "14 Days Girlfriend Intlo"],
     ["SCSEVENTEEN", "SEVENTEEN"],
+    ["Björk's", "Björk:"],
     // Sanitise use of "PRESENT" which is confused with "X presents"
     ["‘PAST PRESENT FUTURE’ PODCAST", "‘PAST+PRESENT+FUTURE’ PODCAST"],
     ["seventeen [right here]", "seventeen right here"], // remove brackets from this band name
