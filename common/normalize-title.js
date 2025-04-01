@@ -233,7 +233,7 @@ function normalizeTitle(title, options) {
     .replace(/'|`|\u200B|‘|’|"|“|”/g, "")
     .replace(/\s+(-|–)(\s|$)/g, " ")
     .replace(/(-|–)$/g, "")
-    .replace(/!|:/g, " ")
+    .replace(/!|:|\./g, " ")
     .replace(/\s+/g, " ")
     .replace(/^(.+),\s+the$/, "the $1")
     .trim();

@@ -27,7 +27,6 @@ async function getAdditionalDataFor(moviePages) {
 
     const data = createOverview({
       duration: getText($(".film-duration")).replace("mins", ""),
-      year: getText($(".film-year")).match(/(\d{4})/)?.[0],
       directors: getText($(".meta .meta-line .film-director")),
       actors: getText($(".meta .meta-line .film-cast")),
       classification: $(".bbfc img").attr("alt")?.replace("BBFC ", "")?.trim(),

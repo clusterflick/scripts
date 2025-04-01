@@ -355,29 +355,12 @@ const searchForBestMatch = async ({
     getPayload({ primary_release_year: year }),
   );
 
-  // Check we haven't matched a "making of" documentary, and if we have search
-  // the previous year
+  // If we don't have a match, or we do but it's a "making of" documentary, then
+  // search the previous year for a match
   if (
-    searchPrimaryYear.results.length === 1 &&
-    searchPrimaryYear.results[0].title.toLowerCase().startsWith("making ")
-  ) {
-    searchPrimaryYear = await moviedb.searchMovie(
-      getPayload({ primary_release_year: year - 1 }),
-    );
-  }
-
-  const bestMatchPrimaryYear = await getBestMatch(
-    normalizedTitle,
-    searchPrimaryYear.results,
-    movie,
-  );
-  if (bestMatchPrimaryYear) return bestMatchPrimaryYear;
-
-  // Check we haven't matched a "making of" documentary, and if we have search
-  // the previous year
-  if (
-    searchPrimaryYear.results.length === 1 &&
-    searchPrimaryYear.results[0].title.toLowerCase().startsWith("making")
+    searchPrimaryYear.results.length === 0 ||
+    (searchPrimaryYear.results.length === 1 &&
+      searchPrimaryYear.results[0].title.toLowerCase().startsWith("making "))
   ) {
     const searchPreviousYear = await searchMovieAndCacheResults(
       `moviedb-search-previous-year-${cacheKeySuffix}`,

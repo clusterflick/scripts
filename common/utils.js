@@ -75,7 +75,13 @@ const isValidClassification = (value = "") => {
 const parseMinsToMs = (value) => parseInt(value, 10) * 60 * 1000;
 
 const sanitizeRichText = (value) =>
-  decode(value.replaceAll("<br />", "\n").trim());
+  decode(
+    value
+      .replaceAll("<br />", "\n")
+      .replaceAll("<p>", "")
+      .replaceAll("</p>", "")
+      .trim(),
+  );
 
 const fetchText = async (url) => (await fetch(url)).text();
 
