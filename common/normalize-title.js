@@ -42,6 +42,7 @@ function normalizeTitle(title, options) {
     [" + Short Film: ", " + Short Film "],
     ["- Celebrating", " - Celebrating"],
     ["- International", " - International"],
+    ["Björk’s", "Björk"],
     // Fix spelling which causes missed match
     [/^seven$/i, "se7en"],
     ["The Return The Return", "The Return"],
@@ -66,6 +67,7 @@ function normalizeTitle(title, options) {
     [" - Paris, 1874", ": Paris 1874"],
     [" - Poets and Lovers", ": Poets and Lovers"],
     ["Last Supper Part 1", "Last Supper"],
+    ["The Last Supper", "Last Supper"],
     ["Veera Dheera Sooran: Part 2", "Veera Dheera Sooran"],
     ["Mulholland Dr.", "Mulholland Drive"], // Otherwise we match the TV pilot of the same name
     ["W&G:", "Wallace & Gromit:"],
@@ -73,6 +75,7 @@ function normalizeTitle(title, options) {
     ["14 Days (Girlfriend Intlo)", "14 Days Girlfriend Intlo"],
     ["SCSEVENTEEN", "SEVENTEEN"],
     ["Björk's", "Björk:"],
+    ["Children’s Cinema", "The Notebook Children's Cinema"], // Stop this accidentally matching "Children in the Cinema"
     // Sanitise use of "PRESENT" which is confused with "X presents"
     ["‘PAST PRESENT FUTURE’ PODCAST", "‘PAST+PRESENT+FUTURE’ PODCAST"],
     ["seventeen [right here]", "seventeen right here"], // remove brackets from this band name
@@ -236,6 +239,8 @@ function normalizeTitle(title, options) {
     .replace(/!|:|\./g, " ")
     .replace(/\s+/g, " ")
     .replace(/^(.+),\s+the$/, "the $1")
+    .trim()
+    .replace(/^the /i, "")
     .trim();
 }
 
