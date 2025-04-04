@@ -24,6 +24,7 @@ const knownRemovablePhrases = [
   ": Final Cut",
   ": Family Flicks Hallowe'en Special",
   ": english language version",
+  ": Everyman In Therapy",
   ": Director's Definitive Edition",
   ": charity screening",
   ": Medicinema Charity Screening",
