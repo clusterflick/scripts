@@ -38,6 +38,7 @@ const knownRemovablePhrases = [
   "- Filum Film Club",
   "- christmas at genesis",
   "- Wes Anderson Season",
+  "- In Celebration of Val Kilmer",
   "– Family Screening",
   "– OperaGlass Works",
   "– Poetry Film Screening and Fundraiser",

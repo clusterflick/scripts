@@ -281,7 +281,12 @@ const tryFindingMatchUsingLlm = async (movie) => {
   let isMovie, confidence, matches;
   try {
     ({ isMovie, confidence, matches } = await askLlm(movie));
-  } catch {
+  } catch (e) {
+    // If we error on recitation, just move on
+    if (e?.response?.candidates?.[0]?.finishReason === "RECITATION") {
+      return null;
+    }
+
     console.log("Error asking LLM; retrying in 60 seconds...");
     // Most likely a rate limint was met; wait for 1 minute before trying again
     await new Promise((resolve) => setTimeout(resolve, 60000));
