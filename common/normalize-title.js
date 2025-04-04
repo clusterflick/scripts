@@ -76,6 +76,7 @@ function normalizeTitle(title, options) {
     ["SCSEVENTEEN", "SEVENTEEN"],
     ["Björk's", "Björk:"],
     ["Children’s Cinema", "The Notebook Children's Cinema"], // Stop this accidentally matching "Children in the Cinema"
+    ["Eurovision Grand Final Live", "Eurovision Grand Final"], // Remove live for better combining
     // Sanitise use of "PRESENT" which is confused with "X presents"
     ["‘PAST PRESENT FUTURE’ PODCAST", "‘PAST+PRESENT+FUTURE’ PODCAST"],
     ["seventeen [right here]", "seventeen right here"], // remove brackets from this band name
@@ -214,7 +215,10 @@ function normalizeTitle(title, options) {
     title = hasUkranianFilm[1];
   }
 
-  title = title.replace(/(^|\s+)\d+th anniversary( screenings?)?(\s+|$)/i, " ");
+  title = title.replace(
+    /(^|\s+)\d+th ann(iversary)?( screenings?)?(\s+|$)/i,
+    " ",
+  );
 
   knownRemovablePhrases.forEach((phrase) => {
     title = title.replace(phrase.toLowerCase(), "");

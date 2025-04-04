@@ -45,7 +45,7 @@ const getMovieTitleAndYearFrom = (title) => {
 const convertToList = (value) => {
   if (!value) return [];
   const list = value
-    .split(/,|\n|\||\/|&|;/g)
+    .split(/,|\n|\||\/|&|;|•/g)
     .map((value) => value.replace(/\s+/g, " ").trim());
   return list.filter((item) => item !== "");
 };
