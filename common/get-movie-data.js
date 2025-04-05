@@ -104,6 +104,7 @@ const matchesExpectedCastCrew = async (match, movie) => {
 
 async function findMovieByDirector(normalizedTitle, movie) {
   if (movie.overview.directors.length === 0) return;
+
   const directorsName = movie.overview.directors[0];
   const peopleMatches = await searchPersonAndCacheResults(
     `moviedb-search-person-${slugify(basicNormalize(directorsName))}`,
@@ -125,16 +126,12 @@ async function findMovieByDirector(normalizedTitle, movie) {
     );
   }
 
-  // If we can't find someone known for directing, let's take a punt in
-  // production, in case they're branching out
+  // If we can't find a director, give the most popular result a chance
   if (directors.length === 0) {
-    directors = peopleMatches.results.filter(
-      ({ known_for_department: department }) =>
-        department && basicNormalize(department) === "production",
-    );
+    directors = [
+      peopleMatches.results.sort((a, b) => b.popularity - a.popularity)[0],
+    ];
   }
-
-  if (directors.length === 0) return;
 
   // Limit queries to just 3 matches
   for (const director of directors.slice(0, 3)) {
