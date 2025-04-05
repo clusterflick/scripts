@@ -155,6 +155,7 @@ const knownRemovablePhrases = [
   "M4J :",
   "MADE IN PRAGUE:",
   "Masterpieces of the Iranian New Wave:",
+  "M:I Audience Choice:",
   "My Twisted Valentine:",
   "New East Cinema:",
   "New Writings:",

@@ -17,6 +17,7 @@ function normalizeTitle(title, options) {
   const corrections = [
     [/^LD:/i, "LD Friendly:"],
     // Remove prefix separators which will cause later processing to strip the wrong section
+    [/Star Wars: Episode ([IV]+) - /i, "Star Wars: Episode $1 "], // Remove the dash
     ["Rafadan Tayfa - Kapadokya", "Rafadan Tayfa: Kapadokya"],
     ["Closing Night + Awards", "Closing Night and Awards"],
     ["Poetry Slam", "Event: Poetry Slam"],
@@ -229,6 +230,8 @@ function normalizeTitle(title, options) {
     title = title.replace(/\([^(]*\)$/, "").trim();
     title = title.replace(/\([^(]*\)$/, "").trim(); // Do it twice in case there's more paraenthesis
   }
+
+  title = title.replace(/\s+screening$/i, "");
 
   return title
     .normalize("NFD")
