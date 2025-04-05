@@ -138,7 +138,7 @@ const createPerformance = ({
     .filter((value) => !!value)
     .join("\n")
     .trim(),
-  bookingUrl: url,
+  bookingUrl: encodeURI(url),
   screen: getScreen(screen),
   status,
   accessibility,

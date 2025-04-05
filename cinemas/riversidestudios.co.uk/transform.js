@@ -33,8 +33,9 @@ function getOverviewData(pageData) {
 
 async function transform({ movieListPage, moviePages }, sourcedEvents) {
   const movies = movieListPage.map((movieData) => {
-    const { title, url } = movieData;
-    const { year, directors, actors } = getOverviewData(moviePages[url]);
+    const { title, url: urlRaw } = movieData;
+    const { year, directors, actors } = getOverviewData(moviePages[urlRaw]);
+    const url = encodeURI(urlRaw);
 
     const overview = createOverview({
       duration: movieData.run_time.split("mins")[0].trim(),
