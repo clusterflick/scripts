@@ -6,6 +6,7 @@ const normalizeName = require("./normalize-name");
 const { basicNormalize } = require("./utils");
 const { dailyCache } = require("./cache");
 const askLlm = require("./ask-llm");
+const askLlmToReviewResults = require("./ask-llm-to-review-results");
 require("dotenv").config();
 
 const moviedb = new MovieDb(process.env.MOVIEDB_API_KEY);
@@ -312,6 +313,30 @@ const tryFindingMatchUsingLlm = async (movie) => {
   }
 };
 
+const reviewResultsUsingLlm = async (movie, results) => {
+  let confidence, match;
+  try {
+    ({ confidence, match } = await askLlmToReviewResults(movie, results));
+  } catch (e) {
+    // If we error on recitation, just move on
+    if (e?.response?.candidates?.[0]?.finishReason === "RECITATION") {
+      return null;
+    }
+
+    console.log("Error asking LLM; retrying in 60 seconds...");
+    // Most likely a rate limint was met; wait for 1 minute before trying again
+    await new Promise((resolve) => setTimeout(resolve, 60000));
+    ({ confidence, match } = await askLlmToReviewResults(movie, results));
+  }
+
+  if (confidence >= 7) {
+    const matchingResult = results.find(({ id }) => id === match?.id);
+    if (matchingResult) return matchingResult;
+  }
+
+  return null;
+};
+
 const searchForBestMatch = async ({
   normalizedTitle,
   movie,
@@ -346,6 +371,14 @@ const searchForBestMatch = async ({
     if (!isUsingLlmData) {
       const bestLlmMatch = await tryFindingMatchUsingLlm(movie);
       if (bestLlmMatch) return bestLlmMatch;
+
+      if (searchTitle.results.length > 0) {
+        const bestLlmMatchFromResults = await reviewResultsUsingLlm(
+          movie,
+          searchTitle.results,
+        );
+        if (bestLlmMatchFromResults) return bestLlmMatchFromResults;
+      }
     }
 
     return null;
@@ -422,6 +455,14 @@ const searchForBestMatch = async ({
   if (!isUsingLlmData) {
     const bestLlmMatch = await tryFindingMatchUsingLlm(movie);
     if (bestLlmMatch) return bestLlmMatch;
+
+    if (seachRelatedYear.results.length > 0) {
+      const bestLlmMatchFromResults = await reviewResultsUsingLlm(
+        movie,
+        seachRelatedYear.results,
+      );
+      if (bestLlmMatchFromResults) return bestLlmMatchFromResults;
+    }
   }
 
   return null;
