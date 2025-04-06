@@ -78,6 +78,10 @@ function normalizeTitle(title, options) {
     ["Björk's", "Björk:"],
     ["Children’s Cinema", "The Notebook Children's Cinema"], // Stop this accidentally matching "Children in the Cinema"
     ["Eurovision Grand Final Live", "Eurovision Grand Final"], // Remove live for better combining
+    [
+      "Films That Fuck",
+      "Films That Fuck: Re-uses of Pornography in Moving Image Practices During the HIV/AIDS Crisis and the Present",
+    ],
     // Sanitise use of "PRESENT" which is confused with "X presents"
     ["‘PAST PRESENT FUTURE’ PODCAST", "‘PAST+PRESENT+FUTURE’ PODCAST"],
     ["seventeen [right here]", "seventeen right here"], // remove brackets from this band name
@@ -226,7 +230,8 @@ function normalizeTitle(title, options) {
   });
 
   const hasYear = title.trim().match(/\(\d{4}\)$/);
-  if (!hasYear) {
+  const hasEpisodeList = title.trim().match(/\(episodes[^(]*\)$/i);
+  if (!hasYear && !hasEpisodeList) {
     title = title.replace(/\([^(]*\)$/, "").trim();
     title = title.replace(/\([^(]*\)$/, "").trim(); // Do it twice in case there's more paraenthesis
   }
