@@ -129,6 +129,7 @@ const knownRemovablePhrases = [
   "EOS:",
   "Film Africa:",
   "Film Screening & Live Q&A:",
+  "French Impressions:",
   "French Sundaes:",
   "Funday:",
   "Good Vibrations:",
