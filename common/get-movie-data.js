@@ -111,6 +111,8 @@ async function findMovieByDirector(normalizedTitle, movie) {
     directorsName,
   );
 
+  if (peopleMatches.results.length === 0) return null;
+
   // Start off with all results. If we've only 1 result, we'll pass through the
   // filters below and get returned.
   let directors = peopleMatches.results.sort(
