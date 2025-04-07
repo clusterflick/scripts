@@ -237,6 +237,7 @@ function normalizeTitle(title, options) {
   }
 
   title = title.replace(/\s+screening$/i, "");
+  title = title.replace(/^relaxed /i, "");
 
   return title
     .normalize("NFD")
