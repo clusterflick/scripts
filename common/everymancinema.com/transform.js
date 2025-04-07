@@ -71,6 +71,7 @@ async function transform(
       url: `${domain}${movie.path}`,
       overview,
       performances,
+      matchingHints: { overview: movie.synopsis },
     });
   }, []);
 
