@@ -32,6 +32,8 @@ const knownRemovablePhrases = [
   ": black & neurodiverse movie club launch",
   ": ANI DiFRANCO",
   ": Watch Party",
+  ": Live Q&A with Director Kevin Macdonald",
+  " Q&A with Director Richard Loncraine",
   "– In Concert",
   " in concert",
   "- UK PREMIERE",
