@@ -1,13 +1,20 @@
 /** @jest-environment setup-polly-jest/jest-environment-node */
-const { setupPolly, schemaValidate } = require("../../../common/test-utils");
+const {
+  setupPolly,
+  schemaValidate,
+  setupCacheMock,
+} = require("../../../common/test-utils");
 const { sortAndFilterMovies } = require("../../../common/utils");
 const { retrieve, transform, attributes } = require("..");
 
 const isRecording = false;
 
+jest.mock("../../../common/cache");
+setupCacheMock(__dirname, "2025-04-07");
+
 describe(attributes.name, () => {
   setupPolly(isRecording, __dirname);
-  jest.useFakeTimers().setSystemTime(new Date("2025-04-06"));
+  jest.useFakeTimers().setSystemTime(new Date("2025-04-07"));
 
   it(
     "retrieve and transform",

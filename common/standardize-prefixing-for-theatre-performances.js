@@ -46,6 +46,7 @@ const metOperaPrefixes = [
   /Met Opera Season[:|\s]/i,
   /Met Opera:/i,
   /The Met:/i,
+  /Met:/i,
   /The MET 2025:/i,
   /The Metropolitan Opera:/i,
 ];
@@ -96,6 +97,7 @@ const rboPrefixes = [
   /The Royal Ballet[:|\s]/i,
   /The Royal Opera[:|\s]/i,
   /RB&O Live:/i,
+  /RB&O:/i,
 ];
 
 function standardizePrefixingForRoyalBalletOperaPerformances(title, options) {
@@ -165,6 +167,7 @@ function standardizePrefixingForTheatrePerformances(
     lowercaseTitle.startsWith("met opera") ||
     lowercaseTitle.startsWith("the met ") ||
     lowercaseTitle.startsWith("the met:") ||
+    lowercaseTitle.startsWith("met:") ||
     lowercaseTitle.startsWith("the metropolitan opera")
   ) {
     return standardizePrefixingForMetropolitanOperaPerformances(title, options);
@@ -172,6 +175,7 @@ function standardizePrefixingForTheatrePerformances(
 
   if (
     lowercaseTitle.startsWith("rb&o ") ||
+    lowercaseTitle.startsWith("rb&o:") ||
     lowercaseTitle.startsWith("rbo ") ||
     lowercaseTitle.startsWith("rbo:") ||
     lowercaseTitle.startsWith("royal opera") ||
