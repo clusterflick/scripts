@@ -101,6 +101,7 @@ const knownRemovablePhrases = [
   "ATOMIC ORIGINS:",
   "Autism Friendly Screening :",
   "AWAN x Fhamtini:",
+  "Babykino:",
   "Bar Screening x Muse:",
   "Bar Trash: A toast to David Lynch:",
   "Bar Trash: Season Launch:",

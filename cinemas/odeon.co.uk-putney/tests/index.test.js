@@ -4,7 +4,10 @@ const {
   setupCacheMock,
   schemaValidate,
 } = require("../../../common/test-utils");
-const { sortAndFilterMovies } = require("../../../common/utils");
+const {
+  sortAndFilterMovies,
+  removeMatchingHints,
+} = require("../../../common/utils");
 const { retrieve, transform, attributes } = require("..");
 
 const isRecording = false;
@@ -26,7 +29,7 @@ describe(attributes.name, () => {
       expect(moviePages).toHaveLength(21);
 
       const output = sortAndFilterMovies(await transform(moviePages, {}));
-      const data = JSON.parse(JSON.stringify(output));
+      const data = JSON.parse(JSON.stringify(output)).map(removeMatchingHints);
 
       // Make sure the data looks roughly correct
       expect(data).toHaveLength(23);

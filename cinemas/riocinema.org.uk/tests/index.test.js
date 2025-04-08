@@ -1,6 +1,9 @@
 /** @jest-environment setup-polly-jest/jest-environment-node */
 const { setupPolly, schemaValidate } = require("../../../common/test-utils");
-const { sortAndFilterMovies } = require("../../../common/utils");
+const {
+  sortAndFilterMovies,
+  removeMatchingHints,
+} = require("../../../common/utils");
 const { retrieve, transform, attributes } = require("..");
 
 const isRecording = false;
@@ -19,7 +22,7 @@ describe(attributes.name, () => {
       expect(moviePages.data.movies.data).toHaveLength(32);
 
       const output = sortAndFilterMovies(await transform(moviePages, {}));
-      const data = JSON.parse(JSON.stringify(output));
+      const data = JSON.parse(JSON.stringify(output)).map(removeMatchingHints);
 
       // Make sure the data looks roughly correct
       expect(data).toHaveLength(32);
