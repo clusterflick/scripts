@@ -99,7 +99,10 @@ async function transform(
               accessibility.relaxed = true;
               return;
             }
-            if (attribute.name.text.toLowerCase() === "baby club") {
+            if (
+              attribute.name.text.toLowerCase() === "baby club" ||
+              attribute.name.text.toLowerCase() === "kids club"
+            ) {
               accessibility.babyFriendly = true;
               return;
             }

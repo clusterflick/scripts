@@ -37,6 +37,11 @@ async function transform(
               accessibility.audioDescription = true;
               return;
             }
+            // autism friendly
+            if (value.toLowerCase() === "atf") {
+              accessibility.relaxed = true;
+              return;
+            }
             if (value.toLowerCase() === "big-shorts") {
               accessibility.audioDescription = true;
               // Don't return so it's added to the notes
