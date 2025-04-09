@@ -39,10 +39,7 @@ const getDirectors = (movie) => {
 
 const getActors = (movie) => {
   const cast = movie.credits?.cast ?? [];
-  return cast
-    .slice(0, 10)
-    .filter(({ popularity }) => popularity >= 5)
-    .map(({ id, name }) => ({ id: `${id}`, name }));
+  return cast.slice(0, 10).map(({ id, name }) => ({ id: `${id}`, name }));
 };
 
 const getGenres = ({ genres }) =>
