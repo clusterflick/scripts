@@ -109,6 +109,7 @@ const getScore = async (movieTitle, movieYear, match) => {
   const $ = cheerio.load(rottenTomatoesGet);
   const scorecard = JSON.parse(getText($("#media-scorecard-json")));
   return {
+    url: match.url,
     audience: {
       all: getScoresFor(scorecard.overlay.audienceAll),
       verified: getScoresFor(scorecard.overlay.audienceVerified),
