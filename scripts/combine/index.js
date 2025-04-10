@@ -40,10 +40,16 @@ const getDirectors = (movie) => {
 
 const getActors = (movie) => {
   const cast = movie.credits?.cast ?? [];
-  return cast
-    .sort((a, b) => b.popularity - a.popularity)
-    .slice(0, 10)
-    .map(({ id, name }) => ({ id: `${id}`, name }));
+  return Array.from(
+    cast
+      .sort((a, b) => b.order - a.order)
+      .reduce((actors, { id, name }) => {
+        if (actors.has(id)) return actors;
+        actors.set(id, { id: `${id}`, name });
+        return actors;
+      }, new Map())
+      .values(),
+  ).slice(0, 10);
 };
 
 const getGenres = ({ genres }) =>
