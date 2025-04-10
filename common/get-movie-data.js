@@ -1,9 +1,8 @@
 const { MovieDb } = require("moviedb-promise");
-const diff = require("fast-diff");
 const slugify = require("slugify");
 const normalizeTitle = require("./normalize-title");
 const normalizeName = require("./normalize-name");
-const { basicNormalize } = require("./utils");
+const { basicNormalize, compareAsSimilar } = require("./utils");
 const { dailyCache } = require("./cache");
 const askLlm = require("./ask-llm");
 const askLlmToReviewResults = require("./ask-llm-to-review-results");
@@ -12,21 +11,6 @@ require("dotenv").config();
 const moviedb = new MovieDb(process.env.MOVIEDB_API_KEY);
 
 const comparableChunk = (value) => value.replace(/\s+/g, "").slice(0, 200);
-
-const compareAsSimilar = (firstString, secondString) => {
-  if (firstString === secondString) return true;
-
-  // Compare strings, calculating a score based on the number of characters that
-  // have changed. The following counts the number of characters changed
-  // (additions and deletions).
-  const lettersChanges = diff(firstString, secondString).reduce(
-    (count, [score, letters]) => (score === 0 ? count : count + letters.length),
-    0,
-  );
-  // The threshold of 4 below allows for 2 characters to mismatch (a character
-  // deleted and then another added), or a difference of 4 characters in length.
-  return lettersChanges <= 4;
-};
 
 const updateMovie = (movie, update) => {
   return {

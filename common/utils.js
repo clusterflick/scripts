@@ -2,6 +2,7 @@ const fs = require("node:fs").promises;
 const { decode } = require("html-entities");
 const { isAfter, startOfDay } = require("date-fns");
 const stringify = require("json-stable-stringify");
+const diff = require("fast-diff");
 
 const readJSON = async (filePath) => {
   const data = await fs.readFile(filePath, "utf8");
@@ -179,6 +180,21 @@ const createAccessibility = (accessibility) =>
 // eslint-disable-next-line no-unused-vars
 const removeMatchingHints = ({ matchingHints, ...movie }) => movie;
 
+const compareAsSimilar = (firstString, secondString) => {
+  if (firstString === secondString) return true;
+
+  // Compare strings, calculating a score based on the number of characters that
+  // have changed. The following counts the number of characters changed
+  // (additions and deletions).
+  const lettersChanges = diff(firstString, secondString).reduce(
+    (count, [score, letters]) => (score === 0 ? count : count + letters.length),
+    0,
+  );
+  // The threshold of 4 below allows for 2 characters to mismatch (a character
+  // deleted and then another added), or a difference of 4 characters in length.
+  return lettersChanges <= 4;
+};
+
 module.exports = {
   readJSON,
   writeJSON,
@@ -196,4 +212,5 @@ module.exports = {
   createOverview,
   createAccessibility,
   removeMatchingHints,
+  compareAsSimilar,
 };

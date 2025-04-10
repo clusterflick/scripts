@@ -49,10 +49,10 @@ function normalizeTitle(title, options) {
     ["The Return The Return", "The Return"],
     [/\s+du$/i, ""], // Dubbed
     [/\s+su$/i, ""], // subbed
+    [/\s+3d$/i, ""], // 3d
     ["Vasthunnam", "Vasthunam"],
     ["Melagaon", "Malegaon"],
     ["Carvaggio", "Caravaggio"],
-    ["Eftihia", "Eftyhia"],
     ["10180", "1080"],
     ["unknwon", "unknown"],
     ["Frozen 2", "Frozen II"],
@@ -65,9 +65,9 @@ function normalizeTitle(title, options) {
     ["David Lynch: The Short Films", "The Short Films of David Lynch"],
     ["Battleground + intro ", "Battlefield + intro "], // BFI gets the name of the movie wrong
     ["The Dawn of Impressionism", "Dawn of Impressionism"],
-    [" - Paris, 1874", ": Paris 1874"],
+    [/ - Paris,? 1874/i, ": Paris 1874"],
     [" - Poets and Lovers", ": Poets and Lovers"],
-    ["Last Supper Part 1", "Last Supper"],
+    [/Last Supper (– )?Part 1/i, "Last Supper"],
     ["The Last Supper", "Last Supper"],
     ["Veera Dheera Sooran: Part 2", "Veera Dheera Sooran"],
     ["Mulholland Dr.", "Mulholland Drive"], // Otherwise we match the TV pilot of the same name
@@ -82,10 +82,34 @@ function normalizeTitle(title, options) {
       "Films That Fuck",
       "Films That Fuck: Re-uses of Pornography in Moving Image Practices During the HIV/AIDS Crisis and the Present",
     ],
+    ["(True True)", "(True)²"], // Fix for Evangelion: Death (True)²
+    ["3.0+1.01", "3.0+1.0"], // Fix for Evangelion: 3.0+1.0 Thrice Upon a Time to combine with updated version release
+    [
+      /^The End of Evangelion$/i,
+      "Neon Genesis Evangelion: The End of Evangelion",
+    ],
+    ["Terror Dome", "Terrordome"],
+    ["Wu Viet", "Woo Viet"],
+    ["The Adventures of Tintin: ", "Tintin and "],
+    [
+      "Dangerous Encounters: 1st Kind",
+      "Dangerous Encounters of the First Kind",
+    ],
+    ["Where Is the Friend's Home?", "Where Is the Friend's House?"],
+    ["Ghidrah", "Ghidorah"], // Fix for Ghidorah, the Three-Headed Monster
+    ["½", " 1/2"],
+    ["Mr. Hulot", "Monsieur Hulot"], // Fix for Monsieur Hulot's Holiday
+    [/^Mishima$/i, "Mishima: A Life in Four Chapters"],
+    ["My Heart Is That Eternal Love", "My Heart Is That Eternal Rose"],
+    [/^A Tale of Sorrow$/i, "A Tale of Sorrow and Sadness"],
+    [/^Eftihia$/i, "My Name is Eftihia"],
+    ["Limonov: The Ballad of Eddie", "Limonov: The Ballad"],
+    ["Masculine-Feminine", "Masculin Feminin"],
     // Sanitise use of "PRESENT" which is confused with "X presents"
     ["‘PAST PRESENT FUTURE’ PODCAST", "‘PAST+PRESENT+FUTURE’ PODCAST"],
     ["seventeen [right here]", "seventeen right here"], // remove brackets from this band name
     ["Exclusive Screening of Highly Acclaimed Bengali Feature Film - ", ""],
+    ["Mission: Impossible - ", "Mission: Impossible – "],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
@@ -246,14 +270,15 @@ function normalizeTitle(title, options) {
     .replace(/\s+and\s+/gi, " ")
     .replace(/(?:\s+|^)&\s+/gi, " ")
     .replace(/:$/, "")
-    .replace(/'|`|\u200B|‘|’|"|“|”/g, "")
+    .replace(/'|`|\u200B|‘|’|"|“|”|²|,/g, "")
     .replace(/\s+(-|–)(\s|$)/g, " ")
     .replace(/(-|–)$/g, "")
-    .replace(/!|:|\./g, " ")
+    .replace(/!|:|\.|\*|…/g, " ")
     .replace(/\s+/g, " ")
     .replace(/^(.+),\s+the$/, "the $1")
     .trim()
     .replace(/^the /i, "")
+    .replace(/([a-z])-([a-z])/gi, "$1$2")
     .trim();
 }
 

@@ -12,6 +12,7 @@ const {
   basicNormalize,
 } = require("../../common/utils");
 const standardizePrefixingForTheatrePerformances = require("../../common/standardize-prefixing-for-theatre-performances");
+const findRottenTomatoesMatch = require("./find-rotten-tomatoes-match");
 
 const getId = (value) =>
   crypto.createHash("sha256").update(value).digest("hex").slice(0, 8);
@@ -110,6 +111,7 @@ async function combine() {
 
     for (const { title, url, overview, performances, themoviedb } of movies) {
       let movieInfo;
+      let rottenTomatoes;
       if (themoviedb) {
         const outputTitle = title.slice(0, 35);
         const start = Date.now();
@@ -118,6 +120,7 @@ async function combine() {
         );
         try {
           movieInfo = await getMovieInfoAndCacheResults(themoviedb);
+          rottenTomatoes = await findRottenTomatoesMatch(movieInfo);
           console.log(
             `\t✅ Retrieved (${Math.round((Date.now() - start) / 1000)}s)`,
           );
@@ -164,6 +167,7 @@ async function combine() {
             posterPath: movieInfo.poster_path,
             showings: {},
             performances: [],
+            rottenTomatoes,
           };
         } else {
           siteData.movies[movieId] = {
