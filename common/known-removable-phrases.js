@@ -88,6 +88,7 @@ const knownRemovablePhrases = [
   "(Black & White) Version",
   "Episode Showcase",
   " by Joshua Oppenheimer",
+  ",  Live in Santiago",
 
   // Prefixes
   "(4DX) ",
@@ -169,6 +170,7 @@ const knownRemovablePhrases = [
   "M:I Audience Choice:",
   "My Twisted Valentine:",
   "New East Cinema:",
+  "New Hollywood Members’ Mixer:",
   "New Writings:",
   "Noah Davis Film Programme:",
   "OUT at Clapham:",
