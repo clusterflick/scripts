@@ -89,6 +89,7 @@ const knownRemovablePhrases = [
   "Episode Showcase",
   " by Joshua Oppenheimer",
   ",  Live in Santiago",
+  ", Live in Santiago",
 
   // Prefixes
   "(4DX) ",
@@ -121,6 +122,7 @@ const knownRemovablePhrases = [
   "Celebrating Peter Sellers:",
   "CELLULOID JAM:",
   "CELLULOID JAM!",
+  "CYFF:",
   "CineMediterra FF 2025:",
   "MediCinema:",
   "Cinema Restored:",
