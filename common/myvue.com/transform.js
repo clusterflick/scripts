@@ -17,7 +17,7 @@ async function transform(
     const overview = createOverview({
       categories: movie.genres,
       directors: movie.director,
-      actors: movie.cast,
+      // Vue cannot be trusted to put actual actor data in the cast section
       duration: movie.runningTime,
       classification: movie.certificate?.name,
     });

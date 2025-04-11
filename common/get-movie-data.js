@@ -74,10 +74,15 @@ const matchesExpectedCastCrew = async (match, movie) => {
       actors.some((actor) => compareAsSimilar(actor, member)),
     );
     if (actorMatches.length > 0) return true;
+  }
 
+  // Only attepmpt to match if there's crew information to check against
+  if (crew.length > 0) {
     // Sometimes cinemas will mistakenly put the director in as cast. If we
     // haven't found a match yet, let's try checking the crew against the
     // actors list to see if we find a match.
+    const actors = movie.overview.actors.map((name) => normalizeName(name));
+
     const directorMatches = crew.filter((member) =>
       actors.some((actor) => compareAsSimilar(actor, member)),
     );
