@@ -1,3 +1,4 @@
+var crypto = require("node:crypto");
 const fs = require("node:fs").promises;
 const { decode } = require("html-entities");
 const { isAfter, startOfDay } = require("date-fns");
@@ -195,6 +196,9 @@ const compareAsSimilar = (firstString, secondString) => {
   return lettersChanges <= 4;
 };
 
+const getId = (value) =>
+  crypto.createHash("sha256").update(value).digest("hex").slice(0, 8);
+
 module.exports = {
   readJSON,
   writeJSON,
@@ -213,4 +217,5 @@ module.exports = {
   createAccessibility,
   removeMatchingHints,
   compareAsSimilar,
+  getId,
 };

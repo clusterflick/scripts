@@ -1,6 +1,6 @@
-var crypto = require("node:crypto");
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const { dailyCache } = require("./cache");
+const { getId } = require("./utils");
 require("dotenv").config();
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
@@ -22,9 +22,6 @@ const generationConfig = {
   topK: 40,
   maxOutputTokens: 8192,
 };
-
-const getId = (value) =>
-  crypto.createHash("sha256").update(value).digest("hex").slice(0, 8);
 
 function convertToPrompt(movie, results) {
   const movieYear = movie.year ? `\nYear: ${movie.year}` : "";

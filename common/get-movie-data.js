@@ -456,7 +456,8 @@ const getMovieInfoAndCacheResults = ({ id }) =>
   dailyCache(`moviedb-info-${id}`, async () => {
     const payload = {
       id,
-      append_to_response: "credits,external_ids,keywords,release_dates,videos",
+      append_to_response:
+        "credits,external_ids,keywords,release_dates,videos,alternative_titles",
     };
     return moviedb.movieInfo(payload);
   });

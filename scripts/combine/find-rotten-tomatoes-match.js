@@ -6,17 +6,17 @@ const {
   getText,
   basicNormalize,
   compareAsSimilar,
+  getId,
 } = require("../../common/utils");
 const normalizeTitle = require("../../common/normalize-title");
 const normalizeName = require("../../common/normalize-name");
 
-const getSearchResults = async (movieTitle, movieYear) => {
-  const slug = slugify(movieTitle, { strict: true }).toLowerCase();
-  const cacheYear = movieYear ?? "no-year";
-  const cacheKey = `rotten-tomatoes-search-${cacheYear}-${slug}`;
+const getSearchResults = async (term) => {
+  const slug = slugify(term, { strict: true }).toLowerCase();
+  const cacheKey = `rotten-tomatoes-search-${slug}`;
   const rottenTomatoesSearch = await dailyCache(cacheKey, async () =>
     fetchText(
-      `https://www.rottentomatoes.com/search?search=${encodeURIComponent(movieTitle)}`,
+      `https://www.rottentomatoes.com/search?search=${encodeURIComponent(term)}`,
     ),
   );
 
@@ -36,18 +36,19 @@ const getSearchResults = async (movieTitle, movieYear) => {
     .get();
 };
 
-const getMoviePage = async (movieTitle, movieYear, match) => {
-  const slug = slugify(movieTitle, { strict: true }).toLowerCase();
-  const cacheYear = movieYear ?? "no-year";
-  const cacheKey = `rotten-tomatoes-get-${cacheYear}-${slug}`;
+const getMoviePage = async (match) => {
+  const cacheKey = `rotten-tomatoes-get-${getId(match.url)}`;
   return await dailyCache(cacheKey, async () => fetchText(match.url));
 };
 
-const getDirectorsForMatch = async (movieTitle, movieYear, match) => {
-  const matchPage = await getMoviePage(movieTitle, movieYear, match);
+const getDirectorsForMatch = async (match) => {
+  const matchPage = await getMoviePage(match);
   const $matchPage = cheerio.load(matchPage);
   const $directorRoles = $matchPage(
-    ".cast-and-crew p[class='role']:contains('Director')",
+    [
+      ".cast-and-crew p[class='role']:contains('Director')",
+      ".cast-and-crew p[class='role']:contains('Narrator')",
+    ].join(","),
   );
   return $directorRoles.map((i, el) => getText($matchPage(el).prev())).get();
 };
@@ -70,7 +71,9 @@ const getDirectors = (credits) =>
 const getMatchFromSearchResults = async (movie, searchResults, matcher) => {
   const match = searchResults.find(
     ({ title, year }) =>
-      normalizeTitle(title) === normalizeTitle(movie.title) &&
+      (normalizeTitle(title) === normalizeTitle(movie.title) ||
+        normalizeTitle(title) === normalizeTitle(movie.originalTitle) ||
+        normalizeTitle(title) === normalizeTitle(movie.americanTitle)) &&
       matcher({ title, year }, movie),
   );
   if (!match) return;
@@ -83,11 +86,7 @@ const getMatchFromSearchResults = async (movie, searchResults, matcher) => {
     return match;
   }
 
-  const directorsForMatch = await getDirectorsForMatch(
-    movie.title,
-    movie.year,
-    match,
-  );
+  const directorsForMatch = await getDirectorsForMatch(match);
   if (directorsForMatch.length === 0) return;
 
   const directorsForMatchOptions = directorsForMatch.flatMap(getNameOptions);
@@ -102,32 +101,72 @@ const getMatchFromSearchResults = async (movie, searchResults, matcher) => {
   if (matchingDirector) return match;
 };
 
+const narrowYearRangeMatcher = (searchResult, movie) => {
+  const searchResultYear = parseInt(searchResult.year, 10);
+  const movieYear = parseInt(movie.year, 10);
+  return searchResultYear >= movieYear - 1 && searchResultYear <= movieYear + 1;
+};
+
+const broadYearRangeMatcher = (searchResult, movie) => {
+  const searchResultYear = parseInt(searchResult.year, 10);
+  const movieYear = parseInt(movie.year, 10);
+  return searchResultYear >= movieYear - 7 && searchResultYear <= movieYear + 7;
+};
+
 const getMatch = async (movie) => {
-  const searchResults = await getSearchResults(movie.title, movie.year);
+  // Search first using the director, if available
+  const director = getDirectors(movie.credits)[0];
+  if (director) {
+    const searchResultsDirector = await getSearchResults(director);
 
-  const matcher = (searchResult, movie) => {
-    const searchResultYear = parseInt(searchResult.year, 10);
-    const movieYear = parseInt(movie.year, 10);
-    return (
-      searchResultYear >= movieYear - 1 && searchResultYear <= movieYear + 1
+    const matchFromDirectorResults = await getMatchFromSearchResults(
+      movie,
+      searchResultsDirector,
+      narrowYearRangeMatcher,
     );
-  };
-  const match = await getMatchFromSearchResults(movie, searchResults, matcher);
-  if (match) return match;
+    if (matchFromDirectorResults) return matchFromDirectorResults;
 
-  const broaderMatcher = (searchResult, movie) => {
-    const searchResultYear = parseInt(searchResult.year, 10);
-    const movieYear = parseInt(movie.year, 10);
-    return (
-      searchResultYear >= movieYear - 7 && searchResultYear <= movieYear + 7
+    const looserMatchFromDirectorResults = await getMatchFromSearchResults(
+      movie,
+      searchResultsDirector,
+      broadYearRangeMatcher,
     );
-  };
-  const closeMatch = await getMatchFromSearchResults(
+    if (looserMatchFromDirectorResults) return looserMatchFromDirectorResults;
+  }
+
+  // Then search using the US title
+  const searchResultsTitleUs = await getSearchResults(movie.americanTitle);
+
+  const matchFromTitleResultsUs = await getMatchFromSearchResults(
     movie,
-    searchResults,
-    broaderMatcher,
+    searchResultsTitleUs,
+    narrowYearRangeMatcher,
   );
-  if (closeMatch) return closeMatch;
+  if (matchFromTitleResultsUs) return matchFromTitleResultsUs;
+
+  const looserMatchFromTitleResultsUs = await getMatchFromSearchResults(
+    movie,
+    searchResultsTitleUs,
+    broadYearRangeMatcher,
+  );
+  if (looserMatchFromTitleResultsUs) return looserMatchFromTitleResultsUs;
+
+  // Then search using the title
+  const searchResultsTitle = await getSearchResults(movie.title);
+
+  const matchFromTitleResults = await getMatchFromSearchResults(
+    movie,
+    searchResultsTitle,
+    narrowYearRangeMatcher,
+  );
+  if (matchFromTitleResults) return matchFromTitleResults;
+
+  const looserMatchFromTitleResults = await getMatchFromSearchResults(
+    movie,
+    searchResultsTitle,
+    broadYearRangeMatcher,
+  );
+  if (looserMatchFromTitleResults) return looserMatchFromTitleResults;
 };
 
 const getScoresFor = (group) =>
@@ -141,8 +180,8 @@ const getScoresFor = (group) =>
       }
     : undefined;
 
-const getScore = async ({ title, year, match }) => {
-  const rottenTomatoesGet = await getMoviePage(title, year, match);
+const getScore = async (match) => {
+  const rottenTomatoesGet = await getMoviePage(match);
   const $ = cheerio.load(rottenTomatoesGet);
   const scorecard = JSON.parse(getText($("#media-scorecard-json")));
   return {
@@ -160,14 +199,26 @@ const getScore = async ({ title, year, match }) => {
 
 async function findRottenTomatoesMatch({
   title,
+  original_title: originalTitle,
+  alternative_titles: alternativeTitles,
   release_date: releaseDate,
   credits,
 }) {
+  const americanTitleDetails = alternativeTitles?.titles?.find(
+    ({ iso_3166_1: country }) => basicNormalize(country) === "us",
+  );
+  const americanTitle = americanTitleDetails?.title ?? title;
   const year = releaseDate.split("-")[0];
-  const match = await getMatch({ title, year, credits });
+  const match = await getMatch({
+    title,
+    originalTitle,
+    americanTitle,
+    year,
+    credits,
+  });
   if (!match) return undefined;
 
-  const score = await getScore({ title, year, match });
+  const score = await getScore(match);
   if (!score) return undefined;
 
   return score;
