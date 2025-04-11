@@ -16,6 +16,7 @@ function normalizeTitle(title, options) {
   // Specific corrections
   const corrections = [
     [/^LD:/i, "LD Friendly:"],
+    [/^Re-Viewing /i, ""],
     // Remove prefix separators which will cause later processing to strip the wrong section
     [/Star Wars: Episode ([IV]+) - /i, "Star Wars: Episode $1 "], // Remove the dash
     ["Rafadan Tayfa - Kapadokya", "Rafadan Tayfa: Kapadokya"],
@@ -105,12 +106,13 @@ function normalizeTitle(title, options) {
     [/^Eftihia$/i, "My Name is Eftihia"],
     ["Limonov: The Ballad of Eddie", "Limonov: The Ballad"],
     ["Masculine-Feminine", "Masculin Feminin"],
+    ["Moutains", "Mountains"], // Fix for All The Mountains Give
+    ["Le Nozze di Figaro", "The Marriage of Figaro"],
     // Sanitise use of "PRESENT" which is confused with "X presents"
     ["‘PAST PRESENT FUTURE’ PODCAST", "‘PAST+PRESENT+FUTURE’ PODCAST"],
     ["seventeen [right here]", "seventeen right here"], // remove brackets from this band name
     ["Exclusive Screening of Highly Acclaimed Bengali Feature Film - ", ""],
     ["Mission: Impossible - ", "Mission: Impossible – "],
-    ["Moutains", "Mountains"], // Fix for All The Mountains Give
   ];
 
   corrections.forEach(([phrase, replacement]) => {

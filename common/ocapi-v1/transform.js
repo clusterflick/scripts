@@ -59,6 +59,9 @@ async function transform(
             url: `${domain}/films/${slug}/${film.id}/?siteId=${sites[0].id}`,
             overview,
             performances: [],
+            matchingHints: {
+              overview: film.synopsis.text,
+            },
           },
         };
       }, mapping),
