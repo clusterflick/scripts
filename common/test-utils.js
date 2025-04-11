@@ -28,6 +28,8 @@ function setupPollyWrapper(isRecording, dirname) {
   return setupPolly({
     adapters: [FetchAdapterNoWarning],
     persister: PersisterFs,
+    recordFailedRequests: true,
+    recordIfMissing: false,
     persisterOptions: {
       fs: {
         recordingsDir: path.resolve(dirname, "__recordings__"),

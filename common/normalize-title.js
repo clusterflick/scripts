@@ -110,6 +110,7 @@ function normalizeTitle(title, options) {
     ["seventeen [right here]", "seventeen right here"], // remove brackets from this band name
     ["Exclusive Screening of Highly Acclaimed Bengali Feature Film - ", ""],
     ["Mission: Impossible - ", "Mission: Impossible – "],
+    ["Moutains", "Mountains"], // Fix for All The Mountains Give
   ];
 
   corrections.forEach(([phrase, replacement]) => {

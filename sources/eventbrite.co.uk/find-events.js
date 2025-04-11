@@ -1,27 +1,29 @@
 const path = require("node:path");
-const nlp = require("compromise");
-const { readJSON } = require("../../common/utils");
+const {
+  readJSON,
+  basicNormalize,
+  sanitizeRichText,
+} = require("../../common/utils");
 const normalizeName = require("../../common/normalize-name");
 const distanceInKmBetweenCoordinates = require("../../common/distance-in-km-between-coordinates");
 const { createOverview, createPerformance } = require("../../common/utils");
 const { parseDate } = require("./utils");
 
-function getNames(synopsis) {
-  const doc = nlp(synopsis);
-  const people = doc.people().json();
-  if (people.length === 0) return;
+function getEventDescriptiopn(details) {
+  if (!details) return "";
 
-  return people.map(({ text }) =>
-    text
-      .replace(/nominee/i, "")
-      .replace(/[,!]/g, "")
-      .trim(),
+  return (
+    details.components?.eventDescription?.structuredContent?.modules
+      .filter(({ type }) => basicNormalize(type) === "text")
+      .map(({ text }) => sanitizeRichText(text))
+      .join("\n\n") || ""
   );
 }
 
-function convertEventbriteEvent(event) {
+function convertEventbriteEvent(event, details) {
   const startDate = parseDate(`${event.start_date}T${event.start_time}`);
   const endDate = parseDate(`${event.end_date}T${event.end_time}`);
+  const eventDescription = getEventDescriptiopn(details);
 
   return {
     title: event.name,
@@ -37,8 +39,7 @@ function convertEventbriteEvent(event) {
       }),
     ],
     matchingHints: {
-      overview: event.summary,
-      cast: getNames(event.summary),
+      overview: `${event.summary}\n\n${eventDescription}`.trim(),
     },
   };
 }
@@ -58,21 +59,18 @@ async function findEvents(cinema) {
     "retrieved-data",
     "eventbrite.co.uk",
   );
-  let data = [];
+  let movieListPages = [];
+  let moviePages = {};
   try {
-    data = await readJSON(dataSrc);
+    const data = await readJSON(dataSrc);
+    movieListPages = data.movieListPages;
+    moviePages = data.moviePages;
   } catch {
     // Source data may not always be available or required
   }
 
   const events = uniqueEvents(
-    data.flatMap(
-      ({
-        search_data: {
-          events: { results },
-        },
-      }) => results,
-    ),
+    movieListPages.flatMap(({ search_data: { events } }) => events.results),
   );
 
   const filteredEvents = events.filter(
@@ -94,7 +92,9 @@ async function findEvents(cinema) {
     },
   );
 
-  return filteredEvents.map(convertEventbriteEvent);
+  return filteredEvents.map((event) =>
+    convertEventbriteEvent(event, moviePages[event.url]),
+  );
 }
 
 module.exports = findEvents;

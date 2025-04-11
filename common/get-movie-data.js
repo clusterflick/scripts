@@ -353,9 +353,6 @@ const searchForBestMatch = async ({
 
     // Only run the LLM on this is we haven't already done so
     if (!isUsingLlmData) {
-      const bestLlmMatch = await tryFindingMatchUsingLlm(movie);
-      if (bestLlmMatch) return bestLlmMatch;
-
       if (searchTitle.results.length > 0) {
         const bestLlmMatchFromResults = await reviewResultsUsingLlm(
           movie,
@@ -363,9 +360,16 @@ const searchForBestMatch = async ({
         );
         if (bestLlmMatchFromResults) return bestLlmMatchFromResults;
       }
+
+      const bestLlmMatch = await tryFindingMatchUsingLlm(movie);
+      if (bestLlmMatch) return bestLlmMatch;
     }
 
-    return null;
+    if (movie.matchingHints?.year) {
+      yearValue = movie.matchingHints?.year;
+    } else {
+      return null;
+    }
   }
 
   const year = parseInt(yearValue, 10);
@@ -437,9 +441,6 @@ const searchForBestMatch = async ({
 
   // Only run the LLM on this is we haven't already done so
   if (!isUsingLlmData) {
-    const bestLlmMatch = await tryFindingMatchUsingLlm(movie);
-    if (bestLlmMatch) return bestLlmMatch;
-
     if (seachRelatedYear.results.length > 0) {
       const bestLlmMatchFromResults = await reviewResultsUsingLlm(
         movie,
@@ -447,6 +448,9 @@ const searchForBestMatch = async ({
       );
       if (bestLlmMatchFromResults) return bestLlmMatchFromResults;
     }
+
+    const bestLlmMatch = await tryFindingMatchUsingLlm(movie);
+    if (bestLlmMatch) return bestLlmMatch;
   }
 
   return null;

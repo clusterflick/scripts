@@ -1,7 +1,7 @@
 /** @jest-environment setup-polly-jest/jest-environment-node */
 const { setupPolly } = require("../../../common/test-utils");
 const { readJSON, removeMatchingHints } = require("../../../common/utils");
-const { attributes, findEvents } = require("..");
+const { attributes, retrieve, findEvents } = require("..");
 
 const isRecording = false;
 
@@ -9,15 +9,6 @@ jest.mock("../../../common/utils", () => ({
   ...jest.requireActual("../../../common/utils"),
   readJSON: jest.fn(),
 }));
-readJSON.mockImplementation(() => {
-  const path = require("node:path");
-  const dataPath = path.join(
-    __dirname,
-    "__manual-recordings__",
-    "eventbrite.co.uk-london-screening-page-2025-01-24",
-  );
-  return jest.requireActual("../../../common/utils").readJSON(dataPath);
-});
 
 const cinema = {
   name: "Genesis Cinema",
@@ -26,18 +17,28 @@ const cinema = {
 
 describe(attributes.name, () => {
   setupPolly(isRecording, __dirname);
-  jest.useFakeTimers().setSystemTime(new Date("2025-01-24"));
+  jest.useFakeTimers().setSystemTime(new Date("2025-04-11"));
 
   it(
-    "find-events",
+    "retrieve and find events",
     async () => {
+      const { movieListPages, moviePages } = await retrieve();
+
+      // Make sure the input looks roughly correct
+      expect(movieListPages).toBeTruthy();
+      expect(movieListPages).toHaveLength(16);
+      expect(moviePages).toBeTruthy();
+      expect(Object.keys(moviePages)).toHaveLength(307);
+
+      readJSON.mockImplementation(() => ({ movieListPages, moviePages }));
+
       const output = await findEvents(cinema);
       const data = JSON.parse(JSON.stringify(output)).map(removeMatchingHints);
 
       // Make sure the data looks roughly correct
-      expect(data).toHaveLength(8);
+      expect(data).toHaveLength(7);
       expect(data).toMatchSnapshot();
     },
-    isRecording ? 120_000 : undefined,
+    isRecording ? 600_000 : undefined,
   );
 });

@@ -9,23 +9,14 @@ const {
 } = require("../utils");
 const { parseDate } = require("./utils");
 
-function getAdditionalDataFor(data) {
+function getDetails(data) {
   const $ = cheerio.load(data);
-
-  const addiitionalData = {};
-
+  const details = {};
   $(".directorDiv .directorInner").each(function () {
     const key = getText($(this)).toLowerCase().replace(":", "").trim();
-
-    if (key === "director") {
-      addiitionalData.directors = getText($(this).next());
-    }
-    if (key === "starring") {
-      addiitionalData.actors = getText($(this).next());
-    }
+    details[key] = getText($(this).next());
   });
-
-  return addiitionalData;
+  return details;
 }
 
 function getSynopsis(data) {
@@ -71,11 +62,13 @@ async function transform(
       return moviesAtCinema;
     }
 
+    const details = getDetails(moviePages[movie.ScheduledFilmId]);
     const overview = createOverview({
       duration: movie.RunTime,
       classification: movie.Rating,
       trailer: movie.TrailerUrl,
-      ...getAdditionalDataFor(moviePages[movie.ScheduledFilmId]),
+      directors: details.director,
+      actors: details.starring,
     });
 
     const synopsis = getSynopsis(moviePages[movie.ScheduledFilmId]);
@@ -127,6 +120,7 @@ async function transform(
         overview: synopsis,
         characters: synopsis ? getCharacters(synopsis) : undefined,
         cast: synopsis ? getCast(synopsis) : undefined,
+        year: details["release date"].match(/\s+(\d{4})$/i)?.[1],
       },
     };
 

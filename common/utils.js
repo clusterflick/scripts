@@ -80,8 +80,13 @@ const sanitizeRichText = (value) =>
   decode(
     value
       .replaceAll("<br />", "\n")
-      .replaceAll("<p>", "")
-      .replaceAll("</p>", "")
+      .replaceAll("<br>", "\n")
+      .replaceAll("<p>", "\n")
+      .replaceAll("</p>", "\n")
+      .replaceAll("<strong>", "")
+      .replaceAll("</strong>", "")
+      .replaceAll("<em>", "")
+      .replaceAll("</em>", "")
       .trim(),
   );
 
