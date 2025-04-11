@@ -22,7 +22,7 @@ const getOverview = ($, $movieData) => {
   const classification = $movieData
     .find(".cert-40")
     .attr("src")
-    .match(/BBFC_([^_]+)_RBG\./i)?.[1];
+    ?.match(/BBFC_([^_]+)_RBG\./i)?.[1];
 
   const $details = $movieData.find(".row").eq(0).find("p");
   const details = {};
