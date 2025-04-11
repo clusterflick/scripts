@@ -44,7 +44,7 @@ const getOverview = ($, $movieData) => {
 };
 
 const getPerformances = ($, attributes, performanceData) => {
-  return performanceData.reduce((performances, { el, data }) => {
+  const performances = performanceData.reduce((performances, { el, data }) => {
     if (data["@type"] !== "Event") return performances;
     const $button = $(el).prev();
     const tags = $button
@@ -86,6 +86,18 @@ const getPerformances = ($, attributes, performanceData) => {
       }),
     );
   }, []);
+
+  // There may be more than one performance in the page (hidden depending on
+  // page size). Filter out any duplicates.
+  return Object.values(
+    performances.reduce(
+      (mapping, performance) => ({
+        ...mapping,
+        [performance.time]: performance,
+      }),
+      {},
+    ),
+  );
 };
 
 async function transform(attributes, { moviePages }, sourcedEvents) {
