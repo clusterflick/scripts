@@ -130,13 +130,16 @@ const getMatch = async (movie) => {
   if (closeMatch) return closeMatch;
 };
 
-const getScoresFor = (group) => ({
-  likes: group.likedCount,
-  dislikes: group.notLikedCount,
-  reviews: group.reviewCount,
-  rating: group.averageRating,
-  score: group.score,
-});
+const getScoresFor = (group) =>
+  group
+    ? {
+        likes: group.likedCount,
+        dislikes: group.notLikedCount,
+        reviews: group.reviewCount,
+        rating: group.averageRating,
+        score: group.score,
+      }
+    : undefined;
 
 const getScore = async ({ title, year, match }) => {
   const rottenTomatoesGet = await getMoviePage(title, year, match);
