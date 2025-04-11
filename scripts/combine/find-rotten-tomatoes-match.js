@@ -58,6 +58,8 @@ const getNameOptions = (name) => [
   normalizeName(name.split(" ").reverse().join(" ")),
   // Remove middle names
   normalizeName(`${name.split(" ").at(0)} ${name.split(" ").at(-1)}`),
+  // Just first initial of first name, in case abreviations are being used
+  normalizeName(`${name.split(" ").at(0)[0]} ${name.split(" ").at(-1)}`),
 ];
 
 const getDirectors = (credits) =>
@@ -72,6 +74,14 @@ const getMatchFromSearchResults = async (movie, searchResults, matcher) => {
       matcher({ title, year }, movie),
   );
   if (!match) return;
+
+  // Don't try to check director for theatre recordings
+  if (
+    normalizeTitle(movie.title).startsWith("metropolitan opera ") ||
+    normalizeTitle(movie.title).startsWith("national theatre ")
+  ) {
+    return match;
+  }
 
   const directorsForMatch = await getDirectorsForMatch(
     movie.title,
