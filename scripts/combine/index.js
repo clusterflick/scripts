@@ -42,7 +42,7 @@ const getActors = (movie) => {
   const cast = movie.credits?.cast ?? [];
   return Array.from(
     cast
-      .sort((a, b) => b.order - a.order)
+      .sort((a, b) => a.order - b.order)
       .reduce((actors, { id, name }) => {
         if (actors.has(id)) return actors;
         actors.set(id, { id: `${id}`, name });
