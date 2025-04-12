@@ -158,8 +158,10 @@ async function getBestMatch(titleQuery, rawResults = [], movie) {
   // If there's only one result ...
   if (rawResults.length === 1) {
     const result = rawResults[0];
-    // ... and there's no crew info, pick the result
-    if (!hasCrewForMovie) return result;
+    // ... and there's no crew info, pick the result if it matches the title
+    if (!hasCrewForMovie && matchesMovieTitle(titleQuery)(result)) {
+      return result;
+    }
     // ... and there's crew info, use it to match the result
     const hasCastCrewMatch = await matchesExpectedCastCrew(result, movie);
     return hasCastCrewMatch ? result : undefined;
