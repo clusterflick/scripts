@@ -45,9 +45,8 @@ const metOperaPrefixes = [
   /Met Opera Live[:|\s]/i,
   /Met Opera Season[:|\s]/i,
   /Met Opera:/i,
-  /The Met:/i,
+  /The Met[:|\s]/i,
   /Met:/i,
-  /The MET 2025:/i,
   /The Metropolitan Opera:/i,
 ];
 
@@ -69,6 +68,11 @@ function standardizePrefixingForMetropolitanOperaPerformances(title, options) {
   const shortYearRangeMatch = updatedPrefixTitle.match(shortYearRangeMatcher);
   if (shortYearRangeMatch) {
     updatedPrefixTitle = `${updatedPrefixTitle.replace(shortYearRangeMatcher, "")} (20${shortYearRangeMatch[1]})`;
+  }
+
+  const yearMatch = updatedPrefixTitle.match(yearMatcher);
+  if (yearMatch) {
+    updatedPrefixTitle = `${updatedPrefixTitle.replace(yearMatcher, "")} (${yearMatch[1]})`;
   }
 
   if (!options.retainYear) {

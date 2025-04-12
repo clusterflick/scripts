@@ -108,6 +108,13 @@ function normalizeTitle(title, options) {
     ["Masculine-Feminine", "Masculin Feminin"],
     ["Moutains", "Mountains"], // Fix for All The Mountains Give
     ["Le Nozze di Figaro", "The Marriage of Figaro"],
+    ["Sanrizuka 3", "Sanrizuka Notes 3"],
+    [
+      "Bluey Let's Play Chef",
+      "Bluey at the Cinema: Let’s Play Chef Collection",
+    ],
+    ["Maastricht:", "Maastricht Concert:"],
+    [/trois /i, "3 "], // Fixes trois hommes et un couffin
     // Sanitise use of "PRESENT" which is confused with "X presents"
     ["‘PAST PRESENT FUTURE’ PODCAST", "‘PAST+PRESENT+FUTURE’ PODCAST"],
     ["seventeen [right here]", "seventeen right here"], // remove brackets from this band name
@@ -276,7 +283,7 @@ function normalizeTitle(title, options) {
     .replace(/'|`|\u200B|‘|’|"|“|”|²|,/g, "")
     .replace(/\s+(-|–)(\s|$)/g, " ")
     .replace(/(-|–)$/g, "")
-    .replace(/!|:|\.|\*|…/g, " ")
+    .replace(/!|:|\.|\*|…|—/g, " ")
     .replace(/\s+/g, " ")
     .replace(/^(.+),\s+the$/, "the $1")
     .trim()
