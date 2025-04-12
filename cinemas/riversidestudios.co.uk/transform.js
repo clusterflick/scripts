@@ -54,9 +54,17 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
     const performances = Object.keys(movieData.performances).flatMap(
       (dayKey) => {
         const dayPerformances = movieData.performances[dayKey];
-        return dayPerformances.map(({ timestamp }) => {
+        return dayPerformances.map(({ timestamp, tag_name: tag }) => {
+          const notesList = [];
+          if (basicNormalize(tag) === "silver_screen") {
+            notesList.push("Silver Screen");
+          }
+          if (basicNormalize(tag) === "captioned") {
+            accessibility.subtitled = true;
+          }
           return createPerformance({
             date: new Date(parseInt(timestamp, 10) * 1000),
+            notesList,
             url,
             accessibility,
           });
