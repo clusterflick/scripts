@@ -5,6 +5,7 @@ const {
   createOverview,
   createPerformance,
   createAccessibility,
+  basicNormalize,
 } = require("../../common/utils");
 const {
   convertDurationStringToMinutes,
@@ -72,8 +73,28 @@ function processListingPage(data) {
   };
 }
 
-function processPerformancePage(data, fallbackUrl, fallbackScreen) {
+function getListingTags(data) {
   const $ = cheerio.load(data);
+  return $(".tag-buttons .tag-button")
+    .map((i, el) => getText($(el)))
+    .get()
+    .filter(
+      (tag) =>
+        basicNormalize(tag) !== "cinema" &&
+        basicNormalize(tag) !== "new releases" &&
+        basicNormalize(tag) !== "more..." &&
+        basicNormalize(tag) !== "barbican presents",
+    );
+}
+
+function processPerformancePage(
+  data,
+  listingPage,
+  fallbackUrl,
+  fallbackScreen,
+) {
+  const $ = cheerio.load(data);
+  const listingTags = getListingTags(listingPage);
 
   const performances = [];
   $(".instance-listing").each(function () {
@@ -88,15 +109,28 @@ function processPerformancePage(data, fallbackUrl, fallbackScreen) {
       .map((tag) => tag.trim().toLowerCase());
     const accessibility = createAccessibility({
       audioDescription: tags.includes("ad"),
-      relaxed: tags.includes("rel"),
+      relaxed:
+        tags.includes("rel") ||
+        !!listingTags.find((tag) =>
+          basicNormalize(tag).includes("relaxed screening"),
+        ),
       hardOfHearing: tags.includes("cap"),
+      babyFriendly: !!listingTags.find((tag) =>
+        basicNormalize(tag).includes("parent and baby"),
+      ),
     });
 
     const dateTime = $(this).find(".instance-time__time time").attr("datetime");
     const screen = getText($(this).find(".instance-listing__venue"));
+    const notesList = listingTags.filter(
+      (tag) =>
+        !basicNormalize(tag).includes("parent and baby") &&
+        !basicNormalize(tag).includes("relaxed screening"),
+    );
     performances.push(
       createPerformance({
         date: parseISO(dateTime),
+        notesList,
         url: $bookingButton.attr("href") || fallbackUrl,
         screen: screen || fallbackScreen,
         status,
@@ -116,7 +150,12 @@ async function transform({ moviePages }, sourcedEvents) {
         venue,
         overview,
       } = processListingPage(listingPage);
-      const performances = processPerformancePage(performancePage, url, venue);
+      const performances = processPerformancePage(
+        performancePage,
+        listingPage,
+        url,
+        venue,
+      );
       const useFallbackTitle = searchTitle.endsWith("..") && listingPageTitle;
       const title = useFallbackTitle ? listingPageTitle : searchTitle;
       return {
