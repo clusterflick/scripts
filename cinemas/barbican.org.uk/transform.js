@@ -56,6 +56,8 @@ function processListingPage(data) {
   const $titleSpecific = $title.find("> span");
   if ($titleSpecific.length > 0) title = getText($titleSpecific.eq(0));
 
+  const aboutMovie = getText($("#about").next());
+
   return {
     url: $('link[rel="canonical"]').attr("href"),
     title,
@@ -70,6 +72,7 @@ function processListingPage(data) {
         .replace(/[()]/g, "")
         .trim(),
     }),
+    matchingHints: { overview: aboutMovie },
   };
 }
 
@@ -149,6 +152,7 @@ async function transform({ moviePages }, sourcedEvents) {
         title: listingPageTitle,
         venue,
         overview,
+        matchingHints,
       } = processListingPage(listingPage);
       const performances = processPerformancePage(
         performancePage,
@@ -163,6 +167,7 @@ async function transform({ moviePages }, sourcedEvents) {
         url,
         overview,
         performances,
+        matchingHints,
       };
     },
   );
