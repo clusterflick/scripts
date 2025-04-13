@@ -1,14 +1,15 @@
 const cheerio = require("cheerio");
+const { parseISO } = require("date-fns");
 const {
   createOverview,
   basicNormalize,
   getText,
   createPerformance,
   createAccessibility,
+  generateShowingId,
 } = require("../../common/utils");
-const { domain } = require("./attributes");
 const { parseDate } = require("./utils");
-const { parseISO } = require("date-fns");
+const attributes = require("./attributes");
 
 const getDetails = ($) => {
   const $credits = $("p.js-accordion__header")
@@ -119,10 +120,13 @@ async function transform({ moviePages }, sourcedEvents) {
   for (const moviePageUrl in moviePages) {
     const { listing, booking } = moviePages[moviePageUrl];
     const $ = cheerio.load(listing);
+    const shortLinkUrl = $("link[rel='shortlink']").attr("href");
+    const id = shortLinkUrl.match(/\/node\/([^/]+)$/i)[1];
 
     movies.push({
+      showingId: generateShowingId(attributes, id),
       title: getText($(".m-banner__copy h1")),
-      url: `${domain}${moviePageUrl}`,
+      url: `${attributes.domain}${moviePageUrl}`,
       overview: getOverview($),
       performances: booking
         ? getMultiplePerformances($, booking)

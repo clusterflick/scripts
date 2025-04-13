@@ -1,4 +1,5 @@
 module.exports = {
+  id: "odeon.co.uk-leicester-square",
   name: "ODEON Luxe Leicester Square",
   domain: "https://www.odeon.co.uk",
   url: "https://www.odeon.co.uk/cinemas/london-leicester-square",

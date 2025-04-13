@@ -2,14 +2,16 @@ const {
   createOverview,
   createPerformance,
   createAccessibility,
+  generateShowingId,
 } = require("../utils");
 const { parseDate } = require("./utils");
 
 async function transform(
-  { cinemaId, domain },
+  attributes,
   { filmData: { films, screenings, screeningTypes } },
   sourcedEvents,
 ) {
+  const { cinemaId, domain } = attributes;
   const movies = Object.values(films).reduce((moviesAtThreate, movie) => {
     const siteMovieScreenings = movie.screenings.byCinema[cinemaId];
     if (!siteMovieScreenings) return moviesAtThreate;
@@ -22,6 +24,7 @@ async function transform(
 
     const movieUrl = `${domain}${movie.link}`;
     const show = {
+      showingId: generateShowingId(attributes, movie.vistaId),
       title: movie.title,
       url: movieUrl,
       overview,

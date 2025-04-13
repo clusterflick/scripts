@@ -3,9 +3,10 @@ const {
   getText,
   createOverview,
   createPerformance,
+  generateShowingId,
 } = require("../../common/utils");
 const { parseDate } = require("./utils");
-const { domain } = require("./attributes");
+const attributes = require("./attributes");
 
 async function transform({ movieListPage, moviePages }, sourcedEvents) {
   const movies = movieListPage.reduce((moviesWithPerformances, movie) => {
@@ -36,8 +37,9 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
     });
 
     return moviesWithPerformances.concat({
+      showingId: generateShowingId(attributes, movie.id),
       title: movie.post_title,
-      url: `${domain}/cinema/${movie.slug}/`,
+      url: `${attributes.domain}/cinema/${movie.slug}/`,
       overview: createOverview({
         duration: movie.spektrix_data.duration,
         classification: movie.spektrix_data.rating,
@@ -57,7 +59,7 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
           return createPerformance({
             date: parseDate(start),
             notesList,
-            url: `${domain}/book-online/${iframeId}`,
+            url: `${attributes.domain}/book-online/${iframeId}`,
             screen: name,
             status,
           });

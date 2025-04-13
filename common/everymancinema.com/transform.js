@@ -3,13 +3,15 @@ const {
   createOverview,
   createPerformance,
   createAccessibility,
+  generateShowingId,
 } = require("../../common/utils");
 
 async function transform(
-  { domain, cinemaId },
+  attributes,
   { movieListPage, moviePages: { movieData, attributeData } },
   sourcedEvents,
 ) {
+  const { domain, cinemaId } = attributes;
   const movies = movieData.reduce((moviesAtThreate, movie) => {
     const isShowing = !!movie.theaters.find(({ th }) => th === cinemaId);
     if (!isShowing) return moviesAtThreate;
@@ -67,6 +69,7 @@ async function transform(
       });
 
     return moviesAtThreate.concat({
+      showingId: generateShowingId(attributes, movie.id),
       title: movie.title,
       url: `${domain}${movie.path}`,
       overview,

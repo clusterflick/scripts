@@ -1,4 +1,5 @@
 module.exports = {
+  id: "myvue.com-shepherds-bush",
   name: "Vue Shepherd's Bush",
   domain: "https://www.myvue.com",
   url: "https://www.myvue.com/cinema/shepherds-bush",

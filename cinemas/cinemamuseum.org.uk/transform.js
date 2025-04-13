@@ -7,8 +7,9 @@ const {
   createOverview,
   basicNormalize,
   getMovieTitleAndYearFrom,
+  generateShowingId,
 } = require("../../common/utils");
-const normalizeTitle = require("../../common/normalize-title");
+const attributes = require("./attributes");
 
 function parseDate(dateString) {
   return parse(dateString, "EEE d MMM yyyy @ HH:mm", new Date(), {
@@ -48,9 +49,10 @@ async function transform({ moviePages }, sourcedEvents) {
     const soldOut = basicNormalize(getText($note)).includes("sold out");
     $note.remove();
     const title = getText($title);
-    const id = normalizeTitle(title);
+    const postId = $(".post.type-post").attr("id").replace("post-", "");
+    const showingId = generateShowingId(attributes, postId);
 
-    if (!movies[id]) {
+    if (!movies[showingId]) {
       let directors;
       const description = getText($(".entry"));
       const directedByMatch = description.match(
@@ -61,7 +63,7 @@ async function transform({ moviePages }, sourcedEvents) {
       }
       const { year } = getMovieTitleAndYearFrom(title);
       const overview = createOverview({ year, directors });
-      movies[id] = { title, url, overview, performances: [] };
+      movies[showingId] = { showingId, title, url, overview, performances: [] };
     }
 
     const date = getDate($);
@@ -77,7 +79,7 @@ async function transform({ moviePages }, sourcedEvents) {
         ].join(","),
       )
       .attr("href");
-    movies[id].performances = movies[id].performances.concat(
+    movies[showingId].performances = movies[showingId].performances.concat(
       createPerformance({ date, url: bookingUrl || url, status: { soldOut } }),
     );
   });

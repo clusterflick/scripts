@@ -3,6 +3,7 @@ const {
   createOverview,
   createPerformance,
   createAccessibility,
+  generateShowingId,
 } = require("../../common/utils");
 
 const screenMapping = {
@@ -31,7 +32,7 @@ const isCastPlaceholder = (value) =>
   value?.toLowerCase()?.startsWith("cast to be announced");
 
 async function transform(
-  { domain },
+  attributes,
   {
     data: {
       movies: { data: moviesData },
@@ -39,6 +40,7 @@ async function transform(
   },
   sourcedEvents,
 ) {
+  const { domain } = attributes;
   const movies = moviesData.reduce((moviesAtCinema, movie) => {
     // If there are duplicate showings at the same time, take the last. This
     // fixes the issue where an invalid showing has been left in and replaced.
@@ -50,6 +52,7 @@ async function transform(
     ).sort((a, b) => a > b);
 
     const transformedMovie = {
+      showingId: generateShowingId(attributes, movie.id),
       title: movie.name,
       url: `${domain}/movie/${movie.urlSlug}`,
       overview: createOverview({

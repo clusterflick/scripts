@@ -1,4 +1,5 @@
 module.exports = {
+  id: "barbican.org.uk",
   name: "The Barbican",
   domain: "https://www.barbican.org.uk",
   url: "https://www.barbican.org.uk/whats-on/cinema",

@@ -1,4 +1,5 @@
 module.exports = {
+  id: "everymancinema.com-borough-yards",
   name: "Everyman Borough Yards",
   domain: "https://www.everymancinema.com",
   url: "https://www.everymancinema.com/venues-list/g011i-everyman-borough-yards/",

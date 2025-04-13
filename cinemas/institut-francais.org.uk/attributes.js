@@ -1,4 +1,5 @@
 module.exports = {
+  id: "institut-francais.org.uk",
   name: "Ciné Lumière",
   domain: "https://www.institut-francais.org.uk",
   url: "https://www.institut-francais.org.uk/cinema/",

@@ -1,4 +1,5 @@
 module.exports = {
+  id: "curzon.com-hoxton",
   name: "Curzon Hoxton",
   domain: "https://www.curzon.com",
   url: "https://www.curzon.com/venues/hoxton",

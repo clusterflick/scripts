@@ -5,8 +5,10 @@ const {
   createPerformance,
   createOverview,
   createAccessibility,
+  generateShowingId,
 } = require("../../common/utils");
 const { calculate24Hours, parseDate } = require("./utils");
+const attributes = require("./attributes");
 
 function getLine($, $lines, prefix) {
   let combinedLines = "";
@@ -71,6 +73,8 @@ async function transform({ movieListPage }, sourcedEvents) {
     const $movieProperties = $movieDetails.find(".running-time");
     const title = getText($movieTitle);
     const url = $movieTitle.attr("href");
+    const id = url.match(/\/film\/([^/]+)\//i)[1];
+    const showingId = generateShowingId(attributes, id);
 
     // Don't pull data for entries which aren't bookable films
     if (title.toLowerCase().includes("(do not book")) {
@@ -149,7 +153,7 @@ async function transform({ movieListPage }, sourcedEvents) {
       }
     });
 
-    movies.push({ title, url, overview, performances });
+    movies.push({ showingId, title, url, overview, performances });
   });
 
   const listOfSourcedEvents = Object.values(sourcedEvents).flatMap(

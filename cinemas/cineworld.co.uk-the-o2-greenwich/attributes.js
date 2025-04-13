@@ -1,4 +1,5 @@
 module.exports = {
+  id: "cineworld.co.uk-the-o2-greenwich",
   name: "Cineworld The O2 Greenwich",
   domain: "https://www.cineworld.co.uk",
   url: "https://www.cineworld.co.uk/cinemas/london-the-o2-greenwich/077",

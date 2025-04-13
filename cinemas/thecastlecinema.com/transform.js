@@ -1,24 +1,29 @@
 const cheerio = require("cheerio");
 const { setHours, setMinutes } = require("date-fns");
-const { domain } = require("./attributes");
+const attributes = require("./attributes");
 const {
   getText,
   createPerformance,
   createOverview,
   createAccessibility,
   convertToList,
+  generateShowingId,
 } = require("../../common/utils");
 const { parseDate } = require("./utils");
 
+const { domain } = attributes;
+
 const getEntry = ($el, movieAdditionalData) => {
   const url = `${domain}${$el.find(".tile-details > a").attr("href")}`;
+  const id = url.match(/\/programme\/([^/]+)\//i)[1];
+  const showingId = generateShowingId(attributes, id);
   const title = getText($el.find(".tile-name"));
   const overview = movieAdditionalData[url];
 
   // It's unexpected to not find a overview information, so throw
   if (!overview) throw new Error("No overview information");
 
-  return { title, url, overview, performances: [] };
+  return { showingId, title, url, overview, performances: [] };
 };
 
 async function getAdditionalDataFor(moviePages) {

@@ -1,4 +1,5 @@
 module.exports = {
+  id: "everymancinema.com-hampstead",
   name: "Everyman Hampstead",
   domain: "https://www.everymancinema.com",
   url: "https://www.everymancinema.com/venues-list/x06zw-everyman-hampstead/",

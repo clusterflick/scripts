@@ -1,4 +1,5 @@
 module.exports = {
+  id: "beermerchantstap.com",
   name: "Beer Merchants Tap",
   domain: "https://beermerchantstap.com",
   url: "https://beermerchantstap.com/events/",

@@ -1,4 +1,5 @@
 module.exports = {
+  id: "curzon.com-victoria",
   name: "Curzon Victoria",
   domain: "https://www.curzon.com",
   url: "https://www.curzon.com/venues/victoria",

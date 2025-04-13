@@ -6,6 +6,7 @@ const {
   createOverview,
   createPerformance,
   createAccessibility,
+  generateShowingId,
 } = require("../utils");
 const { parseDate } = require("./utils");
 
@@ -45,10 +46,11 @@ function getCast(synopsis) {
 }
 
 async function transform(
-  { domain, cinemaId },
+  attributes,
   { movieListPage: { movies: moviesData }, moviePages },
   sourcedEvents,
 ) {
+  const { domain, cinemaId } = attributes;
   const movies = moviesData.reduce((moviesAtCinema, movie) => {
     const slug = slugify(movie.Title);
     const showings = movie.show_times.filter(
@@ -74,6 +76,7 @@ async function transform(
     const synopsis = getSynopsis(moviePages[movie.ScheduledFilmId]);
 
     const transformedMovie = {
+      showingId: generateShowingId(attributes, movie.ID),
       title: movie.Title,
       url: `${domain}/movie-details/${cinemaId}/${movie.ScheduledFilmId}/${slug}`,
       overview,

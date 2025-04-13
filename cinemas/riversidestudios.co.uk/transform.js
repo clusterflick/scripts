@@ -5,7 +5,9 @@ const {
   createAccessibility,
   basicNormalize,
   getText,
+  generateShowingId,
 } = require("../../common/utils");
+const attributes = require("./attributes");
 
 function getOverviewData(pageData) {
   const $ = cheerio.load(pageData);
@@ -36,6 +38,7 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
     const { title, url: urlRaw } = movieData;
     const { year, directors, actors } = getOverviewData(moviePages[urlRaw]);
     const url = encodeURI(urlRaw);
+    const showingId = generateShowingId(attributes, movieData.id);
 
     const overview = createOverview({
       duration: movieData.run_time.split("mins")[0].trim(),
@@ -72,7 +75,7 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
       },
     );
 
-    return { title, url, overview, performances };
+    return { showingId, title, url, overview, performances };
   });
 
   const listOfSourcedEvents = Object.values(sourcedEvents).flatMap(

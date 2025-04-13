@@ -1,4 +1,5 @@
 module.exports = {
+  id: "everymancinema.com-stratford-international",
   name: "Everyman Stratford International",
   domain: "https://www.everymancinema.com",
   url: "https://www.everymancinema.com/venues-list/g029x-everyman-stratford-international/",

@@ -1,4 +1,5 @@
 module.exports = {
+  id: "cineworld.co.uk-west-india-quay",
   name: "Cineworld West India Quay",
   domain: "https://www.cineworld.co.uk",
   url: "https://www.cineworld.co.uk/cinemas/london-west-india-quay/041",

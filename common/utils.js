@@ -204,6 +204,10 @@ const compareAsSimilar = (firstString, secondString) => {
 const getId = (value) =>
   crypto.createHash("sha256").update(value).digest("hex").slice(0, 8);
 
+function generateShowingId(attributes, eventId) {
+  return `${attributes.id}-${eventId}`;
+}
+
 module.exports = {
   readJSON,
   writeJSON,
@@ -223,4 +227,5 @@ module.exports = {
   removeMatchingHints,
   compareAsSimilar,
   getId,
+  generateShowingId,
 };

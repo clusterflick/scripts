@@ -1,14 +1,14 @@
 const cheerio = require("cheerio");
 const nlp = require("compromise");
-const slugify = require("slugify");
 const {
   getText,
   createOverview,
   createPerformance,
   createAccessibility,
+  generateShowingId,
 } = require("../../common/utils");
 const { parseDate } = require("./utils");
-const { domain } = require("./attributes");
+const attributes = require("./attributes");
 
 function getAdditionalDataFor(data) {
   const $ = cheerio.load(data);
@@ -69,12 +69,11 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
     $movieShowings.each(function () {
       const $titleInfo = $(this).find("h2");
       const title = getText($titleInfo.find("a"));
-      const id = slugify(title);
+      const urlPath = $titleInfo.find("a").attr("href");
+      const movieUrl = `${attributes.domain}/${urlPath}`;
+      const id = movieUrl.match(/\/event\/([^/]+)$/i)[1];
 
       if (!movies[id]) {
-        const urlPath = $titleInfo.find("a").attr("href");
-        const movieUrl = `${domain}/${urlPath}`;
-
         const $duration = $titleInfo.parent().next();
         const durationMatch = getText($duration).match(
           /^Running time:\W+(\d+)\W*mins$/,
@@ -95,6 +94,7 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
 
         let matchingHintsOverview = getOverviewFrom(moviePages[movieUrl]);
         movies[id] = {
+          showingId: generateShowingId(attributes, id),
           // Fix for special characters not encoding correctly in calendar
           title: title.replace(/’/g, "'").replace(/–/g, "-"),
           url: movieUrl,

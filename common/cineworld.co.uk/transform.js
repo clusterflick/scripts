@@ -3,6 +3,7 @@ const {
   createOverview,
   createPerformance,
   createAccessibility,
+  generateShowingId,
 } = require("../../common/utils");
 
 const getCertificate = (attributeIds) => {
@@ -25,7 +26,11 @@ const getCategories = (attributeIds) => {
   return categories;
 };
 
-async function transform(venue, { movieListPage, moviePages }, sourcedEvents) {
+async function transform(
+  attributes,
+  { movieListPage, moviePages },
+  sourcedEvents,
+) {
   const movies = {};
   let events = [];
 
@@ -55,6 +60,7 @@ async function transform(venue, { movieListPage, moviePages }, sourcedEvents) {
       if (film.name.toUpperCase() === "THEATRE LET") return;
 
       movies[film.id] = {
+        showingId: generateShowingId(attributes, film.id),
         title: film.name,
         url: film.link,
         overview,

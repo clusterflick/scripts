@@ -1,4 +1,5 @@
 module.exports = {
+  id: "cineworld.co.uk-bexleyheath",
   name: "Cineworld Bexleyheath",
   domain: "https://www.cineworld.co.uk",
   url: "https://www.cineworld.co.uk/cinemas/london-bexleyheath/027",

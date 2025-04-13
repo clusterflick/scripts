@@ -1,4 +1,5 @@
 module.exports = {
+  id: "picturehouses.com-hackney",
   name: "Hackney Picturehouse",
   domain: "https://www.picturehouses.com",
   url: "https://www.picturehouses.com/cinema/hackney-picturehouse",

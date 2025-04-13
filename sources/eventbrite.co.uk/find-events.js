@@ -3,11 +3,13 @@ const {
   readJSON,
   basicNormalize,
   sanitizeRichText,
+  generateShowingId,
 } = require("../../common/utils");
 const normalizeName = require("../../common/normalize-name");
 const distanceInKmBetweenCoordinates = require("../../common/distance-in-km-between-coordinates");
 const { createOverview, createPerformance } = require("../../common/utils");
 const { parseDate } = require("./utils");
+const attributes = require("./attributes");
 
 function getEventDescriptiopn(details) {
   if (!details) return "";
@@ -26,6 +28,7 @@ function convertEventbriteEvent(event, details) {
   const eventDescription = getEventDescriptiopn(details);
 
   return {
+    showingId: generateShowingId(attributes, event.id),
     title: event.name,
     url: event.url,
     overview: createOverview({

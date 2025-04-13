@@ -1,4 +1,5 @@
 module.exports = {
+  id: "thelexicinema.co.uk",
   name: "The Lexi Cinema",
   domain: "https://thelexicinema.co.uk",
   url: "https://thelexicinema.co.uk/TheLexiCinema.dll/WhatsOn",

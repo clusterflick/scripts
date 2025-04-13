@@ -1,4 +1,5 @@
 module.exports = {
+  id: "odeon.co.uk-haymarket",
   name: "ODEON Luxe Haymarket",
   domain: "https://www.odeon.co.uk",
   url: "https://www.odeon.co.uk/cinemas/london-haymarket",

@@ -6,9 +6,10 @@ const {
   createPerformance,
   createAccessibility,
   basicNormalize,
+  generateShowingId,
 } = require("../../common/utils");
 const { parseDate } = require("./utils");
-const { domain } = require("./attributes");
+const attributes = require("./attributes");
 
 async function transform({ movieListPage, moviePages }, sourcedEvents) {
   const movies = {};
@@ -19,6 +20,8 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
       // the data for it from the listing before adding performances.
       if (!movies[url]) {
         const $ = cheerio.load(moviePages[url]);
+        const filmId = screenings[0]?.[1];
+        const showingId = generateShowingId(attributes, filmId);
         const title = sanitizeRichText(rawTitle);
         const overview = createOverview({
           duration: getText($(".film-details__running-time__content"))
@@ -29,7 +32,7 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
           classification: rating,
           trailer: $("a[data-action='play-trailer']").attr("href"),
         });
-        movies[url] = { title, url, overview, performances: [] };
+        movies[url] = { showingId, title, url, overview, performances: [] };
       }
 
       for (const screening of screenings) {
@@ -51,7 +54,7 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
                 basicNormalize(tag) !== "subtitled" &&
                 basicNormalize(tag) !== "parent & baby",
             ),
-            url: `${domain}/tickets/${performanceId}`,
+            url: `${attributes.domain}/tickets/${performanceId}`,
             accessibility: createAccessibility({
               subtitled: tags.includes("Subtitled"),
               babyFriendly: tags.includes("Parent & Baby"),

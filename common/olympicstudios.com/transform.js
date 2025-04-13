@@ -6,6 +6,8 @@ const {
   createPerformance,
   basicNormalize,
   createAccessibility,
+  generateShowingId,
+  getId,
 } = require("../utils");
 
 const getMinutes = (duration) => {
@@ -111,8 +113,9 @@ async function transform(attributes, { moviePages }, sourcedEvents) {
       .get();
     const $listingData = $("#section_3_stack");
     const $title = $listingData.find("h3").eq(0);
-
+    const id = getId(moviePageUrl.split("/film/")[1]);
     movies.push({
+      showingId: generateShowingId(attributes, id),
       title: getText($title),
       url: moviePageUrl,
       overview: getOverview($, $title.parent()),

@@ -5,8 +5,10 @@ const {
   createPerformance,
   createOverview,
   createAccessibility,
+  generateShowingId,
 } = require("../../common/utils");
 const { parseDate } = require("./utils");
+const attributes = require("./attributes");
 
 const isCatchAll = (value) => value.toLowerCase().trim().startsWith("various");
 
@@ -110,7 +112,11 @@ async function transform({ moviePages }, sourcedEvents) {
       $(this).remove();
     });
 
+    const shortLinkUrl = $("link[rel='shortlink']").attr("href");
+    const id = new URLSearchParams(new URL(shortLinkUrl).search).get("p");
+
     return {
+      showingId: generateShowingId(attributes, id),
       title: getText($title),
       url: $('link[rel="canonical"]').attr("href"),
       overview: createOverview({

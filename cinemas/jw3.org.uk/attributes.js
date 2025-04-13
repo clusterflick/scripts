@@ -1,4 +1,5 @@
 module.exports = {
+  id: "jw3.org.uk",
   name: "JW3",
   domain: "https://www.jw3.org.uk",
   url: "https://www.jw3.org.uk",

@@ -6,12 +6,14 @@ const {
   createPerformance,
   createAccessibility,
   basicNormalize,
+  generateShowingId,
 } = require("../../common/utils");
 const {
   convertDurationStringToMinutes,
   getYear,
   getDirectorDuration,
 } = require("./utils");
+const attributes = require("./attributes");
 
 const convertSummaryToMapping = ($) => {
   const summary = {};
@@ -51,6 +53,8 @@ function processListingPage(data) {
   const footnotes = convertFootnotesToMapping($);
   const movieBlurbDirectors = convertMovieBlurbToDirectors($);
 
+  const eventId = `${$("button.saved-event-button").data("saved-event-id")}`;
+  const showingId = generateShowingId(attributes, eventId);
   const $title = $(".heading-group__primary");
   let title = getText($title);
   const $titleSpecific = $title.find("> span");
@@ -59,8 +63,9 @@ function processListingPage(data) {
   const aboutMovie = getText($("#about").next());
 
   return {
-    url: $('link[rel="canonical"]').attr("href"),
+    showingId,
     title,
+    url: $('link[rel="canonical"]').attr("href"),
     venue: getText($("#venue").parent()),
     overview: createOverview({
       duration: summary.runtime
@@ -148,8 +153,9 @@ async function transform({ moviePages }, sourcedEvents) {
   const movies = moviePages.map(
     ({ title: searchTitle, listingPage, performancePage }) => {
       const {
-        url,
+        showingId,
         title: listingPageTitle,
+        url,
         venue,
         overview,
         matchingHints,
@@ -163,6 +169,7 @@ async function transform({ moviePages }, sourcedEvents) {
       const useFallbackTitle = searchTitle.endsWith("..") && listingPageTitle;
       const title = useFallbackTitle ? listingPageTitle : searchTitle;
       return {
+        showingId,
         title,
         url,
         overview,

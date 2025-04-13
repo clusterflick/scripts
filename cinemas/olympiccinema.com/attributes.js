@@ -1,4 +1,5 @@
 module.exports = {
+  id: "olympiccinema.com",
   name: "The Olympic Cinema",
   domain: "https://www.olympiccinema.com",
   url: "https://www.olympiccinema.com/whats-on",

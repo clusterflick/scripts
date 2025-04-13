@@ -4,13 +4,11 @@ const {
   createOverview,
   createPerformance,
   createAccessibility,
+  generateShowingId,
 } = require("../../common/utils");
 
-async function transform(
-  { domain, url },
-  { result: movieData },
-  sourcedEvents,
-) {
+async function transform(attributes, { result: movieData }, sourcedEvents) {
+  const { domain, url } = attributes;
   const movies = movieData.reduce((moviesAtCinema, movie) => {
     if (movie.showingGroups.length === 0) return moviesAtCinema;
 
@@ -68,6 +66,7 @@ async function transform(
     );
 
     const transformedMovie = {
+      showingId: generateShowingId(attributes, movie.filmId),
       title: movie.filmTitle,
       url: movie.filmUrl.replace(domain, url),
       overview,

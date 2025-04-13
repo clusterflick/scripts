@@ -6,12 +6,11 @@ const {
   createAccessibility,
   convertToList,
   splitConjoinedItemsInList,
+  generateShowingId,
 } = require("../utils");
 const { parseDate } = require("./utils");
 
-function getOverviewFor({ html }) {
-  const $ = cheerio.load(html);
-
+function getOverviewFor($) {
   const overview = {
     categories: "",
     directors: "",
@@ -45,9 +44,7 @@ function getOverviewFor({ html }) {
   return createOverview(overview);
 }
 
-function getPerformancesFor(url, { title, performances, html }) {
-  const $ = cheerio.load(html);
-
+function getPerformancesFor($, url, { title, performances }) {
   const $showInfo = $("ul.Film-info__information li");
   let isSubtitled = false;
   $showInfo.each(function () {
@@ -106,16 +103,22 @@ function getPerformancesFor(url, { title, performances, html }) {
   return showPerformances;
 }
 
-async function transform({ url }, { moviePages }, sourcedEvents) {
+async function transform(attributes, { moviePages }, sourcedEvents) {
+  const { url } = attributes;
   const shows = [];
 
   for (const showPath in moviePages) {
     const show = moviePages[showPath];
+    const $ = cheerio.load(show.html);
+    const articleId = $(
+      "input[name='BOparam::WScontent::loadArticle::article_id']",
+    ).val();
     shows.push({
+      showingId: generateShowingId(attributes, articleId),
       title: show.title,
       url: `${url}?${showPath}`,
-      overview: getOverviewFor(show),
-      performances: getPerformancesFor(`${url}?${showPath}`, show),
+      overview: getOverviewFor($),
+      performances: getPerformancesFor($, `${url}?${showPath}`, show),
     });
   }
 

@@ -1,4 +1,5 @@
 module.exports = {
+  id: "everymancinema.com-crystal-palace",
   name: "Everyman Crystal Palace",
   domain: "https://www.everymancinema.com",
   url: "https://www.everymancinema.com/venues-list/x11dr-everyman-crystal-palace/",

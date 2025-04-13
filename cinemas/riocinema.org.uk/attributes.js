@@ -1,4 +1,5 @@
 module.exports = {
+  id: "riocinema.org.uk",
   name: "Rio Cinema",
   domain: "https://www.riocinema.org.uk",
   url: "https://www.riocinema.org.uk",

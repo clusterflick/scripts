@@ -1,4 +1,5 @@
 module.exports = {
+  id: "myvue.com-fulham-broadway",
   name: "Vue Fulham Broadway",
   domain: "https://www.myvue.com",
   url: "https://www.myvue.com/cinema/fulham-broadway",

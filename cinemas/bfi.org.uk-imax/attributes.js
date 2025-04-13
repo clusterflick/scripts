@@ -1,4 +1,5 @@
 module.exports = {
+  id: "bfi.org.uk-imax",
   name: "BFI IMAX",
   domain: "https://whatson.bfi.org.uk/imax/Online/",
   url: "https://whatson.bfi.org.uk/imax/Online/default.asp",

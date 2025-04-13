@@ -46,7 +46,13 @@ function schemaValidate(data) {
   const validate = ajv.compile(schema);
   const isValid = validate(data);
   if (!isValid) console.error(validate.errors);
-  return isValid;
+
+  const addIdToSet = (set, { showingId }) => set.add(showingId);
+  const ids = data.reduce(addIdToSet, new Set());
+  const hasAllUniqueIds = ids.size === data.length;
+  if (!hasAllUniqueIds) console.error("Duplicate IDs detected");
+
+  return isValid && hasAllUniqueIds;
 }
 
 const setupCacheMock = (dirname, suffix) => {

@@ -1,4 +1,5 @@
 module.exports = {
+  id: "freud.org.uk",
   name: "Freud Museum London",
   domain: "https://www.freud.org.uk",
   url: "https://www.freud.org.uk/events/category/events/",

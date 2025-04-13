@@ -1,4 +1,5 @@
 module.exports = {
+  id: "odeon.co.uk-south-woodford",
   name: "ODEON South Woodford",
   domain: "https://www.odeon.co.uk",
   url: "https://www.odeon.co.uk/cinemas/south-woodford",

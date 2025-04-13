@@ -1,4 +1,5 @@
 module.exports = {
+  id: "cineworld.co.uk-leicester-square",
   name: "Cineworld Leicester Square",
   domain: "https://www.cineworld.co.uk",
   url: "https://www.cineworld.co.uk/cinemas/london-leicester-square/103",

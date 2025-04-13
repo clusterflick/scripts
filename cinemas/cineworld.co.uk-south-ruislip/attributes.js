@@ -1,4 +1,5 @@
 module.exports = {
+  id: "cineworld.co.uk-south-ruislip",
   name: "Cineworld South Ruislip",
   domain: "https://www.cineworld.co.uk",
   url: "https://www.cineworld.co.uk/cinemas/london-south-ruislip/106",

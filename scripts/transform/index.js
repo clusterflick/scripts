@@ -172,6 +172,11 @@ async function transform(location, input, historicData = []) {
   try {
     const start = Date.now();
     await validateAgainstSchema(matchedData);
+
+    const addIdToSet = (set, { showingId }) => set.add(showingId);
+    const ids = matchedData.reduce(addIdToSet, new Set());
+    if (ids.size !== matchedData.length) throw new Error("Duplicate ID");
+
     const duration = Math.round((Date.now() - start) / 1000);
     console.log(` - ✅ Validated (${duration}s)`);
   } catch (e) {

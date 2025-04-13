@@ -1,4 +1,5 @@
 module.exports = {
+  id: "everymancinema.com-muswell-hill",
   name: "Everyman Muswell Hill",
   domain: "https://www.everymancinema.com",
   url: "https://www.everymancinema.com/venues-list/x06sn-everyman-muswell-hill/",

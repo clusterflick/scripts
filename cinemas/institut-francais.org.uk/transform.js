@@ -5,8 +5,10 @@ const {
   createPerformance,
   createAccessibility,
   basicNormalize,
+  generateShowingId,
 } = require("../../common/utils");
 const { parseDate } = require("./utils");
+const attributes = require("./attributes");
 
 const getDetails = ($, $movieData) => {
   const $details = $movieData.find("li");
@@ -110,8 +112,11 @@ async function transform({ moviePages }, sourcedEvents) {
 
     const $title = $(".title-dates h1");
     const details = getDetails($, $(".metadata"));
+    const shortLinkUrl = $("link[rel='shortlink']").attr("href");
+    const id = new URLSearchParams(new URL(shortLinkUrl).search).get("p");
 
     movies.push({
+      showingId: generateShowingId(attributes, id),
       title: getText($title),
       url: moviePageUrl,
       overview: getOverview(details),

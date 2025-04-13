@@ -25,7 +25,7 @@ describe(attributes.name, () => {
       const data = JSON.parse(JSON.stringify(output)).map(removeMatchingHints);
 
       // Make sure the data looks roughly correct
-      expect(data).toHaveLength(45);
+      expect(data).toHaveLength(48);
 
       expect(schemaValidate(data)).toBe(true);
       expect(data).toMatchSnapshot();

@@ -3,8 +3,10 @@ const {
   getText,
   createPerformance,
   createOverview,
+  generateShowingId,
 } = require("../../common/utils");
 const { parseDate } = require("./utils");
+const attributes = require("./attributes");
 
 const infoMatcher = /^([^,]+),\s+(\d{4}),\s+(\d+)\s+min(\s+|$|,)/i;
 
@@ -34,7 +36,8 @@ async function transform({ moviePages }, sourcedEvents) {
     const overview = createOverview(parseDetailsFrom(info));
 
     const performances = [];
-    $(".booking_calender #addform tr#row").each(function () {
+    const $performanceRows = $(".booking_calender #addform tr#row");
+    $performanceRows.each(function () {
       const $cells = $(this).find("td");
       const dateString = getText($cells.eq(1));
       const timeString = getText($cells.eq(2));
@@ -43,7 +46,10 @@ async function transform({ moviePages }, sourcedEvents) {
       performances.push(createPerformance({ date, url }));
     });
 
-    movies.push({ title, url, overview, performances });
+    const href = $performanceRows.eq(0).find("td a").eq(0).attr("href");
+    const id = href.split("/close-up-cinema/")[1];
+    const showingId = generateShowingId(attributes, id);
+    movies.push({ showingId, title, url, overview, performances });
   });
 
   const listOfSourcedEvents = Object.values(sourcedEvents).flatMap(

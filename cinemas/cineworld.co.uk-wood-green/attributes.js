@@ -1,4 +1,5 @@
 module.exports = {
+  id: "cineworld.co.uk-wood-green",
   name: "Cineworld Wood Green",
   domain: "https://www.cineworld.co.uk",
   url: "https://www.cineworld.co.uk/cinemas/london-wood-green/046",

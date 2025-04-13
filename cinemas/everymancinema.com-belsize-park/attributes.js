@@ -1,4 +1,5 @@
 module.exports = {
+  id: "everymancinema.com-belsize-park",
   name: "Everyman Belsize Park",
   domain: "https://www.everymancinema.com",
   url: "https://www.everymancinema.com/venues-list/x077p-everyman-belsize-park/",

@@ -1,4 +1,5 @@
 module.exports = {
+  id: "picturehouses.com-west-norwood",
   name: "West Norwood Library & Picturehouse",
   domain: "https://www.picturehouses.com",
   url: "https://www.picturehouses.com/cinema/west-norwood-picturehouse",

@@ -5,6 +5,7 @@ const {
   createOverview,
   createAccessibility,
   basicNormalize,
+  generateShowingId,
 } = require("../../common/utils");
 const { parseDate } = require("./utils");
 
@@ -48,13 +49,14 @@ function getNotesList(performance) {
   return notes;
 }
 
-async function transform({ domain }, urlSlug, movieData, sourcedEvents) {
+async function transform(attributes, urlSlug, movieData, sourcedEvents) {
   const movies = movieData.Events.reduce((events, movie) => {
     if (basicNormalize(movie.Title) === basicNormalize("Private Event")) {
       return events;
     }
 
     return events.concat({
+      showingId: generateShowingId(attributes, movie.ID),
       title: sanitizeRichText(movie.Title),
       url: movie.URL,
       overview: createOverview({
@@ -67,7 +69,7 @@ async function transform({ domain }, urlSlug, movieData, sourcedEvents) {
         createPerformance({
           date: parseDate(performance),
           notesList: getNotesList(performance),
-          url: `${domain}/${urlSlug}/${performance.URL}`,
+          url: `${attributes.domain}/${urlSlug}/${performance.URL}`,
           screen: performance.AuditoriumName,
           status: getStatus(performance),
           accessibility: createAccessibility(getAccessibility(performance)),

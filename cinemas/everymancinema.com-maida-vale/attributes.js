@@ -1,4 +1,5 @@
 module.exports = {
+  id: "everymancinema.com-maida-vale",
   name: "Everyman Maida Vale",
   domain: "https://www.everymancinema.com",
   url: "https://www.everymancinema.com/venues-list/x0lwi-everyman-maida-vale/",

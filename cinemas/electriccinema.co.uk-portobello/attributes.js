@@ -1,4 +1,5 @@
 module.exports = {
+  id: "electriccinema.co.uk-portobello",
   name: "Electric Cinema Portobello",
   domain: "https://www.electriccinema.co.uk",
   url: "https://www.electriccinema.co.uk/cinemas/portobello/",

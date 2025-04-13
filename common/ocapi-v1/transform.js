@@ -4,12 +4,13 @@ const {
   createPerformance,
   createOverview,
   createAccessibility,
+  generateShowingId,
 } = require("../../common/utils");
 
 const findFor = (list, idMatch) => list.find(({ id }) => id === idMatch);
 
 async function transform(
-  { domain },
+  attributes,
   showtimeDays,
   { getBookingUrl },
   sourcedEvents,
@@ -51,10 +52,12 @@ async function transform(
           trailer: film.trailerUrl,
         });
 
+        const { domain } = attributes;
         const slug = slugify(film.title.text, { strict: true }).toLowerCase();
         return {
           ...mappedFilms,
           [film.id]: {
+            showingId: generateShowingId(attributes, film.id),
             title: film.title.text,
             url: `${domain}/films/${slug}/${film.id}/?siteId=${sites[0].id}`,
             overview,

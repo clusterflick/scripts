@@ -1,4 +1,5 @@
 module.exports = {
+  id: "thecinemaatselfridges.com",
   name: "The Cinema at Selfridges",
   domain: "https://www.thecinemaatselfridges.com",
   url: "https://www.thecinemaatselfridges.com/whats-on",

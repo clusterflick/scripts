@@ -1,4 +1,5 @@
 module.exports = {
+  id: "odeon.co.uk-tottenham-court-road",
   name: "ODEON Tottenham Court Road",
   domain: "https://www.odeon.co.uk",
   url: "https://www.odeon.co.uk/cinemas/london-tottenham-court-road",

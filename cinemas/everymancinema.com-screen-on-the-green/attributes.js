@@ -1,4 +1,5 @@
 module.exports = {
+  id: "everymancinema.com-screen-on-the-green",
   name: "Everyman Screen on the Green",
   domain: "https://www.everymancinema.com",
   url: "https://www.everymancinema.com/venues-list/x077o-everyman-screen-on-the-green/",

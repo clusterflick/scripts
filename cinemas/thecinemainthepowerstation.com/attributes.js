@@ -1,4 +1,5 @@
 module.exports = {
+  id: "thecinemainthepowerstation.com",
   name: "The Cinema in the Power Station (and the Arches)",
   domain: "https://www.thecinemainthepowerstation.com",
   url: "https://www.thecinemainthepowerstation.com/whats-on",
