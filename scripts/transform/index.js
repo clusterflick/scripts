@@ -1,5 +1,9 @@
 const { isAfter } = require("date-fns");
-const { sortAndFilterMovies, basicNormalize } = require("../../common/utils");
+const {
+  sortAndFilterMovies,
+  basicNormalize,
+  getId,
+} = require("../../common/utils");
 const findMatchesOnTheMovieDb = require("./find-matches-on-the-movie-db");
 const getSourcedEventsFor = require("./get-sourced-events-for");
 const validateAgainstSchema = require("./validate-against-schema");
@@ -157,6 +161,13 @@ async function transform(location, input, historicData = []) {
 
       // Otherwise, add the movie into the transformed data
       console.log(" - Found missing movie:", movie.title, movie.url);
+      if (!movie.showingId) {
+        // Generate showing id for historic data
+        const prefix = movie.url.includes("eventbrite.co")
+          ? "eventbrite.co.uk"
+          : location;
+        movie.showingId = `${prefix}-${getId(movie.url)}`;
+      }
       matchedData.push(movie);
     }
     const duration = Math.round((Date.now() - start) / 1000);
