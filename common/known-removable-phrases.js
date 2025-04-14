@@ -195,6 +195,7 @@ const knownRemovablePhrases = [
   "pitchblack playback:",
   "Play for Today:",
   "Rebel Reel:",
+  "Premiere and Networking Event:",
   "Screening:",
   "ScreenTalk:",
   "Screening of ",

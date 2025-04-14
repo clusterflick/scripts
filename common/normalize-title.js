@@ -115,11 +115,13 @@ function normalizeTitle(title, options) {
     ],
     ["Maastricht:", "Maastricht Concert:"],
     [/trois /i, "3 "], // Fixes trois hommes et un couffin
+    [/ \(20th$/, ""],
     // Sanitise use of "PRESENT" which is confused with "X presents"
     ["‘PAST PRESENT FUTURE’ PODCAST", "‘PAST+PRESENT+FUTURE’ PODCAST"],
     ["seventeen [right here]", "seventeen right here"], // remove brackets from this band name
     ["Exclusive Screening of Highly Acclaimed Bengali Feature Film - ", ""],
     ["Mission: Impossible - ", "Mission: Impossible – "],
+    ["Premiere and Networking Event - ", "Premiere and Networking Event: "],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
