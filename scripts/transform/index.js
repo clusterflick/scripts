@@ -42,7 +42,7 @@ async function transform(location, input, historicData = []) {
     throw e;
   }
 
-  console.log("Checking for missing data ...");
+  console.log("Checking historical data ...");
   try {
     const start = Date.now();
 
@@ -101,6 +101,28 @@ async function transform(location, input, historicData = []) {
       "thelexicinema.co.uk",
     ];
     const yesterdaysData = optedIn.includes(location) ? historicData : [];
+    const now = new Date();
+
+    let newSeen = 0;
+    for (const movie of matchedData) {
+      const previouslySeen = yesterdaysData.find(
+        ({ showingId }) => showingId === movie.showingId,
+      );
+      if (previouslySeen) {
+        // If we've seen this movie before in a previous run, then copy across
+        // the date is was first seen.
+        movie.seen = previouslySeen.seen;
+      } else {
+        // If we've not seen this movie before in a previous run, then add the
+        // current date as this is the first time we've seen it.
+        movie.seen = now.getTime();
+        newSeen++;
+      }
+    }
+
+    if (newSeen > 0) {
+      console.log(` - Found ${newSeen} new movie${newSeen === 1 ? "" : "s"}`);
+    }
 
     // If a movie matches the following, it's been delisted but is still valid:
     for (const movie of yesterdaysData) {
@@ -109,7 +131,6 @@ async function transform(location, input, historicData = []) {
 
       // The movie data from yesterday contains future performances .
       // If there's no future performances, it's a past movie; continue
-      const now = new Date();
       const futurePerformances = movie.performances.filter(({ time }) =>
         isAfter(time, now),
       );
@@ -171,9 +192,7 @@ async function transform(location, input, historicData = []) {
       matchedData.push(movie);
     }
     const duration = Math.round((Date.now() - start) / 1000);
-    console.log(
-      ` - ✅ ${optedIn.includes(location) ? "Checked" : "Skipped"} (${duration}s)`,
-    );
+    console.log(` - ✅ Done (${duration}s)`);
   } catch (e) {
     console.log(` - ❌ Error checking`);
     throw e;

@@ -116,6 +116,7 @@ async function combine() {
       showingId,
       title,
       url,
+      seen,
       overview,
       performances,
       themoviedb,
@@ -218,6 +219,7 @@ async function combine() {
             ? title
             : undefined,
         url,
+        seen,
         overview,
       };
 
