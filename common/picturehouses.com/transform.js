@@ -123,7 +123,7 @@ async function transform(
         overview: synopsis,
         characters: synopsis ? getCharacters(synopsis) : undefined,
         cast: synopsis ? getCast(synopsis) : undefined,
-        year: details["release date"].match(/\s+(\d{4})$/i)?.[1],
+        year: details["release date"]?.match(/\s+(\d{4})$/i)?.[1],
       },
     };
 
