@@ -1,5 +1,4 @@
 const path = require("node:path");
-const crypto = require("node:crypto");
 const getModuleNamesFor = require("../../common/get-module-names-for");
 const normalizeTitle = require("../../common/normalize-title");
 const {
@@ -10,12 +9,10 @@ const {
   parseMinsToMs,
   readJSON,
   basicNormalize,
+  getId,
 } = require("../../common/utils");
 const standardizePrefixingForTheatrePerformances = require("../../common/standardize-prefixing-for-theatre-performances");
 const findRottenTomatoesMatch = require("./find-rotten-tomatoes-match");
-
-const getId = (value) =>
-  crypto.createHash("sha256").update(value).digest("hex").slice(0, 8);
 
 const getClassification = (movie) => {
   const results = movie.release_dates?.results ?? [];
@@ -115,7 +112,14 @@ async function combine() {
 
     const movieGenres = await getMovieGenresAndCacheResults();
 
-    for (const { title, url, overview, performances, themoviedb } of movies) {
+    for (const {
+      showingId,
+      title,
+      url,
+      overview,
+      performances,
+      themoviedb,
+    } of movies) {
       let movieInfo;
       let rottenTomatoes;
       if (themoviedb) {
@@ -188,7 +192,6 @@ async function combine() {
         }
       }
 
-      const showingId = getId(`${venueId}-${title}`);
       const movie = siteData.movies[movieId];
 
       if (movie.isUnmatched) {
