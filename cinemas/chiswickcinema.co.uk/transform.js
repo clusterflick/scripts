@@ -35,7 +35,13 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
         movies[url] = { showingId, title, url, overview, performances: [] };
       }
 
-      for (const screening of screenings) {
+      // Sometimes screenings can be an object with index keys instead of an
+      // array. Support when this happens.
+      // E.g. screenings = { '0': [Array], '1': [Array], '2': [Array] };
+      const screeningsArray = Array.isArray(screenings)
+        ? screenings
+        : Object.values(screenings);
+      for (const screening of screeningsArray) {
         // prettier-ignore
         const [
           time,
