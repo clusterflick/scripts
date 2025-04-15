@@ -8,7 +8,12 @@ const findMatchesOnTheMovieDb = require("./find-matches-on-the-movie-db");
 const getSourcedEventsFor = require("./get-sourced-events-for");
 const validateAgainstSchema = require("./validate-against-schema");
 
-async function transform(location, input, historicData = []) {
+async function transform(
+  location,
+  input,
+  yesterdaysRelease = [],
+  previousRelease = [],
+) {
   const { transform, attributes } = require(`../../cinemas/${location}`);
   const sourcedEvents = await getSourcedEventsFor(attributes);
 
@@ -45,6 +50,27 @@ async function transform(location, input, historicData = []) {
   console.log("Checking historical data ...");
   try {
     const start = Date.now();
+
+    let newSeen = 0;
+    for (const movie of matchedData) {
+      const previouslySeen = previousRelease.find(
+        ({ showingId }) => showingId === movie.showingId,
+      );
+      if (previouslySeen) {
+        // If we've seen this movie before in a previous run, then copy across
+        // the date is was first seen.
+        movie.seen = previouslySeen.seen;
+      } else {
+        // If we've not seen this movie before in a previous run, then add the
+        // current date as this is the first time we've seen it.
+        movie.seen = Date.now();
+        newSeen++;
+      }
+    }
+
+    if (newSeen > 0) {
+      console.log(` - Found ${newSeen} new movie${newSeen === 1 ? "" : "s"}`);
+    }
 
     // Only check for missing data for the following locations
     const optedIn = [
@@ -100,29 +126,7 @@ async function transform(location, input, historicData = []) {
       "thegardencinema.co.uk",
       "thelexicinema.co.uk",
     ];
-    const yesterdaysData = optedIn.includes(location) ? historicData : [];
-    const now = new Date();
-
-    let newSeen = 0;
-    for (const movie of matchedData) {
-      const previouslySeen = yesterdaysData.find(
-        ({ showingId }) => showingId === movie.showingId,
-      );
-      if (previouslySeen) {
-        // If we've seen this movie before in a previous run, then copy across
-        // the date is was first seen.
-        movie.seen = previouslySeen.seen;
-      } else {
-        // If we've not seen this movie before in a previous run, then add the
-        // current date as this is the first time we've seen it.
-        movie.seen = now.getTime();
-        newSeen++;
-      }
-    }
-
-    if (newSeen > 0) {
-      console.log(` - Found ${newSeen} new movie${newSeen === 1 ? "" : "s"}`);
-    }
+    const yesterdaysData = optedIn.includes(location) ? yesterdaysRelease : [];
 
     // If a movie matches the following, it's been delisted but is still valid:
     for (const movie of yesterdaysData) {
@@ -131,6 +135,7 @@ async function transform(location, input, historicData = []) {
 
       // The movie data from yesterday contains future performances .
       // If there's no future performances, it's a past movie; continue
+      const now = new Date();
       const futurePerformances = movie.performances.filter(({ time }) =>
         isAfter(time, now),
       );
