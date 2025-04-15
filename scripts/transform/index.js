@@ -1,3 +1,4 @@
+const cheerio = require("cheerio");
 const { isAfter } = require("date-fns");
 const {
   sortAndFilterMovies,
@@ -141,9 +142,16 @@ async function transform(
       );
       if (futurePerformances.length === 0) continue;
 
-      // The movie was in yesterdays data but is missing from todays data.
+      // The movie was in yesterdays data, identified by the showing ID.
       // If there's a match, we already have the data; continue
-      const match = matchedData.find(({ url, performances }) => {
+      const showingIdMatch = matchedData.find(
+        ({ showingId }) => showingId === movie.showingId,
+      );
+      if (showingIdMatch) continue;
+
+      // The movie was in yesterdays data, identified by the performances.
+      // If there's a match, we already have the data; continue
+      const performancesMatch = matchedData.find(({ url, performances }) => {
         if (basicNormalize(url) === basicNormalize(movie.url)) {
           return true;
         }
@@ -156,7 +164,7 @@ async function transform(
             ),
         );
       });
-      if (match) continue;
+      if (performancesMatch) continue;
 
       // The movie listing page is still up advertising the movie.
       // If we can't get the page or the page has a "not found" URL, then it's
@@ -184,6 +192,18 @@ async function transform(
         ({ url }) => basicNormalize(url) === basicNormalize(response.url),
       );
       if (redirectMatch) continue;
+
+      // The movie may have been renamed, which would cause the title and URL to
+      // change. If the old URL doesn't redirect to the new URL, it may have an
+      // updated canonical URL in the meta data pointing to the new location.
+      // If there's a match, we already have the data; continue
+      const $ = cheerio.load(content);
+      const canonicalUrl = $('link[rel="canonical"]').attr("href");
+      const canonicalMatch = matchedData.find(
+        ({ url }) =>
+          canonicalUrl && basicNormalize(url) === basicNormalize(canonicalUrl),
+      );
+      if (canonicalMatch) continue;
 
       // Otherwise, add the movie into the transformed data
       console.log(" - Found missing movie:", movie.title, movie.url);
