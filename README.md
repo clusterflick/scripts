@@ -50,7 +50,8 @@ a single JSON file.
 
 ℹ️ **Note:** Before running this script, please make sure you have:
 
-- Set up a `.env` file containing your Movie DB API key (`MOVIEDB_API_KEY`)
+- Set up a `.env` file containing your Movie DB API key (`MOVIEDB_API_KEY`) and
+  Gemini API key(`GEMINI_API_KEY`)
 - retrieved the necessary cinema and source data using the `retrieve` script
   (above)
 
