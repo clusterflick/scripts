@@ -116,6 +116,8 @@ function normalizeTitle(title, options) {
     ["Maastricht:", "Maastricht Concert:"],
     [/trois /i, "3 "], // Fixes trois hommes et un couffin
     [/ \(20th$/, ""],
+    [" S/O ", " son of "], // Fixes Arjun S/O Vyjayanthi
+    ["Ep III-", "episode III "],
     // Sanitise use of "PRESENT" which is confused with "X presents"
     ["‘PAST PRESENT FUTURE’ PODCAST", "‘PAST+PRESENT+FUTURE’ PODCAST"],
     ["seventeen [right here]", "seventeen right here"], // remove brackets from this band name
