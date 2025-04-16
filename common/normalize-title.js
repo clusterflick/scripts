@@ -124,6 +124,7 @@ function normalizeTitle(title, options) {
     ["Exclusive Screening of Highly Acclaimed Bengali Feature Film - ", ""],
     ["Mission: Impossible - ", "Mission: Impossible – "],
     ["Premiere and Networking Event - ", "Premiere and Networking Event: "],
+    ["R.S.V.P - ", ""], // Fixes R.S.V.P - Ronde Saare Viah Picho
   ];
 
   corrections.forEach(([phrase, replacement]) => {

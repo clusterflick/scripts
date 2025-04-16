@@ -67,6 +67,7 @@ const knownRemovablePhrases = [
   "Fan First Premiere exclusively in IMAX",
   "Dog-Friendly Screening",
   "Dog-Friendly ",
+  "Grounded:",
   "' Screening",
   "for Halloween",
   "with intro and Q&A",
