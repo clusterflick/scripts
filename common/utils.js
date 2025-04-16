@@ -151,6 +151,14 @@ const createPerformance = ({
   accessibility,
 });
 
+const attemptEncodingFix = (value) => {
+  try {
+    return decodeURIComponent(escape(value));
+  } catch {
+    return value;
+  }
+};
+
 const createOverview = ({
   duration,
   year,
@@ -168,10 +176,14 @@ const createOverview = ({
       : splitConjoinedItemsInList(convertToList(categories)),
     directors: Array.isArray(directors)
       ? directors
-      : splitConjoinedItemsInList(convertToList(directors)),
+      : splitConjoinedItemsInList(convertToList(directors)).map(
+          attemptEncodingFix,
+        ),
     actors: Array.isArray(actors)
       ? actors
-      : splitConjoinedItemsInList(convertToList(actors)),
+      : splitConjoinedItemsInList(convertToList(actors)).map(
+          attemptEncodingFix,
+        ),
     classification: isValidClassification(classification),
     trailer: trailer || undefined,
   };
