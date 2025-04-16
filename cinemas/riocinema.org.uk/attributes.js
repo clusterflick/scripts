@@ -2,7 +2,7 @@ module.exports = {
   id: "riocinema.org.uk",
   name: "Rio Cinema",
   domain: "https://www.riocinema.org.uk",
-  url: "https://www.riocinema.org.uk",
+  url: "https://riocinema.org.uk/Rio.dll/WhatsOn",
   address: "107 Kingsland High Street, London, E8 2PB, UK",
   geo: { lat: 51.54970097438604, lon: -0.07550473771574956 },
   siteId:

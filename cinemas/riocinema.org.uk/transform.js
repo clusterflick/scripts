@@ -1,8 +1,8 @@
+const savoySystemsTransform = require("../../common/savoysystems.co.uk/transform");
 const attributes = require("./attributes");
-const indycinemagroupTransform = require("../../common/indycinemagroup.com/transform");
 
-async function transform(data, sourcedEvents) {
-  return indycinemagroupTransform(attributes, data, sourcedEvents);
+async function transform(movieData, sourcedEvents) {
+  return savoySystemsTransform(attributes, "Rio.dll", movieData, sourcedEvents);
 }
 
 module.exports = transform;
