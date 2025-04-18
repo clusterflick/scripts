@@ -1,6 +1,6 @@
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const { dailyCache } = require("./cache");
-const { getId } = require("./utils");
+const { getId, basicNormalize } = require("./utils");
 require("dotenv").config();
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
@@ -41,7 +41,15 @@ ${JSON.stringify(results)}
 }
 
 module.exports = async function askLlmToReviewResults(movie, results) {
-  if (!movie.matchingHints?.overview) {
+  const normalizedTitle = basicNormalize(movie.title);
+  const isAnniversaryShowing = normalizedTitle.includes("anniversary");
+  // If we've no matching hints, don't use LLM
+  // If we've no hint overview, don't use LLM unless it's an anniversary showing
+  // (in which case the LLM might just get it without the overview hint)
+  if (
+    !movie.matchingHints ||
+    (!movie.matchingHints.overview && !isAnniversaryShowing)
+  ) {
     return { match: null, confidence: 0 };
   }
 
