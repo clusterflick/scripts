@@ -116,6 +116,7 @@ async function combine() {
       showingId,
       title,
       url,
+      category,
       seen,
       overview,
       performances,
@@ -219,6 +220,7 @@ async function combine() {
             ? title
             : undefined,
         url,
+        category,
         seen,
         overview,
       };
