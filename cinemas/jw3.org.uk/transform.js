@@ -82,7 +82,6 @@ const getSinglePerformance = ($) => {
   const title = basicNormalize(getText($(".m-banner__copy h1")));
   const description = basicNormalize(getText($infoSidebar));
 
-  console.log(">>> getSinglePerformance", date);
   return [
     createPerformance({
       date: parseDate(date),
@@ -121,7 +120,6 @@ async function transform({ moviePages }, sourcedEvents) {
   const movies = [];
 
   for (const moviePageUrl in moviePages) {
-    console.log(">>> moviePageUrl", `${attributes.domain}${moviePageUrl}`);
     const { listing, booking } = moviePages[moviePageUrl];
     const $ = cheerio.load(listing);
     const shortLinkUrl = $("link[rel='shortlink']").attr("href");
