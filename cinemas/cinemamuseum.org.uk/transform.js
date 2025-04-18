@@ -63,7 +63,14 @@ async function transform({ moviePages }, sourcedEvents) {
       }
       const { year } = getMovieTitleAndYearFrom(title);
       const overview = createOverview({ year, directors });
-      movies[showingId] = { showingId, title, url, overview, performances: [] };
+      movies[showingId] = {
+        showingId,
+        title,
+        url,
+        overview,
+        performances: [],
+        matchingHints: { overview: getText($(".entry")) },
+      };
     }
 
     const date = getDate($);

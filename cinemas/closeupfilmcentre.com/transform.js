@@ -49,7 +49,14 @@ async function transform({ moviePages }, sourcedEvents) {
     const href = $performanceRows.eq(0).find("td a").eq(0).attr("href");
     const id = href.split("/close-up-cinema/")[1];
     const showingId = generateShowingId(attributes, id);
-    movies.push({ showingId, title, url, overview, performances });
+    movies.push({
+      showingId,
+      title,
+      url,
+      overview,
+      performances,
+      matchingHints: { overview: getText($("#film_program_support")) },
+    });
   });
 
   const listOfSourcedEvents = Object.values(sourcedEvents).flatMap(

@@ -65,6 +65,7 @@ async function transform(
         url: film.link,
         overview,
         performances: [],
+        matchingHints: { overview: additionalData.synopsis },
       };
     });
   });

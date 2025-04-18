@@ -29,6 +29,7 @@ async function transform(
       url: movieUrl,
       overview,
       performances: [],
+      matchingHints: { overview: movie.short_synopsis },
     };
 
     const screeningIds = Object.values(siteMovieScreenings).flatMap(

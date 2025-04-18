@@ -7,6 +7,7 @@ const {
 const {
   sortAndFilterMovies,
   removeMatchingHints,
+  addTestCategory,
 } = require("../../../common/utils");
 const { retrieve, transform, attributes } = require("..");
 
@@ -29,7 +30,15 @@ describe(attributes.name, () => {
       expect(moviePages).toHaveLength(14);
 
       const output = sortAndFilterMovies(await transform(moviePages, {}));
-      const data = JSON.parse(JSON.stringify(output)).map(removeMatchingHints);
+      expect(
+        output.every((movie) =>
+          Object.prototype.hasOwnProperty.call(movie, "matchingHints"),
+        ),
+      ).toBe(true);
+
+      const data = JSON.parse(JSON.stringify(output))
+        .map(removeMatchingHints)
+        .map(addTestCategory);
 
       // Make sure the data looks roughly correct
       expect(data).toHaveLength(11);

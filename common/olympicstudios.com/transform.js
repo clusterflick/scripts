@@ -113,6 +113,7 @@ async function transform(attributes, { moviePages }, sourcedEvents) {
       .get();
     const $listingData = $("#section_3_stack");
     const $title = $listingData.find("h3").eq(0);
+    const $synopsis = $listingData.find("h3").eq(1).next();
     const id = getId(moviePageUrl.split("/film/")[1]);
     movies.push({
       showingId: generateShowingId(attributes, id),
@@ -120,6 +121,7 @@ async function transform(attributes, { moviePages }, sourcedEvents) {
       url: moviePageUrl,
       overview: getOverview($, $title.parent()),
       performances: getPerformances($, attributes, structuredData),
+      matchingHints: { overview: getText($synopsis) },
     });
   }
 

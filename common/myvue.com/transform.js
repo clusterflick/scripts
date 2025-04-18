@@ -71,6 +71,7 @@ async function transform(attributes, { result: movieData }, sourcedEvents) {
       url: movie.filmUrl.replace(domain, url),
       overview,
       performances,
+      matchingHints: { overview: movie.synopsisShort },
     };
     return moviesAtCinema.concat(transformedMovie);
   }, []);

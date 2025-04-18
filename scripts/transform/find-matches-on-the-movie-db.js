@@ -2,7 +2,6 @@ const { format } = require("date-fns");
 const {
   parseMinsToMs,
   getMovieTitleAndYearFrom,
-  removeMatchingHints,
 } = require("../../common/utils");
 const normalizeTitle = require("../../common/normalize-title");
 const {
@@ -23,7 +22,7 @@ async function findMatchesOnTheMovieDb(movies) {
 
     // If there's no best match, just move on
     if (!result) {
-      processedMovies.push(removeMatchingHints(movie));
+      processedMovies.push(movie);
       continue;
     }
 
@@ -47,7 +46,7 @@ async function findMatchesOnTheMovieDb(movies) {
       "yyyy-MM-dd",
     );
     processedMovies.push({
-      ...removeMatchingHints(movie),
+      ...movie,
       themoviedb: {
         id: result.id,
         title: result.title,

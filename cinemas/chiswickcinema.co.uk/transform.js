@@ -32,7 +32,14 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
           classification: rating,
           trailer: $("a[data-action='play-trailer']").attr("href"),
         });
-        movies[url] = { showingId, title, url, overview, performances: [] };
+        movies[url] = {
+          showingId,
+          title,
+          url,
+          overview,
+          performances: [],
+          matchingHints: { overview: getText($(".film-details__synopsis")) },
+        };
       }
 
       // Sometimes screenings can be an object with index keys instead of an

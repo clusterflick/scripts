@@ -5,7 +5,14 @@
   "uniqueItems": true,
   "items": {
     "type": "object",
-    "required": ["showingId", "title", "url", "overview", "performances"],
+    "required": [
+      "showingId",
+      "title",
+      "url",
+      "category",
+      "overview",
+      "performances"
+    ],
     "properties": {
       "showingId": {
         "type": "string",
@@ -18,6 +25,21 @@
       "url": {
         "type": "string",
         "format": "uri"
+      },
+      "category": {
+        "type": "string",
+        "enum": [
+          "movie",
+          "multiple-movies",
+          "tv",
+          "quiz",
+          "comedy",
+          "music",
+          "talk",
+          "workshop",
+          "shorts",
+          "event"
+        ]
       },
       "seen": {
         "type": "number"

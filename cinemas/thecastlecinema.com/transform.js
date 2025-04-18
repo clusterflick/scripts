@@ -23,7 +23,14 @@ const getEntry = ($el, movieAdditionalData) => {
   // It's unexpected to not find a overview information, so throw
   if (!overview) throw new Error("No overview information");
 
-  return { showingId, title, url, overview, performances: [] };
+  return {
+    showingId,
+    title,
+    url,
+    overview,
+    performances: [],
+    matchingHints: { overview: getText($el.find(".tile-subname")) },
+  };
 };
 
 async function getAdditionalDataFor(moviePages) {

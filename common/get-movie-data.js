@@ -2,7 +2,7 @@ const { MovieDb } = require("moviedb-promise");
 const slugify = require("slugify");
 const normalizeTitle = require("./normalize-title");
 const normalizeName = require("./normalize-name");
-const { basicNormalize, compareAsSimilar } = require("./utils");
+const { basicNormalize, compareAsSimilar, runLlmFunction } = require("./utils");
 const { dailyCache } = require("./cache");
 const askLlm = require("./ask-llm");
 const askLlmToReviewResults = require("./ask-llm-to-review-results");
@@ -269,24 +269,19 @@ async function getBestMatch(titleQuery, rawResults = [], movie) {
 }
 
 const tryFindingMatchUsingLlm = async (movie) => {
-  let isMovie, confidence, matches;
-  try {
-    ({ isMovie, confidence, matches } = await askLlm(movie));
-  } catch (e) {
-    // If we error on recitation, just move on
-    if (e?.response?.candidates?.[0]?.finishReason === "RECITATION") {
-      return null;
-    }
+  const result = await runLlmFunction(() => askLlm(movie));
+  if (result === null) return null;
 
-    console.log("Error asking LLM; retrying in 60 seconds...");
-    // Most likely a rate limint was met; wait for 1 minute before trying again
-    await new Promise((resolve) => setTimeout(resolve, 60000));
-    ({ isMovie, confidence, matches } = await askLlm(movie));
-  }
+  const { isMovie, isMultipleMovies, confidence, matches } = result;
 
   // If we've confidence it's a movie, and it's a movie the LLM actually
   // knows of, then we can search again with updated information.
-  if (isMovie && confidence >= 8 && matches[0].isKnownMovie) {
+  if (
+    isMovie &&
+    !isMultipleMovies &&
+    confidence >= 8 &&
+    matches[0].isKnownMovie
+  ) {
     const updatedMovie = updateMovie(movie, {
       title: matches[0].title,
       overview: {
@@ -302,23 +297,17 @@ const tryFindingMatchUsingLlm = async (movie) => {
       isUsingLlmData: true,
     });
   }
+
+  return null;
 };
 
 const reviewResultsUsingLlm = async (movie, results) => {
-  let confidence, match;
-  try {
-    ({ confidence, match } = await askLlmToReviewResults(movie, results));
-  } catch (e) {
-    // If we error on recitation, just move on
-    if (e?.response?.candidates?.[0]?.finishReason === "RECITATION") {
-      return null;
-    }
+  const result = await runLlmFunction(() =>
+    askLlmToReviewResults(movie, results),
+  );
+  if (result === null) return null;
 
-    console.log("Error asking LLM; retrying in 60 seconds...");
-    // Most likely a rate limint was met; wait for 1 minute before trying again
-    await new Promise((resolve) => setTimeout(resolve, 60000));
-    ({ confidence, match } = await askLlmToReviewResults(movie, results));
-  }
+  const { confidence, match } = result;
 
   if (confidence >= 7) {
     const matchingResult = results.find(({ id }) => id === match?.id);
@@ -479,7 +468,21 @@ const getMovieGenresAndCacheResults = () =>
   });
 
 const searchMovieAndCacheResults = (cacheKey, payload) =>
-  dailyCache(cacheKey, async () => moviedb.searchMovie(payload));
+  dailyCache(cacheKey, async () => {
+    const firstPage = await moviedb.searchMovie(payload);
+    let results = [].concat(firstPage.results);
+    let pages = [1];
+
+    // Get up to 3 pages of results, or all pages, whichever is smaller
+    const maxPages = Math.min(3, firstPage.total_pages);
+    for (let page = 2; page <= maxPages; page++) {
+      const nextPage = await moviedb.searchMovie({ ...payload, page });
+      pages = pages.concat(page);
+      results = results.concat(nextPage.results);
+    }
+
+    return { ...firstPage, results, pages };
+  });
 
 const searchPersonAndCacheResults = (cacheKey, query) =>
   dailyCache(cacheKey, async () => moviedb.searchPerson({ query }));

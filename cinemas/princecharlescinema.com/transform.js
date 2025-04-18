@@ -153,7 +153,16 @@ async function transform({ movieListPage }, sourcedEvents) {
       }
     });
 
-    movies.push({ showingId, title, url, overview, performances });
+    movies.push({
+      showingId,
+      title,
+      url,
+      overview,
+      performances,
+      matchingHints: {
+        overview: getText($movieDetails.find(".jacro-formatted-text")),
+      },
+    });
   });
 
   const listOfSourcedEvents = Object.values(sourcedEvents).flatMap(

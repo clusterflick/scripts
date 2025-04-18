@@ -11,14 +11,16 @@ const {
 const { parseDate } = require("./utils");
 const attributes = require("./attributes");
 
-const getDetails = ($) => {
-  const $credits = $("p.js-accordion__header")
+const getSection = ($, heading) =>
+  $("p.js-accordion__header")
     .filter(function () {
-      return basicNormalize($(this).text()) === "credits";
+      return basicNormalize($(this).text()) === basicNormalize(heading);
     })
     .eq(0)
     .next();
 
+const getDetails = ($) => {
+  const $credits = getSection($, "credits");
   const pieces = $credits.text().trim().split("\n");
   return pieces.reduce((details, line) => {
     if (!line) return details;
@@ -133,6 +135,10 @@ async function transform({ moviePages }, sourcedEvents) {
       performances: booking
         ? getMultiplePerformances($, booking)
         : getSinglePerformance($),
+      matchingHints: {
+        overview:
+          getText(getSection($, "synopsis")) || getText($(".m-entity__body")),
+      },
     });
   }
 

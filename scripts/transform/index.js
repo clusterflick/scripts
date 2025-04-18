@@ -4,10 +4,12 @@ const {
   sortAndFilterMovies,
   basicNormalize,
   getId,
+  removeMatchingHints,
 } = require("../../common/utils");
 const findMatchesOnTheMovieDb = require("./find-matches-on-the-movie-db");
 const getSourcedEventsFor = require("./get-sourced-events-for");
 const validateAgainstSchema = require("./validate-against-schema");
+const categoriseEntries = require("./categorise-entries");
 
 async function transform(
   location,
@@ -222,6 +224,19 @@ async function transform(
     console.log(` - ❌ Error checking`);
     throw e;
   }
+
+  console.log("Categorising data ...");
+  try {
+    const start = Date.now();
+    matchedData = await categoriseEntries(matchedData);
+    const duration = Math.round((Date.now() - start) / 1000);
+    console.log(` - ✅ Categorised (${duration}s)`);
+  } catch (e) {
+    console.log(` - ❌ Error categorising`);
+    throw e;
+  }
+
+  matchedData = matchedData.map(removeMatchingHints);
 
   console.log("Validating data ...");
   try {

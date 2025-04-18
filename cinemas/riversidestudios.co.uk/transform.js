@@ -75,7 +75,16 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
       },
     );
 
-    return { showingId, title, url, overview, performances };
+    return {
+      showingId,
+      title,
+      url,
+      overview,
+      performances,
+      matchingHints: {
+        overview: getText(cheerio.load(moviePages[urlRaw])(".te")),
+      },
+    };
   });
 
   const listOfSourcedEvents = Object.values(sourcedEvents).flatMap(

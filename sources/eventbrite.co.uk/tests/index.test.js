@@ -1,6 +1,10 @@
 /** @jest-environment setup-polly-jest/jest-environment-node */
 const { setupPolly } = require("../../../common/test-utils");
-const { readJSON, removeMatchingHints } = require("../../../common/utils");
+const {
+  readJSON,
+  removeMatchingHints,
+  addTestCategory,
+} = require("../../../common/utils");
 const { attributes, retrieve, findEvents } = require("..");
 
 const isRecording = false;
@@ -33,7 +37,15 @@ describe(attributes.name, () => {
       readJSON.mockImplementation(() => ({ movieListPages, moviePages }));
 
       const output = await findEvents(cinema);
-      const data = JSON.parse(JSON.stringify(output)).map(removeMatchingHints);
+      expect(
+        output.every((movie) =>
+          Object.prototype.hasOwnProperty.call(movie, "matchingHints"),
+        ),
+      ).toBe(true);
+
+      const data = JSON.parse(JSON.stringify(output))
+        .map(removeMatchingHints)
+        .map(addTestCategory);
 
       // Make sure the data looks roughly correct
       expect(data).toHaveLength(7);

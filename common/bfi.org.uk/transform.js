@@ -119,6 +119,7 @@ async function transform(attributes, { moviePages }, sourcedEvents) {
       url: `${url}?${showPath}`,
       overview: getOverviewFor($),
       performances: getPerformancesFor($, `${url}?${showPath}`, show),
+      matchingHints: { overview: $(".main-article-body").text() },
     });
   }
 

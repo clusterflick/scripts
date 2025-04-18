@@ -124,6 +124,7 @@ async function transform({ moviePages }, sourcedEvents) {
         $("#more-dates").length > 0
           ? getMultiplePerformances($, $("#more-dates"), details)
           : getSinglePerformance($, $(".next-showing"), details),
+      matchingHints: { overview: getText($(".definition")) },
     });
   }
 

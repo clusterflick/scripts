@@ -3,6 +3,7 @@ const { setupPolly, schemaValidate } = require("../../../common/test-utils");
 const {
   sortAndFilterMovies,
   removeMatchingHints,
+  addTestCategory,
 } = require("../../../common/utils");
 const { retrieve, transform, attributes } = require("..");
 
@@ -22,7 +23,15 @@ describe(attributes.name, () => {
       expect(moviePages.data.movies.data).toHaveLength(33);
 
       const output = sortAndFilterMovies(await transform(moviePages, {}));
-      const data = JSON.parse(JSON.stringify(output)).map(removeMatchingHints);
+      expect(
+        output.every((movie) =>
+          Object.prototype.hasOwnProperty.call(movie, "matchingHints"),
+        ),
+      ).toBe(true);
+
+      const data = JSON.parse(JSON.stringify(output))
+        .map(removeMatchingHints)
+        .map(addTestCategory);
 
       // Make sure the data looks roughly correct
       expect(data).toHaveLength(33);

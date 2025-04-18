@@ -7,10 +7,7 @@ const {
 } = require("../../common/utils");
 
 const screenMapping = {
-  115: "1", // riocinema.org.uk
-  116: "2", // riocinema.org.uk
   117: "1", // regentstreetcinema.com
-  122: "Ludski Bar", // riocinema.org.uk
   131: "1", // sidcupstoryteller.co.uk
   132: "2", // sidcupstoryteller.co.uk
   133: "3", // sidcupstoryteller.co.uk
@@ -102,6 +99,7 @@ async function transform(
           accessibility,
         });
       }),
+      matchingHints: { overview: movie.synopsis },
     };
 
     return moviesAtCinema.concat([transformedMovie]);

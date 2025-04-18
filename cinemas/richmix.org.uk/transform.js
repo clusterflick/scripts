@@ -65,6 +65,7 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
           });
         },
       ),
+      matchingHints: { overview: getText(cheerio.load(movie.post_content)) },
     });
   }, []);
 

@@ -198,6 +198,8 @@ const createAccessibility = (accessibility) =>
 // eslint-disable-next-line no-unused-vars
 const removeMatchingHints = ({ matchingHints, ...movie }) => movie;
 
+const addTestCategory = (movie) => ({ ...movie, category: "event" });
+
 const compareAsSimilar = (firstString, secondString) => {
   if (firstString === secondString) return true;
 
@@ -220,6 +222,30 @@ function generateShowingId(attributes, eventId) {
   return `${attributes.id}-${eventId}`;
 }
 
+async function runLlmFunction(llmFunction) {
+  try {
+    return await llmFunction();
+  } catch (e) {
+    // Rate limit was met; wait for 60 seconds and try again
+    if (
+      e.status === 429 &&
+      basicNormalize(e.statusText) === basicNormalize("Too Many Requests")
+    ) {
+      console.log("Error asking LLM; pausing for quota to reset...");
+      await new Promise((resolve) => setTimeout(resolve, 65000));
+      return await llmFunction();
+    }
+
+    // If we error on recitation
+    if (e?.response?.candidates?.[0]?.finishReason === "RECITATION") {
+      return null;
+    }
+
+    console.log("Error asking LLM", e);
+    throw new Error("Error asking LLM");
+  }
+}
+
 module.exports = {
   readJSON,
   writeJSON,
@@ -237,7 +263,9 @@ module.exports = {
   createOverview,
   createAccessibility,
   removeMatchingHints,
+  addTestCategory,
   compareAsSimilar,
   getId,
   generateShowingId,
+  runLlmFunction,
 };

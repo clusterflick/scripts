@@ -127,6 +127,7 @@ async function transform({ moviePages }, sourcedEvents) {
         actors: getText($cast),
       }),
       performances: getPerformances($, $(".film-detail__screenings").eq(0)),
+      matchingHints: { overview: getText($(".film-detail__synopsis")) },
     };
   });
 
