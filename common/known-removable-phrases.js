@@ -131,6 +131,7 @@ const knownRemovablePhrases = [
   "MediCinema:",
   "Cinema Restored:",
   "Citra Sasmita: Into Eternal Land:",
+  "Classic Mat:",
   "David Lynch:",
   "Day Of The Dude:",
   "Doc 'n Roll:",
