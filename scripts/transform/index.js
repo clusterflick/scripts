@@ -51,14 +51,31 @@ async function transform(
   }
 
   console.log("Checking historical data ...");
+  const checkFor =
+    (movie) =>
+    ({ showingId }) => {
+      if (showingId === movie.showingId) return true;
+
+      // Support miration of picturehouse IDs to remove venue ID section:
+      // - from "picturehouses.com-finsbury-park-031-HO00015869"
+      // - to   "picturehouses.com-finsbury-park-HO00015869"
+      if (showingId.startsWith("picturehouses.com-")) {
+        const migratedShowingId = showingId.replace(
+          /^picturehouses.com-(.+)-\d{3}-HO(\d+)$/i,
+          "picturehouses.com-$1-HO$2",
+        );
+        if (migratedShowingId === movie.showingId) return true;
+      }
+
+      return false;
+    };
+
   try {
     const start = Date.now();
 
     let newSeen = 0;
     for (const movie of matchedData) {
-      const previouslySeen = previousRelease.find(
-        ({ showingId }) => showingId === movie.showingId,
-      );
+      const previouslySeen = previousRelease.find(checkFor(movie));
       if (previouslySeen) {
         // If we've seen this movie before in a previous run, then copy across
         // the date is was first seen.

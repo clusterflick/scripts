@@ -76,7 +76,7 @@ async function transform(
     const synopsis = getSynopsis(moviePages[movie.ScheduledFilmId]);
 
     const transformedMovie = {
-      showingId: generateShowingId(attributes, movie.ID),
+      showingId: generateShowingId(attributes, movie.ScheduledFilmId),
       title: movie.Title,
       url: `${domain}/movie-details/${cinemaId}/${movie.ScheduledFilmId}/${slug}`,
       overview,
