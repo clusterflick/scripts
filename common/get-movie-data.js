@@ -8,6 +8,18 @@ const askLlm = require("./ask-llm");
 const askLlmToReviewResults = require("./ask-llm-to-review-results");
 require("dotenv").config();
 
+const apiRetryWrapper = async (callback) => {
+  try {
+    return callback();
+  } catch (e) {
+    console.log(
+      `Error contacting themoviedb; trying again in 60 seconds - ${e.message}`,
+    );
+    await new Promise((resolve) => setTimeout(resolve, 60000));
+    return callback();
+  }
+};
+
 const moviedb = new MovieDb(process.env.MOVIEDB_API_KEY);
 
 const comparableChunk = (value) => value.replace(/\s+/g, "").slice(0, 200);
@@ -459,24 +471,26 @@ const getMovieInfoAndCacheResults = ({ id }) =>
       append_to_response:
         "credits,external_ids,keywords,release_dates,videos,alternative_titles",
     };
-    return moviedb.movieInfo(payload);
+    return apiRetryWrapper(() => moviedb.movieInfo(payload));
   });
 
 const getMovieGenresAndCacheResults = () =>
-  dailyCache(`moviedb-genres`, async () => {
-    return moviedb.genreMovieList();
-  });
+  dailyCache(`moviedb-genres`, async () =>
+    apiRetryWrapper(() => moviedb.genreMovieList()),
+  );
 
 const searchMovieAndCacheResults = (cacheKey, payload) =>
   dailyCache(cacheKey, async () => {
-    const firstPage = await moviedb.searchMovie(payload);
+    const firstPage = await apiRetryWrapper(() => moviedb.searchMovie(payload));
     let results = [].concat(firstPage.results);
     let pages = [1];
 
     // Get up to 3 pages of results, or all pages, whichever is smaller
     const maxPages = Math.min(3, firstPage.total_pages);
     for (let page = 2; page <= maxPages; page++) {
-      const nextPage = await moviedb.searchMovie({ ...payload, page });
+      const nextPage = await apiRetryWrapper(() =>
+        moviedb.searchMovie({ ...payload, page }),
+      );
       pages = pages.concat(page);
       results = results.concat(nextPage.results);
     }
@@ -485,11 +499,13 @@ const searchMovieAndCacheResults = (cacheKey, payload) =>
   });
 
 const searchPersonAndCacheResults = (cacheKey, query) =>
-  dailyCache(cacheKey, async () => moviedb.searchPerson({ query }));
+  dailyCache(cacheKey, async () =>
+    apiRetryWrapper(() => moviedb.searchPerson({ query })),
+  );
 
 const getPersonMovieCreditsAndCacheResults = (id) =>
   dailyCache(`moviedb-person-movie-credits-${id}`, async () =>
-    moviedb.personMovieCredits({ id }),
+    apiRetryWrapper(() => moviedb.personMovieCredits({ id })),
   );
 
 module.exports = {
