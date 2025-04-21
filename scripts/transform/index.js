@@ -201,7 +201,16 @@ async function transform(
 
       // Check response content in case the service is misconfigured to respond
       // ok status with not found content
-      if (content.toLowerCase().includes("page not found")) continue;
+      const pageNotFound = basicNormalize("page not found");
+      if (basicNormalize(content).includes(pageNotFound)) continue;
+
+      const noScreenings = basicNormalize("no screenings currently scheduled");
+      if (basicNormalize(content).includes(noScreenings)) continue;
+
+      const noPerformance = basicNormalize(
+        "there are currently no performance scheduled for this event",
+      );
+      if (basicNormalize(content).includes(noPerformance)) continue;
 
       // The movie may have been renamed, which would cause the title and URL to
       // change. Usually the old URL will redirect to the new URL, so let's
