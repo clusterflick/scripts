@@ -284,7 +284,6 @@ const knownRemovablePhrases = [
   "preview screening",
   "preview",
   "()",
-  " .",
 ];
 
 module.exports = knownRemovablePhrases;

@@ -108,6 +108,7 @@ function normalizeTitle(title, options) {
     ["Masculine-Feminine", "Masculin Feminin"],
     ["Moutains", "Mountains"], // Fix for All The Mountains Give
     ["Le Nozze di Figaro", "The Marriage of Figaro"],
+    ["La Nozze di Figaro", "The Marriage of Figaro"],
     ["Sanrizuka 3", "Sanrizuka Notes 3"],
     [
       "Bluey Let's Play Chef",
@@ -115,7 +116,8 @@ function normalizeTitle(title, options) {
     ],
     ["Maastricht:", "Maastricht Concert:"],
     [/trois /i, "3 "], // Fixes trois hommes et un couffin
-    [/ \(20th$/, ""],
+    [/ \(20th$/i, ""],
+    [/ \(Re-Re$/i, ""],
     [" S/O ", " son of "], // Fixes Arjun S/O Vyjayanthi
     ["Ep III-", "episode III "],
     // Sanitise use of "PRESENT" which is confused with "X presents"
@@ -274,6 +276,13 @@ function normalizeTitle(title, options) {
     title = title.replace(/\([^(]*\)$/, "").trim();
     title = title.replace(/\([^(]*\)$/, "").trim(); // Do it twice in case there's more paraenthesis
   }
+
+  // Remove tagline which may be added between "..."
+  // e.g. "Sachein ... The Miracle Of Love ..."
+  title = title
+    .trim()
+    .replace(/\.\.\.[^.]+\.\.\.$/, "")
+    .trim();
 
   title = title.replace(/\s+screening$/i, "");
   title = title.replace(/^relaxed /i, "");
