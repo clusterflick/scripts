@@ -16,6 +16,11 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
 
   for (const { films, day } of movieListPage.screenings) {
     for (const { title: rawTitle, url, rating, screenings } of films) {
+      // Remove private hire entries
+      if (basicNormalize(rawTitle).startsWith("private hire")) {
+        continue;
+      }
+
       // If this is the first time we're seeing this file in the results, create
       // the data for it from the listing before adding performances.
       if (!movies[url]) {

@@ -127,6 +127,7 @@ function normalizeTitle(title, options) {
     ["Mission: Impossible - ", "Mission: Impossible – "],
     ["Premiere and Networking Event - ", "Premiere and Networking Event: "],
     ["R.S.V.P - ", ""], // Fixes R.S.V.P - Ronde Saare Viah Picho
+    [/^Short Films\s+-/i, "Short Films:"], // Fixes mismatch on movie called Short Films
   ];
 
   corrections.forEach(([phrase, replacement]) => {
