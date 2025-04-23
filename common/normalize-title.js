@@ -115,6 +115,7 @@ function normalizeTitle(title, options) {
       "Bluey at the Cinema: Let’s Play Chef Collection",
     ],
     ["Maastricht:", "Maastricht Concert:"],
+    ["Sardaar Ji", "Sardaarji"],
     [/trois /i, "3 "], // Fixes trois hommes et un couffin
     [/ \(20th$/i, ""],
     [/ \(Re-Re$/i, ""],
