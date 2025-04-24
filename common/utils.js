@@ -241,8 +241,16 @@ async function runLlmFunction(llmFunction) {
       return await llmFunction();
     }
 
-    // If we error on recitation
+    // If we error on recitation, there's not much we can do. We don't want the
+    // LLM generating information, so it may be it's reciting back traning
+    // information, so return empty.
     if (e?.response?.candidates?.[0]?.finishReason === "RECITATION") {
+      return null;
+    }
+
+    // If we error on prohibited content, perhaps from a movie search with adult
+    // results allowed, so return empty.
+    if (e?.response?.promptFeedback?.blockReason === "PROHIBITED_CONTENT") {
       return null;
     }
 

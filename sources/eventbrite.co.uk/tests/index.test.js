@@ -14,6 +14,9 @@ jest.mock("../../../common/utils", () => ({
   readJSON: jest.fn(),
 }));
 
+// Hide script output
+console.log = () => {};
+
 const cinema = {
   name: "Genesis Cinema",
   geo: { lat: 51.52128726645794, lon: -0.051143457671891594 },

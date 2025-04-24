@@ -359,6 +359,18 @@ const searchForBestMatch = async ({
 
     if (bestTitleMatch) return bestTitleMatch;
 
+    const searchTitleIncludingAdult = await searchMovieAndCacheResults(
+      `moviedb-search-title-including-adult-${cacheKeySuffix}`,
+      getPayload({ include_adult: true }),
+    );
+    const bestTitleIncludingAdultMatch = await getBestMatch(
+      normalizedTitle,
+      searchTitleIncludingAdult.results,
+      movie,
+    );
+
+    if (bestTitleIncludingAdultMatch) return bestTitleIncludingAdultMatch;
+
     // Only run the LLM on this is we haven't already done so
     if (!isUsingLlmData) {
       if (searchTitle.results.length > 0) {
@@ -383,17 +395,22 @@ const searchForBestMatch = async ({
   const year = parseInt(yearValue, 10);
 
   // Try to find a movie released on the year provided
-  let searchPrimaryYear = await searchMovieAndCacheResults(
+  const searchPrimaryYear = await searchMovieAndCacheResults(
     `moviedb-search-primary-year-${cacheKeySuffix}`,
     getPayload({ primary_release_year: year }),
   );
 
-  // If we don't have a match, or we do but it's a "making of" documentary, then
-  // search the previous year for a match
+  const bestMatchPrimaryYear = await getBestMatch(
+    normalizedTitle,
+    searchPrimaryYear.results,
+    movie,
+  );
+
+  // If we have a match but it's a "making of" documentary, then search the
+  // previous year for a match
   if (
-    searchPrimaryYear.results.length === 0 ||
-    (searchPrimaryYear.results.length === 1 &&
-      searchPrimaryYear.results[0].title.toLowerCase().startsWith("making "))
+    bestMatchPrimaryYear &&
+    bestMatchPrimaryYear.title.toLowerCase().startsWith("making ")
   ) {
     const searchPreviousYear = await searchMovieAndCacheResults(
       `moviedb-search-previous-year-${cacheKeySuffix}`,
@@ -405,6 +422,25 @@ const searchForBestMatch = async ({
       movie,
     );
     if (bestMatchPreviousYear) return bestMatchPreviousYear;
+
+    // If we have a match, then return it
+  } else if (bestMatchPrimaryYear) {
+    return bestMatchPrimaryYear;
+
+    // If we don't have a match, check adult results
+  } else {
+    const searchPrimaryYearIncludingAdult = await searchMovieAndCacheResults(
+      `moviedb-search-primary-year-including-adult${cacheKeySuffix}`,
+      getPayload({ primary_release_year: year, include_adult: true }),
+    );
+    const bestMatchPrimaryYearIncludingAdult = await getBestMatch(
+      normalizedTitle,
+      searchPrimaryYearIncludingAdult.results,
+      movie,
+    );
+    if (bestMatchPrimaryYearIncludingAdult) {
+      return bestMatchPrimaryYearIncludingAdult;
+    }
   }
 
   // Try to find a movie with some release related to that year

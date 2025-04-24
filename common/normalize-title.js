@@ -126,6 +126,7 @@ function normalizeTitle(title, options) {
     ["seventeen [right here]", "seventeen right here"], // remove brackets from this band name
     ["Exclusive Screening of Highly Acclaimed Bengali Feature Film - ", ""],
     ["Mission: Impossible - ", "Mission: Impossible – "],
+    ["Festival: Shorts -", "Festival: Shorts –"],
     ["Premiere and Networking Event - ", "Premiere and Networking Event: "],
     ["R.S.V.P - ", ""], // Fixes R.S.V.P - Ronde Saare Viah Picho
     [/^Short Films\s+-/i, "Short Films:"], // Fixes mismatch on movie called Short Films
