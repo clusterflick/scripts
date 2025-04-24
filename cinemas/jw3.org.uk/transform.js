@@ -97,9 +97,8 @@ const getSinglePerformance = ($) => {
   ];
 };
 
-const getMultiplePerformances = ($, booking) => {
+const getMultiplePerformances = ($, bookingInformation) => {
   const $sidebars = $(".o-sidebar--event.m-entity");
-  const bookingInformation = JSON.parse(booking);
   const title = basicNormalize(getText($(".m-banner__copy h1")));
   const description = basicNormalize(bookingInformation.description);
   return bookingInformation.instances.map(({ id, start, availability }) => {

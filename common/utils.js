@@ -159,6 +159,11 @@ const attemptEncodingFix = (value) => {
   }
 };
 
+const removeNotes = (value) => {
+  // Remove role notes, e.g. "Meryl Streep (Narration)" -> "Meryl Streep"
+  return value.replace(/\([^)]+\)$/i, "").trim();
+};
+
 const createOverview = ({
   duration,
   year,
@@ -176,14 +181,14 @@ const createOverview = ({
       : splitConjoinedItemsInList(convertToList(categories)),
     directors: Array.isArray(directors)
       ? directors
-      : splitConjoinedItemsInList(convertToList(directors)).map(
-          attemptEncodingFix,
-        ),
+      : splitConjoinedItemsInList(convertToList(directors))
+          .map(attemptEncodingFix)
+          .map(removeNotes),
     actors: Array.isArray(actors)
       ? actors
-      : splitConjoinedItemsInList(convertToList(actors)).map(
-          attemptEncodingFix,
-        ),
+      : splitConjoinedItemsInList(convertToList(actors))
+          .map(attemptEncodingFix)
+          .map(removeNotes),
     classification: isValidClassification(classification),
     trailer: trailer || undefined,
   };
