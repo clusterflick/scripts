@@ -5,6 +5,7 @@ const {
   createOverview,
   createAccessibility,
   generateShowingId,
+  isPrivateHire,
 } = require("../../common/utils");
 
 const findFor = (list, idMatch) => list.find(({ id }) => id === idMatch);
@@ -22,9 +23,9 @@ async function transform(
     ) =>
       films.reduce((mappedFilms, film) => {
         if (mappedFilms[film.id]) return mappedFilms;
-        if (film.title.text.toLowerCase().startsWith("private hire ")) {
-          return mappedFilms;
-        }
+
+        // Remove private hire entries
+        if (isPrivateHire(film.title.text)) return mappedFilms;
 
         const findByRole = (role) => (group, member) => {
           if (!member.roles.includes(role)) return group;

@@ -6,6 +6,7 @@ const {
   createOverview,
   createAccessibility,
   generateShowingId,
+  isPrivateHire,
 } = require("../../common/utils");
 const { calculate24Hours, parseDate } = require("./utils");
 const attributes = require("./attributes");
@@ -77,9 +78,7 @@ async function transform({ movieListPage }, sourcedEvents) {
     const showingId = generateShowingId(attributes, id);
 
     // Don't pull data for entries which aren't bookable films
-    if (title.toLowerCase().includes("(do not book")) {
-      return;
-    }
+    if (isPrivateHire(title)) return;
 
     const overview = createOverview({
       directors: getLine($, $moviePeople, "Directed by "),

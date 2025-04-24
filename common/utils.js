@@ -227,6 +227,10 @@ function generateShowingId(attributes, eventId) {
   return `${attributes.id}-${eventId}`;
 }
 
+const isPrivateHire = (title) =>
+  basicNormalize(title).startsWith("private hire") ||
+  basicNormalize(title).includes("do not book");
+
 async function runLlmFunction(llmFunction) {
   try {
     return await llmFunction();
@@ -280,5 +284,6 @@ module.exports = {
   compareAsSimilar,
   getId,
   generateShowingId,
+  isPrivateHire,
   runLlmFunction,
 };

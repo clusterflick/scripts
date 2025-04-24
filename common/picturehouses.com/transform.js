@@ -7,6 +7,7 @@ const {
   createPerformance,
   createAccessibility,
   generateShowingId,
+  isPrivateHire,
 } = require("../utils");
 const { parseDate } = require("./utils");
 
@@ -60,9 +61,7 @@ async function transform(
     if (showings.length === 0) return moviesAtCinema;
 
     // Remove private hire entries
-    if (movie.Title.toLowerCase().startsWith("private hire (")) {
-      return moviesAtCinema;
-    }
+    if (isPrivateHire(movie.Title)) return moviesAtCinema;
 
     const details = getDetails(moviePages[movie.ScheduledFilmId]);
     const overview = createOverview({
