@@ -61,7 +61,7 @@ async function askLlmToCategorise(movie) {
   if (movie.themoviedb) return { ...movie, category: "movie" };
   if (!movie.matchingHints) return { ...movie, category: "event" };
 
-  console.log(`Asking LLM to categorise "${movie.title}"`);
+  console.log(` - Asking LLM to categorise "${movie.title}"`);
   const prompt = convertToPrompt(movie);
 
   const response = await dailyCache(

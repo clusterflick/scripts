@@ -61,6 +61,9 @@ function processListingPage(data) {
   if ($titleSpecific.length > 0) title = getText($titleSpecific.eq(0));
 
   const aboutMovie = getText($("#about").next());
+  const releaseYear = summary["release year"]?.match(/^\d{4}$/)
+    ? summary["release year"]
+    : null;
 
   return {
     showingId,
@@ -71,7 +74,7 @@ function processListingPage(data) {
       duration: summary.runtime
         ? convertDurationStringToMinutes(summary.runtime)
         : footnotes.duration,
-      year: summary["release year"] || footnotes.year,
+      year: releaseYear || footnotes.year,
       directors: summary.director || footnotes.director || movieBlurbDirectors,
       classification: getText($("._classification"))
         .replace(/[()]/g, "")

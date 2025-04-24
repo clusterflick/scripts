@@ -43,7 +43,7 @@ module.exports = async function askLlm(movie) {
     return { isMovie: false, isMultipleMovies: false, confidence: 0 };
   }
 
-  console.log(`Asking LLM to help match "${movie.title}"`);
+  console.log(` - Asking LLM to identify "${movie.title}"`);
   const prompt = convertToPrompt(movie);
 
   return dailyCache(`ask-llm-${getId(prompt)}`, async () => {

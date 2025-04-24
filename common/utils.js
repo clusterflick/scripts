@@ -236,7 +236,7 @@ async function runLlmFunction(llmFunction) {
       e.status === 429 &&
       basicNormalize(e.statusText) === basicNormalize("Too Many Requests")
     ) {
-      console.log("Error asking LLM; pausing for quota to reset...");
+      console.log(" ! - Error asking LLM; pausing for quota to reset...");
       await new Promise((resolve) => setTimeout(resolve, 65000));
       return await llmFunction();
     }
