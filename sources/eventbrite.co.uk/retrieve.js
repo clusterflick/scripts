@@ -15,6 +15,7 @@ async function retrieve() {
   const movieListPages = [];
   const moviePages = {};
 
+  console.log(" - Requesting search results pages...");
   while (page <= lastPage) {
     const url = `${attributes.url}${page}`;
     const pageData = await getPageServerData(url);
@@ -28,8 +29,13 @@ async function retrieve() {
     ({ search_data: { events } }) => events.results,
   );
 
-  for (const event of events) {
+  console.log(` - Requesting details for ${events.length} events...`);
+  for (const [index, event] of events.entries()) {
     try {
+      if (index % 10 === 0)
+        console.log(
+          `    - ${Math.round((index / events.length) * 100)}% complete`,
+        );
       const eventData = await getPageServerData(event.url);
       moviePages[event.url] = eventData;
     } catch {
