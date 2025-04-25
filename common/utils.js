@@ -236,16 +236,13 @@ async function runLlmFunction(llmFunction) {
     return await llmFunction();
   } catch (e) {
     // Rate limit was met; wait just over 60 seconds and try again
-    if (
-      e.status === 429 &&
-      basicNormalize(e.statusText) === basicNormalize("Too Many Requests")
-    ) {
+    if (e.status === 429) {
       console.log(" ! - Error asking LLM; pausing for quota to reset...");
       await new Promise((resolve) => setTimeout(resolve, 65000));
       return await llmFunction();
     }
 
-    // Service is reporting overloaded; wait 90 seconds and try again
+    // Model is overloaded; wait 90 seconds and try again
     if (e.status === 503) {
       console.log(
         " ! - Error asking LLM; pausing to let service become available...",
@@ -255,14 +252,15 @@ async function runLlmFunction(llmFunction) {
     }
 
     // If we error on recitation, there's not much we can do. We don't want the
-    // LLM generating information, so it may be it's reciting back traning
-    // information, so return empty.
+    // LLM making up information, and Google is blocking it reciting back some
+    // of the training information. As such, just return empty.
     if (e?.response?.candidates?.[0]?.finishReason === "RECITATION") {
       return null;
     }
 
-    // If we error on prohibited content, perhaps from a movie search with adult
-    // results allowed, so return empty.
+    // If we error on prohibited content, there's not much we can do. This may
+    // be as a result of passing in results from the Movie DB with adult results
+    // allowed. As such, just return empty.
     if (e?.response?.promptFeedback?.blockReason === "PROHIBITED_CONTENT") {
       return null;
     }
