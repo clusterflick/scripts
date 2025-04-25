@@ -43,7 +43,7 @@ async function processSearchResultPage(
       cacheKey,
       async (page) => {
         // Go to the main page first, let it load, and then get the show page
-        await page.waitForLoadState("networkidle");
+        await page.waitForLoadState("domcontentloaded");
         await page.goto(`${domain}${showUrl}`);
 
         // Wait until the page is finished everything
@@ -97,7 +97,7 @@ async function retrieve(attributes) {
       const pages = [];
 
       // Go to the main page first, let it load, and then get the search results
-      await page.waitForLoadState("networkidle");
+      await page.waitForLoadState("domcontentloaded");
       await page.goto(`${url}?${urlQuery.join("&")}`);
 
       while (true) {
