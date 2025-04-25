@@ -130,6 +130,11 @@ function normalizeTitle(title, options) {
     ["Premiere and Networking Event - ", "Premiere and Networking Event: "],
     ["R.S.V.P - ", ""], // Fixes R.S.V.P - Ronde Saare Viah Picho
     [/^Short Films\s+-/i, "Short Films:"], // Fixes mismatch on movie called Short Films
+    [
+      "Final Destination + Final Destination",
+      "Final Destination & Final Destination",
+    ],
+    ["Hidden (Cache)", "Hidden Cache"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
