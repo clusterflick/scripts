@@ -235,13 +235,22 @@ async function runLlmFunction(llmFunction) {
   try {
     return await llmFunction();
   } catch (e) {
-    // Rate limit was met; wait for 60 seconds and try again
+    // Rate limit was met; wait just over 60 seconds and try again
     if (
       e.status === 429 &&
       basicNormalize(e.statusText) === basicNormalize("Too Many Requests")
     ) {
       console.log(" ! - Error asking LLM; pausing for quota to reset...");
       await new Promise((resolve) => setTimeout(resolve, 65000));
+      return await llmFunction();
+    }
+
+    // Service is reporting overloaded; wait 90 seconds and try again
+    if (e.status === 503) {
+      console.log(
+        " ! - Error asking LLM; pausing to let service become available...",
+      );
+      await new Promise((resolve) => setTimeout(resolve, 90000));
       return await llmFunction();
     }
 
