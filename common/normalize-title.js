@@ -131,7 +131,7 @@ function normalizeTitle(title, options) {
     ["R.S.V.P - ", ""], // Fixes R.S.V.P - Ronde Saare Viah Picho
     [/^Short Films\s+-/i, "Short Films:"], // Fixes mismatch on movie called Short Films
     [
-      "Final Destination + Final Destination",
+      /Final Destination\s*\+\s*Final Destination/i,
       "Final Destination & Final Destination",
     ],
     ["Hidden (Cache)", "Hidden Cache"],
@@ -169,6 +169,11 @@ function normalizeTitle(title, options) {
   );
   if (hasRetrospectiveScreening) {
     title = hasRetrospectiveScreening[1];
+  }
+
+  const hasSelects = matchesOpenPrefix(title, "selects");
+  if (hasSelects) {
+    title = hasSelects[1];
   }
 
   const hasClub = matchesOpenPrefix(title, "club");
