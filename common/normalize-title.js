@@ -136,6 +136,7 @@ function normalizeTitle(title, options) {
     ],
     ["Hidden (Cache)", "Hidden Cache"],
     ["- Special Double Bill", " Special Double Bill"],
+    ["Mission: Impossible 8 (", "Mission: Impossible – The Final Reckoning ("],
   ];
 
   corrections.forEach(([phrase, replacement]) => {

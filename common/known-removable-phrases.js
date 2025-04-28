@@ -226,6 +226,7 @@ const knownRemovablePhrases = [
   "Subtitled screen ",
   "SUBTITLED ",
   "SUBTITLED:",
+  "Special preview with London premiere footage:",
   "Street Celebration: Pre",
   "RELAXED  screen",
   "RELAXED screen",
