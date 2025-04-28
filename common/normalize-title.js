@@ -135,6 +135,7 @@ function normalizeTitle(title, options) {
       "Final Destination & Final Destination",
     ],
     ["Hidden (Cache)", "Hidden Cache"],
+    ["- Special Double Bill", " Special Double Bill"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
