@@ -48,8 +48,14 @@ async function getAdditionalDataFor(moviePages) {
   }, {});
 }
 
+// Fix for issue in one of the listings where the <i> tag wasn't closed
+// correctly. This tagsoup causes issues when parsing the markup.
+function fixMarkup(movieListPage) {
+  return movieListPage.replaceAll("<i></div>", "</i></div>");
+}
+
 async function transform({ movieListPage, moviePages }, sourcedEvents) {
-  const $ = cheerio.load(movieListPage);
+  const $ = cheerio.load(fixMarkup(movieListPage));
   const $listEntry = $("#slim-tiles").children();
 
   const movieAdditionalData = await getAdditionalDataFor(moviePages);
