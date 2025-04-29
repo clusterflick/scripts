@@ -227,7 +227,7 @@ function generateShowingId(attributes, eventId) {
   return `${attributes.id}-${eventId}`;
 }
 
-const isPrivateHire = (title) =>
+const isPrivateHire = (title = "") =>
   basicNormalize(title).startsWith("private hire") ||
   basicNormalize(title).includes("do not book");
 

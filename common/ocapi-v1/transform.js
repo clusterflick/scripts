@@ -25,7 +25,12 @@ async function transform(
         if (mappedFilms[film.id]) return mappedFilms;
 
         // Remove private hire entries
-        if (isPrivateHire(film.title.text)) return mappedFilms;
+        if (
+          isPrivateHire(film.title.text) ||
+          isPrivateHire(film.distributorName)
+        ) {
+          return mappedFilms;
+        }
 
         const findByRole = (role) => (group, member) => {
           if (!member.roles.includes(role)) return group;
@@ -64,7 +69,7 @@ async function transform(
             overview,
             performances: [],
             matchingHints: {
-              overview: film.synopsis.text,
+              overview: film.synopsis?.text,
             },
           },
         };
