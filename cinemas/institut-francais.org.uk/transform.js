@@ -70,8 +70,8 @@ const getMultiplePerformances = ($, $multiple, details) => {
         screen: getText($single.find("td").eq(2)),
         accessibility: createAccessibility({
           subtitled:
-            languageDetails.includes("with english subtitles") ||
-            languageDetails.includes("with en subs"),
+            languageDetails.includes("with english sub") ||
+            languageDetails.includes("with en sub"),
         }),
       });
     })

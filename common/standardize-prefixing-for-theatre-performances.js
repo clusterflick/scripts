@@ -92,6 +92,7 @@ const rboPrefixes = [
   /RBO Encore[:|\s]/i,
   /RBO Live[:|\s]/i,
   /ROH Royal Opera Live[:|\s]/i,
+  /ROH[:|\s]/i,
   /Royal Opera Live[:|\s]/i,
   /Royal Ballet Live[:|\s]/i,
   /RBO[:|\s]/i,
@@ -186,7 +187,9 @@ function standardizePrefixingForTheatrePerformances(
     lowercaseTitle.startsWith("royal ballet") ||
     lowercaseTitle.startsWith("the royal opera") ||
     lowercaseTitle.startsWith("the royal ballet") ||
-    lowercaseTitle.startsWith("roh royal opera")
+    lowercaseTitle.startsWith("roh royal opera") ||
+    lowercaseTitle.startsWith("roh ") ||
+    lowercaseTitle.startsWith("roh: ")
   ) {
     return standardizePrefixingForRoyalBalletOperaPerformances(title, options);
   }

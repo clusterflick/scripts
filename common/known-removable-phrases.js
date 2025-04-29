@@ -45,6 +45,7 @@ const knownRemovablePhrases = [
   "- christmas at genesis",
   "- Wes Anderson Season",
   "- In Celebration of Val Kilmer",
+  "- In Partnership with London Review of Books",
   "- Birthday Season",
   "- birthday seaon",
   " Birthday Season",
@@ -88,6 +89,7 @@ const knownRemovablePhrases = [
   "Making theatre amid Lebanon's collapse",
   "FILM PREMIERE & STARLITT SOIRÉE",
   "Live Q&A with Cynthia Erivo",
+  " Q&A with George Mackay",
   " x Flower Workshop",
   " x FIST CLUB for IWD",
   " x Gala Screening",
@@ -159,6 +161,7 @@ const knownRemovablePhrases = [
   "Film Screening & Live Q&A:",
   "French Impressions:",
   "French Sundaes:",
+  "From Stanley Kubrick’s Personal Collection:",
   "Funday:",
   "Good Vibrations:",
   "gff:",
@@ -219,6 +222,7 @@ const knownRemovablePhrases = [
   "SLA:",
   "She Connects; Saturday night at the movies",
   "SHORTIES:",
+  "Silent Cinema:",
   "Silver Screen ",
   "SILVER SCREEN: ",
   "SILVERSCREEN: ",
@@ -243,6 +247,7 @@ const knownRemovablePhrases = [
   "Wallace & Gromit in ",
   "International Women's Day:",
   "Scared To Dance -",
+  "Yugesh Walia and the Birmingham Film Workshop:",
 
   // Weirdly specific fixes
   " D.C.",
@@ -271,6 +276,7 @@ const knownRemovablePhrases = [
 
   // Common superfluous pieces
   "Double Feature",
+  "Sing-along-a",
   "Sing-A-Long-A",
   "Sing-A-Long",
   "Sing-Along",

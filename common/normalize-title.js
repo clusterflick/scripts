@@ -109,6 +109,7 @@ function normalizeTitle(title, options) {
     ["Moutains", "Mountains"], // Fix for All The Mountains Give
     ["Le Nozze di Figaro", "The Marriage of Figaro"],
     ["La Nozze di Figaro", "The Marriage of Figaro"],
+    ["EOS: Michelangelo -", "EOS: Michelangelo –"],
     ["Sanrizuka 3", "Sanrizuka Notes 3"],
     [
       "Bluey Let's Play Chef",
@@ -129,6 +130,7 @@ function normalizeTitle(title, options) {
     ["Festival: Shorts -", "Festival: Shorts –"],
     ["Premiere and Networking Event - ", "Premiere and Networking Event: "],
     ["R.S.V.P - ", ""], // Fixes R.S.V.P - Ronde Saare Viah Picho
+    ["Member Library Lates: Tom Cruise", "Member Library Lates – Tom Cruise"],
     [/^Short Films\s+-/i, "Short Films:"], // Fixes mismatch on movie called Short Films
     [
       /Final Destination\s*\+\s*Final Destination/i,
