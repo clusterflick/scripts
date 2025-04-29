@@ -113,12 +113,25 @@ async function transform(attributes, { moviePages }, sourcedEvents) {
     const articleId = $(
       "input[name='BOparam::WScontent::loadArticle::article_id']",
     ).val();
+    const showingId = generateShowingId(attributes, articleId);
+    const performances = getPerformancesFor($, `${url}?${showPath}`, show);
+
+    // Sometimes the same show can be on different URLs with the same ID.
+    // Detect this by finding existing showings and adding performances instead
+    // of creating a new one with a duplicate showing ID.
+    const existingShow = shows.find((show) => show.showingId === showingId);
+    if (existingShow) {
+      existingShow.performances =
+        existingShow.performances.concat(performances);
+      continue;
+    }
+
     shows.push({
-      showingId: generateShowingId(attributes, articleId),
+      showingId,
       title: show.title,
       url: `${url}?${showPath}`,
       overview: getOverviewFor($),
-      performances: getPerformancesFor($, `${url}?${showPath}`, show),
+      performances,
       matchingHints: { overview: $(".main-article-body").text() },
     });
   }
