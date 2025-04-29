@@ -242,12 +242,12 @@ async function runLlmFunction(llmFunction) {
       return await llmFunction();
     }
 
-    // Model is overloaded; wait 90 seconds and try again
+    // Model is overloaded; wait a few minutes and try again
     if (e.status === 503) {
       console.log(
         " ! - Error asking LLM; pausing to let service become available...",
       );
-      await new Promise((resolve) => setTimeout(resolve, 90000));
+      await new Promise((resolve) => setTimeout(resolve, 180000));
       return await llmFunction();
     }
 
