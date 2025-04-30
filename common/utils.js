@@ -235,18 +235,24 @@ async function runLlmFunction(llmFunction) {
   try {
     return await llmFunction();
   } catch (e) {
-    // Rate limit was met; wait just over 60 seconds and try again
-    if (e.status === 429) {
-      console.log(" ! - Error asking LLM; pausing for quota to reset...");
-      await new Promise((resolve) => setTimeout(resolve, 65000));
+    // Fetch failed for an unknown reason; wait 30 seconds and try again.
+    if (basicNormalize(e?.message) === "fetch failed") {
+      console.log(" ! - Error asking LLM; pausing before trying again...");
+      await new Promise((resolve) => setTimeout(resolve, 30000));
       return await llmFunction();
     }
 
-    // Model is overloaded; wait a few minutes and try again
+    // Rate limit was met; it should reset after 1 minute but it's had issues
+    // before of not resetting correctly. Wait 90 seconds and try again.
+    if (e.status === 429) {
+      console.log(" ! - Error asking LLM; pausing for quota reset...");
+      await new Promise((resolve) => setTimeout(resolve, 90000));
+      return await llmFunction();
+    }
+
+    // Model is overloaded; wait a few minutes and try again.
     if (e.status === 503) {
-      console.log(
-        " ! - Error asking LLM; pausing to let service become available...",
-      );
+      console.log(" ! - Error asking LLM; pausing for model availability...");
       await new Promise((resolve) => setTimeout(resolve, 180000));
       return await llmFunction();
     }
@@ -265,6 +271,7 @@ async function runLlmFunction(llmFunction) {
       return null;
     }
 
+    // If it fails for an unknown reason, we need to throw and stop the script
     console.log("Error asking LLM", e);
     throw new Error("Error asking LLM");
   }
