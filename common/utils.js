@@ -236,7 +236,7 @@ async function runLlmFunction(llmFunction) {
     return await llmFunction();
   } catch (e) {
     // Fetch failed for an unknown reason; wait 30 seconds and try again.
-    if (basicNormalize(e?.message) === "fetch failed") {
+    if (basicNormalize(e?.message).includes("fetch failed")) {
       console.log(" ! - Error asking LLM; pausing before trying again...");
       await new Promise((resolve) => setTimeout(resolve, 30000));
       return await llmFunction();
