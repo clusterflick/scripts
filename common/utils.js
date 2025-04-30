@@ -231,30 +231,38 @@ const isPrivateHire = (title = "") =>
   basicNormalize(title).startsWith("private hire") ||
   basicNormalize(title).includes("do not book");
 
-async function runLlmFunction(llmFunction) {
+async function runLlmFunction(llmFunction, options = { run: 0 }) {
   try {
     return await llmFunction();
   } catch (e) {
+    const { run } = options;
+
+    // If it fails after a few retries, then don't keep trying
+    if (run === 2) {
+      console.log(` ! - Error asking LLM; failed after ${run + 1} attempts`);
+      throw e;
+    }
+
     // Fetch failed for an unknown reason; wait 30 seconds and try again.
     if (basicNormalize(e?.message).includes("fetch failed")) {
       console.log(" ! - Error asking LLM; pausing before trying again...");
-      await new Promise((resolve) => setTimeout(resolve, 30000));
-      return await llmFunction();
+      await new Promise((resolve) => setTimeout(resolve, 30_000));
+      return await runLlmFunction(llmFunction, { ...options, run: run + 1 });
     }
 
     // Rate limit was met; it should reset after 1 minute but it's had issues
     // before of not resetting correctly. Wait 90 seconds and try again.
     if (e.status === 429) {
       console.log(" ! - Error asking LLM; pausing for quota reset...");
-      await new Promise((resolve) => setTimeout(resolve, 90000));
-      return await llmFunction();
+      await new Promise((resolve) => setTimeout(resolve, 90_000));
+      return await runLlmFunction(llmFunction, { ...options, run: run + 1 });
     }
 
     // Model is overloaded; wait a few minutes and try again.
     if (e.status === 503) {
       console.log(" ! - Error asking LLM; pausing for model availability...");
-      await new Promise((resolve) => setTimeout(resolve, 180000));
-      return await llmFunction();
+      await new Promise((resolve) => setTimeout(resolve, 180_000));
+      return await runLlmFunction(llmFunction, { ...options, run: run + 1 });
     }
 
     // If we error on recitation, there's not much we can do. We don't want the
