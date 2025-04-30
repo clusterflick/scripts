@@ -139,6 +139,8 @@ function normalizeTitle(title, options) {
     ["Hidden (Cache)", "Hidden Cache"],
     ["- Special Double Bill", " Special Double Bill"],
     ["Mission: Impossible 8 (", "Mission: Impossible – The Final Reckoning ("],
+    ["Children’s Classics on 16mm", "Children’s Classics 16mm"],
+    ["[TOWARDS THE LIGHT", "TOWARDS THE LIGHT"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
@@ -314,7 +316,7 @@ function normalizeTitle(title, options) {
     .replace(/'|`|\u200B|‘|’|"|“|”|²|,/g, "")
     .replace(/\s+(-|–)(\s|$)/g, " ")
     .replace(/(-|–)$/g, "")
-    .replace(/!|:|\.|\*|…|—/g, " ")
+    .replace(/!|:|\.|\*|…|—|]/g, " ")
     .replace(/\s+/g, " ")
     .replace(/^(.+),\s+the$/, "the $1")
     .trim()
