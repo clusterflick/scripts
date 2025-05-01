@@ -109,7 +109,8 @@ function normalizeTitle(title, options) {
     ["Moutains", "Mountains"], // Fix for All The Mountains Give
     ["Le Nozze di Figaro", "The Marriage of Figaro"],
     ["La Nozze di Figaro", "The Marriage of Figaro"],
-    ["EOS: Michelangelo -", "EOS: Michelangelo –"],
+    [": Michelangelo -", ": Michelangelo –"],
+    [" - Michelangelo:", ": Michelangelo –"],
     ["Sanrizuka 3", "Sanrizuka Notes 3"],
     [
       "Bluey Let's Play Chef",
@@ -141,6 +142,7 @@ function normalizeTitle(title, options) {
     ["Mission: Impossible 8 (", "Mission: Impossible – The Final Reckoning ("],
     ["Children’s Classics on 16mm", "Children’s Classics 16mm"],
     ["[TOWARDS THE LIGHT", "TOWARDS THE LIGHT"],
+    ["(Wish World & The Reality War)", "Wish World & The Reality War"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {

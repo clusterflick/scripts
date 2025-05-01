@@ -24,5 +24,5 @@ const updatedData = Array.from(titles).map((title) => ({
   input: title,
   output: normalizeTitle(title),
 }));
-const updatedContent = JSON.stringify(updatedData, null, 2);
+const updatedContent = `${JSON.stringify(updatedData, null, 2)}\n`;
 fs.writeFileSync(existingDataPath, updatedContent);
