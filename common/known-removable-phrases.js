@@ -216,6 +216,7 @@ const knownRemovablePhrases = [
   "Play for Today:",
   "Rebel Reel:",
   "Premiere and Networking Event:",
+  "Pride Month:",
   "Sanrizuka 5:",
   "Screening:",
   "ScreenTalk:",

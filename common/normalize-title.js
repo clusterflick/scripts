@@ -142,7 +142,6 @@ function normalizeTitle(title, options) {
     ["Mission: Impossible 8 (", "Mission: Impossible – The Final Reckoning ("],
     ["Children’s Classics on 16mm", "Children’s Classics 16mm"],
     ["[TOWARDS THE LIGHT", "TOWARDS THE LIGHT"],
-    ["(Wish World & The Reality War)", "Wish World & The Reality War"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
@@ -151,6 +150,19 @@ function normalizeTitle(title, options) {
       replacement.toLowerCase(),
     );
   });
+
+  // Doctor Who 2025 finale specific match
+  if (
+    title.startsWith("doctor who") &&
+    (title.includes("two episode finale") ||
+      title.includes("two-episode finale") ||
+      title.includes("two episode season finale") ||
+      title.includes("two-episode season finale") ||
+      title.includes("2025 finale") ||
+      title.includes("wish world"))
+  ) {
+    return "doctor who wish world the reality war";
+  }
 
   const hasPresents = title.match(/\s+presents?:?\s+(.*?)$/i);
   if (hasPresents) {
