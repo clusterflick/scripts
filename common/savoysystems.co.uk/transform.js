@@ -69,7 +69,9 @@ async function transform(attributes, urlSlug, movieData, sourcedEvents) {
         createPerformance({
           date: parseDate(performance),
           notesList: getNotesList(performance),
-          url: `${attributes.domain}/${urlSlug}/${performance.URL}`,
+          url: performance.URL.toLowerCase().startsWith("http")
+            ? performance.URL
+            : `${attributes.domain}/${urlSlug}/${performance.URL}`,
           screen: performance.AuditoriumName,
           status: getStatus(performance),
           accessibility: createAccessibility(getAccessibility(performance)),
