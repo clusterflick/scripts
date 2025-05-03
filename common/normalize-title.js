@@ -142,6 +142,8 @@ function normalizeTitle(title, options) {
     ["Mission: Impossible 8 (", "Mission: Impossible – The Final Reckoning ("],
     ["Children’s Classics on 16mm", "Children’s Classics 16mm"],
     ["[TOWARDS THE LIGHT", "TOWARDS THE LIGHT"],
+    // Fixes accidental match on "I Like To Watch", which in this case is a movie marathon
+    ["Animus Presents: I Like To Watch", "Animus Magazine – I Like To Watch"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
