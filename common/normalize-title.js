@@ -144,6 +144,10 @@ function normalizeTitle(title, options) {
     ["[TOWARDS THE LIGHT", "TOWARDS THE LIGHT"],
     // Fixes accidental match on "I Like To Watch", which in this case is a movie marathon
     ["Animus Presents: I Like To Watch", "Animus Magazine – I Like To Watch"],
+    [
+      /^Demon Slayer: Mugen Train\s?(?:-|$)/i,
+      "Demon Slayer The Movie Mugen Train -",
+    ],
   ];
 
   corrections.forEach(([phrase, replacement]) => {

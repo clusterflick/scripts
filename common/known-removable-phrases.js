@@ -11,8 +11,8 @@ const knownRemovablePhrases = [
   "the imax 3d experience",
   "(SRX) ",
   "(SCX) ",
+  "/Birthday Screening",
   ": Black & White Version",
-  ": The Movie",
   ": The Final Cut",
   ": stu spasm",
   ": Special Early Screening",
@@ -37,6 +37,7 @@ const knownRemovablePhrases = [
   ": Live Q&A with Director Kevin Macdonald",
   ": Chicken Jockey Screening",
   ": The Block Party",
+  ": Members Preview",
   " Q&A with Director Richard Loncraine",
   "– In Concert",
   " in concert",
@@ -101,6 +102,7 @@ const knownRemovablePhrases = [
   " by Joshua Oppenheimer",
   ",  Live in Santiago",
   ", Live in Santiago",
+  " introduced by youth lagoon",
 
   // Prefixes
   "(4DX) ",
