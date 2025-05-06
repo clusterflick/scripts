@@ -282,6 +282,7 @@ const knownRemovablePhrases = [
   ": Pastor. Spy. Assassin",
   ": 20 Years’ New Taiwan Cinema",
   " and the Cultural Networks of Weimar Berlin with Dr Jon Hughes",
+  " Kimetsu no Yaiba ",
 
   // Common superfluous pieces
   "Double Feature",

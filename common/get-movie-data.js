@@ -430,7 +430,7 @@ const searchForBestMatch = async ({
     // If we don't have a match, check adult results
   } else {
     const searchPrimaryYearIncludingAdult = await searchMovieAndCacheResults(
-      `moviedb-search-primary-year-including-adult${cacheKeySuffix}`,
+      `moviedb-search-primary-year-including-adult-${cacheKeySuffix}`,
       getPayload({ primary_release_year: year, include_adult: true }),
     );
     const bestMatchPrimaryYearIncludingAdult = await getBestMatch(
