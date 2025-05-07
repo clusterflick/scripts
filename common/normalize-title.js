@@ -133,9 +133,14 @@ function normalizeTitle(title, options) {
     ["R.S.V.P - ", ""], // Fixes R.S.V.P - Ronde Saare Viah Picho
     ["Member Library Lates: Tom Cruise", "Member Library Lates – Tom Cruise"],
     [/^Short Films\s+-/i, "Short Films:"], // Fixes mismatch on movie called Short Films
+    [/^Final Destination.+Double Bill.*$/i, "Double Bill: Final Destination"],
     [
-      /Final Destination\s*\+\s*Final Destination/i,
-      "Final Destination & Final Destination",
+      /Final Destination\s*\+\s*Final Destination.+$/i,
+      "Double Bill: Final Destination",
+    ],
+    [
+      /.*Final Destination and Final Destination.+$/i,
+      "Double Bill: Final Destination",
     ],
     ["Hidden (Cache)", "Hidden Cache"],
     ["- Special Double Bill", " Special Double Bill"],
