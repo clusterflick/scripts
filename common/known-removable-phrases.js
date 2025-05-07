@@ -243,6 +243,7 @@ const knownRemovablePhrases = [
   "SXSW:",
   "RELAXED  screen",
   "RELAXED screen",
+  "RELAXED: ",
   "T.S. Eliot’s ",
   "T.S. Eliot's ",
   "The Dead Carpet :",

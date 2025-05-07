@@ -150,6 +150,7 @@ function normalizeTitle(title, options) {
       "Demon Slayer The Movie Mugen Train -",
     ],
     ["OCEAN WITH DAVID ATTENBOROUGH", "David Attenborough: Ocean"],
+    [/^Sylvanian Families$/i, "Sylvanian Families The Movie"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
