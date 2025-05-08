@@ -75,6 +75,7 @@ const knownRemovablePhrases = [
   "Dog-Friendly Screening",
   "Dog-Friendly ",
   "Grounded:",
+  "Naturist Screening",
   "' Screening",
   "for Halloween",
   "with intro and Q&A",
