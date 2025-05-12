@@ -56,6 +56,8 @@ function normalizeTitle(title, options) {
     ["Carvaggio", "Caravaggio"],
     ["10180", "1080"],
     ["unknwon", "unknown"],
+    ["Shanthamee Reethriyil", "Shanthamee Raathriyil"],
+    ["Shanthamee Rathriyil", "Shanthamee Raathriyil"],
     ["Frozen 2", "Frozen II"],
     [/\s+terminator 2$/i, " Terminator 2 Judgment Day"],
     [/^Relaxed Mufasa/i, "Relaxed screening: Mufasa"],
