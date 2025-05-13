@@ -47,7 +47,7 @@ const getOverview = (details) => {
   });
 };
 
-const getMultiplePerformances = ($, $multiple, details) => {
+const getMultiplePerformances = ($, $multiple, details, moviePageUrl) => {
   return $multiple
     .find("tbody tr")
     .map((i, el) => {
@@ -55,6 +55,7 @@ const getMultiplePerformances = ($, $multiple, details) => {
       const day = $single.find("time.date").attr("datetime");
       const time = $single.find("time.time").attr("datetime");
       const calendarNote = getText($single.find(".calendar-note"));
+      const performanceUrl = $single.find("a.button").attr("href");
       const moreInformation = details["more information"];
       const languageDetails = basicNormalize(details.language);
 
@@ -66,7 +67,7 @@ const getMultiplePerformances = ($, $multiple, details) => {
             ? undefined
             : moreInformation,
         ],
-        url: $single.find("a.button").attr("href"),
+        url: performanceUrl ?? moviePageUrl,
         screen: getText($single.find("td").eq(2)),
         accessibility: createAccessibility({
           subtitled:
@@ -78,11 +79,17 @@ const getMultiplePerformances = ($, $multiple, details) => {
     .get();
 };
 
-const getSinglePerformance = ($, $single, details) => {
+const getSinglePerformance = ($, $single, details, moviePageUrl) => {
   const day = $single.find(".timetable .date time").attr("datetime");
   const time = $single.find(".timetable time.time").attr("datetime");
   const calendarNote = getText($single.find(".timetable .calendar-note"));
+  const performanceUrl = $single.find(".actions a.button").attr("href");
   const moreInformation = details["more information"];
+
+  if (basicNormalize(calendarNote) === basicNormalize("Cancelled")) {
+    return [];
+  }
+
   return [
     createPerformance({
       date: parseDate(`${day} ${time}`),
@@ -92,7 +99,7 @@ const getSinglePerformance = ($, $single, details) => {
           ? undefined
           : moreInformation,
       ],
-      url: $single.find(".actions a.button").attr("href"),
+      url: performanceUrl ?? moviePageUrl,
       screen: getText($single.find(".timetable .location")),
       accessibility: createAccessibility({
         subtitled: basicNormalize(details.language).includes(
@@ -122,8 +129,8 @@ async function transform({ moviePages }, sourcedEvents) {
       overview: getOverview(details),
       performances:
         $("#more-dates").length > 0
-          ? getMultiplePerformances($, $("#more-dates"), details)
-          : getSinglePerformance($, $(".next-showing"), details),
+          ? getMultiplePerformances($, $("#more-dates"), details, moviePageUrl)
+          : getSinglePerformance($, $(".next-showing"), details, moviePageUrl),
       matchingHints: { overview: getText($(".definition")) },
     });
   }

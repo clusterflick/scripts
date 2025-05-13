@@ -207,6 +207,9 @@ async function transform(
       const noScreenings = basicNormalize("no screenings currently scheduled");
       if (basicNormalize(content).includes(noScreenings)) continue;
 
+      const cancelledEvent = basicNormalize("cancelled event");
+      if (basicNormalize(content).includes(cancelledEvent)) continue;
+
       const noPerformance = basicNormalize(
         "there are currently no performance scheduled for this event",
       );
