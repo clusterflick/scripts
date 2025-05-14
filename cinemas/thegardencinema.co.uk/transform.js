@@ -48,20 +48,15 @@ function getNotes($el) {
 function getPerformances($, $filmScreenings) {
   const performances = [];
   const $screenings = $filmScreenings.find(".screening-panel");
-  $screenings.each(function (index) {
+  let screeningDate;
+  $screenings.each(function () {
     let $screeningDate = $(this).find(".screening-panel__date-title");
-    // Note: This will break if the venue only ever has more than 2 performances
-    // in a single day
-    if ($screeningDate.length === 0) {
-      $screeningDate = $screenings
-        .eq(index - 1)
-        .find(".screening-panel__date-title");
+    if ($screeningDate.length === 1) {
+      screeningDate = getText($screeningDate);
     }
     const $screeningTime = $(this).find(".screening-time");
-
-    const date = parseDate(
-      `${getText($screeningDate)} T ${getText($screeningTime)}`,
-    );
+    const screeningTime = getText($screeningTime);
+    const date = parseDate(`${screeningDate} T ${screeningTime}`);
 
     performances.push(
       createPerformance({
