@@ -8,6 +8,9 @@ const askLlm = require("./ask-llm");
 const askLlmToReviewResults = require("./ask-llm-to-review-results");
 require("dotenv").config();
 
+const applyNameCorrections = (name) =>
+  name.replace(/Scott McGhee/i, "Scott McGehee");
+
 const apiRetryWrapper = async (callback) => {
   try {
     return callback();
@@ -107,7 +110,7 @@ const matchesExpectedCastCrew = async (match, movie) => {
 async function findMovieByDirector(normalizedTitle, movie) {
   if (movie.overview.directors.length === 0) return;
 
-  const directorsName = movie.overview.directors[0];
+  const directorsName = applyNameCorrections(movie.overview.directors[0]);
   const peopleMatches = await searchPersonAndCacheResults(
     `moviedb-search-person-${slugify(basicNormalize(directorsName))}`,
     directorsName,
