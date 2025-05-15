@@ -48,6 +48,7 @@ function normalizeTitle(title, options) {
     // Fix spelling which causes missed match
     [/^seven$/i, "se7en"],
     ["The Return The Return", "The Return"],
+    ["Wildnerness", "Wilderness"],
     [/\s+du$/i, ""], // Dubbed
     [/\s+su$/i, ""], // subbed
     [/\s+3d$/i, ""], // 3d
