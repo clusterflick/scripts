@@ -7,6 +7,7 @@ const knownRemovablePhrases = [
   "on 16mm",
   "on 35mm",
   "35mm edition uk charity screening",
+  "UK Charity Screening",
   "- 35mm",
   "the imax 3d experience",
   "(SRX) ",
