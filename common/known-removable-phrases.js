@@ -270,6 +270,7 @@ const knownRemovablePhrases = [
   "Valentine's Day:",
   "VE Day Anniversary:",
   "Wallace & Gromit in ",
+  "Windrush Caribbean Film Festival 2025:",
   "International Women's Day:",
   "Scared To Dance -",
   "Yugesh Walia and the Birmingham Film Workshop:",
