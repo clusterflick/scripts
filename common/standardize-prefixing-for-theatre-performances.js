@@ -44,7 +44,7 @@ const metOperaPrefixes = [
   /Met Opera Encore[:|\s]/i,
   /Met Opera Live[:|\s]/i,
   /Met Opera Season[:|\s]/i,
-  /Met Opera:/i,
+  /Met Opera[:|\s]/i,
   /The Met[:|\s]/i,
   /Met:/i,
   /The Metropolitan Opera:/i,
@@ -113,7 +113,7 @@ function standardizePrefixingForRoyalBalletOperaPerformances(title, options) {
     .replace(/\s+-\s+/, ": ");
 
   let updatedPrefixTitle = rboPrefixes.reduce(
-    (value, prefix) => value.replace(prefix, "RB&O Live: "),
+    (value, prefix) => value.replace(prefix, "Royal Ballet & Opera: "),
     title,
   );
 

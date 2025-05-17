@@ -301,6 +301,7 @@ const knownRemovablePhrases = [
   ": 20 Years’ New Taiwan Cinema",
   " and the Cultural Networks of Weimar Berlin with Dr Jon Hughes",
   " Kimetsu no Yaiba ",
+  "Cinema Season",
 
   // Common superfluous pieces
   "Double Feature",
