@@ -8,7 +8,7 @@
     "scripts": "index.js"
   },
   "scripts": {
-    "test": "jest",
+    "test": "TZ=Europe/London jest",
     "lint": "eslint .",
     "format": "prettier \"./**/*.(m)?js(on)?\" --write --write && prettier \"./**/*.md\" --write --prose-wrap=always",
     "retrieve": "TZ=Europe/London node index.js retrieve",

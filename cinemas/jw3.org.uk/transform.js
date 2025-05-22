@@ -24,9 +24,9 @@ const getDetails = ($) => {
   const pieces = $credits.text().trim().split("\n");
   return pieces.reduce((details, line) => {
     if (!line) return details;
-    const [keyRaw, value] = line.split(/:\s+/);
+    const [keyRaw, ...value] = line.split(/:\s*/);
     const key = basicNormalize(keyRaw).replace(/s$/, "");
-    return { ...details, [key]: value.trim() };
+    return { ...details, [key]: value.join(":").trim() };
   }, {});
 };
 
