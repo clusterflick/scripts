@@ -229,7 +229,8 @@ function generateShowingId(attributes, eventId) {
 
 const isPrivateHire = (title = "") =>
   basicNormalize(title).startsWith("private hire") ||
-  basicNormalize(title).includes("do not book");
+  basicNormalize(title).includes("do not book") ||
+  basicNormalize(title).includes("private event");
 
 async function runLlmFunction(llmFunction, options = { run: 0 }) {
   try {
