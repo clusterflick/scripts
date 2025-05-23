@@ -345,7 +345,7 @@ function normalizeTitle(title, options) {
     .replace(/\s+and\s+/gi, " ")
     .replace(/(?:\s+|^)&\s+/gi, " ")
     .replace(/:$/, "")
-    .replace(/'|`|\u200B|‘|’|"|“|”|²|,/g, "")
+    .replace(/'|`|\u200B|‘|’|"|“|”|²|®|,/g, "")
     .replace(/\s+(-|–)(\s|$)/g, " ")
     .replace(/(\s|^)(-|–)\s+/g, " ")
     .replace(/(-|–)$/g, "")
