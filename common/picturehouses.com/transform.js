@@ -53,7 +53,7 @@ async function transform(
 ) {
   const { domain, cinemaId } = attributes;
   const movies = moviesData.reduce((moviesAtCinema, movie) => {
-    const slug = slugify(movie.Title);
+    const slug = slugify(movie.Title, { strict: true }).toLowerCase();
     const showings = movie.show_times.filter(
       (showing) => showing.CinemaId === cinemaId,
     );
@@ -63,7 +63,9 @@ async function transform(
     // Remove private hire entries
     if (isPrivateHire(movie.Title)) return moviesAtCinema;
 
-    const details = getDetails(moviePages[movie.ScheduledFilmId]);
+    const moviePage = moviePages[movie.ScheduledFilmId];
+    const id = movie.ScheduledFilmId.trim();
+    const details = getDetails(moviePage);
     const overview = createOverview({
       duration: movie.RunTime,
       classification: movie.Rating,
@@ -72,12 +74,12 @@ async function transform(
       actors: details.starring,
     });
 
-    const synopsis = getSynopsis(moviePages[movie.ScheduledFilmId]);
+    const synopsis = getSynopsis(moviePage);
 
     const transformedMovie = {
-      showingId: generateShowingId(attributes, movie.ScheduledFilmId),
+      showingId: generateShowingId(attributes, id),
       title: movie.Title,
-      url: `${domain}/movie-details/${cinemaId}/${movie.ScheduledFilmId}/${slug}`,
+      url: `${domain}/movie-details/${cinemaId}/${id}/${slug}`,
       overview,
       performances: showings.map((showing) => {
         const hasAttribute = (value) =>

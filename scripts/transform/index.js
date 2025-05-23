@@ -282,7 +282,7 @@ async function transform(
     const duration = Math.round((Date.now() - start) / 1000);
     console.log(` - ✅ Validated (${duration}s)`);
   } catch (e) {
-    console.log(` - ❌ Error matching`);
+    console.log(` - ❌ Error validating`);
     console.log(e.cause);
     throw e;
   }
