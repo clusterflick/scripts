@@ -92,6 +92,7 @@ const knownRemovablePhrases = [
   "with tommy wiseau live on stage",
   "with Steve Zissou",
   "with Molly Miles",
+  "with Loose Willis & Maxim Melton",
   "(BFI Classics) with David Forrest",
   "/ Broken Social Scene",
   "BFI IMAX special",
@@ -126,11 +127,13 @@ const knownRemovablePhrases = [
   "Art of Action:",
   "ATOMIC ORIGINS:",
   "Autism Friendly Screening :",
+  "Average Rob:",
   "AWAN x Fhamtini:",
   "Babykino:",
   "Bar Screening x Muse:",
   "Bar Trash: A toast to David Lynch:",
   "Bar Trash: Season Launch:",
+  "BAR TRASH: 3rd Birthday — ",
   "Bar Trash:",
   "BAR TRASH –",
   "Beyond:",
@@ -276,6 +279,7 @@ const knownRemovablePhrases = [
   "Windrush Caribbean Film Festival 2025:",
   "International Women's Day:",
   "Scared To Dance -",
+  "YouTube Ciné-Club:",
   "Yugesh Walia and the Birmingham Film Workshop:",
 
   // Weirdly specific fixes
@@ -306,7 +310,6 @@ const knownRemovablePhrases = [
   "Cinema Season",
 
   // Common superfluous pieces
-  "Double Feature",
   "Sing-along-a",
   "Sing-A-Long-A",
   "Sing-A-Long",
@@ -327,6 +330,7 @@ const knownRemovablePhrases = [
   "Film Screening",
   "premiere screening",
   "PREMIERE and SOCIAL for ",
+  "U.K. Premiere & Q&A & Fine Wine Reception",
   "UK Premiere",
   "Premiere for",
   "premiere",
