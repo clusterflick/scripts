@@ -17,7 +17,6 @@ async function transform(
     if (!siteMovieScreenings) return moviesAtThreate;
 
     const overview = createOverview({
-      year: movie.premiere.split("-")[0],
       classification: movie.rating,
       directors: movie.director,
     });
