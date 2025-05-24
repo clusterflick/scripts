@@ -9,7 +9,7 @@ const categories = {
   movie:
     "Use this category when there is a showing of a single full-length movie",
   "multiple-movies":
-    "Use this category when there is a showing of multiple full-length movies. Sometimes referred to as 'double bills', 'movie marathons', etc.",
+    "Use this category when there is a showing of multiple full-length movies. Sometimes referred to as 'double bills', 'movie marathons', 'trilogy', etc.",
   tv: "Use this category when there is one or more episodes of a TV show being shown",
   quiz: "Use this category when the event is a quiz",
   comedy:
