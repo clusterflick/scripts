@@ -39,6 +39,7 @@ const knownRemovablePhrases = [
   ": Chicken Jockey Screening",
   ": The Block Party",
   ": Members Preview",
+  ": Subtitled",
   " Q&A with Director Richard Loncraine",
   "– In Concert",
   " in concert",

@@ -1,0 +1,55 @@
+const cheerio = require("cheerio");
+const attributes = require("./attributes");
+const {
+  getText,
+  createPerformance,
+  generateShowingId,
+  createOverview,
+} = require("../../common/utils");
+const { parseDate } = require("./utils");
+
+async function transform({ movieListPage }, sourcedEvents) {
+  const $ = cheerio.load(movieListPage);
+  const movies = [];
+  $("#sessionsByFilmConent .film").each(function () {
+    const eventId = new URLSearchParams(
+      $(this).find(".poster").attr("src").split("?")[1],
+    ).get("code");
+    const showingId = generateShowingId(attributes, eventId);
+    const overview = createOverview({
+      classification: getText($(this).find(".censor")),
+    });
+
+    const performances = [];
+    const $dateContainer = $(this).find(".date-container");
+    $dateContainer.each(function () {
+      const day = getText($(this).find(".date"));
+      const $performanceLink = $(this).find(".session-times li a");
+      $performanceLink.each(function () {
+        const time = getText($(this).find("time"));
+        performances.push(
+          createPerformance({
+            date: parseDate(`${day} @ ${time}`),
+            url: `https://ticketing.eu.veezi.com${$(this).attr("href")}`,
+          }),
+        );
+      });
+    });
+
+    movies.push({
+      showingId,
+      title: getText($(this).find(".title")),
+      url: attributes.url,
+      overview,
+      performances,
+      matchingHints: { overview: getText($(this).find(".film-desc")) },
+    });
+  });
+
+  const listOfSourcedEvents = Object.values(sourcedEvents).flatMap(
+    (events) => events,
+  );
+  return movies.concat(listOfSourcedEvents);
+}
+
+module.exports = transform;
