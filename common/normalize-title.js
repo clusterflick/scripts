@@ -42,6 +42,7 @@ function normalizeTitle(title, options) {
     ["- Live Arena Tour", "Live Arena Tour"],
     ["- Drunken Scorpion Presents ", "- Drunken Scorpion "],
     [/^Baby\s*?\+\s*?1:?\s+/i, "Baby & 1 "],
+    ["friends + crew", "friends & crew"],
     [" + Short Film: ", " + Short Film "],
     ["- Celebrating", " - Celebrating"],
     ["- International", " - International"],
