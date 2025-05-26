@@ -112,6 +112,7 @@ const knownRemovablePhrases = [
   ",  Live in Santiago",
   ", Live in Santiago",
   " introduced by youth lagoon",
+  "Voices of an unheard generation",
 
   // Prefixes
   "(4DX) ",
