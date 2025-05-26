@@ -162,6 +162,7 @@ function normalizeTitle(title, options) {
     ],
     ["OCEAN WITH DAVID ATTENBOROUGH", "David Attenborough: Ocean"],
     [/^Sylvanian Families$/i, "Sylvanian Families The Movie"],
+    ["Gravy Train Screening", "Gravy Train Short Film"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {

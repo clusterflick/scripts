@@ -249,15 +249,14 @@ async function getBestMatch(titleQuery, rawResults = [], movie) {
       // (This specifically helps match throwback movies from Picturehouse where
       // very little data is provided to match against except an overview, which
       // _never_ matches the data from TheMovieDB)
-      if (movie.matchingHints.characters && result.overview) {
-        const hasAllCharacters = movie.matchingHints.characters.every(
-          (character) => {
-            const removeBrackets = character.replace(/\([^)]+\)/g, "").trim();
-            const hint = normalizeName(removeBrackets);
-            const overview = normalizeName(result.overview);
-            return overview.includes(hint);
-          },
-        );
+      const hintCharacters = movie.matchingHints.characters;
+      if (hintCharacters && hintCharacters.length > 0 && result.overview) {
+        const hasAllCharacters = hintCharacters.every((character) => {
+          const removeBrackets = character.replace(/\([^)]+\)/g, "").trim();
+          const hint = normalizeName(removeBrackets);
+          const overview = normalizeName(result.overview);
+          return overview.includes(hint);
+        });
         if (hasAllCharacters) return result;
       }
 
@@ -266,9 +265,10 @@ async function getBestMatch(titleQuery, rawResults = [], movie) {
       // kind of signal if we've failed on every other type of match.
       // (This specifically helps match throwback movies from Picturehouse where
       // very little data is provided to match against except an overview)
-      if (movie.matchingHints.cast) {
+      const hintCast = movie.matchingHints.cast;
+      if (hintCast && hintCast.length > 0) {
         const updatedMovie = updateMovie(movie, {
-          overview: { actors: movie.matchingHints.cast },
+          overview: { actors: hintCast },
         });
         const matchesPossibleCast = await matchesExpectedCastCrew(
           result,
