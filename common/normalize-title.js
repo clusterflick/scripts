@@ -15,8 +15,10 @@ function normalizeTitle(title, options) {
 
   // Specific corrections
   const corrections = [
+    [/^Times\+ Preview$/i, "The Last Journey"], // NOTE: This may need updated in the future if there's a new times preview out with a similarly poor title
     [/^LD:/i, "LD Friendly:"],
     [/^Re-Viewing /i, ""],
+    [/housefull 5 (?:a|b) /i, "housefull 5 "],
     // Remove prefix separators which will cause later processing to strip the wrong section
     [/Star Wars: Episode ([IV]+) - /i, "Star Wars: Episode $1 "], // Remove the dash
     ["Rafadan Tayfa - Kapadokya", "Rafadan Tayfa: Kapadokya"],
@@ -151,6 +153,7 @@ function normalizeTitle(title, options) {
     ["Hidden (Cache)", "Hidden Cache"],
     ["- Special Double Bill", " Special Double Bill"],
     ["Mission: Impossible 8 (", "Mission: Impossible – The Final Reckoning ("],
+    ["MI 8: The Final Reckoning", "Mission: Impossible – The Final Reckoning"],
     ["Children’s Classics on 16mm", "Children’s Classics 16mm"],
     ["[TOWARDS THE LIGHT", "TOWARDS THE LIGHT"],
     // Fixes accidental match on "I Like To Watch", which in this case is a movie marathon
@@ -163,6 +166,10 @@ function normalizeTitle(title, options) {
     ["OCEAN WITH DAVID ATTENBOROUGH", "David Attenborough: Ocean"],
     [/^Sylvanian Families$/i, "Sylvanian Families The Movie"],
     ["Gravy Train Screening", "Gravy Train Short Film"],
+    [
+      "African Kung Fu Nazis & African Kung Fu Nazis II",
+      "African Kung Fu Nazis and African Kung Fu Nazis II Double Bill",
+    ],
   ];
 
   corrections.forEach(([phrase, replacement]) => {

@@ -41,6 +41,8 @@ const knownRemovablePhrases = [
   ": Members Preview",
   ": Subtitled",
   " Q&A with Director Richard Loncraine",
+  " Alex Ross Perry and Stephen Malkmus Q&A",
+  " with Live Q&A at The Prince Charles Cinema",
   "– In Concert",
   " in concert",
   "- UK PREMIERE",
