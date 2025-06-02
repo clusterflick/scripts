@@ -60,7 +60,12 @@ function processListingPage(data) {
   const $titleSpecific = $title.find("> span");
   if ($titleSpecific.length > 0) title = getText($titleSpecific.eq(0));
 
-  const aboutMovie = getText($("#about").next());
+  const $aboutTheFilm = $("#about-the-film").parents(".container").next();
+  const aboutDirectorDuration = getDirectorDuration(
+    getText($aboutTheFilm.find("p").last()),
+  );
+  const aboutMovie = getText($aboutTheFilm);
+  const aboutListing = getText($("#about").next());
   const releaseYear = summary["release year"]?.match(/^\d{4}$/)
     ? summary["release year"]
     : null;
@@ -73,14 +78,18 @@ function processListingPage(data) {
     overview: createOverview({
       duration: summary.runtime
         ? convertDurationStringToMinutes(summary.runtime)
-        : footnotes.duration,
+        : footnotes.duration || aboutDirectorDuration.duration,
       year: releaseYear || footnotes.year,
-      directors: summary.director || footnotes.director || movieBlurbDirectors,
+      directors:
+        summary.director ||
+        footnotes.director ||
+        aboutDirectorDuration.director ||
+        movieBlurbDirectors,
       classification: getText($("._classification"))
         .replace(/[()]/g, "")
         .trim(),
     }),
-    matchingHints: { overview: aboutMovie },
+    matchingHints: { overview: aboutMovie || aboutListing },
   };
 }
 
