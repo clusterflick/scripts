@@ -18,7 +18,7 @@ function normalizeTitle(title, options) {
     [/^Times\+ Preview$/i, "The Last Journey"], // NOTE: This may need updated in the future if there's a new times preview out with a similarly poor title
     [/^LD:/i, "LD Friendly:"],
     [/^Re-Viewing /i, ""],
-    [/housefull 5 (?:a|b) /i, "housefull 5 "],
+    [/housefull 5 (a|b)(\s+|$)/i, "housefull 5 "],
     // Remove prefix separators which will cause later processing to strip the wrong section
     [/Star Wars: Episode ([IV]+) - /i, "Star Wars: Episode $1 "], // Remove the dash
     ["Rafadan Tayfa - Kapadokya", "Rafadan Tayfa: Kapadokya"],
@@ -47,6 +47,8 @@ function normalizeTitle(title, options) {
     ["friends + crew", "friends & crew"],
     [" + Short Film: ", " + Short Film "],
     ["- Celebrating", " - Celebrating"],
+    ["- Classics", " - Classics"],
+    ["- Pride", " - Pride"],
     ["- International", " - International"],
     ["Björk’s", "Björk"],
     ["Funny Games / Funny Games US", "Funny Games Double Bill"],
@@ -358,7 +360,7 @@ function normalizeTitle(title, options) {
     .replace(/'|`|\u200B|‘|’|"|“|”|²|®|,|/g, "")
     .replace(/\s+(-|–)(\s|$)/g, " ")
     .replace(/(\s|^)(-|–)\s+/g, " ")
-    .replace(/(-|–)$/g, "")
+    .replace(/(-|–|\()$/g, "")
     .replace(/!|:|\.|\*|…|—|]/g, " ")
     .replace(/\s+/g, " ")
     .replace(/^(.+),\s+the$/, "the $1")

@@ -115,6 +115,8 @@ const knownRemovablePhrases = [
   ", Live in Santiago",
   " introduced by youth lagoon",
   "Voices of an unheard generation",
+  "London Film Premiere",
+  "London Film Premier",
 
   // Prefixes
   "(4DX) ",
@@ -212,6 +214,7 @@ const knownRemovablePhrases = [
   "London Bengali Film Festival 2025:",
   "LPFF:",
   "LIFF:",
+  "SLFF",
   "LSF 2025:",
   "Lynchspirations:",
   "M4J:",
@@ -245,7 +248,9 @@ const knownRemovablePhrases = [
   "Outdoor Cinema:",
   "Outdoor:",
   "Premiere and Networking Event:",
+  "Premiere Event",
   "Pride Month:",
+  "Pride Launch:",
   "Sanrizuka 5:",
   "SAFAR:",
   "SAFAR ",
@@ -287,6 +292,7 @@ const knownRemovablePhrases = [
   "Windrush Caribbean Film Festival 2025:",
   "International Women's Day:",
   "Scared To Dance -",
+  "Underseen David Lean:",
   "YouTube Ciné-Club:",
   "Yugesh Walia and the Birmingham Film Workshop:",
 
@@ -347,6 +353,7 @@ const knownRemovablePhrases = [
   "Launch Screening",
   "preview screening",
   "preview",
+  "live action",
   "()",
 ];
 
