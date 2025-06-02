@@ -35,6 +35,7 @@ ${movie.title}${movieYear}${movieClassification}
 ${movie.matchingHints.overview}
 
 Using the JSON search response below, see if there is a match for the details above, which are from a cinema listing.
+Take todays date into account when considering which movie could match this cinema listing. Movies which are not released yet, or have release dates more than a year in the future are unlikely to be good matches.
 
 ${JSON.stringify(results)}
 `.trim();
