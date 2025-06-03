@@ -153,6 +153,7 @@ function normalizeTitle(title, options) {
       "Double Bill: Final Destination",
     ],
     ["Hidden (Cache)", "Hidden Cache"],
+    ["Hidden (Caché)", "Hidden Cache"],
     ["- Special Double Bill", " Special Double Bill"],
     ["Mission: Impossible 8 (", "Mission: Impossible – The Final Reckoning ("],
     ["MI 8: The Final Reckoning", "Mission: Impossible – The Final Reckoning"],
