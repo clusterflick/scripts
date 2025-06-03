@@ -66,6 +66,7 @@ function normalizeTitle(title, options) {
     ["unknwon", "unknown"],
     ["Shanthamee Reethriyil", "Shanthamee Raathriyil"],
     ["Shanthamee Rathriyil", "Shanthamee Raathriyil"],
+    ["Aabhyanthara Kuttavvali", "Aabhyanthara Kuttavaali"],
     ["Frozen 2", "Frozen II"],
     [/\s+terminator 2$/i, " Terminator 2 Judgment Day"],
     [/^Relaxed Mufasa/i, "Relaxed screening: Mufasa"],
@@ -126,6 +127,7 @@ function normalizeTitle(title, options) {
       "Bluey Let's Play Chef",
       "Bluey at the Cinema: Let’s Play Chef Collection",
     ],
+    [": Chef Collection", " Let’s Play Chef Collection"],
     ["Maastricht:", "Maastricht Concert:"],
     ["Sardaar Ji", "Sardaarji"],
     [/trois /i, "3 "], // Fixes trois hommes et un couffin
