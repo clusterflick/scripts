@@ -16,6 +16,8 @@ function normalizeTitle(title, options) {
   // Specific corrections
   const corrections = [
     [/^Times\+ Preview$/i, "The Last Journey"], // NOTE: This may need updated in the future if there's a new times preview out with a similarly poor title
+    [" + Zog", " and Zog"],
+    [" + Superworm", " and Superworm"],
     [/^LD:/i, "LD Friendly:"],
     [/^Re-Viewing /i, ""],
     [/housefull 5 (a|b)(\s+|$)/i, "housefull 5 "],
@@ -328,7 +330,7 @@ function normalizeTitle(title, options) {
   }
 
   title = title.replace(
-    /(^|\s+)\d+th ann(iversary)?( screenings?)?(\s+|$)/i,
+    /(^|\s+)\d+th ann(iversary)?( screenings?)?( edition)?(\s+|$)/i,
     " ",
   );
 
