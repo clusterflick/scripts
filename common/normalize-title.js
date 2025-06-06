@@ -177,6 +177,7 @@ function normalizeTitle(title, options) {
       "African Kung Fu Nazis & African Kung Fu Nazis II",
       "African Kung Fu Nazis and African Kung Fu Nazis II Double Bill",
     ],
+    ["Silents Synced - ", "Silents Synced: "],
   ];
 
   corrections.forEach(([phrase, replacement]) => {

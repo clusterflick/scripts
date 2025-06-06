@@ -82,6 +82,7 @@ function standardizePrefixingForMetropolitanOperaPerformances(title, options) {
   return updatedPrefixTitle
     .replace(/(\(\))+/, "")
     .replace(/Live in HD/i, "")
+    .replace(/Season:/i, "")
     .replace(/\s+:\s+/, " ")
     .replace(/\s+/g, " ")
     .trim();
