@@ -25,6 +25,7 @@ function normalizeTitle(title, options) {
     [/Star Wars: Episode ([IV]+) - /i, "Star Wars: Episode $1 "], // Remove the dash
     ["Rafadan Tayfa - Kapadokya", "Rafadan Tayfa: Kapadokya"],
     ["Average Rob -", "Average Rob:"],
+    ["Roger Waters -", "Roger Waters:"],
     ["Closing Night + Awards", "Closing Night and Awards"],
     ["Poetry Slam", "Event: Poetry Slam"],
     ["Scared To Dance -", "Scared To Dance "],
@@ -45,7 +46,7 @@ function normalizeTitle(title, options) {
     ["- Year of the Rabbit", "Year of the Rabbit"],
     ["- Live Arena Tour", "Live Arena Tour"],
     ["- Drunken Scorpion Presents ", "- Drunken Scorpion "],
-    [/^Baby\s*?\+\s*?1:?\s+/i, "Baby & 1 "],
+    [/^Baby\s*?\+\s*?1:?\s*/i, "Baby & 1 "],
     ["friends + crew", "friends & crew"],
     [" + Short Film: ", " + Short Film "],
     ["- Celebrating", " - Celebrating"],
@@ -69,6 +70,7 @@ function normalizeTitle(title, options) {
     ["Shanthamee Reethriyil", "Shanthamee Raathriyil"],
     ["Shanthamee Rathriyil", "Shanthamee Raathriyil"],
     ["Aabhyanthara Kuttavvali", "Aabhyanthara Kuttavaali"],
+    ["Daakuaan Da Munda", "Dakuaan Da Munda"],
     ["Frozen 2", "Frozen II"],
     [/\s+terminator 2$/i, " Terminator 2 Judgment Day"],
     [/^Relaxed Mufasa/i, "Relaxed screening: Mufasa"],
@@ -373,6 +375,7 @@ function normalizeTitle(title, options) {
     .trim()
     .replace(/^the /i, "")
     .replace(/([a-z])-([a-z])/gi, "$1$2")
+    .replace(/\([^)]+$/i, "") // Remove stuff in brackets where the last bracket got removed elsehwere (e.g. there was a separator within the brackets)
     .trim();
 }
 
