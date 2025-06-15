@@ -71,6 +71,10 @@ function normalizeTitle(title, options) {
     ["Shanthamee Rathriyil", "Shanthamee Raathriyil"],
     ["Aabhyanthara Kuttavvali", "Aabhyanthara Kuttavaali"],
     ["Daakuaan Da Munda", "Dakuaan Da Munda"],
+    [
+      "Vyasana Sametham Bandhu Mithradhikal",
+      "Vysanasametham Bandhumithradhikal",
+    ],
     ["Frozen 2", "Frozen II"],
     [/\s+terminator 2$/i, " Terminator 2 Judgment Day"],
     [/^Relaxed Mufasa/i, "Relaxed screening: Mufasa"],
@@ -145,6 +149,7 @@ function normalizeTitle(title, options) {
     ["Exclusive Screening of Highly Acclaimed Bengali Feature Film - ", ""],
     ["Mission: Impossible - ", "Mission: Impossible – "],
     ["Festival: Shorts -", "Festival: Shorts –"],
+    ["Ori - Rebirth", "Ori: Rebirth"],
     ["Premiere and Networking Event - ", "Premiere and Networking Event: "],
     ["R.S.V.P - ", ""], // Fixes R.S.V.P - Ronde Saare Viah Picho
     ["Member Library Lates: Tom Cruise", "Member Library Lates – Tom Cruise"],
