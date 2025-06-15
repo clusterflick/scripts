@@ -327,6 +327,11 @@ function normalizeTitle(title, options) {
     title = hasSlavicPremier[1];
   }
 
+  const hasFrenchShowing = title.match(/projection de «([^»]+)»/i);
+  if (hasFrenchShowing) {
+    title = hasFrenchShowing[1];
+  }
+
   const hasUkranianFilm = title.match(/Ukrainian Film "([^"]+)" /i);
   if (hasUkranianFilm) {
     title = hasUkranianFilm[1];
