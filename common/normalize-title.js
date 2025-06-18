@@ -71,9 +71,10 @@ function normalizeTitle(title, options) {
     ["Shanthamee Rathriyil", "Shanthamee Raathriyil"],
     ["Aabhyanthara Kuttavvali", "Aabhyanthara Kuttavaali"],
     ["Daakuaan Da Munda", "Dakuaan Da Munda"],
+    ["Vysanasametham Bandhumithradhikal", "Vyasanasametham Bandhumithradhikal"],
     [
       "Vyasana Sametham Bandhu Mithradhikal",
-      "Vysanasametham Bandhumithradhikal",
+      "Vyasanasametham Bandhumithradhikal",
     ],
     ["Frozen 2", "Frozen II"],
     [/\s+terminator 2$/i, " Terminator 2 Judgment Day"],

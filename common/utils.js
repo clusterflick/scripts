@@ -228,9 +228,12 @@ function generateShowingId(attributes, eventId) {
 }
 
 const isPrivateHire = (title = "") =>
-  basicNormalize(title).startsWith("private hire") ||
-  basicNormalize(title).includes("do not book") ||
-  basicNormalize(title).includes("private event");
+  basicNormalize(title).includes("private hire") ||
+  basicNormalize(title).includes("private event") ||
+  // Sometimes private screenings are advertised on an event site, but in which
+  // case they'll contain more information (like the movie title)
+  basicNormalize(title) === "private screening" ||
+  basicNormalize(title).includes("do not book");
 
 async function runLlmFunction(llmFunction, options = { run: 0 }) {
   try {
