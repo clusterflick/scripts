@@ -5,6 +5,7 @@ const {
   basicNormalize,
   getId,
   removeMatchingHints,
+  isPrivateHire,
 } = require("../../common/utils");
 const findMatchesOnTheMovieDb = require("./find-matches-on-the-movie-db");
 const getSourcedEventsFor = require("./get-sourced-events-for");
@@ -151,7 +152,7 @@ async function transform(
     // If a movie matches the following, it's been delisted but is still valid:
     for (const movie of yesterdaysData) {
       // Don't bring unbookable events back in
-      if (movie.title.toLowerCase().includes("(do not book")) continue;
+      if (isPrivateHire(movie.title)) continue;
 
       // The movie data from yesterday contains future performances .
       // If there's no future performances, it's a past movie; continue

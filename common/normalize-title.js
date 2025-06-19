@@ -139,6 +139,8 @@ function normalizeTitle(title, options) {
     [": Chef Collection", " Let’s Play Chef Collection"],
     ["Maastricht:", "Maastricht Concert:"],
     ["Sardaar Ji", "Sardaarji"],
+    ["Sardar Ji", "Sardaarji"],
+    ["Sardarji", "Sardaarji"],
     [/trois /i, "3 "], // Fixes trois hommes et un couffin
     [/ \(20th$/i, ""],
     [/ \(Re-Re$/i, ""],
@@ -386,6 +388,7 @@ function normalizeTitle(title, options) {
     .trim()
     .replace(/^the /i, "")
     .replace(/([a-z])-([a-z])/gi, "$1$2")
+    .replace(/\s+q&a$/i, "")
     .replace(/\([^)]+$/i, "") // Remove stuff in brackets where the last bracket got removed elsehwere (e.g. there was a separator within the brackets)
     .trim();
 }

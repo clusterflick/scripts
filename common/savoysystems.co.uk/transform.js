@@ -6,6 +6,7 @@ const {
   createAccessibility,
   basicNormalize,
   generateShowingId,
+  isPrivateHire,
 } = require("../../common/utils");
 const { parseDate } = require("./utils");
 
@@ -51,9 +52,8 @@ function getNotesList(performance) {
 
 async function transform(attributes, urlSlug, movieData, sourcedEvents) {
   const movies = movieData.Events.reduce((events, movie) => {
-    if (basicNormalize(movie.Title) === basicNormalize("Private Event")) {
-      return events;
-    }
+    // Remove private hire entries
+    if (isPrivateHire(movie.Title)) return events;
 
     return events.concat({
       showingId: generateShowingId(attributes, movie.ID),
