@@ -219,6 +219,7 @@ const knownRemovablePhrases = [
   "LD Friendly:",
   "Life Journeys: Morag Ross & ",
   "LOTR:",
+  "LOTR ",
   "London Breeze:",
   "London Bengali Film Festival 2025:",
   "LPFF:",
