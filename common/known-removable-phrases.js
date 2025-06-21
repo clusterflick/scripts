@@ -123,6 +123,7 @@ const knownRemovablePhrases = [
   "Voices of an unheard generation",
   "London Film Premiere",
   "London Film Premier",
+  "2025 MEET-UP",
 
   // Prefixes
   "(4DX) ",
@@ -189,6 +190,7 @@ const knownRemovablePhrases = [
   "Dr. Seuss' ",
   "EOS:",
   "Everyman Barnet's 90th Anniversary:",
+  "Family Films:",
   "Film Africa:",
   "Film Screening & Live Q&A:",
   "French Impressions:",
@@ -265,6 +267,7 @@ const knownRemovablePhrases = [
   "Premiere Event",
   "Pride Month:",
   "Pride Launch:",
+  "Trans Pride:",
   "Sanrizuka 5:",
   "SAFAR:",
   "SAFAR ",
