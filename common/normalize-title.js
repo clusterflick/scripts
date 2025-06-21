@@ -189,7 +189,7 @@ function normalizeTitle(title, options) {
     ],
     ["Silents Synced - ", "Silents Synced: "],
     [/\s+extended$/i, ""],
-    [/(?:\s|^)LOTR(?:\s|:)(?:\s*the\s+)?/i, "The Lord of the Rings: "],
+    [/(?:\s|^)LOTR(?:\s|:)(?:\s*the\s+)?/i, "The Lord of the Rings: The "],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
