@@ -189,6 +189,7 @@ function normalizeTitle(title, options) {
     ],
     ["Silents Synced - ", "Silents Synced: "],
     [/\s+extended$/i, ""],
+    [/ – A Special.*$/i, ""],
     [/(?:\s|^)LOTR(?:\s|:)(?:\s*the\s+)?/i, "The Lord of the Rings: The "],
   ];
 
