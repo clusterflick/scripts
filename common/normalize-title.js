@@ -136,6 +136,7 @@ function normalizeTitle(title, options) {
       "Bluey Let's Play Chef",
       "Bluey at the Cinema: Let’s Play Chef Collection",
     ],
+    [": Let's Chef Collection", " Let’s Play Chef Collection"],
     [": Chef Collection", " Let’s Play Chef Collection"],
     ["Maastricht:", "Maastricht Concert:"],
     ["Sardaar Ji", "Sardaarji"],
