@@ -48,6 +48,7 @@ function normalizeTitle(title, options) {
     ["- Drunken Scorpion Presents ", "- Drunken Scorpion "],
     [/^Baby\s*?\+\s*?1:?\s*/i, "Baby & 1 "],
     ["friends + crew", "friends & crew"],
+    ["Trans + Pride:", "Trans Pride:"],
     [" + Short Film: ", " + Short Film "],
     ["- Celebrating", " - Celebrating"],
     ["- Classics", " - Classics"],

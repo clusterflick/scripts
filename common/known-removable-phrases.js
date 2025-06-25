@@ -44,6 +44,7 @@ const knownRemovablePhrases = [
   " Alex Ross Perry and Stephen Malkmus Q&A",
   " with Live Q&A at The Prince Charles Cinema",
   " with Pet Shop Boys Score",
+  " with Ranjit S. Ruprai",
   "– In Concert",
   " in concert",
   "- UK PREMIERE",
