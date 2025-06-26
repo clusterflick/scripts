@@ -115,7 +115,7 @@ async function transform(
             .map(({ attribute_full: title, description }) =>
               description ? `${title}: ${description}` : title,
             ),
-          url: `https://ticketing.picturehouses.com/Ticketing/visSelectTickets.aspx?cinemacode=${cinemaId}&txtSessionId=${showing.SessionId}&visLang=1`,
+          url: `https://web.picturehouses.com/order/showtimes/${cinemaId}-${showing.SessionId}/seats`,
           status,
           accessibility,
         });
