@@ -192,6 +192,7 @@ const knownRemovablePhrases = [
   "Dystopia is Not the Future:",
   "EOS:",
   "Everyman Barnet's 90th Anniversary:",
+  "£1 Family Films:",
   "Family Films:",
   "Film Africa:",
   "Film Screening & Live Q&A:",

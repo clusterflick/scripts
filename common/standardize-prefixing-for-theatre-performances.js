@@ -42,6 +42,7 @@ function standardizePrefixingForNationalTheatrePerformances(title) {
 // Metropolitan Opera
 const metOperaPrefixes = [
   /Met Opera Encore[:|\s]/i,
+  /Met Opera Live in HD[:|\s]/i,
   /Met Opera Live[:|\s]/i,
   /Met Opera Season[:|\s]/i,
   /Met Opera[:|\s]/i,

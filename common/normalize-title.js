@@ -190,6 +190,7 @@ function normalizeTitle(title, options) {
       "African Kung Fu Nazis and African Kung Fu Nazis II Double Bill",
     ],
     ["Silents Synced - ", "Silents Synced: "],
+    ["Gama Bomb - ", "Gama Bomb: "],
     [/\s+extended$/i, ""],
     [/ – A Special.*$/i, ""],
     [/(?:\s|^)LOTR(?:\s|:)(?:\s*the\s+)?/i, "The Lord of the Rings: The "],
