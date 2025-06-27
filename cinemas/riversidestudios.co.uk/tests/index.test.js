@@ -42,6 +42,6 @@ describe(attributes.name, () => {
       expect(schemaValidate(data)).toBe(true);
       expect(data).toMatchSnapshot();
     },
-    isRecording ? 120_000 : 10_000,
+    isRecording ? 240_000 : 10_000,
   );
 });

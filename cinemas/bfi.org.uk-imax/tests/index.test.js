@@ -52,6 +52,6 @@ describe(attributes.name, () => {
       expect(schemaValidate(data)).toBe(true);
       expect(data).toMatchSnapshot();
     },
-    isRecording ? 120_000 : undefined,
+    isRecording ? 240_000 : undefined,
   );
 });
