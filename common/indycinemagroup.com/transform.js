@@ -13,9 +13,7 @@ const screenMapping = {
   133: "3", // sidcupstoryteller.co.uk
   140: "1", // actonecinema.co.uk
   141: "2", // actonecinema.co.uk
-  162: "1", // ealingproject.co.uk
-  163: "2", // ealingproject.co.uk
-  164: "3", // ealingproject.co.uk
+  301: "Lounge", // actonecinema.co.uk
   236: "1", // throwleyyardcinema.co.uk
   237: "2", // throwleyyardcinema.co.uk
   238: "3", // throwleyyardcinema.co.uk
