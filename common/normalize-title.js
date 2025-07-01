@@ -194,6 +194,7 @@ function normalizeTitle(title, options) {
     [/\s+extended$/i, ""],
     [/ – A Special.*$/i, ""],
     [/(?:\s|^)LOTR(?:\s|:)(?:\s*the\s+)?/i, "The Lord of the Rings: The "],
+    ["Doctor Who: Projections in Time -", "Doctor Who: "], // Remove unnecessary "Projections in Time" prefix
   ];
 
   corrections.forEach(([phrase, replacement]) => {
