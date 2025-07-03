@@ -18,6 +18,8 @@ function normalizeTitle(title, options) {
     [/^Times\+ Preview$/i, "The Last Journey"], // NOTE: This may need updated in the future if there's a new times preview out with a similarly poor title
     [" + Zog", " and Zog"],
     [" + Superworm", " and Superworm"],
+    [" + The Gruffalo's Child", " and The Gruffalo's Child"],
+    ["Relaxed Screening + Discussion:", "Relaxed Screening & Discussion:"],
     [/^LD:/i, "LD Friendly:"],
     [/^Re-Viewing /i, ""],
     [/housefull 5 (a|b)(\s+|$)/i, "housefull 5 "],
