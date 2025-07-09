@@ -50,8 +50,9 @@ async function getAdditionalDataFor(moviePages) {
 
 // Fix for issue in one of the listings where the <i> tag wasn't closed
 // correctly. This tagsoup causes issues when parsing the markup.
+// We don't need these tags, so let's just remove them!
 function fixMarkup(movieListPage) {
-  return movieListPage.replaceAll("<i></div>", "</i></div>");
+  return movieListPage.replaceAll("<i>", "").replaceAll("</i>", "");
 }
 
 async function transform({ movieListPage, moviePages }, sourcedEvents) {
