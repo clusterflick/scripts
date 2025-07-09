@@ -28,6 +28,8 @@ function normalizeTitle(title, options) {
     ["Rafadan Tayfa - Kapadokya", "Rafadan Tayfa: Kapadokya"],
     ["Average Rob -", "Average Rob:"],
     ["Roger Waters -", "Roger Waters:"],
+    ["CBeebies Musical - ", "CBeebies Musical: "],
+    ["Modigliani - ", "Modigliani: "],
     ["Closing Night + Awards", "Closing Night and Awards"],
     ["Poetry Slam", "Event: Poetry Slam"],
     ["Scared To Dance -", "Scared To Dance "],
@@ -36,6 +38,7 @@ function normalizeTitle(title, options) {
     ["Green Screen -", "Green Screen "],
     [/^SILVER\s*?SCREEN -/i, "SILVER SCREEN"],
     ["SUBTITLED -", "SUBTITLED "],
+    [/ Subtitled$/i, ": Subtitled"],
     [/^RELAXED -/i, "Relaxed screening: "],
     ["RELAXED Disney's", "Relaxed screening: Disney's"],
     ["Mamma Mia-", "Mamma Mia -"],
@@ -197,6 +200,7 @@ function normalizeTitle(title, options) {
     [/ – A Special.*$/i, ""],
     [/(?:\s|^)LOTR(?:\s|:)(?:\s*the\s+)?/i, "The Lord of the Rings: The "],
     ["Doctor Who: Projections in Time -", "Doctor Who: "], // Remove unnecessary "Projections in Time" prefix
+    ["H I / P D", "Hidden Inventory/Premature Death"], // Fixes Jujutsu Kaisen: H I / P D
   ];
 
   corrections.forEach(([phrase, replacement]) => {
@@ -391,7 +395,7 @@ function normalizeTitle(title, options) {
     .replace(/\s+(-|–)(\s|$)/g, " ")
     .replace(/(\s|^)(-|–)\s+/g, " ")
     .replace(/(-|–|\()$/g, "")
-    .replace(/!|:|\.|\*|…|—|]/g, " ")
+    .replace(/!|:|\.|\*|…|—|]|<|>/g, " ")
     .replace(/\s+/g, " ")
     .replace(/^(.+),\s+the$/, "the $1")
     .trim()
