@@ -154,6 +154,7 @@ function normalizeTitle(title, options) {
     ["Ep III-", "episode III "],
     // Sanitise use of "PRESENT" which is confused with "X presents"
     ["‘PAST PRESENT FUTURE’ PODCAST", "‘PAST+PRESENT+FUTURE’ PODCAST"],
+    ["Past Present Future Podcast", "Past+Present+Future Podcast"],
     ["seventeen [right here]", "seventeen right here"], // remove brackets from this band name
     ["Exclusive Screening of Highly Acclaimed Bengali Feature Film - ", ""],
     ["Mission: Impossible - ", "Mission: Impossible – "],
