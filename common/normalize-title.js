@@ -38,7 +38,6 @@ function normalizeTitle(title, options) {
     ["Green Screen -", "Green Screen "],
     [/^SILVER\s*?SCREEN -/i, "SILVER SCREEN"],
     ["SUBTITLED -", "SUBTITLED "],
-    [/ Subtitled$/i, ": Subtitled"],
     [/^RELAXED -/i, "Relaxed screening: "],
     ["RELAXED Disney's", "Relaxed screening: Disney's"],
     ["Mamma Mia-", "Mamma Mia -"],
@@ -285,6 +284,11 @@ function normalizeTitle(title, options) {
     title = hasGala[1];
   }
 
+  const hasMixer = matchesOpenPrefix(title, "mixer");
+  if (hasMixer) {
+    title = hasMixer[1];
+  }
+
   const hasSpecial = matchesOpenPrefix(title, "special");
   if (hasSpecial) {
     title = hasSpecial[1];
@@ -402,6 +406,7 @@ function normalizeTitle(title, options) {
     .replace(/^the /i, "")
     .replace(/([a-z])-([a-z])/gi, "$1$2")
     .replace(/\s+q&a$/i, "")
+    .replace(/\+$/, "")
     .replace(/\([^)]+$/i, "") // Remove stuff in brackets where the last bracket got removed elsehwere (e.g. there was a separator within the brackets)
     .trim();
 }
