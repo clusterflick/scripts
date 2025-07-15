@@ -124,7 +124,7 @@ function normalizeTitle(title, options) {
     ["Where Is the Friend's Home?", "Where Is the Friend's House?"],
     ["Ghidrah", "Ghidorah"], // Fix for Ghidorah, the Three-Headed Monster
     ["½", " 1/2"],
-    ["Mr. Hulot", "Monsieur Hulot"], // Fix for Monsieur Hulot's Holiday
+    [/Mr\.? Hulot/i, "Monsieur Hulot"], // Fix for Monsieur Hulot's Holiday
     [/^Mishima$/i, "Mishima: A Life in Four Chapters"],
     ["My Heart Is That Eternal Love", "My Heart Is That Eternal Rose"],
     [/^A Tale of Sorrow$/i, "A Tale of Sorrow and Sadness"],

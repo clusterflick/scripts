@@ -213,6 +213,7 @@ const knownRemovablePhrases = [
   "French Sundaes:",
   "friends & crew screening",
   "From Stanley Kubrick’s Personal Collection:",
+  "Kubrick's",
   "Funday:",
   "Good Vibrations:",
   "gff:",
