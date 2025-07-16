@@ -24,7 +24,7 @@ const getDetails = ($, $movieData) => {
     if (key === "country, year") {
       const [country, year] = value.split("|");
       details.country = country.trim();
-      if (year) {
+      if (year?.trim().match(/^\d{4}$/)) {
         details.year = year.trim();
       }
     } else {
