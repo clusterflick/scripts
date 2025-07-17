@@ -201,6 +201,7 @@ function normalizeTitle(title, options) {
     [/(?:\s|^)LOTR(?:\s|:)(?:\s*the\s+)?/i, "The Lord of the Rings: The "],
     ["Doctor Who: Projections in Time -", "Doctor Who: "], // Remove unnecessary "Projections in Time" prefix
     ["H I / P D", "Hidden Inventory/Premature Death"], // Fixes Jujutsu Kaisen: H I / P D
+    ["X-Men 2", "X2"], // The title of the second X-men movie is X2
   ];
 
   corrections.forEach(([phrase, replacement]) => {
