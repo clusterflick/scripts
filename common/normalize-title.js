@@ -72,6 +72,7 @@ function normalizeTitle(title, options) {
     ["Carvaggio", "Caravaggio"],
     ["10180", "1080"],
     ["unknwon", "unknown"],
+    ["colourful", "colorful"],
     ["Shanthamee Reethriyil", "Shanthamee Raathriyil"],
     ["Shanthamee Rathriyil", "Shanthamee Raathriyil"],
     ["Aabhyanthara Kuttavvali", "Aabhyanthara Kuttavaali"],
@@ -202,6 +203,7 @@ function normalizeTitle(title, options) {
     ["Doctor Who: Projections in Time -", "Doctor Who: "], // Remove unnecessary "Projections in Time" prefix
     ["H I / P D", "Hidden Inventory/Premature Death"], // Fixes Jujutsu Kaisen: H I / P D
     ["X-Men 2", "X2"], // The title of the second X-men movie is X2
+    [/\(?with subtitles for.*$/i, ""],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
