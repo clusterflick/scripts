@@ -1,6 +1,6 @@
 const yearMatcher = /(\d{4})/;
-const yearRangeMatcher = /(\d{2})\d{2}[-|/](\d{2})/;
-const shortYearRangeMatcher = /\d{2}[-|/](\d{2})/;
+const yearRangeMatcher = /(\d{2})(\d{2})[-|/](\d{2})/;
+const shortYearRangeMatcher = /(\d{2})[-|/](\d{2})/;
 const yearSuffixMatcher = /\(\d{4}\)$/;
 const ownerMatcher = /:\s+[^\s]+['|’]s/;
 
@@ -63,12 +63,12 @@ function standardizePrefixingForMetropolitanOperaPerformances(title, options) {
 
   const yearRangeMatch = updatedPrefixTitle.match(yearRangeMatcher);
   if (yearRangeMatch) {
-    updatedPrefixTitle = `${updatedPrefixTitle.replace(yearRangeMatcher, "")} (${yearRangeMatch[1]}${yearRangeMatch[2]})`;
+    updatedPrefixTitle = `${updatedPrefixTitle.replace(yearRangeMatcher, "")} (${yearRangeMatch[1]}${yearRangeMatch[3]})`;
   }
 
   const shortYearRangeMatch = updatedPrefixTitle.match(shortYearRangeMatcher);
   if (shortYearRangeMatch) {
-    updatedPrefixTitle = `${updatedPrefixTitle.replace(shortYearRangeMatcher, "")} (20${shortYearRangeMatch[1]})`;
+    updatedPrefixTitle = `${updatedPrefixTitle.replace(shortYearRangeMatcher, "")} (20${shortYearRangeMatch[2]})`;
   }
 
   const yearMatch = updatedPrefixTitle.match(yearMatcher);
@@ -107,7 +107,7 @@ const rboPrefixes = [
   /RB&O:/i,
 ];
 
-function standardizePrefixingForRoyalBalletOperaPerformances(title, options) {
+function standardizePrefixingForRoyalBalletOperaPerformances(title) {
   title = title
     .replace(/Captured Live /i, "")
     .replace(/Hoffman(\s|$)/i, "Hoffmann$1")
@@ -121,24 +121,39 @@ function standardizePrefixingForRoyalBalletOperaPerformances(title, options) {
 
   updatedPrefixTitle = updatedPrefixTitle.replace(ownerMatcher, ":");
 
+  let year;
+
   const yearRangeMatch = updatedPrefixTitle.match(yearRangeMatcher);
   if (yearRangeMatch) {
-    updatedPrefixTitle = `${updatedPrefixTitle.replace(yearRangeMatcher, "")} (${yearRangeMatch[1]}${yearRangeMatch[2]})`;
+    year = `${yearRangeMatch[1]}${yearRangeMatch[2]}`;
+    updatedPrefixTitle = updatedPrefixTitle.replace(yearRangeMatcher, "");
   }
 
   const shortYearRangeMatch = updatedPrefixTitle.match(shortYearRangeMatcher);
   if (shortYearRangeMatch) {
-    updatedPrefixTitle = `${updatedPrefixTitle.replace(shortYearRangeMatcher, "")} (20${shortYearRangeMatch[1]})`;
+    year = `20${shortYearRangeMatch[1]}`;
+    updatedPrefixTitle = updatedPrefixTitle.replace(shortYearRangeMatcher, "");
   }
 
   const yearMatch = updatedPrefixTitle.match(yearMatcher);
   if (yearMatch) {
-    updatedPrefixTitle = `${updatedPrefixTitle.replace(yearMatcher, "")} (${yearMatch[1]})`;
+    year = yearMatch[1];
+    updatedPrefixTitle = updatedPrefixTitle.replace(yearMatcher, "");
   }
 
-  if (!options.retainYear) {
-    updatedPrefixTitle = updatedPrefixTitle.replace(yearSuffixMatcher, "");
+  const yearSuffixMatch = updatedPrefixTitle.match(yearSuffixMatcher);
+  if (yearSuffixMatch) {
+    year = yearSuffixMatch[0].replaceAll(/[()]/g, "");
+    updatedPrefixTitle = updatedPrefixTitle.replace(yearMatcher, "");
   }
+
+  if (year) {
+    const [before, ...after] = updatedPrefixTitle.split(":");
+    updatedPrefixTitle = `${before} ${year}:${after.join(":")}`;
+  }
+
+  // Remove any year value -- they can't be relied upon
+  updatedPrefixTitle = updatedPrefixTitle.replace(yearSuffixMatcher, "");
 
   return updatedPrefixTitle
     .replace(/(\(\))+/, "")

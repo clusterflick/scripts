@@ -208,6 +208,7 @@ function normalizeTitle(title, options) {
     ],
     ["X-Men 2", "X2"], // The title of the second X-men movie is X2
     [/\(?with subtitles for.*$/i, ""],
+    [/ a$/i, ""], // Remove strange trailing "A"
   ];
 
   corrections.forEach(([phrase, replacement]) => {
