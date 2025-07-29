@@ -25,6 +25,9 @@ async function retrieve() {
   const moviePages = {};
   for (const moviePageUrl of [...moviePageUrls]) {
     moviePages[moviePageUrl] = await fetchText(moviePageUrl);
+    if (moviePages[moviePageUrl].match(/502 Proxy Error/i)) {
+      throw new Error(`Proxy error returned for ${moviePageUrl}`);
+    }
   }
 
   return { moviePages };
