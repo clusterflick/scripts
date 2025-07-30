@@ -95,11 +95,16 @@ async function transform({ moviePages }, sourcedEvents) {
 
     if (stats.length > 1) {
       directors = isCatchAll(stats[0]) ? "" : stats[0];
-      year =
-        isCatchAll(stats[stats.length - 2]) ||
-        stats[stats.length - 2].includes("-") // ignore year ranges
-          ? undefined
-          : stats[stats.length - 2];
+
+      // Sometimes the year position can change. Check in two places, but always
+      // make sure we're just getting 4 digits
+      const yearInSecondLastPosition = stats[stats.length - 2]?.match(/^\d{4}$/)
+        ? stats[stats.length - 2]
+        : undefined;
+      const yearInThirdLastPosition = stats[stats.length - 3]?.match(/^\d{4}$/)
+        ? stats[stats.length - 3]
+        : undefined;
+      year = yearInSecondLastPosition || yearInThirdLastPosition || undefined;
     }
 
     const $cast = $(".film-detail__cast");
