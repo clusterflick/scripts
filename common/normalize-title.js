@@ -144,6 +144,7 @@ function normalizeTitle(title, options) {
     ],
     [": Let's Chef Collection", " Let’s Play Chef Collection"],
     [": Chef Collection", " Let’s Play Chef Collection"],
+    ["the cinema show", "cinema show"],
     ["Maastricht:", "Maastricht Concert:"],
     ["Sardaar Ji", "Sardaarji"],
     ["Sardar Ji", "Sardaarji"],
@@ -207,8 +208,10 @@ function normalizeTitle(title, options) {
       "Modì: Three Days on the Wing of Madness",
     ],
     ["X-Men 2", "X2"], // The title of the second X-men movie is X2
+    ["The Rise and Fall of The Clash Redux", "The Rise and Fall of The Clash"],
     [/\(?with subtitles for.*$/i, ""],
     [/ a$/i, ""], // Remove strange trailing "A"
+    ["Oslo Stories Trilogy:", "Oslo Stories:"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
