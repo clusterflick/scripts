@@ -8,7 +8,7 @@ const { parseDate } = require("./utils");
 
 async function transform(
   attributes,
-  { filmData: { films, screenings, screeningTypes } },
+  { films, screenings, screeningTypes },
   sourcedEvents,
 ) {
   const { cinemaId, domain } = attributes;

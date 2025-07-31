@@ -1,11 +1,8 @@
-const { fetchText } = require("../../common/utils");
+const { fetchJson } = require("../../common/utils");
 
-async function retrieve({ url }) {
-  const site = await fetchText(url);
-  const [, data] = site.match(
-    /\/*\s+<!\[CDATA\[\s+\*\/\s+var\s+electric\s+=\s+(.+?);\s+\/\*\s+\]\]>\s+\*\//i,
-  );
-  return JSON.parse(data);
+async function retrieve({ domain }) {
+  const site = await fetchJson(`${domain}/data/data.json`);
+  return site;
 }
 
 module.exports = retrieve;

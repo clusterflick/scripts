@@ -11,18 +11,18 @@ const isRecording = false;
 
 describe(attributes.name, () => {
   setupPolly(isRecording, __dirname);
-  jest.useFakeTimers().setSystemTime(new Date("2025-01-23"));
+  jest.useFakeTimers().setSystemTime(new Date("2025-08-01"));
 
   it(
     "retrieve and transform",
     async () => {
-      const moviePages = await retrieve();
+      const cinemaData = await retrieve();
 
       // Make sure the input looks roughly correct
-      expect(moviePages).toBeTruthy();
-      expect(Object.keys(moviePages.filmData.films)).toHaveLength(7);
+      expect(cinemaData).toBeTruthy();
+      expect(Object.keys(cinemaData.films)).toHaveLength(23);
 
-      const output = sortAndFilterMovies(await transform(moviePages, {}));
+      const output = sortAndFilterMovies(await transform(cinemaData, {}));
       expect(
         output.every((movie) =>
           Object.prototype.hasOwnProperty.call(movie, "matchingHints"),
@@ -34,7 +34,7 @@ describe(attributes.name, () => {
         .map(addTestCategory);
 
       // Make sure the data looks roughly correct
-      expect(data).toHaveLength(6); // One of the entries has no performances
+      expect(data).toHaveLength(7);
 
       expect(schemaValidate(data)).toBe(true);
       expect(data).toMatchSnapshot();
