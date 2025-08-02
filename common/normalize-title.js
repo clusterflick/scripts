@@ -212,6 +212,10 @@ function normalizeTitle(title, options) {
     [/\(?with subtitles for.*$/i, ""],
     [/ a$/i, ""], // Remove strange trailing "A"
     ["Oslo Stories Trilogy:", "Oslo Stories:"],
+    [
+      /^The Invisible Doctrine /i,
+      "The Invisible Doctrine: The Secret History of Neoliberalism ",
+    ],
   ];
 
   corrections.forEach(([phrase, replacement]) => {

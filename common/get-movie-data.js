@@ -524,8 +524,8 @@ const searchMovieAndCacheResults = (cacheKey, payload) =>
     let results = [].concat(firstPage.results);
     let pages = [1];
 
-    // Get up to 3 pages of results, or all pages, whichever is smaller
-    const maxPages = Math.min(3, firstPage.total_pages);
+    // Get up to 5 pages of results, or all pages, whichever is smaller
+    const maxPages = Math.min(5, firstPage.total_pages);
     for (let page = 2; page <= maxPages; page++) {
       const nextPage = await apiRetryWrapper(() =>
         moviedb.searchMovie({ ...payload, page }),
