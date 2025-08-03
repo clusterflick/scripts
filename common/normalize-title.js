@@ -216,6 +216,8 @@ function normalizeTitle(title, options) {
       /^The Invisible Doctrine /i,
       "The Invisible Doctrine: The Secret History of Neoliberalism ",
     ],
+    ["The Fantastic Four: First Steps", "The Fantastic 4: First Steps"],
+    ["Pip and Posy's", "Pip and Posy"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
