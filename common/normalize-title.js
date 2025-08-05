@@ -16,6 +16,7 @@ function normalizeTitle(title, options) {
   // Specific corrections
   const corrections = [
     [/^Times\+ Preview$/i, "The Last Journey"], // NOTE: This may need updated in the future if there's a new times preview out with a similarly poor title
+    [" + Cat", " and Cat"],
     [" + Zog", " and Zog"],
     [" + Superworm", " and Superworm"],
     [" + The Gruffalo's Child", " and The Gruffalo's Child"],
@@ -36,6 +37,7 @@ function normalizeTitle(title, options) {
     ["Hitchcock: The Gainsborough Days -", "Hitchcock: The Gainsborough Days "],
     ["Sky Original -", "Sky Original "],
     ["Green Screen -", "Green Screen "],
+    ["Film Club -", "Film Club: "],
     [/^SILVER\s*?SCREEN -/i, "SILVER SCREEN"],
     ["SUBTITLED -", "SUBTITLED "],
     [/^RELAXED -/i, "Relaxed screening: "],
@@ -218,6 +220,7 @@ function normalizeTitle(title, options) {
     ],
     ["The Fantastic Four: First Steps", "The Fantastic 4: First Steps"],
     ["Pip and Posy's", "Pip and Posy"],
+    ["10 + 10", "10 plus 10"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
