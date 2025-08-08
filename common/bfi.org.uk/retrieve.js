@@ -54,10 +54,12 @@ async function processSearchResultPage(
           // might as well keep going and see if the next waitFor passes.
         }
         // Make sure there's information showing. Not all pages have film info
-        // (that we care about), so check for the rich text or media areas too
+        // (that we care about), so check for the rich text or media areas too.
+        // On some fundraising pages we don't have those, but we may have a list
+        // instead which contains audience list XML attributes to match instead.
         try {
           await page
-            .locator(".Film-info__information,.Rich-text,.Media")
+            .locator(".Film-info__information,.Rich-text,.Media,ul[xmlns\\:av]")
             .waitFor({ strict: false });
         } catch (error) {
           console.error(`Page data not available at ${domain}${showUrl}`);
