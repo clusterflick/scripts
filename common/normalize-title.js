@@ -221,6 +221,7 @@ function normalizeTitle(title, options) {
     ["The Fantastic Four: First Steps", "The Fantastic 4: First Steps"],
     ["Pip and Posy's", "Pip and Posy"],
     ["10 + 10", "10 plus 10"],
+    ["Super Connected Live", "Super Connected"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
