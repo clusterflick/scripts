@@ -57,12 +57,21 @@ function getPerformances($, $filmScreenings) {
     const $screeningTime = $(this).find(".screening-time");
     const screeningTime = getText($screeningTime);
     const date = parseDate(`${screeningDate} T ${screeningTime}`);
+    const url = $screeningTime.find("a").attr("href");
+
+    // In the past the Garden cinema has accidentally duplicates all
+    // performances, so that they show twice. Detect this and filter them out.
+    const isPerformanceDuplicate = performances.find(
+      (performance) =>
+        performance.time === date.getTime() && performance.bookingUrl === url,
+    );
+    if (isPerformanceDuplicate) return;
 
     performances.push(
       createPerformance({
         date,
         notesList: getNotes($(this)),
-        url: $screeningTime.find("a").attr("href"),
+        url,
         status: getStatus($(this)),
         accessibility: createAccessibility(getAccessibility($(this))),
       }),
