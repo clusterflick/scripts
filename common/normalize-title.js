@@ -30,6 +30,7 @@ function normalizeTitle(title, options) {
     ["Average Rob -", "Average Rob:"],
     ["Roger Waters -", "Roger Waters:"],
     ["CBeebies Musical - ", "CBeebies Musical: "],
+    ["CBeebies - ", "CBeebies: "],
     ["Modigliani - ", "Modigliani: "],
     ["Closing Night + Awards", "Closing Night and Awards"],
     ["Poetry Slam", "Event: Poetry Slam"],
@@ -66,8 +67,8 @@ function normalizeTitle(title, options) {
     [/^seven$/i, "se7en"],
     ["The Return The Return", "The Return"],
     ["Wildnerness", "Wilderness"],
-    [/\s+du$/i, ""], // Dubbed
-    [/\s+su$/i, ""], // subbed
+    [/\s+dub?$/i, ""], // Dubbed
+    [/\s+sub?$/i, ""], // subbed
     [/\s+3d$/i, ""], // 3d
     ["Vasthunnam", "Vasthunam"],
     ["Melagaon", "Malegaon"],
@@ -419,7 +420,8 @@ function normalizeTitle(title, options) {
     .replace(/[:|&]$/, "")
     .replace(/'|`|\u200B|‘|’|"|“|”|²|®|,|/g, "")
     .replace(/\s+(-|–)(\s|$)/g, " ")
-    .replace(/(\s|^)(-|–)\s+/g, " ")
+    .replace(/\s+(-|–)\s+/g, " ")
+    .replace(/^(-|–)/g, "")
     .replace(/(-|–|\()$/g, "")
     .replace(/!|:|\.|\*|…|—|]|<|>/g, " ")
     .replace(/\s+/g, " ")
