@@ -362,6 +362,7 @@ const knownRemovablePhrases = [
   "tlor:",
   "Tom Cruise Day:",
   "Tom Cruise:",
+  "UFF 2025:",
   "Valentine's Day:",
   "VE Day Anniversary:",
   "Wallace & Gromit in ",
