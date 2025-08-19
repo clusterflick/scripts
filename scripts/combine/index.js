@@ -131,8 +131,17 @@ async function combine() {
           ` - Retriving data for ${outputTitle} ... ${"".padEnd(35 - outputTitle.length, " ")}`,
         );
         try {
-          movieInfo = await getMovieInfoAndCacheResults(themoviedb);
-          rottenTomatoes = await findRottenTomatoesMatch(movieInfo);
+          try {
+            movieInfo = await getMovieInfoAndCacheResults(themoviedb);
+            rottenTomatoes = await findRottenTomatoesMatch(movieInfo);
+          } catch {
+            // Try again to get the data if it fails. The movie info will be
+            // cached from the previous run if it was successful.
+            process.stdout.write(`\\t🔄`);
+            movieInfo = await getMovieInfoAndCacheResults(themoviedb);
+            rottenTomatoes = await findRottenTomatoesMatch(movieInfo);
+          }
+
           console.log(
             `\t✅ Retrieved (${Math.round((Date.now() - start) / 1000)}s)`,
           );
