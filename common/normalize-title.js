@@ -223,6 +223,7 @@ function normalizeTitle(title, options) {
     ["Pip and Posy's", "Pip and Posy"],
     ["10 + 10", "10 plus 10"],
     ["Super Connected Live", "Super Connected"],
+    ["wall-e", "WALL·E"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
