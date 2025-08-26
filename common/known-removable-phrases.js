@@ -382,6 +382,7 @@ const knownRemovablePhrases = [
   "UFF 2025:",
   "Valentine's Day:",
   "VE Day Anniversary:",
+  "Visions of Ukraine:",
   "Wallace & Gromit in ",
   "Windrush Caribbean Film Festival 2025:",
   "International Women's Day:",

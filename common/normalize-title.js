@@ -31,6 +31,7 @@ function normalizeTitle(title, options) {
     ["Roger Waters -", "Roger Waters:"],
     ["CBeebies Musical - ", "CBeebies Musical: "],
     ["CBeebies - ", "CBeebies: "],
+    [" - The Musical", ": The Musical"],
     ["Modigliani - ", "Modigliani: "],
     ["Closing Night + Awards", "Closing Night and Awards"],
     ["Poetry Slam", "Event: Poetry Slam"],
@@ -224,6 +225,9 @@ function normalizeTitle(title, options) {
     ["10 + 10", "10 plus 10"],
     ["Super Connected Live", "Super Connected"],
     ["wall-e", "WALL·E"],
+    ["Die Hard 2: Die Harder", "Die Hard 2"],
+    ["PRINCE - SIGN O'THE TIMES", "PRINCE: SIGN O THE TIMES"],
+    [" 2.1 ", " 2 "],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
