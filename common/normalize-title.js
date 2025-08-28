@@ -73,7 +73,9 @@ function normalizeTitle(title, options) {
     [/\s+3d$/i, ""], // 3d
     ["Vasthunnam", "Vasthunam"],
     ["Melagaon", "Malegaon"],
+    ["Chadian", "Chadum"],
     ["Carvaggio", "Caravaggio"],
+    ["Acroyd", "Ackroyd"],
     ["10180", "1080"],
     ["unknwon", "unknown"],
     ["colourful", "colorful"],
