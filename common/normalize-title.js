@@ -230,6 +230,7 @@ function normalizeTitle(title, options) {
     ["Die Hard 2: Die Harder", "Die Hard 2"],
     ["PRINCE - SIGN O'THE TIMES", "PRINCE: SIGN O THE TIMES"],
     [" 2.1 ", " 2 "],
+    ["Disney Junior Cinema Club 2025", "Disney Junior Cinema Club"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
