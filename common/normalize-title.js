@@ -195,6 +195,7 @@ function normalizeTitle(title, options) {
       /^Demon Slayer: Mugen Train\s?(?:-|$)/i,
       "Demon Slayer The Movie Mugen Train -",
     ],
+    ["Demon Slayer-Infinity Castle", "Demon Slayer Infinity Castle"],
     ["OCEAN WITH DAVID ATTENBOROUGH", "David Attenborough: Ocean"],
     [/^Sylvanian Families$/i, "Sylvanian Families The Movie"],
     ["Gravy Train Screening", "Gravy Train Short Film"],
