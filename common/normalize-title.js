@@ -15,6 +15,8 @@ function normalizeTitle(title, options) {
 
   // Specific corrections
   const corrections = [
+    [/:? The Movie$/i, ""],
+    [/F1\s?®? The Movie/i, "F1"],
     [/^Times\+ Preview$/i, "The Last Journey"], // NOTE: This may need updated in the future if there's a new times preview out with a similarly poor title
     [" + Cat", " and Cat"],
     [" + Zog", " and Zog"],
@@ -197,7 +199,7 @@ function normalizeTitle(title, options) {
     ],
     ["Demon Slayer-Infinity Castle", "Demon Slayer Infinity Castle"],
     ["OCEAN WITH DAVID ATTENBOROUGH", "David Attenborough: Ocean"],
-    [/^Sylvanian Families$/i, "Sylvanian Families The Movie"],
+    [/(^|\s)Sylvanian Families$/i, " Sylvanian Families The Movie"],
     ["Gravy Train Screening", "Gravy Train Short Film"],
     [
       "African Kung Fu Nazis & African Kung Fu Nazis II",
