@@ -234,6 +234,11 @@ function normalizeTitle(title, options) {
     ["PRINCE - SIGN O'THE TIMES", "PRINCE: SIGN O THE TIMES"],
     [" 2.1 ", " 2 "],
     ["Disney Junior Cinema Club 2025", "Disney Junior Cinema Club"],
+    ["Downtown Abbey", "Downton Abbey"],
+    [
+      "Reality Is Not Enough: Irvine Welsh",
+      "Irvine Welsh: Reality Is Not Enough",
+    ],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
