@@ -23,39 +23,47 @@ const generationConfig = {
   maxOutputTokens: 8192,
 };
 
-function convertToPrompt(movie, results) {
-  const movieYear = movie.year ? `\nYear: ${movie.year}` : "";
+function convertToPrompt(movie, results, normalizedTitle) {
+  const movieYear = movie.year ? `Year: ${movie.year}\n` : "";
   const movieClassification = movie.classification
-    ? `\nClassification: ${movie.classification}`
+    ? `Classification: ${movie.classification}\n`
     : "";
 
   return `
-${movie.title}${movieYear}${movieClassification}
-
+Cinema listing title: ${movie.title}
+Normalized title: ${normalizedTitle}
+${movieYear}${movieClassification}
+Overview from the cinema listing, contained between the "---" delimeters:
+---
 ${movie.matchingHints.overview}
+---
 
-Using the JSON search response below, see if there is a match for the details above, which are from a cinema listing.
+Using the JSON search response below, see if there is a match for the details above, which are from a cinema listing. The "overview" for each result in the JSON will contain key details to match on.
+Try to match using the normalized title above first. If you are unable to find a match with a high confidence using that title, then try to match using the cinema listing title.
 Take todays date into account when considering which movie could match this cinema listing. Movies which are not released yet, or have release dates more than a year in the future are unlikely to be good matches.
 
 ${JSON.stringify(results)}
 `.trim();
 }
 
-module.exports = async function askLlmToReviewResults(movie, results) {
-  const normalizedTitle = basicNormalize(movie.title);
-  const isAnniversaryShowing = normalizedTitle.includes("anniversary");
+module.exports = async function askLlmToReviewResults(
+  movie,
+  results,
+  normalizedTitle,
+) {
+  const isAnniversary = basicNormalize(movie.title).includes("anniversary");
   // If we've no matching hints, don't use LLM
   // If we've no hint overview, don't use LLM unless it's an anniversary showing
   // (in which case the LLM might just get it without the overview hint)
   if (
     !movie.matchingHints ||
-    (!movie.matchingHints.overview && !isAnniversaryShowing)
+    (!movie.matchingHints.overview && !isAnniversary)
   ) {
     return { match: null, confidence: 0 };
   }
 
   console.log(` - Asking LLM to match "${movie.title}" against results`);
-  const prompt = convertToPrompt(movie, results);
+  const prompt = convertToPrompt(movie, results, normalizedTitle);
 
   return dailyCache(`ask-llm-with-results-${getId(prompt)}`, async () => {
     const chatSession = model.startChat({ generationConfig, history: [] });

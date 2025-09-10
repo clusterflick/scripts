@@ -316,9 +316,9 @@ const tryFindingMatchUsingLlm = async (movie) => {
   return null;
 };
 
-const reviewResultsUsingLlm = async (movie, results) => {
+const reviewResultsUsingLlm = async (movie, results, normalizedTitle) => {
   const result = await runLlmFunction(() =>
-    askLlmToReviewResults(movie, results),
+    askLlmToReviewResults(movie, results, normalizedTitle),
   );
   if (result === null) return null;
 
@@ -380,6 +380,7 @@ const searchForBestMatch = async ({
         const bestLlmMatchFromResults = await reviewResultsUsingLlm(
           movie,
           searchTitle.results,
+          normalizedTitle,
         );
         if (bestLlmMatchFromResults) return bestLlmMatchFromResults;
       }
