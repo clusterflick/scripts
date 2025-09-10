@@ -38,6 +38,7 @@ function normalizeTitle(title, options) {
     ["Closing Night + Awards", "Closing Night and Awards"],
     ["Poetry Slam", "Event: Poetry Slam"],
     ["Scared To Dance -", "Scared To Dance "],
+    ["ODEON Pride Nights - ", "ODEON Pride Nights "],
     ["Hitchcock: The Gainsborough Days -", "Hitchcock: The Gainsborough Days "],
     ["Sky Original -", "Sky Original "],
     ["Green Screen -", "Green Screen "],
