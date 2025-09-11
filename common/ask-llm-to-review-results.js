@@ -30,8 +30,7 @@ function convertToPrompt(movie, results, normalizedTitle) {
     : "";
 
   return `
-Cinema listing title: ${movie.title}
-Normalized title: ${normalizedTitle}
+Title: ${normalizedTitle}
 ${movieYear}${movieClassification}
 Overview from the cinema listing, contained between the "---" delimeters:
 ---
@@ -39,7 +38,6 @@ ${movie.matchingHints.overview}
 ---
 
 Using the JSON search response below, see if there is a match for the details above, which are from a cinema listing. The "overview" for each result in the JSON will contain key details to match on.
-Try to match using the normalized title above first. If you are unable to find a match with a high confidence using that title, then try to match using the cinema listing title.
 Take todays date into account when considering which movie could match this cinema listing. Movies which are not released yet, or have release dates more than a year in the future are unlikely to be good matches.
 
 ${JSON.stringify(results)}
