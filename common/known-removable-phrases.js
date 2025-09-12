@@ -163,6 +163,7 @@ const knownRemovablePhrases = [
   "London Film Premier",
   "2025 MEET-UP",
   "& Special Introduction",
+  "The Movie: Reze Arc",
 
   // Prefixes
   "(4DX) ",

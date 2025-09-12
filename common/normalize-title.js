@@ -98,6 +98,7 @@ function normalizeTitle(title, options) {
     ["Lynch: Fire Walk With Me", "Lynch: Twin Peaks Fire Walk With Me"],
     ["War Paint: Woman at War", "War Paint: Women at War"],
     ["Big Night Out: New Moon", "Big Night Out: The Twilight Saga: New Moon"],
+    ["The Twilight Saga: Twilight", "Twilight"],
     ["David Lynch: The Short Films", "The Short Films of David Lynch"],
     ["Battleground + intro ", "Battlefield + intro "], // BFI gets the name of the movie wrong
     ["The Dawn of Impressionism", "Dawn of Impressionism"],
