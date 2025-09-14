@@ -4,6 +4,7 @@ const {
   createPerformance,
   createAccessibility,
   generateShowingId,
+  isPrivateHire,
 } = require("../../common/utils");
 
 const screenMapping = {
@@ -45,6 +46,8 @@ async function transform(
         {},
       ),
     ).sort((a, b) => a > b);
+
+    if (isPrivateHire(movie.name)) return moviesAtCinema;
 
     const transformedMovie = {
       showingId: generateShowingId(attributes, movie.id),
