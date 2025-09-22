@@ -119,6 +119,10 @@ function normalizeTitle(title, options) {
       "Films That Fuck",
       "Films That Fuck: Re-uses of Pornography in Moving Image Practices During the HIV/AIDS Crisis and the Present",
     ],
+    [
+      "Films that F*ck 2: Californian Gay Pornotragedies",
+      "Victim of Circumstance",
+    ],
     ["(True True)", "(True)²"], // Fix for Evangelion: Death (True)²
     ["3.0+1.01", "3.0+1.0"], // Fix for Evangelion: 3.0+1.0 Thrice Upon a Time to combine with updated version release
     [
@@ -241,6 +245,7 @@ function normalizeTitle(title, options) {
       "Reality Is Not Enough: Irvine Welsh",
       "Irvine Welsh: Reality Is Not Enough",
     ],
+    ["Dora: Magic Mermaid Adventures", "Dora: Mermaid Adventures"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
