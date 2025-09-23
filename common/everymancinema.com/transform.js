@@ -22,7 +22,7 @@ async function transform(
       duration: movie.runtime ? movie.runtime / 60 : undefined,
       categories: movie.genres,
       actors: movie.casting,
-      directors: movie.direction.concat(movie.coDirection),
+      directors: (movie.direction || []).concat(movie.coDirection || []),
       classification: movie.certificate,
       trailer: movie.trailer.youtube?.[0],
     });
