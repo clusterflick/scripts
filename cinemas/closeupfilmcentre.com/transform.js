@@ -42,12 +42,14 @@ async function transform({ moviePages }, sourcedEvents) {
       const dateString = getText($cells.eq(1));
       const timeString = getText($cells.eq(2));
       const date = parseDate(`${dateString} @ ${timeString}`);
-      const url = $cells.eq(3).find("a").attr("href");
-      performances.push(createPerformance({ date, url }));
+      const bookingUrl = $cells.eq(3).find("a").attr("href");
+      performances.push(createPerformance({ date, url: bookingUrl || url }));
     });
 
     const href = $performanceRows.eq(0).find("td a").eq(0).attr("href");
-    const id = href.split("/close-up-cinema/")[1];
+    const id = href
+      ? href.split("/close-up-cinema/")[1]
+      : url.split("/film_programmes/")[1];
     const showingId = generateShowingId(attributes, id);
     movies.push({
       showingId,
