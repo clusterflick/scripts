@@ -246,6 +246,7 @@ function normalizeTitle(title, options) {
       "Irvine Welsh: Reality Is Not Enough",
     ],
     ["Dora: Magic Mermaid Adventures", "Dora: Mermaid Adventures"],
+    ["LEGACY AFRICA FILM", "Legacy Africa "],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
