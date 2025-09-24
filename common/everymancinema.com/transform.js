@@ -8,7 +8,7 @@ const {
 
 async function transform(
   attributes,
-  { movieListPage, moviePages: { movieData, attributeData } },
+  { movieListPage, moviePages: { movieData, movieDetails, attributeData } },
   sourcedEvents,
 ) {
   const { domain, cinemaId } = attributes;
@@ -18,12 +18,15 @@ async function transform(
 
     if (!movieListPage[movie.id]) return moviesAtThreate;
 
+    const movieInfo = movieDetails.find(({ id }) => id === movie.id) || {};
     const overview = createOverview({
-      duration: movie.runtime ? movie.runtime / 60 : undefined,
-      categories: movie.genres,
-      actors: movie.casting,
-      directors: (movie.direction || []).concat(movie.coDirection || []),
-      classification: movie.certificate,
+      duration: movieInfo.runtime ? movieInfo.runtime / 60 : undefined,
+      categories: movieInfo.genres,
+      actors: movieInfo.casting,
+      directors: (movieInfo.direction || []).concat(
+        movieInfo.coDirection || [],
+      ),
+      classification: movieInfo.certificate,
       trailer: movie.trailer.youtube?.[0],
     });
 

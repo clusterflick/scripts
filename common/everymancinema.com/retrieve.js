@@ -35,6 +35,15 @@ async function retrieve({ domain, url, cinemaId }) {
     websiteId,
   };
 
+  const params = new URLSearchParams();
+  params.append("basic", "false");
+  params.append("castingLimit", "10");
+  movieIds.forEach((movieId) => params.append("ids", movieId));
+  const movieDetailsResponse = await fetch(
+    `https://www.everymancinema.com/api/gatsby-source-boxofficeapi/movies?${params}`,
+  );
+  const movieDetails = await movieDetailsResponse.json();
+
   const scheduleResponse = await fetch(
     "https://www.everymancinema.com/api/gatsby-source-boxofficeapi/schedule",
     {
@@ -46,7 +55,7 @@ async function retrieve({ domain, url, cinemaId }) {
 
   return {
     movieListPage: schedule[cinemaId].schedule,
-    moviePages: { movieData, attributeData },
+    moviePages: { movieData, movieDetails, attributeData },
   };
 }
 
