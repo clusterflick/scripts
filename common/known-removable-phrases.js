@@ -182,6 +182,7 @@ const knownRemovablePhrases = [
   "Academy Awards Best Picture 2025:",
   "Agnes Varda's",
   "Akira Kurosawa's ",
+  "Andrew Lloyd Webber's",
   "AnimeGirlsOnline:",
   "Animation at War:",
   "Art of Action:",
