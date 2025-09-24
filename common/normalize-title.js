@@ -22,6 +22,15 @@ function normalizeTitle(title, options) {
     [" + Zog", " and Zog"],
     [" + Superworm", " and Superworm"],
     [" + The Gruffalo's Child", " and The Gruffalo's Child"],
+    [
+      /^Taylor Swift The Official Release Party$/i,
+      "Taylor Swift The Official Release Party Of A Showgirl",
+    ],
+    [
+      /Taylor Swift (\||\/) (The )?Release /i,
+      "Taylor Swift The Official Release ",
+    ],
+    [/Taylor Swift (\||\/) The /i, "Taylor Swift The "],
     ["Relaxed Screening + Discussion:", "Relaxed Screening & Discussion:"],
     [/^LD:/i, "LD Friendly:"],
     [/^Re-Viewing /i, ""],
