@@ -182,7 +182,6 @@ function normalizeTitle(title, options) {
     ["Past Present Future Podcast", "Past+Present+Future Podcast"],
     ["seventeen [right here]", "seventeen right here"], // remove brackets from this band name
     ["Exclusive Screening of Highly Acclaimed Bengali Feature Film - ", ""],
-    ["Mission: Impossible - ", "Mission: Impossible – "],
     ["Festival: Shorts -", "Festival: Shorts –"],
     ["Ori - Rebirth", "Ori: Rebirth"],
     ["Premiere and Networking Event - ", "Premiere and Networking Event: "],
@@ -201,8 +200,12 @@ function normalizeTitle(title, options) {
     ["Hidden (Cache)", "Hidden Cache"],
     ["Hidden (Caché)", "Hidden Cache"],
     ["- Special Double Bill", " Special Double Bill"],
+    ["Mission: Impossible - ", "Mission: Impossible – "],
     ["Mission: Impossible 8 (", "Mission: Impossible – The Final Reckoning ("],
+    ["Mission: Impossible 2", "Mission: Impossible II"],
     ["MI 8: The Final Reckoning", "Mission: Impossible – The Final Reckoning"],
+    ["M:I Season - ", "M:I Season: "],
+    [/M:I Season: (?!Mission)/i, "M:I Season: Mission: Impossible – "],
     ["Children’s Classics on 16mm", "Children’s Classics 16mm"],
     ["[TOWARDS THE LIGHT", "TOWARDS THE LIGHT"],
     // Fixes accidental match on "I Like To Watch", which in this case is a movie marathon
@@ -213,6 +216,7 @@ function normalizeTitle(title, options) {
       "Demon Slayer The Movie Mugen Train -",
     ],
     ["Demon Slayer-Infinity Castle", "Demon Slayer Infinity Castle"],
+    ["Demon Slayer: The Movie -", "Demon Slayer "],
     ["OCEAN WITH DAVID ATTENBOROUGH", "David Attenborough: Ocean"],
     [/(^|\s)Sylvanian Families$/i, " Sylvanian Families The Movie"],
     ["Gravy Train Screening", "Gravy Train Short Film"],
