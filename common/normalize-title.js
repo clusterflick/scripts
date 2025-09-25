@@ -206,6 +206,8 @@ function normalizeTitle(title, options) {
     ["MI 8: The Final Reckoning", "Mission: Impossible – The Final Reckoning"],
     ["M:I Season - ", "M:I Season: "],
     [/M:I Season: (?!Mission)/i, "M:I Season: Mission: Impossible – "],
+    [/Dead Reckoning$/i, "Dead Reckoning Part One"],
+    [/Dead Reckoning (?!Part)/i, "Dead Reckoning Part One "],
     ["Children’s Classics on 16mm", "Children’s Classics 16mm"],
     ["[TOWARDS THE LIGHT", "TOWARDS THE LIGHT"],
     // Fixes accidental match on "I Like To Watch", which in this case is a movie marathon
@@ -260,6 +262,7 @@ function normalizeTitle(title, options) {
     ],
     ["Dora: Magic Mermaid Adventures", "Dora: Mermaid Adventures"],
     ["LEGACY AFRICA FILM", "Legacy Africa "],
+    [/^(.+) Block \d+(.+FF(\s+\d{4})?)?$/i, "$1 Block $2"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
