@@ -263,6 +263,7 @@ function normalizeTitle(title, options) {
     ["Dora: Magic Mermaid Adventures", "Dora: Mermaid Adventures"],
     ["LEGACY AFRICA FILM", "Legacy Africa "],
     [/^(.+) Block \d+(.+FF(\s+\d{4})?)?$/i, "$1 Block $2"],
+    ["Kantara A Legend", "Kantara"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
