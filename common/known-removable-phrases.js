@@ -61,6 +61,7 @@ const knownRemovablePhrases = [
   " with score by Pet Shop Boys",
   " Music by Pet Shop Boys",
   " with Ranjit S. Ruprai",
+  " In Conversation with James Chinlund",
   "– In Concert",
   " in concert",
   "- UK PREMIERE",
