@@ -49,6 +49,7 @@ const metOperaPrefixes = [
   /The Met[:|\s]/i,
   /Met:/i,
   /The Metropolitan Opera:/i,
+  /RBO.+The Metropolitan Opera:/i,
 ];
 
 function standardizePrefixingForMetropolitanOperaPerformances(title, options) {
@@ -61,20 +62,30 @@ function standardizePrefixingForMetropolitanOperaPerformances(title, options) {
 
   updatedPrefixTitle = updatedPrefixTitle.replace(ownerMatcher, ":");
 
+  let year = new Date().getFullYear();
+
   const yearRangeMatch = updatedPrefixTitle.match(yearRangeMatcher);
   if (yearRangeMatch) {
-    updatedPrefixTitle = `${updatedPrefixTitle.replace(yearRangeMatcher, "")} (${yearRangeMatch[1]}${yearRangeMatch[3]})`;
+    year = `${yearRangeMatch[1]}${yearRangeMatch[3]}`;
+    updatedPrefixTitle = updatedPrefixTitle.replace(yearRangeMatcher, "");
   }
 
   const shortYearRangeMatch = updatedPrefixTitle.match(shortYearRangeMatcher);
   if (shortYearRangeMatch) {
-    updatedPrefixTitle = `${updatedPrefixTitle.replace(shortYearRangeMatcher, "")} (20${shortYearRangeMatch[2]})`;
+    year = `20${shortYearRangeMatch[2]}`;
+    updatedPrefixTitle = updatedPrefixTitle.replace(shortYearRangeMatcher, "");
   }
 
   const yearMatch = updatedPrefixTitle.match(yearMatcher);
   if (yearMatch) {
-    updatedPrefixTitle = `${updatedPrefixTitle.replace(yearMatcher, "")} (${yearMatch[1]})`;
+    year = `${yearMatch[1]}`;
+    updatedPrefixTitle = updatedPrefixTitle.replace(yearMatcher, "");
   }
+
+  const yearNumber = parseInt(year, 10);
+  const isFutureYear = yearNumber > new Date().getFullYear();
+  year = isFutureYear ? `${yearNumber - 1}` : year;
+  updatedPrefixTitle = `${updatedPrefixTitle} (${year})`;
 
   if (!options.retainYear) {
     updatedPrefixTitle = updatedPrefixTitle.replace(yearSuffixMatcher, "");
@@ -101,8 +112,8 @@ const rboPrefixes = [
   /Royal Ballet and Opera[:|\s]/i,
   /Royal Ballet & Opera[:|\s]/i,
   /Royal Opera House[:|\s]/i,
-  /The Royal Ballet[:|\s]/i,
-  /The Royal Opera[:|\s]/i,
+  /^The Royal Ballet[:|\s]/i,
+  /^The Royal Opera[:|\s]/i,
   /RB&O Live:/i,
   /RB&O:/i,
 ];
@@ -121,7 +132,7 @@ function standardizePrefixingForRoyalBalletOperaPerformances(title) {
 
   updatedPrefixTitle = updatedPrefixTitle.replace(ownerMatcher, ":");
 
-  let year;
+  let year = new Date().getFullYear();
 
   const yearRangeMatch = updatedPrefixTitle.match(yearRangeMatcher);
   if (yearRangeMatch) {
@@ -135,25 +146,31 @@ function standardizePrefixingForRoyalBalletOperaPerformances(title) {
     updatedPrefixTitle = updatedPrefixTitle.replace(shortYearRangeMatcher, "");
   }
 
+  const yearSuffixMatch = updatedPrefixTitle.match(yearSuffixMatcher);
+  if (yearSuffixMatch) {
+    const yearSuffix = yearSuffixMatch[0].replaceAll(/[()]/g, "");
+    const yearNumber = parseInt(yearSuffix, 10);
+    const isFutureYear = yearNumber > new Date().getFullYear();
+    year = isFutureYear ? `${yearNumber - 1}` : yearSuffix;
+    updatedPrefixTitle = updatedPrefixTitle.replace(yearMatcher, "");
+  }
+
   const yearMatch = updatedPrefixTitle.match(yearMatcher);
   if (yearMatch) {
     year = yearMatch[1];
     updatedPrefixTitle = updatedPrefixTitle.replace(yearMatcher, "");
   }
 
-  const yearSuffixMatch = updatedPrefixTitle.match(yearSuffixMatcher);
-  if (yearSuffixMatch) {
-    year = yearSuffixMatch[0].replaceAll(/[()]/g, "");
-    updatedPrefixTitle = updatedPrefixTitle.replace(yearMatcher, "");
-  }
-
-  if (year) {
-    const [before, ...after] = updatedPrefixTitle.split(":");
-    updatedPrefixTitle = `${before} ${year}:${after.join(":")}`;
-  }
+  // Add the year value in (either calcualted or defaulted to this year)
+  const [before, ...after] = updatedPrefixTitle.split(":");
+  updatedPrefixTitle = `${before} ${year}:${after.join(":")}`;
 
   // Remove any year value -- they can't be relied upon
   updatedPrefixTitle = updatedPrefixTitle.replace(yearSuffixMatcher, "");
+
+  updatedPrefixTitle = updatedPrefixTitle
+    .replace(/the royal opera:/i, "")
+    .replace(/the royal ballet:/i, "");
 
   return updatedPrefixTitle
     .replace(/(\(\))+/, "")
@@ -190,7 +207,9 @@ function standardizePrefixingForTheatrePerformances(
     lowercaseTitle.startsWith("the met ") ||
     lowercaseTitle.startsWith("the met:") ||
     lowercaseTitle.startsWith("met:") ||
-    lowercaseTitle.startsWith("the metropolitan opera")
+    lowercaseTitle.startsWith("the metropolitan opera:") ||
+    (lowercaseTitle.startsWith("rbo ") &&
+      lowercaseTitle.includes("the metropolitan opera:"))
   ) {
     return standardizePrefixingForMetropolitanOperaPerformances(title, options);
   }

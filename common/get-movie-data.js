@@ -62,6 +62,8 @@ const matchesExpectedCastCrew = async (match, movie) => {
     );
 
     // Don't bother checking the Opera listings, they're usualy wrong
+    // TODO: This may be problematic as it'll just match any entry which has
+    // crew, even if it's the wrong one...
     if (
       directors.length &&
       basicNormalize(directors[0]) === "themetropolitanopera"
