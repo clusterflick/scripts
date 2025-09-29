@@ -87,6 +87,7 @@ function normalizeTitle(title, options) {
     ["Melagaon", "Malegaon"],
     ["Chadian", "Chadum"],
     ["Carvaggio", "Caravaggio"],
+    ["Seigfried", "Siegfried"],
     ["Acroyd", "Ackroyd"],
     ["10180", "1080"],
     ["unknwon", "unknown"],
@@ -264,6 +265,14 @@ function normalizeTitle(title, options) {
     ["LEGACY AFRICA FILM", "Legacy Africa "],
     [/^(.+) Block \d+(.+FF(\s+\d{4})?)?$/i, "$1 Block $2"],
     ["Kantara A Legend", "Kantara"],
+    [
+      /Royal Ballet & Opera \d{4}: La Sonnambula/i,
+      "The Metropolitan Opera: La Sonnambula",
+    ],
+    [
+      /Royal Ballet & Opera \d{4}: Eugene Onegin/i,
+      "The Metropolitan Opera: Eugene Onegin",
+    ],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
@@ -456,7 +465,7 @@ function normalizeTitle(title, options) {
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/\s*:\s+/g, ": ")
-    .replace(/\s+and\s+/gi, " ")
+    .replace(/\s+[a|u]nd\s+/gi, " ")
     .replace(/(?:\s+|^)&\s+/gi, " ")
     .replace(/[:|&]$/, "")
     .replace(/'|`|\u200B|‘|’|"|“|”|²|®|,|/g, "")
