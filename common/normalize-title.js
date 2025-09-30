@@ -261,7 +261,8 @@ function normalizeTitle(title, options) {
       "Reality Is Not Enough: Irvine Welsh",
       "Irvine Welsh: Reality Is Not Enough",
     ],
-    ["Dora: Magic Mermaid Adventures", "Dora: Mermaid Adventures"],
+    ["Dora the Explorer", "Dora"],
+    [/Dora:? Magic Mermaid Adventures/i, "Dora: Mermaid Adventures"],
     ["LEGACY AFRICA FILM", "Legacy Africa "],
     [/^(.+) Block \d+(.+FF(\s+\d{4})?)?$/i, "$1 Block $2"],
     ["Kantara A Legend", "Kantara"],
@@ -273,6 +274,7 @@ function normalizeTitle(title, options) {
       /Royal Ballet & Opera \d{4}: Eugene Onegin/i,
       "The Metropolitan Opera: Eugene Onegin",
     ],
+    ["Worlds25 - Finals in Cinema", "World Finals 2025"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
@@ -480,6 +482,7 @@ function normalizeTitle(title, options) {
     .replace(/^the /i, "")
     .replace(/([a-z])-([a-z])/gi, "$1$2")
     .replace(/\s+q&a$/i, "")
+    .replace(/\s3d$/i, "")
     .replace(/\+$/, "")
     .replace(/\([^)]+$/i, "") // Remove stuff in brackets where the last bracket got removed elsehwere (e.g. there was a separator within the brackets)
     .trim();
