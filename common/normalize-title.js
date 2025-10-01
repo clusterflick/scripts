@@ -275,6 +275,7 @@ function normalizeTitle(title, options) {
       "The Metropolitan Opera: Eugene Onegin",
     ],
     ["Worlds25 - Finals in Cinema", "World Finals 2025"],
+    ["Love + War", "Love+War"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {

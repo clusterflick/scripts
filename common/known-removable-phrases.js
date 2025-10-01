@@ -519,6 +519,7 @@ const knownRemovablePhrases = [
   "RIIZE Concert Tour",
   "U.K. Premiere & Q&A & Fine Wine Reception",
   "UK Premiere",
+  "World Premiere",
   "Premiere for",
   "the premiere",
   "premiere",
