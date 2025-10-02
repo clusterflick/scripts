@@ -22,7 +22,6 @@ const knownRemovablePhrases = [
   ": 4K World Premiere with Immersive Reception",
   ": 41st Anniversary",
   ": A Kabuki Salon",
-  ": Back Again",
   ": Black & White Version",
   ": The Final Cut",
   ": stu spasm",
