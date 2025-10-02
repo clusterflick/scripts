@@ -278,6 +278,8 @@ function normalizeTitle(title, options) {
     ],
     ["Worlds25 - Finals in Cinema", "World Finals 2025"],
     ["Love + War", "Love+War"],
+    ["Neighbour Totoro", "Neighbor Totoro"],
+    ["The Extra Terrestrial", "The Extra-Terrestrial"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
