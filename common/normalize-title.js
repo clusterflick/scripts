@@ -285,6 +285,8 @@ function normalizeTitle(title, options) {
     ["Love + War", "Love+War"],
     ["Neighbour Totoro", "Neighbor Totoro"],
     ["The Extra Terrestrial", "The Extra-Terrestrial"],
+    // Work around a weird issue with the moviedb API and a soft hyphen in the listing title
+    [/Tales from the Mag(\u00AD)?ic Garden/i, "Tales from the Garden"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
@@ -476,6 +478,7 @@ function normalizeTitle(title, options) {
   return title
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\u00AD/g, "") // Remove soft hyphens
     .replace(/\s*:\s+/g, ": ")
     .replace(/\s+[a|u]nd\s+/gi, " ")
     .replace(/(?:\s+|^)&\s+/gi, " ")
