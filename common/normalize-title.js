@@ -98,6 +98,7 @@ function normalizeTitle(title, options) {
     ["10180", "1080"],
     ["unknwon", "unknown"],
     ["colourful", "colorful"],
+    ["theater", "theatre"],
     ["Shanthamee Reethriyil", "Shanthamee Raathriyil"],
     ["Shanthamee Rathriyil", "Shanthamee Raathriyil"],
     ["Aabhyanthara Kuttavvali", "Aabhyanthara Kuttavaali"],
