@@ -44,11 +44,7 @@ function normalizeTitle(title, options) {
     ["CBeebies - ", "CBeebies: "],
     [" - The Musical", ": The Musical"],
     ["Westlife -", "Westlife:"],
-    [
-      "Royal Albert Hall (25th Anniversary Concert)",
-      "25th Anniversary Concert",
-    ],
-    ["Royal Albert Hall (25th Anniversary)", "25th Anniversary Concert"],
+    ["Westlife: 25th Anniversary Concert", "Westlife: Royal Albert Hall"],
     ["Modigliani - ", "Modigliani: "],
     ["Closing Night + Awards", "Closing Night and Awards"],
     ["Poetry Slam", "Event: Poetry Slam"],
