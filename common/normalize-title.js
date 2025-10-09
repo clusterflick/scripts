@@ -84,7 +84,7 @@ function normalizeTitle(title, options) {
     ["Wildnerness", "Wilderness"],
     [/\s+dub?$/i, ""], // Dubbed
     [/\s+sub?$/i, ""], // subbed
-    [/\s+3d$/i, ""], // 3d
+    [/\s+(3|2)d$/i, ""], // 3d or 2d
     ["Vasthunnam", "Vasthunam"],
     ["Melagaon", "Malegaon"],
     ["Chadian", "Chadum"],
@@ -259,6 +259,7 @@ function normalizeTitle(title, options) {
     ["PRINCE - SIGN O'THE TIMES", "PRINCE: SIGN O THE TIMES"],
     [" 2.1 ", " 2 "],
     ["Disney Junior Cinema Club 2025", "Disney Junior Cinema Club"],
+    ["Disney Junior Club 2025", "Disney Junior Cinema Club"],
     ["Downtown Abbey", "Downton Abbey"],
     [
       "Reality Is Not Enough: Irvine Welsh",
@@ -284,6 +285,7 @@ function normalizeTitle(title, options) {
     ["The Extra Terrestrial", "The Extra-Terrestrial"],
     // Work around a weird issue with the moviedb API and a soft hyphen in the listing title
     [/Tales from the Mag(\u00AD)?ic Garden/i, "Tales from the Garden"],
+    [" – Q&A with ", " + Q&A with "],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
