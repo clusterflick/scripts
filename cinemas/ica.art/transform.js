@@ -1,0 +1,97 @@
+const cheerio = require("cheerio");
+const {
+  generateShowingId,
+  convertToList,
+  getText,
+  createOverview,
+  createPerformance,
+  createAccessibility,
+  basicNormalize,
+} = require("../../common/utils");
+const attributes = require("./attributes");
+const { parseDate } = require("./utils");
+
+const getOverview = (colophon, trailer) => {
+  const details = convertToList(colophon);
+  const directorMatch = /^dirs?\.\s+/i;
+  const director = details.find((value) =>
+    value.toLowerCase().match(directorMatch),
+  );
+  const durationMatch = /\s+mins?\.?$/i;
+  const duration = details.find((value) =>
+    value.toLowerCase().match(durationMatch),
+  );
+  const yearMatch = /\s+\d{4}$/i;
+  const countryYear = details.find((value) =>
+    value.toLowerCase().match(yearMatch),
+  );
+
+  return createOverview({
+    year: countryYear ? countryYear.split(" ").at(-1) : undefined,
+    duration: duration?.replace(durationMatch, ""),
+    directors: director?.replace(directorMatch, ""),
+    trailer,
+  });
+};
+
+async function transform({ moviePages }, sourcedEvents) {
+  const movies = [];
+
+  for (const moviePageUrl in moviePages) {
+    const moviePage = moviePages[moviePageUrl];
+    const $ = cheerio.load(moviePage);
+
+    const title = Array.from($("a span.title").contents())
+      .map((el) => getText($(el)))
+      .join(" ")
+      .trim()
+      .replace(/\s+/g, " ");
+    const details = getText($("#colophon"));
+    const id = moviePageUrl.replace(`${attributes.domain}/films/`, "");
+    const trailer = $("#films-trailer iframe").attr("src");
+    const bookingUrl = $("#detail-body .row.select")
+      .attr("onclick")
+      .replace('location.href="', "")
+      .replace('";', "");
+
+    movies.push({
+      showingId: generateShowingId(attributes, id),
+      title,
+      url: moviePageUrl,
+      overview: getOverview(details, trailer),
+      performances: Array.from($(".performance-list .performance")).map(
+        (el) => {
+          const screen = getText($(el).find(".venue"));
+          const date = getText($(el).find(".date"));
+          const time = getText($(el).find(".time"));
+          const url = bookingUrl.match(/^https?:\/\//i)
+            ? bookingUrl
+            : `${attributes.domain}${bookingUrl}`;
+          return createPerformance({
+            date: parseDate(`${date} ${time}`),
+            url,
+            screen,
+            accessibility: createAccessibility({
+              subtitled: basicNormalize(details).includes(
+                "with english subtitles",
+              ),
+            }),
+          });
+        },
+      ),
+      matchingHints: {
+        overview: Array.from($("#colophon").prev().nextAll().not(".row.select"))
+          .map((el) => getText($(el)))
+          .join("\n")
+          .trim(),
+      },
+    });
+  }
+
+  const listOfSourcedEvents = Object.values(sourcedEvents).flatMap(
+    (events) => events,
+  );
+  return movies.concat(listOfSourcedEvents);
+}
+
+module.exports = transform;

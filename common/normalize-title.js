@@ -289,6 +289,7 @@ function normalizeTitle(title, options) {
     // Work around a weird issue with the moviedb API and a soft hyphen in the listing title
     [/Tales from the Mag(\u00AD)?ic Garden/i, "Tales from the Garden"],
     [" – Q&A with ", " + Q&A with "],
+    ["Stendalì: Still They Toll + ", ""],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
