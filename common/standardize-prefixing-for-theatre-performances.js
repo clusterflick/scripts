@@ -172,8 +172,8 @@ function standardizePrefixingForRoyalBalletOperaPerformances(title) {
   updatedPrefixTitle = updatedPrefixTitle.replace(yearSuffixMatcher, "");
 
   updatedPrefixTitle = updatedPrefixTitle
-    .replace(/the royal opera:/i, "")
-    .replace(/the royal ballet:/i, "");
+    .replace(/the\s+royal\s+opera:/i, "")
+    .replace(/the\s+royal\s+ballet:/i, "");
 
   return updatedPrefixTitle
     .replace(/(\(\))+/, "")
