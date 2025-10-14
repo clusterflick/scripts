@@ -43,6 +43,7 @@ function normalizeTitle(title, options) {
     ["CBeebies Musical - ", "CBeebies Musical: "],
     ["CBeebies - ", "CBeebies: "],
     ["Ex Libris - ", "Ex Libris: "],
+    ["Bison - ", "Bison: "],
     [/Luca\s+-\s+Seeing Red/i, "Luca – Seeing Red"],
     ["Chainsaw Man - The Movie:", "Chainsaw Man – The Movie:"],
     [" - The Musical", ": The Musical"],

@@ -438,6 +438,7 @@ const knownRemovablePhrases = [
   "T.S. Eliot's ",
   "The Dead Carpet :",
   "The IWGB screens:",
+  "The Machine That Kills Bad People:",
   "The World of Austen:",
   "Thrill Seekers:",
   "Thrill Seekers :",
