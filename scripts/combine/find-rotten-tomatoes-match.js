@@ -30,7 +30,7 @@ const getSearchResults = async (term) => {
         // important information.
         title: getText($title).replaceAll(" - ", " – "),
         url: $title.attr("href"),
-        year: $(el).attr("releaseyear"),
+        year: $(el).attr("release-year"),
       };
     })
     .get();
