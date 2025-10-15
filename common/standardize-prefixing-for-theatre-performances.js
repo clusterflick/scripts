@@ -199,7 +199,7 @@ function standardizePrefixingForTheatrePerformances(
   }
 
   if (
-    lowercaseTitle.startsWith("nt live:") ||
+    lowercaseTitle.match(/(^|\s)nt live:?/i) ||
     lowercaseTitle.startsWith("nt live broadcast:")
   ) {
     return standardizePrefixingForNationalTheatrePerformances(title, options);

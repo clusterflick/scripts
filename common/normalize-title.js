@@ -50,6 +50,7 @@ function normalizeTitle(title, options) {
     ["Westlife -", "Westlife:"],
     ["Westlife: 25th Anniversary Concert", "Westlife: Royal Albert Hall"],
     ["Modigliani - ", "Modigliani: "],
+    ["Preview Screening - ", "Preview Screening: "],
     ["Closing Night + Awards", "Closing Night and Awards"],
     ["Poetry Slam", "Event: Poetry Slam"],
     ["Scared To Dance -", "Scared To Dance "],
@@ -463,6 +464,10 @@ function normalizeTitle(title, options) {
   });
 
   const hasYear = title.trim().match(/\(\d{4}\)$/);
+  if (hasYear) {
+    title = title.replace(/\((\d{4})\)$/, " ($1)"); // Add a space before it
+  }
+
   const hasEpisodeList = title.trim().match(/\(episodes[^(]*\)$/i);
   if (!hasYear && !hasEpisodeList) {
     title = title.replace(/\([^(]*\)$/, "").trim();
