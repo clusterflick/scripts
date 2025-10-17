@@ -488,6 +488,7 @@ function normalizeTitle(title, options) {
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/\u00AD/g, "") // Remove soft hyphens
+    .replace(/\uFFFD/g, '') // Remove Unicode Replacement Character
     .replace(/\s*:\s+/g, ": ")
     .replace(/\s+[a|u]nd\s+/gi, " ")
     .replace(/(?:\s+|^)&\s+/gi, " ")
