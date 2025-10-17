@@ -46,10 +46,16 @@ async function transform({ moviePages }, sourcedEvents) {
       performances.push(createPerformance({ date, url: bookingUrl || url }));
     });
 
-    const href = $performanceRows.eq(0).find("td a").eq(0).attr("href");
-    const id = href
-      ? href.split("/close-up-cinema/")[1]
-      : url.split("/film_programmes/")[1];
+    const hrefs = new Set(
+      $performanceRows
+        .map((i, el) => $(el).find("td a").eq(0).attr("href"))
+        .get(),
+    );
+    const href = [...hrefs][0];
+    const id =
+      hrefs.size === 1 && href
+        ? href.split("/close-up-cinema/")[1]
+        : url.split("/film_programmes/")[1];
     const showingId = generateShowingId(attributes, id);
     movies.push({
       showingId,
