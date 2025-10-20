@@ -293,6 +293,7 @@ function normalizeTitle(title, options) {
     [" – Q&A with ", " + Q&A with "],
     ["Stendalì: Still They Toll + ", ""],
     [/\s+Part\s+(\d+)(\s|:|$)/i, " $1$2"],
+    ["Bāhubali", "Baahubali"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
