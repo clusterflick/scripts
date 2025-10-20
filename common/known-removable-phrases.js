@@ -55,6 +55,7 @@ const knownRemovablePhrases = [
   ": Opening Night Special",
   ": Music By Pet Shop Boys",
   ": resurrected! a celebration",
+  ": Resurrected!",
   ": The Original Broadway Production",
   ": Hippo-licious",
   ": The Sneakers",
