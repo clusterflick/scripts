@@ -292,6 +292,7 @@ function normalizeTitle(title, options) {
     [/Tales from the Mag(\u00AD)?ic Garden/i, "Tales from the Garden"],
     [" – Q&A with ", " + Q&A with "],
     ["Stendalì: Still They Toll + ", ""],
+    [/\s+Part\s+(\d+)(\s|:|$)/i, " $1$2"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
@@ -488,7 +489,7 @@ function normalizeTitle(title, options) {
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/\u00AD/g, "") // Remove soft hyphens
-    .replace(/\uFFFD/g, '') // Remove Unicode Replacement Character
+    .replace(/\uFFFD/g, "") // Remove Unicode Replacement Character
     .replace(/\s*:\s+/g, ": ")
     .replace(/\s+[a|u]nd\s+/gi, " ")
     .replace(/(?:\s+|^)&\s+/gi, " ")

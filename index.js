@@ -2,7 +2,7 @@
 
 const fs = require("node:fs").promises;
 const path = require("node:path");
-const { readJSON, writeJSON } = require("./common/utils");
+const { readJSON, writeJSON, sanitizePathSegment } = require("./common/utils");
 
 const setupDirectory = async (type) => {
   const directoryPath = path.join(process.cwd(), type);
@@ -24,6 +24,23 @@ const setupDirectory = async (type) => {
     await setupDirectory("combined-data");
     await writeJSON(
       path.join(process.cwd(), "combined-data", "combined-data.json"),
+      output,
+    );
+    return;
+  }
+
+  if (action.toLowerCase() === "match") {
+    if (!location) throw new Error("No source provided");
+
+    const match = require("./scripts/match");
+    const output = await match(location);
+    await setupDirectory("matched-data");
+    await writeJSON(
+      path.join(
+        process.cwd(),
+        "matched-data",
+        `${sanitizePathSegment(location)}.json`,
+      ),
       output,
     );
     return;

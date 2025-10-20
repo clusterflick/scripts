@@ -18,6 +18,17 @@ const writeJSON = async (filePath, value) => {
 const basicNormalize = (value = "") =>
   value.toLowerCase().replaceAll(",", "").replace(/\s+/g, " ").trim();
 
+const sanitizePathSegment = (value = "") => {
+  return value
+    .normalize("NFKC")
+    .replace(/\0/g, "")
+    .replace(/[/\\]+/g, "-") // replace separators
+    .replace(/^[.\s]+/, "") // avoid hidden files / traversal
+    .toLowerCase()
+    .replace(/[^a-z0-9-]/g, "") // whitelist chars
+    .slice(0, 255);
+};
+
 const sortAndFilterMovies = (movies) => {
   const startOfToday = startOfDay(new Date());
 
@@ -294,6 +305,7 @@ module.exports = {
   readJSON,
   writeJSON,
   basicNormalize,
+  sanitizePathSegment,
   sortAndFilterMovies,
   getMovieTitleAndYearFrom,
   convertToList,
