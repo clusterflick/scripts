@@ -16,8 +16,9 @@ const getMoviePage = async (id, urlBase) => {
     // Check for an error page and fail if we find one
     const { error } = appData.props.pageProps;
     if (error) {
-      console.log("Error:", error);
-      throw new Error(`Request failed: ${error.message || "Unknown"}`);
+      throw new Error(
+        `Request failed: ${error.message || error.name || "Error found on page"}`,
+      );
     }
     return contents;
   });
