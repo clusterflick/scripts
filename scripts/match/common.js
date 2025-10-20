@@ -67,6 +67,10 @@ const broadYearRangeMatcher = (searchResult, movie) => {
   return searchResultYear >= movieYear - 7 && searchResultYear <= movieYear + 7;
 };
 
+const noYearRangeMatcher = () => {
+  return true;
+};
+
 const normaliseAndParseInt = (value) => parseInt(value.replaceAll(",", ""), 10);
 
 const getMatch = async (movie, getSearchResults, getDirectorsForMatch) => {
@@ -107,6 +111,23 @@ const getMatch = async (movie, getSearchResults, getDirectorsForMatch) => {
     getDirectorsForMatch,
   );
   if (looserMatchFromTitleResults) return looserMatchFromTitleResults;
+
+  // Then seaech without year
+  const closeMatchFromTitleResultsUs = await getMatchFromSearchResults(
+    movie,
+    searchResultsTitleUs,
+    noYearRangeMatcher,
+    getDirectorsForMatch,
+  );
+  if (closeMatchFromTitleResultsUs) return closeMatchFromTitleResultsUs;
+
+  const closeMatchFromTitleResults = await getMatchFromSearchResults(
+    movie,
+    searchResultsTitle,
+    noYearRangeMatcher,
+    getDirectorsForMatch,
+  );
+  if (closeMatchFromTitleResults) return closeMatchFromTitleResults;
 };
 
 async function findSourceMatch(
