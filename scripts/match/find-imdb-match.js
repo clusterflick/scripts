@@ -16,7 +16,8 @@ const getMoviePage = async (id, urlBase) => {
     // Check for an error page and fail if we find one
     const { error } = appData.props.pageProps;
     if (error) {
-      throw new Error(`Request failed: ${error.message}`);
+      console.log("Error:", error);
+      throw new Error(`Request failed: ${error.message || "Unknown"}`);
     }
     return contents;
   });
@@ -24,7 +25,13 @@ const getMoviePage = async (id, urlBase) => {
 
 const getScore = async (id) => {
   const url = `https://www.imdb.com/title/${id}`;
-  const imdbGet = await getMoviePage(id, url);
+  // Sometimes the initial connection will fail, so try twice to get the page
+  let imdbGet;
+  try {
+    imdbGet = await getMoviePage(id, url);
+  } catch {
+    imdbGet = await getMoviePage(id, url);
+  }
   const appData = getAppDataFrom(imdbGet);
   const { entityMetadata, histogramData } = appData.props.pageProps.contentData;
   const { aggregateRating, voteCount } = entityMetadata.ratingsSummary;

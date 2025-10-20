@@ -275,7 +275,8 @@ function normalizeTitle(title, options) {
     ["Dora's Magical Mermaid Adventures", "Dora: Mermaid Adventures"],
     ["LEGACY AFRICA FILM", "Legacy Africa "],
     [/^(.+) Block \d+(.+FF(\s+\d{4})?)?$/i, "$1 Block $2"],
-    ["Kantara A Legend", "Kantara"],
+    [/Kantara:? A Legend/i, "Kantara"],
+    [" - Chapter ", ": Chapter "],
     [
       /Royal Ballet & Opera \d{4}: La Sonnambula/i,
       "The Metropolitan Opera: La Sonnambula",
@@ -294,6 +295,7 @@ function normalizeTitle(title, options) {
     ["Stendalì: Still They Toll + ", ""],
     [/\s+Part\s+(\d+)(\s|:|$)/i, " $1$2"],
     ["Bāhubali", "Baahubali"],
+    ["MEMBERS ONLY: Pumpkin Carving", "Members only pumpkin carving"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
