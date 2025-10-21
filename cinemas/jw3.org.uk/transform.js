@@ -130,8 +130,8 @@ async function transform({ moviePages }, sourcedEvents) {
     const shortLinkUrl = $("link[rel='shortlink']").attr("href");
     const id = shortLinkUrl.match(/\/node\/([^/]+)$/i)[1];
     const performances = booking
-        ? getMultiplePerformances($, booking)
-        : getSinglePerformance($);
+      ? getMultiplePerformances($, booking)
+      : getSinglePerformance($);
 
     if (performances) {
       movies.push({

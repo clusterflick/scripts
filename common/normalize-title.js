@@ -46,6 +46,7 @@ function normalizeTitle(title, options) {
     ["Bison - ", "Bison: "],
     [/Luca\s+-\s+Seeing Red/i, "Luca – Seeing Red"],
     ["Chainsaw Man - The Movie:", "Chainsaw Man – The Movie:"],
+    ["Antarctica - ", "Antarctica: "],
     [" - The Musical", ": The Musical"],
     ["Westlife -", "Westlife:"],
     ["Westlife: 25th Anniversary Concert", "Westlife: Royal Albert Hall"],
