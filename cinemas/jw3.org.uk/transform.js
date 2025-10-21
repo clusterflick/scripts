@@ -78,6 +78,10 @@ const getSinglePerformance = ($) => {
       .eq(0),
   ).replace(/^date\s+-\s+/i, "");
 
+  // Return empty if we can't find the date of any performances. This may happen
+  // on festival pages where the date is a date range of multiple events.
+  if (!date) return null;
+
   const $infoSidebar = $sidebars
     .filter((i, el) => basicNormalize($(el).text()).startsWith("please note"))
     .eq(0);
@@ -125,20 +129,23 @@ async function transform({ moviePages }, sourcedEvents) {
     const $ = cheerio.load(listing);
     const shortLinkUrl = $("link[rel='shortlink']").attr("href");
     const id = shortLinkUrl.match(/\/node\/([^/]+)$/i)[1];
-
-    movies.push({
-      showingId: generateShowingId(attributes, id),
-      title: getText($(".m-banner__copy h1")),
-      url: `${attributes.domain}${moviePageUrl}`,
-      overview: getOverview($),
-      performances: booking
+    const performances = booking
         ? getMultiplePerformances($, booking)
-        : getSinglePerformance($),
-      matchingHints: {
-        overview:
-          getText(getSection($, "synopsis")) || getText($(".m-entity__body")),
-      },
-    });
+        : getSinglePerformance($);
+
+    if (performances) {
+      movies.push({
+        showingId: generateShowingId(attributes, id),
+        title: getText($(".m-banner__copy h1")),
+        url: `${attributes.domain}${moviePageUrl}`,
+        overview: getOverview($),
+        performances,
+        matchingHints: {
+          overview:
+            getText(getSection($, "synopsis")) || getText($(".m-entity__body")),
+        },
+      });
+    }
   }
 
   const listOfSourcedEvents = Object.values(sourcedEvents).flatMap(
