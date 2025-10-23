@@ -72,7 +72,7 @@ const splitConjoinedItemsInList = (list, joiner = " and ") => {
 };
 
 const classifications = ["U", "PG", "12", "12A", "15", "18"];
-const isValidClassification = (value = "") => {
+const getValidClassification = (value = "") => {
   const sanitizedValue = (value ?? "")
     .toLowerCase()
     .replace("+", "")
@@ -101,9 +101,9 @@ const sanitizeRichText = (value) =>
       .trim(),
   );
 
-const fetchText = async (url) => (await fetch(url)).text();
+const fetchText = async (url, options) => (await fetch(url, options)).text();
 
-const fetchJson = async (url) => (await fetch(url)).json();
+const fetchJson = async (url, options) => (await fetch(url, options)).json();
 
 const getText = ($el) => $el.text().trim();
 
@@ -200,7 +200,7 @@ const createOverview = ({
       : splitConjoinedItemsInList(convertToList(actors))
           .map(attemptEncodingFix)
           .map(removeNotes),
-    classification: isValidClassification(classification),
+    classification: getValidClassification(classification),
     trailer: trailer || undefined,
   };
 };
@@ -325,4 +325,5 @@ module.exports = {
   generateShowingId,
   isPrivateHire,
   runLlmFunction,
+  getValidClassification,
 };
