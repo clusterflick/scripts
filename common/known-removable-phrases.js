@@ -65,6 +65,7 @@ const knownRemovablePhrases = [
   "– Music by Pet Shop Boys",
   " Q&A with Director Richard Loncraine",
   " Q&A with Richard Gere",
+  " Q&A with Producer Kevin Loader",
   " ACCOMPANIED BY LIVE MUSIC",
   " Alex Ross Perry and Stephen Malkmus Q&A",
   " with Live Q&A at The Prince Charles Cinema",
