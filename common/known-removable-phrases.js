@@ -62,6 +62,8 @@ const knownRemovablePhrases = [
   ": The Original Broadway Production",
   ": Hippo-licious",
   ": The Sneakers",
+  ": Film with Q&A",
+  ": Porridge Radio",
   "– Music by Pet Shop Boys",
   " Q&A with Director Richard Loncraine",
   " Q&A with Richard Gere",
