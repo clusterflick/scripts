@@ -98,6 +98,8 @@ const sanitizeRichText = (value) =>
       .replaceAll("</strong>", "")
       .replaceAll("<em>", "")
       .replaceAll("</em>", "")
+      .replaceAll("<font>", "")
+      .replaceAll("</font>", "")
       .trim(),
   );
 
