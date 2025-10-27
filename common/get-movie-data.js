@@ -8,6 +8,13 @@ const askLlm = require("./ask-llm");
 const askLlmToReviewResults = require("./ask-llm-to-review-results");
 require("dotenv").config();
 
+/**
+ * Specifically ignored IDs from the Movie DB
+ */
+const ignoredIds = [
+  1547689, // Caravaggio [Duplicate] -- https://www.themoviedb.org/movie/1547689
+];
+
 const applyNameCorrections = (name) =>
   name.replace(/Scott McGhee/i, "Scott McGehee");
 
@@ -536,6 +543,10 @@ const searchMovieAndCacheResults = (cacheKey, payload) =>
       pages = pages.concat(page);
       results = results.concat(nextPage.results);
     }
+
+    // Remove specifically ignored entries which have yet to be deleted from
+    // the Movie DB.
+    results = results.filter(({ id }) => !ignoredIds.includes(id));
 
     return { ...firstPage, results, pages };
   });
