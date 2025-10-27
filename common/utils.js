@@ -91,6 +91,7 @@ const sanitizeRichText = (value) =>
   decode(
     value
       .replaceAll("\\n", "\n")
+      .replaceAll("\\", "")
       .replaceAll("<br />", "\n")
       .replaceAll("<br>", "\n")
       .replaceAll("<p>", "\n")

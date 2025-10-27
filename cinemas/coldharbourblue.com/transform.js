@@ -52,7 +52,7 @@ async function transform(retrievedData, sourcedEvents) {
       // Create new event
       eventsMap.set(event.url, {
         showingId: generateShowingId(attributes, eventId),
-        title: decode(event.name),
+        title: decode(event.name).replaceAll("\\", ""),
         url: event.url,
         overview: createOverview({ duration }),
         performances: [

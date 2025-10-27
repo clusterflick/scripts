@@ -402,7 +402,6 @@ const knownRemovablePhrases = [
   "Baby & 1 screen",
   "Baby & 1 ",
   "POLISH HERITAGE DAYS:",
-  "Philosophical Screens:",
   "PINK PALACE:",
   "pitchblack playback:",
   "Play for Today:",

@@ -7,7 +7,7 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 const systemInstruction = `
   Given the following details from a cinema listing, provide a response with no introduction or summary, just JSON response.
-  The JSON must contain \`isMovie\` boolean on whether it's a movie and \`confidence\` as a number from 0 to 9 (9 being the most confident).
+  The JSON must contain \`isMovie\` boolean on whether it's a movie and \`confidence\` as a number from 0 to 9 (9 being the most confident). Take into account that there may be sessions where movies are discussed but not shown; these should have \`isMovie\` set to false.
   The JSON must also contain \`isMultipleMovies\` boolean on whether the listing is describing a performance of multiple full-length movies. Sometimes referred to as 'double bills', 'movie marathons', 'trilogy', etc.
   Take the date that this request is being made into account when considering which movies could match this data. Short names which match older movies may also be referencing mmovies which are currently in the cinema. You should weigh movies currently in the cinema more heavily in your returned matches.
   If \`isMovie\` is true, the response must have a \`matches\` array of possible matches (up to 5) ordered from most to least likely. Otherwise, do not include a matches array.

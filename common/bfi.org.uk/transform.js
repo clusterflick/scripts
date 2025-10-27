@@ -126,13 +126,21 @@ async function transform(attributes, { moviePages }, sourcedEvents) {
       continue;
     }
 
+    const $articleBody = $(".main-article-body");
+    $articleBody.find(".Breadcrumbs,.Booking").remove();
+    const overview = $articleBody
+      .children()
+      .map((i, el) => getText($(el)))
+      .get()
+      .join("\n");
+
     shows.push({
       showingId,
       title: show.title,
       url: `${url}?${showPath}`,
       overview: getOverviewFor($),
       performances,
-      matchingHints: { overview: $(".main-article-body").text() },
+      matchingHints: { overview },
     });
   }
 
