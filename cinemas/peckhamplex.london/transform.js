@@ -94,8 +94,6 @@ async function transform({ moviePages }, sourcedEvents) {
     });
   }
 
-  // console.log(">> movies", movies);
-
   const listOfSourcedEvents = Object.values(sourcedEvents).flatMap(
     (events) => events,
   );

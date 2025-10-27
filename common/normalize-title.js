@@ -305,6 +305,7 @@ function normalizeTitle(title, options) {
       "Two Strangers Trying Not To Kill Each Other",
     ],
     [/ for Palestine$/i, ""],
+    ["Interstellar Live", "Interstellar"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
@@ -502,6 +503,7 @@ function normalizeTitle(title, options) {
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/\u00AD/g, "") // Remove soft hyphens
     .replace(/\uFFFD/g, "") // Remove Unicode Replacement Character
+    .replace(/™/g, "") // Remove trademark symbol
     .replace(/\s*:\s+/g, ": ")
     .replace(/\s+[a|u]nd\s+/gi, " ")
     .replace(/(?:\s+|^)&\s+/gi, " ")

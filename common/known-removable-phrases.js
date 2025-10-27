@@ -111,6 +111,7 @@ const knownRemovablePhrases = [
   " in Seoul",
   " in cinemas",
   " in cinema",
+  " in concert",
   " and Creating Survivor",
   " plus 1 hour Q&A.  Ticket giveaway",
   " plus Director Q&A",
