@@ -334,6 +334,7 @@ const knownRemovablePhrases = [
   "IFF 2024:",
   "IFF 2025:",
   "Indian 101 Diwali Celebration:",
+  "Islamophobia Awareness Month:",
   "Jazz In Exile:",
   "Just Evidence 1:",
   "Just Evidence 1.",

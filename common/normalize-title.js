@@ -504,6 +504,7 @@ function normalizeTitle(title, options) {
     .replace(/\u00AD/g, "") // Remove soft hyphens
     .replace(/\uFFFD/g, "") // Remove Unicode Replacement Character
     .replace(/™/g, "") // Remove trademark symbol
+    .replace(/\\/g, "")
     .replace(/\s*:\s+/g, ": ")
     .replace(/\s+[a|u]nd\s+/gi, " ")
     .replace(/(?:\s+|^)&\s+/gi, " ")
