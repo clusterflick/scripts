@@ -90,6 +90,7 @@ const parseMinsToMs = (value) => parseInt(value, 10) * 60 * 1000;
 const sanitizeRichText = (value) =>
   decode(
     value
+      .replaceAll("\\n", "\n")
       .replaceAll("<br />", "\n")
       .replaceAll("<br>", "\n")
       .replaceAll("<p>", "\n")
@@ -158,7 +159,7 @@ const createPerformance = ({
     .filter((value) => !!value)
     .join("\n")
     .trim(),
-  bookingUrl: encodeURI(url),
+  bookingUrl: typeof url === "function" ? url() : encodeURI(url),
   screen: getScreen(screen),
   status,
   accessibility,

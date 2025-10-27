@@ -62,6 +62,7 @@ function normalizeTitle(title, options) {
     ["Sky Original -", "Sky Original "],
     ["Green Screen -", "Green Screen "],
     ["Film Club -", "Film Club: "],
+    ["Crafty Movie Night - ", "Crafty Movie Night: "],
     [/^SILVER\s*?SCREEN -/i, "SILVER SCREEN"],
     ["SUBTITLED -", "SUBTITLED "],
     [/^RELAXED -/i, "Relaxed screening: "],
@@ -299,6 +300,11 @@ function normalizeTitle(title, options) {
     [/\s+Part\s+(\d+)(\s|:|$)/i, " $1$2"],
     ["Bāhubali", "Baahubali"],
     ["MEMBERS ONLY: Pumpkin Carving", "Members only pumpkin carving"],
+    [
+      "Two Strangers Who Try Not to Kill Eachother",
+      "Two Strangers Trying Not To Kill Each Other",
+    ],
+    [/ for Palestine$/i, ""],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
