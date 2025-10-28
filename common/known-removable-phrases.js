@@ -427,6 +427,7 @@ const knownRemovablePhrases = [
   "SAFAR:",
   "SAFAR ",
   "Scared To Dance:",
+  "Screening & Social",
   "Screening:",
   "ScreenTalk:",
   "Screening of ",
