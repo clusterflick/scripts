@@ -308,6 +308,7 @@ function normalizeTitle(title, options) {
     ["Interstellar Live", "Interstellar"],
     ["Brassed Off Live", "Brassed Off"],
     ["National Theatre Live Presents", "National Theatre Live"],
+    ["High School Musical Movie", "High School Musical"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
