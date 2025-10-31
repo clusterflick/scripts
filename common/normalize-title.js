@@ -309,6 +309,11 @@ function normalizeTitle(title, options) {
     ["Brassed Off Live", "Brassed Off"],
     ["National Theatre Live Presents", "National Theatre Live"],
     ["High School Musical Movie", "High School Musical"],
+    ["Sex Dla Opornych", "Seks dla opornych"],
+    ["TO CATCH A THEIF", "To Catch a Thief"],
+    [/\(Double(-|\s)Bill\)/i, " Double Bill "],
+    [/- Double Feature/i, " Double Bill "],
+    [/Wicked \+ Wicked[:]? For Good/i, "Wicked & Wicked: For Good"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
