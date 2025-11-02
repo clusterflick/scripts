@@ -312,8 +312,9 @@ function normalizeTitle(title, options) {
     ["Sex Dla Opornych", "Seks dla opornych"],
     ["TO CATCH A THEIF", "To Catch a Thief"],
     [/\(Double(-|\s)Bill\)/i, " Double Bill "],
-    [/- Double Feature/i, " Double Bill "],
-    [/Wicked \+ Wicked[:]? For Good/i, "Wicked & Wicked: For Good"],
+    [/-? Double Feature/i, " Double Bill "],
+    [/Wicked [+|/] Wicked[:]? For Good/i, "Wicked & Wicked: For Good"],
+    [/Wicked Double Bill/i, "Wicked & Wicked: For Good Double Bill"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
