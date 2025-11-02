@@ -315,6 +315,7 @@ function normalizeTitle(title, options) {
     [/-? Double Feature/i, " Double Bill "],
     [/Wicked [+|/] Wicked[:]? For Good/i, "Wicked & Wicked: For Good"],
     [/Wicked Double Bill/i, "Wicked & Wicked: For Good Double Bill"],
+    [/The God Father/i, "The Godfather"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {

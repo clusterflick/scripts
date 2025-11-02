@@ -126,6 +126,7 @@ const knownRemovablePhrases = [
   " plus Filmmaker Q&A",
   " plus shorts",
   "Bottomless Brunch Party!",
+  "Interactive Film",
   "screening and Q&A with Byline Times",
   "Screening and Q&A",
   "Screening, Director Q&A, and Meet  and Greet",
