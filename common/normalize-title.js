@@ -314,7 +314,7 @@ function normalizeTitle(title, options) {
     [/\(Double(-|\s)Bill\)/i, " Double Bill "],
     [/-? Double Feature/i, " Double Bill "],
     [/Wicked [+|/] Wicked[:]? For Good/i, "Wicked & Wicked: For Good"],
-    [/Wicked Double Bill/i, "Wicked & Wicked: For Good Double Bill"],
+    [/Wicked:? Double Bill/i, "Wicked & Wicked: For Good Double Bill"],
     [/The God Father/i, "The Godfather"],
   ];
 
