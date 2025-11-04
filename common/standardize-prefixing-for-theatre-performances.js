@@ -1,4 +1,5 @@
 const yearMatcher = /(\d{4})/;
+const fullYearRangeMatcher = /(\d{4})[-|/](\d{4})/;
 const yearRangeMatcher = /(\d{2})(\d{2})[-|/](\d{2})/;
 const shortYearRangeMatcher = /(\d{2})[-|/](\d{2})/;
 const yearSuffixMatcher = /\(\d{4}\)$/;
@@ -67,6 +68,12 @@ function standardizePrefixingForMetropolitanOperaPerformances(title, options) {
 
   let year = new Date().getFullYear();
 
+  const fullYearRangeMatch = updatedPrefixTitle.match(fullYearRangeMatcher);
+  if (fullYearRangeMatch) {
+    year = fullYearRangeMatch[2];
+    updatedPrefixTitle = updatedPrefixTitle.replace(fullYearRangeMatcher, "");
+  }
+
   const yearRangeMatch = updatedPrefixTitle.match(yearRangeMatcher);
   if (yearRangeMatch) {
     year = `${yearRangeMatch[1]}${yearRangeMatch[3]}`;
@@ -105,6 +112,7 @@ function standardizePrefixingForMetropolitanOperaPerformances(title, options) {
 
 // Royal Ballet and Opera
 const rboPrefixes = [
+  /RBO CINEMA SEASON/i,
   /RBO Encore[:|\s]/i,
   /RBO Live[:|\s]/i,
   /ROH Royal Opera Live[:|\s]/i,
@@ -136,6 +144,12 @@ function standardizePrefixingForRoyalBalletOperaPerformances(title) {
   updatedPrefixTitle = updatedPrefixTitle.replace(ownerMatcher, ":");
 
   let year = new Date().getFullYear();
+
+  const fullYearRangeMatch = updatedPrefixTitle.match(fullYearRangeMatcher);
+  if (fullYearRangeMatch) {
+    year = fullYearRangeMatch[1];
+    updatedPrefixTitle = updatedPrefixTitle.replace(fullYearRangeMatcher, "");
+  }
 
   const yearRangeMatch = updatedPrefixTitle.match(yearRangeMatcher);
   if (yearRangeMatch) {
