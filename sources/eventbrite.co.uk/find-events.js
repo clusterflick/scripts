@@ -86,11 +86,14 @@ async function findEvents(cinema) {
       },
     }) => {
       if (isCancelled || isOnline) return false;
+
+      const processName = (name) =>
+        normalizeName(name.replace("Cinema London", "").replace("London", ""));
+
       const distance = distanceInKmBetweenCoordinates(cinema.geo, { lat, lon });
-      const [venueName] = name.split(",");
+      const [venueName] = name.split(/[,|]/i);
       return (
-        normalizeName(venueName) === normalizeName(cinema.name) &&
-        distance < 0.1
+        processName(venueName) === processName(cinema.name) && distance < 0.1
       );
     },
   );

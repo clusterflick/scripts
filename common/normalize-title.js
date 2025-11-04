@@ -317,6 +317,13 @@ function normalizeTitle(title, options) {
     [/Wicked:? Double Bill/i, "Wicked & Wicked: For Good Double Bill"],
     [/The God Father/i, "The Godfather"],
     ["Le Litre de lait + Les Contrebandières", "Les Contrebandières"],
+    ["ELF MOVIE", "Elf"],
+    ["Screening + Q&A:", "Screening & Q&A:"],
+    [
+      "Sapphic Cinema and BFI Melodrama -",
+      "Sapphic Cinema and BFI Melodrama: ",
+    ],
+    [/^(.+)- National Theatre Live$/i, "National Theatre Live: $1"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
