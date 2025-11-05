@@ -35,7 +35,7 @@ describe(attributes.name, () => {
         .map(addTestCategory);
 
       // Make sure the data looks roughly correct
-      expect(data).toHaveLength(5);
+      expect(data).toHaveLength(7);
 
       expect(schemaValidate(data)).toBe(true);
       expect(data).toMatchSnapshot();
