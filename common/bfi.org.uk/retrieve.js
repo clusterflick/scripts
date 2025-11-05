@@ -2,7 +2,7 @@ const cheerio = require("cheerio");
 const { format, addYears } = require("date-fns");
 const slugify = require("slugify");
 const getPageWithPlaywright = require("../get-page-with-playwright");
-const { getText } = require("../utils");
+const { getText, getId } = require("../utils");
 
 const dateFormat = "yyyy-MM-dd";
 
@@ -37,7 +37,7 @@ async function processSearchResultPage(
     );
 
     const slug = slugify(showData.title, { strict: true }).toLowerCase();
-    const cacheKey = `bfi.org.uk-${articleId}-${slug}`;
+    const cacheKey = `bfi.org.uk-${getId(showUrl)}-${articleId}-${slug}`;
     moviePages[showUrl].html = await getPageWithPlaywright(
       url,
       cacheKey,
@@ -53,6 +53,18 @@ async function processSearchResultPage(
           // If this fails, it'll be because it timed out. At that point, we
           // might as well keep going and see if the next waitFor passes.
         }
+
+        try {
+          // Check we're not on an error page...
+          await page
+            .locator("#content h2")
+            .filter({ hasText: /500 - internal server error/i })
+            .waitFor({ state: "detached", timeout: 1000 });
+        } catch {
+          // ... and bail if we actually are on an error page
+          return null;
+        }
+
         // Make sure there's information showing. Not all pages have film info
         // (that we care about), so check for the rich text or media areas too.
         // On some fundraising pages we don't have those, but we may have a list
@@ -69,6 +81,16 @@ async function processSearchResultPage(
         return await page.content();
       },
     );
+
+    // If the HTML for the page can't be extracted, it's an error page. In this
+    // case there's nothing we cna do to retrieve this show. Let's hope the
+    // article is available on another URL.
+    if (moviePages[showUrl].html === null) {
+      console.log(
+        `      - Unable to retrieve data for "${showData.title}"; error page detected at ${domain}${showUrl}`,
+      );
+      delete moviePages[showUrl];
+    }
   }
 
   return moviePages;
@@ -91,7 +113,7 @@ async function retrieve(attributes) {
   console.log("");
   console.log(`    - [${Date.now()}] Retrieving search results pages ... `);
 
-  const cacheKey = `bfi.org.uk-${articleId}`;
+  const cacheKey = `bfi.org.uk-${getId(articleId)}-${articleId}`;
   const movieListPage = await getPageWithPlaywright(
     url,
     cacheKey,

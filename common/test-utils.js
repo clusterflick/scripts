@@ -60,9 +60,19 @@ const setupCacheMock = (dirname, suffix) => {
   const { readCache } = jest.requireActual("./cache");
 
   dailyCache.mockImplementation((key) =>
-    readCache(key, (filename) =>
-      path.join(dirname, "__manual-recordings__", `${filename}-${suffix}`),
-    ),
+    readCache(key, (filename) => {
+      // A hash ID value was added to BFI cache. Instead of updating all manual
+      // recording filenames, let's remove the ID here so they continue to map.
+      if (filename.startsWith("bfi.org.uk-")) {
+        const [prefix, , ...remainder] = filename.split("-");
+        filename = `${prefix}-${remainder.join("-")}`;
+      }
+      return path.join(
+        dirname,
+        "__manual-recordings__",
+        `${filename}-${suffix}`,
+      );
+    }),
   );
 
   readDailyCache.mockImplementation((key) =>
