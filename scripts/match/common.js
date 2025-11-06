@@ -158,7 +158,18 @@ async function findSourceMatch(
   );
   if (!match) return undefined;
 
-  const score = await getScore(match);
+  let score;
+  try {
+    score = await getScore(match);
+  } catch {
+    // If something goes wrong, Wait 3 seconds and try again
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+    try {
+      score = await getScore(match);
+    } catch {
+      console.log(`Error retriving score for "${match.title}"`);
+    }
+  }
   if (!score) return undefined;
 
   return score;
