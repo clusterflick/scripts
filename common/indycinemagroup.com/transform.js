@@ -89,6 +89,9 @@ async function transform(
             "This screening features a special in person Q&A appearance",
           );
         }
+        if (tags.includes("dog-friendly")) {
+          notesList.push("This screening is dog friendly");
+        }
 
         const status = {
           soldOut: showing.seatsRemaining === 0,
@@ -96,7 +99,7 @@ async function transform(
 
         const accessibility = createAccessibility({
           audioDescription: tags.includes("ad"),
-          relaxed: tags.includes("relaxed"),
+          relaxed: tags.includes("relaxed") || tags.includes("ld-friendly"),
           babyFriendly:
             tags.includes("carers--babies") ||
             tags.includes("baby") ||
