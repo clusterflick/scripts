@@ -99,7 +99,7 @@ async function transform(
       "beermerchantstap.com",
       "bfi.org.uk-imax",
       "bfi.org.uk-southbank",
-      "chiswickcinema.co.uk",
+      // "chiswickcinema.co.uk", // Removed due to moving systems so old invalid URLs were being pulled in
       "cinemamuseum.org.uk",
       "closeupfilmcentre.com",
       "electriccinema.co.uk-portobello",
