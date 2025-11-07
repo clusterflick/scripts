@@ -22,6 +22,11 @@ const screenMapping = {
   295: "Stage", // throwleyyardcinema.co.uk
   318: "1", // phoenixcinema.co.uk
   317: "2", // phoenixcinema.co.uk
+  439: "1", // chiswickcinema.co.uk
+  440: "2", // chiswickcinema.co.uk
+  441: "3", // chiswickcinema.co.uk
+  442: "4", // chiswickcinema.co.uk
+  443: "5", // chiswickcinema.co.uk
 };
 
 const isCastPlaceholder = (value) =>
@@ -70,8 +75,19 @@ async function transform(
         const notesList = [
           `${showing.seatsRemaining} of ${showing.seatsRemaining + showing.ticketsSold} seats remaining`,
         ];
-        if (tags.includes("no-trailers-or-adverts")) {
+        if (
+          tags.includes("no-trailers-or-adverts") ||
+          tags.includes("ad-free")
+        ) {
           notesList.push("No adverts or trailers");
+        }
+        if (tags.includes("intro")) {
+          notesList.push("This screening features a specialist introduction");
+        }
+        if (tags.includes("qa")) {
+          notesList.push(
+            "This screening features a special in person Q&A appearance",
+          );
         }
 
         const status = {
@@ -82,13 +98,19 @@ async function transform(
           audioDescription: tags.includes("ad"),
           relaxed: tags.includes("relaxed"),
           babyFriendly:
-            tags.includes("carers--babies") || tags.includes("baby"),
+            tags.includes("carers--babies") ||
+            tags.includes("baby") ||
+            tags.includes("kids-club") ||
+            tags.includes("baby-friendly"),
           hardOfHearing:
             tags.includes("hard-of-hearing") ||
             tags.includes("hoh") ||
             tags.includes("cc") ||
             tags.includes("oc"),
-          subtitled: tags.includes("subbed") || tags.includes("subtitles"),
+          subtitled:
+            tags.includes("subbed") ||
+            tags.includes("subtitles") ||
+            tags.includes("subtitled"),
         });
 
         return createPerformance({
