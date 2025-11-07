@@ -63,6 +63,7 @@ function normalizeTitle(title, options) {
     ["Green Screen -", "Green Screen "],
     ["Film Club -", "Film Club: "],
     ["Crafty Movie Night - ", "Crafty Movie Night: "],
+    ["Girlguiding Screening - ", "Girlguiding Screening: "],
     [/^SILVER\s*?SCREEN -/i, "SILVER SCREEN"],
     ["SUBTITLED -", "SUBTITLED "],
     [/^RELAXED -/i, "Relaxed screening: "],
@@ -532,7 +533,7 @@ function normalizeTitle(title, options) {
     .replace(/\s+(-|–)\s+/g, " ")
     .replace(/^(-|–)/g, "")
     .replace(/(-|–|\()$/g, "")
-    .replace(/!|:|\.|\*|…|—|]|<|>/g, " ")
+    .replace(/!|:|;|\.|\*|…|—|]|<|>/g, " ")
     .replaceAll("–", "–")
     .replace(
       // Remove emoji
