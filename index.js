@@ -46,6 +46,17 @@ const setupDirectory = async (type) => {
     return;
   }
 
+  if (action.toLowerCase() === "cache") {
+    const cacheMoviedb = require("./scripts/cache");
+    const output = await cacheMoviedb();
+    await setupDirectory("cached-data");
+    await writeJSON(
+      path.join(process.cwd(), "cached-data", "moviedb-data.json"),
+      output,
+    );
+    return;
+  }
+
   const getPath = (type) => path.join(process.cwd(), type, location);
   if (!location) throw new Error("No location provided");
 

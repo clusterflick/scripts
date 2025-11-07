@@ -62,6 +62,17 @@ const getYoutubeTrailer = (movie) => {
 
 async function combine() {
   const getImddId = ({ external_ids: externalIds = {} }) => externalIds.imdb_id;
+  const cachePath = path.join(
+    process.cwd(),
+    "cached-data",
+    "moviedb-data.json",
+  );
+  let cache = {};
+  try {
+    cache = await readJSON(cachePath);
+  } catch {
+    console.log("⚠️ Unable to load cached data");
+  }
   const cinemasPath = path.join(__dirname, "..", "..", "cinemas");
   const data = {};
   const cinemas = await getModuleNamesFor(cinemasPath);
@@ -130,7 +141,9 @@ async function combine() {
         );
         try {
           try {
-            movieInfo = await getMovieInfoAndCacheResults(themoviedb);
+            movieInfo =
+              cache[themoviedb.id] ||
+              (await getMovieInfoAndCacheResults(themoviedb));
           } catch {
             // Try again to get the data if it fails. The movie info will be
             // cached from the previous run if it was successful.

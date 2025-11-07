@@ -13,6 +13,17 @@ async function match(source) {
     "combined-data.json",
   );
   const combinedData = await readJSON(dataPath);
+  const cachePath = path.join(
+    process.cwd(),
+    "cached-data",
+    "moviedb-data.json",
+  );
+  let cache = {};
+  try {
+    cache = await readJSON(cachePath);
+  } catch {
+    console.log("⚠️ Unable to load cached data");
+  }
   const data = {};
 
   const movies = Object.values(combinedData.movies);
@@ -33,13 +44,16 @@ async function match(source) {
     meta.withInfo++;
     let matchData;
     if (source === "rottentomatoes") {
-      const movieInfo = await getMovieInfoAndCacheResults(movie);
+      const movieInfo =
+        cache[movie.id] || (await getMovieInfoAndCacheResults(movie));
       matchData = await findRottenTomatoesMatch(movieInfo);
     } else if (source === "metacritic") {
-      const movieInfo = await getMovieInfoAndCacheResults(movie);
+      const movieInfo =
+        cache[movie.id] || (await getMovieInfoAndCacheResults(movie));
       matchData = await findMetacriticMatch(movieInfo);
     } else if (source === "letterboxd") {
-      const movieInfo = await getMovieInfoAndCacheResults(movie);
+      const movieInfo =
+        cache[movie.id] || (await getMovieInfoAndCacheResults(movie));
       matchData = await findLetterboxdMatch(movieInfo);
     } else if (source === "imdb") {
       matchData = await findImdbMatch(movie);
