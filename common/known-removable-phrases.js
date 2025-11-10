@@ -346,6 +346,7 @@ const knownRemovablePhrases = [
   "Horace Ové’s",
   "MASSIVE:",
   "Nagasaki Day:",
+  "Philosophical Screens:",
   "Pirates Season :",
   "Tobey Maguire Trilogy",
   "World AIDS Day Special",
