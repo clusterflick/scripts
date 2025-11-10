@@ -325,6 +325,10 @@ function normalizeTitle(title, options) {
       "Sapphic Cinema and BFI Melodrama: ",
     ],
     [/^(.+)- National Theatre Live$/i, "National Theatre Live: $1"],
+    [
+      "MUPPET PUPPETS CHRISTMAS CAROL WORKSHOP & SING-ALONG",
+      "Muppet Christmas Carol",
+    ],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
