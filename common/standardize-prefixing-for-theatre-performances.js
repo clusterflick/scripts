@@ -24,17 +24,24 @@ function standardizePrefixingForLesMiserablesPerformances(title) {
 }
 
 // National Theatre
-const nationalTheatrePrefixes = [/NT Live Broadcast[:|\s]/i, /NT Live[:|\s]/i];
+const nationalTheatreIndicator = [
+  /NT Live Broadcast[:|\s]/i,
+  /NT Live[:|\s]/i,
+  /National Theatre Live Presents/i,
+  /National Theatre Presents/i,
+  /National Theatre Live/i,
+  /National Theatre[:|\s|$]/i,
+];
 
 function standardizePrefixingForNationalTheatrePerformances(title) {
   title = title.replace(/\s+&\s+/, " and ").replace(/\s+-\s+/, ": ");
 
-  let updatedPrefixTitle = nationalTheatrePrefixes.reduce(
-    (value, prefix) => value.replace(prefix, "National Theatre Live: "),
-    title,
-  );
+  let updatedTitle = nationalTheatreIndicator
+    .reduce((value, prefix) => value.replace(prefix, " "), title)
+    .replace(/Preview Screening/i, "")
+    .replace(/Preview/i, "");
 
-  return updatedPrefixTitle
+  return `National Theatre Live: ${updatedTitle}`
     .replace(/\s+:\s+/, " ")
     .replace(/\s+/g, " ")
     .trim();
@@ -127,6 +134,7 @@ const rboPrefixes = [
   /^The Royal Opera[:|\s]/i,
   /RB&O Live:/i,
   /RB&O:/i,
+  /Live From Royal Ballet/i,
 ];
 
 function standardizePrefixingForRoyalBalletOperaPerformances(title) {
@@ -137,11 +145,14 @@ function standardizePrefixingForRoyalBalletOperaPerformances(title) {
     .replace(/\s+-\s+/, ": ");
 
   let updatedPrefixTitle = rboPrefixes.reduce(
-    (value, prefix) => value.replace(prefix, "Royal Ballet & Opera: "),
+    (value, prefix) => value.replace(prefix, ""),
     title,
   );
 
-  updatedPrefixTitle = updatedPrefixTitle.replace(ownerMatcher, ":");
+  updatedPrefixTitle = `Royal Ballet & Opera: ${updatedPrefixTitle}`.replace(
+    ownerMatcher,
+    ":",
+  );
 
   let year = new Date().getFullYear();
 
@@ -214,7 +225,8 @@ function standardizePrefixingForTheatrePerformances(
 
   if (
     lowercaseTitle.match(/(^|\s)nt live:?/i) ||
-    lowercaseTitle.startsWith("nt live broadcast:")
+    lowercaseTitle.startsWith("nt live broadcast:") ||
+    lowercaseTitle.includes("national theatre")
   ) {
     return standardizePrefixingForNationalTheatrePerformances(title, options);
   }
@@ -242,7 +254,8 @@ function standardizePrefixingForTheatrePerformances(
     lowercaseTitle.startsWith("the royal ballet") ||
     lowercaseTitle.startsWith("roh royal opera") ||
     lowercaseTitle.startsWith("roh ") ||
-    lowercaseTitle.startsWith("roh: ")
+    lowercaseTitle.startsWith("roh: ") ||
+    lowercaseTitle.includes("live from royal ballet")
   ) {
     return standardizePrefixingForRoyalBalletOperaPerformances(title, options);
   }
