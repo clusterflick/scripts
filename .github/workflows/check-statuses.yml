@@ -6,7 +6,7 @@ name: Check Venue Statuses
 jobs:
   check_cineworld:
     name: Check Cineworld
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env:
       TZ: Europe/London
     steps:
@@ -27,8 +27,8 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version-file: .node-version
-      - run: npx playwright install --with-deps
       - run: npm install
+      - run: npx playwright install --with-deps
       - run: node analysis/check-curzon-ids.js
 
   check_everyman:
@@ -46,7 +46,7 @@ jobs:
 
   check_myvue:
     name: Check Vue
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env:
       TZ: Europe/London
     steps:
@@ -59,7 +59,7 @@ jobs:
 
   check_odeon:
     name: Check Odeon
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env:
       TZ: Europe/London
     steps:
@@ -67,8 +67,8 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version-file: .node-version
-      - run: npx playwright install --with-deps
       - run: npm install
+      - run: npx playwright install --with-deps
       - run: node analysis/check-odeon-ids.js
 
   check_omniplex:
@@ -86,7 +86,7 @@ jobs:
 
   check_picturehouse:
     name: Check Picturehouse
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     env:
       TZ: Europe/London
     steps:
@@ -94,6 +94,6 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version-file: .node-version
-      - run: npx playwright install --with-deps
       - run: npm install
+      - run: npx playwright install --with-deps
       - run: node analysis/check-picturehouse-ids.js
