@@ -1,6 +1,10 @@
 const cheerio = require("cheerio");
 const { dailyCache } = require("../../common/cache");
-const { getText, fetchText } = require("../../common/utils");
+const {
+  getText,
+  fetchText,
+  macosFirefoxUseragent,
+} = require("../../common/utils");
 
 const getAppDataFrom = (contents) => {
   const $ = cheerio.load(contents);
@@ -11,14 +15,18 @@ const getMoviePage = async (id, urlBase) => {
   const cacheKey = `imdb-get-${id}`;
   const url = `${urlBase}/ratings`;
   return await dailyCache(cacheKey, async () => {
-    const contents = await fetchText(url);
-    const appData = getAppDataFrom(contents);
-    // Check for an error page and fail if we find one
-    const { error } = appData.props.pageProps;
-    if (error) {
-      throw new Error(
-        `Request failed: ${error.message || error.name || "Error found on page"}`,
-      );
+    const contents = await fetchText(url, { headers: macosFirefoxUseragent() });
+    try {
+      const appData = getAppDataFrom(contents);
+      // Check for an error page and fail if we find one
+      const { error } = appData.props.pageProps;
+      if (error) {
+        throw new Error(
+          `Request failed: ${error.message || error.name || "Error found on page"}`,
+        );
+      }
+    } catch {
+      throw new Error(`Retrival failed: Unable to parse app data from page`);
     }
     return contents;
   });
