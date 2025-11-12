@@ -1,0 +1,99 @@
+on:
+  workflow_dispatch:
+
+name: Check Venue Statuses
+
+jobs:
+  check_cineworld:
+    name: Check Cineworld
+    runs-on: ubuntu-latest
+    env:
+      TZ: Europe/London
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: .node-version
+      - run: npm install
+      - run: node analysis/check-cineworld-ids.js
+
+  check_curzon:
+    name: Check Curzon
+    runs-on: ubuntu-latest
+    env:
+      TZ: Europe/London
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: .node-version
+      - run: npx playwright install --with-deps
+      - run: npm install
+      - run: node analysis/check-curzon-ids.js
+
+  check_everyman:
+    name: Check Everyman
+    runs-on: ubuntu-latest
+    env:
+      TZ: Europe/London
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: .node-version
+      - run: npm install
+      - run: node analysis/check-everyman-ids.js
+
+  check_myvue:
+    name: Check Vue
+    runs-on: ubuntu-latest
+    env:
+      TZ: Europe/London
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: .node-version
+      - run: npm install
+      - run: node analysis/check-myvue-ids.js
+
+  check_odeon:
+    name: Check Odeon
+    runs-on: ubuntu-latest
+    env:
+      TZ: Europe/London
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: .node-version
+      - run: npx playwright install --with-deps
+      - run: npm install
+      - run: node analysis/check-odeon-ids.js
+
+  check_omniplex:
+    name: Check Omniplex
+    runs-on: ubuntu-latest
+    env:
+      TZ: Europe/London
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: .node-version
+      - run: npm install
+      - run: node analysis/check-omniplex-ids.js
+
+  check_picturehouse:
+    name: Check Picturehouse
+    runs-on: ubuntu-latest
+    env:
+      TZ: Europe/London
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: .node-version
+      - run: npx playwright install --with-deps
+      - run: npm install
+      - run: node analysis/check-picturehouse-ids.js

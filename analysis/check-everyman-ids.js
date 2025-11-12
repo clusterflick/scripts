@@ -52,22 +52,27 @@ async function checkEverymanIds() {
     }
   }
 
+  let failForError = false;
   for (const cinema in recorded) {
     process.stdout.write(
       `[🎞️  Location: ${cinema}]${"".padEnd(50 - cinema.length, " ")}`,
     );
 
     if (!recorded[cinema]) {
+      failForError = true;
       console.log(` - ❌ Missing data`);
     } else {
       const { retrieved, current } = recorded[cinema];
       if (retrieved.name === current.name && retrieved.id === current.id) {
         console.log(` - ✅ Matching data`);
       } else {
+        failForError = true;
         console.log(` - ❌ Data mismatch`);
       }
     }
   }
+
+  if (failForError) process.exit(1);
 }
 
 checkEverymanIds();
