@@ -37,7 +37,7 @@ async function retrieve() {
   console.log(" - Requesting search results pages...");
   const movieListPages = []
     .concat(await getSearchResultsFor("screening"))
-    .concat(await getSearchResultsFor("film"));
+    .concat(await getSearchResultsFor("film-and-media--events")); // This is a specific category
 
   const events = uniqueEvents(
     movieListPages.flatMap(({ search_data: { events } }) => events.results),

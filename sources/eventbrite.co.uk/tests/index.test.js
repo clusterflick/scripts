@@ -33,9 +33,9 @@ describe(attributes.name, () => {
 
       // Make sure the input looks roughly correct
       expect(movieListPages).toBeTruthy();
-      expect(movieListPages).toHaveLength(83);
+      expect(movieListPages).toHaveLength(59);
       expect(moviePages).toBeTruthy();
-      expect(Object.keys(moviePages)).toHaveLength(1240);
+      expect(Object.keys(moviePages)).toHaveLength(923);
 
       readJSON.mockImplementation(() => ({ movieListPages, moviePages }));
 
