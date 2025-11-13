@@ -1,12 +1,6 @@
 const cheerio = require("cheerio");
+const { fetchWin1252Text } = require("../../common/utils");
 const { domain, cinemaId } = require("./attributes");
-
-const fetchText = async (url) => {
-  const response = await fetch(url);
-  const buffer = await response.arrayBuffer();
-  const decoder = new TextDecoder("iso-8859-1");
-  return decoder.decode(buffer);
-};
 
 function fixHtmlTypos(html) {
   return html.replace(/<soan /g, "<span ");
@@ -28,12 +22,12 @@ function extractMovieUrls(html) {
 
 async function retrieve() {
   const cinemaUrl = `${domain}/cinema/${cinemaId}`;
-  const movieListPage = await fetchText(cinemaUrl);
+  const movieListPage = await fetchWin1252Text(cinemaUrl);
 
   const movieUrls = extractMovieUrls(movieListPage);
   const moviePages = {};
   for (const movieUrl of movieUrls) {
-    moviePages[movieUrl] = await fetchText(movieUrl);
+    moviePages[movieUrl] = await fetchWin1252Text(movieUrl);
   }
 
   return {

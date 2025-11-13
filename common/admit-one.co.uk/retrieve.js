@@ -1,14 +1,8 @@
 const cheerio = require("cheerio");
-
-const fetchText = async (url) => {
-  const response = await fetch(url);
-  const buffer = await response.arrayBuffer();
-  const decoder = new TextDecoder("iso-8859-1");
-  return decoder.decode(buffer);
-};
+const { fetchWin1252Text } = require("../utils");
 
 async function retrieve({ domain }) {
-  const movieListPage = await fetchText(domain);
+  const movieListPage = await fetchWin1252Text(domain);
   const $ = cheerio.load(movieListPage);
   const moviePageUrls = new Set();
   $(".whatson_panel").each(function () {
@@ -22,7 +16,7 @@ async function retrieve({ domain }) {
 
   const moviePages = {};
   for (const moviePageUrl of [...moviePageUrls]) {
-    moviePages[moviePageUrl] = await fetchText(moviePageUrl);
+    moviePages[moviePageUrl] = await fetchWin1252Text(moviePageUrl);
   }
 
   return {

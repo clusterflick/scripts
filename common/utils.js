@@ -1,5 +1,6 @@
 var crypto = require("node:crypto");
 const fs = require("node:fs").promises;
+const iconv = require("iconv-lite");
 const { decode } = require("html-entities");
 const { isAfter, startOfDay } = require("date-fns");
 const stringify = require("json-stable-stringify");
@@ -112,6 +113,12 @@ const sanitizeRichText = (value) =>
   );
 
 const fetchText = async (url, options) => (await fetch(url, options)).text();
+
+const fetchWin1252Text = async (url) => {
+  const response = await fetch(url);
+  const buffer = Buffer.from(await response.arrayBuffer());
+  return iconv.decode(buffer, "win1252");
+};
 
 const fetchJson = async (url, options) => (await fetch(url, options)).json();
 
@@ -328,6 +335,7 @@ module.exports = {
   parseMinsToMs,
   sanitizeRichText,
   fetchText,
+  fetchWin1252Text,
   fetchJson,
   macosFirefoxUseragent,
   getText,
