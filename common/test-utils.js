@@ -1,10 +1,10 @@
 const path = require("node:path");
 const { setupPolly } = require("setup-polly-jest");
 const FetchAdapter = require("@pollyjs/adapter-fetch");
-const PersisterFs = require("@pollyjs/persister-fs");
 const Ajv = require("ajv");
 const addFormats = require("ajv-formats");
 const schema = require("../schema.json");
+const ChunkedFsPersister = require("./pollyjs-chunked-fs-persister");
 
 global.navigator.onLine = true;
 
@@ -27,12 +27,13 @@ function setupPollyWrapper(isRecording, dirname) {
 
   return setupPolly({
     adapters: [FetchAdapterNoWarning],
-    persister: PersisterFs,
+    persister: ChunkedFsPersister,
     recordFailedRequests: true,
     recordIfMissing: false,
     persisterOptions: {
-      fs: {
+      "chunked-fs": {
         recordingsDir: path.resolve(dirname, "__recordings__"),
+        maxEntries: 250,
       },
     },
     // "replay", "record", or "passthrough"
