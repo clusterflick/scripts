@@ -6,6 +6,50 @@ const { getText, getId } = require("../utils");
 
 const dateFormat = "yyyy-MM-dd";
 
+function getPageContents(url, cacheKey, domain, showUrl) {
+  return getPageWithPlaywright(url, cacheKey, async (page) => {
+    // Go to the main page first, let it load, and then get the show page
+    await page.waitForLoadState("domcontentloaded");
+    await page.goto(`${domain}${showUrl}`);
+
+    // Wait until the page is finished everything
+    try {
+      await page.waitForLoadState("networkidle");
+    } catch {
+      // If this fails, it'll be because it timed out. At that point, we
+      // might as well keep going and see if the next waitFor passes.
+    }
+
+    try {
+      // Check we're not on an error page...
+      await page
+        .locator("#content h2")
+        .filter({ hasText: /500 - internal server error/i })
+        .waitFor({ state: "detached", timeout: 1000 });
+    } catch {
+      // ... and bail if we actually are on an error page
+      return new Error(
+        `Error page detected - ${getText(await page.locator("#content h2"))}`,
+      );
+    }
+
+    // Make sure there's information showing. Not all pages have film info
+    // (that we care about), so check for the rich text or media areas too.
+    // On some fundraising pages we don't have those, but we may have a list
+    // instead which contains audience list XML attributes to match instead.
+    try {
+      await page
+        .locator(".Film-info__information,.Rich-text,.Media,ul[xmlns\\:av]")
+        .waitFor({ strict: false });
+    } catch {
+      // Bail if we can't find the expected information
+      return new Error(`Film information not available at ${domain}${showUrl}`);
+    }
+
+    return await page.content();
+  });
+}
+
 async function processSearchResultPage(
   { url, domain, articleId },
   moviePages,
@@ -38,59 +82,25 @@ async function processSearchResultPage(
 
     const slug = slugify(showData.title, { strict: true }).toLowerCase();
     const cacheKey = `bfi.org.uk-${getId(showUrl)}-${articleId}-${slug}`;
-    moviePages[showUrl].html = await getPageWithPlaywright(
-      url,
-      cacheKey,
-      async (page) => {
-        // Go to the main page first, let it load, and then get the show page
-        await page.waitForLoadState("domcontentloaded");
-        await page.goto(`${domain}${showUrl}`);
-
-        // Wait until the page is finished everything
-        try {
-          await page.waitForLoadState("networkidle");
-        } catch {
-          // If this fails, it'll be because it timed out. At that point, we
-          // might as well keep going and see if the next waitFor passes.
-        }
-
-        try {
-          // Check we're not on an error page...
-          await page
-            .locator("#content h2")
-            .filter({ hasText: /500 - internal server error/i })
-            .waitFor({ state: "detached", timeout: 1000 });
-        } catch {
-          // ... and bail if we actually are on an error page
-          return null;
-        }
-
-        // Make sure there's information showing. Not all pages have film info
-        // (that we care about), so check for the rich text or media areas too.
-        // On some fundraising pages we don't have those, but we may have a list
-        // instead which contains audience list XML attributes to match instead.
-        try {
-          await page
-            .locator(".Film-info__information,.Rich-text,.Media,ul[xmlns\\:av]")
-            .waitFor({ strict: false });
-        } catch (error) {
-          console.error(`Page data not available at ${domain}${showUrl}`);
-          throw error;
-        }
-
-        return await page.content();
-      },
-    );
-
-    // If the HTML for the page can't be extracted, it's an error page. In this
-    // case there's nothing we cna do to retrieve this show. Let's hope the
-    // article is available on another URL.
-    if (moviePages[showUrl].html === null) {
+    let pageContents = await getPageContents(url, cacheKey, domain, showUrl);
+    // If we got an error the first time we tried to get the page contents,
+    // wait and then try again.
+    if (pageContents instanceof Error) {
+      console.log(
+        `      - First attempt failed to retrieve data for ${domain}${showUrl} -- waiting before trying again...`,
+      );
+      await new Promise((resolve) => setTimeout(resolve, 30_000)); // Wait 30 seconds
+      pageContents = getPageContents(url, cacheKey, domain, showUrl);
+    }
+    // If we still can't get the page contents, fail the run.
+    if (pageContents instanceof Error) {
       console.log(
         `      - Unable to retrieve data for "${showData.title}"; error page detected at ${domain}${showUrl}`,
       );
-      delete moviePages[showUrl];
+      throw pageContents;
     }
+
+    moviePages[showUrl].html = pageContents;
   }
 
   return moviePages;
