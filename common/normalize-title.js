@@ -334,6 +334,14 @@ function normalizeTitle(title, options) {
     ],
     ["LIVE: New Year’s Eve Concert", "LIVE: NYE Concert"],
     ["Film Club |", "Film Club: "],
+    ["IN-HOUSE - ", "IN-HOUSE: "],
+    ["BAR TRASH - ", "BAR TRASH: "],
+    ["Goethe Annual Lecture 2025 - ", "Goethe Annual Lecture 2025: "],
+    [
+      /All Out of Bubblegum Film Club \d+ \//i,
+      "All Out of Bubblegum Film Club: ",
+    ],
+    [/^Watch (.+) with RKG & Friends$/i, "$1"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
