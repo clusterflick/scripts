@@ -1,6 +1,15 @@
 const { fetchText } = require("../../common/utils.js");
 const attributes = require("./attributes");
 
+function uniqueEvents(events) {
+  const ids = {};
+  return events.filter((event) => {
+    const isNewEvent = !ids[event.id];
+    ids[event.id] = true;
+    return isNewEvent;
+  });
+}
+
 const getPageServerData = async (url) => {
   const jsonString = (await fetchText(url)).match(
     /\s+window.__SERVER_DATA__ = ({.+});/i,
@@ -9,27 +18,33 @@ const getPageServerData = async (url) => {
   return JSON.parse(jsonString.replace(/\t/g, " "));
 };
 
-async function retrieve() {
+const getSearchResultsFor = async (searchTerm) => {
+  const movieListPages = [];
   let page = 1;
   let lastPage = 1;
-  const movieListPages = [];
-  const moviePages = {};
-
-  console.log(" - Requesting search results pages...");
   while (page <= lastPage) {
-    const url = `${attributes.url}${page}`;
+    const url = `${attributes.url}/${searchTerm}/?page=${page}`;
     const pageData = await getPageServerData(url);
 
     page += 1;
     lastPage = pageData.page_count;
     movieListPages.push(pageData);
   }
+  return movieListPages;
+};
 
-  const events = movieListPages.flatMap(
-    ({ search_data: { events } }) => events.results,
+async function retrieve() {
+  console.log(" - Requesting search results pages...");
+  const movieListPages = []
+    .concat(await getSearchResultsFor("screening"))
+    .concat(await getSearchResultsFor("film"));
+
+  const events = uniqueEvents(
+    movieListPages.flatMap(({ search_data: { events } }) => events.results),
   );
 
   console.log(` - Requesting details for ${events.length} events...`);
+  const moviePages = {};
   for (const [index, event] of events.entries()) {
     try {
       if (index % 10 === 0)

@@ -88,12 +88,19 @@ async function findEvents(cinema) {
       if (isCancelled || isOnline) return false;
 
       const processName = (name) =>
-        normalizeName(name.replace("Cinema London", "").replace("London", ""));
+        normalizeName(
+          name
+            .replace("Cinema London", "")
+            .replace(" - London", "")
+            .replace("London", ""),
+        );
 
       const distance = distanceInKmBetweenCoordinates(cinema.geo, { lat, lon });
       const [venueName] = name.split(/[,|]/i);
+      const names = (cinema.alternativeNames || []).concat(cinema.name);
       return (
-        processName(venueName) === processName(cinema.name) && distance < 0.1
+        names.some((name) => processName(venueName) === processName(name)) &&
+        distance < 0.1
       );
     },
   );

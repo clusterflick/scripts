@@ -55,6 +55,7 @@ function normalizeTitle(title, options) {
     ["Modigliani - ", "Modigliani: "],
     ["Film Africa 2025 -", "Film Africa 2025:"],
     ["Preview Screening - ", "Preview Screening: "],
+    ["Cinema Film Screening - ", "Cinema Film Screening "],
     ["Closing Night + Awards", "Closing Night and Awards"],
     ["Poetry Slam", "Event: Poetry Slam"],
     ["Scared To Dance -", "Scared To Dance "],
@@ -332,6 +333,7 @@ function normalizeTitle(title, options) {
       "Muppet Christmas Carol",
     ],
     ["LIVE: New Year’s Eve Concert", "LIVE: NYE Concert"],
+    ["Film Club |", "Film Club: "],
   ];
 
   corrections.forEach(([phrase, replacement]) => {

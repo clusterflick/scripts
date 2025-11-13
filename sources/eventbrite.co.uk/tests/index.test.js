@@ -24,7 +24,7 @@ const cinema = {
 
 describe(attributes.name, () => {
   setupPolly(isRecording, __dirname);
-  jest.useFakeTimers().setSystemTime(new Date("2025-04-11"));
+  jest.useFakeTimers().setSystemTime(new Date("2025-11-13"));
 
   it(
     "retrieve and find events",
@@ -33,9 +33,9 @@ describe(attributes.name, () => {
 
       // Make sure the input looks roughly correct
       expect(movieListPages).toBeTruthy();
-      expect(movieListPages).toHaveLength(16);
+      expect(movieListPages).toHaveLength(83);
       expect(moviePages).toBeTruthy();
-      expect(Object.keys(moviePages)).toHaveLength(307);
+      expect(Object.keys(moviePages)).toHaveLength(1240);
 
       readJSON.mockImplementation(() => ({ movieListPages, moviePages }));
 
@@ -51,9 +51,9 @@ describe(attributes.name, () => {
         .map(addTestCategory);
 
       // Make sure the data looks roughly correct
-      expect(data).toHaveLength(7);
+      expect(data).toHaveLength(5);
       expect(data).toMatchSnapshot();
     },
-    isRecording ? 600_000 : undefined,
+    isRecording ? 3_600_000 : undefined,
   );
 });

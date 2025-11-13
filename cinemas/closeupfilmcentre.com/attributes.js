@@ -1,6 +1,7 @@
 module.exports = {
   id: "closeupfilmcentre.com",
   name: "Close-Up Film Centre",
+  alternativeNames: ["Close-Up Cinema"],
   domain: "https://www.closeupfilmcentre.com",
   url: "https://www.closeupfilmcentre.com",
   address: "97 Sclater Street, London, E1 6HR, UK",
