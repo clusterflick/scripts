@@ -15,7 +15,7 @@ async function retrieve(location) {
   console.log(`[🎞️  Location: ${location}]`);
 
   const { retrieve } = getModule(location);
-  if (!retrieve) throw new Error(`No module for location ${retrieve}`);
+  if (!retrieve) throw new Error(`No module for location "${location}"`);
 
   console.log("Retrieving data ...");
   let retrievedData;
