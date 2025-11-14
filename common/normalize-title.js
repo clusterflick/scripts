@@ -342,6 +342,8 @@ function normalizeTitle(title, options) {
       "All Out of Bubblegum Film Club: ",
     ],
     [/^Watch (.+) with RKG & Friends$/i, "$1"],
+    ["EXPOSED aka EXPONERAD", "EXPONERAD"],
+    ["THE SEDUCERS AKA TOP SECRET", "THE SEDUCERS"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
