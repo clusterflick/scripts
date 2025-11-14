@@ -1,6 +1,7 @@
 module.exports = {
   id: "riocinema.org.uk",
   name: "Rio Cinema",
+  alternativeNames: ["The Rio"],
   domain: "https://riocinema.org.uk",
   url: "https://riocinema.org.uk/Rio.dll/WhatsOn",
   address: "107 Kingsland High Street, London, E8 2PB, UK",

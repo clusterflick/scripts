@@ -1,6 +1,7 @@
 module.exports = {
   id: "sandsfilms.co.uk",
   name: "Sands Films Cinema",
+  alternativeNames: ["Rotherhithe Sands Films Studios"],
   domain: "https://sandsfilms.co.uk",
   url: "https://sandsfilms.eventive.org",
   address: "82 Saint Marychurch Street, London, SE16 4HZ, UK",

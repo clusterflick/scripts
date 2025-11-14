@@ -1,6 +1,7 @@
 module.exports = {
   id: "phoenixcinema.co.uk",
   name: "Phoenix Cinema",
+  alternativeNames: ["Phoenix Cinema East Finchley", "Phoenix Cinema Finchley"],
   domain: "https://www.phoenixcinema.co.uk",
   url: "https://www.phoenixcinema.co.uk",
   address: "52 High Road, London, N2 9PJ, UK",

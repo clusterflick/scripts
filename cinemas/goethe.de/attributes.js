@@ -1,6 +1,7 @@
 module.exports = {
   id: "goethe.de",
   name: "Goethe-Institut London",
+  alternativeNames: ["Goethe-Institut"],
   domain: "https://www.goethe.de",
   url: "https://www.goethe.de/ins/gb/en/ver.cfm#adress_IDtxt=London&category_IDtxt=178934",
   address: "50 Princes Gate, Exhibition Road, London, SW7 2PH, UK",

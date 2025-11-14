@@ -1,6 +1,7 @@
 module.exports = {
   id: "odeon.co.uk-uxbridge",
   name: "ODEON Luxe Uxbridge",
+  alternativeNames: ["ODEON Uxbridge"],
   domain: "https://www.odeon.co.uk",
   url: "https://www.odeon.co.uk/cinemas/uxbridge",
   address: "302 The chimes shopping centre, Uxbridge, London, UB8 1GD, UK",

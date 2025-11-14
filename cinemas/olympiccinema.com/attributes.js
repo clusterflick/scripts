@@ -1,6 +1,7 @@
 module.exports = {
   id: "olympiccinema.com",
   name: "The Olympic Cinema",
+  alternativeNames: ["Olympic Studios"],
   domain: "https://www.olympiccinema.com",
   url: "https://www.olympiccinema.com/whats-on",
   address: "117-123 Church Road Barnes, London, SW13 9HL, UK",

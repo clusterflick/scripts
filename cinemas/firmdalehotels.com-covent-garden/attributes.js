@@ -1,6 +1,7 @@
 module.exports = {
   id: "firmdalehotels.com-covent-garden",
   name: "Firmdale Covent Garden Hotel",
+  alternativeNames: ["Covent Garden Hotel"],
   domain: "https://www.firmdalehotels.com",
   url: "https://www.firmdalehotels.com/whats-on/firmdale-film-club",
   address: "10 Monmouth Street, London, WC2H 9HB, UK",

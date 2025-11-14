@@ -1,6 +1,7 @@
 module.exports = {
   id: "ica.art",
   name: "Institute of Contemporary Arts",
+  alternativeNames: ["ICA Cinema"],
   domain: "https://www.ica.art",
   url: "https://www.ica.art/upcoming",
   address: "The Mall, London, SW1Y 5AH, UK",

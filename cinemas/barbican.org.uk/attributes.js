@@ -1,6 +1,7 @@
 module.exports = {
   id: "barbican.org.uk",
   name: "The Barbican",
+  alternativeNames: ["Barbican Centre"],
   domain: "https://www.barbican.org.uk",
   url: "https://www.barbican.org.uk/whats-on/cinema",
   address: "Silk Street, City of London, London, EC2Y 8DS, UK",

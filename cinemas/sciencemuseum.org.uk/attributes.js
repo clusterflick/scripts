@@ -1,6 +1,7 @@
 module.exports = {
   id: "sciencemuseum.org.uk",
   name: "Science Museum",
+  alternativeNames: ["Science Museum IMAX"],
   domain: "https://www.sciencemuseum.org.uk",
   url: "https://www.sciencemuseum.org.uk/see-and-do",
   address: "Exhibition Road, South Kensington, London, SW7 2DD, UK",

@@ -1,7 +1,7 @@
 module.exports = {
   id: "coldharbourblue.com",
   name: "Coldharbour Blue",
-  alternativeNames: ["Cold Harbour Blue"],
+  alternativeNames: ["Cold Harbour Blue", "Whirled Cinema"],
   domain: "https://www.coldharbourblue.com",
   url: "https://www.coldharbourblue.com/events",
   address:

@@ -11,7 +11,7 @@ const isRecording = false;
 
 describe(attributes.name, () => {
   setupPolly(isRecording, __dirname);
-  jest.useFakeTimers().setSystemTime(new Date("2025-11-08"));
+  jest.useFakeTimers().setSystemTime(new Date("2025-11-14"));
 
   it(
     "retrieve and transform",
@@ -37,7 +37,7 @@ describe(attributes.name, () => {
         .map(addTestCategory);
 
       // Make sure the data looks roughly correct
-      expect(data).toHaveLength(50); // Results are filtered from the original data
+      expect(data).toHaveLength(41); // Results are filtered from the original data
 
       expect(schemaValidate(data)).toBe(true);
       expect(data).toMatchSnapshot();

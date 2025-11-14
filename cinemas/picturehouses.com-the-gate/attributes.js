@@ -1,6 +1,7 @@
 module.exports = {
   id: "picturehouses.com-the-gate",
   name: "The Gate Picturehouse",
+  alternativeNames: ["The Gate"],
   domain: "https://www.picturehouses.com",
   url: "https://www.picturehouses.com/cinema/the-gate",
   address: "87 Notting Hill Gate, London, W11 3JZ, UK",

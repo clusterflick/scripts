@@ -1,6 +1,7 @@
 module.exports = {
   id: "davidleancinema.org.uk",
   name: "The David Lean Cinema",
+  alternativeNames: ["David Lean Croydon"],
   domain: "https://www.davidleancinema.org.uk",
   url: "https://www.davidleancinema.org.uk/listings/",
   address: "Croydon Clocktower, Katharine Street, Croydon, CR9 1ET, UK",

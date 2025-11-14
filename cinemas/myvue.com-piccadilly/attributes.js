@@ -1,6 +1,7 @@
 module.exports = {
   id: "myvue.com-piccadilly",
   name: "Vue Piccadilly",
+  alternativeNames: ["Vue Piccadilly Circus"],
   domain: "https://www.myvue.com",
   url: "https://www.myvue.com/cinema/piccadilly",
   address: "19 Lower Regent Street, London, SW1Y 4LR, UK",

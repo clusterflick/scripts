@@ -1,6 +1,7 @@
 module.exports = {
   id: "picturehouses.com-the-ritzy",
   name: "The Ritzy Picturehouse",
+  alternativeNames: ["The Ritzy"],
   domain: "https://www.picturehouses.com",
   url: "https://www.picturehouses.com/cinema/the-ritzy",
   address: "Brixton, Brixton Oval, Coldharbour Lane, London, SW2 1JG, UK",
