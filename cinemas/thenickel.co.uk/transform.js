@@ -100,6 +100,11 @@ async function transform({ movieListPage }, sourcedEvents) {
       if (filmMatch) filmTime = filmMatch[1];
       if (doorsMatch || filmMatch) return;
 
+      // Drop text mentioning double feature; the Nickel lists each performance
+      // separately even if they're part of a double feature. Including this
+      // text can confuse categorisation into identifying it as "movie marathon"
+      if (text.match(/DOUBLE FEATURE/i)) return;
+
       // Everything else is part of the description
       description.push(text.trim());
     });
