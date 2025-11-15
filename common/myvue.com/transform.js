@@ -40,6 +40,10 @@ async function transform(attributes, { result: movieData }, sourcedEvents) {
               accessibility.relaxed = true;
               return;
             }
+            if (value.toLowerCase() === "subtitled") {
+              accessibility.subtitled = true;
+              return;
+            }
             if (value.toLowerCase() === "big-shorts") {
               accessibility.audioDescription = true;
               // Don't return so it's added to the notes

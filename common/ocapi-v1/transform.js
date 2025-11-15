@@ -6,6 +6,7 @@ const {
   createAccessibility,
   generateShowingId,
   isPrivateHire,
+  basicNormalize,
 } = require("../../common/utils");
 
 const findFor = (list, idMatch) => list.find(({ id }) => id === idMatch);
@@ -89,13 +90,19 @@ async function transform(
 
         const notesList = [];
         const accessibility = {};
+        if (basicNormalize(movie.title).includes("(subbed)")) {
+          accessibility.subtitled = true;
+        }
         if (performance.requires3dGlasses) {
           notesList.push("Requires 3D glasses");
         }
         performance.attributeIds.forEach((attributeId) => {
           const attribute = findFor(attributes, attributeId);
           if (attribute) {
-            if (attribute.name.text.toLowerCase().endsWith(" (sub)")) {
+            if (
+              attribute.name.text.toLowerCase().endsWith(" (sub)") ||
+              attribute.name.text.toLowerCase().startsWith("Subtitled ")
+            ) {
               accessibility.subtitled = true;
               return;
             }
