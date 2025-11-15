@@ -21,16 +21,16 @@ function getPageContents(url, cacheKey, domain, showUrl) {
     }
 
     try {
-      // Check we're not on an error page...
-      await page
+      const errorLocator = page
         .locator("#content h2")
-        .filter({ hasText: /500 - internal server error/i })
-        .waitFor({ state: "detached", timeout: 1000 });
+        .filter({ hasText: /500 - internal server error/i });
+
+      // Check if we're on an error page
+      await errorLocator.waitFor({ state: "attached", timeout: 1000 });
+
+      return new Error(`Error page detected - ${getText(await errorLocator)}`);
     } catch {
-      // ... and bail if we actually are on an error page
-      return new Error(
-        `Error page detected - ${getText(await page.locator("#content h2"))}`,
-      );
+      // If waitFor times out, no error page was found, continue normally
     }
 
     // Make sure there's information showing. Not all pages have film info
