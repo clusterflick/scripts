@@ -3,6 +3,11 @@ module.exports = {
   name: "Phoenix Cinema",
   alternativeNames: ["Phoenix Cinema East Finchley", "Phoenix Cinema Finchley"],
   domain: "https://www.phoenixcinema.co.uk",
+  socials: {
+    letterboxd: null,
+    twitter: "Phoenixcinema",
+    instagram: "phoenix_cinema",
+  },
   url: "https://www.phoenixcinema.co.uk",
   address: "52 High Road, London, N2 9PJ, UK",
   geo: { lat: 51.58853061979289, lon: -0.16390063689779108 },

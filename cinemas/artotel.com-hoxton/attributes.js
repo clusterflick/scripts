@@ -2,6 +2,11 @@ module.exports = {
   id: "artotel.com-battersea-power-station",
   name: "JOIA",
   domain: "https://artotel.com",
+  socials: {
+    letterboxd: null,
+    twitter: "artotel",
+    instagram: "artotel",
+  },
   url: "https://artotel.com/en/hotels/london/hoxton/whats-on/",
   address: "1 Electric Boulevard, Nine Elms, London, SW11 8BJ, UK",
   geo: { lat: 51.480810109766104, lon: -0.1451906305733974 },

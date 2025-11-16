@@ -2,6 +2,11 @@ module.exports = {
   id: "everymancinema.com-screen-on-the-green",
   name: "Everyman Screen on the Green",
   domain: "https://www.everymancinema.com",
+  socials: {
+    letterboxd: "everymancinema",
+    twitter: "everymancinema",
+    instagram: "everymancinema",
+  },
   url: "https://www.everymancinema.com/venues-list/x077o-everyman-screen-on-the-green/",
   address: "83 Upper Street, London, N1 0NP, UK",
   geo: { lat: 51.536895795317655, lon: -0.10367029831557663 },

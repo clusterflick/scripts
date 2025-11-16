@@ -2,6 +2,11 @@ module.exports = {
   id: "regentstreetcinema.com",
   name: "Regent Street Cinema",
   domain: "https://www.regentstreetcinema.com",
+  socials: {
+    letterboxd: "regentstcinema",
+    twitter: "RegentStCinema",
+    instagram: "regentstcinema",
+  },
   url: "https://www.regentstreetcinema.com",
   address: "307 Regent Street, London, W1B 2HW, UK",
   geo: { lat: 51.51697797578034, lon: -0.14287260207236563 },

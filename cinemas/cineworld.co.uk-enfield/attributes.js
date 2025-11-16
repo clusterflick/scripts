@@ -2,6 +2,11 @@ module.exports = {
   id: "cineworld.co.uk-enfield",
   name: "Cineworld Enfield",
   domain: "https://www.cineworld.co.uk",
+  socials: {
+    letterboxd: null,
+    twitter: "cineworld",
+    instagram: "cineworld",
+  },
   url: "https://www.cineworld.co.uk/cinemas/london-enfield/048",
   address:
     "Southbury Leisure Centre, 208 Southbury Rd, Enfield, London, EN1 1YQ, UK",

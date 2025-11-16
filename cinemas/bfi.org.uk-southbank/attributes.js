@@ -2,6 +2,11 @@ module.exports = {
   id: "bfi.org.uk-southbank",
   name: "BFI Southbank",
   domain: "https://whatson.bfi.org.uk/Online/",
+  socials: {
+    letterboxd: "bfi",
+    twitter: "britishfilminstitute",
+    instagram: "BFI",
+  },
   url: "https://whatson.bfi.org.uk/Online/default.asp",
   address: "Belvedere Road, South Bank, London, SE1 8XT, UK",
   geo: { lat: 51.50694478669063, lon: -0.11512917647911004 },
