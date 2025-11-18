@@ -273,6 +273,7 @@ const knownRemovablePhrases = [
   "Brazilian Summer Nights:",
   "BTS ARMY:",
   "by Rebecca Salvadori",
+  "Mondays for Members:",
   "Members' Exclusive:",
   "Members':",
   "Members:",
