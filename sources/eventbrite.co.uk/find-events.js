@@ -22,6 +22,22 @@ function getEventDescriptiopn(details) {
   );
 }
 
+function isExcludedEvent({ name }) {
+  return basicNormalize(name).startsWith(
+    // Exclude film clubs which only discuss the movie but don't have a showing
+    basicNormalize("All Out of Bubblegum Film Club"),
+  );
+}
+
+function processVenueName(venueName) {
+  return normalizeName(
+    venueName
+      .replace("Cinema London", "")
+      .replace(" - London", "")
+      .replace("London", ""),
+  );
+}
+
 function convertEventbriteEvent(event, details) {
   const startDate = parseDate(`${event.start_date}T${event.start_time}`);
   const endDate = parseDate(`${event.end_date}T${event.end_time}`);
@@ -76,34 +92,25 @@ async function findEvents(cinema) {
     movieListPages.flatMap(({ search_data: { events } }) => events.results),
   );
 
-  const filteredEvents = events.filter(
-    ({
-      is_cancelled: isCancelled,
-      is_online_event: isOnline,
+  const filteredEvents = events.filter((event) => {
+    if (event.is_cancelled || event.is_online_event) return false;
+    if (isExcludedEvent(event)) return false;
+
+    const {
       primary_venue: {
         name,
         address: { longitude: lon, latitude: lat },
       },
-    }) => {
-      if (isCancelled || isOnline) return false;
-
-      const processName = (name) =>
-        normalizeName(
-          name
-            .replace("Cinema London", "")
-            .replace(" - London", "")
-            .replace("London", ""),
-        );
-
-      const distance = distanceInKmBetweenCoordinates(cinema.geo, { lat, lon });
-      const [venueName] = name.split(/[,|]/i);
-      const names = (cinema.alternativeNames || []).concat(cinema.name);
-      return (
-        names.some((name) => processName(venueName) === processName(name)) &&
-        distance < 0.1
-      );
-    },
-  );
+    } = event;
+    const distance = distanceInKmBetweenCoordinates(cinema.geo, { lat, lon });
+    const [venueName] = name.split(/[,|]/i);
+    const names = (cinema.alternativeNames || []).concat(cinema.name);
+    return (
+      names.some(
+        (name) => processVenueName(venueName) === processVenueName(name),
+      ) && distance < 0.1
+    );
+  });
 
   return filteredEvents.map((event) =>
     convertEventbriteEvent(event, moviePages[event.url]),
