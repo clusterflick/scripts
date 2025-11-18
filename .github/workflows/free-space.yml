@@ -38,3 +38,14 @@ jobs:
       - run: npm cache verify
       - run: npm cache clean --force
       - run: npm cache verify
+
+  self_hosted_pi_4_4:
+    name: Free space on Pi4-4
+    runs-on: self-hosted-pi4-4
+    steps:
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: .node-version
+      - run: npm cache verify
+      - run: npm cache clean --force
+      - run: npm cache verify
