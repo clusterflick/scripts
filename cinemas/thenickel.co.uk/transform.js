@@ -71,8 +71,7 @@ async function transform({ movieListPage }, sourcedEvents) {
     const title = getText($detailsCol.children("b").first());
 
     const movieInfo = {};
-    let doorsTime = null;
-    let filmTime = null;
+    const times = [];
     const description = [];
 
     $detailsCol.contents().each(function () {
@@ -96,8 +95,9 @@ async function transform({ movieListPage }, sourcedEvents) {
       // They can be on the same line: "Doors 6pm • Film 6:30pm"
       const doorsMatch = text.match(/Doors\s+([\d:.]+\s*[ap]m)/i);
       const filmMatch = text.match(/Film\s+([\d:.]+\s*[ap]m)/i);
-      if (doorsMatch) doorsTime = doorsMatch[1];
-      if (filmMatch) filmTime = filmMatch[1];
+      // This assumes the door match will always occur before the film match
+      if (doorsMatch) times.push({ doors: doorsMatch[1] });
+      if (filmMatch) times[times.length - 1].films = filmMatch[1];
       if (doorsMatch || filmMatch) return;
 
       // Drop text mentioning double feature; the Nickel lists each performance
@@ -109,17 +109,40 @@ async function transform({ movieListPage }, sourcedEvents) {
       description.push(text.trim());
     });
 
+    // If there's no film time, the performance may be sold out and the times
+    // removed from the page. The movie will be added again if it was captured
+    // by a previous run as part of the missing movies functionality.
+    if (!times.length === 0) return;
+
     // Extract date from booking column
     const bookingText = $bookingCol.text();
     const dateMatch = bookingText.match(
       /(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\s*(\d+\.\d+)/i,
     );
-    const date = parseDate(`${dateMatch[1]} ${dateMatch[2]}`, filmTime);
-    const bookingUrl = $bookingCol.find("a").attr("href");
-    const [, id] = bookingUrl.match(/event\/id\/(\d+)/);
+
+    const bookingUrls = $bookingCol.find("a");
+    const performances = times.map(
+      ({ films: filmTime, doors: doorsTime }, index) => {
+        const date = parseDate(`${dateMatch[1]} ${dateMatch[2]}`, filmTime);
+        const notesList = [];
+        if (doorsTime) notesList.push(`Doors ${doorsTime}`);
+        return createPerformance({
+          date,
+          notesList,
+          url: bookingUrls.eq(index).attr("href"),
+        });
+      },
+    );
+
+    // Use the event ID of the first performance as the overall movie ID.
+    // Normally this wouldn't be a great idea, but each listing is per day, so
+    // we should be ok to use this as an overall ID knowing it won't change
+    // until the date of all performances added as part of this movie object.
+    const [, id] = bookingUrls
+      .eq(0)
+      .attr("href")
+      .match(/event\/id\/(\d+)/);
     const showingId = generateShowingId(attributes, id);
-    const notesList = [];
-    if (doorsTime) notesList.push(`Doors ${doorsTime}`);
 
     const movie = {
       showingId,
@@ -129,13 +152,7 @@ async function transform({ movieListPage }, sourcedEvents) {
         year: movieInfo.year,
         directors: movieInfo.directors,
       }),
-      performances: [
-        createPerformance({
-          date,
-          notesList,
-          url: bookingUrl,
-        }),
-      ],
+      performances,
       matchingHints: {
         overview: description
           .join("\n")

@@ -146,6 +146,7 @@ async function transform(
       "thecinemainthepowerstation.com",
       "thegardencinema.co.uk",
       "thelexicinema.co.uk",
+      "thenickel.co.uk",
     ];
     const yesterdaysData = optedIn.includes(location) ? yesterdaysRelease : [];
 
