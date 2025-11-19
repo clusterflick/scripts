@@ -56,6 +56,11 @@ function schemaValidate(data) {
   return isValid && hasAllUniqueIds;
 }
 
+const disableCache = () => {
+  const { dailyCache } = require("./cache");
+  dailyCache.mockImplementation((key, callback) => callback());
+};
+
 const setupCacheMock = (dirname, suffix) => {
   const { dailyCache, readDailyCache } = require("./cache");
   const { readCache } = jest.requireActual("./cache");
@@ -87,4 +92,5 @@ module.exports = {
   setupPolly: setupPollyWrapper,
   schemaValidate,
   setupCacheMock,
+  disableCache,
 };
