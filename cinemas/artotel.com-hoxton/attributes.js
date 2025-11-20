@@ -1,6 +1,6 @@
 module.exports = {
-  id: "artotel.com-battersea-power-station",
-  name: "JOIA",
+  id: "artotel.com-hoxton",
+  name: "Art'otel London Hoxton",
   domain: "https://artotel.com",
   socials: {
     letterboxd: null,
@@ -8,6 +8,6 @@ module.exports = {
     instagram: "artotel",
   },
   url: "https://artotel.com/en/hotels/london/hoxton/whats-on/",
-  address: "1 Electric Boulevard, Nine Elms, London, SW11 8BJ, UK",
-  geo: { lat: 51.480810109766104, lon: -0.1451906305733974 },
+  address: "1-3 Rivington Street, London, EC2A 3DT, UK",
+  geo: { lat: 51.526156790963746, lon: -0.08333842748307863 },
 };

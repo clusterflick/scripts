@@ -12,8 +12,7 @@ require("dotenv").config();
  * Specifically ignored IDs from the Movie DB
  */
 const ignoredIds = [
-  1547689, // Caravaggio [Duplicate] -- https://www.themoviedb.org/movie/1547689
-  1087846, // (SPECIAL) MYSTERY MOVIE [Placeholder] -- https://www.themoviedb.org/movie/1087846-special-mystery-movie
+  1526154, // Le making of de Nouvelle Vague -- https://www.themoviedb.org/movie/1526154-le-making-of-de-nouvelle-vague
 ];
 
 const applyNameCorrections = (name) =>

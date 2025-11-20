@@ -17,7 +17,7 @@ function normalizeTitle(title, options) {
   const corrections = [
     [/:? The Movie$/i, ""],
     [/F1\s?®? The Movie/i, "F1"],
-    [/^Times\+ Preview$/i, "The Last Journey"], // NOTE: This may need updated in the future if there's a new times preview out with a similarly poor title
+    ["The Fishermen", "The Fisherman"], // NOTE: This can be removed in the future once this specific misname has been removed
     [" + Cat", " and Cat"],
     [" + Zog", " and Zog"],
     [" + Superworm", " and Superworm"],
@@ -344,6 +344,11 @@ function normalizeTitle(title, options) {
     [/^Watch (.+) with RKG & Friends$/i, "$1"],
     ["EXPOSED aka EXPONERAD", "EXPONERAD"],
     ["THE SEDUCERS AKA TOP SECRET", "THE SEDUCERS"],
+    ["Song O Chyabrung", "Song Of Chyabrung"],
+    [
+      /Marcel,? Santa and the Little Pizza Delivery Man/i,
+      "Marcel, Father Christmas and the Little Pizza Delivery Boy",
+    ],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
