@@ -125,7 +125,9 @@ async function transform({ movieListPage }, sourcedEvents) {
       /(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\s*(\d+\.\d+)/i,
     );
 
-    const bookingUrls = $bookingCol.find("a");
+    const bookingUrls = $bookingCol
+      .find("a")
+      .filter((i, el) => $(el).attr("href").trim() && $(el).text().trim());
     const performances = times.map(
       ({ films: filmTime, doors: doorsTime }, index) => {
         const date = parseDate(`${dateMatch[1]} ${dateMatch[2]}`, filmTime);
