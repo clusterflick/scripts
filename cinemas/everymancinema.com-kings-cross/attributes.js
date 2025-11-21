@@ -1,6 +1,7 @@
 module.exports = {
   id: "everymancinema.com-kings-cross",
   name: "Everyman King's Cross",
+  alternativeNames: ["Everyman On The Corner"],
   domain: "https://www.everymancinema.com",
   socials: {
     letterboxd: "everymancinema",

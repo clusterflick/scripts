@@ -1,5 +1,5 @@
 const cheerio = require("cheerio");
-const { parse, isBefore, startOfDay, addYears } = require("date-fns");
+const { parse, isBefore, startOfDay, addYears, subDays } = require("date-fns");
 const { enGB } = require("date-fns/locale/en-GB");
 const {
   getText,
@@ -43,10 +43,12 @@ function parseDate(dateString, timeString) {
   // It's unexpected to not find a parsable date, so throw
   if (isNaN(parsedDate.getTime())) throw new Error("Unable to parse date");
 
-  // If the date is in the past, then it's probably on the year boundary
-  // and we need to add a year
-  const today = startOfDay(new Date());
-  if (isBefore(parsedDate, today)) {
+  // If the date is significantly the past, then it's probably on the year
+  // boundary and we need to add a year. This is done by checking if it's a date
+  // more than 5 days ago. We can't just check if it's before today as old
+  // listings may be left up past the performance date.
+  const fiveDaysAgo = subDays(startOfDay(new Date()), 5);
+  if (isBefore(parsedDate, fiveDaysAgo)) {
     parsedDate = addYears(parsedDate, 1);
   }
 
@@ -83,7 +85,7 @@ async function transform({ movieListPage }, sourcedEvents) {
       if (!text.trim()) return;
 
       // Check if this contains year/director info (YYYY, Country, Director)
-      const [, movieInfoText] = text.match(/^\s*\(([^)]+)\)\s*$/) || [];
+      const [, movieInfoText] = text.match(/^\s*\((\d{4}[^)]+)\)\s*$/) || [];
       if (movieInfoText) {
         const [year, , directors] = movieInfoText.split(",");
         movieInfo.year = isRange(year) ? undefined : year.trim();
@@ -91,14 +93,17 @@ async function transform({ movieListPage }, sourcedEvents) {
         return;
       }
 
-      // Check if this contains "Doors" and/or "Film" timing
+      // Check if this contains "Doors", "Film", or "Screenings" timing
       // They can be on the same line: "Doors 6pm • Film 6:30pm"
       const doorsMatch = text.match(/Doors\s+([\d:.]+\s*[ap]m)/i);
       const filmMatch = text.match(/Film\s+([\d:.]+\s*[ap]m)/i);
-      // This assumes the door match will always occur before the film match
+      const screeningsMatch = text.match(/Screenings\s+([\d:.]+\s*[ap]m)/i);
+      // This assumes the door match will always occur before the film or
+      // screenings match
       if (doorsMatch) times.push({ doors: doorsMatch[1] });
       if (filmMatch) times[times.length - 1].films = filmMatch[1];
-      if (doorsMatch || filmMatch) return;
+      if (screeningsMatch) times[times.length - 1].films = screeningsMatch[1];
+      if (doorsMatch || filmMatch || screeningsMatch) return;
 
       // Drop text mentioning double feature; the Nickel lists each performance
       // separately even if they're part of a double feature. Including this
@@ -133,6 +138,8 @@ async function transform({ movieListPage }, sourcedEvents) {
         });
       },
     );
+
+    if (performances.length === 0) return;
 
     // Use the event ID of the first performance as the overall movie ID.
     // Normally this wouldn't be a great idea, but each listing is per day, so
