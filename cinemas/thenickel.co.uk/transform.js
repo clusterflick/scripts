@@ -143,6 +143,13 @@ async function transform({ movieListPage }, sourcedEvents) {
 
     if (performances.length === 0) return;
 
+    // If there's no booking URL (usualoly when the performance is sold out),
+    // then skip adding this movie and we'll get it from historical data.
+    // TODO: Keep an eye on this, we may want to move how we calculate the ID
+    // below to somehting else so that we always get fresh data even for sold
+    // out movies.
+    if (bookingUrls.length === 0) return;
+
     // Use the event ID of the first performance as the overall movie ID.
     // Normally this wouldn't be a great idea, but each listing is per day, so
     // we should be ok to use this as an overall ID knowing it won't change

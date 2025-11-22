@@ -146,7 +146,7 @@ async function transform(
       "thecinemainthepowerstation.com",
       "thegardencinema.co.uk",
       "thelexicinema.co.uk",
-      // "thenickel.co.uk", // A misparsed performance has been added so opt-out of checking for missing performances until it's cleared
+      "thenickel.co.uk",
     ];
     const yesterdaysData = optedIn.includes(location) ? yesterdaysRelease : [];
 
