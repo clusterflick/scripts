@@ -10,5 +10,5 @@ module.exports = {
   },
   url: "https://www.barbican.org.uk/whats-on/cinema",
   address: "Silk Street, City of London, London, EC2Y 8DS, UK",
-  geo: { lat: 51.52024395978229, lon: -0.093786 },
+  geo: { lat: 51.52021852014776, lon: -0.09378707236413857 },
 };

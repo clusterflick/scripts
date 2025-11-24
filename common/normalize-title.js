@@ -124,6 +124,7 @@ function normalizeTitle(title, options) {
       "Vyasanasametham Bandhumithradhikal",
     ],
     ["Frozen 2", "Frozen II"],
+    ["Terminator 2 Live", " Terminator 2"],
     [/\s+terminator 2$/i, " Terminator 2 Judgment Day"],
     [/^Relaxed Mufasa/i, "Relaxed screening: Mufasa"],
     ["behaviour", "behavior"],

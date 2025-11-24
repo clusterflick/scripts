@@ -172,6 +172,7 @@ const knownRemovablePhrases = [
   "Hitchcock for Halloween:",
   "Hitch-October:",
   "for Halloween",
+  "The Film with Live Band",
   "with intro and Q&A",
   "with a live Q&A with The Cast",
   "with Introduction",
