@@ -45,6 +45,11 @@ function normalizeTitle(title, options) {
     ["Ex Libris - ", "Ex Libris: "],
     ["Bison - ", "Bison: "],
     ["The World of Hans Zimmer-", "The World of Hans Zimmer: "],
+    ["The World of Hans Zimmer -", "The World of Hans Zimmer: "],
+    [
+      "The World of Hans Zimmer: The New Dimension",
+      "The World of Hans Zimmer: A New Dimension",
+    ],
     [/Luca\s+-\s+Seeing Red/i, "Luca – Seeing Red"],
     ["Chainsaw Man - The Movie:", "Chainsaw Man – The Movie:"],
     ["Antarctica - ", "Antarctica: "],
