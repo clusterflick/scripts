@@ -42,6 +42,7 @@ function normalizeTitle(title, options) {
     ["Roger Waters -", "Roger Waters:"],
     ["CBeebies Musical - ", "CBeebies Musical: "],
     ["CBeebies - ", "CBeebies: "],
+    ["CBeebies Panto 2025", "CBeebies Panto"],
     ["Ex Libris - ", "Ex Libris: "],
     ["Bison - ", "Bison: "],
     ["The World of Hans Zimmer-", "The World of Hans Zimmer: "],
@@ -56,6 +57,10 @@ function normalizeTitle(title, options) {
     ["Rolling Stones - ", "Rolling Stones: "],
     [" - The Musical", ": The Musical"],
     ["Westlife -", "Westlife:"],
+    [
+      "Westlife: Royal Albert Hall 25th Anniversary Concert",
+      "Westlife: Royal Albert Hall",
+    ],
     ["Westlife: 25th Anniversary Concert", "Westlife: Royal Albert Hall"],
     ["Modigliani - ", "Modigliani: "],
     ["Film Africa 2025 -", "Film Africa 2025:"],
@@ -196,6 +201,7 @@ function normalizeTitle(title, options) {
     ["Sardaar Ji", "Sardaarji"],
     ["Sardar Ji", "Sardaarji"],
     ["Sardarji", "Sardaarji"],
+    ["DE DE PYAR DE 2", "DE DE PYAAR DE 2"],
     [/trois /i, "3 "], // Fixes trois hommes et un couffin
     [/ \(20th$/i, ""],
     [/ \(Re-Re$/i, ""],
