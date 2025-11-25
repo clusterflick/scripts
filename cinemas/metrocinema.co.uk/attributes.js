@@ -14,4 +14,5 @@ module.exports = {
   apiKey: "qWZhtogUoLqN0WQimlxrRJE36YUURmbfli8X7IwM8SVlnwPj3ssUuOkmfTdgvcBA",
   apiDomain: "https://metrocinema.api.cinesync.io",
   locationId: "4",
+  location: "metro-cinema",
 };

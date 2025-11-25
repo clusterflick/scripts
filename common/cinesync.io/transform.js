@@ -24,14 +24,8 @@ function parseDuration(durationStr) {
   return hours * 60 + minutes;
 }
 
-/**
- * Parse date and time from session_start_date and show_time_slots
- */
 function parseDateTime(dateStr, timeStr) {
-  // dateStr is like "2025-11-24"
-  // timeStr is like "2:00pm" or "8:00pm"
-  const dateTimeStr = `${dateStr} ${timeStr}`;
-  return parse(dateTimeStr, "yyyy-MM-dd h:mma", new Date());
+  return parse(`${dateStr} ${timeStr}`, "yyyy-MM-dd h:mma", new Date());
 }
 
 async function transform(attributes, { movieListPage }, sourcedEvents) {
@@ -62,10 +56,9 @@ async function transform(attributes, { movieListPage }, sourcedEvents) {
         moviesMap.set(movieId, {
           showingId: generateShowingId(attributes, movieId),
           title: movie.movie_name,
-          url: `${attributes.domain}/movie/${movie.url_key}`,
+          url: `${attributes.domain}/movies/${movie.url_key}?location=${attributes.location}&locationKey=${attributes.locationId}`,
           overview: createOverview({
             duration: parseDuration(movie.duration),
-            year: movie.movie_year,
             categories,
             directors,
             actors,
@@ -76,6 +69,11 @@ async function transform(attributes, { movieListPage }, sourcedEvents) {
           matchingHints: {
             overview: movie.synopsis
               ? sanitizeRichText(movie.synopsis)
+                  .split("<a ")[0]
+                  .split(/[\n|\r]/)
+                  .map((value) => value.trim())
+                  .filter((value) => !!value)
+                  .join("\n")
               : undefined,
           },
         });
@@ -114,16 +112,13 @@ async function transform(attributes, { movieListPage }, sourcedEvents) {
           notesList.push(tag.name);
         });
 
-        // Build booking URL - using the show_time_uuid
-        const bookingUrl = `${attributes.domain}/buy-tickets?show_time_uuid=${showTime.show_time_uuid}`;
-
         const performance = createPerformance({
           date: parseDateTime(
             showTime.session_start_date,
             showTime.show_time_slots,
           ),
           notesList,
-          url: bookingUrl,
+          url: `${attributes.domain}/movies/${movie.url_key}/showtimes/${showTime.session_start_date}/${attributes.location}/seat-plan?showtime=${showTime.show_time_uuid}`,
           screen: showTime.screen_name,
           status: {
             soldOut: showTime.sold_out || false,
@@ -136,7 +131,6 @@ async function transform(attributes, { movieListPage }, sourcedEvents) {
     }
   }
 
-  console.log(tags);
   // Convert map to array
   const movies = Array.from(moviesMap.values());
 
