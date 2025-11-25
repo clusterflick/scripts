@@ -585,6 +585,7 @@ function normalizeTitle(title, options) {
     .replace(/\s+q&a$/i, "")
     .replace(/\s3d$/i, "")
     .replace(/\+$/, "")
+    .replace(/\(\d{4}-[^)]+\)$/, "") // Remove any date range suffixes
     .replace(/\([^)]+$/i, "") // Remove stuff in brackets where the last bracket got removed elsehwere (e.g. there was a separator within the brackets)
     .trim();
 }
