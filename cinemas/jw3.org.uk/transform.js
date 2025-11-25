@@ -93,10 +93,10 @@ const getSinglePerformance = ($) => {
       date: parseDate(date),
       notesList: getNotesList($, $sidebars),
       url,
-      accessibility: {
+      accessibility: createAccessibility({
         subtitled: description.includes("with english subtitles"),
         babyFriendly: title.startsWith("babykino:"),
-      },
+      }),
     }),
   ];
 };

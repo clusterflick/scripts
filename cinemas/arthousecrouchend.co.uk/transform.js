@@ -6,6 +6,7 @@ const {
   generateShowingId,
   basicNormalize,
   createPerformance,
+  createAccessibility,
 } = require("../../common/utils");
 const { parseDate } = require("./utils");
 const attributes = require("./attributes");
@@ -71,10 +72,10 @@ async function transform({ moviePages }, sourcedEvents) {
               accessibilityFromPerformanceNote ? undefined : performanceNote,
             ],
             url: $(this).attr("href"),
-            accessibility: {
+            accessibility: createAccessibility({
               ...(accessibilityFromPerformanceNote ?? {}),
               ...accessibilityFromSynopsis,
-            },
+            }),
           }),
         );
       });
