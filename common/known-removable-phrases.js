@@ -652,6 +652,7 @@ const knownRemovablePhrases = [
   "Extended Cut",
   "Extended Version",
   "Free Event:",
+  "Film Screening & FILM TALK",
   "Free Film Screening",
   "Film Screenings",
   "Film Screening",
