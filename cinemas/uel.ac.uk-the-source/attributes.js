@@ -9,5 +9,5 @@ module.exports = {
   },
   url: "https://www.uel.ac.uk/the-source",
   address: "Source Studios, Theatre Square, Stratford, London, E15 1BX, UK",
-  geo: { lat: 51.54279941291508, lon: 0.001426898571487537 },
+  geo: { lat: 51.542946713588705, lon: 0.0014237981889354745 },
 };

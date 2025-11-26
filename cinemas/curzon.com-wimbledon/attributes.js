@@ -9,5 +9,5 @@ module.exports = {
   },
   url: "https://www.curzon.com/venues/wimbledon",
   address: "23 The Broadway, London, SW19 1RE, UK",
-  geo: { lat: 51.420747389164646, lon: -0.2054954322800224 },
+  geo: { lat: 51.420350211789135, lon: -0.20554479541443185 },
 };

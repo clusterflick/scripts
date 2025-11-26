@@ -9,5 +9,5 @@ module.exports = {
   },
   url: "https://www.curzon.com/venues/soho",
   address: "99 Shaftesbury Avenue, London, W1D 5DY, UK",
-  geo: { lat: 51.51298767477921, lon: -0.1305613666708299 },
+  geo: { lat: 51.51270913537077, lon: -0.13058624291734733 },
 };
