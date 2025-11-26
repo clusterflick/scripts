@@ -7,7 +7,7 @@ const {
   generateShowingId,
   basicNormalize,
 } = require("../../common/utils");
-const normalizeName = require("../../common/normalize-name");
+const normalizeVenueName = require("../../common/normalize-venue-name");
 const distanceInKmBetweenCoordinates = require("../../common/distance-in-km-between-coordinates");
 const attributes = require("./attributes");
 const { default: slugify } = require("slugify");
@@ -214,9 +214,11 @@ async function findEvents(cinema) {
           lon: location.lon,
         })
       : 0; // Assume a name match will be good enough if no location is available
+    const names = (cinema.alternativeNames || []).concat(cinema.name);
     return (
-      normalizeName(venue.title) === normalizeName(cinema.name) &&
-      distance < 0.1
+      names.some(
+        (name) => normalizeVenueName(venue.title) === normalizeVenueName(name),
+      ) && distance < 0.1
     );
   });
 

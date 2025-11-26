@@ -14,7 +14,7 @@ async function geocodeAddress(cinema, name, address) {
   const url = `https://maps.googleapis.com/maps/api/geocode/json?key=${MAPS_API_KEY}&address=${encodedAddress}`;
 
   const cacheKey = `geocode-${cinema}`;
-  const response = await dailyCache(cacheKey, async () => await fetchJson(url))
+  const response = await dailyCache(cacheKey, async () => await fetchJson(url));
   return response.results[0].geometry.location;
 }
 
@@ -41,7 +41,10 @@ async function checkCoordinates() {
     await new Promise((resolve) => setTimeout(resolve, 100));
 
     const geocodedLocation = await geocodeAddress(cinema, name, address);
-    const distance = distanceInKmBetweenCoordinates(geo, { lat: geocodedLocation.lat, lon: geocodedLocation.lng });
+    const distance = distanceInKmBetweenCoordinates(geo, {
+      lat: geocodedLocation.lat,
+      lon: geocodedLocation.lng,
+    });
 
     if (distance > SIGNIFICANT_DISTANCE_KM) {
       const distanceInMeters = Math.round(distance * 1000);
@@ -59,4 +62,3 @@ async function checkCoordinates() {
 }
 
 checkCoordinates();
-

@@ -1,6 +1,6 @@
 const path = require("node:path");
 const cheerio = require("cheerio");
-const normalizeName = require("../../common/normalize-name");
+const normalizeVenueName = require("../../common/normalize-venue-name");
 const distanceInKmBetweenCoordinates = require("../../common/distance-in-km-between-coordinates");
 const {
   createOverview,
@@ -78,9 +78,12 @@ async function findEvents(cinema) {
       lon: location.geo.longitude,
     };
     const distance = distanceInKmBetweenCoordinates(cinema.geo, coordinates);
+    const names = (cinema.alternativeNames || []).concat(cinema.name);
     return (
-      normalizeName(location.name) === normalizeName(cinema.name) &&
-      distance < 0.1
+      names.some(
+        (name) =>
+          normalizeVenueName(location.name) === normalizeVenueName(name),
+      ) && distance < 0.1
     );
   });
 

@@ -5,7 +5,7 @@ const {
   sanitizeRichText,
   generateShowingId,
 } = require("../../common/utils");
-const normalizeName = require("../../common/normalize-name");
+const normalizeVenueName = require("../../common/normalize-venue-name");
 const distanceInKmBetweenCoordinates = require("../../common/distance-in-km-between-coordinates");
 const { createOverview, createPerformance } = require("../../common/utils");
 const { parseDate } = require("./utils");
@@ -26,15 +26,6 @@ function isExcludedEvent({ name }) {
   return basicNormalize(name).startsWith(
     // Exclude film clubs which only discuss the movie but don't have a showing
     basicNormalize("All Out of Bubblegum Film Club"),
-  );
-}
-
-function processVenueName(venueName) {
-  return normalizeName(
-    venueName
-      .replace("Cinema London", "")
-      .replace(" - London", "")
-      .replace("London", ""),
   );
 }
 
@@ -107,7 +98,7 @@ async function findEvents(cinema) {
     const names = (cinema.alternativeNames || []).concat(cinema.name);
     return (
       names.some(
-        (name) => processVenueName(venueName) === processVenueName(name),
+        (name) => normalizeVenueName(venueName) === normalizeVenueName(name),
       ) && distance < 0.1
     );
   });

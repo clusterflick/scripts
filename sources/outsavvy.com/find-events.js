@@ -1,7 +1,7 @@
 const path = require("node:path");
 const cheerio = require("cheerio");
 const { readJSON, generateShowingId, getText } = require("../../common/utils");
-const normalizeName = require("../../common/normalize-name");
+const normalizeVenueName = require("../../common/normalize-venue-name");
 const distanceInKmBetweenCoordinates = require("../../common/distance-in-km-between-coordinates");
 const { createOverview, createPerformance } = require("../../common/utils");
 const { parseDate } = require("./utils");
@@ -86,8 +86,11 @@ async function findEvents(cinema) {
 
   const filteredEvents = events.filter(({ venueName, coordinates }) => {
     const distance = distanceInKmBetweenCoordinates(cinema.geo, coordinates);
+    const names = (cinema.alternativeNames || []).concat(cinema.name);
     return (
-      normalizeName(venueName) === normalizeName(cinema.name) && distance < 0.1
+      names.some(
+        (name) => normalizeVenueName(venueName) === normalizeVenueName(name),
+      ) && distance < 0.1
     );
   });
 
