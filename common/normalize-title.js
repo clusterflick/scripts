@@ -362,6 +362,7 @@ function normalizeTitle(title, options) {
       "Marcel, Father Christmas and the Little Pizza Delivery Boy",
     ],
     ["Migrant Cinema - ", "Migrant Cinema: "],
+    ["muppets christmas carol", "muppet christmas carol"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {

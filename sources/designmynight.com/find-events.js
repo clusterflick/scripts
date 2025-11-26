@@ -43,8 +43,21 @@ function extractMovieTitleFromTicketName(ticketName) {
     )
     .trim();
 
-  // Only return title if it's different from the original name
-  return title === originalName ? null : title;
+  // If the title is unchanged, and it includes a keyword that looks like a
+  // ticket name then let's assume it's not a movie title
+  const normalizeTitle = basicNormalize(title);
+  if (
+    title === originalName &&
+    (normalizeTitle.includes("admission") ||
+      normalizeTitle.includes("seating") ||
+      normalizeTitle.includes("ticket") ||
+      normalizeTitle.includes("royal box") ||
+      normalizeTitle.includes("table for"))
+  ) {
+    return undefined;
+  }
+
+  return title;
 }
 
 /**
