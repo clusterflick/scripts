@@ -67,7 +67,15 @@ async function findEvents(cinema) {
     // Source data may not always be available or required
   }
 
-  const allHits = movieListPages.flatMap(({ hits }) => hits);
+  const allHits = movieListPages
+    .flatMap(({ hits }) => hits)
+    // Remove duplicates; as we're running more than one search, it's possible
+    // to get the same values back for both.
+    .reduce((acc, hit) => {
+      const missingValue = !acc.find((item) => item.objectID === hit.objectID);
+      if (missingValue) acc.push(hit);
+      return acc;
+    }, []);
   const matchingEvents = allHits.filter((hit) => {
     const coordinates = { lat: hit._geoloc.lat, lon: hit._geoloc.lng };
     const distance = distanceInKmBetweenCoordinates(cinema.geo, coordinates);
@@ -76,7 +84,8 @@ async function findEvents(cinema) {
       names.some(
         (name) => normalizeVenueName(hit.venue) === normalizeVenueName(name),
       ) &&
-      // Check if the distance is close (i.e. we have a match) or ridiculously far away (i.e. something is misconfigured)
+      // Check if the distance is close (i.e. we have a match) or ridiculously
+      // far away (i.e. something is misconfigured)
       (distance < 0.1 || distance > 5000)
     );
   });
