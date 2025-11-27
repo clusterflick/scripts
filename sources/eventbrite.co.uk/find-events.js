@@ -5,11 +5,10 @@ const {
   sanitizeRichText,
   generateShowingId,
 } = require("../../common/utils");
-const normalizeVenueName = require("../../common/normalize-venue-name");
-const distanceInKmBetweenCoordinates = require("../../common/distance-in-km-between-coordinates");
 const { createOverview, createPerformance } = require("../../common/utils");
 const { parseDate } = require("./utils");
 const attributes = require("./attributes");
+const { venueMatchesCinema } = require("../../common/source-utils");
 
 function getEventDescription(details) {
   if (!details) return "";
@@ -93,14 +92,9 @@ async function findEvents(cinema) {
         address: { longitude: lon, latitude: lat },
       },
     } = event;
-    const distance = distanceInKmBetweenCoordinates(cinema.geo, { lat, lon });
+    // Split venue name before matching (e.g., "BFI Southbank, London" -> "BFI Southbank")
     const [venueName] = name.split(/[,|]/i);
-    const names = (cinema.alternativeNames || []).concat(cinema.name);
-    return (
-      names.some(
-        (name) => normalizeVenueName(venueName) === normalizeVenueName(name),
-      ) && distance < 0.1
-    );
+    return venueMatchesCinema(cinema, venueName, { lat, lon });
   });
 
   return filteredEvents.map((event) =>

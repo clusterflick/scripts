@@ -1,5 +1,6 @@
 const path = require("node:path");
 const { parse, differenceInMinutes } = require("date-fns");
+const slugify = require("slugify");
 const {
   readJSON,
   createOverview,
@@ -7,10 +8,8 @@ const {
   generateShowingId,
   basicNormalize,
 } = require("../../common/utils");
-const normalizeVenueName = require("../../common/normalize-venue-name");
-const distanceInKmBetweenCoordinates = require("../../common/distance-in-km-between-coordinates");
+const { venueMatchesCinema } = require("../../common/source-utils");
 const attributes = require("./attributes");
-const { default: slugify } = require("slugify");
 
 function parseDateTime(date, time) {
   return parse(`${date} ${time}`, "yyyy-MM-dd HH:mm", new Date());
@@ -208,18 +207,10 @@ async function findEvents(cinema) {
 
   // Filter movieListPages to find events at this cinema
   const matchingListings = uniqueListings.filter(({ location, venue }) => {
-    const distance = location
-      ? distanceInKmBetweenCoordinates(cinema.geo, {
-          lat: location.lat,
-          lon: location.lon,
-        })
-      : 0; // Assume a name match will be good enough if no location is available
-    const names = (cinema.alternativeNames || []).concat(cinema.name);
-    return (
-      names.some(
-        (name) => normalizeVenueName(venue.title) === normalizeVenueName(name),
-      ) && distance < 0.1
-    );
+    const coordinates = location
+      ? { lat: location.lat, lon: location.lon }
+      : null;
+    return venueMatchesCinema(cinema, venue.title, coordinates);
   });
 
   // For each matching listing, get the event data from moviePages

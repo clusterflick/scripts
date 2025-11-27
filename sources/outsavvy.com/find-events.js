@@ -1,11 +1,10 @@
 const path = require("node:path");
 const cheerio = require("cheerio");
 const { readJSON, generateShowingId, getText } = require("../../common/utils");
-const normalizeVenueName = require("../../common/normalize-venue-name");
-const distanceInKmBetweenCoordinates = require("../../common/distance-in-km-between-coordinates");
 const { createOverview, createPerformance } = require("../../common/utils");
 const { parseDate } = require("./utils");
 const attributes = require("./attributes");
+const { venueMatchesCinema } = require("../../common/source-utils");
 
 function extractCoordinates($) {
   const mapImg = $(".website-map img[data-src*='marker-point.png']");
@@ -85,13 +84,7 @@ async function findEvents(cinema) {
   }
 
   const filteredEvents = events.filter(({ venueName, coordinates }) => {
-    const distance = distanceInKmBetweenCoordinates(cinema.geo, coordinates);
-    const names = (cinema.alternativeNames || []).concat(cinema.name);
-    return (
-      names.some(
-        (name) => normalizeVenueName(venueName) === normalizeVenueName(name),
-      ) && distance < 0.1
-    );
+    return venueMatchesCinema(cinema, venueName, coordinates);
   });
 
   return filteredEvents.map((event) => convertOutsavvyEvent(event));

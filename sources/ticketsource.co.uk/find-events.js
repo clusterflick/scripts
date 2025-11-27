@@ -5,10 +5,9 @@ const {
   createAccessibility,
   basicNormalize,
 } = require("../../common/utils");
-const normalizeVenueName = require("../../common/normalize-venue-name");
-const distanceInKmBetweenCoordinates = require("../../common/distance-in-km-between-coordinates");
 const { createOverview, createPerformance } = require("../../common/utils");
 const attributes = require("./attributes");
+const { venueMatchesCinema } = require("../../common/source-utils");
 
 function createPerformanceFromHit({ timestamp, venueSlug, timeHash, hint }) {
   return createPerformance({
@@ -78,16 +77,9 @@ async function findEvents(cinema) {
     }, []);
   const matchingEvents = allHits.filter((hit) => {
     const coordinates = { lat: hit._geoloc.lat, lon: hit._geoloc.lng };
-    const distance = distanceInKmBetweenCoordinates(cinema.geo, coordinates);
-    const names = (cinema.alternativeNames || []).concat(cinema.name);
-    return (
-      names.some(
-        (name) => normalizeVenueName(hit.venue) === normalizeVenueName(name),
-      ) &&
-      // Check if the distance is close (i.e. we have a match) or ridiculously
-      // far away (i.e. something is misconfigured)
-      (distance < 0.1 || distance > 5000)
-    );
+    return venueMatchesCinema(cinema, hit.venue, coordinates, {
+      supportMisconfiguredCoordinates: true,
+    });
   });
 
   // Group by eventID

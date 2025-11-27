@@ -1,7 +1,5 @@
 const path = require("node:path");
 const cheerio = require("cheerio");
-const normalizeVenueName = require("../../common/normalize-venue-name");
-const distanceInKmBetweenCoordinates = require("../../common/distance-in-km-between-coordinates");
 const {
   createOverview,
   createPerformance,
@@ -9,6 +7,7 @@ const {
   generateShowingId,
 } = require("../../common/utils");
 const attributes = require("./attributes");
+const { venueMatchesCinema } = require("../../common/source-utils");
 
 function extractEventDetails(html) {
   const $ = cheerio.load(html);
@@ -77,14 +76,7 @@ async function findEvents(cinema) {
       lat: location.geo.latitude,
       lon: location.geo.longitude,
     };
-    const distance = distanceInKmBetweenCoordinates(cinema.geo, coordinates);
-    const names = (cinema.alternativeNames || []).concat(cinema.name);
-    return (
-      names.some(
-        (name) =>
-          normalizeVenueName(location.name) === normalizeVenueName(name),
-      ) && distance < 0.1
-    );
+    return venueMatchesCinema(cinema, location.name, coordinates);
   });
 
   return filteredEvents.map((event) => convertDiceEvent(event));

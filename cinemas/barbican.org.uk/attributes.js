@@ -1,7 +1,7 @@
 module.exports = {
   id: "barbican.org.uk",
   name: "The Barbican",
-  alternativeNames: ["Barbican Centre"],
+  alternativeNames: ["Barbican Centre", "Barbican"],
   domain: "https://www.barbican.org.uk",
   socials: {
     letterboxd: null,
