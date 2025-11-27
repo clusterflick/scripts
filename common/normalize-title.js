@@ -76,6 +76,7 @@ function normalizeTitle(title, options) {
     ["Film Club -", "Film Club: "],
     ["Crafty Movie Night - ", "Crafty Movie Night: "],
     ["Girlguiding Screening - ", "Girlguiding Screening: "],
+    ["SEEN Charity Film Screening - ", "SEEN Charity Film Screening: "],
     [/^SILVER\s*?SCREEN -/i, "SILVER SCREEN"],
     ["SUBTITLED -", "SUBTITLED "],
     [/^RELAXED -/i, "Relaxed screening: "],

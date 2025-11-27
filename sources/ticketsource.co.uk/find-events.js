@@ -1,4 +1,5 @@
 const path = require("node:path");
+const { decode } = require("html-entities");
 const {
   readJSON,
   generateShowingId,
@@ -38,7 +39,7 @@ function convertTicketSourceEvent(hits) {
 
   return {
     showingId: generateShowingId(attributes, eventHash),
-    title,
+    title: decode(title),
     url: `${attributes.domain}/whats-on/${locationSlug}/${venueSlug}/${eventSlug}/${eventHash}`,
     overview: createOverview({}),
     performances: hits.map(createPerformanceFromHit),
