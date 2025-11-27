@@ -14,6 +14,8 @@ require("dotenv").config();
 const ignoredIds = [
   1526154, // Le making of de Nouvelle Vague -- https://www.themoviedb.org/movie/1526154-le-making-of-de-nouvelle-vague
   766878, // Screening -- https://www.themoviedb.org/movie/766878-screening
+  978656, // An Introduction to David Lynch -- https://www.themoviedb.org/movie/-an-introduction-to-david-lynch
+  894857, // Desiree Burch: Unf*ckable -- https://www.themoviedb.org/movie/894857-desiree-burch-unf-ckable
 ];
 
 const applyNameCorrections = (name) =>
