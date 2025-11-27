@@ -13,6 +13,7 @@ require("dotenv").config();
  */
 const ignoredIds = [
   1526154, // Le making of de Nouvelle Vague -- https://www.themoviedb.org/movie/1526154-le-making-of-de-nouvelle-vague
+  766878, // Screening -- https://www.themoviedb.org/movie/766878-screening
 ];
 
 const applyNameCorrections = (name) =>

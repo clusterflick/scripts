@@ -5,7 +5,8 @@ function normalizeVenueName(venueName) {
     venueName
       .replace("Cinema London", "")
       .replace(" - London", "")
-      .replace("London", ""),
+      .replace("London", "")
+      .replace("Cinema,", ""),
   );
 }
 

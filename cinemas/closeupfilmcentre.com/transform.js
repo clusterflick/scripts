@@ -17,6 +17,43 @@ const parseDetailsFrom = (info) => {
   return { directors, year, duration };
 };
 
+function checkPerformanceExists(performance, sourcedEvent, cinemaEvents) {
+  return cinemaEvents.some((event) =>
+    event.performances.some((existingPerf) => {
+      const hasSameBookingUrl =
+        existingPerf.bookingUrl === performance.bookingUrl;
+      const hasSameOrigin =
+        new URL(existingPerf.bookingUrl).origin ===
+        new URL(performance.bookingUrl).origin;
+      const hasSameTime = existingPerf.time === performance.time;
+      const hasSameTitle = sourcedEvent.title === event.title;
+      return (
+        // If the performance has the same booking URL and time, it's a duplicate
+        (hasSameBookingUrl && hasSameTime) ||
+        // If the performance has the same title and origin and time, it's a duplicate
+        // This is to handle the case where the performance has a different booking URL but the same title and time and from the same source
+        (hasSameTitle && hasSameOrigin && hasSameTime)
+      );
+    }),
+  );
+}
+
+function filterSourcedEvents(sourcedEvents, cinemaEvents) {
+  const deduplicated = [];
+  for (const sourcedEvent of sourcedEvents) {
+    const newPerformances = sourcedEvent.performances.filter(
+      (performance) =>
+        !checkPerformanceExists(performance, sourcedEvent, cinemaEvents),
+    );
+
+    // Only add the event if it has new performances
+    if (newPerformances.length > 0) {
+      deduplicated.push({ ...sourcedEvent, performances: newPerformances });
+    }
+  }
+  return deduplicated;
+}
+
 async function transform({ moviePages }, sourcedEvents) {
   const movies = [];
 
@@ -70,7 +107,14 @@ async function transform({ moviePages }, sourcedEvents) {
   const listOfSourcedEvents = Object.values(sourcedEvents).flatMap(
     (events) => events,
   );
-  return movies.concat(listOfSourcedEvents);
+
+  // Filter out duplicate performances from sourced events
+  const deduplicatedSourcedEvents = filterSourcedEvents(
+    listOfSourcedEvents,
+    movies,
+  );
+
+  return movies.concat(deduplicatedSourcedEvents);
 }
 
 module.exports = transform;

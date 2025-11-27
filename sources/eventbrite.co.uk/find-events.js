@@ -11,7 +11,7 @@ const { createOverview, createPerformance } = require("../../common/utils");
 const { parseDate } = require("./utils");
 const attributes = require("./attributes");
 
-function getEventDescriptiopn(details) {
+function getEventDescription(details) {
   if (!details) return "";
 
   return (
@@ -32,7 +32,7 @@ function isExcludedEvent({ name }) {
 function convertEventbriteEvent(event, details) {
   const startDate = parseDate(`${event.start_date}T${event.start_time}`);
   const endDate = parseDate(`${event.end_date}T${event.end_time}`);
-  const eventDescription = getEventDescriptiopn(details);
+  const eventDescription = getEventDescription(details);
 
   return {
     showingId: generateShowingId(attributes, event.id),
