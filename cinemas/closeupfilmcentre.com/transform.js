@@ -5,6 +5,7 @@ const {
   createOverview,
   generateShowingId,
 } = require("../../common/utils");
+const normalizeTitle = require("../../common/normalize-title");
 const { parseDate } = require("./utils");
 const attributes = require("./attributes");
 
@@ -26,7 +27,8 @@ function checkPerformanceExists(performance, sourcedEvent, cinemaEvents) {
         new URL(existingPerf.bookingUrl).origin ===
         new URL(performance.bookingUrl).origin;
       const hasSameTime = existingPerf.time === performance.time;
-      const hasSameTitle = sourcedEvent.title === event.title;
+      const hasSameTitle =
+        normalizeTitle(sourcedEvent.title) === normalizeTitle(event.title);
       return (
         // If the performance has the same booking URL and time, it's a duplicate
         (hasSameBookingUrl && hasSameTime) ||

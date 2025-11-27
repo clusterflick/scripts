@@ -52,7 +52,7 @@ function parseOverviewFromDescription(descriptionHtml) {
   const yearRegex = /\b(\d{4})\b/;
   const durationRegex = /(\d{2,3})\s*mins?\b/i;
 
-  $("p").each(function () {
+  $("p,div").each(function () {
     const text = getText($(this));
     if (!text) return;
 
@@ -143,7 +143,7 @@ function toMovie($, showEl) {
       overview: cheerio
         .load(getTextAt($show, "description"))
         .root()
-        .find("p")
+        .find("p,div")
         .toArray()
         .map((el) => getText($(el)).replace(/\s+/g, " "))
         .join("\n")

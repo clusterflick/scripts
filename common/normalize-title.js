@@ -363,6 +363,10 @@ function normalizeTitle(title, options) {
     ],
     ["Migrant Cinema - ", "Migrant Cinema: "],
     ["muppets christmas carol", "muppet christmas carol"],
+    [
+      /^Dr\.? Strangelove$/i,
+      "Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb",
+    ],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
