@@ -75,12 +75,24 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
       },
     );
 
+    // There have been instances where the same performance is entered multiple
+    // times in the data coming back from Riverside Studios. This is a
+    // workaround to deduplicate these (and so pass schema validation).
+    const uniquePerformances = performances.filter(
+      (performance, index, self) => {
+        const serialized = JSON.stringify(performance);
+        return (
+          index === self.findIndex((p) => JSON.stringify(p) === serialized)
+        );
+      },
+    );
+
     return {
       showingId,
       title,
       url,
       overview,
-      performances,
+      performances: uniquePerformances,
       matchingHints: {
         overview: getText(cheerio.load(moviePages[urlRaw])(".te")),
       },
