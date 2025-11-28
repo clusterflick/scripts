@@ -5,7 +5,7 @@ module.exports = {
   socials: {
     letterboxd: null,
     twitter: "cineworld",
-    instagram: "cineworld",
+    instagram: "cineworldsouthruislip",
   },
   url: "https://www.cineworld.co.uk/cinemas/london-south-ruislip/106",
   address: "The Old Dairy, Victoria Road, Ruislip, London, HA4 0EW, UK",

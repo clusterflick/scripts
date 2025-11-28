@@ -4,8 +4,8 @@ module.exports = {
   domain: "https://whatson.bfi.org.uk/Online/",
   socials: {
     letterboxd: "bfi",
-    twitter: "britishfilminstitute",
-    instagram: "BFI",
+    twitter: "bfi",
+    instagram: "britishfilminstitute",
   },
   url: "https://whatson.bfi.org.uk/Online/default.asp",
   address: "Belvedere Road, South Bank, London, SE1 8XT, UK",

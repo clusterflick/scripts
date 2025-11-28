@@ -5,7 +5,7 @@ module.exports = {
   socials: {
     letterboxd: null,
     twitter: "cineworld",
-    instagram: "cineworld",
+    instagram: "cineworldwandsworth",
   },
   url: "https://www.cineworld.co.uk/cinemas/london-wandsworth/066",
   address: "Wandsworth High Street, London, SW18 4TF, UK",

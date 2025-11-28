@@ -5,7 +5,7 @@ module.exports = {
   socials: {
     letterboxd: null,
     twitter: "cineworld",
-    instagram: "cineworld",
+    instagram: "cineworldhounslow",
   },
   url: "https://www.cineworld.co.uk/cinemas/london-hounslow/118",
   address: "5A Smithy Lane, Hounslow, London, TW3 1EY, UK",

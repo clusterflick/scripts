@@ -5,7 +5,7 @@ module.exports = {
   socials: {
     letterboxd: null,
     twitter: "cineworld",
-    instagram: "cineworld",
+    instagram: "cineworldattheo2",
   },
   url: "https://www.cineworld.co.uk/cinemas/london-the-o2-greenwich/077",
   address: "The O2, Peninsula Square, London, SE10 0DX, UK",

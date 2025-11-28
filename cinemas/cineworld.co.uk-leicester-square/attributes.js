@@ -5,7 +5,7 @@ module.exports = {
   socials: {
     letterboxd: null,
     twitter: "cineworld",
-    instagram: "cineworld",
+    instagram: "cineworldlsq",
   },
   url: "https://www.cineworld.co.uk/cinemas/london-leicester-square/103",
   address: "5-6 Leicester Square, London, WC2H 7NA, UK",

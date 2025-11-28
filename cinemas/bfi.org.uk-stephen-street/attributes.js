@@ -4,8 +4,8 @@ module.exports = {
   domain: "https://www.bfi.org.uk",
   socials: {
     letterboxd: "bfi",
-    twitter: "britishfilminstitute",
-    instagram: "BFI",
+    twitter: "bfi",
+    instagram: "britishfilminstitute",
   },
   url: "https://www.bfi.org.uk/venue-hire/hiring-bfi-stephen-street",
   address: "21 Stephen Street, London, W1T 1LN, UK",

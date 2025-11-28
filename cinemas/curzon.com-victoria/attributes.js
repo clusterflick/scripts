@@ -5,7 +5,7 @@ module.exports = {
   socials: {
     letterboxd: "curzon",
     twitter: "CurzonVictoria",
-    instagram: "curzon.victoria",
+    instagram: "curzonvic",
   },
   url: "https://www.curzon.com/venues/victoria",
   address: "58 Victoria Street, London, SW1E 6QW, UK",

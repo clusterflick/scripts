@@ -4,8 +4,8 @@ module.exports = {
   domain: "https://whatson.bfi.org.uk/imax/Online/",
   socials: {
     letterboxd: "bfi",
-    twitter: "britishfilminstitute",
-    instagram: "BFI",
+    twitter: "bfi",
+    instagram: "britishfilminstitute",
   },
   url: "https://whatson.bfi.org.uk/imax/Online/default.asp",
   address: "1 Charlie Chaplin Walk, South Bank, London, SE1 8XR, UK",
