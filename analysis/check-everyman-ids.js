@@ -7,7 +7,11 @@ const {
 const { isInLondon, getNullMapping, getAttributesFor } = require("./utils");
 
 const prefix = "everymancinema.com-";
-const normalize = (value) => value.replace("Everyman ", "").trim();
+const normalize = (value) =>
+  value
+    .replace("Everyman ", "")
+    .replace(/^at\s+/i, "")
+    .trim();
 
 async function checkEverymanIds() {
   const mainPage = await fetchText("https://www.everymancinema.com/");
