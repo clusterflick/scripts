@@ -371,6 +371,7 @@ const knownRemovablePhrases = [
   "Film Club x Bounce Cinema:",
   "W Film Club:",
   "Film Club:",
+  "= Premier Film Screening",
   "Film Screening & Live Q&A:",
   "Film Screening:",
   "Fist Club X The Castle:",
