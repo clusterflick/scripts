@@ -388,6 +388,7 @@ const knownRemovablePhrases = [
   "Good Vibrations:",
   "gff:",
   "Goethe Annual Lecture 2025:",
+  "Grab your ticket to ",
   "green screen:",
   "green screen;",
   "green screen ",
