@@ -361,6 +361,7 @@ const knownRemovablePhrases = [
   "£2 Family Films :",
   "£2 Christmas Family Films:",
   "£5 Christmas Family Films:",
+  "Family Cinema:",
   "Family Films:",
   "Family Film Week:",
   "FFC x Marsh:",
@@ -455,6 +456,7 @@ const knownRemovablePhrases = [
   "LSFF:",
   "SLFF",
   "LMFF:",
+  "LAFS:",
   "London Migration Film Festival",
   "Love... Obsession... Music!:",
   "BFI LFF: Opening Night Gala",
@@ -639,6 +641,7 @@ const knownRemovablePhrases = [
   " Kimetsu no Yaiba ",
   "Cinema Season",
   "Sunrise, Sunset and Midnight",
+  "Julian Assange and the Price of Truth",
 
   // Common superfluous pieces
   "DRINK-AND-SING-ALONG",

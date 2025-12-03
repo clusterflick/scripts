@@ -39,7 +39,8 @@ function standardizePrefixingForNationalTheatrePerformances(title) {
   let updatedTitle = nationalTheatreIndicator
     .reduce((value, prefix) => value.replace(prefix, " "), title)
     .replace(/Preview Screening/i, "")
-    .replace(/Preview/i, "");
+    .replace(/Preview/i, "")
+    .replace(/: National Theatre$/i, "");
 
   return `National Theatre Live: ${updatedTitle}`
     .replace(/\s+:\s+/, " ")

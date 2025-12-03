@@ -273,6 +273,7 @@ const isPrivateHire = (title = "") =>
   // Sometimes private screenings are advertised on an event site, but in which
   // case they'll contain more information (like the movie title)
   basicNormalize(title) === "private screening" ||
+  basicNormalize(title) === "cleaning screen placeholder" ||
   basicNormalize(title).includes("do not book");
 
 async function runLlmFunction(llmFunction, options = { run: 0 }) {
