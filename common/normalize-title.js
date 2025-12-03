@@ -1,3 +1,4 @@
+var removeDiacritics = require("diacritics").remove;
 const knownRemovablePhrases = require("./known-removable-phrases");
 const standardizePrefixingForTheatrePerformances = require("./standardize-prefixing-for-theatre-performances");
 
@@ -368,6 +369,7 @@ function normalizeTitle(title, options) {
       /^Dr\.? Strangelove$/i,
       "Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb",
     ],
+    ["Prime Minster", "Prime Minister"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
@@ -560,7 +562,7 @@ function normalizeTitle(title, options) {
   title = title.replace(/\s+screening$/i, "");
   title = title.replace(/^relaxed /i, "");
 
-  return title
+  return removeDiacritics(title)
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/\u00AD/g, "") // Remove soft hyphens
