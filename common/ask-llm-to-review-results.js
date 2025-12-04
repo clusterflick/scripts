@@ -68,8 +68,18 @@ module.exports = async function askLlmToReviewResults(
     const result = await chatSession.sendMessage(prompt);
     const text = result.response
       .text()
+      .replace(/"backdrop_path": "[^,]+,\n/i, "") // Fix for specific LLM issue which generated invalid JSON
       .replace("```json", "")
       .replace("```", "");
-    return JSON.parse(text);
+    try {
+      const answer = JSON.parse(text);
+      return answer;
+    } catch (e) {
+      console.log("Error parsing LLM answer, full response below:");
+      console.log("----------------------------------------------");
+      console.log(result.response.text());
+      console.log("----------------------------------------------");
+      throw e;
+    }
   });
 };
