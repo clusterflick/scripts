@@ -111,6 +111,7 @@ function normalizeTitle(title, options) {
     [/\s+dub?$/i, ""], // Dubbed
     [/\s+sub?$/i, ""], // subbed
     [/\s+(3|2)d$/i, ""], // 3d or 2d
+    [/\s+2026$/i, ""], // Year
     ["Vasthunnam", "Vasthunam"],
     ["Melagaon", "Malegaon"],
     ["Chadian", "Chadum"],
@@ -370,6 +371,7 @@ function normalizeTitle(title, options) {
       "Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb",
     ],
     ["Prime Minster", "Prime Minister"],
+    [/Akhanda 2(\s+\(Telugu\))?$/i, "Akhanda 2: Thaandavam"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
