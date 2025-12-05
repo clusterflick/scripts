@@ -45,6 +45,8 @@ function standardizePrefixingForNationalTheatrePerformances(title) {
   return `National Theatre Live: ${updatedTitle}`
     .replace(/\s+:\s+/, " ")
     .replace(/\s+/g, " ")
+    .replace(/\(\d{4}\)$/i, "")
+    .replace(/\(\d{4}\s+encore\)$/i, "")
     .trim();
 }
 

@@ -16,6 +16,8 @@ const ignoredIds = [
   766878, // Screening -- https://www.themoviedb.org/movie/766878-screening
   978656, // An Introduction to David Lynch -- https://www.themoviedb.org/movie/-an-introduction-to-david-lynch
   894857, // Desiree Burch: Unf*ckable -- https://www.themoviedb.org/movie/894857-desiree-burch-unf-ckable
+  36883, // Midnight Movies: From the Margin to the Mainstream -- https://www.themoviedb.org/movie/36883-midnight-movies-from-the-margin-to-the-mainstream
+  598681, // WTF? -- https://www.themoviedb.org/movie/-wtf
 ];
 
 const applyNameCorrections = (name) =>
