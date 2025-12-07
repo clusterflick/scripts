@@ -372,6 +372,8 @@ function normalizeTitle(title, options) {
     ],
     ["Prime Minster", "Prime Minister"],
     [/Akhanda 2(\s+\(Telugu\))?$/i, "Akhanda 2: Thaandavam"],
+    ["LES LIAISONS DANSEREUSES", "LES LIAISONS DANGEREUSES"],
+    ["Search4Square", "Search for SquarePants"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
