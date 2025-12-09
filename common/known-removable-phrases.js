@@ -482,6 +482,7 @@ const knownRemovablePhrases = [
   "NEVER WATCHING MOVIES:",
   "Noah Davis Film Programme:",
   "Noah Baumbach:",
+  "MMEMBERS ONLY:",
   "MEMBERS ONLY:",
   "Merry Hitchmas:",
   "Misan Harriman:",

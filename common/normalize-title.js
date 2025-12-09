@@ -374,6 +374,11 @@ function normalizeTitle(title, options) {
     [/Akhanda 2(\s+\(Telugu\))?$/i, "Akhanda 2: Thaandavam"],
     ["LES LIAISONS DANSEREUSES", "LES LIAISONS DANGEREUSES"],
     ["Search4Square", "Search for SquarePants"],
+    [
+      /Snakes and Ladders: Childish Actions/i,
+      "Snakes and Ladders 2: Children's Games",
+    ],
+    [/Ella Mc Cay/i, "Ella McCay"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
