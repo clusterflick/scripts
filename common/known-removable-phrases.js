@@ -555,6 +555,7 @@ const knownRemovablePhrases = [
   "SLA:",
   "SLA:",
   "SLA 2025:",
+  "Shakespeare's ",
   "SHARMADEAN REID INTRODUCES",
   "She Connects; Saturday night at the movies",
   "SHORTIES:",
