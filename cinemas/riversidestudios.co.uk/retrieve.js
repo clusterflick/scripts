@@ -4,7 +4,7 @@ const { domain } = require("./attributes");
 const filmEventType = "101";
 
 async function retrieve() {
-  const url = `${domain}/ajax/filter_stream/2/88/?offset=0&limit=500`;
+  const url = `${domain}/ajax/filter_stream/ZWhHVEdwSDNuekJLUWI1OXVDQ0Fvdz09/?offset=0&limit=500`;
   const movieListPage = (await fetchJson(url)).filter((movie) => {
     // Accept events which have no type set (which seem to be films)
     if (!movie.event_type) return true;
