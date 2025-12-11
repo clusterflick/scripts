@@ -139,7 +139,7 @@ async function transform(
       "olympiccinema.com",
       "princecharlescinema.com",
       "richmix.org.uk",
-      "riversidestudios.co.uk",
+      // "riversidestudios.co.uk", -- Remove this for now as they've just swapped to a new system
       "thearzner.com",
       "thecastlecinema.com",
       "thecinemaatselfridges.com",

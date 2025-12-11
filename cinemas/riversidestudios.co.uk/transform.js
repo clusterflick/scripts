@@ -41,7 +41,7 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
     const showingId = generateShowingId(attributes, movieData.id);
 
     const overview = createOverview({
-      duration: movieData.run_time.split("mins")[0].trim(),
+      duration: movieData.duration.split("mins")[0].trim(),
       year,
       directors,
       actors,
