@@ -15,6 +15,8 @@ const convertDurationStringToMinutes = (duration) => {
   if (!duration) return undefined;
 
   const hrsAndMinsString = duration
+    .toLowerCase()
+    .replace("approx", "")
     .trim()
     .match(/^(?:(\d+)\s*ho?u?r?s?,?\s+?)?(\d+)\s*mi?n?s?/i);
   const hoursString = duration.trim().match(/^(\d+)\s*ho?u?rs?/i);

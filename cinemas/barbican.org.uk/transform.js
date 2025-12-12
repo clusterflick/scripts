@@ -17,6 +17,12 @@ const attributes = require("./attributes");
 
 const convertSummaryToMapping = ($) => {
   const summary = {};
+  $(".label-value-list__list li").each(function () {
+    const $key = $(this).find(".label-value-list__label");
+    const key = getText($key).toLowerCase().replace(":", "").trim();
+    const $value = $(this).find(".label-value-list__value");
+    summary[key] = getText($($value));
+  });
   $(".at-a-glance-row").each(function () {
     const $key = $(this).find("strong");
     const key = getText($key).toLowerCase().replace(":", "").trim();
