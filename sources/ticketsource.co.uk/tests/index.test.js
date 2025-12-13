@@ -16,7 +16,7 @@ const isRecording = false;
 
 describe(`${attributes.name}`, () => {
   setupPolly(isRecording, __dirname);
-  jest.useFakeTimers().setSystemTime(new Date("2025-11-27"));
+  jest.useFakeTimers().setSystemTime(new Date("2025-12-13"));
 
   describe.each([
     {
@@ -28,7 +28,13 @@ describe(`${attributes.name}`, () => {
       name: "Close-Up Film Centre",
       alternativeNames: ["Close-Up Cinema"],
       geo: { lat: 51.52363533860424, lon: -0.07204024586584808 },
-      expectedMatches: 24,
+      expectedMatches: 10,
+    },
+    {
+      name: "The Exchange Twickenham",
+      alternativeNames: ["The Exchange"],
+      geo: { lat: 51.45004001959767, lon: -0.3313163212241062 },
+      expectedMatches: 11,
     },
   ])("$name", ({ name, alternativeNames, geo, expectedMatches }) => {
     it(
@@ -38,7 +44,7 @@ describe(`${attributes.name}`, () => {
 
         // Make sure the input looks roughly correct
         expect(movieListPages).toBeTruthy();
-        expect(Object.keys(movieListPages)).toHaveLength(5);
+        expect(Object.keys(movieListPages)).toHaveLength(7);
 
         readJSON.mockImplementation(() => ({ movieListPages, moviePages }));
 

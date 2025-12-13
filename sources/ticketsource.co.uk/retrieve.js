@@ -43,6 +43,20 @@ function buildSearchParamsForLocationFilter({ page = 0 } = {}) {
   });
 }
 
+function buildSearchParamsForNtLive({ page = 0 } = {}) {
+  return buildSearchParams(page, {
+    filters: `category:'theatre'`,
+    query: "NT Live",
+  });
+}
+
+function buildSearchParamsForExhibitionOnScreen({ page = 0 } = {}) {
+  return buildSearchParams(page, {
+    filters: `category:'theatre'`,
+    query: "Exhibition On Screen",
+  });
+}
+
 async function fetchAlgoliaEvents(params) {
   const urlParameters = new URLSearchParams({
     "x-algolia-agent": "Algolia for JavaScript (3.35.1); Browser",
@@ -65,36 +79,16 @@ async function fetchAlgoliaEvents(params) {
 /**
  * Fetch all pages of events from TicketSource via Algolia API
  */
-async function retrieveGeoFilterEvents() {
+async function retrieveFilterEvents(buildSearchParamsForFilter) {
   const movieListPages = [];
-  const searchParams = buildSearchParamsForGeoFilter({ page: 0 });
+  const searchParams = buildSearchParamsForFilter({ page: 0 });
   const firstPage = await fetchAlgoliaEvents(searchParams);
   movieListPages.push(firstPage);
 
   const totalPages = firstPage.nbPages;
   let currentPage = 1; // Continue from the second page
   while (currentPage + 1 <= totalPages) {
-    const pageParams = buildSearchParamsForGeoFilter({ page: currentPage });
-    const pageResponse = await fetchAlgoliaEvents(pageParams);
-    movieListPages.push(pageResponse);
-    currentPage++;
-  }
-
-  return movieListPages;
-}
-
-async function retrieveLocationFilterEvents() {
-  const movieListPages = [];
-  const searchParams = buildSearchParamsForLocationFilter({ page: 0 });
-  const firstPage = await fetchAlgoliaEvents(searchParams);
-  movieListPages.push(firstPage);
-
-  const totalPages = firstPage.nbPages;
-  let currentPage = 1; // Continue from the second page
-  while (currentPage + 1 <= totalPages) {
-    const pageParams = buildSearchParamsForLocationFilter({
-      page: currentPage,
-    });
+    const pageParams = buildSearchParamsForFilter({ page: currentPage });
     const pageResponse = await fetchAlgoliaEvents(pageParams);
     movieListPages.push(pageResponse);
     currentPage++;
@@ -105,8 +99,10 @@ async function retrieveLocationFilterEvents() {
 
 async function retrieve() {
   const movieListPages = [].concat(
-    await retrieveGeoFilterEvents(),
-    await retrieveLocationFilterEvents(),
+    await retrieveFilterEvents(buildSearchParamsForGeoFilter),
+    await retrieveFilterEvents(buildSearchParamsForLocationFilter),
+    await retrieveFilterEvents(buildSearchParamsForNtLive),
+    await retrieveFilterEvents(buildSearchParamsForExhibitionOnScreen),
   );
   return { movieListPages };
 }

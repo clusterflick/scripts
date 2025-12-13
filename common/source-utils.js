@@ -30,7 +30,7 @@ function sortVenuesByEventCount(venues) {
  * @param {string} venueName - Name of the venue to match (caller should pre-split if needed)
  * @param {Object|null} coordinates - Venue coordinates {lat, lon}, or null for name-only matching
  * @param {Object} options - Optional configuration
- * @param {number} options.maxDistance - Maximum distance in km (default: 0.15)
+ * @param {number} options.maxDistance - Maximum distance in km (default: 0.35)
  * @param {boolean} options.supportMisconfiguredCoordinates - Allow ridiculously far distances (> 5000km) for misconfigured data (default: false)
  * @returns {Object|undefined} Matching cinema or undefined
  */
@@ -40,7 +40,7 @@ function findMatchingCinema(
   coordinates,
   options = {},
 ) {
-  const { maxDistance = 0.15, supportMisconfiguredCoordinates = false } =
+  const { maxDistance = 0.35, supportMisconfiguredCoordinates = false } =
     options;
 
   return knownCinemas.find((cinema) => {
@@ -71,7 +71,7 @@ function findMatchingCinema(
  * @param {string} venueName - Name of the venue to match
  * @param {Object|null} coordinates - Venue coordinates {lat, lon}, or null for name-only matching
  * @param {Object} options - Optional configuration
- * @param {number} options.maxDistance - Maximum distance in km (default: 0.15)
+ * @param {number} options.maxDistance - Maximum distance in km
  * @param {boolean} options.supportMisconfiguredCoordinates - Allow ridiculously far distances (> 5000km) for misconfigured data (default: false)
  * @returns {boolean} True if venue matches the cinema
  */

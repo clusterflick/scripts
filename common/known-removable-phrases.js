@@ -366,6 +366,7 @@ const knownRemovablePhrases = [
   "£2 Christmas Family Films:",
   "£5 Christmas Family Films:",
   "Family Cinema:",
+  "FAMILY FILM CLUB",
   "Family Films:",
   "Family Film Week:",
   "FFC x Marsh:",
