@@ -1,27 +1,31 @@
 const cheerio = require("cheerio");
-const { parse } = require("date-fns");
+const { parse, isValid } = require("date-fns");
 const { enGB } = require("date-fns/locale/en-GB");
 const {
   getText,
   createPerformance,
   createOverview,
-  basicNormalize,
   getMovieTitleAndYearFrom,
   generateShowingId,
 } = require("../../common/utils");
 const attributes = require("./attributes");
 
 function parseDate(dateString) {
-  return parse(dateString, "EEE d MMM yyyy @ HH:mm", new Date(), {
+  const longform = parse(dateString, "MMMM d, yyyy @ HH:mm", new Date(), {
     locale: enGB,
   });
+  if (isValid(longform)) return longform;
+  const shortform = parse(dateString, "d MMMM @ HH:mm", new Date(), {
+    locale: enGB,
+  });
+  return shortform;
 }
 
 function getDate($) {
-  const dateString = getText($(".entry_header h4")).split("·")[0].trim();
+  const dateString = getText($(".tribe-event-date-start"));
+  const parsedDate = parseDate(dateString);
 
-  const dateFromHeading = parseDate(dateString);
-  if (!isNaN(dateFromHeading.getTime())) return dateFromHeading;
+  if (!isNaN(parsedDate.getTime())) return parsedDate;
 
   // If the date can't be parsed, it may be because they forgot to put the time.
   // Check the description to see if there's a time mentioned.
@@ -44,19 +48,18 @@ async function transform({ moviePages }, sourcedEvents) {
     const moviePage = moviePages[url];
     const $ = cheerio.load(moviePage);
 
-    const $title = $(".entry_header h2");
-    const $note = $title.find("span");
-    const soldOut = basicNormalize(getText($note)).includes("sold out");
-    $note.remove();
+    const $title = $("#tribe-events-content h1");
     const title = getText($title);
-    const postId = $(".post.type-post").attr("id").replace("post-", "");
+    const postId = $(".tribe_events.type-tribe_events")
+      .attr("id")
+      .replace("post-", "");
     const showingId = generateShowingId(attributes, postId);
 
     if (!movies[showingId]) {
       let directors;
-      const description = getText($(".entry"));
+      const description = getText($(".tribe_events .tribe-events-content"));
       const directedByMatch = description.match(
-        /directed\s+by\s+(.*?)(?:\n|,|;|\sand\s|\swith\s)/i,
+        /directed\s+by\s+(.*?)(?:\n|,|;|\sand\s|\swith\s|\sstarring\s)/i,
       );
       if (directedByMatch) {
         directors = directedByMatch[1].replace(/\.$/, "");
@@ -69,25 +72,18 @@ async function transform({ moviePages }, sourcedEvents) {
         url,
         overview,
         performances: [],
-        matchingHints: { overview: getText($(".entry")) },
+        matchingHints: {
+          overview: getText($(".tribe_events .tribe-events-content")),
+        },
       };
     }
 
     const date = getDate($);
-    if (!date) return;
+    if (!date) throw new Error("Date not available");
 
-    const bookingUrl = $(".entry")
-      .find(
-        [
-          "a:contains('Ticketlab')",
-          "a:contains('TicketLab')",
-          "a:contains('Ticketsource')",
-          "a:contains('TicketSource')",
-        ].join(","),
-      )
-      .attr("href");
+    const bookingUrl = $(".tribe-rc-get-tickets-primary-link").attr("href");
     movies[showingId].performances = movies[showingId].performances.concat(
-      createPerformance({ date, url: bookingUrl || url, status: { soldOut } }),
+      createPerformance({ date, url: bookingUrl || url }),
     );
   });
 

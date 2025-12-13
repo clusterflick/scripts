@@ -1,5 +1,9 @@
 /** @jest-environment setup-polly-jest/jest-environment-node */
-const { setupPolly, schemaValidate } = require("../../../common/test-utils");
+const {
+  setupPolly,
+  schemaValidate,
+  setupCacheMock,
+} = require("../../../common/test-utils");
 const {
   sortAndFilterMovies,
   removeMatchingHints,
@@ -9,9 +13,12 @@ const { retrieve, transform, attributes } = require("..");
 
 const isRecording = false;
 
+jest.mock("../../../common/cache");
+setupCacheMock(__dirname, "2025-12-13");
+
 describe(attributes.name, () => {
   setupPolly(isRecording, __dirname);
-  jest.useFakeTimers().setSystemTime(new Date("2025-03-02"));
+  jest.useFakeTimers().setSystemTime(new Date("2025-12-13"));
 
   it(
     "retrieve and transform",
@@ -20,7 +27,7 @@ describe(attributes.name, () => {
 
       // Make sure the input looks roughly correct
       expect(moviePages).toBeTruthy();
-      expect(Object.keys(moviePages)).toHaveLength(51);
+      expect(Object.keys(moviePages)).toHaveLength(21);
 
       const output = sortAndFilterMovies(await transform({ moviePages }, {}));
       expect(
@@ -34,7 +41,7 @@ describe(attributes.name, () => {
         .map(addTestCategory);
 
       // Make sure the data looks roughly correct
-      expect(data).toHaveLength(48);
+      expect(data).toHaveLength(21);
 
       expect(schemaValidate(data)).toBe(true);
       expect(data).toMatchSnapshot();
