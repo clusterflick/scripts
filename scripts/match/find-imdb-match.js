@@ -41,8 +41,12 @@ const getScore = async (id) => {
   } catch {
     imdbGet = await getMoviePage(id, url);
   }
+
   const appData = getAppDataFrom(imdbGet);
-  const { entityMetadata, histogramData } = appData.props.pageProps.contentData;
+  const { contentData } = appData.props.pageProps;
+  if (!contentData) return;
+
+  const { entityMetadata, histogramData } = contentData;
   const { aggregateRating, voteCount } = entityMetadata.ratingsSummary;
   const allStars = histogramData.histogramValues.reduce(
     (sum, { voteCount: val, rating }) => sum + val * rating,
