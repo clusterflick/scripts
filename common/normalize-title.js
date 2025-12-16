@@ -23,6 +23,9 @@ function normalizeTitle(title, options) {
     [" + Zog", " and Zog"],
     [" + Superworm", " and Superworm"],
     [" + The Gruffalo's Child", " and The Gruffalo's Child"],
+    [" + 28YL: The Bone Temple", " "],
+    [" + The Bone Temple (", " "],
+    [" the bone temple double", " double"],
     [
       /^Taylor Swift The Official Release Party$/i,
       "Taylor Swift The Official Release Party Of A Showgirl",
@@ -330,7 +333,8 @@ function normalizeTitle(title, options) {
     ["High School Musical Movie", "High School Musical"],
     ["Sex Dla Opornych", "Seks dla opornych"],
     ["TO CATCH A THEIF", "To Catch a Thief"],
-    [/\(Double(-|\s)Bill\)/i, " Double Bill "],
+    [/\(Double(-|\s)?Bill\)/i, " Double Bill "],
+    [/Double(-|\s)?Bill/i, "Double Bill"],
     [/-? Double Feature/i, " Double Bill "],
     [/Wicked [+|/] Wicked[:]? For Good/i, "Wicked & Wicked: For Good"],
     [/Wicked:? Double Bill/i, "Wicked & Wicked: For Good Double Bill"],
@@ -604,6 +608,7 @@ function normalizeTitle(title, options) {
     .replace(/\+$/, "")
     .replace(/\(\d{4}-[^)]+\)$/, "") // Remove any date range suffixes
     .replace(/\([^)]+$/i, "") // Remove stuff in brackets where the last bracket got removed elsehwere (e.g. there was a separator within the brackets)
+    .replace(/^([^(]+)\)$/i, "$1") // Remove trailing ending bracket
     .trim();
 }
 
