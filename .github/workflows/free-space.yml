@@ -53,3 +53,15 @@ jobs:
       - run: npm cache verify
       - run: npm cache clean --force
       - run: npm cache verify
+
+  self_hosted_pi_4_5:
+    name: Free space on Pi4-5
+    runs-on: self-hosted-pi4-5
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: .node-version
+      - run: npm cache verify
+      - run: npm cache clean --force
+      - run: npm cache verify
