@@ -319,6 +319,7 @@ function normalizeTitle(title, options) {
     // Work around a weird issue with the moviedb API and a soft hyphen in the listing title
     [/Tales from the Mag(\u00AD)?ic Garden/i, "Tales from the Garden"],
     [" – Q&A with ", " + Q&A with "],
+    ["Homosexual –", "Homosexual ("],
     ["Stendalì: Still They Toll + ", ""],
     [/\s+Part\s+(\d+)(\s|:|$)/i, " $1$2"],
     ["Bāhubali", "Baahubali"],
@@ -383,6 +384,7 @@ function normalizeTitle(title, options) {
       "Snakes and Ladders 2: Children's Games",
     ],
     [/Ella Mc Cay/i, "Ella McCay"],
+    ["Superman 2025", "Superman (2025)"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {

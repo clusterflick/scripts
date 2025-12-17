@@ -314,6 +314,7 @@ const knownRemovablePhrases = [
   "CELLULOID JAM!",
   "Cinema Film Screening Konrad Wolf Film Series:",
   "Cinema Film Screening Konrad Wolf:",
+  "Cinema Film Screening",
   "Konrad Wolf:",
   "CineMarx:",
   "Copy of ",
