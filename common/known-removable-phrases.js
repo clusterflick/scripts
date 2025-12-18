@@ -257,6 +257,7 @@ const knownRemovablePhrases = [
   "AnimeGirlsOnline:",
   "Animation at War:",
   "Animation in Love:",
+  "Annemarie Jacir:",
   "Art of Action:",
   "Artist's Film Picks:",
   "ATOMIC ORIGINS:",
