@@ -110,6 +110,7 @@ const knownRemovablePhrases = [
   "– European Day of Languages",
   "– Family Screening",
   "- Family Screening",
+  "– A Fundraiser for Latin Elephant",
   "- Genesis Networking",
   "– OperaGlass Works",
   "– Poetry Film Screening and Fundraiser",
