@@ -26,6 +26,7 @@ function normalizeTitle(title, options) {
     [" + 28YL: The Bone Temple", " "],
     [" + The Bone Temple (", " "],
     [" & 28 Years Later: The Bone Temple (", " "],
+    [" & 28 Years Later: The Bone Temple -", " "],
     [" the bone temple double", " double"],
     [
       /^Taylor Swift The Official Release Party$/i,
