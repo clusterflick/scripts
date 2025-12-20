@@ -51,6 +51,7 @@ function normalizeTitle(title, options) {
     ["CBeebies Panto 2025", "CBeebies Panto"],
     ["Ex Libris - ", "Ex Libris: "],
     ["Bison - ", "Bison: "],
+    ["COLD ISLANDERS - ", "COLD ISLANDERS: "],
     ["The World of Hans Zimmer-", "The World of Hans Zimmer: "],
     ["The World of Hans Zimmer -", "The World of Hans Zimmer: "],
     [
@@ -136,6 +137,7 @@ function normalizeTitle(title, options) {
       "Vyasana Sametham Bandhu Mithradhikal",
       "Vyasanasametham Bandhumithradhikal",
     ],
+    ["Mana Shankara Varaprasad Garu", "Mana ShankaraVaraprasad Garu"],
     ["Frozen 2", "Frozen II"],
     ["Terminator 2 Live", " Terminator 2"],
     [/\s+terminator 2$/i, " Terminator 2 Judgment Day"],

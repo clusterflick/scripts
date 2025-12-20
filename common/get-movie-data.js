@@ -67,11 +67,13 @@ const matchesExpectedCastCrew = async (match, movie) => {
     normalizeName(name.split(" ").reverse().join(" ")),
   ]);
 
-  // Only attepmpt to match if there's crew information to check against
+  // Only attempt to match if there's crew information to check against
   if (crew.length > 0) {
-    const directors = movie.overview.directors.map((name) =>
-      normalizeName(name),
-    );
+    const movieDirectors = [
+      ...movie.overview.directors,
+      ...(movie.matchingHints?.crew || []),
+    ];
+    const directors = movieDirectors.map((name) => normalizeName(name));
 
     // Don't bother checking the Opera listings, they're usualy wrong
     // TODO: This may be problematic as it'll just match any entry which has
@@ -122,9 +124,13 @@ const matchesExpectedCastCrew = async (match, movie) => {
 };
 
 async function findMovieByDirector(normalizedTitle, movie) {
-  if (movie.overview.directors.length === 0) return;
+  const movieDirectors = [
+    ...movie.overview.directors,
+    ...(movie.matchingHints?.crew || []),
+  ];
+  if (movieDirectors.length === 0) return;
 
-  const directorsName = applyNameCorrections(movie.overview.directors[0]);
+  const directorsName = applyNameCorrections(movieDirectors[0]);
   const peopleMatches = await searchPersonAndCacheResults(
     `moviedb-search-person-${slugify(basicNormalize(directorsName))}`,
     directorsName,
@@ -170,7 +176,9 @@ async function findMovieByDirector(normalizedTitle, movie) {
 }
 
 const hasCrewFor = (movie) =>
-  movie.overview.directors.length > 0 || movie.overview.actors.length > 0;
+  movie.overview.directors.length > 0 ||
+  movie.overview.actors.length > 0 ||
+  movie.matchingHints?.crew?.length > 0;
 
 const matchesMovieTitle =
   (normalizedTitle) =>
@@ -289,6 +297,21 @@ async function getBestMatch(titleQuery, rawResults = [], movie) {
           updatedMovie,
         );
         if (matchesPossibleCast) return result;
+      }
+
+      // Check if there are matching crew. Most likely this will have been used
+      // as a hard coded (but time bound) hint to match a movie with
+      // //insufficient data. e.g. "Close-Up on Abbas Kiarostami"
+      const hintCrew = movie.matchingHints.crew;
+      if (hintCrew && hintCrew.length > 0) {
+        const updatedMovie = updateMovie(movie, {
+          overview: { directors: hintCrew },
+        });
+        const matchesPossibleCrew = await matchesExpectedCastCrew(
+          result,
+          updatedMovie,
+        );
+        if (matchesPossibleCrew) return result;
       }
     }
   }

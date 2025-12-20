@@ -7,6 +7,7 @@ const {
 } = require("../../common/utils");
 const normalizeTitle = require("../../common/normalize-title");
 const { parseDate } = require("./utils");
+const { endOfMonth, isBefore } = require("date-fns");
 const attributes = require("./attributes");
 
 const infoMatcher = /^([^,]+),\s+(\d{4}),\s+(\d+)\s+min(\s+|$|,)/i;
@@ -116,7 +117,27 @@ async function transform({ moviePages }, sourcedEvents) {
     movies,
   );
 
-  return movies.concat(deduplicatedSourcedEvents);
+  // Set nmatching hint for director on sourced events without one, if all
+  // performances are before end of February. These are most likely part of
+  // the "Close-Up on Abbas Kiarostami" series.
+  // TODO: We can remove this after February 2026
+  const endOfFebruary = endOfMonth(new Date(2026, 1)); // February is month index 1
+  const sourcedEventsWithDirector = deduplicatedSourcedEvents.map((event) => {
+    const isMissingDirector = !event.overview?.directors?.length;
+    const isFinishedBeforeEndOfFebruary = event.performances.every(({ time }) =>
+      isBefore(time, endOfFebruary),
+    );
+
+    if (isMissingDirector && isFinishedBeforeEndOfFebruary) {
+      return {
+        ...event,
+        matchingHints: { ...event.matchingHints, crew: ["Abbas Kiarostami"] },
+      };
+    }
+    return event;
+  });
+
+  return movies.concat(sourcedEventsWithDirector);
 }
 
 module.exports = transform;
