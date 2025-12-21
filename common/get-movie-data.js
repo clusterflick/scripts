@@ -80,7 +80,7 @@ const matchesExpectedCastCrew = async (match, movie) => {
     // crew, even if it's the wrong one...
     if (
       directors.length &&
-      basicNormalize(directors[0]) === "themetropolitanopera"
+      basicNormalize(directors[0]).includes("metropolitanopera")
     ) {
       return true;
     }
