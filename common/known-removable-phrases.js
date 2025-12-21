@@ -711,6 +711,7 @@ const knownRemovablePhrases = [
   "World Premiere",
   "Premiere for",
   "the premiere",
+  "Movie Premiere",
   "premiere",
   "IMAX Preview",
   "Launch Screening",
