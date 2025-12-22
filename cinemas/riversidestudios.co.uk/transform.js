@@ -41,29 +41,37 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
     const showingId = generateShowingId(attributes, movieData.id);
 
     const overview = createOverview({
-      duration: movieData.duration.split("mins")[0].trim(),
+      duration: movieData.duration.split("minutes")[0].trim(),
       year,
       directors,
       actors,
-      classification: movieData.event_rating,
+      classification: movieData.age_rating_class,
     });
 
-    const accessibility = createAccessibility({
-      audioDescription: movieData.audio_described === "ad",
-      babyFriendly: basicNormalize(movieData.text).startsWith(
-        "parent and baby",
-      ),
-    });
     const performances = Object.keys(movieData.performances).flatMap(
       (dayKey) => {
         const dayPerformances = movieData.performances[dayKey];
-        return dayPerformances.map(({ timestamp, tag_name: tag }) => {
+        return dayPerformances.map(({ timestamp, tag_ids: tags }) => {
+          const accessibility = createAccessibility({
+            audioDescription: tags.includes("80879"),
+            babyFriendly: tags.includes("80996"),
+            hardOfHearing: tags.includes("80832"),
+            relaxed: tags.includes("80881"),
+            subtitled: tags.includes("80883"),
+          });
+
           const notesList = [];
-          if (basicNormalize(tag) === "silver_screen") {
+          if (tags.includes("224")) {
+            notesList.push("Double bill");
+          }
+          if (tags.includes("80787")) {
             notesList.push("Silver Screen");
           }
-          if (basicNormalize(tag) === "captioned") {
-            accessibility.subtitled = true;
+          if (tags.includes("80811")) {
+            notesList.push("Q&A");
+          }
+          if (tags.includes("259")) {
+            notesList.push("British Sign Language");
           }
           return createPerformance({
             date: new Date(parseInt(timestamp, 10) * 1000),
