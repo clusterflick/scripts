@@ -18,6 +18,7 @@ const ignoredIds = [
   894857, // Desiree Burch: Unf*ckable -- https://www.themoviedb.org/movie/894857-desiree-burch-unf-ckable
   36883, // Midnight Movies: From the Margin to the Mainstream -- https://www.themoviedb.org/movie/36883-midnight-movies-from-the-margin-to-the-mainstream
   598681, // WTF? -- https://www.themoviedb.org/movie/-wtf
+  1554871, // Superman -- https://www.themoviedb.org/movie/1554871-superman
 ];
 
 const applyNameCorrections = (name) =>
