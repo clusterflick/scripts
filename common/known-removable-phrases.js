@@ -434,6 +434,7 @@ const knownRemovablePhrases = [
   "Hong Kong Film Festival UK 2025:",
   "Holding Back the Years:",
   "Horror with Hitchcock:",
+  "Hussein Kamal's",
   "IFF 2024:",
   "IFF 2025:",
   "Indian 101 Diwali Celebration:",

@@ -390,6 +390,7 @@ function normalizeTitle(title, options) {
     [/Ella Mc Cay/i, "Ella McCay"],
     ["Superman 2025", "Superman (2025)"],
     ["A Minecraft Movie Premiere", "A Minecraft Movie"],
+    ["Evgenij Onegin", "Eugene Onegin"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
