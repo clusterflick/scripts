@@ -10,6 +10,8 @@ require("dotenv").config();
 
 /**
  * Specifically ignored IDs from the Movie DB
+ * This may be to low quality entry, duplicate, pending deletion, or a
+ * high-probability of mismatch, etc.
  */
 const ignoredIds = [
   1526154, // Le making of de Nouvelle Vague -- https://www.themoviedb.org/movie/1526154-le-making-of-de-nouvelle-vague
@@ -171,7 +173,13 @@ async function findMovieByDirector(normalizedTitle, movie) {
     const directorCredits = credits.crew.filter(
       ({ job }) => job && basicNormalize(job) === "director",
     );
-    const resultsWithSameTitle = directorCredits.filter(
+
+    // Remove specifically ignored entries from the Movie DB
+    const directorCreditsWithoutIgnored = directorCredits.filter(
+      ({ id }) => !ignoredIds.includes(id),
+    );
+
+    const resultsWithSameTitle = directorCreditsWithoutIgnored.filter(
       matchesMovieTitle(normalizedTitle),
     );
     if (resultsWithSameTitle.length === 1) return resultsWithSameTitle[0];
@@ -575,8 +583,7 @@ const searchMovieAndCacheResults = (cacheKey, payload) =>
       results = results.concat(nextPage.results);
     }
 
-    // Remove specifically ignored entries which have yet to be deleted from
-    // the Movie DB.
+    // Remove specifically ignored entries from the Movie DB
     results = results.filter(({ id }) => !ignoredIds.includes(id));
 
     return { ...firstPage, results, pages };
