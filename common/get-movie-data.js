@@ -19,6 +19,8 @@ const ignoredIds = [
   36883, // Midnight Movies: From the Margin to the Mainstream -- https://www.themoviedb.org/movie/36883-midnight-movies-from-the-margin-to-the-mainstream
   598681, // WTF? -- https://www.themoviedb.org/movie/-wtf
   1554871, // Superman -- https://www.themoviedb.org/movie/1554871-superman
+  223575, // Song Sung Blue -- https://www.themoviedb.org/movie/-song-sung-blue
+  1082548, // My Father's Shadow -- https://www.themoviedb.org/movie/1082548-my-father-s-shadow
 ];
 
 const applyNameCorrections = (name) =>
