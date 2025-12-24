@@ -6,6 +6,7 @@ const {
   generateShowingId,
   isPrivateHire,
 } = require("../../common/utils");
+const standardizePrefixingForTheatrePerformances = require("../standardize-prefixing-for-theatre-performances");
 
 const screenMapping = {
   117: "1", // regentstreetcinema.com
@@ -31,6 +32,11 @@ const screenMapping = {
 
 const isCastPlaceholder = (value) =>
   value?.toLowerCase()?.startsWith("cast to be announced");
+
+const isTheatreProduction = (title) =>
+  standardizePrefixingForTheatrePerformances(title).startsWith(
+    "The Metropolitan Opera:",
+  );
 
 async function transform(
   attributes,
@@ -62,7 +68,12 @@ async function transform(
         categories: movie.allGenres,
         duration: movie.duration,
         directors: movie.directedBy,
-        actors: isCastPlaceholder(movie.starring) ? "" : movie.starring,
+        // Don't use the cast list if it's just placeholder test or the listing
+        // page is for a theatre event (where the crew lists are often wrong).
+        actors:
+          isCastPlaceholder(movie.starring) || isTheatreProduction(movie.name)
+            ? ""
+            : movie.starring,
         classification: movie.rating,
         trailer: movie.trailerYoutubeId
           ? `https://www.youtube.com/watch?v=${movie.trailerYoutubeId}`
