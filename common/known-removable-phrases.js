@@ -409,6 +409,7 @@ const knownRemovablePhrases = [
   "green screen ",
   "Horace Ové’s",
   "MASSIVE:",
+  "Matinee:",
   "Nagasaki Day:",
   "Philosophical Screens:",
   "Pirates Season :",
