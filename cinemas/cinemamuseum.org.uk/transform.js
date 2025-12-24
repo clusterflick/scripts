@@ -7,6 +7,7 @@ const {
   createOverview,
   getMovieTitleAndYearFrom,
   generateShowingId,
+  basicNormalize,
 } = require("../../common/utils");
 const attributes = require("./attributes");
 
@@ -49,6 +50,10 @@ async function transform({ moviePages }, sourcedEvents) {
     const $ = cheerio.load(moviePage);
 
     const $title = $("#tribe-events-content h1");
+    const suffix = getText($title.find("span"));
+    const soldOut = basicNormalize(suffix).includes("sold out");
+    const status = !soldOut ? undefined : { soldOut };
+    $title.find("span").remove();
     const title = getText($title);
     const postId = $(".tribe_events.type-tribe_events")
       .attr("id")
@@ -83,7 +88,7 @@ async function transform({ moviePages }, sourcedEvents) {
 
     const bookingUrl = $(".tribe-rc-get-tickets-primary-link").attr("href");
     movies[showingId].performances = movies[showingId].performances.concat(
-      createPerformance({ date, url: bookingUrl || url }),
+      createPerformance({ date, url: bookingUrl || url, status }),
     );
   });
 
