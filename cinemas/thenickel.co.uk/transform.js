@@ -45,10 +45,10 @@ function parseDate(dateString, timeString) {
 
   // If the date is significantly the past, then it's probably on the year
   // boundary and we need to add a year. This is done by checking if it's a date
-  // more than 5 days ago. We can't just check if it's before today as old
+  // more than 19 days ago. We can't just check if it's before today as old
   // listings may be left up past the performance date.
-  const fiveDaysAgo = subDays(startOfDay(new Date()), 5);
-  if (isBefore(parsedDate, fiveDaysAgo)) {
+  const tenDaysAgo = subDays(startOfDay(new Date()), 10);
+  if (isBefore(parsedDate, tenDaysAgo)) {
     parsedDate = addYears(parsedDate, 1);
   }
 
