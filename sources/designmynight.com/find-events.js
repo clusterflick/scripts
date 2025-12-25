@@ -1,5 +1,6 @@
 const path = require("node:path");
 const { parse, differenceInMinutes } = require("date-fns");
+const { enGB } = require("date-fns/locale/en-GB");
 const slugify = require("slugify");
 const {
   readJSON,
@@ -12,7 +13,9 @@ const { venueMatchesCinema } = require("../../common/source-utils");
 const attributes = require("./attributes");
 
 function parseDateTime(date, time) {
-  return parse(`${date} ${time}`, "yyyy-MM-dd HH:mm", new Date());
+  return parse(`${date} ${time}`, "yyyy-MM-dd HH:mm", new Date(), {
+    locale: enGB,
+  });
 }
 
 /**

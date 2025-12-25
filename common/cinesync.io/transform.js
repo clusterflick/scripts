@@ -6,6 +6,7 @@ const {
   isPrivateHire,
 } = require("../../common/utils");
 const { parse } = require("date-fns");
+const { enGB } = require("date-fns/locale/en-GB");
 
 const getNames = (array = []) => array.map(({ name }) => name).filter(Boolean);
 
@@ -25,7 +26,9 @@ function parseDuration(durationStr) {
 }
 
 function parseDateTime(dateStr, timeStr) {
-  return parse(`${dateStr} ${timeStr}`, "yyyy-MM-dd h:mma", new Date());
+  return parse(`${dateStr} ${timeStr}`, "yyyy-MM-dd h:mma", new Date(), {
+    locale: enGB,
+  });
 }
 
 async function transform(attributes, { movieListPage }, sourcedEvents) {

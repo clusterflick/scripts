@@ -1,5 +1,6 @@
 const cheerio = require("cheerio");
 const { parse, differenceInMinutes } = require("date-fns");
+const { enGB } = require("date-fns/locale/en-GB");
 const {
   createPerformance,
   createOverview,
@@ -19,8 +20,12 @@ function parseDateText(dateText) {
     return null;
   }
   const [date, endTime] = dateText.split(" - ");
-  const start = parse(date, "EEE d MMM yyyy h:mm a", new Date());
-  const end = parse(endTime, "h:mm a", start);
+  const start = parse(date, "EEE d MMM yyyy h:mm a", new Date(), {
+    locale: enGB,
+  });
+  const end = parse(endTime, "h:mm a", start, {
+    locale: enGB,
+  });
   return { start, end };
 }
 

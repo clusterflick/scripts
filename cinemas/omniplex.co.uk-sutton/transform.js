@@ -1,5 +1,6 @@
 const cheerio = require("cheerio");
 const { parse, set } = require("date-fns");
+const { enGB } = require("date-fns/locale/en-GB");
 const {
   getText,
   createPerformance,
@@ -80,7 +81,9 @@ function extractPerformances($eventWrapper, $, movieTitle) {
   $eventWrapper.find(".OMP_listingDate").each(function () {
     const $dateSection = $(this);
     const dateStr = $dateSection.attr("data-date"); // e.g., "11-11-2025"
-    const baseDate = parse(dateStr, "dd-MM-yyyy", new Date());
+    const baseDate = parse(dateStr, "dd-MM-yyyy", new Date(), {
+      locale: enGB,
+    });
 
     $dateSection.find(".OMP_buttonSelection").each(function () {
       const $showtime = $(this);
