@@ -16,10 +16,11 @@ async function transform(attributes, { moviePages }, sourcedEvents) {
     const showingUrl = new URL(movieUrl);
     const showCode = showingUrl.searchParams.get("sh");
 
+    // Skip if this is an empty entry
+    if (!data.Show) continue;
+
     // Skip if this is an "umbrella" show (e.g a grouping page for add-ons)
-    if (data.Show.Type === "UmbrellaShow") {
-      continue;
-    }
+    if (data.Show.Type === "UmbrellaShow") continue;
 
     const performances = [];
     for (const venue of data.Show.Venues) {
