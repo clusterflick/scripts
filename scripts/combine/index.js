@@ -98,11 +98,28 @@ async function combine() {
 
   // Use the same slugify library as the website
   const { default: slugify } = await import("@sindresorhus/slugify");
-  const releaseResponse = await fetch(
-    "https://api.github.com/repos/clusterflick/data-retrieved/releases/latest",
+  const { Octokit } = await import("@octokit/core");
+
+  const octokit = new Octokit({ auth: process.env.PAT });
+  let response = await octokit.request(
+    "GET /repos/clusterflick/data-retrieved/releases/latest",
   );
-  const releaseData = await releaseResponse.json();
-  siteData.generatedAt = releaseData.published_at;
+
+  if (!response.data.published_at) {
+    console.warn("Unexpected response from GitHub releases API, retrying...");
+    await new Promise((resolve) => setTimeout(resolve, 60000));
+    response = await octokit.request(
+      "GET /repos/clusterflick/data-retrieved/releases/latest",
+    );
+  }
+
+  if (!response.data.published_at) {
+    throw new Error(
+      `GitHub releases API returned unexpected response: ${JSON.stringify(response)}`,
+    );
+  }
+
+  siteData.generatedAt = response.data.published_at;
 
   for (const cinema in data) {
     console.log(`[🎞️  Cinema: ${cinema}]`);

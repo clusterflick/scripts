@@ -25,9 +25,24 @@ async function getReleaseList() {
   const { Octokit } = await import("@octokit/core");
 
   const octokit = new Octokit({ auth: process.env.PAT });
-  const response = await octokit.request(
+  let response = await octokit.request(
     "GET /repos/clusterflick/data-transformed/releases",
   );
+
+  if (!Array.isArray(response.data)) {
+    console.warn("Unexpected response from GitHub releases API, retrying...");
+    await new Promise((resolve) => setTimeout(resolve, 60000));
+    response = await octokit.request(
+      "GET /repos/clusterflick/data-transformed/releases",
+    );
+  }
+
+  if (!Array.isArray(response.data)) {
+    throw new Error(
+      `GitHub releases API returned unexpected response: ${JSON.stringify(response)}`,
+    );
+  }
+
   return response.data;
 }
 
