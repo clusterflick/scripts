@@ -246,6 +246,7 @@ const knownRemovablePhrases = [
   "007:",
   "25 and Under",
   "25 & Under",
+  "1956:",
   "A24:",
   "A FESTIVE FEAST",
   "Academy Awards Best Picture 2025:",
