@@ -1,4 +1,5 @@
 const { parseISO } = require("date-fns");
+const nlp = require("compromise");
 const {
   createOverview,
   createPerformance,
@@ -7,6 +8,14 @@ const {
   createAccessibility,
 } = require("../../common/utils");
 const attributes = require("./attributes");
+
+function getCast(synopsis) {
+  const doc = nlp(synopsis);
+  const people = doc.people().json();
+  if (people.length === 0) return;
+
+  return people.map(({ text }) => text);
+}
 
 function extractYearFromCaption(caption) {
   if (!caption) return undefined;
@@ -58,6 +67,7 @@ async function transform(allEvents, sourcedEvents) {
       performances: parsePerformances(event),
       matchingHints: {
         overview: event.Summary,
+        cast: event.Summary ? getCast(event.Summary) : undefined,
       },
     });
   }
