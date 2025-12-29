@@ -5,6 +5,7 @@ const {
   createPerformance,
   readJSON,
   generateShowingId,
+  createAccessibility,
 } = require("../../common/utils");
 const attributes = require("./attributes");
 const { venueMatchesCinema } = require("../../common/source-utils");
@@ -46,6 +47,7 @@ function convertDiceEvent(event) {
       createPerformance({
         date: startDate,
         url: event.url,
+        accessibility: createAccessibility(event.name, {}),
       }),
     ],
     matchingHints: {

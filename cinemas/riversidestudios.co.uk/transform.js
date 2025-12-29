@@ -52,7 +52,7 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
       (dayKey) => {
         const dayPerformances = movieData.performances[dayKey];
         return dayPerformances.map(({ timestamp, tag_ids: tags }) => {
-          const accessibility = createAccessibility({
+          const accessibility = createAccessibility(title, {
             audioDescription: tags.includes("80879"),
             babyFriendly: tags.includes("80996"),
             hardOfHearing: tags.includes("80832"),

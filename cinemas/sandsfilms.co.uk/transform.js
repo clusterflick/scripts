@@ -5,6 +5,7 @@ const {
   createPerformance,
   generateShowingId,
   getText,
+  createAccessibility,
 } = require("../../common/utils");
 const attributes = require("./attributes");
 
@@ -80,6 +81,7 @@ async function transform({ movieListPage }, sourcedEvents) {
       date: parseISO(event.start_time),
       url: eventUrl,
       status: getTicketStatus(event),
+      accessibility: createAccessibility(event.name, {}),
     });
 
     return {

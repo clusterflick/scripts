@@ -145,7 +145,7 @@ async function transform({ movieListPage }, sourcedEvents) {
             notesList,
             url: bookingUrl || url,
             status,
-            accessibility: createAccessibility(accessibility),
+            accessibility: createAccessibility(title, accessibility),
           }),
         );
         $currentElement = $currentElement.next();

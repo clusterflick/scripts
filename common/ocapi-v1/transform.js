@@ -145,7 +145,7 @@ async function transform(
             notesList,
             url: getBookingUrl(performance),
             status: { soldOut: performance.isSoldOut },
-            accessibility: createAccessibility(accessibility),
+            accessibility: createAccessibility(movie.title, accessibility),
           }),
         );
       });

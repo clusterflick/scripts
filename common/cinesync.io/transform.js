@@ -4,6 +4,7 @@ const {
   generateShowingId,
   sanitizeRichText,
   isPrivateHire,
+  createAccessibility,
 } = require("../../common/utils");
 const { parse } = require("date-fns");
 const { enGB } = require("date-fns/locale/en-GB");
@@ -126,7 +127,7 @@ async function transform(attributes, { movieListPage }, sourcedEvents) {
           status: {
             soldOut: showTime.sold_out || false,
           },
-          accessibility,
+          accessibility: createAccessibility(movie.movie_name, accessibility),
         });
 
         movieEntry.performances.push(performance);

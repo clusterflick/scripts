@@ -5,6 +5,7 @@ const {
   createPerformance,
   generateShowingId,
   createOverview,
+  createAccessibility,
 } = require("../../common/utils");
 const { parseDate } = require("./utils");
 
@@ -16,6 +17,7 @@ async function transform({ movieListPage }, sourcedEvents) {
       $(this).find(".poster").attr("src").split("?")[1],
     ).get("code");
     const showingId = generateShowingId(attributes, eventId);
+    const title = getText($(this).find(".title"));
     const overview = createOverview({
       classification: getText($(this).find(".censor")),
     });
@@ -31,6 +33,7 @@ async function transform({ movieListPage }, sourcedEvents) {
           createPerformance({
             date: parseDate(`${day} @ ${time}`),
             url: `https://ticketing.eu.veezi.com${$(this).attr("href")}`,
+            accessibility: createAccessibility(title, {}),
           }),
         );
       });
@@ -38,7 +41,7 @@ async function transform({ movieListPage }, sourcedEvents) {
 
     movies.push({
       showingId,
-      title: getText($(this).find(".title")),
+      title,
       url: attributes.url,
       overview,
       performances,

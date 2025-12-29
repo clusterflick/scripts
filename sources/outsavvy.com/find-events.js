@@ -1,6 +1,11 @@
 const path = require("node:path");
 const cheerio = require("cheerio");
-const { readJSON, generateShowingId, getText } = require("../../common/utils");
+const {
+  readJSON,
+  generateShowingId,
+  getText,
+  createAccessibility,
+} = require("../../common/utils");
 const { createOverview, createPerformance } = require("../../common/utils");
 const { parseDate } = require("./utils");
 const attributes = require("./attributes");
@@ -58,6 +63,7 @@ function convertOutsavvyEvent(event) {
       createPerformance({
         date: event.date,
         url: event.url,
+        accessibility: createAccessibility(event.title, {}),
       }),
     ],
     matchingHints: {

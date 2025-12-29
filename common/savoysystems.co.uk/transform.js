@@ -55,9 +55,10 @@ async function transform(attributes, urlSlug, movieData, sourcedEvents) {
     // Remove private hire entries
     if (isPrivateHire(movie.Title)) return events;
 
+    const title = sanitizeRichText(movie.Title);
     return events.concat({
       showingId: generateShowingId(attributes, movie.ID),
-      title: sanitizeRichText(movie.Title),
+      title,
       url: movie.URL,
       overview: createOverview({
         duration: movie.RunningTime,
@@ -74,7 +75,10 @@ async function transform(attributes, urlSlug, movieData, sourcedEvents) {
             : `${attributes.domain}/${urlSlug}/${performance.URL}`,
           screen: performance.AuditoriumName,
           status: getStatus(performance),
-          accessibility: createAccessibility(getAccessibility(performance)),
+          accessibility: createAccessibility(
+            title,
+            getAccessibility(performance),
+          ),
         }),
       ),
       matchingHints: {

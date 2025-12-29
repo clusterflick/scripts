@@ -4,6 +4,7 @@ const {
   createOverview,
   createPerformance,
   getText,
+  createAccessibility,
 } = require("../../common/utils");
 const { parse } = require("date-fns");
 const { enGB } = require("date-fns/locale/en-GB");
@@ -15,6 +16,7 @@ async function transform({ moviePages }, sourcedEvents) {
   for (const [, html] of Object.entries(moviePages)) {
     const $ = cheerio.load(html);
     const canonicalUrl = $('link[rel="canonical"]').attr("href");
+    const title = getText($(".event-hero__title"));
 
     const performances = [];
     $(".showings__table-row").each((_, element) => {
@@ -37,6 +39,7 @@ async function transform({ moviePages }, sourcedEvents) {
           date,
           url: canonicalUrl,
           notesList: showtimeType ? [showtimeType] : [],
+          accessibility: createAccessibility(title, {}),
         }),
       );
     });
@@ -46,7 +49,7 @@ async function transform({ moviePages }, sourcedEvents) {
 
     const movie = {
       showingId,
-      title: getText($(".event-hero__title")),
+      title,
       url: canonicalUrl,
       overview: createOverview({}),
       performances,

@@ -71,7 +71,10 @@ async function transform(
     const $movieShowings = $(this).find("> div > div");
     $movieShowings.each(function () {
       const $titleInfo = $(this).find("h2");
-      const title = getText($titleInfo.find("a"));
+      // Fix for special characters not encoding correctly in calendar
+      const title = getText($titleInfo.find("a"))
+        .replace(/’/g, "'")
+        .replace(/–/g, "-");
       const urlPath = $titleInfo.find("a").attr("href");
       const movieUrl = `${attributes.domain}/${urlPath}`;
       const id = movieUrl.match(/\/event\/([^/]+)$/i)[1];
@@ -98,8 +101,7 @@ async function transform(
         let matchingHintsOverview = getOverviewFrom(moviePages[movieUrl]);
         movies[id] = {
           showingId: generateShowingId(attributes, id),
-          // Fix for special characters not encoding correctly in calendar
-          title: title.replace(/’/g, "'").replace(/–/g, "-"),
+          title,
           url: movieUrl,
           overview,
           performances: [],
@@ -162,7 +164,7 @@ async function transform(
             url: $performance.attr("href") || movies[id].url,
             screen,
             status,
-            accessibility: createAccessibility(accessibility),
+            accessibility: createAccessibility(title, accessibility),
           }),
         );
       });

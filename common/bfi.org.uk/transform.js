@@ -91,9 +91,8 @@ function getPerformancesFor($, url, { title, performances }) {
         status: {
           soldOut: $(".item-link").hasClass("soldout"),
         },
-        accessibility: createAccessibility({
+        accessibility: createAccessibility(title, {
           audioDescription: hasAudioDescription,
-          relaxed: title.toLowerCase().trim().startsWith("relaxed "),
           subtitled: isSubtitled,
           ...accessibilityMapping[key],
         }),

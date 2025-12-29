@@ -25,6 +25,7 @@ async function transform({ moviePages }, sourcedEvents) {
     );
     const moviePage = moviePages[movieUrl];
     const $ = cheerio.load(moviePage);
+    const title = getText($(".prog-title"));
     const youtubeId = $(".ytvideo").data("video");
     const accessibilityFromSynopsis = {};
     const commonPerformanceNotes = [];
@@ -72,7 +73,7 @@ async function transform({ moviePages }, sourcedEvents) {
               accessibilityFromPerformanceNote ? undefined : performanceNote,
             ],
             url: $(this).attr("href"),
-            accessibility: createAccessibility({
+            accessibility: createAccessibility(title, {
               ...(accessibilityFromPerformanceNote ?? {}),
               ...accessibilityFromSynopsis,
             }),
@@ -83,7 +84,7 @@ async function transform({ moviePages }, sourcedEvents) {
 
     return {
       showingId: generateShowingId(attributes, id),
-      title: getText($(".prog-title")),
+      title,
       url: movieUrl,
       overview,
       performances,

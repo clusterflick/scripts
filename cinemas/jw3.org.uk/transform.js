@@ -65,7 +65,7 @@ const getNotesList = ($, $sidebars) => {
     .filter((tag) => basicNormalize(tag) !== "cinema");
 };
 
-const getSinglePerformance = ($) => {
+const getSinglePerformance = ($, title) => {
   const url = $(".m-banner__links a.a-btn").eq(0).attr("href");
   const $sidebars = $(".o-sidebar--event.m-entity");
   const $dateSidebar = $sidebars
@@ -85,7 +85,6 @@ const getSinglePerformance = ($) => {
   const $infoSidebar = $sidebars
     .filter((i, el) => basicNormalize($(el).text()).startsWith("please note"))
     .eq(0);
-  const title = basicNormalize(getText($(".m-banner__copy h1")));
   const description = basicNormalize(getText($infoSidebar));
 
   return [
@@ -93,17 +92,15 @@ const getSinglePerformance = ($) => {
       date: parseDate(date),
       notesList: getNotesList($, $sidebars),
       url,
-      accessibility: createAccessibility({
+      accessibility: createAccessibility(title, {
         subtitled: description.includes("with english subtitles"),
-        babyFriendly: title.startsWith("babykino:"),
       }),
     }),
   ];
 };
 
-const getMultiplePerformances = ($, bookingInformation) => {
+const getMultiplePerformances = ($, bookingInformation, title) => {
   const $sidebars = $(".o-sidebar--event.m-entity");
-  const title = basicNormalize(getText($(".m-banner__copy h1")));
   const description = basicNormalize(bookingInformation.description);
   return bookingInformation.instances.map(({ id, start, availability }) => {
     return createPerformance({
@@ -113,9 +110,8 @@ const getMultiplePerformances = ($, bookingInformation) => {
       status: {
         soldOut: availability.available === 0,
       },
-      accessibility: createAccessibility({
+      accessibility: createAccessibility(title, {
         subtitled: description.includes("with english subtitles"),
-        babyFriendly: title.startsWith("babykino:"),
       }),
     });
   });
@@ -129,14 +125,15 @@ async function transform({ moviePages }, sourcedEvents) {
     const $ = cheerio.load(listing);
     const shortLinkUrl = $("link[rel='shortlink']").attr("href");
     const id = shortLinkUrl.match(/\/node\/([^/]+)$/i)[1];
+    const title = getText($(".m-banner__copy h1"));
     const performances = booking
-      ? getMultiplePerformances($, booking)
-      : getSinglePerformance($);
+      ? getMultiplePerformances($, booking, title)
+      : getSinglePerformance($, title);
 
     if (performances) {
       movies.push({
         showingId: generateShowingId(attributes, id),
-        title: getText($(".m-banner__copy h1")),
+        title,
         url: `${attributes.domain}${moviePageUrl}`,
         overview: getOverview($),
         performances,

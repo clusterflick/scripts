@@ -2,6 +2,7 @@ const {
   createOverview,
   createPerformance,
   generateShowingId,
+  createAccessibility,
 } = require("../utils");
 
 async function transform(attributes, { moviePages }, sourcedEvents) {
@@ -29,6 +30,7 @@ async function transform(attributes, { moviePages }, sourcedEvents) {
           createPerformance({
             date: new Date(performance.DateTimeOffset),
             url: performance.Url || movieUrl,
+            accessibility: createAccessibility(data.Show.Name, {}),
           }),
         );
       }

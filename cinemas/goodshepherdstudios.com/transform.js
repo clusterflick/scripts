@@ -7,6 +7,7 @@ const {
   generateShowingId,
   getText,
   basicNormalize,
+  createAccessibility,
 } = require("../../common/utils");
 const attributes = require("./attributes");
 
@@ -62,6 +63,7 @@ async function transform({ movieListPage }, sourcedEvents) {
           date: parsedDate.start,
           url: fullUrl,
           status: {},
+          accessibility: createAccessibility(title, {}),
         }),
       ],
       matchingHints: {

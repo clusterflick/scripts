@@ -4,6 +4,7 @@ const {
   createPerformance,
   createOverview,
   generateShowingId,
+  createAccessibility,
 } = require("../../common/utils");
 const normalizeTitle = require("../../common/normalize-title");
 const { parseDate } = require("./utils");
@@ -83,7 +84,10 @@ async function transform({ moviePages }, sourcedEvents) {
       const timeString = getText($cells.eq(2));
       const date = parseDate(`${dateString} @ ${timeString}`);
       const bookingUrl = $cells.eq(3).find("a").attr("href");
-      performances.push(createPerformance({ date, url: bookingUrl || url }));
+      const accessibility = createAccessibility(title, {});
+      performances.push(
+        createPerformance({ date, url: bookingUrl || url, accessibility }),
+      );
     });
 
     const hrefs = new Set(

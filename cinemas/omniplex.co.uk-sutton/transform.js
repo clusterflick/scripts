@@ -74,9 +74,6 @@ function parseMovieDetails(html) {
 
 function extractPerformances($eventWrapper, $, movieTitle) {
   const performances = [];
-  const title = basicNormalize(movieTitle);
-  const isOpenCaption = title.includes("(open caption screening)");
-  const isSubtitled = title.includes("(subtitled)");
 
   $eventWrapper.find(".OMP_listingDate").each(function () {
     const $dateSection = $(this);
@@ -112,10 +109,9 @@ function extractPerformances($eventWrapper, $, movieTitle) {
           date: performanceDate,
           url: () => url,
           screen,
-          accessibility: createAccessibility({
-            hardOfHearing:
-              accessibilityNotes.includes("audio description") || isOpenCaption,
-            subtitled: accessibilityNotes.includes("subtitle") || isSubtitled,
+          accessibility: createAccessibility(movieTitle, {
+            hardOfHearing: accessibilityNotes.includes("audio description"),
+            subtitled: accessibilityNotes.includes("subtitle"),
             relaxed: accessibilityNotes.includes("sensory"),
             babyFriendly: accessibilityNotes.includes("kids club"),
           }),

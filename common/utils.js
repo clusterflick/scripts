@@ -233,11 +233,60 @@ const createOverview = ({
   };
 };
 
-const createAccessibility = (accessibility) =>
-  Object.keys(accessibility).reduce((mapping, key) => {
-    if (!accessibility[key]) return mapping;
-    return { ...mapping, [key]: true };
-  }, {});
+const relaxedMatchers = [
+  /Relaxed Screen/i,
+  /Relaxed Preview/i,
+  /^Relaxed /i,
+  /\(Relaxed\)/i,
+];
+
+const babyFriendlyMatchers = [
+  /Parents? [&|+|and] Baby/i,
+  /Baby\s*[&|+|and]\s*1/i,
+  /Kids Club:/i,
+  /Babykino:/i,
+];
+
+const subtitledMatchers = [
+  /Subtitl?ed/i,
+  /Subbed/i,
+  /\(Sub\)/i,
+  /Subs\)/i,
+  /with Subtitles/i,
+];
+
+const hardOfHearingMatchers = [/Caption(?:ed)?/i];
+
+const getTitleAccessibility = (title) => {
+  const titleAccessibility = {};
+  if (relaxedMatchers.some((matcher) => !!title.match(matcher))) {
+    titleAccessibility.relaxed = true;
+  }
+  if (babyFriendlyMatchers.some((matcher) => !!title.match(matcher))) {
+    titleAccessibility.babyFriendly = true;
+  }
+  if (subtitledMatchers.some((matcher) => !!title.match(matcher))) {
+    titleAccessibility.subtitled = true;
+  }
+  if (hardOfHearingMatchers.some((matcher) => !!title.match(matcher))) {
+    titleAccessibility.hardOfHearing = true;
+  }
+  return titleAccessibility;
+};
+
+const createAccessibility = (title, accessibility) => {
+  const titleAccessibility = getTitleAccessibility(title.trim());
+
+  const listingAccessibility = Object.keys(accessibility).reduce(
+    (mapping, key) => {
+      if (!accessibility[key]) return mapping;
+      return { ...mapping, [key]: true };
+    },
+    {},
+  );
+
+  return { ...titleAccessibility, ...listingAccessibility };
+};
 
 // eslint-disable-next-line no-unused-vars
 const removeMatchingHints = ({ matchingHints, ...movie }) => movie;

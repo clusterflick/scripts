@@ -4,6 +4,7 @@ const {
   createOverview,
   createPerformance,
   getText,
+  createAccessibility,
 } = require("../../common/utils");
 const { parse, isBefore, startOfDay, addYears } = require("date-fns");
 const { enGB } = require("date-fns/locale/en-GB");
@@ -51,6 +52,7 @@ async function transform({ movieListPage }, sourcedEvents) {
 
     const eventIdMatch = url.match(/\/id\/(\d+)\//);
     const showingId = generateShowingId(attributes, eventIdMatch[1]);
+    const accessibility = createAccessibility(title, {});
 
     const movie = {
       showingId,
@@ -60,7 +62,7 @@ async function transform({ movieListPage }, sourcedEvents) {
         year,
         directors: director.trim(),
       }),
-      performances: [createPerformance({ date, url })],
+      performances: [createPerformance({ date, url, accessibility })],
       matchingHints: {},
     };
 

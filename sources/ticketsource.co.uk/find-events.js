@@ -10,11 +10,14 @@ const { createOverview, createPerformance } = require("../../common/utils");
 const attributes = require("./attributes");
 const { venueMatchesCinema } = require("../../common/source-utils");
 
-function createPerformanceFromHit({ timestamp, venueSlug, timeHash, hint }) {
+function createPerformanceFromHit(
+  { timestamp, venueSlug, timeHash, hint },
+  title,
+) {
   return createPerformance({
     date: new Date(timestamp * 1000),
     url: `${attributes.domain}/${venueSlug}/${timeHash}`,
-    accessibility: createAccessibility({
+    accessibility: createAccessibility(title, {
       subtitled: basicNormalize(hint).includes("subtitle"),
     }),
   });
@@ -36,13 +39,14 @@ function convertTicketSourceEvent(hits) {
   let title = event;
   const quotedTitleMatch = eventDescription?.match(/"([^"]+)"/);
   if (quotedTitleMatch) title = quotedTitleMatch[1];
+  title = decode(title);
 
   return {
     showingId: generateShowingId(attributes, eventHash),
-    title: decode(title),
+    title,
     url: `${attributes.domain}/whats-on/${locationSlug}/${venueSlug}/${eventSlug}/${eventHash}`,
     overview: createOverview({}),
-    performances: hits.map(createPerformanceFromHit),
+    performances: hits.map((hit) => createPerformanceFromHit(hit, title)),
     matchingHints: {
       overview: `${eventDescription || ""}\n${hint || ""}`.trim() || undefined,
     },

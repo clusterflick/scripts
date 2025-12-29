@@ -91,7 +91,7 @@ async function transform(
           soldOut: !!showing.SoldoutStatus,
         };
 
-        const accessibility = createAccessibility({
+        const accessibility = createAccessibility(movie.Title, {
           audioDescription: hasAttribute("audio d"),
           relaxed: hasAttribute("relaxed"),
           babyFriendly:

@@ -5,6 +5,7 @@ const {
   createPerformance,
   createOverview,
   generateShowingId,
+  createAccessibility,
 } = require("../../common/utils");
 const attributes = require("./attributes");
 const { decode } = require("html-entities");
@@ -36,6 +37,7 @@ async function transform(retrievedData, sourcedEvents) {
       if (eventsMap.has(event.url)) continue;
 
       const eventId = extractEventIdFromUrl(event.url);
+      const title = decode(event.name).replaceAll("\\", "");
 
       // Calculate duration from start and end dates
       const startDate = parseISO(event.startDate);
@@ -52,7 +54,7 @@ async function transform(retrievedData, sourcedEvents) {
       // Create new event
       eventsMap.set(event.url, {
         showingId: generateShowingId(attributes, eventId),
-        title: decode(event.name).replaceAll("\\", ""),
+        title,
         url: event.url,
         overview: createOverview({ duration }),
         performances: [
@@ -60,6 +62,7 @@ async function transform(retrievedData, sourcedEvents) {
             date: startDate,
             url: event.url,
             status: { soldOut },
+            accessibility: createAccessibility(title, {}),
           }),
         ],
         matchingHints: {

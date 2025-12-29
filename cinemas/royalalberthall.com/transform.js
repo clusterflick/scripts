@@ -4,6 +4,7 @@ const {
   createPerformance,
   generateShowingId,
   getValidClassification,
+  createAccessibility,
 } = require("../../common/utils");
 const attributes = require("./attributes");
 
@@ -30,6 +31,7 @@ function parsePerformances(event) {
       notesList: event.Suffix ? [event.Suffix] : [],
       url: event.BookingURL || `${attributes.domain}${event.EventURL}`,
       screen: event.Venue,
+      accessibility: createAccessibility(event.Title, {}),
     });
   });
 }

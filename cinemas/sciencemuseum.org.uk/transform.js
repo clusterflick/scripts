@@ -6,6 +6,7 @@ const {
   createOverview,
   createPerformance,
   getValidClassification,
+  createAccessibility,
 } = require("../../common/utils");
 const attributes = require("./attributes");
 const { parseISO } = require("date-fns");
@@ -105,6 +106,7 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
             status: {
               soldOut: performanceStatusMessage.toLowerCase() === "sold out",
             },
+            accessibility: createAccessibility(movie.productionTitle, {}),
           });
         },
       ),

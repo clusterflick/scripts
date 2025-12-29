@@ -8,6 +8,7 @@ const {
   createPerformance,
   generateShowingId,
   basicNormalize,
+  createAccessibility,
 } = require("../../common/utils");
 const { venueMatchesCinema } = require("../../common/source-utils");
 const attributes = require("./attributes");
@@ -160,6 +161,7 @@ function convertDesignMyNightEvent(
         date,
         url: eventUrl,
         status: { soldOut },
+        accessibility: createAccessibility(title, {}),
       });
     });
 

@@ -6,6 +6,7 @@ const {
   generateShowingId,
   basicNormalize,
   getId,
+  createAccessibility,
 } = require("../../common/utils");
 const { parseDate } = require("./utils");
 
@@ -85,7 +86,8 @@ async function transform(attributes, { movieListPage }, sourcedEvents) {
       if (dateMatch) {
         // Format date string: "SATURDAY 8TH NOVEMBER, 8PM" -> "saturday 8th november 8pm"
         const date = parseDate(basicNormalize(dateMatch[1]));
-        performances.push(createPerformance({ url, date }));
+        const accessibility = createAccessibility(title, {});
+        performances.push(createPerformance({ url, date, accessibility }));
       }
     });
 

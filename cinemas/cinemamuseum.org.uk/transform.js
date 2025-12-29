@@ -8,6 +8,7 @@ const {
   getMovieTitleAndYearFrom,
   generateShowingId,
   basicNormalize,
+  createAccessibility,
 } = require("../../common/utils");
 const attributes = require("./attributes");
 
@@ -88,7 +89,12 @@ async function transform({ moviePages }, sourcedEvents) {
 
     const bookingUrl = $(".tribe-rc-get-tickets-primary-link").attr("href");
     movies[showingId].performances = movies[showingId].performances.concat(
-      createPerformance({ date, url: bookingUrl || url, status }),
+      createPerformance({
+        date,
+        url: bookingUrl || url,
+        status,
+        accessibility: createAccessibility(movies[showingId].title, {}),
+      }),
     );
   });
 

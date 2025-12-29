@@ -20,7 +20,7 @@ function extractDurationInMinutes(durationText) {
   return hours * 60 + minutes;
 }
 
-function extractPerformances($) {
+function extractPerformances($, title) {
   const performances = [];
 
   $(".date-wrapper").each(function () {
@@ -37,7 +37,7 @@ function extractPerformances($) {
         createPerformance({
           date: parseISO($timeElement.attr("datetime")),
           url: () => $link.attr("href"),
-          accessibility: createAccessibility({
+          accessibility: createAccessibility(title, {
             hardOfHearing: hasAccessibility("Hard of Hearing screening"),
             relaxed: hasAccessibility("Autism Friendly screening"),
             babyFriendly: hasAccessibility("Watch With Baby"),
@@ -74,10 +74,11 @@ async function transform({ moviePages }, sourcedEvents) {
     // Generate a unique ID from the URL
     const urlParts = $('link[rel="canonical"]').attr("href").split("/");
     const slub = urlParts.at(-1);
+    const title = getText($(".page-title"));
 
     movies.push({
       showingId: generateShowingId(attributes, slub),
-      title: getText($(".page-title")),
+      title,
       url,
       overview: createOverview({
         duration: extractDurationInMinutes(getInfoSection("Running Time:")),
@@ -87,7 +88,7 @@ async function transform({ moviePages }, sourcedEvents) {
         actors: getNameList("actors"),
         trailer: $('meta[itemprop="embedURL"]').attr("content"),
       }),
-      performances: extractPerformances($),
+      performances: extractPerformances($, title),
       matchingHints: {
         overview: getText($(".synopsis p[itemprop='description']")),
       },

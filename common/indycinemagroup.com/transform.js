@@ -108,7 +108,7 @@ async function transform(
           soldOut: showing.seatsRemaining === 0,
         };
 
-        const accessibility = createAccessibility({
+        const accessibility = createAccessibility(movie.name, {
           audioDescription: tags.includes("ad"),
           relaxed: tags.includes("relaxed") || tags.includes("ld-friendly"),
           babyFriendly:

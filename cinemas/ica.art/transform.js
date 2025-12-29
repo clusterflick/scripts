@@ -71,7 +71,7 @@ async function transform({ moviePages }, sourcedEvents) {
             date: parseDate(`${date} ${time}`),
             url,
             screen,
-            accessibility: createAccessibility({
+            accessibility: createAccessibility(title, {
               subtitled: basicNormalize(details).includes(
                 "with english subtitles",
               ),

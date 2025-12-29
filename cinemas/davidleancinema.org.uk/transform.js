@@ -122,7 +122,7 @@ function toMovie($, showEl) {
       notesList: [comment],
       url: bookingUrl,
       status: { soldOut },
-      accessibility: createAccessibility(accessibility),
+      accessibility: createAccessibility(title, accessibility),
     });
   });
 

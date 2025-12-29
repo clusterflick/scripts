@@ -45,7 +45,7 @@ function getNotes($el) {
   return notes;
 }
 
-function getPerformances($, $filmScreenings) {
+function getPerformances($, $filmScreenings, title) {
   const performances = [];
   const $screenings = $filmScreenings.find(".screening-panel");
   let screeningDate;
@@ -73,7 +73,7 @@ function getPerformances($, $filmScreenings) {
         notesList: getNotes($(this)),
         url,
         status: getStatus($(this)),
-        accessibility: createAccessibility(getAccessibility($(this))),
+        accessibility: createAccessibility(title, getAccessibility($(this))),
       }),
     );
   });
@@ -123,10 +123,11 @@ async function transform({ moviePages }, sourcedEvents) {
 
     const shortLinkUrl = $("link[rel='shortlink']").attr("href");
     const id = new URLSearchParams(new URL(shortLinkUrl).search).get("p");
+    const title = getText($title);
 
     return {
       showingId: generateShowingId(attributes, id),
-      title: getText($title),
+      title,
       url: $('link[rel="canonical"]').attr("href"),
       overview: createOverview({
         year,
@@ -135,8 +136,14 @@ async function transform({ moviePages }, sourcedEvents) {
         directors,
         actors: getText($cast),
       }),
-      performances: getPerformances($, $(".film-detail__screenings").eq(0)),
-      matchingHints: { overview: getText($(".film-detail__synopsis")) },
+      performances: getPerformances(
+        $,
+        $(".film-detail__screenings").eq(0),
+        title,
+      ),
+      matchingHints: {
+        overview: getText($(".film-detail__synopsis")),
+      },
     };
   });
 

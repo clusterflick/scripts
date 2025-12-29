@@ -6,6 +6,7 @@ const {
   createPerformance,
   createOverview,
   generateShowingId,
+  createAccessibility,
 } = require("../../common/utils");
 const attributes = require("./attributes");
 
@@ -137,6 +138,7 @@ async function transform({ movieListPage }, sourcedEvents) {
           date,
           notesList,
           url: bookingUrls.eq(index).attr("href"),
+          accessibility: createAccessibility(title, {}),
         });
       },
     );

@@ -118,6 +118,7 @@ function processPerformancePage(
   listingPage,
   fallbackUrl,
   fallbackScreen,
+  title,
 ) {
   const $ = cheerio.load(data);
   const listingTags = getListingTags(listingPage);
@@ -133,7 +134,7 @@ function processPerformancePage(
     const tags = getText($(this).find(".instance-accessibility-tags"))
       .split(/\s+/)
       .map((tag) => tag.trim().toLowerCase());
-    const accessibility = createAccessibility({
+    const accessibility = createAccessibility(title, {
       audioDescription: tags.includes("ad"),
       relaxed:
         tags.includes("rel") ||
@@ -178,14 +179,15 @@ async function transform({ moviePages }, sourcedEvents) {
         overview,
         matchingHints,
       } = processListingPage(listingPage);
+      const useFallbackTitle = searchTitle.endsWith("..") && listingPageTitle;
+      const title = useFallbackTitle ? listingPageTitle : searchTitle;
       const performances = processPerformancePage(
         performancePage,
         listingPage,
         url,
         venue,
+        title,
       );
-      const useFallbackTitle = searchTitle.endsWith("..") && listingPageTitle;
-      const title = useFallbackTitle ? listingPageTitle : searchTitle;
       return {
         showingId,
         title,

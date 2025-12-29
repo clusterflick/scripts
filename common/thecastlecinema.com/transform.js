@@ -123,7 +123,7 @@ async function transform(
           url: `${attributes.domain}${$link.attr("href")}`,
           screen: getText($link.find(".screen")),
           status,
-          accessibility: createAccessibility(accessibility),
+          accessibility: createAccessibility(movies[id].title, accessibility),
         }),
       );
     });

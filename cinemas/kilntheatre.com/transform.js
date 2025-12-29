@@ -33,10 +33,10 @@ const getTrailer = ($trailer) => {
   return trailerUrl.split("/embed/")[1];
 };
 
-const extractAccessibilityData = (classList) => {
+const extractAccessibilityData = (classList, title) => {
   const className = basicNormalize(classList);
 
-  return createAccessibility({
+  return createAccessibility(title, {
     babyFriendly: className.includes("parent-and-baby-screening"),
     hardOfHearing: className.includes("captioned-screening"),
   });
@@ -54,6 +54,7 @@ async function transform({ moviePages }, sourcedEvents) {
     if (rawPerformances.length === 0) continue;
 
     const id = $("link[rel='shortlink']").attr("href").split("?p=")[1];
+    const title = rawPerformances[0].name;
     const details = getDetails($, $(".h-row__film-info li"));
     const trailer = getTrailer($('a[data-fresco-group="trailer"]'));
 
@@ -67,7 +68,10 @@ async function transform({ moviePages }, sourcedEvents) {
       const timeText = getText($bookingButton);
       const date = parseDate(`${dateText} ${timeText}`);
 
-      const accessibility = extractAccessibilityData($(el).attr("class"));
+      const accessibility = extractAccessibilityData(
+        $(el).attr("class"),
+        title,
+      );
       const soldOut = $bookingButton.hasClass("sold-out") || undefined;
       additionalDetails[date.getTime()] = { accessibility, soldOut };
     });
@@ -85,7 +89,7 @@ async function transform({ moviePages }, sourcedEvents) {
 
     movies.push({
       showingId: generateShowingId(attributes, id),
-      title: rawPerformances[0].name,
+      title,
       url: moviePageUrl,
       overview: createOverview({
         directors: details.directors,

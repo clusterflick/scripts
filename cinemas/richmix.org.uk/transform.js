@@ -4,6 +4,7 @@ const {
   createOverview,
   createPerformance,
   generateShowingId,
+  createAccessibility,
 } = require("../../common/utils");
 const { parseDate } = require("./utils");
 const attributes = require("./attributes");
@@ -62,6 +63,7 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
             url: `${attributes.domain}/book-online/${iframeId}`,
             screen: name,
             status,
+            accessibility: createAccessibility(movie.post_title, {}),
           });
         },
       ),

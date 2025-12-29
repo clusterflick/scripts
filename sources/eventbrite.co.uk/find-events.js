@@ -4,6 +4,7 @@ const {
   basicNormalize,
   sanitizeRichText,
   generateShowingId,
+  createAccessibility,
 } = require("../../common/utils");
 const { createOverview, createPerformance } = require("../../common/utils");
 const { parseDate } = require("./utils");
@@ -45,6 +46,7 @@ function convertEventbriteEvent(event, details) {
         date: startDate,
         notesList: [],
         url: event.tickets_url,
+        accessibility: createAccessibility(event.name, {}),
       }),
     ],
     matchingHints: {

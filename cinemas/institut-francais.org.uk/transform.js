@@ -47,7 +47,13 @@ const getOverview = (details) => {
   });
 };
 
-const getMultiplePerformances = ($, $multiple, details, moviePageUrl) => {
+const getMultiplePerformances = (
+  $,
+  $multiple,
+  details,
+  moviePageUrl,
+  title,
+) => {
   return $multiple
     .find("tbody tr")
     .map((i, el) => {
@@ -69,7 +75,7 @@ const getMultiplePerformances = ($, $multiple, details, moviePageUrl) => {
         ],
         url: performanceUrl ?? moviePageUrl,
         screen: getText($single.find("td").eq(2)),
-        accessibility: createAccessibility({
+        accessibility: createAccessibility(title, {
           subtitled:
             languageDetails.includes("with english sub") ||
             languageDetails.includes("with en sub"),
@@ -79,7 +85,7 @@ const getMultiplePerformances = ($, $multiple, details, moviePageUrl) => {
     .get();
 };
 
-const getSinglePerformance = ($, $single, details, moviePageUrl) => {
+const getSinglePerformance = ($, $single, details, moviePageUrl, title) => {
   const day = $single.find(".timetable .date time").attr("datetime");
   const time = $single.find(".timetable time.time").attr("datetime");
   const calendarNote = getText($single.find(".timetable .calendar-note"));
@@ -101,7 +107,7 @@ const getSinglePerformance = ($, $single, details, moviePageUrl) => {
       ],
       url: performanceUrl ?? moviePageUrl,
       screen: getText($single.find(".timetable .location")),
-      accessibility: createAccessibility({
+      accessibility: createAccessibility(title, {
         subtitled: basicNormalize(details.language).includes(
           "with english subtitles",
         ),
@@ -121,16 +127,29 @@ async function transform({ moviePages }, sourcedEvents) {
     const details = getDetails($, $(".metadata"));
     const shortLinkUrl = $("link[rel='shortlink']").attr("href");
     const id = new URLSearchParams(new URL(shortLinkUrl).search).get("p");
+    const title = getText($title);
 
     movies.push({
       showingId: generateShowingId(attributes, id),
-      title: getText($title),
+      title,
       url: moviePageUrl,
       overview: getOverview(details),
       performances:
         $("#more-dates").length > 0
-          ? getMultiplePerformances($, $("#more-dates"), details, moviePageUrl)
-          : getSinglePerformance($, $(".next-showing"), details, moviePageUrl),
+          ? getMultiplePerformances(
+              $,
+              $("#more-dates"),
+              details,
+              moviePageUrl,
+              title,
+            )
+          : getSinglePerformance(
+              $,
+              $(".next-showing"),
+              details,
+              moviePageUrl,
+              title,
+            ),
       matchingHints: { overview: getText($(".definition")) },
     });
   }

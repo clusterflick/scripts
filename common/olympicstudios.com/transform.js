@@ -45,7 +45,7 @@ const getOverview = ($, $movieData) => {
   });
 };
 
-const getPerformances = ($, attributes, performanceData) => {
+const getPerformances = ($, attributes, performanceData, title) => {
   const performances = performanceData.reduce((performances, { el, data }) => {
     if (data["@type"] !== "Event") return performances;
     const $button = $(el).prev();
@@ -81,7 +81,7 @@ const getPerformances = ($, attributes, performanceData) => {
           basicNormalize(data.location.name) !== basicNormalize(attributes.name)
             ? data.location.name
             : undefined,
-        accessibility: createAccessibility({
+        accessibility: createAccessibility(title, {
           subtitled: tags.includes("Subtitled"),
           babyFriendly: tags.includes("Babes in Arms"),
         }),
@@ -115,12 +115,13 @@ async function transform(attributes, { moviePages }, sourcedEvents) {
     const $title = $listingData.find("h3").eq(0);
     const $synopsis = $listingData.find("h3").eq(1).next();
     const id = getId(moviePageUrl.split("/film/")[1]);
+    const title = getText($title);
     movies.push({
       showingId: generateShowingId(attributes, id),
-      title: getText($title),
+      title,
       url: moviePageUrl,
       overview: getOverview($, $title.parent()),
-      performances: getPerformances($, attributes, structuredData),
+      performances: getPerformances($, attributes, structuredData, title),
       matchingHints: { overview: getText($synopsis) },
     });
   }
