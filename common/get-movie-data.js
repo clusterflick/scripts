@@ -23,6 +23,7 @@ const ignoredIds = [
   1554871, // Superman -- https://www.themoviedb.org/movie/1554871-superman
   223575, // Song Sung Blue -- https://www.themoviedb.org/movie/-song-sung-blue
   1082548, // My Father's Shadow -- https://www.themoviedb.org/movie/1082548-my-father-s-shadow
+  373903, //  National Theatre Live: Les Liaisons Dangereuses (2016) -- https://www.themoviedb.org/movie/373903-national-theatre-live-les-liaisons-dangereuses
 ];
 
 const applyNameCorrections = (name) =>
