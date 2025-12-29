@@ -1,10 +1,12 @@
 const path = require("node:path");
 const { decode } = require("html-entities");
+const cheerio = require("cheerio");
 const {
   readJSON,
   generateShowingId,
   createAccessibility,
   basicNormalize,
+  getText,
 } = require("../../common/utils");
 const { createOverview, createPerformance } = require("../../common/utils");
 const attributes = require("./attributes");
@@ -13,17 +15,20 @@ const { venueMatchesCinema } = require("../../common/source-utils");
 function createPerformanceFromHit(
   { timestamp, venueSlug, timeHash, hint },
   title,
+  eventText,
 ) {
   return createPerformance({
     date: new Date(timestamp * 1000),
     url: `${attributes.domain}/${venueSlug}/${timeHash}`,
     accessibility: createAccessibility(title, {
-      subtitled: basicNormalize(hint).includes("subtitle"),
+      subtitled:
+        basicNormalize(hint).includes("subtitle") ||
+        basicNormalize(eventText).includes("subtitle"),
     }),
   });
 }
 
-function convertTicketSourceEvent(hits) {
+function convertTicketSourceEvent(hits, moviePages) {
   const {
     event,
     locationSlug,
@@ -33,6 +38,11 @@ function convertTicketSourceEvent(hits) {
     eventDescription,
     hint,
   } = hits[0]; // Use the first entry for event-level data
+  const moviePage = moviePages[eventHash];
+  const $ = cheerio.load(moviePage);
+  const $eventText = $(".eventText");
+  $eventText.find("br").replaceWith("\n");
+  const eventText = getText($eventText);
 
   // Extract movie title from eventDescription if it's in quotes
   // e.g., 'Screening of the movie "LE GANG DES AMAZONES"' -> 'LE GANG DES AMAZONES'
@@ -46,9 +56,14 @@ function convertTicketSourceEvent(hits) {
     title,
     url: `${attributes.domain}/whats-on/${locationSlug}/${venueSlug}/${eventSlug}/${eventHash}`,
     overview: createOverview({}),
-    performances: hits.map((hit) => createPerformanceFromHit(hit, title)),
+    performances: hits.map((hit) =>
+      createPerformanceFromHit(hit, title, eventText),
+    ),
     matchingHints: {
-      overview: `${eventDescription || ""}\n${hint || ""}`.trim() || undefined,
+      overview:
+        eventText ||
+        `${eventDescription || ""}\n${hint || ""}`.trim() ||
+        undefined,
     },
   };
 }
@@ -64,9 +79,11 @@ async function findEvents(cinema) {
   );
 
   let movieListPages = [];
+  let moviePages = {};
   try {
     const data = await readJSON(dataSrc);
     movieListPages = data.movieListPages || [];
+    moviePages = data.moviePages || {};
   } catch {
     // Source data may not always be available or required
   }
@@ -80,6 +97,7 @@ async function findEvents(cinema) {
       if (missingValue) acc.push(hit);
       return acc;
     }, []);
+
   const matchingEvents = allHits.filter((hit) => {
     const coordinates = { lat: hit._geoloc.lat, lon: hit._geoloc.lng };
     return venueMatchesCinema(cinema, hit.venue, coordinates, {
@@ -96,7 +114,7 @@ async function findEvents(cinema) {
 
   // Convert each group into a single event with multiple performances
   return Object.values(groupedByEventId).map((hits) =>
-    convertTicketSourceEvent(hits),
+    convertTicketSourceEvent(hits, moviePages),
   );
 }
 

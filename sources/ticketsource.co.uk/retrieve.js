@@ -1,5 +1,7 @@
 const { subMonths } = require("date-fns");
 const { fetchJson } = require("../../common/utils");
+const attributes = require("./attributes");
+const getPageWithPlaywright = require("../../common/get-page-with-playwright");
 
 // Algolia API configuration
 const ALGOLIA_CONFIG = {
@@ -104,7 +106,34 @@ async function retrieve() {
     await retrieveFilterEvents(buildSearchParamsForNtLive),
     await retrieveFilterEvents(buildSearchParamsForExhibitionOnScreen),
   );
-  return { movieListPages };
+
+  const allHits = movieListPages
+    .flatMap(({ hits }) => hits)
+    // Remove duplicates; as we're running more than one search, it's possible
+    // to get the same values back for both.
+    .reduce((acc, hit) => {
+      const missingValue = !acc.find((item) => item.objectID === hit.objectID);
+      if (missingValue) acc.push(hit);
+      return acc;
+    }, []);
+
+  const moviePages = {};
+  for (const hit of allHits) {
+    const { locationSlug, venueSlug, eventSlug, eventHash } = hit;
+    const url = `${attributes.domain}/whats-on/${locationSlug}/${venueSlug}/${eventSlug}/${eventHash}`;
+    const cacheKey = `ticketsource-${eventSlug}-${eventHash}`;
+    moviePages[eventHash] = await getPageWithPlaywright(
+      url,
+      cacheKey,
+      async (page) => {
+        await page.waitForLoadState();
+        await page.locator("#js-navigation-wrapper").waitFor({ strict: false });
+        return await page.content();
+      },
+    );
+  }
+
+  return { movieListPages, moviePages };
 }
 
 module.exports = retrieve;

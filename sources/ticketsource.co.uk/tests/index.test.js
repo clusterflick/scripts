@@ -1,5 +1,5 @@
 /** @jest-environment setup-polly-jest/jest-environment-node */
-const { setupPolly } = require("../../../common/test-utils");
+const { setupPolly, setupCacheMock } = require("../../../common/test-utils");
 const {
   readJSON,
   removeMatchingHints,
@@ -14,9 +14,12 @@ jest.mock("../../../common/utils", () => ({
 
 const isRecording = false;
 
+jest.mock("../../../common/cache");
+setupCacheMock(__dirname, "2025-12-30");
+
 describe(`${attributes.name}`, () => {
   setupPolly(isRecording, __dirname);
-  jest.useFakeTimers().setSystemTime(new Date("2025-12-13"));
+  jest.useFakeTimers().setSystemTime(new Date("2025-12-30"));
 
   describe.each([
     {
@@ -28,13 +31,13 @@ describe(`${attributes.name}`, () => {
       name: "Close-Up Film Centre",
       alternativeNames: ["Close-Up Cinema"],
       geo: { lat: 51.52363533860424, lon: -0.07204024586584808 },
-      expectedMatches: 10,
+      expectedMatches: 28,
     },
     {
       name: "The Exchange Twickenham",
       alternativeNames: ["The Exchange"],
       geo: { lat: 51.45004001959767, lon: -0.3313163212241062 },
-      expectedMatches: 11,
+      expectedMatches: 18,
     },
   ])("$name", ({ name, alternativeNames, geo, expectedMatches }) => {
     it(
@@ -44,7 +47,7 @@ describe(`${attributes.name}`, () => {
 
         // Make sure the input looks roughly correct
         expect(movieListPages).toBeTruthy();
-        expect(Object.keys(movieListPages)).toHaveLength(7);
+        expect(Object.keys(movieListPages)).toHaveLength(11);
 
         readJSON.mockImplementation(() => ({ movieListPages, moviePages }));
 
