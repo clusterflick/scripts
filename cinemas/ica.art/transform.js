@@ -80,9 +80,24 @@ async function transform({ moviePages }, sourcedEvents) {
         },
       ),
       matchingHints: {
-        overview: Array.from($("#colophon").prev().nextAll().not(".row.select"))
-          .map((el) => getText($(el)))
+        overview: Array.from(
+          $("#detail-body")
+            .children()
+            .not(".subhead")
+            .not("#films-image")
+            .not("#films-trailer")
+            .not("#trailer-control")
+            .not("#colophon")
+            .not("#credit")
+            .not(".row.select"),
+        )
+          .map((el) => {
+            $(el).find("br").replaceWith("\n");
+            return getText($(el));
+          })
+          .filter((value) => value.trim().length > 0)
           .join("\n")
+          .replace(/[\n]+/g, "\n")
           .trim(),
       },
     });
