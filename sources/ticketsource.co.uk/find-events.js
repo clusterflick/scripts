@@ -1,6 +1,7 @@
 const path = require("node:path");
 const { decode } = require("html-entities");
 const cheerio = require("cheerio");
+const nlp = require("compromise");
 const {
   readJSON,
   generateShowingId,
@@ -11,6 +12,14 @@ const {
 const { createOverview, createPerformance } = require("../../common/utils");
 const attributes = require("./attributes");
 const { venueMatchesCinema } = require("../../common/source-utils");
+
+function getCast(synopsis) {
+  const doc = nlp(synopsis);
+  const people = doc.people().json();
+  if (people.length === 0) return;
+
+  return people.map(({ text }) => text);
+}
 
 function createPerformanceFromHit(
   { timestamp, venueSlug, timeHash, hint },
@@ -64,6 +73,7 @@ function convertTicketSourceEvent(hits, moviePages) {
         eventText ||
         `${eventDescription || ""}\n${hint || ""}`.trim() ||
         undefined,
+      cast: eventText ? getCast(eventText) : undefined,
     },
   };
 }

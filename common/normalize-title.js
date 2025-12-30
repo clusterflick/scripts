@@ -393,6 +393,8 @@ function normalizeTitle(title, options) {
     ["A Minecraft Movie Premiere", "A Minecraft Movie"],
     ["Evgenij Onegin", "Eugene Onegin"],
     ["NOVELLE VAGUE", "NOUVELLE VAGUE"],
+    [/^Bowie:? The Final Act/i, "David Bowie: The Final Act"],
+    [/: Bowie:? The Final Act/i, ": David Bowie: The Final Act"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
