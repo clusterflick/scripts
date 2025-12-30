@@ -37,10 +37,33 @@ Overview from the cinema listing, contained between the "---" delimeters:
 ${movie.matchingHints.overview}
 ---
 
-Using the JSON search response below, see if there is a match for the details above, which are from a cinema listing. The "overview" for each result in the JSON will contain key details to match on.
+Using the JSON search response below, see if there is a match for the details above, which are from a cinema listing. The "overview" value for each result in the JSON will contain details to match on.
+Phrases in the cinema listing above which are an exact match to phrases in the "overview" value should be considered a strong indicator of matching.
 Take todays date into account when considering which movie could match this cinema listing. Movies which are not released yet, or have release dates more than a year in the future are unlikely to be good matches.
 
-${JSON.stringify(results)}
+${JSON.stringify(
+  results.map(
+    ({
+      id,
+      original_language,
+      original_title,
+      overview,
+      popularity,
+      release_date,
+      title,
+    }) => ({
+      id,
+      original_language,
+      original_title,
+      overview,
+      popularity,
+      release_date,
+      title,
+    }),
+  ),
+  null,
+  2,
+)}
 `.trim();
 }
 
