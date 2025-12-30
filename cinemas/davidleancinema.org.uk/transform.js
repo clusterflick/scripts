@@ -82,11 +82,13 @@ function parseOverviewFromDescription(descriptionHtml) {
   };
 }
 
-function mapAccessibilityFromAttribute(attr = "") {
+function mapAccessibilityFromAttribute(attr = "", overview = "") {
   const value = basicNormalize(attr);
   return {
     hardOfHearing: value.includes("hoh"),
-    subtitled: value.includes("subtitl"),
+    subtitled:
+      value.includes("subtitl") ||
+      basicNormalize(overview).includes("with english subtitles"),
     babyFriendly: value.includes("babes-in-arms") || value.includes("bias"),
     relaxed: value.includes("relaxed"),
     audioDescription: value.includes("audio desc"),
@@ -108,13 +110,28 @@ function toMovie($, showEl) {
 
   const eventNodes = $show.find("events > event");
 
+  const overview = cheerio
+    .load(getTextAt($show, "description"))
+    .root()
+    .find("p,div")
+    .toArray()
+    .map((el) => getText($(el)).replace(/\s+/g, " "))
+    .join("\n")
+    .split("\n")
+    .map((value) => value.trim())
+    .filter((value) => !!value)
+    .join("\n");
+
   const performances = eventNodes.toArray().map((el) => {
     const $event = $(el);
     const rawDate = getTextAt($event, "date_time_iso");
     const bookingUrl = getTextAt($event, "url") || url;
     const soldOut = basicNormalize(getTextAt($event, "status")) === "sold out";
     const eventAttribute = getTextAt($event, "event_attribute");
-    const accessibility = mapAccessibilityFromAttribute(eventAttribute);
+    const accessibility = mapAccessibilityFromAttribute(
+      eventAttribute,
+      overview,
+    );
     const comment = getTextAt($event, "comment");
     const date = parseISO(rawDate);
     return createPerformance({
@@ -139,19 +156,7 @@ function toMovie($, showEl) {
       trailer,
     }),
     performances,
-    matchingHints: {
-      overview: cheerio
-        .load(getTextAt($show, "description"))
-        .root()
-        .find("p,div")
-        .toArray()
-        .map((el) => getText($(el)).replace(/\s+/g, " "))
-        .join("\n")
-        .split("\n")
-        .map((value) => value.trim())
-        .filter((value) => !!value)
-        .join("\n"),
-    },
+    matchingHints: { overview },
   };
 }
 
