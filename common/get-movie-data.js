@@ -26,6 +26,24 @@ const ignoredIds = [
   373903, //  National Theatre Live: Les Liaisons Dangereuses (2016) -- https://www.themoviedb.org/movie/373903-national-theatre-live-les-liaisons-dangereuses
 ];
 
+/**
+ * Specifically forced match to IDs from the Movie DB
+ * This may be to low information provided by venue sites for common single word
+ * titles which will therefore not match.
+ */
+const forcedMatches = {
+  elf: 10719, // https://www.themoviedb.org/movie/10719-elf
+  holiday: 1581, // https://www.themoviedb.org/movie/1581-the-holiday
+  notebook: 11036, // https://www.themoviedb.org/movie/11036-the-notebook
+  sham: 1423983, // https://www.themoviedb.org/movie/1423983
+};
+
+function getForcedMatch(normalizedTitle) {
+  const matchId = forcedMatches[normalizedTitle];
+  if (!matchId) return null;
+  return getMovieInfoAndCacheResults({ id: matchId });
+}
+
 const applyNameCorrections = (name) =>
   name.replace(/Scott McGhee/i, "Scott McGehee");
 
@@ -441,7 +459,8 @@ const searchForBestMatch = async ({
     if (movie.matchingHints?.year) {
       yearValue = movie.matchingHints?.year;
     } else {
-      return null;
+      const forcedMatch = await getForcedMatch(normalizedTitle);
+      return forcedMatch || null;
     }
   }
 
@@ -550,7 +569,8 @@ const searchForBestMatch = async ({
     if (bestLlmMatch) return bestLlmMatch;
   }
 
-  return null;
+  const forcedMatch = await getForcedMatch(normalizedTitle);
+  return forcedMatch || null;
 };
 
 const getMovieInfoAndCacheResults = ({ id }) =>
