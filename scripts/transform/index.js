@@ -139,14 +139,14 @@ async function transform(
       "olympiccinema.com",
       "princecharlescinema.com",
       "richmix.org.uk",
-      // "riversidestudios.co.uk", -- Remove this for now as they've just swapped to a new system
+      "riversidestudios.co.uk",
       "thearzner.com",
       "thecastlecinema.com",
       "thecinemaatselfridges.com",
       "thecinemainthepowerstation.com",
       "thegardencinema.co.uk",
       "thelexicinema.co.uk",
-      "thenickel.co.uk",
+      // "thenickel.co.uk", -- Remove this for now as there's events incorrectly identified as 2026 which are being persisted
     ];
     const yesterdaysData = optedIn.includes(location) ? yesterdaysRelease : [];
 
