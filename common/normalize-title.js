@@ -358,7 +358,6 @@ function normalizeTitle(title, options) {
       "MUPPET PUPPETS CHRISTMAS CAROL WORKSHOP & SING-ALONG",
       "Muppet Christmas Carol",
     ],
-    ["LIVE: New Year’s Eve Concert", "LIVE: NYE Concert"],
     ["Film Club |", "Film Club: "],
     ["IN-HOUSE - ", "IN-HOUSE: "],
     ["BAR TRASH - ", "BAR TRASH: "],
