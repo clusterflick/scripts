@@ -397,6 +397,8 @@ function normalizeTitle(title, options) {
     [/^Bowie:? The Final Act/i, "David Bowie: The Final Act"],
     [/: Bowie:? The Final Act/i, ": David Bowie: The Final Act"],
     [/JEFF BUCKLEY - IT'S NEVER OVER/i, "It's Never Over, Jeff Buckley"],
+    ["Berliner Philharmoniker Live:", "Berliner Philharmoniker:"],
+    ["NYE Concert", "New Years Eve Concert"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {

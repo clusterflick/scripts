@@ -669,6 +669,7 @@ const knownRemovablePhrases = [
   "Cinema Season",
   "Sunrise, Sunset and Midnight",
   "Julian Assange and the Price of Truth",
+  "Soyut Dışavurumcu Bir Dostluğun Anatomisi Veyahut",
 
   // Common superfluous pieces
   "DRINK-AND-SING-ALONG",
