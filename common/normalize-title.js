@@ -272,6 +272,7 @@ function normalizeTitle(title, options) {
     [/\s+extended$/i, ""],
     [/ – A Special.*$/i, ""],
     [/(?:\s|^)LOTR(?:\s|:)(?:\s*the\s+)?/i, "The Lord of the Rings: The "],
+    [/Lord of the Rings -/i, "Lord of the Rings: "],
     ["Doctor Who: Projections in Time -", "Doctor Who: "], // Remove unnecessary "Projections in Time" prefix
     ["H I / P D", "Hidden Inventory/Premature Death"], // Fixes Jujutsu Kaisen: H I / P D
     [
@@ -395,6 +396,7 @@ function normalizeTitle(title, options) {
     ["NOVELLE VAGUE", "NOUVELLE VAGUE"],
     [/^Bowie:? The Final Act/i, "David Bowie: The Final Act"],
     [/: Bowie:? The Final Act/i, ": David Bowie: The Final Act"],
+    [/JEFF BUCKLEY - IT'S NEVER OVER/i, "It's Never Over, Jeff Buckley"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
