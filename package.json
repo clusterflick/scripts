@@ -16,7 +16,7 @@
     "combine": "TZ=Europe/London node index.js combine",
     "match": "TZ=Europe/London node index.js match",
     "cache": "TZ=Europe/London node index.js cache",
-    "clear:cache": "rm -rf ./cache",
+    "clear:cache": "rm -rf ./cache && rm -rf ./cache-llm",
     "clear:retrieved-data": "rm -rf ./retrieved-data",
     "clear:transformed-data": "rm -rf ./transformed-data",
     "clear:combined-data": "rm -rf ./combined-data",

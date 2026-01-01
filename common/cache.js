@@ -20,13 +20,18 @@ function getCachePath(filename) {
   return path.join(process.cwd(), "cache", filename);
 }
 
-function getPathDaily(filename) {
-  const suffix = format(new Date(), "yyyy-MM-dd");
-  return getCachePath(`${filename}-${suffix}`);
+function getLlmCachePath(filename) {
+  return path.join(process.cwd(), "cache-llm", filename);
 }
 
-const setupCacheDirectory = async () => {
-  const directoryPath = getCachePath("");
+function getPathDaily(filename, getPath = getCachePath) {
+  if (!filename) return getPath("");
+  const suffix = format(new Date(), "yyyy-MM-dd");
+  return getPath(`${filename}-${suffix}`);
+}
+
+const setupCacheDirectory = async (getPath = getCachePath) => {
+  const directoryPath = getPath("");
   if (
     !fs.existsSync(directoryPath) ||
     !fs.statSync(directoryPath).isDirectory()
@@ -40,7 +45,7 @@ function checkCache(filename, getPath) {
 }
 
 function readCache(filename, getPath) {
-  setupCacheDirectory();
+  setupCacheDirectory(getPath);
   const data = fs.readFileSync(getPath(filename), "utf8");
   try {
     return JSON.parse(data);
@@ -50,7 +55,7 @@ function readCache(filename, getPath) {
 }
 
 function writeCache(filename, value, getPath) {
-  setupCacheDirectory();
+  setupCacheDirectory(getPath);
   let data;
   try {
     data = JSON.stringify(value, null, 2);
@@ -77,6 +82,12 @@ function dailyCache(key, retrieve) {
   return cache(key, retrieve, getPathDaily);
 }
 
+function dailyLlmCache(key, retrieve) {
+  return cache(key, retrieve, (filename) =>
+    getPathDaily(filename, getLlmCachePath),
+  );
+}
+
 function readDailyCache(key) {
   if (checkCache(key, getPathDaily)) {
     return readCache(key, getPathDaily);
@@ -89,6 +100,7 @@ module.exports = {
   getCachePath,
   cache,
   dailyCache,
+  dailyLlmCache,
   readDailyCache,
   readCache,
 };

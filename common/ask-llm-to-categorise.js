@@ -1,5 +1,5 @@
 const { GoogleGenerativeAI } = require("@google/generative-ai");
-const { dailyCache } = require("./cache");
+const { dailyLlmCache } = require("./cache");
 const { getId } = require("./utils");
 require("dotenv").config();
 
@@ -61,12 +61,12 @@ async function askLlmToCategorise(movie) {
   if (movie.themoviedb) return { ...movie, category: "movie" };
   if (!movie.matchingHints) return { ...movie, category: "event" };
 
-  console.log(` - Asking LLM to categorise "${movie.title}"`);
   const prompt = convertToPrompt(movie);
 
-  const response = await dailyCache(
+  const response = await dailyLlmCache(
     `ask-llm-to-categorise-${getId(prompt)}`,
     async () => {
+      console.log(` - Asking LLM to categorise "${movie.title}"`);
       const chatSession = model.startChat({ generationConfig, history: [] });
       const result = await chatSession.sendMessage(prompt);
       const text = result.response

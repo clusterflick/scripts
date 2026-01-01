@@ -1,5 +1,5 @@
 const { GoogleGenerativeAI } = require("@google/generative-ai");
-const { dailyCache } = require("./cache");
+const { dailyLlmCache } = require("./cache");
 const { getId, basicNormalize } = require("./utils");
 require("dotenv").config();
 
@@ -83,10 +83,10 @@ module.exports = async function askLlmToReviewResults(
     return { match: null, confidence: 0 };
   }
 
-  console.log(` - Asking LLM to match "${movie.title}" against results`);
   const prompt = convertToPrompt(movie, results, normalizedTitle);
 
-  return dailyCache(`ask-llm-with-results-${getId(prompt)}`, async () => {
+  return dailyLlmCache(`ask-llm-with-results-${getId(prompt)}`, async () => {
+    console.log(` - Asking LLM to match "${movie.title}" against results`);
     const chatSession = model.startChat({ generationConfig, history: [] });
     const result = await chatSession.sendMessage(prompt);
     const text = result.response
