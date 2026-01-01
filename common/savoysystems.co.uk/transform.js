@@ -14,12 +14,53 @@ function getStatus(performance) {
   return { soldOut: basicNormalize(performance.IsSoldOut) === "y" };
 }
 
+/**
+ * Lexi Cinema Tags
+ * - BF  => Baby-Friendly Screenings
+ * - FF  => Family Fun
+ * - AD  => Audio Described
+ * - HOH => Hard of Hearing
+ * - RS  => Relaxed Screening
+ * - QA  => Q+A
+ * - AS  => Accessible Screenings
+ * [Specific events -- these may change]
+ * - BHS => Black History Studies
+ * - TP  => Talking Pictures
+ * - WA  => Women of Almodóvar
+ * - SL  => Spotlight
+ * - BR  => Summer Nights in Brazil
+ */
+
+/**
+ * Rio Cinema Tags
+ * - PP    => Pink Palace
+ * - SP    => Special Event
+ * - CM    => Classic Matinee
+ * - QA    => Q+A / Discussion
+ * - FF    => Family Flicks
+ * - HoH   => Hard of Hearing
+ * - RS    => Relaxed Screening
+ * - CB    => Carers + Baby
+ * - NoAds => No Ads or Trailers
+ */
+
+/**
+ * Arzner Tags
+ * - CC => Closed Captions
+ */
+
 function getAccessibility(performance, synopsis) {
   return {
-    audioDescription: basicNormalize(performance.AD) === "y",
-    hardOfHearing: basicNormalize(performance.HOH) === "y",
-    babyFriendly: basicNormalize(performance.BF) === "y",
-    relaxed: basicNormalize(performance.RS) === "y",
+    audioDescription: basicNormalize(performance.AD) === "y", // Lexi Cinema
+    hardOfHearing:
+      basicNormalize(performance.HOH) === "y" || // Lexi Cinema
+      basicNormalize(performance.HoH) === "y" || // Rio Cinema
+      basicNormalize(performance.CC) === "y", // Arzner
+    babyFriendly:
+      basicNormalize(performance.BF) === "y" || // Lexi Cinema
+      basicNormalize(performance.FF) === "y" || // Lexi Cinema
+      basicNormalize(performance.CB) === "y", // Rio Cinema
+    relaxed: basicNormalize(performance.RS) === "y", // Lexi Cinema, Rio Cinema
     subtitled: basicNormalize(synopsis).includes("with english subtitles"),
   };
 }
@@ -34,19 +75,27 @@ function getCharacters(synopsis) {
 
 function getNotesList(performance) {
   const notes = [];
-  // Q+A
   if (basicNormalize(performance.QA) === "y") {
+    // Lexi Cinema, Rio Cinema
     notes.push("This screening will be followed by a Q&A");
   }
-  // Accessible screening
   if (basicNormalize(performance.AS) === "y") {
+    // Lexi Cinema
     notes.push("Accessible screening");
   }
-  // Talking Pictures
   if (basicNormalize(performance.TP) === "y") {
+    // Lexi Cinema
     notes.push(
       "Talking Pictures: A friendly film discussion group for seniors",
     );
+  }
+  if (basicNormalize(performance.SP) === "y") {
+    // Rio Cinema
+    notes.push("Special Event");
+  }
+  if (basicNormalize(performance.NoAds) === "y") {
+    // Rio Cinema
+    notes.push("No Ads or Trailers");
   }
   return notes;
 }
