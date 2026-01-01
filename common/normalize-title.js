@@ -139,6 +139,8 @@ function normalizeTitle(title, options) {
     ],
     ["Mana Shankara Varaprasad Garu", "Mana ShankaraVaraprasad Garu"],
     ["Vrushabha", "Vrusshabha"],
+    [/Anaganaga Oka Raj(?:$|\s+)/i, "Anaganaga Oka Raju"],
+    ["Wignyapthi", "Wignyapathi"],
     ["Frozen 2", "Frozen II"],
     ["Terminator 2 Live", " Terminator 2"],
     [/\s+terminator 2$/i, " Terminator 2 Judgment Day"],
@@ -398,6 +400,7 @@ function normalizeTitle(title, options) {
     [/JEFF BUCKLEY - IT'S NEVER OVER/i, "It's Never Over, Jeff Buckley"],
     ["Berliner Philharmoniker Live:", "Berliner Philharmoniker:"],
     ["NYE Concert", "New Years Eve Concert"],
+    ["Happy Feet 2", "Happy Feet Two"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {

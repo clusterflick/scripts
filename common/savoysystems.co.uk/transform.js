@@ -14,12 +14,13 @@ function getStatus(performance) {
   return { soldOut: basicNormalize(performance.IsSoldOut) === "y" };
 }
 
-function getAccessibility(performance) {
+function getAccessibility(performance, synopsis) {
   return {
     audioDescription: basicNormalize(performance.AD) === "y",
     hardOfHearing: basicNormalize(performance.HOH) === "y",
     babyFriendly: basicNormalize(performance.BF) === "y",
     relaxed: basicNormalize(performance.RS) === "y",
+    subtitled: basicNormalize(synopsis).includes("with english subtitles"),
   };
 }
 
@@ -77,7 +78,7 @@ async function transform(attributes, urlSlug, movieData, sourcedEvents) {
           status: getStatus(performance),
           accessibility: createAccessibility(
             title,
-            getAccessibility(performance),
+            getAccessibility(performance, movie.Synopsis),
           ),
         }),
       ),
