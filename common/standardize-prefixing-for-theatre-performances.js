@@ -4,6 +4,7 @@ const yearRangeMatcher = /(\d{2})(\d{2})[-|/](\d{2})/;
 const shortYearRangeMatcher = /(\d{2})[-|/](\d{2})/;
 const yearSuffixMatcher = /\(\d{4}\)$/;
 const ownerMatcher = /:\s+[^\s]+['|’]s/;
+const baselineYear = new Date().getFullYear() - 1; // Keep the year at 2025
 
 // Les Miserables
 function standardizePrefixingForLesMiserablesPerformances(title) {
@@ -77,7 +78,7 @@ function standardizePrefixingForMetropolitanOperaPerformances(title, options) {
 
   updatedPrefixTitle = updatedPrefixTitle.replace(ownerMatcher, ":");
 
-  let year = new Date().getFullYear();
+  let year = baselineYear;
 
   const fullYearRangeMatch = updatedPrefixTitle.match(fullYearRangeMatcher);
   if (fullYearRangeMatch) {
@@ -104,7 +105,7 @@ function standardizePrefixingForMetropolitanOperaPerformances(title, options) {
   }
 
   const yearNumber = parseInt(year, 10);
-  const isFutureYear = yearNumber > new Date().getFullYear();
+  const isFutureYear = yearNumber > baselineYear;
   year = isFutureYear ? `${yearNumber - 1}` : year;
   updatedPrefixTitle = `${updatedPrefixTitle} (${year})`;
 
@@ -158,7 +159,7 @@ function standardizePrefixingForRoyalBalletOperaPerformances(title) {
     ":",
   );
 
-  let year = new Date().getFullYear();
+  let year = baselineYear;
 
   const fullYearRangeMatch = updatedPrefixTitle.match(fullYearRangeMatcher);
   if (fullYearRangeMatch) {
@@ -182,7 +183,7 @@ function standardizePrefixingForRoyalBalletOperaPerformances(title) {
   if (yearSuffixMatch) {
     const yearSuffix = yearSuffixMatch[0].replaceAll(/[()]/g, "");
     const yearNumber = parseInt(yearSuffix, 10);
-    const isFutureYear = yearNumber > new Date().getFullYear();
+    const isFutureYear = yearNumber > baselineYear;
     year = isFutureYear ? `${yearNumber - 1}` : yearSuffix;
     updatedPrefixTitle = updatedPrefixTitle.replace(yearMatcher, "");
   }
