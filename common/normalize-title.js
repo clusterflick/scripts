@@ -401,6 +401,7 @@ function normalizeTitle(title, options) {
     ["Berliner Philharmoniker Live:", "Berliner Philharmoniker:"],
     ["NYE Concert", "New Years Eve Concert"],
     ["Happy Feet 2", "Happy Feet Two"],
+    ["And Life Goes On", "Life, and Nothing More…"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
