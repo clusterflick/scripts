@@ -258,6 +258,7 @@ const knownRemovablePhrases = [
   "Alabaster DePlume:",
   "All Out of Bubblegum Film Club:",
   "An Evening With Radio Times",
+  "An Evening with Dan Smith & Filmmakers",
   "Andrew Lloyd Webber's",
   "ANFFF:",
   "AnimeGirlsOnline:",
