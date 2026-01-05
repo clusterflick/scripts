@@ -245,7 +245,9 @@ function standardizePrefixingForTheatrePerformances(
     lowercaseTitle.startsWith("matinee: la scala:") ||
     lowercaseTitle.startsWith("the metropolitan opera:") ||
     (lowercaseTitle.startsWith("rbo ") &&
-      lowercaseTitle.includes("the metropolitan opera:"))
+      lowercaseTitle.includes("the metropolitan opera:")) ||
+    (lowercaseTitle.startsWith("rbo ") &&
+      lowercaseTitle.includes("the met opera -"))
   ) {
     return standardizePrefixingForMetropolitanOperaPerformances(title, options);
   }
