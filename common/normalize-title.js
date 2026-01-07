@@ -274,6 +274,10 @@ function normalizeTitle(title, options) {
     [/ – A Special.*$/i, ""],
     [/(?:\s|^)LOTR(?:\s|:)(?:\s*the\s+)?/i, "The Lord of the Rings: The "],
     [/Lord of the Rings -/i, "Lord of the Rings: "],
+    [
+      "Lord of the Rings: Return of the King",
+      "Lord of the Rings: The Return of the King",
+    ],
     ["Doctor Who: Projections in Time -", "Doctor Who: "], // Remove unnecessary "Projections in Time" prefix
     ["H I / P D", "Hidden Inventory/Premature Death"], // Fixes Jujutsu Kaisen: H I / P D
     [
