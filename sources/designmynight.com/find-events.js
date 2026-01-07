@@ -58,7 +58,8 @@ function extractMovieTitleFromTicketName(ticketName) {
       normalizeTitle.includes("royal box") ||
       normalizeTitle.includes("table for") ||
       normalizeTitle.includes("advance adult") ||
-      normalizeTitle.includes("advance child"))
+      normalizeTitle.includes("advance child") ||
+      normalizeTitle === "advance")
   ) {
     return undefined;
   }
