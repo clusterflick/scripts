@@ -552,6 +552,7 @@ const knownRemovablePhrases = [
   "Outdoor Cinema:",
   "Outdoor:",
   "Pay-What-You-Can:",
+  "PEFF26:",
   "Premiere and Networking Event:",
   "Premiere Event",
   "Pride Month:",

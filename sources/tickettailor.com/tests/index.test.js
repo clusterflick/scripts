@@ -12,7 +12,7 @@ jest.mock("../../../common/utils", () => ({
   readJSON: jest.fn(),
 }));
 
-const isRecording = true;
+const isRecording = false;
 
 jest.mock("../../../common/cache");
 setupCacheMock(__dirname, "2026-01-07");

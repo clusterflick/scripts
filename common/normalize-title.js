@@ -403,6 +403,7 @@ function normalizeTitle(title, options) {
     ["And Life Goes On", "Life, and Nothing More…"],
     ["Sumud / Life endures", "Sumud: Life endures"],
     ["Romeo + Juliet", "Romeo+Juliet"],
+    ["PEFF26 |", "PEFF26: "],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
