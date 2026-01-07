@@ -25,12 +25,13 @@ const ignoredIds = [
   1082548, // My Father's Shadow -- https://www.themoviedb.org/movie/1082548-my-father-s-shadow
   373903, //  National Theatre Live: Les Liaisons Dangereuses (2016) -- https://www.themoviedb.org/movie/373903-national-theatre-live-les-liaisons-dangereuses
   133882, // Murcof, Erik Truffaz & Talvin Singh - Montreux Jazz Festival -- https://www.themoviedb.org/movie/133882-murcof-erik-truffaz-talvin-singh-montreux-jazz-festival
+  1342278, // Pave Paradise -- https://www.themoviedb.org/movie/1342278
 ];
 
 /**
  * Specifically forced match to IDs from the Movie DB
- * This may be to low information provided by venue sites for common single word
- * titles which will therefore not match.
+ * This may be due to low information provided by venue sites for common single
+ * word titles which will therefore not match.
  */
 const forcedMatches = {
   elf: 10719, // https://www.themoviedb.org/movie/10719-elf
@@ -39,6 +40,7 @@ const forcedMatches = {
   sham: 1423983, // https://www.themoviedb.org/movie/1423983
   mummy: 564, // https://www.themoviedb.org/movie/564-the-mummy
   "oversabi aunty": 1594952, // https://www.themoviedb.org/movie/1594952-oversabi-aunty
+  "romeo+juliet": 454, // https://www.themoviedb.org/movie/454-romeo-juliet
 };
 
 function getForcedMatch(normalizedTitle) {
