@@ -5,6 +5,7 @@ const sportShowings = [
   /\s+Premier League Screening$/i,
   /Union Jack Classic/i,
   /Super Bowl/i,
+  /Six Nations/i,
 ];
 
 const isNotSportShowing = ({ title }) =>
