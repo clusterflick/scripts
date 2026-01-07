@@ -564,6 +564,7 @@ const knownRemovablePhrases = [
   "hits Red Carpet",
   "Red Carpet Screening",
   "Rio Feminist Film Group:",
+  "Sake, onigiri +",
   "Sanrizuka 5:",
   "SAFAR:",
   "SAFAR ",

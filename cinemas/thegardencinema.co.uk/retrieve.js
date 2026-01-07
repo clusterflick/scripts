@@ -8,7 +8,9 @@ async function retrieve() {
   const $ = cheerio.load(movieListPage);
 
   const moviePageUrls = new Set();
-  $(".films-list__by-title__film-title a").each(function () {
+  $(
+    ".films-list__by-title__film-title a, .films-list__by-date__film__title a",
+  ).each(function () {
     moviePageUrls.add($(this).attr("href"));
   });
 
