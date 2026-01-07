@@ -87,16 +87,27 @@ async function findEvents(cinema) {
   const filteredEvents = events.filter((event) => {
     if (event.is_cancelled || event.is_online_event) return false;
     if (isExcludedEvent(event)) return false;
+    if (!event.primary_venue) return false;
 
     const {
       primary_venue: {
         name,
-        address: { longitude: lon, latitude: lat },
+        address: {
+          longitude: lon,
+          latitude: lat,
+          localized_address_display: eventAddress,
+        },
       },
     } = event;
     // Split venue name before matching (e.g., "BFI Southbank, London" -> "BFI Southbank")
     const [venueName] = name.split(/[,|]/i);
-    return venueMatchesCinema(cinema, venueName, { lat, lon });
+    // localized_address_display is like "265 Lavender Hill, London, SW11 1JB"
+    return venueMatchesCinema(
+      cinema,
+      venueName,
+      { lat, lon },
+      { eventAddress },
+    );
   });
 
   return filteredEvents.map((event) =>

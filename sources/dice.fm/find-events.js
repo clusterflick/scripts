@@ -78,7 +78,10 @@ async function findEvents(cinema) {
       lat: location.geo.latitude,
       lon: location.geo.longitude,
     };
-    return venueMatchesCinema(cinema, location.name, coordinates);
+    // location.address is a string like "438 Kingsland Rd, London E8 4AA, UK"
+    return venueMatchesCinema(cinema, location.name, coordinates, {
+      eventAddress: location.address,
+    });
   });
 
   return filteredEvents.map((event) => convertDiceEvent(event));

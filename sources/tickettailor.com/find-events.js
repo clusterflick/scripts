@@ -12,16 +12,10 @@ const {
   readJSON,
 } = require("../../common/utils");
 const attributes = require("./attributes");
-const { venueMatchesCinema } = require("../../common/source-utils");
-
-// UK postcode regex - matches formats like "E11 3DR", "SE1 6ER", "SW1A 1AA"
-const UK_POSTCODE_REGEX = /\b([A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2})\b/i;
-
-function extractPostcode(text) {
-  if (!text) return null;
-  const match = text.match(UK_POSTCODE_REGEX);
-  return match ? match[1].toUpperCase().replace(/\s+/g, " ") : null;
-}
+const {
+  venueMatchesCinema,
+  extractPostcode,
+} = require("../../common/source-utils");
 
 function extractEventIdFromUrl(url) {
   const urlParts = url.split("/");
