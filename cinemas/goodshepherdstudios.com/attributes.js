@@ -1,6 +1,7 @@
 module.exports = {
   id: "goodshepherdstudios.com",
   name: "Good Shepherd Studios",
+  alternativeNames: ["We Flock CIC"],
   domain: "https://www.goodshepherdstudios.com",
   socials: {
     letterboxd: null,

@@ -67,6 +67,7 @@ const setupCacheMock = (dirname, suffix) => {
 
   dailyCache.mockImplementation((key) =>
     readCache(key, (filename) => {
+      if (!filename) return path.join(dirname, "__manual-recordings__");
       // A hash ID value was added to BFI cache. Instead of updating all manual
       // recording filenames, let's remove the ID here so they continue to map.
       if (filename.startsWith("bfi.org.uk-")) {
