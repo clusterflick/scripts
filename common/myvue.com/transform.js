@@ -45,8 +45,8 @@ async function transform(attributes, { result: movieData }, sourcedEvents) {
               return;
             }
             if (value.toLowerCase() === "big-shorts") {
-              accessibility.audioDescription = true;
-              // Don't return so it's added to the notes
+              accessibility.babyFriendly = true;
+              return;
             }
             if (title && description) {
               notesList.push(`${title}: ${sanitizeRichText(description)}`);
