@@ -96,6 +96,9 @@ const getSinglePerformance = ($, $single, details, moviePageUrl, title) => {
     return [];
   }
 
+  // Sometimes we get listing pages without an actual performance date / time
+  if (!day || !time) return [];
+
   return [
     createPerformance({
       date: parseDate(`${day} ${time}`),
