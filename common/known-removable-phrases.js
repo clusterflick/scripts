@@ -242,6 +242,7 @@ const knownRemovablePhrases = [
   "London Film Premier",
   "2025 MEET-UP",
   "& Special Introduction",
+  "feature film –",
 
   // Prefixes
   "(4DX) ",
@@ -379,6 +380,7 @@ const knownRemovablePhrases = [
   "EOS:",
   "Escapes:",
   "Everyman Barnet's 90th Anniversary:",
+  "Everyman in Therapy:",
   "£1 Family Films:",
   "£1 Family Films :",
   "£2 Family Films:",
@@ -555,6 +557,7 @@ const knownRemovablePhrases = [
   "Outdoor:",
   "Pay-What-You-Can:",
   "PEFF26:",
+  "Picture East Film Festival 2026",
   "Premiere and Networking Event:",
   "Premiere Event",
   "Pride Month:",
@@ -743,6 +746,7 @@ const knownRemovablePhrases = [
   "Movie Premiere",
   "premiere",
   "IMAX Preview",
+  "IMAX exclusive preview",
   "Launch Screening",
   "Preview Screenings",
   "preview screening",

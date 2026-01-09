@@ -408,6 +408,11 @@ function normalizeTitle(title, options) {
     ["Sumud / Life endures", "Sumud: Life endures"],
     ["Romeo + Juliet", "Romeo+Juliet"],
     ["PEFF26 |", "PEFF26: "],
+    [
+      /^Buster Keaton's Sherlock Jr\. with R\.E\.M\..*/i,
+      "R.E.M x Buster Keaton's Sherlock Jr.",
+    ],
+    ["Picture East Film Festival 2026 - ", "Picture East Film Festival 2026:"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {

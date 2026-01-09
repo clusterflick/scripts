@@ -2,7 +2,7 @@ const { basicNormalize } = require("../../common/utils");
 
 const sportShowings = [
   /\s+Cup Screening$/i,
-  /\s+Premier League Screening$/i,
+  /\s+League Screening$/i,
   /Union Jack Classic/i,
   /Super Bowl/i,
   /Six Nations/i,
