@@ -413,6 +413,7 @@ function normalizeTitle(title, options) {
       "R.E.M x Buster Keaton's Sherlock Jr.",
     ],
     ["Picture East Film Festival 2026 - ", "Picture East Film Festival 2026:"],
+    ["Romford Horror 2026 -", "Romford Horror 2026:"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {

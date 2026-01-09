@@ -570,6 +570,7 @@ const knownRemovablePhrases = [
   "hits Red Carpet",
   "Red Carpet Screening",
   "Rio Feminist Film Group:",
+  "Romford Horror 2026:",
   "Sake, onigiri +",
   "Sanrizuka 5:",
   "SAFAR:",
