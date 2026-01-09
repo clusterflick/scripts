@@ -1,20 +1,45 @@
-const { fetchText } = require("../../common/utils.js");
 const cheerio = require("cheerio");
-const attributes = require("./attributes");
+const { fetchText, basicNormalize } = require("../../common/utils.js");
+
+const filmsUrl =
+  "https://dice.fm/browse/london-54d8a23438fe5d27d500001c/culture/film";
+const theatreUrl =
+  "https://dice.fm/browse/london-54d8a23438fe5d27d500001c/culture/theatre";
+
+const getEvents = (page) => {
+  const $ = cheerio.load(page);
+  const data = JSON.parse($("#__NEXT_DATA__").html());
+  return data.props.pageProps.events;
+};
 
 async function retrieve() {
-  const movieListPage = await fetchText(attributes.url);
-  const $ = cheerio.load(movieListPage);
-  const data = JSON.parse($("#__NEXT_DATA__").html());
-
+  const movieListPages = {
+    film: await fetchText(filmsUrl),
+    theatre: await fetchText(theatreUrl),
+  };
   const moviePages = {};
-  for (const event of data.props.pageProps.events) {
+
+  const filmEvents = getEvents(movieListPages.film);
+  for (const event of filmEvents) {
     const url = `https://dice.fm/event/${event.perm_name}`;
     const html = await fetchText(url);
     moviePages[url] = html;
   }
 
-  return { movieListPage, moviePages };
+  const theatreEvents = getEvents(movieListPages.theatre);
+  for (const event of theatreEvents) {
+    // Only get theatre listings which could be movies in the wrong category
+    if (
+      basicNormalize(event.name).includes("movie") ||
+      basicNormalize(event.name).includes("film")
+    ) {
+      const url = `https://dice.fm/event/${event.perm_name}`;
+      const html = await fetchText(url);
+      moviePages[url] = html;
+    }
+  }
+
+  return { movieListPages, moviePages };
 }
 
 module.exports = retrieve;

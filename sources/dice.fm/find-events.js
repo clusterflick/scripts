@@ -19,7 +19,10 @@ function extractEventDetails(html) {
     try {
       const content = $(el).html();
       const json = JSON.parse(content);
-      if (json["@type"] === "ScreeningEvent") {
+      if (
+        json["@type"] === "ScreeningEvent" ||
+        json["@type"] === "TheaterEvent"
+      ) {
         screeningEvent = json;
       }
     } catch {

@@ -24,19 +24,19 @@ const cinema = {
 
 describe(attributes.name, () => {
   setupPolly(isRecording, __dirname);
-  jest.useFakeTimers().setSystemTime(new Date("2025-10-29"));
+  jest.useFakeTimers().setSystemTime(new Date("2026-01-09"));
 
   it(
     "retrieve and find events",
     async () => {
-      const { movieListPage, moviePages } = await retrieve();
+      const { movieListPages, moviePages } = await retrieve();
 
       // Make sure the input looks roughly correct
-      expect(movieListPage).toBeTruthy();
+      expect(movieListPages).toBeTruthy();
       expect(moviePages).toBeTruthy();
-      expect(Object.keys(moviePages)).toHaveLength(21);
+      expect(Object.keys(moviePages)).toHaveLength(23);
 
-      readJSON.mockImplementation(() => ({ movieListPage, moviePages }));
+      readJSON.mockImplementation(() => ({ movieListPages, moviePages }));
 
       const output = await findEvents(cinema);
       expect(
@@ -50,7 +50,7 @@ describe(attributes.name, () => {
         .map(addTestCategory);
 
       // Make sure the data looks roughly correct
-      expect(data).toHaveLength(6);
+      expect(data).toHaveLength(3);
       expect(data).toMatchSnapshot();
     },
     isRecording ? 600_000 : undefined,
