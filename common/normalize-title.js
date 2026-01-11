@@ -92,6 +92,7 @@ function normalizeTitle(title, options) {
     ["Saturday night at the movies -", "Saturday night at the movies:"],
     ["Pierre Boulez - Boulez", "Pierre Boulez "],
     ["twin peaks - ", "twin peaks "],
+    [" - Part 1 - ", " I: "],
     ["- Part ", "Part "],
     ["- FREE ENTRY", "FREE ENTRY"],
     ["- Live From", "Live From"],
@@ -414,6 +415,7 @@ function normalizeTitle(title, options) {
     ],
     ["Picture East Film Festival 2026 - ", "Picture East Film Festival 2026:"],
     ["Romford Horror 2026 -", "Romford Horror 2026:"],
+    ["Opening Night -", "Opening Night "],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
