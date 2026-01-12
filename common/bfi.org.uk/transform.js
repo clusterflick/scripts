@@ -112,6 +112,9 @@ async function transform(attributes, { moviePages }, sourcedEvents) {
     const articleId = $(
       "input[name='BOparam::WScontent::loadArticle::article_id']",
     ).val();
+
+    if (!articleId) throw new Error(`Unable to find articleId on ${url}`);
+
     const showingId = generateShowingId(attributes, articleId);
     const performances = getPerformancesFor($, `${url}?${showPath}`, show);
 
