@@ -416,6 +416,11 @@ function normalizeTitle(title, options) {
     ["Picture East Film Festival 2026 - ", "Picture East Film Festival 2026:"],
     ["Romford Horror 2026 -", "Romford Horror 2026:"],
     ["Opening Night -", "Opening Night "],
+    [
+      /(free |monthly )?mystery ([\w+]+ )?(night|film|movie|cinema|screening)( Nov)?/i,
+      "mystery movie",
+    ],
+    ["vhs film", "movie"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
@@ -638,7 +643,7 @@ function normalizeTitle(title, options) {
     .replace(/([a-z])-([a-z])/gi, "$1$2")
     .replace(/\s+q&a$/i, "")
     .replace(/\s3d$/i, "")
-    .replace(/\+$/, "")
+    .replace(/[+?]$/, "")
     .replace(/\(\d{4}-[^)]+\)$/, "") // Remove any date range suffixes
     .replace(/\([^)]+$/i, "") // Remove stuff in brackets where the last bracket got removed elsehwere (e.g. there was a separator within the brackets)
     .replace(/^([^(]+)\)$/i, "$1") // Remove trailing ending bracket
