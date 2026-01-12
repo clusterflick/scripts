@@ -422,6 +422,7 @@ function normalizeTitle(title, options) {
     ],
     [/(classic )?secret scre(e|a)(n|m)ing( \d+)?/i, "mystery movie"],
     ["secret classic bollywood cinema", "mystery movie"],
+    [/scre(e|a)(n|m) unseen/i, "mystery movie"],
     ["vhs film", "movie"],
   ];
 
