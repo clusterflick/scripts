@@ -194,7 +194,7 @@ async function transform(
       let content;
       try {
         response = await fetch(movie.url);
-        content = await response.text();
+        content = (await response.text()).replaceAll("&nbsp;", " ");
       } catch {
         // If something goes wrong checking the the URL, assume it's been removed
         continue;
