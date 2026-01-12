@@ -247,6 +247,7 @@ const knownRemovablePhrases = [
   "2025 MEET-UP",
   "& Special Introduction",
   "feature film –",
+  "Dedicated to Ozu",
 
   // Prefixes
   "(4DX) ",

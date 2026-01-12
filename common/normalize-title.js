@@ -424,6 +424,7 @@ function normalizeTitle(title, options) {
     ["secret classic bollywood cinema", "mystery movie"],
     [/scre(e|a)(n|m) unseen/i, "mystery movie"],
     ["vhs film", "movie"],
+    [/The Bill Reunion \d+/i, "The Bill Reunion"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
