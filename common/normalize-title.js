@@ -420,6 +420,8 @@ function normalizeTitle(title, options) {
       /(free |monthly )?mystery ([\w+]+ )?(night|film|movie|cinema|screening)( Nov)?/i,
       "mystery movie",
     ],
+    [/(classic )?secret scre(e|a)(n|m)ing( \d+)?/i, "mystery movie"],
+    ["secret classic bollywood cinema", "mystery movie"],
     ["vhs film", "movie"],
   ];
 
