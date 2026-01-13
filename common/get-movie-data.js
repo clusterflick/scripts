@@ -26,6 +26,7 @@ const ignoredIds = [
   373903, //  National Theatre Live: Les Liaisons Dangereuses (2016) -- https://www.themoviedb.org/movie/373903-national-theatre-live-les-liaisons-dangereuses
   133882, // Murcof, Erik Truffaz & Talvin Singh - Montreux Jazz Festival -- https://www.themoviedb.org/movie/133882-murcof-erik-truffaz-talvin-singh-montreux-jazz-festival
   1342278, // Pave Paradise -- https://www.themoviedb.org/movie/1342278
+  229310, // Entry -- https://www.themoviedb.org/movie/229310-entry
 ];
 
 /**

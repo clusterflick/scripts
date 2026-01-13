@@ -126,6 +126,7 @@ const knownRemovablePhrases = [
   "– OperaGlass Works",
   "– Poetry Film Screening and Fundraiser",
   "- the new film by Mai HUA & Jerry HYDE",
+  "Film By Mahmoud Hojeij",
   ": Rise For Mayreau Fundraiser",
   "| The Ritzy",
   "| Screening at the BFI",
