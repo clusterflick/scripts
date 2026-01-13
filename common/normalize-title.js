@@ -335,6 +335,8 @@ function normalizeTitle(title, options) {
     ["Stendalì: Still They Toll + ", ""],
     [/\s+Part\s+(\d+)(\s|:|$)/i, " $1$2"],
     ["Bāhubali", "Baahubali"],
+    ["Khatarnaak", "Khatarnak"],
+    ["Thalaimayil", "Thalaimaiyil "],
     ["MEMBERS ONLY: Pumpkin Carving", "Members only pumpkin carving"],
     [
       "Two Strangers Who Try Not to Kill Eachother",
@@ -417,7 +419,7 @@ function normalizeTitle(title, options) {
     ["Romford Horror 2026 -", "Romford Horror 2026:"],
     ["Opening Night -", "Opening Night "],
     [
-      /(free |monthly )?mystery ([\w+]+ )?(night|film|movie|cinema|screening)( Nov)?/i,
+      /(free |monthly )?mystery ([\w+]+ )?(night|film|movie|cinema|screening)( Nov| \d)?/i,
       "mystery movie",
     ],
     [/(classic )?secret scre(e|a)(n|m)ing( \d+)?/i, "mystery movie"],
@@ -425,6 +427,8 @@ function normalizeTitle(title, options) {
     [/scre(e|a)(n|m) unseen/i, "mystery movie"],
     ["vhs film", "movie"],
     [/The Bill Reunion \d+/i, "The Bill Reunion"],
+    ["R.E.M. Buster", "R.E.M. X Buster"],
+    [/(.*) presents: (.*)with R.E.M.'s (.*)/i, "$1 presents: R.E.M X $2$3"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {

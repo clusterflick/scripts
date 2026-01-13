@@ -59,7 +59,8 @@ function extractMovieTitleFromTicketName(ticketName) {
       normalizeTitle.includes("table for") ||
       normalizeTitle.includes("advance adult") ||
       normalizeTitle.includes("advance child") ||
-      normalizeTitle === "advance")
+      normalizeTitle === "advance" ||
+      normalizeTitle.match(/^entry\b/i)) // e.g. "Entry" or "Entry with Pizza"
   ) {
     return undefined;
   }
