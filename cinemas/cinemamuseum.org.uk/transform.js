@@ -78,14 +78,18 @@ async function transform({ moviePages }, sourcedEvents) {
         url,
         overview,
         performances: [],
-        matchingHints: {
-          overview: getText($(".tribe_events .tribe-events-content")),
-        },
+        matchingHints: { overview: description },
       };
     }
 
     const date = getDate($);
-    if (!date) throw new Error("Date not available");
+    const isFilmFestival = basicNormalize(title).includes("film festival");
+    if (!date) {
+      // If we can't get a date, it may be a festival that we can ignore
+      if (isFilmFestival) return;
+      // Otherwise, it's an error and we should stop the run
+      throw new Error("Date not available");
+    }
 
     const bookingUrl = $(".tribe-rc-get-tickets-primary-link").attr("href");
     movies[showingId].performances = movies[showingId].performances.concat(
