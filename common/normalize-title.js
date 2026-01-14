@@ -141,6 +141,7 @@ function normalizeTitle(title, options) {
     ["Vrushabha", "Vrusshabha"],
     [/Anaganaga Oka Raj(?:$|\s+)/i, "Anaganaga Oka Raju"],
     ["Wignyapthi", "Wignyapathi"],
+    ["Mahasayulaki", "Mahasayulaku"],
     ["Frozen 2", "Frozen II"],
     ["Terminator 2 Live", " Terminator 2"],
     [/\s+terminator 2$/i, " Terminator 2 Judgment Day"],
@@ -429,6 +430,8 @@ function normalizeTitle(title, options) {
     [/The Bill Reunion \d+/i, "The Bill Reunion"],
     ["R.E.M. Buster", "R.E.M. X Buster"],
     [/(.*) presents: (.*)with R.E.M.'s (.*)/i, "$1 presents: R.E.M X $2$3"],
+    ["-Dive in Wonderland-", " Dive in Wonderland "],
+    ["Live stand-up + ", "Live stand-up & "],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
