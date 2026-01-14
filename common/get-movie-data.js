@@ -212,9 +212,9 @@ async function findMovieByDirector(normalizedTitle, movie) {
 }
 
 const hasCrewFor = (movie) =>
-  movie.overview.directors.length > 0 ||
-  movie.overview.actors.length > 0 ||
-  movie.matchingHints?.crew?.length > 0;
+  movie.overview.directors.length > 0 || movie.overview.actors.length > 0;
+
+const hasCrewHintsFor = (movie) => movie.matchingHints?.crew?.length > 0;
 
 const matchesMovieTitle =
   (normalizedTitle) =>
@@ -227,6 +227,7 @@ async function getBestMatch(titleQuery, rawResults = [], movie) {
   if (rawResults.length === 0) return undefined;
 
   const hasCrewForMovie = hasCrewFor(movie);
+  const hasCrewHintsForMovie = hasCrewHintsFor(movie);
 
   // If there's only one result ...
   if (rawResults.length === 1) {
@@ -248,7 +249,10 @@ async function getBestMatch(titleQuery, rawResults = [], movie) {
   );
 
   // If there's only a few results remaining ...
-  if (resultsWithReleaseDate.length <= 3 && hasCrewForMovie) {
+  if (
+    resultsWithReleaseDate.length <= 3 &&
+    (hasCrewForMovie || hasCrewHintsForMovie)
+  ) {
     // ... and there's crew info, use it to match a result ...
     for (const result of resultsWithReleaseDate) {
       const hasCastCrewMatch = await matchesExpectedCastCrew(result, movie);
@@ -276,7 +280,7 @@ async function getBestMatch(titleQuery, rawResults = [], movie) {
   }
 
   // As we still have more than 1 result and there's crew info, use it to match the result
-  if (hasCrewForMovie) {
+  if (hasCrewForMovie || hasCrewHintsForMovie) {
     for (const result of resultsWithSameTitle) {
       const hasCastCrewMatch = await matchesExpectedCastCrew(result, movie);
       if (hasCastCrewMatch) return result;

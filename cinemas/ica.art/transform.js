@@ -12,7 +12,10 @@ const attributes = require("./attributes");
 const { parseDate } = require("./utils");
 
 const getOverview = (colophon, trailer) => {
-  const details = convertToList(colophon);
+  const correctedColophon = colophon
+    // Fix missing comma before film country
+    .replace(/([^,])\s+Japan\s+/i, "$1, Japan ");
+  const details = convertToList(correctedColophon);
   const directorMatch = /^dirs?\.\s+/i;
   const director = details.find((value) =>
     value.toLowerCase().match(directorMatch),
