@@ -9,6 +9,9 @@ const matchesStartingPrefix = (title, phrase) =>
   title.match(new RegExp(`(?:^|\\s+)${phrase}[:;]\\s+(.*?)$`, "i"));
 
 function normalizeTitle(title, options) {
+  // Remove any odd whitespace including non-breaking spaces which could cause matching issues later
+  title = title.replace(/\s+/g, " ");
+
   title = standardizePrefixingForTheatrePerformances(
     title,
     options,
@@ -325,7 +328,7 @@ function normalizeTitle(title, options) {
       /Royal Ballet & Opera \d{4}: Eugene Onegin/i,
       "The Metropolitan Opera: Eugene Onegin",
     ],
-    ["Worlds25 - Finals in Cinema", "World Finals 2025"],
+    ["Worlds25 - Finals in Cinema", "World Finals 2025"],
     ["Love + War", "Love+War"],
     ["Neighbour Totoro", "Neighbor Totoro"],
     ["The Extra Terrestrial", "The Extra-Terrestrial"],
