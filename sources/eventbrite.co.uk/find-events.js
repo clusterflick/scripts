@@ -22,7 +22,18 @@ function getEventDescription(details) {
   );
 }
 
-function isExcludedEvent({ name }) {
+function isExcludedEvent({ name, tags }) {
+  // Exclude events which are medical screenings
+  if (
+    tags.some(
+      (tag) =>
+        basicNormalize(tag.display_name).includes("medical") ||
+        basicNormalize(tag.display_name).includes("healthcare"),
+    )
+  ) {
+    return true;
+  }
+
   return basicNormalize(name).startsWith(
     // Exclude film clubs which only discuss the movie but don't have a showing
     basicNormalize("All Out of Bubblegum Film Club"),
@@ -100,7 +111,7 @@ async function findEvents(cinema) {
       },
     } = event;
     // Split venue name before matching (e.g., "BFI Southbank, London" -> "BFI Southbank")
-    const [venueName] = name.split(/[,|]/i);
+    const [venueName] = name.split(/[,|-]/i);
     // localized_address_display is like "265 Lavender Hill, London, SW11 1JB"
     return venueMatchesCinema(
       cinema,

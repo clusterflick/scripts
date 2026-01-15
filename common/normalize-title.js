@@ -436,6 +436,7 @@ function normalizeTitle(title, options) {
     [/(.*) presents: (.*)with R.E.M.'s (.*)/i, "$1 presents: R.E.M X $2$3"],
     ["-Dive in Wonderland-", " Dive in Wonderland "],
     ["Live stand-up + ", "Live stand-up & "],
+    ["UCL East Community Cinema -", "UCL East Community Cinema: "],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
