@@ -429,6 +429,7 @@ function normalizeTitle(title, options) {
     [/(classic )?secret scre(e|a)(n|m)ing( \d+)?/i, "mystery movie"],
     ["secret classic bollywood cinema", "mystery movie"],
     [/scre(e|a)(n|m) unseen/i, "mystery movie"],
+    [/(Orange Box )?Secret Film Screenings?/i, "mystery movie"],
     ["vhs film", "movie"],
     [/The Bill Reunion \d+/i, "The Bill Reunion"],
     ["R.E.M. Buster", "R.E.M. X Buster"],
