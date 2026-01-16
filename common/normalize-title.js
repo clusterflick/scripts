@@ -437,6 +437,9 @@ function normalizeTitle(title, options) {
     ["-Dive in Wonderland-", " Dive in Wonderland "],
     ["Live stand-up + ", "Live stand-up & "],
     ["UCL East Community Cinema -", "UCL East Community Cinema: "],
+    ["THIS IS NOT AN EXIT - ", "THIS IS NOT AN EXIT: "],
+    [/^\s*Twin Cheeks\s*$/i, "Twin Cheeks: Who Killed The Homecoming King?"],
+    ["FRANCESCA WOODMAN", "The Woodmans"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {

@@ -371,6 +371,7 @@ const knownRemovablePhrases = [
   "Daniel Craig:",
   "David Lynch:",
   "David Lynch Celebration :",
+  "David Lynch Angelo Badalamenti, Julee Cruise",
   "Day Of The Dude:",
   "Diane Keaton and ",
   "Doc 'n Roll:",
