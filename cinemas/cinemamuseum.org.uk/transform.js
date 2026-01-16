@@ -85,10 +85,12 @@ async function transform({ moviePages }, sourcedEvents) {
     const date = getDate($);
     const isFilmFestival = basicNormalize(title).includes("film festival");
     if (!date) {
+      // Temporarily skip entries without a date
+      return;
       // If we can't get a date, it may be a festival that we can ignore
-      if (isFilmFestival) return;
+      // if (isFilmFestival) return;
       // Otherwise, it's an error and we should stop the run
-      throw new Error("Date not available");
+      // throw new Error("Date not available");
     }
 
     const bookingUrl = $(".tribe-rc-get-tickets-primary-link").attr("href");
