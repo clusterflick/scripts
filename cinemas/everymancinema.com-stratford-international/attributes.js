@@ -10,5 +10,8 @@ module.exports = {
   url: "https://www.everymancinema.com/venues-list/g029x-everyman-stratford-international/",
   address: "4 Redman Place, London, E20 1JQ, UK",
   geo: { lat: 51.54257211871595, lon: -0.010748691552051819 },
+  structure: "group",
+  groupName: "Everyman",
+  type: "Cinema",
   cinemaId: "G029X",
 };

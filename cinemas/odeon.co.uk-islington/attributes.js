@@ -10,5 +10,8 @@ module.exports = {
   url: "https://www.odeon.co.uk/cinemas/islington",
   address: "13 Esther Anne Place, Islington, London, N1 1TU, UK",
   geo: { lat: 51.538986888542766, lon: -0.10360688672760725 },
+  structure: "group",
+  groupName: "Odeon",
+  type: "Cinema",
   cinemaId: "858",
 };

@@ -11,4 +11,6 @@ module.exports = {
   url: "https://www.thexchange.org.uk",
   address: "Ernest Harriss House, 61 Elgin Avenue, London, W9 2DB, UK",
   geo: { lat: 51.525666712970555, lon: -0.19652863588103714 },
+  structure: "solo",
+  type: "Community Cinema",
 };

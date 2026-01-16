@@ -11,5 +11,8 @@ module.exports = {
   address:
     "Valley Park Leisure Complex, 21 Hesterman Way, Croydon, CR0 4YA, UK",
   geo: { lat: 51.377993822394764, lon: -0.12449613048973689 },
+  structure: "group",
+  groupName: "Vue",
+  type: "Cinema",
   cinemaId: "10025",
 };

@@ -10,5 +10,8 @@ module.exports = {
   url: "https://whatson.bfi.org.uk/Online/default.asp",
   address: "Belvedere Road, South Bank, London, SE1 8XT, UK",
   geo: { lat: 51.50661723132389, lon: -0.11579438330226112 },
+  structure: "group",
+  groupName: "BFI",
+  type: "Cinema",
   articleId: "25E7EA2E-291F-44F9-8EBC-E560154FDAEB",
 };

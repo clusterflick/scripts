@@ -12,4 +12,6 @@ module.exports = {
   address:
     "ArtsOne Building, Queen Mary University of London, 1 Westfield Way, London, E1 4PD, UK",
   geo: { lat: 51.52412543923962, lon: -0.03777143560976456 },
+  structure: "solo",
+  type: "University",
 };

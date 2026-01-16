@@ -10,5 +10,8 @@ module.exports = {
   url: "https://www.myvue.com/cinema/croydon-grants",
   address: "14 High Street, Croydon, Surrey, CR0 1GT, UK",
   geo: { lat: 51.37283469876453, lon: -0.10099034375485608 },
+  structure: "group",
+  groupName: "Vue",
+  type: "Cinema",
   cinemaId: "10028",
 };

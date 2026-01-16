@@ -10,5 +10,8 @@ module.exports = {
   url: "https://www.odeon.co.uk/cinemas/camden",
   address: "14 The Parkway, Camden, London, NW1 7AA, UK",
   geo: { lat: 51.53898358120131, lon: -0.14352900207134897 },
+  structure: "group",
+  groupName: "Odeon",
+  type: "Cinema",
   cinemaId: "590",
 };

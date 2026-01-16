@@ -10,4 +10,6 @@ module.exports = {
   url: "https://www.aplaceforchange.co.uk",
   address: "17 Oval Way, London, SE11 5RR, UK",
   geo: { lat: 51.485962975769155, lon: -0.11654023517249693 },
+  structure: "solo",
+  type: "Community Cinema",
 };

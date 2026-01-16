@@ -10,5 +10,8 @@ module.exports = {
   url: "https://www.odeon.co.uk/cinemas/london-leicester-square",
   address: "24-26 Leicester Square, London, WC2H 7JY, UK",
   geo: { lat: 51.51053736313127, lon: -0.12932277571696912 },
+  structure: "group",
+  groupName: "Odeon",
+  type: "Cinema",
   cinemaId: "153",
 };

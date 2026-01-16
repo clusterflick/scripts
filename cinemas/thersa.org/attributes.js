@@ -14,4 +14,6 @@ module.exports = {
   url: "https://www.thersa.org/venue-hire/media-pr-filming/private-screenings/",
   address: "8 John Adam Street, London, WC2N 6EZ, UK",
   geo: { lat: 51.50962968075151, lon: -0.12279051381784958 },
+  structure: "solo",
+  type: "Concert Hall/Theatre",
 };

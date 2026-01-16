@@ -11,6 +11,8 @@ module.exports = {
   url: "https://www.lumiereromford.com/buy-tickets",
   address: "The Mercury Shopping Centre, Mercury Gardens, Romford, RM1 3EE, UK",
   geo: { lat: 51.57963148608159, lon: 0.18566149819018146 },
+  structure: "solo",
+  type: "Cinema",
   apiKey: "qWZhtogUoLqN0WQimlxrRJE36YUURmbfli8X7IwM8SVlnwPj3ssUuOkmfTdgvcBA",
   apiDomain: "https://lumiereromford.api.cinesync.io",
   locationId: "4",

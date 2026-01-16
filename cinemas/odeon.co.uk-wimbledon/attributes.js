@@ -10,5 +10,8 @@ module.exports = {
   url: "https://www.odeon.co.uk/cinemas/wimbledon",
   address: "39 The Broadway, London, SW19 1QB, UK",
   geo: { lat: 51.41999060231851, lon: -0.20482694440479335 },
+  structure: "group",
+  groupName: "Odeon",
+  type: "Cinema",
   cinemaId: "555",
 };

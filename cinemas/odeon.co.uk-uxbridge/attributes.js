@@ -11,5 +11,8 @@ module.exports = {
   url: "https://www.odeon.co.uk/cinemas/uxbridge",
   address: "302 The chimes shopping centre, Uxbridge, London, UB8 1GD, UK",
   geo: { lat: 51.54521947784089, lon: -0.475636859742944 },
+  structure: "group",
+  groupName: "Odeon",
+  type: "Cinema",
   cinemaId: "593",
 };

@@ -10,5 +10,8 @@ module.exports = {
   url: "https://www.everymancinema.com/venues-list/g011i-everyman-borough-yards/",
   address: "3 Dirty Lane, London, SE1 9PA, UK",
   geo: { lat: 51.50554636417702, lon: -0.09223577607832761 },
+  structure: "group",
+  groupName: "Everyman",
+  type: "Cinema",
   cinemaId: "G011I",
 };

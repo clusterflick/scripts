@@ -10,4 +10,6 @@ module.exports = {
   url: "https://www.institut-francais.org.uk/cinema/",
   address: "17 Queensberry Place London, SW7 2DT, UK",
   geo: { lat: 51.49456379683928, lon: -0.17726910527069906 },
+  structure: "solo",
+  type: "Cultural Institute",
 };

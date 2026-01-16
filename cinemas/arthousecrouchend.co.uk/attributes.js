@@ -10,4 +10,6 @@ module.exports = {
   url: "https://www.arthousecrouchend.co.uk",
   address: "159A Tottenham Lane, London, N8 9BT, UK",
   geo: { lat: 51.58192919065717, lon: -0.12008086198709847 },
+  structure: "solo",
+  type: "Cinema",
 };

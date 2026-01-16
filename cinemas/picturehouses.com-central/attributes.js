@@ -11,5 +11,8 @@ module.exports = {
   address:
     "Corner of Great Windmill Street and Shaftesbury Avenue, Piccadilly Circus, London, W1D 7DH, UK",
   geo: { lat: 51.51069286638665, lon: -0.13368885374453857 },
+  structure: "group",
+  groupName: "Picturehouse",
+  type: "Cinema",
   cinemaId: "022",
 };

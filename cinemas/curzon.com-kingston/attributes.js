@@ -11,4 +11,7 @@ module.exports = {
   address:
     "The Bentall Centre, Wood Street, Kingston upon Thames, London, KT1 1TP, UK",
   geo: { lat: 51.41133439637979, lon: -0.30457939999999994 },
+  structure: "group",
+  groupName: "Curzon",
+  type: "Cinema",
 };

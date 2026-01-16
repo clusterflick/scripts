@@ -10,4 +10,6 @@ module.exports = {
   url: "https://beermerchantstap.com/events/",
   address: "99 Wallis Road, London, E9 5LN, UK",
   geo: { lat: 51.54464146295322, lon: -0.02408037325831264 },
+  structure: "solo",
+  type: "Bar",
 };

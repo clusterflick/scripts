@@ -11,5 +11,8 @@ module.exports = {
   address:
     "St George's Shopping & Leisure Centre, St Anne's Road, London, HA1 1HS, UK",
   geo: { lat: 51.581444310333495, lon: -0.33857227297336373 },
+  structure: "group",
+  groupName: "Vue",
+  type: "Cinema",
   cinemaId: "10006",
 };

@@ -10,5 +10,8 @@ module.exports = {
   url: "https://www.picturehouses.com/cinema/ealing-picturehouse",
   address: "Unit 8, Filmworks Walk, Ealing, London, W5 5FA, UK",
   geo: { lat: 51.51221207400364, lon: -0.30681670181213766 },
+  structure: "group",
+  groupName: "Picturehouse",
+  type: "Cinema",
   cinemaId: "031",
 };

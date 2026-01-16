@@ -10,5 +10,8 @@ module.exports = {
   url: "https://www.odeon.co.uk/cinemas/kingston",
   address: "Clarence Street, Kingston, London, KT1 1QP, UK",
   geo: { lat: 51.41187198262875, lon: -0.29925354440516305 },
+  structure: "group",
+  groupName: "Odeon",
+  type: "Cinema",
   cinemaId: "536",
 };

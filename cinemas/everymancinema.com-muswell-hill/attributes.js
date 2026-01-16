@@ -10,5 +10,8 @@ module.exports = {
   url: "https://www.everymancinema.com/venues-list/x06sn-everyman-muswell-hill/",
   address: "Fortis Green Road, London, N10 3HP, UK",
   geo: { lat: 51.58967201632439, lon: -0.1459151347281199 },
+  structure: "group",
+  groupName: "Everyman",
+  type: "Cinema",
   cinemaId: "X06SN",
 };

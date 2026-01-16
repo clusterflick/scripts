@@ -14,4 +14,7 @@ module.exports = {
   url: "https://www.thecinemainthepowerstation.com/whats-on",
   address: "3rd Floor, Turbine Hall B, Battersea Power Station, SW11 8DD, UK",
   geo: { lat: 51.48136816125882, lon: -0.14469487520046534 },
+  structure: "group",
+  groupName: "Olympic Studios",
+  type: "Cinema",
 };

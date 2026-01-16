@@ -10,5 +10,8 @@ module.exports = {
   url: "https://www.everymancinema.com/venues-list/x0lwi-everyman-maida-vale/",
   address: "215 Sutherland Avenue, London, W9 1RU, UK",
   geo: { lat: 51.52805162625692, lon: -0.18172050256232536 },
+  structure: "group",
+  groupName: "Everyman",
+  type: "Cinema",
   cinemaId: "X0LWI",
 };

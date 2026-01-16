@@ -16,4 +16,6 @@ module.exports = {
   url: "https://langleyfilmbox.com/whats-on/",
   address: "Hawksbrook Lane, Beckenham, BR3 3BP, UK",
   geo: { lat: 51.38889808015456, lon: -0.019143992204121277 },
+  structure: "solo",
+  type: "Community Cinema",
 };

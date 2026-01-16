@@ -10,5 +10,8 @@ module.exports = {
   url: "https://www.everymancinema.com/venues-list/x06si-everyman-barnet/",
   address: "Great North Road, Barnet, EN5 1AB, UK",
   geo: { lat: 51.64645248831123, lon: -0.18753579238038853 },
+  structure: "group",
+  groupName: "Everyman",
+  type: "Cinema",
   cinemaId: "X06SI",
 };

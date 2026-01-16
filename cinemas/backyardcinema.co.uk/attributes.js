@@ -10,5 +10,7 @@ module.exports = {
   url: "https://www.backyardcinema.co.uk",
   address: "49 Tanner Street, London Bridge, London, SE1 3PL, UK",
   geo: { lat: 51.4999847809596, lon: -0.07794442991580973 },
+  structure: "solo",
+  type: "Cinema",
   siteId: "BYCXMAS25",
 };

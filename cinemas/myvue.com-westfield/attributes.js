@@ -11,5 +11,8 @@ module.exports = {
   url: "https://www.myvue.com/cinema/westfield",
   address: "Ariel Way, London, W12 7GF, UK",
   geo: { lat: 51.507883529336006, lon: -0.2216908956127698 },
+  structure: "group",
+  groupName: "Vue",
+  type: "Cinema",
   cinemaId: "10072",
 };
