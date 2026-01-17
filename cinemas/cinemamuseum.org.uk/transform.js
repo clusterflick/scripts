@@ -83,14 +83,10 @@ async function transform({ moviePages }, sourcedEvents) {
     }
 
     const date = getDate($);
-    const isFilmFestival = basicNormalize(title).includes("film festival");
     if (!date) {
-      // Temporarily skip entries without a date
+      // Skip entries without a date. The Cinema Museum has been putting up
+      // festival and placeholder pages without complete date+time data.
       return;
-      // If we can't get a date, it may be a festival that we can ignore
-      // if (isFilmFestival) return;
-      // Otherwise, it's an error and we should stop the run
-      // throw new Error("Date not available");
     }
 
     const bookingUrl = $(".tribe-rc-get-tickets-primary-link").attr("href");
