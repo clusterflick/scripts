@@ -46,7 +46,14 @@ function getPageContents(url, cacheKey, domain, showUrl) {
       return new Error(`Film information not available at ${domain}${showUrl}`);
     }
 
-    return await page.content();
+    // There have been instances where the page contents have been an empty
+    // object. Detect this and break the run to retry.
+    const content = await page.content();
+    if (typeof content !== "string" || content.length === 0) {
+      return new Error(`Empty page contents at ${domain}${showUrl}`);
+    }
+
+    return content;
   });
 }
 

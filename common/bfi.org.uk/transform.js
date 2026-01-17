@@ -103,20 +103,21 @@ function getPerformancesFor($, url, { title, performances }) {
 }
 
 async function transform(attributes, { moviePages }, sourcedEvents) {
-  const { url } = attributes;
+  const { domain } = attributes;
   const shows = [];
 
   for (const showPath in moviePages) {
+    const url = `${domain}${showPath}`;
     const show = moviePages[showPath];
     const $ = cheerio.load(show.html);
-    const articleId = $(
-      "input[name='BOparam::WScontent::loadArticle::article_id']",
-    ).val();
+    const articleId = new URL(url).searchParams.get(
+      "BOparam::WScontent::loadArticle::article_id",
+    );
 
-    if (!articleId) throw new Error(`Unable to find articleId on ${url}`);
+    if (!articleId) throw new Error(`Unable to get articleId on ${showPath}`);
 
     const showingId = generateShowingId(attributes, articleId);
-    const performances = getPerformancesFor($, `${url}?${showPath}`, show);
+    const performances = getPerformancesFor($, url, show);
 
     // Sometimes the same show can be on different URLs with the same ID.
     // Detect this by finding existing showings and adding performances instead
@@ -139,7 +140,7 @@ async function transform(attributes, { moviePages }, sourcedEvents) {
     shows.push({
       showingId,
       title: show.title,
-      url: `${url}?${showPath}`,
+      url,
       overview: getOverviewFor($),
       performances,
       matchingHints: { overview },
