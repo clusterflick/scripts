@@ -373,6 +373,7 @@ function normalizeTitle(title, options) {
     ["Film Club |", "Film Club: "],
     ["IN-HOUSE - ", "IN-HOUSE: "],
     ["BAR TRASH - ", "BAR TRASH: "],
+    ["Guest Event - ", "Guest Event: "],
     ["Goethe Annual Lecture 2025 - ", "Goethe Annual Lecture 2025: "],
     [
       /All Out of Bubblegum Film Club \d+ \//i,
@@ -440,6 +441,7 @@ function normalizeTitle(title, options) {
     ["THIS IS NOT AN EXIT - ", "THIS IS NOT AN EXIT: "],
     [/^\s*Twin Cheeks\s*$/i, "Twin Cheeks: Who Killed The Homecoming King?"],
     ["FRANCESCA WOODMAN", "The Woodmans"],
+    [/^Screening(?!(?:\s+of\b|\s*\+|\s*&))(?=\s)/i, "Screening of "],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
@@ -590,6 +592,13 @@ function normalizeTitle(title, options) {
   const hasSlavicPremier = title.match(/Кинопремиера на "([^"]+)" /i);
   if (hasSlavicPremier) {
     title = hasSlavicPremier[1];
+  }
+
+  const hasSlavicSecondScreening = title.match(
+    /Втора прожекция на "([^"]+)" /i,
+  );
+  if (hasSlavicSecondScreening) {
+    title = hasSlavicSecondScreening[1];
   }
 
   const hasFrenchShowing = title.match(/projection de «([^»]+)»/i);

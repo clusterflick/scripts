@@ -22,11 +22,6 @@ describe(attributes.name, () => {
       expect(moviePages).toBeTruthy();
 
       const output = sortAndFilterMovies(await transform(moviePages, {}));
-      expect(
-        output.every((movie) =>
-          Object.prototype.hasOwnProperty.call(movie, "matchingHints"),
-        ),
-      ).toBe(true);
 
       const data = JSON.parse(JSON.stringify(output))
         .map(removeMatchingHints)

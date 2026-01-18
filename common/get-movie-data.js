@@ -28,6 +28,7 @@ const ignoredIds = [
   1342278, // Pave Paradise -- https://www.themoviedb.org/movie/1342278
   229310, // Entry -- https://www.themoviedb.org/movie/229310-entry
   681293, // Shortcuts -- https://www.themoviedb.org/movie/681293-shortcuts
+  1575833, // Nuremberg: The Real Story -- https://www.themoviedb.org/movie/1575833-nuremberg-the-real-story
 ];
 
 /**
@@ -304,8 +305,9 @@ async function getBestMatch(titleQuery, rawResults = [], movie) {
           hint.length >= 50 &&
           overview.length >= 50 &&
           (hint.includes(overview) || overview.includes(hint))
-        )
+        ) {
           return result;
+        }
       }
 
       // Check if there are matching characters in the overview.
@@ -320,7 +322,9 @@ async function getBestMatch(titleQuery, rawResults = [], movie) {
           const overview = normalizeName(result.overview);
           return overview.includes(hint);
         });
-        if (hasAllCharacters) return result;
+        if (hasAllCharacters) {
+          return result;
+        }
       }
 
       // Check if there are matching cast derrived from the synopsis. This may
@@ -337,7 +341,9 @@ async function getBestMatch(titleQuery, rawResults = [], movie) {
           result,
           updatedMovie,
         );
-        if (matchesPossibleCast) return result;
+        if (matchesPossibleCast) {
+          return result;
+        }
       }
 
       // Check if there are matching crew. Most likely this will have been used
@@ -352,7 +358,9 @@ async function getBestMatch(titleQuery, rawResults = [], movie) {
           result,
           updatedMovie,
         );
-        if (matchesPossibleCrew) return result;
+        if (matchesPossibleCrew) {
+          return result;
+        }
       }
     }
   }

@@ -45,7 +45,10 @@ async function transform({ movieListPage }, sourcedEvents) {
       url: attributes.url,
       overview,
       performances,
-      matchingHints: { overview: getText($(this).find(".film-desc")) },
+      // TODO: Remove matching hints. For some reason Curzon Sea Containers
+      // has used the same description as a different version of the movie for
+      // "Wuthering Heights", so it's matching the 2022 version.
+      // matchingHints: { overview: getText($(this).find(".film-desc")) },
     });
   });
 
