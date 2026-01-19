@@ -1,7 +1,7 @@
 module.exports = {
   id: "ucl.ac.uk-ucl-east-community-cinema",
   name: "UCL East Community Cinema",
-  alternativeNames: ["UCL East Cinema"],
+  alternativeNames: ["UCL East Cinema", "UCL East - Marshgate"],
   domain:
     "https://www.ucl.ac.uk/creative-cultural-industries/ucl-east-community-cinema",
   socials: {

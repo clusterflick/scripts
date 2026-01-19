@@ -5,7 +5,7 @@ module.exports = {
   socials: {
     letterboxd: null,
     twitter: null,
-    instagram: null,
+    instagram: "aplaceforchange",
   },
   url: "https://www.aplaceforchange.co.uk",
   address: "17 Oval Way, London, SE11 5RR, UK",

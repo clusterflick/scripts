@@ -439,6 +439,7 @@ function normalizeTitle(title, options) {
     ["Live stand-up + ", "Live stand-up & "],
     ["UCL East Community Cinema -", "UCL East Community Cinema: "],
     ["THIS IS NOT AN EXIT - ", "THIS IS NOT AN EXIT: "],
+    ["Andres Veiel - ", "Andres Veiel: "],
     [/^\s*Twin Cheeks\s*$/i, "Twin Cheeks: Who Killed The Homecoming King?"],
     ["FRANCESCA WOODMAN", "The Woodmans"],
     [/^Screening(?!(?:\s+of\b|\s*\+|\s*&))(?=\s)/i, "Screening of "],

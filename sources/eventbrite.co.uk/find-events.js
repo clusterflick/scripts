@@ -41,9 +41,13 @@ function isExcludedEvent({ name, tags }) {
     return true;
   }
 
-  return basicNormalize(name).startsWith(
+  return (
     // Exclude film clubs which only discuss the movie but don't have a showing
-    basicNormalize("All Out of Bubblegum Film Club"),
+    basicNormalize(name).startsWith(
+      basicNormalize("All Out of Bubblegum Film Club"),
+    ) ||
+    // Exclude Gaming events
+    basicNormalize(name).includes(basicNormalize("Global Game Jam"))
   );
 }
 

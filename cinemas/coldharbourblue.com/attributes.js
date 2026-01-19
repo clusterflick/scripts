@@ -1,7 +1,11 @@
 module.exports = {
   id: "coldharbourblue.com",
   name: "Coldharbour Blue",
-  alternativeNames: ["Cold Harbour Blue", "Whirled Cinema"],
+  alternativeNames: [
+    "Cold Harbour Blue",
+    "Whirled Cinema",
+    "COLDHARBOUR BLUE (Whirled Cinema)",
+  ],
   domain: "https://www.coldharbourblue.com",
   socials: {
     letterboxd: null,

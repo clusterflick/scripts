@@ -4,6 +4,7 @@ module.exports = {
   alternativeNames: [
     "The Royal Society of Arts",
     "The RSA - the Royal Society of Arts",
+    "The RSA - Royal Society of Arts",
   ],
   domain: "https://www.thersa.org",
   socials: {

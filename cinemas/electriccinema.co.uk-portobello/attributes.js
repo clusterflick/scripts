@@ -1,6 +1,7 @@
 module.exports = {
   id: "electriccinema.co.uk-portobello",
   name: "Electric Cinema Portobello",
+  alternativeNames: ["Electric Cinema"],
   domain: "https://www.electriccinema.co.uk",
   socials: {
     letterboxd: "electriccinemas",
