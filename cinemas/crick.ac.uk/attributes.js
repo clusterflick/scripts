@@ -11,5 +11,5 @@ module.exports = {
   address: "1 Midland Road, London, NW1 1AT, UK",
   geo: { lat: 51.531731756139834, lon: -0.12870791528286527 },
   structure: "solo",
-  type: "Gallery",
+  type: "University",
 };

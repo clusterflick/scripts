@@ -12,5 +12,5 @@ module.exports = {
   address: "Randlesdown Road, London, SE6 3BT, UK",
   geo: { lat: 51.433108588491734, lon: -0.019912945972504828 },
   structure: "solo",
-  type: "Cinema",
+  type: "Bar",
 };

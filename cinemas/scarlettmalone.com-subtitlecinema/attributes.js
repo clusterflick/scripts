@@ -12,5 +12,5 @@ module.exports = {
   address: "9-10 Culford Mews, London, N1 4DZ, UK",
   geo: { lat: 51.54609726262986, lon: -0.08260013960650686 },
   structure: "solo",
-  type: "Cinema",
+  type: "Community Cinema",
 };

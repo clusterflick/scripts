@@ -11,5 +11,5 @@ module.exports = {
   address: "1 Wythes Road, London, E16 2DN, UK",
   geo: { lat: 51.50213320721621, lon: 0.04729866937292651 },
   structure: "solo",
-  type: "Gallery",
+  type: "Community Cinema",
 };
