@@ -1,7 +1,7 @@
 module.exports = {
   id: "olympiccinema.com",
   name: "The Olympic Cinema",
-  alternativeNames: ["Olympic Studios"],
+  alternativeNames: ["Olympic Studios", "Olympic Studios, Screening Room"],
   domain: "https://www.olympiccinema.com",
   socials: {
     letterboxd: null,

@@ -374,6 +374,7 @@ function normalizeTitle(title, options) {
     ["IN-HOUSE - ", "IN-HOUSE: "],
     ["BAR TRASH - ", "BAR TRASH: "],
     ["Guest Event - ", "Guest Event: "],
+    ["Tony Palmer film - ", "Tony Palmer film: "],
     ["Goethe Annual Lecture 2025 - ", "Goethe Annual Lecture 2025: "],
     [
       /All Out of Bubblegum Film Club \d+ \//i,
@@ -440,6 +441,7 @@ function normalizeTitle(title, options) {
     ["UCL East Community Cinema -", "UCL East Community Cinema: "],
     ["THIS IS NOT AN EXIT - ", "THIS IS NOT AN EXIT: "],
     ["Andres Veiel - ", "Andres Veiel: "],
+    ["Gothic Film Festival - ", "Gothic Film Festival: "],
     [/^\s*Twin Cheeks\s*$/i, "Twin Cheeks: Who Killed The Homecoming King?"],
     ["FRANCESCA WOODMAN", "The Woodmans"],
     [/^Screening(?!(?:\s+of\b|\s*\+|\s*&))(?=\s)/i, "Screening of "],
