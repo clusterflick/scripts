@@ -203,6 +203,11 @@ const removeNotes = (value) => {
   return value.replace(/\([^)]+\)$/i, "").trim();
 };
 
+const convertNamesTextToList = (names) =>
+  splitConjoinedItemsInList(convertToList(names))
+    .map(attemptEncodingFix)
+    .map(removeNotes);
+
 const createOverview = ({
   duration,
   year,
@@ -406,4 +411,5 @@ module.exports = {
   isPrivateHire,
   runLlmFunction,
   getValidClassification,
+  convertNamesTextToList,
 };

@@ -1,3 +1,4 @@
+const cheerio = require("cheerio");
 const { fetchText } = require("../../common/utils.js");
 const attributes = require("./attributes");
 
@@ -11,11 +12,15 @@ function uniqueEvents(events) {
 }
 
 const getPageServerData = async (url) => {
-  const jsonString = (await fetchText(url)).match(
-    /\s+window.__SERVER_DATA__ = ({.+});/i,
-  )[1];
-  // Remove tabs from string the JSON parser throws on
-  return JSON.parse(jsonString.replace(/\t/g, " "));
+  const html = await fetchText(url);
+  const serverDataMatch = html.match(/\s+window.__SERVER_DATA__ = ({.+});/i);
+  if (serverDataMatch) {
+    // Remove tabs from string the JSON parser throws on
+    return JSON.parse(serverDataMatch[1].replace(/\t/g, " "));
+  }
+
+  const $ = cheerio.load(html);
+  return JSON.parse($("#__NEXT_DATA__").html());
 };
 
 const getSearchResultsFor = async (searchTerm) => {
@@ -53,8 +58,9 @@ async function retrieve() {
         );
       const eventData = await getPageServerData(event.url);
       moviePages[event.url] = eventData;
-    } catch {
+    } catch (e) {
       // Event may have been removed
+      console.log(`! Error retriving page data at ${event.url} - ${e.message}`);
     }
   }
 

@@ -5,6 +5,7 @@ const {
   sanitizeRichText,
   generateShowingId,
   createAccessibility,
+  convertNamesTextToList,
 } = require("../../common/utils");
 const { createOverview, createPerformance } = require("../../common/utils");
 const { parseDate } = require("./utils");
@@ -14,8 +15,14 @@ const { venueMatchesCinema } = require("../../common/source-utils");
 function getEventDescription(details) {
   if (!details) return "";
 
+  const context =
+    details.components?.eventDescription || details.props?.pageProps?.context;
+
+  // Bail if we can't traverse down to get the right context data
+  if (!context || context === details) return "";
+
   return (
-    details.components?.eventDescription?.structuredContent?.modules
+    context.structuredContent?.modules
       .filter(({ type }) => basicNormalize(type) === "text")
       .map(({ text }) => sanitizeRichText(text))
       .join("\n\n") || ""
@@ -45,6 +52,9 @@ function convertEventbriteEvent(event, details) {
   const endDate = parseDate(`${event.end_date}T${event.end_time}`);
   const eventDescription = getEventDescription(details);
 
+  const crewMatch = eventDescription.match(/Dir:(.*)\n/i);
+  const castMatch = eventDescription.match(/Cast:(.*)\n/i);
+
   return {
     showingId: generateShowingId(attributes, event.id),
     title: event.name,
@@ -62,6 +72,8 @@ function convertEventbriteEvent(event, details) {
     ],
     matchingHints: {
       overview: `${event.summary}\n\n${eventDescription}`.trim(),
+      crew: crewMatch ? convertNamesTextToList(crewMatch[1]) : undefined,
+      cast: castMatch ? convertNamesTextToList(castMatch[1]) : undefined,
     },
   };
 }
