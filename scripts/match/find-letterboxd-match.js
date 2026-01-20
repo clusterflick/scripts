@@ -1,63 +1,39 @@
-const slugify = require("slugify");
 const cheerio = require("cheerio");
-const { dailyCache } = require("../../common/cache");
-const { fetchText, getText } = require("../../common/utils");
-const { normaliseAndParseInt, getMatch, findSourceMatch } = require("./common");
-
-const getSearchResults = async (term) => {
-  const slug = slugify(term, { strict: true }).toLowerCase();
-  const cacheKey = `letterboxd-search-${slug}`;
-  const letterboxdSearch = await dailyCache(cacheKey, async () =>
-    fetchText(`https://letterboxd.com/s/search/films/${slug}/`),
-  );
-
-  const $ = cheerio.load(letterboxdSearch);
-  return $(".search-result")
-    .map((i, el) => {
-      const $meta = $(el).find("div[data-film-id]");
-      const $title = $(el).find(".film-title-wrapper > a");
-      const $year = $(el).find(".film-title-wrapper > small.metadata");
-      const $director = $(el).find("p.film-metadata > .text-slug");
-      return {
-        id: $meta.attr("data-film-id"),
-        slug: $meta.attr("data-item-slug"),
-        // Replace hyphen with dash so that normalization doesn't strip out
-        // important information.
-        title: getText($title).replaceAll(" - ", " – "),
-        url: `https://letterboxd.com${$title.attr("href")}`,
-        year: getText($year),
-        directors: [getText($director)],
-      };
-    })
-    .get();
-};
+const { normaliseAndParseInt } = require("./common");
+const getPageWithPlaywright = require("../../common/get-page-with-playwright");
 
 const getMovieRatings = async (match) => {
-  const cacheKey = `letterboxd-ratings-${match.id}-${match.slug}`;
-  return await dailyCache(cacheKey, async () =>
-    fetchText(`https://letterboxd.com/csi/film/${match.slug}/ratings-summary/`),
-  );
-};
+  const url = `https://letterboxd.com/tmdb/${match.id}`;
+  const cacheKey = `letterboxd-listing-${match.id}`;
 
-const getMovieStats = async (match) => {
-  const cacheKey = `letterboxd-stats-${match.id}-${match.slug}`;
-  return await dailyCache(cacheKey, async () =>
-    fetchText(`https://letterboxd.com/csi/film/${match.slug}/stats/`),
-  );
-};
+  return await getPageWithPlaywright(url, cacheKey, async (page) => {
+    await page.waitForLoadState();
+    await page.locator("#film-page-wrapper").waitFor({ strict: false });
 
-const getDirectorsForMatch = ({ directors }) => directors;
+    const letterboxdUrl = await page
+      .locator('[property="og:url"]')
+      .getAttribute("content");
+
+    const ratings = await page
+      .locator("section.ratings-histogram-chart")
+      .evaluate((el) => el.outerHTML);
+    const stats = await page
+      .locator("div.production-statistic-list")
+      .evaluate((el) => el.outerHTML);
+
+    return { url: letterboxdUrl, ratings, stats };
+  });
+};
 
 const getScore = async (match) => {
-  const letterboxdRating = await getMovieRatings(match);
-  const $rating = cheerio.load(letterboxdRating);
-  const ratingSummary = $rating(".average-rating a").attr("title");
+  const { url, ratings, stats } = await getMovieRatings(match);
+  const $rating = cheerio.load(ratings);
+  const ratingSummary = $rating(".average-rating a").data("original-title");
   const ratingDetails = ratingSummary
     ? ratingSummary.toLowerCase().match(/weighted average of ([^\s]+) based/i)
     : null;
 
-  const letterboxdStats = await getMovieStats(match);
-  const $stats = cheerio.load(letterboxdStats);
+  const $stats = cheerio.load(stats);
   const likeSummary = $stats(".production-statistic.-likes").attr("aria-label");
   const likeDetails = likeSummary
     ? likeSummary.toLowerCase().match(/liked by\s+([\d,]+)\s+member/i)
@@ -70,7 +46,7 @@ const getScore = async (match) => {
   // Calculate unweighted average
   const $histogramBars = $rating(".rating-histogram-bar a");
   const histogram = Array.from(
-    $histogramBars.map((i, el) => $rating(el).attr("title")),
+    $histogramBars.map((i, el) => $rating(el).data("original-title")),
   ).map((value) => normaliseAndParseInt(value.split(" ")[0]));
   const reviewCount = histogram.reduce((sum, val) => sum + val, 0);
   const allStars = histogram.reduce((sum, val, i) => sum + val * (i + 1), 0);
@@ -78,7 +54,7 @@ const getScore = async (match) => {
 
   return {
     id: match.id,
-    url: `https://letterboxd.com/film/${match.slug}/`,
+    url,
     likes: likeDetails ? normaliseAndParseInt(likeDetails[1]) : undefined,
     reviews: reviewCount,
     rating: weightedAverage,
@@ -87,12 +63,7 @@ const getScore = async (match) => {
 };
 
 async function findLetterboxdMatch(movie) {
-  return findSourceMatch(movie, {
-    getMatch,
-    getSearchResults,
-    getDirectorsForMatch,
-    getScore,
-  });
+  return getScore(movie);
 }
 
 module.exports = findLetterboxdMatch;
