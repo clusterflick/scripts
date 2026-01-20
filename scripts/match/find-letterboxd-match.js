@@ -1,6 +1,7 @@
 const cheerio = require("cheerio");
 const { normaliseAndParseInt } = require("./common");
 const getPageWithPlaywright = require("../../common/get-page-with-playwright");
+const { basicNormalize } = require("../../common/utils");
 
 const getMovieRatings = async (match) => {
   const url = `https://letterboxd.com/tmdb/${match.id}`;
@@ -11,7 +12,21 @@ const getMovieRatings = async (match) => {
     cacheKey,
     async (page) => {
       await page.waitForLoadState();
-      await page.locator("#film-page-wrapper").waitFor({ strict: false });
+
+      try {
+        await page
+          .locator("#film-page-wrapper")
+          .waitFor({ state: "attached", timeout: 10000 });
+      } catch (error) {
+        // Catch whenever there isn't a corresponding page on Letterboxd
+        // because they've chosen not to import it
+        const title = await page.locator("#content h1.title").textContent();
+        if (basicNormalize(title) === basicNormalize("Film not imported")) {
+          return { isNotImported: true };
+        }
+        // Otherwise throw, as we've hit an unexpected issue
+        throw error;
+      }
 
       const letterboxdUrl = await page
         .locator('[property="og:url"]')
@@ -26,7 +41,7 @@ const getMovieRatings = async (match) => {
         ratings = await page
           .locator("section.ratings-histogram-chart")
           .evaluate((el) => el.outerHTML);
-      } catch (error) {
+      } catch {
         // Assume the movie doesn't have any ratings
       }
 
@@ -40,7 +55,7 @@ const getMovieRatings = async (match) => {
         stats = await page
           .locator("div.production-statistic-list")
           .evaluate((el) => el.outerHTML);
-      } catch (error) {
+      } catch {
         // Movie should always have stats. Let's not block, but output a warning
         // message so we can see the issue in the logs
         console.log(`\nWARN: Stats not available for movie: ${letterboxdUrl}`);
@@ -53,7 +68,14 @@ const getMovieRatings = async (match) => {
 };
 
 const getScore = async (match) => {
-  const { url, ratings, stats } = await getMovieRatings(match);
+  const {
+    url,
+    ratings,
+    stats,
+    isNotImported = false,
+  } = await getMovieRatings(match);
+  if (isNotImported) return null;
+
   const $rating = cheerio.load(ratings);
   const ratingSummary = $rating(".average-rating a").data("original-title");
   const ratingDetails = ratingSummary
