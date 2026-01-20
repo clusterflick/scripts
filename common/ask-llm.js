@@ -15,7 +15,7 @@ const systemInstruction = `
   If \`isKnownMovie\` is true, then each match must include the properties \`title\` (in original language), \`year\` of initial release (leave blank if uncertain), \`directors\` as an array of director names and \`cast\` as an array of cast member names.
 `;
 const model = genAI.getGenerativeModel({
-  model: "gemini-2.0-flash",
+  model: "gemini-2.5-flash-lite",
   systemInstruction,
 });
 const generationConfig = {
