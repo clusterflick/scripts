@@ -6,23 +6,50 @@ const getMovieRatings = async (match) => {
   const url = `https://letterboxd.com/tmdb/${match.id}`;
   const cacheKey = `letterboxd-listing-${match.id}`;
 
-  return await getPageWithPlaywright(url, cacheKey, async (page) => {
-    await page.waitForLoadState();
-    await page.locator("#film-page-wrapper").waitFor({ strict: false });
+  return await getPageWithPlaywright(
+    url,
+    cacheKey,
+    async (page) => {
+      await page.waitForLoadState();
+      await page.locator("#film-page-wrapper").waitFor({ strict: false });
 
-    const letterboxdUrl = await page
-      .locator('[property="og:url"]')
-      .getAttribute("content");
+      const letterboxdUrl = await page
+        .locator('[property="og:url"]')
+        .getAttribute("content");
 
-    const ratings = await page
-      .locator("section.ratings-histogram-chart")
-      .evaluate((el) => el.outerHTML);
-    const stats = await page
-      .locator("div.production-statistic-list")
-      .evaluate((el) => el.outerHTML);
+      let ratings = "";
+      try {
+        await page
+          .locator("section.ratings-histogram-chart")
+          .waitFor({ state: "attached", timeout: 10000 });
 
-    return { url: letterboxdUrl, ratings, stats };
-  }, { goto: { waitUntil: "domcontentloaded" } });
+        ratings = await page
+          .locator("section.ratings-histogram-chart")
+          .evaluate((el) => el.outerHTML);
+      } catch (error) {
+        // Assume the movie doesn't have any ratings
+      }
+
+      let stats = "";
+      try {
+        await page
+          .locator("div.production-statistic-list .production-statistic")
+          .first()
+          .waitFor({ state: "attached", timeout: 10000 });
+
+        stats = await page
+          .locator("div.production-statistic-list")
+          .evaluate((el) => el.outerHTML);
+      } catch (error) {
+        // Movie should always have stats. Let's not block, but output a warning
+        // message so we can see the issue in the logs
+        console.log(`\nWARN: Stats not available for movie: ${letterboxdUrl}`);
+      }
+
+      return { url: letterboxdUrl, ratings, stats };
+    },
+    { goto: { waitUntil: "domcontentloaded" } },
+  );
 };
 
 const getScore = async (match) => {
@@ -63,7 +90,8 @@ const getScore = async (match) => {
 };
 
 async function findLetterboxdMatch(movie) {
-  return getScore(movie);
+  const score = await getScore(movie);
+  return score;
 }
 
 module.exports = findLetterboxdMatch;
