@@ -219,6 +219,7 @@ function normalizeTitle(title, options) {
     ["Sardar Ji", "Sardaarji"],
     ["Sardarji", "Sardaarji"],
     ["DE DE PYAR DE 2", "DE DE PYAAR DE 2"],
+    ["En Ghabl El Kot", "En Ghab El Kot"],
     [/trois /i, "3 "], // Fixes trois hommes et un couffin
     [/ \(20th$/i, ""],
     [/ \(Re-Re$/i, ""],
@@ -423,6 +424,7 @@ function normalizeTitle(title, options) {
     ],
     ["Picture East Film Festival 2026 - ", "Picture East Film Festival 2026:"],
     ["Romford Horror 2026 -", "Romford Horror 2026:"],
+    ["Romford Horror Festival 2026 -", "Romford Horror 2026:"],
     ["Opening Night -", "Opening Night "],
     [
       /(free |monthly )?mystery ([\w+]+ )?(night|film|movie|cinema|screening)( Nov| \d)?/i,
@@ -445,6 +447,7 @@ function normalizeTitle(title, options) {
     [/^\s*Twin Cheeks\s*$/i, "Twin Cheeks: Who Killed The Homecoming King?"],
     ["FRANCESCA WOODMAN", "The Woodmans"],
     [/^Screening(?!(?:\s+of\b|\s*\+|\s*&))(?=\s)/i, "Screening of "],
+    ["Traitors - Live Final", "Traitors Final"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
