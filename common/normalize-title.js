@@ -448,6 +448,7 @@ function normalizeTitle(title, options) {
     ["FRANCESCA WOODMAN", "The Woodmans"],
     [/^Screening(?!(?:\s+of\b|\s*\+|\s*&))(?=\s)/i, "Screening of "],
     ["Traitors - Live Final", "Traitors Final"],
+    ["Million Moments for Democracy", "Million Moments"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
