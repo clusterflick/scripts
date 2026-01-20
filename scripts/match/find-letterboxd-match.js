@@ -22,7 +22,7 @@ const getMovieRatings = async (match) => {
       .evaluate((el) => el.outerHTML);
 
     return { url: letterboxdUrl, ratings, stats };
-  });
+  }, { goto: { waitUntil: "domcontentloaded" } });
 };
 
 const getScore = async (match) => {

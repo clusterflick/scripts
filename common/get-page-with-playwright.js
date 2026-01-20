@@ -5,7 +5,7 @@ const { dailyCache } = require("./cache");
 const stealth = require("puppeteer-extra-plugin-stealth")();
 chromium.use(stealth);
 
-async function getPageWithPlaywright(url, cacheKey, callback) {
+async function getPageWithPlaywright(url, cacheKey, callback, options = {}) {
   return dailyCache(cacheKey, async () => {
     const browser = await chromium.launch({ headless: true });
     const context = await browser.newContext();
@@ -14,7 +14,7 @@ async function getPageWithPlaywright(url, cacheKey, callback) {
     const page = await context.newPage();
     await page.setViewportSize({ width: 1280, height: 720 });
     try {
-      await page.goto(url);
+      await page.goto(url, options.goto);
       const result = await callback(page);
       await browser.close();
       return result;
