@@ -128,7 +128,7 @@ async function transform({ moviePages }, sourcedEvents) {
     return {
       showingId: generateShowingId(attributes, id),
       title,
-      url: $('link[rel="canonical"]').attr("href"),
+      url: new URL($('link[rel="canonical"]').attr("href")).href,
       overview: createOverview({
         year,
         duration: stats[stats.length - 1].replace("m.", ""),
