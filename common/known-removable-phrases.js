@@ -47,6 +47,7 @@ const knownRemovablePhrases = [
   " with SCRT & Mubi",
   " with Gemma Gore",
   " with Geremi So",
+  ": A RIGHT OF PASSAGE",
   ": Reverie Cineclub",
   ": Reverie Cineclub: Fairytales from around the World",
   ": Parents & Baby Screening",

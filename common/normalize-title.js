@@ -457,6 +457,12 @@ function normalizeTitle(title, options) {
     ["TRAITORS 2026 FINAL SCREENING PARTY", "Traitors Finale"],
     ["Million Moments for Democracy", "Million Moments"],
     ["OPENING Eika Katappa", "Eika Katappa"],
+    ["Labryinth", "Labyrinth"],
+    [
+      "Tony Palmer film - Story of Popular Music",
+      "All You Need Is Love: The Story of Popular Music",
+    ],
+    ["THE WITCH THAT CAME FROM THE SEA", "The Witch Who Came from the Sea"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
