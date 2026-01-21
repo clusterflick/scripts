@@ -13,19 +13,18 @@ const getMovieRatings = async (match) => {
     async (page) => {
       await page.waitForLoadState();
 
-      try {
-        await page
-          .locator("#film-page-wrapper")
-          .waitFor({ state: "attached", timeout: 10000 });
-      } catch (error) {
-        // Catch whenever there isn't a corresponding page on Letterboxd
-        // because they've chosen not to import it
-        const title = await page.locator("#content h1.title").textContent();
+      // Race between the film page loading and the "not imported" page
+      const filmWrapper = page.locator("#film-page-wrapper");
+      const notImportedTitle = page.locator("#content h1.title");
+
+      await filmWrapper.or(notImportedTitle).waitFor({ state: "attached" });
+
+      // Check if we hit the "not imported" page
+      if (await notImportedTitle.isVisible()) {
+        const title = await notImportedTitle.textContent();
         if (basicNormalize(title) === basicNormalize("Film not imported")) {
           return { isNotImported: true };
         }
-        // Otherwise throw, as we've hit an unexpected issue
-        throw error;
       }
 
       const letterboxdUrl = await page
