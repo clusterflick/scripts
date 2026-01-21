@@ -76,7 +76,8 @@ async function askLlmToCategorise(movie) {
       return JSON.parse(text);
     },
   );
-  return { ...movie, category: response.category || "event" };
+  const hasCategory = !!response.category && response.confidence > 7;
+  return { ...movie, category: hasCategory ? response.category : "event" };
 }
 
 module.exports = askLlmToCategorise;

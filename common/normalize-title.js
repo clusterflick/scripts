@@ -376,6 +376,10 @@ function normalizeTitle(title, options) {
     ["BAR TRASH - ", "BAR TRASH: "],
     ["Guest Event - ", "Guest Event: "],
     ["Tony Palmer film - ", "Tony Palmer film: "],
+    [
+      "Tony Palmer film: Story of Popular Music",
+      "All You Need Is Love: The Story of Popular Music",
+    ],
     ["Goethe Annual Lecture 2025 - ", "Goethe Annual Lecture 2025: "],
     [
       /All Out of Bubblegum Film Club \d+ \//i,
@@ -458,11 +462,8 @@ function normalizeTitle(title, options) {
     ["Million Moments for Democracy", "Million Moments"],
     ["OPENING Eika Katappa", "Eika Katappa"],
     ["Labryinth", "Labyrinth"],
-    [
-      "Tony Palmer film - Story of Popular Music",
-      "All You Need Is Love: The Story of Popular Music",
-    ],
     ["THE WITCH THAT CAME FROM THE SEA", "The Witch Who Came from the Sea"],
+    ["Mudlarking and Metamorphosis", "Mudlarking"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
