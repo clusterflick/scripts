@@ -445,11 +445,18 @@ function normalizeTitle(title, options) {
     ["Andres Veiel - ", "Andres Veiel: "],
     ["Gothic Film Festival - ", "Gothic Film Festival: "],
     ["Aussies in London - ", "Aussies in London: "],
+    ["MOVIE CLUB - ", "Movie Club: "],
+    [
+      "Tarot readings, Demi Moore-tinis + ",
+      "Tarot readings, Demi Moore-tinis & ",
+    ],
     [/^\s*Twin Cheeks\s*$/i, "Twin Cheeks: Who Killed The Homecoming King?"],
     ["FRANCESCA WOODMAN", "The Woodmans"],
     [/^Screening(?!(?:\s+of\b|\s*\+|\s*&))(?=\s)/i, "Screening of "],
-    ["Traitors - Live Final", "Traitors Final"],
+    ["Traitors - Live Final", "Traitors Finale"],
+    ["TRAITORS 2026 FINAL SCREENING PARTY", "Traitors Finale"],
     ["Million Moments for Democracy", "Million Moments"],
+    ["OPENING Eika Katappa", "Eika Katappa"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
