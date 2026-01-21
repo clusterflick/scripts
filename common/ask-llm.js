@@ -12,7 +12,7 @@ const systemInstruction = `
   Take the date that this request is being made into account when considering which movies could match this data. Short names which match older movies may also be referencing mmovies which are currently in the cinema. You should weigh movies currently in the cinema more heavily in your returned matches.
   If \`isMovie\` is true, the response must have a \`matches\` array of possible matches (up to 5) ordered from most to least likely. Otherwise, do not include a matches array.
   Each match must include a \`isKnownMovie\` boolean on whether you know the movie being referenced, or are relying on the input content for the properties defined next.
-  If \`isKnownMovie\` is true, then each match must include the properties \`title\` (in original language), \`year\` of initial release (leave blank if uncertain), \`directors\` as an array of director names and \`cast\` as an array of cast member names.
+  If \`isKnownMovie\` is true, then each match must include the properties \`title\` (in original language), \`year\` of initial release (leave blank if uncertain), \`directors\` as an array of director names and \`cast\` as an array of cast member names. Limit each array to no more than 5 names.
 `;
 const model = genAI.getGenerativeModel({
   model: "gemini-2.5-flash-lite",

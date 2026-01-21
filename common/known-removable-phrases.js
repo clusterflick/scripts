@@ -304,6 +304,7 @@ const knownRemovablePhrases = [
   "Autism Friendly Screening :",
   "Autism Friendly Screening ",
   "Autism-Friendly:",
+  "Aussies in London:",
   "Average Rob:",
   "AWAN x Fhamtini:",
   "Babykino:",
