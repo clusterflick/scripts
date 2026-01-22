@@ -5,6 +5,9 @@ const getMoviePage = async (id, urlBase) => {
   const url = `${urlBase}/ratings`;
   const contents = await getPageWithPlaywright(url, cacheKey, async (page) => {
     await page.waitForLoadState();
+    await page
+      .locator(".ipc-page-content-container")
+      .waitFor({ strict: false });
 
     try {
       const data = await page.locator("#__NEXT_DATA__").textContent();
@@ -17,7 +20,8 @@ const getMoviePage = async (id, urlBase) => {
         );
       }
       return data;
-    } catch {
+    } catch (e) {
+      console.log("Error:", e);
       throw new Error(`Retrival failed: Unable to parse app data from page`);
     }
   });
@@ -26,7 +30,13 @@ const getMoviePage = async (id, urlBase) => {
 
 const getScore = async (id) => {
   const url = `https://www.imdb.com/title/${id}`;
-  const appData = await getMoviePage(id, url);
+  let appData;
+  // Sometimes the first attempt fails, so quickly try again
+  try {
+    appData = await getMoviePage(id, url);
+  } catch {
+    appData = await getMoviePage(id, url);
+  }
   const { contentData } = appData.props.pageProps;
   if (!contentData) return;
 
