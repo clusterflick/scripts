@@ -1,69 +1,61 @@
-const getPageWithPlaywright = require("../../common/get-page-with-playwright");
+const zlib = require("node:zlib");
+const { promisify } = require("node:util");
+const { dailyCache } = require("../../common/cache");
 
-const getMoviePage = async (id, urlBase) => {
-  const cacheKey = `imdb-get-${id}`;
-  const url = `${urlBase}/ratings`;
-  const contents = await getPageWithPlaywright(url, cacheKey, async (page) => {
-    await page.waitForLoadState();
-    await page
-      .locator(".ipc-page-content-container")
-      .waitFor({ strict: false });
+const gunzip = promisify(zlib.gunzip);
 
-    try {
-      const data = await page.locator("#__NEXT_DATA__").textContent();
-      const appData = JSON.parse(data);
-      // Check for an error page and fail if we find one
-      const { error } = appData.props.pageProps;
-      if (error) {
-        throw new Error(
-          `Request failed: ${error.message || error.name || "Error found on page"}`,
-        );
-      }
-      return data;
-    } catch (e) {
-      console.log("Error:", e);
-      throw new Error(`Retrival failed: Unable to parse app data from page`);
-    }
-  });
-  return JSON.parse(contents);
+const IMDB_RATINGS_URL = "https://datasets.imdbws.com/title.ratings.tsv.gz";
+const CACHE_KEY = "imdb-ratings-dataset";
+
+let ratingsMap = null;
+
+const downloadAndParseRatings = async () => {
+  const response = await fetch(IMDB_RATINGS_URL);
+  if (!response.ok) {
+    throw new Error(`Failed to download IMDB dataset: ${response.statusText}`);
+  }
+
+  const compressedData = Buffer.from(await response.arrayBuffer());
+  const decompressedData = await gunzip(compressedData);
+  const tsvContent = decompressedData.toString("utf-8");
+
+  // Parse TSV: tconst, averageRating, numVotes
+  const lines = tsvContent.trim().split("\n");
+  const ratings = {};
+
+  // Skip header row
+  for (let i = 1; i < lines.length; i++) {
+    const [tconst, averageRating, numVotes] = lines[i].split("\t");
+    ratings[tconst] = {
+      rating: parseFloat(averageRating),
+      reviews: parseInt(numVotes, 10),
+    };
+  }
+
+  return ratings;
 };
 
-const getScore = async (id) => {
-  const url = `https://www.imdb.com/title/${id}`;
-  let appData;
-  // Sometimes the first attempt fails, so quickly try again
-  try {
-    appData = await getMoviePage(id, url);
-  } catch {
-    appData = await getMoviePage(id, url);
-  }
-  const { contentData } = appData.props.pageProps;
-  if (!contentData) return;
+const getRatingsMap = async () => {
+  if (ratingsMap) return ratingsMap;
 
-  const { entityMetadata, histogramData } = contentData;
-  const { aggregateRating, voteCount } = entityMetadata.ratingsSummary;
-  const allStars = histogramData.histogramValues.reduce(
-    (sum, { voteCount: val, rating }) => sum + val * rating,
-    0,
-  );
-  const unweightedAverage = allStars / voteCount;
-
-  return {
-    id,
-    url,
-    reviews: voteCount,
-    rating: aggregateRating,
-    unweightedRating: Math.round(unweightedAverage * 10) / 10,
-  };
+  ratingsMap = await dailyCache(CACHE_KEY, downloadAndParseRatings);
+  return ratingsMap;
 };
 
 async function findImdbMatch({ imdbId }) {
   if (!imdbId) return undefined;
 
-  const score = await getScore(imdbId);
-  if (!score) return undefined;
+  const ratings = await getRatingsMap();
+  const data = ratings[imdbId];
 
-  return score;
+  if (!data) return undefined;
+
+  return {
+    id: imdbId,
+    url: `https://www.imdb.com/title/${imdbId}`,
+    reviews: data.reviews,
+    rating: data.rating,
+  };
 }
 
 module.exports = findImdbMatch;
