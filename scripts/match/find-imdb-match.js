@@ -1,23 +1,14 @@
-const cheerio = require("cheerio");
-const { dailyCache } = require("../../common/cache");
-const {
-  getText,
-  fetchText,
-  macosFirefoxUseragent,
-} = require("../../common/utils");
-
-const getAppDataFrom = (contents) => {
-  const $ = cheerio.load(contents);
-  return JSON.parse(getText($("#__NEXT_DATA__")));
-};
+const getPageWithPlaywright = require("../../common/get-page-with-playwright");
 
 const getMoviePage = async (id, urlBase) => {
   const cacheKey = `imdb-get-${id}`;
   const url = `${urlBase}/ratings`;
-  return await dailyCache(cacheKey, async () => {
-    const contents = await fetchText(url, { headers: macosFirefoxUseragent() });
+  const contents = await getPageWithPlaywright(url, cacheKey, async (page) => {
+    await page.waitForLoadState();
+
     try {
-      const appData = getAppDataFrom(contents);
+      const data = await page.locator("#__NEXT_DATA__").textContent();
+      const appData = JSON.parse(data);
       // Check for an error page and fail if we find one
       const { error } = appData.props.pageProps;
       if (error) {
@@ -25,24 +16,17 @@ const getMoviePage = async (id, urlBase) => {
           `Request failed: ${error.message || error.name || "Error found on page"}`,
         );
       }
-    } catch {
+      return data;
+    } catch (e) {
       throw new Error(`Retrival failed: Unable to parse app data from page`);
     }
-    return contents;
   });
+  return JSON.parse(contents);
 };
 
 const getScore = async (id) => {
   const url = `https://www.imdb.com/title/${id}`;
-  // Sometimes the initial connection will fail, so try twice to get the page
-  let imdbGet;
-  try {
-    imdbGet = await getMoviePage(id, url);
-  } catch {
-    imdbGet = await getMoviePage(id, url);
-  }
-
-  const appData = getAppDataFrom(imdbGet);
+  const appData = await getMoviePage(id, url);
   const { contentData } = appData.props.pageProps;
   if (!contentData) return;
 

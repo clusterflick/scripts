@@ -128,11 +128,6 @@ const fetchWin1252Text = async (url) => {
 
 const fetchJson = async (url, options) => (await fetch(url, options)).json();
 
-const macosFirefoxUseragent = () => ({
-  "User-Agent":
-    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0",
-});
-
 const getText = ($el) => $el.text().trim();
 
 const screenNumberMapping = {
@@ -398,7 +393,6 @@ module.exports = {
   fetchText,
   fetchWin1252Text,
   fetchJson,
-  macosFirefoxUseragent,
   getText,
   createPerformance,
   createOverview,
