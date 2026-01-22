@@ -431,11 +431,11 @@ function normalizeTitle(title, options) {
     ["Romford Horror Festival 2026 -", "Romford Horror 2026:"],
     ["Opening Night -", "Opening Night "],
     [
-      /(free |monthly )?mystery ([\w+]+ )?(night|film|movie|cinema|screening)( Nov| \d)?/i,
+      /(free |monthly )?mystery ([\w+]+ )?([\w+]+ )?(night|film|movie|cinema|screening)( Nov| \d)?/i,
       "mystery movie",
     ],
     [/(classic )?secret scre(e|a)(n|m)ing( \d+)?/i, "mystery movie"],
-    ["secret classic bollywood cinema", "mystery movie"],
+    [/secret (classic )?bollywood cinema/i, "mystery movie"],
     [/scre(e|a)(n|m) unseen/i, "mystery movie"],
     [/(Orange Box )?Secret Film Screenings?/i, "mystery movie"],
     ["vhs film", "movie"],
@@ -464,6 +464,8 @@ function normalizeTitle(title, options) {
     ["Labryinth", "Labyrinth"],
     ["THE WITCH THAT CAME FROM THE SEA", "The Witch Who Came from the Sea"],
     ["Mudlarking and Metamorphosis", "Mudlarking"],
+    ["John Smith – World Famous", "Being John Smith"],
+    ["From Lumière to Lloyd", "From Lumière to Speedy"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {

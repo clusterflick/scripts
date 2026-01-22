@@ -17,7 +17,7 @@ const getMoviePage = async (id, urlBase) => {
         );
       }
       return data;
-    } catch (e) {
+    } catch {
       throw new Error(`Retrival failed: Unable to parse app data from page`);
     }
   });
