@@ -118,15 +118,52 @@ const sanitizeRichText = (value) =>
       .trim(),
   );
 
-const fetchText = async (url, options) => (await fetch(url, options)).text();
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const withRetry = async (
+  fn,
+  { retries = 1, delayMs = 30_000, label = "Operation" } = {},
+) => {
+  let lastError;
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      return await fn();
+    } catch (error) {
+      lastError = error;
+      if (attempt < retries) {
+        console.log(
+          ` ! - ${label} failed (${error.message}), retrying in ${delayMs / 1000}s...`,
+        );
+        await sleep(delayMs);
+      }
+    }
+  }
+  throw lastError;
+};
+
+const fetchWithRetry = async (
+  url,
+  options = {},
+  { retries = 1, delayMs = 30_000 } = {},
+) => {
+  return withRetry(async () => fetch(url, options), {
+    retries,
+    delayMs,
+    label: "Fetch",
+  });
+};
+
+const fetchText = async (url, options) =>
+  (await fetchWithRetry(url, options)).text();
 
 const fetchWin1252Text = async (url) => {
-  const response = await fetch(url);
+  const response = await fetchWithRetry(url);
   const buffer = Buffer.from(await response.arrayBuffer());
   return iconv.decode(buffer, "win1252");
 };
 
-const fetchJson = async (url, options) => (await fetch(url, options)).json();
+const fetchJson = async (url, options) =>
+  (await fetchWithRetry(url, options)).json();
 
 const getText = ($el) => $el.text().trim();
 
@@ -340,7 +377,7 @@ async function runLlmFunction(llmFunction, options = { run: 0 }) {
     // Fetch failed for an unknown reason; wait 30 seconds and try again.
     if (basicNormalize(e?.message).includes("fetch failed")) {
       console.log(" ! - Error asking LLM; pausing before trying again...");
-      await new Promise((resolve) => setTimeout(resolve, 30_000));
+      await sleep(30_000);
       return await runLlmFunction(llmFunction, { ...options, run: run + 1 });
     }
 
@@ -348,14 +385,14 @@ async function runLlmFunction(llmFunction, options = { run: 0 }) {
     // before of not resetting correctly. Wait 90 seconds and try again.
     if (e.status === 429) {
       console.log(" ! - Error asking LLM; pausing for quota reset...");
-      await new Promise((resolve) => setTimeout(resolve, 90_000));
+      await sleep(90_000);
       return await runLlmFunction(llmFunction, { ...options, run: run + 1 });
     }
 
     // Model is overloaded; wait a few minutes and try again.
     if (e.status === 503) {
       console.log(" ! - Error asking LLM; pausing for model availability...");
-      await new Promise((resolve) => setTimeout(resolve, 180_000));
+      await sleep(180_000);
       return await runLlmFunction(llmFunction, { ...options, run: run + 1 });
     }
 
@@ -390,6 +427,9 @@ module.exports = {
   splitConjoinedItemsInList,
   parseMinsToMs,
   sanitizeRichText,
+  sleep,
+  withRetry,
+  fetchWithRetry,
   fetchText,
   fetchWin1252Text,
   fetchJson,

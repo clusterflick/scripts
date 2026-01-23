@@ -1,6 +1,6 @@
 require("dotenv").config();
 const path = require("node:path");
-const { fetchJson } = require("../common/utils");
+const { fetchJson, sleep } = require("../common/utils");
 const getModuleNamesFor = require("../common/get-module-names-for");
 const distanceInKmBetweenCoordinates = require("../common/distance-in-km-between-coordinates");
 const { dailyCache } = require("../common/cache");
@@ -38,7 +38,7 @@ async function checkCoordinates() {
 
     const { name, address, geo } = getAttributesFor(cinema);
     // Rate limit: Google allows 50 requests per second, but let's be conservative
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    await sleep(100);
 
     const geocodedLocation = await geocodeAddress(cinema, name, address);
     const distance = distanceInKmBetweenCoordinates(geo, {

@@ -4,7 +4,7 @@ const {
   isWithinInterval,
   parseISO,
 } = require("date-fns");
-const { fetchJson } = require("../../common/utils");
+const { fetchJson, withRetry } = require("../../common/utils");
 
 async function getReleaseData(location, release) {
   if (!release) return;
@@ -12,36 +12,27 @@ async function getReleaseData(location, release) {
   const data = release.assets.find(({ name }) => name === location);
   if (!data) return;
 
-  try {
-    return await fetchJson(data.browser_download_url);
-  } catch {
-    // Wait 30 seconds before trying again
-    await new Promise((resolve) => setTimeout(resolve, 30000));
-    return await fetchJson(data.browser_download_url);
-  }
+  return await fetchJson(data.browser_download_url);
 }
 
 async function getReleaseList() {
   const { Octokit } = await import("@octokit/core");
-
   const octokit = new Octokit({ auth: process.env.PAT });
-  let response = await octokit.request(
-    "GET /repos/clusterflick/data-transformed/releases",
+
+  const response = await withRetry(
+    async () => {
+      const res = await octokit.request(
+        "GET /repos/clusterflick/data-transformed/releases",
+      );
+      if (!Array.isArray(res.data)) {
+        throw new Error(
+          `Unexpected response: ${JSON.stringify(res.data).slice(0, 200)}`,
+        );
+      }
+      return res;
+    },
+    { retries: 1, delayMs: 60_000, label: "GitHub releases API" },
   );
-
-  if (!Array.isArray(response.data)) {
-    console.warn("Unexpected response from GitHub releases API, retrying...");
-    await new Promise((resolve) => setTimeout(resolve, 60000));
-    response = await octokit.request(
-      "GET /repos/clusterflick/data-transformed/releases",
-    );
-  }
-
-  if (!Array.isArray(response.data)) {
-    throw new Error(
-      `GitHub releases API returned unexpected response: ${JSON.stringify(response)}`,
-    );
-  }
 
   return response.data;
 }

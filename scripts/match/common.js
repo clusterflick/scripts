@@ -1,6 +1,10 @@
 const normalizeName = require("../../common/normalize-name");
 const normalizeTitle = require("../../common/normalize-title");
-const { compareAsSimilar, basicNormalize } = require("../../common/utils");
+const {
+  compareAsSimilar,
+  basicNormalize,
+  sleep,
+} = require("../../common/utils");
 
 const getNameOptions = (name) => [
   normalizeName(name),
@@ -162,8 +166,8 @@ async function findSourceMatch(
   try {
     score = await getScore(match);
   } catch {
-    // If something goes wrong, Wait 3 seconds and try again
-    await new Promise((resolve) => setTimeout(resolve, 3000));
+    // If something goes wrong, wait 3 seconds and try again
+    await sleep(3_000);
     try {
       score = await getScore(match);
     } catch {

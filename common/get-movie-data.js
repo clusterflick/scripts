@@ -2,7 +2,12 @@ const { MovieDb } = require("moviedb-promise");
 const slugify = require("slugify");
 const normalizeTitle = require("./normalize-title");
 const normalizeName = require("./normalize-name");
-const { basicNormalize, compareAsSimilar, runLlmFunction } = require("./utils");
+const {
+  basicNormalize,
+  compareAsSimilar,
+  runLlmFunction,
+  sleep,
+} = require("./utils");
 const { dailyCache } = require("./cache");
 const askLlm = require("./ask-llm");
 const askLlmToReviewResults = require("./ask-llm-to-review-results");
@@ -63,7 +68,7 @@ const apiRetryWrapper = async (callback) => {
     console.log(
       `Error contacting themoviedb; trying again in 60 seconds - ${e.message}`,
     );
-    await new Promise((resolve) => setTimeout(resolve, 60000));
+    await sleep(60_000);
     return callback();
   }
 };

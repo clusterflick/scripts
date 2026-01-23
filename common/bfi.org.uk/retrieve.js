@@ -2,7 +2,7 @@ const cheerio = require("cheerio");
 const { format, addYears } = require("date-fns");
 const slugify = require("slugify");
 const getPageWithPlaywright = require("../get-page-with-playwright");
-const { getText, getId } = require("../utils");
+const { getText, getId, sleep } = require("../utils");
 
 const dateFormat = "yyyy-MM-dd";
 
@@ -96,7 +96,7 @@ async function processSearchResultPage(
       console.log(
         `      - First attempt failed to retrieve data for ${domain}${showUrl} -- waiting before trying again...`,
       );
-      await new Promise((resolve) => setTimeout(resolve, 30_000)); // Wait 30 seconds
+      await sleep(30_000); // Wait 30 seconds
       pageContents = getPageContents(url, cacheKey, domain, showUrl);
     }
     // If we still can't get the page contents, fail the run.

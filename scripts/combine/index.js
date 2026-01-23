@@ -10,6 +10,7 @@ const {
   readJSON,
   basicNormalize,
   getId,
+  sleep,
 } = require("../../common/utils");
 const standardizePrefixingForTheatrePerformances = require("../../common/standardize-prefixing-for-theatre-performances");
 
@@ -107,7 +108,7 @@ async function combine() {
 
   if (!response.data.published_at) {
     console.warn("Unexpected response from GitHub releases API, retrying...");
-    await new Promise((resolve) => setTimeout(resolve, 60000));
+    await sleep(60_000);
     response = await octokit.request(
       "GET /repos/clusterflick/data-retrieved/releases/latest",
     );
