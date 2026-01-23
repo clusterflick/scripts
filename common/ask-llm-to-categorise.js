@@ -29,6 +29,7 @@ const systemInstruction = `
   Given the following details from a cinema listing, provide a response with no introduction or summary, just JSON response.
   The JSON response must an object which contains a \`category\` string, \`reason\` string and your \`confidence\` as a number from 0 to 9 (9 being the most confident).
   Pick the category which best describes the listing details that have been provided. Look to the most prominant part of the listing when deciding. If an event does not have an obvious prominant part (e.g an event with screenings, stories and talks) then it may be that no one specific category is suitable.
+  However, if the event has multiple films as well as something else extra (e.g. a talk, performance, etc. especially that you might have at an awards ceremony) then the extra thing should be ignored. The aim is to inform users of what the event is mostly about when filtering.
   e.g. A movie screening with Q&A would be category "movie", and an evening of short film with discussion afterwards would be category "short"
   Make sure to check whether a movie is being shown, or if it's just being discussed, e.g. "New Writings" events at the BFI are discussions hosted in the library
   The \`reason\` should be the reason you picked a particular category, limited to a maximum of 150 characters.

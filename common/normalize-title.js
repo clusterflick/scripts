@@ -469,6 +469,10 @@ function normalizeTitle(title, options) {
     ["Mudlarking and Metamorphosis", "Mudlarking"],
     ["John Smith – World Famous", "Being John Smith"],
     ["From Lumière to Lloyd", "From Lumière to Speedy"],
+    [
+      /Master and Commander$/i,
+      "Master and Commander: The Far Side of the World",
+    ],
   ];
 
   corrections.forEach(([phrase, replacement]) => {

@@ -44,6 +44,7 @@ const forcedMatches = {
   mummy: 564, // https://www.themoviedb.org/movie/564-the-mummy
   "oversabi aunty": 1594952, // https://www.themoviedb.org/movie/1594952-oversabi-aunty
   "romeo+juliet": 454, // https://www.themoviedb.org/movie/454-romeo-juliet
+  lorax: 73723, // https://www.themoviedb.org/movie/73723-the-lorax
 };
 
 function getForcedMatch(normalizedTitle) {
