@@ -8,6 +8,7 @@ const sportShowings = [
   /Six Nations/i,
   /AFCON\s+/i,
   /GRAND PRIX:/i,
+  /^\w+\s+FANPARK:/i,
 ];
 
 const isNotSportShowing = ({ title }) =>

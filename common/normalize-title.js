@@ -376,6 +376,9 @@ function normalizeTitle(title, options) {
     ["BAR TRASH - ", "BAR TRASH: "],
     ["Guest Event - ", "Guest Event: "],
     ["Tony Palmer film - ", "Tony Palmer film: "],
+    ["Throwback - ", "Throwback: "],
+    ["Toddler - ", "Toddler: "],
+    ["Popcorn Nights - ", "Popcorn Nights: "],
     [
       "Tony Palmer film: Story of Popular Music",
       "All You Need Is Love: The Story of Popular Music",
