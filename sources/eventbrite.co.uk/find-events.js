@@ -25,7 +25,8 @@ function getEventDescription(details) {
     context.structuredContent?.modules
       .filter(({ type }) => basicNormalize(type) === "text")
       .map(({ text }) => sanitizeRichText(text))
-      .join("\n\n") || ""
+      .join("\n\n")
+      .replace(/\n\n+/gi, "\n\n") || ""
   );
 }
 
@@ -54,6 +55,7 @@ function isExcludedEvent({ name, tags }) {
 function convertEventbriteEvent(event, details) {
   const startDate = parseDate(`${event.start_date}T${event.start_time}`);
   const endDate = parseDate(`${event.end_date}T${event.end_time}`);
+  const duration = (endDate.getTime() - startDate.getTime()) / 1000 / 60;
   const eventDescription = getEventDescription(details);
 
   const crewMatch = eventDescription.match(/Dir:(.*)\n/i);
@@ -63,9 +65,7 @@ function convertEventbriteEvent(event, details) {
     showingId: generateShowingId(attributes, event.id),
     title: event.name,
     url: event.url,
-    overview: createOverview({
-      duration: (endDate.getTime() - startDate.getTime()) / 1000 / 60,
-    }),
+    overview: createOverview({ duration }),
     performances: [
       createPerformance({
         date: startDate,
@@ -75,7 +75,8 @@ function convertEventbriteEvent(event, details) {
       }),
     ],
     matchingHints: {
-      overview: `${event.summary}\n\n${eventDescription}`.trim(),
+      overview:
+        `Duration: ${duration}\n\n${event.summary}\n\n${eventDescription}`.trim(),
       crew: crewMatch ? convertNamesTextToList(crewMatch[1]) : undefined,
       cast: castMatch ? convertNamesTextToList(castMatch[1]) : undefined,
     },

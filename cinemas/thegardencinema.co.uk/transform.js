@@ -125,6 +125,11 @@ async function transform({ moviePages }, sourcedEvents) {
     const id = new URLSearchParams(new URL(shortLinkUrl).search).get("p");
     const title = getText($title);
 
+    $(".film-detail__synopsis .info-bar").remove();
+    const overview = getText($(".film-detail__synopsis"))
+      .replace(/\n(\s*\n)+/gi, "\n\n")
+      .trim();
+
     return {
       showingId: generateShowingId(attributes, id),
       title,
@@ -141,9 +146,7 @@ async function transform({ moviePages }, sourcedEvents) {
         $(".film-detail__screenings").eq(0),
         title,
       ),
-      matchingHints: {
-        overview: getText($(".film-detail__synopsis")),
-      },
+      matchingHints: { overview },
     };
   });
 

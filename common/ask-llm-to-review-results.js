@@ -85,24 +85,27 @@ module.exports = async function askLlmToReviewResults(
 
   const prompt = convertToPrompt(movie, results, normalizedTitle);
 
-  return dailyLlmCache(`ask-llm-with-results-${getId(prompt)}`, async () => {
-    console.log(` - Asking LLM to match "${movie.title}" against results`);
-    const chatSession = model.startChat({ generationConfig, history: [] });
-    const result = await chatSession.sendMessage(prompt);
-    const text = result.response
-      .text()
-      .replace(/"backdrop_path": "[^,]+,\n/i, "") // Fix for specific LLM issue which generated invalid JSON
-      .replace("```json", "")
-      .replace("```", "");
-    try {
-      const answer = JSON.parse(text);
-      return answer;
-    } catch (e) {
-      console.log("Error parsing LLM answer, full response below:");
-      console.log("----------------------------------------------");
-      console.log(result.response.text());
-      console.log("----------------------------------------------");
-      throw e;
-    }
-  });
+  return dailyLlmCache(
+    `ask-llm-with-results-${getId(`${systemInstruction}\n${prompt}`)}`,
+    async () => {
+      console.log(` - Asking LLM to match "${movie.title}" against results`);
+      const chatSession = model.startChat({ generationConfig, history: [] });
+      const result = await chatSession.sendMessage(prompt);
+      const text = result.response
+        .text()
+        .replace(/"backdrop_path": "[^,]+,\n/i, "") // Fix for specific LLM issue which generated invalid JSON
+        .replace("```json", "")
+        .replace("```", "");
+      try {
+        const answer = JSON.parse(text);
+        return answer;
+      } catch (e) {
+        console.log("Error parsing LLM answer, full response below:");
+        console.log("----------------------------------------------");
+        console.log(result.response.text());
+        console.log("----------------------------------------------");
+        throw e;
+      }
+    },
+  );
 };

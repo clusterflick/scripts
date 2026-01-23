@@ -35,11 +35,15 @@ function getAdditionalDataFor(data) {
 
 function getOverviewFrom(data) {
   const $ = cheerio.load(data);
-  const $overview = $(".container .grid h1").parent().next().find("p");
+  const $details = $(".container .grid h1").parent();
+  const $overview = $details.next().find("p");
   $overview.find("*").each(function () {
     $(this).prepend(" ").append(" ");
   });
-  return $overview.text().split("About the festival")[0].trim();
+
+  const details = getText($details);
+  const overview = getText($overview).split("About the festival")[0].trim();
+  return `${details}\n\n${overview}`;
 }
 
 function getCharacters(synopsis) {

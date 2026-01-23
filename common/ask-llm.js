@@ -45,14 +45,17 @@ module.exports = async function askLlm(movie) {
 
   const prompt = convertToPrompt(movie);
 
-  return dailyLlmCache(`ask-llm-${getId(prompt)}`, async () => {
-    console.log(` - Asking LLM to identify "${movie.title}"`);
-    const chatSession = model.startChat({ generationConfig, history: [] });
-    const result = await chatSession.sendMessage(prompt);
-    const text = result.response
-      .text()
-      .replace("```json", "")
-      .replace("```", "");
-    return JSON.parse(text);
-  });
+  return dailyLlmCache(
+    `ask-llm-${getId(`${systemInstruction}\n${prompt}`)}`,
+    async () => {
+      console.log(` - Asking LLM to identify "${movie.title}"`);
+      const chatSession = model.startChat({ generationConfig, history: [] });
+      const result = await chatSession.sendMessage(prompt);
+      const text = result.response
+        .text()
+        .replace("```json", "")
+        .replace("```", "");
+      return JSON.parse(text);
+    },
+  );
 };

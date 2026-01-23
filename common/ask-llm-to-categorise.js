@@ -7,27 +7,31 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 const categories = {
   movie:
-    "Use this category when there is a showing of a single full-length movie",
+    "Use this category when there is a showing of a single full-length movie. If there are multiple full-length movies showing, this is not the correct category. However, if there is a single full-length movie showing along with short movies, then this is the correct category",
   "multiple-movies":
-    "Use this category when there is a showing of multiple full-length movies. Sometimes referred to as 'double bills', 'movie marathons', 'trilogy', etc.",
+    "Use this category when there is a showing of more than one full-length movies or a series of films. These event are sometimes referred to as 'double bills', 'movie marathons', 'trilogy', etc.",
   tv: "Use this category when there is one or more episodes of a TV show being shown",
   quiz: "Use this category when the event is a quiz",
   comedy:
     "Use this category when the event is a comedy show, open mic comedy, stand up comedy, etc. and is not related to a showing of movie or TV show",
   music:
-    "Use this category when the event is primarily music being played, such as pre-recorded music or a live band, etc. and is not related to a showing of movie or TV show. Events which contain some music but which a musical performance is not a majority of the event should not use this category.",
+    "Use this category when the event is primarily music being played, such as pre-recorded music, album playbacks, or a live band, etc. and is not related to a showing of movie or TV show. Events which contain some music but which a musical performance is not a majority of the event should not use this category.",
   talk: "Use this category when the event is a talk, and is not related to a showing of movie or TV show. Events which contain talks but which a main talk is not a majority of the event should not use this category.",
   workshop:
     "Use this category when the event is a workshop, and is not related to a showing of movie or TV show",
   shorts:
-    "Use this category when there is one or more short movies being shown",
+    "Use this category when there is one or more short movies being shown, such as a programme of short films. These are often referred to as shorts and clips",
   event:
     "Use this category if the event doesn't match any of the other categories",
 };
 
 const systemInstruction = `
   Given the following details from a cinema listing, provide a response with no introduction or summary, just JSON response.
-  The JSON response must an object which contains a \`category\` string, and your \`confidence\` as a number from 0 to 9 (9 being the most confident).
+  The JSON response must an object which contains a \`category\` string, \`reason\` string and your \`confidence\` as a number from 0 to 9 (9 being the most confident).
+  Pick the category which best describes the listing details that have been provided. Look to the most prominant part of the listing when deciding. If an event does not have an obvious prominant part (e.g an event with screenings, stories and talks) then it may be that no one specific category is suitable.
+  e.g. A movie screening with Q&A would be category "movie", and an evening of short film with discussion afterwards would be category "short"
+  Make sure to check whether a movie is being shown, or if it's just being discussed, e.g. "New Writings" events at the BFI are discussions hosted in the library
+  The \`reason\` should be the reason you picked a particular category, limited to a maximum of 150 characters.
   The \`category\` property must be one of "${Object.keys(categories).join('", "')}", using "event" if none of the other categories apply or you have a low confidence.
   Here is a description of each of the categories:
   ${JSON.stringify(categories, null, 4)}
@@ -64,7 +68,7 @@ async function askLlmToCategorise(movie) {
   const prompt = convertToPrompt(movie);
 
   const response = await dailyLlmCache(
-    `ask-llm-to-categorise-${getId(prompt)}`,
+    `ask-llm-to-categorise-${getId(`${systemInstruction}\n${prompt}`)}`,
     async () => {
       console.log(` - Asking LLM to categorise "${movie.title}"`);
       const chatSession = model.startChat({ generationConfig, history: [] });

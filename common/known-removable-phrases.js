@@ -339,7 +339,7 @@ const knownRemovablePhrases = [
   "BTS ARMY:",
   "by Rebecca Salvadori",
   "by Louisa May Alcott",
-  "by  Paromita Vohra",
+  "by Paromita Vohra",
   "COLD ISLANDERS:",
   "Mondays for Members:",
   "Members' Exclusive:",
