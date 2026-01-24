@@ -11,14 +11,20 @@ const sportShowings = [
   /^\w+\s+FANPARK:/i,
 ];
 
+const nonFilmEvents = [/Community Pilates/i];
+
 const isNotSportShowing = ({ title }) =>
   !sportShowings.some((sports) => basicNormalize(title).match(sports));
+
+const isNotNonFilmEvent = ({ title }) =>
+  !nonFilmEvents.some((nonFilm) => basicNormalize(title).match(nonFilm));
 
 async function transform(data, sourcedEvents) {
   // Return the sourced events for this venue
   return Object.values(sourcedEvents)
     .flatMap((events) => events)
-    .filter(isNotSportShowing); // Remove all the football match screenings
+    .filter(isNotSportShowing) // Remove all the football match screenings
+    .filter(isNotNonFilmEvent); // Remove all non film events
 }
 
 module.exports = transform;
