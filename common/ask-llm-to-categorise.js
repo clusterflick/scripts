@@ -27,13 +27,21 @@ const categories = {
 
 const systemInstruction = `
   Given the following details from a cinema listing, provide a response with no introduction or summary, just JSON response.
-  The JSON response must an object which contains a \`category\` string, \`reason\` string and your \`confidence\` as a number from 0 to 9 (9 being the most confident).
-  Pick the category which best describes the listing details that have been provided. Look to the most prominant part of the listing when deciding. If an event does not have an obvious prominant part (e.g an event with screenings, stories and talks) then it may be that no one specific category is suitable.
+  The JSON response must an object which contains a \`title\` string, \`category\` string, \`reason\` string and your \`confidence\` as a number from 0 to 9 (9 being the most confident).
+  Pick the category which best describes the listing details that have been provided. Look to the most prominant part of the listing when deciding.
+
+  Monthly screenings should be categorised as "movie", not "multiple-movies" as only one film is being shown at once.
+  Make sure to check whether a film is being shown, or if it's just being discussed, e.g. "New Writings" events at the BFI are discussions hosted in the library
+  When looking at the description, "dir." often indicates the director(s). Multiple lines using this may indicate that it's a multiple movies or shorts.
+
+  If an event does not have an obvious prominant part (e.g an event with screenings, stories and talks) then it may be that no one specific category is suitable.
   However, if the event has multiple films as well as something else extra (e.g. a talk, performance, etc. especially that you might have at an awards ceremony) then the extra thing should be ignored. The aim is to inform users of what the event is mostly about when filtering.
-  e.g. A movie screening with Q&A would be category "movie", and an evening of short film with discussion afterwards would be category "short"
-  Make sure to check whether a movie is being shown, or if it's just being discussed, e.g. "New Writings" events at the BFI are discussions hosted in the library
+  e.g. A film screening with Q&A would be category "movie", and an evening of short film with discussion afterwards would be category "short"
+
+  The \`title\` should be the title of the event you're categorising, limited to a maximum of 150 characters.
   The \`reason\` should be the reason you picked a particular category, limited to a maximum of 150 characters.
   The \`category\` property must be one of "${Object.keys(categories).join('", "')}", using "event" if none of the other categories apply or you have a low confidence.
+
   Here is a description of each of the categories:
   ${JSON.stringify(categories, null, 4)}
 `;
