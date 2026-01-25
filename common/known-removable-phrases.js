@@ -785,6 +785,7 @@ const knownRemovablePhrases = [
   "3D Re-Release",
   "Re-release",
   "Rerelease",
+  "special preview followed by panel discussion",
   "Special Preview of new 4K Restoration",
   "4K Restoration",
   "4K Re-Issue",
