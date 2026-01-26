@@ -10,6 +10,7 @@ const knownRemovablePhrases = [
   "in 35mm",
   "from 16mm",
   "from 35mm",
+  "from VHS",
   "35mm edition uk charity screening",
   "UK Charity Screening",
   "London Gala Screening",
