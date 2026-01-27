@@ -91,7 +91,12 @@ function findMatchingCinema(
     // This handles cases where sources have misconfigured coordinates
     if (nameMatches && eventPostcode) {
       const cinemaPostcode = extractPostcode(cinema.address);
-      if (cinemaPostcode && eventPostcode === cinemaPostcode) {
+      const isExactPostcodeMatch =
+        cinemaPostcode && eventPostcode === cinemaPostcode;
+      const isPartialPostcodeMatch =
+        cinemaPostcode &&
+        eventPostcode.split(/\s+/)[0] === cinemaPostcode.split(/\s+/)[0];
+      if (isExactPostcodeMatch || isPartialPostcodeMatch) {
         return true;
       }
     }

@@ -112,6 +112,16 @@ async function findEvents(cinema) {
     const coordinates = { lat: hit._geoloc.lat, lon: hit._geoloc.lng };
     return venueMatchesCinema(cinema, hit.venue, coordinates, {
       supportMisconfiguredCoordinates: true,
+      eventAddress: [
+        hit.venueAdd1,
+        hit.venueAdd2,
+        hit.venueAdd3,
+        hit.venueAdd4,
+        hit.venuePostcode,
+      ]
+        .filter(Boolean)
+        .join(", ")
+        .trim(),
     });
   });
 

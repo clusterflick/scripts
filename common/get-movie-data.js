@@ -34,6 +34,7 @@ const ignoredIds = [
   229310, // Entry -- https://www.themoviedb.org/movie/229310-entry
   681293, // Shortcuts -- https://www.themoviedb.org/movie/681293-shortcuts
   1575833, // Nuremberg: The Real Story -- https://www.themoviedb.org/movie/1575833-nuremberg-the-real-story
+  477391, // Film Festival -- https://www.themoviedb.org/movie/477391
 ];
 
 /**
