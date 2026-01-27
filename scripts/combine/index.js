@@ -125,17 +125,30 @@ async function combine() {
   for (const cinema in data) {
     console.log(`[🎞️  Cinema: ${cinema}]`);
     const {
-      attributes: { name, url, address, geo },
+      attributes: {
+        id: venueId,
+        name,
+        socials,
+        url,
+        address,
+        geo,
+        structure,
+        groupName,
+        type,
+      },
       movies,
     } = data[cinema];
-    const venueId = getId(name);
 
     siteData.venues[venueId] = {
       id: venueId,
       name,
+      socials,
       url,
       address,
       geo,
+      structure,
+      groupName,
+      type,
     };
 
     const movieGenres = await getMovieGenresAndCacheResults();
