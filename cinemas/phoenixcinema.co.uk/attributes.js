@@ -12,11 +12,11 @@ module.exports = {
     twitter: "Phoenixcinema",
     instagram: "phoenix_cinema",
   },
-  url: "https://www.phoenixcinema.co.uk",
+  url: "https://www.phoenixcinema.co.uk/PhoenixCinemaLondon.dll/WhatsOn",
   address: "52 High Road, London, N2 9PJ, UK",
   geo: { lat: 51.58853061979289, lon: -0.16390063689779108 },
   structure: "solo",
   type: "Cinema",
   siteId:
-    "eyJfcmFpbHMiOnsibWVzc2FnZSI6Iklqa3lJZz09IiwiZXhwIjpudWxsLCJwdXIiOiJjb29raWUuc2l0ZV9pZCJ9fQ==--90e6c2f8a81dc3cce3e07e7c0a61db194a1db1b3",
+    "eyJfcmFpbHMiOnsibWVzc2FnZSI6Ik1qST0iLCJleHAiOm51bGwsInB1ciI6ImNvb2tpZS5jaXJjdWl0X2lkIn19--c96645da4d8216ae6e21d5079ddb6b9650302da4",
 };

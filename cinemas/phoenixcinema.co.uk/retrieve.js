@@ -1,8 +1,8 @@
+const savoySystemsRetrieve = require("../../common/savoysystems.co.uk/retrieve");
 const attributes = require("./attributes");
-const indycinemagroupRetrieve = require("../../common/indycinemagroup.com/retrieve");
 
 async function retrieve() {
-  return indycinemagroupRetrieve(attributes);
+  return savoySystemsRetrieve(attributes);
 }
 
 module.exports = retrieve;
