@@ -1,32 +1,42 @@
 const { callLlm } = require("./llm-client");
 const { basicNormalize } = require("./utils");
 
-const systemInstruction = `
-  Given the following details from a cinema listing, and a JSON list of results from themoviedb, provide a response with no introduction or summary, just JSON response.
-  The JSON must contain \`match\` JSON which is a match taken from the JSON list of results from themoviedb and \`confidence\` as a number from 0 to 9 (9 being the most confident).
-  If there are no matches (or confidence is 0), then the value of \`match\` may be \`null\`
-`;
+const systemInstruction = `You match cinema listings to TheMovieDB search results. Respond with JSON only, no introduction or explanation.
+
+Required fields:
+- "match": object or null - the matching result from the provided TheMovieDB results, or null if no match
+- "confidence": number 0-9 (9 = most confident)
+
+If a match is found, include the full result object from TheMovieDB (id, title, release_date, etc.).
+
+Matching guidelines:
+- Exact phrase matches between the cinema overview and TheMovieDB overview are strong indicators.
+- Use the current date to assess plausibility. Unreleased films or those releasing more than a year in the future are unlikely matches.
+- Consider original_title for foreign language films.
+
+Example response with match:
+{"match":{"id":426063,"title":"Nosferatu","original_title":"Nosferatu","release_date":"2024-12-25","overview":"..."},"confidence":8}
+
+Example response without match:
+{"match":null,"confidence":0}`;
 
 function convertToPrompt(movie, results, normalizedTitle) {
-  const movieYear = movie.year ? `Year: ${movie.year}\n` : "";
-  const movieClassification = movie.classification
-    ? `Classification: ${movie.classification}\n`
-    : "";
+  const parts = [`Title: ${normalizedTitle}`];
 
-  return `
-Title: ${normalizedTitle}
-${movieYear}${movieClassification}
-Overview from the cinema listing, contained between the "---" delimeters:
----
-${movie.matchingHints.overview}
----
+  if (movie.year) {
+    parts.push(`Year: ${movie.year}`);
+  }
+  if (movie.classification) {
+    parts.push(`Classification: ${movie.classification}`);
+  }
 
-Using the JSON search response below, see if there is a match for the details above, which are from a cinema listing. The "overview" value for each result in the JSON will contain details to match on.
-Phrases in the cinema listing above which are an exact match to phrases in the "overview" value should be considered a strong indicator of matching.
-Take todays date into account when considering which movie could match this cinema listing. Movies which are not released yet, or have release dates more than a year in the future are unlikely to be good matches.
+  parts.push(`Current Date: ${new Date().toISOString().split("T")[0]}`);
 
-${JSON.stringify(
-  results.map(
+  if (movie.matchingHints?.overview) {
+    parts.push(`\nCinema listing overview:\n${movie.matchingHints.overview}`);
+  }
+
+  const filteredResults = results.map(
     ({
       id,
       original_language,
@@ -44,11 +54,13 @@ ${JSON.stringify(
       release_date,
       title,
     }),
-  ),
-  null,
-  2,
-)}
-`.trim();
+  );
+
+  parts.push(
+    `\nTheMovieDB results:\n${JSON.stringify(filteredResults, null, 2)}`,
+  );
+
+  return parts.join("\n");
 }
 
 function parseResponse(text, result) {
