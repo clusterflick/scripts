@@ -43,7 +43,7 @@ function getOverviewFrom(data) {
 
   const details = getText($details);
   const overview = getText($overview).split("About the festival")[0].trim();
-  return `${details}\n\n${overview}`;
+  return overview ? `${details}\n\n${overview}` : null;
 }
 
 function getCharacters(synopsis) {
