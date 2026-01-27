@@ -1,9 +1,4 @@
-const { GoogleGenerativeAI } = require("@google/generative-ai");
-const { dailyLlmCache } = require("./cache");
-const { getId } = require("./utils");
-require("dotenv").config();
-
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const { callLlm } = require("./llm-client");
 
 const categories = {
   movie:
@@ -47,16 +42,6 @@ const systemInstruction = `
   Here is a description of each of the categories:
   ${JSON.stringify(categories, null, 4)}
 `;
-const model = genAI.getGenerativeModel({
-  model: "gemini-2.5-flash-lite",
-  systemInstruction,
-});
-const generationConfig = {
-  temperature: 0,
-  topP: 0.95,
-  topK: 40,
-  maxOutputTokens: 8192,
-};
 
 function convertToPrompt(movie) {
   const movieYear = movie.year ? `\nYear: ${movie.year}` : "";
@@ -78,19 +63,13 @@ async function askLlmToCategorise(movie) {
 
   const prompt = convertToPrompt(movie);
 
-  const response = await dailyLlmCache(
-    `ask-llm-to-categorise-${getId(`${systemInstruction}\n${prompt}`)}`,
-    async () => {
-      console.log(` - Asking LLM to categorise "${movie.title}"`);
-      const chatSession = model.startChat({ generationConfig, history: [] });
-      const result = await chatSession.sendMessage(prompt);
-      const text = result.response
-        .text()
-        .replace("```json", "")
-        .replace("```", "");
-      return JSON.parse(text);
-    },
-  );
+  const response = await callLlm({
+    systemInstruction,
+    prompt,
+    cacheKeyPrefix: "ask-llm-to-categorise",
+    logMessage: `Asking LLM to categorise "${movie.title}"`,
+  });
+
   const hasCategory = !!response.category && response.confidence > 7;
   return { ...movie, category: hasCategory ? response.category : "event" };
 }

@@ -1,9 +1,4 @@
-const { GoogleGenerativeAI } = require("@google/generative-ai");
-const { dailyLlmCache } = require("./cache");
-const { getId } = require("./utils");
-require("dotenv").config();
-
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const { callLlm } = require("./llm-client");
 
 const systemInstruction = `
   Given the following details from a cinema listing, provide a response with no introduction or summary, just JSON response.
@@ -14,16 +9,6 @@ const systemInstruction = `
   Each match must include a \`isKnownMovie\` boolean on whether you know the movie being referenced, or are relying on the input content for the properties defined next.
   If \`isKnownMovie\` is true, then each match must include the properties \`title\` (in original language), \`year\` of initial release (leave blank if uncertain), \`directors\` as an array of director names and \`cast\` as an array of cast member names. Limit each array to no more than 5 names.
 `;
-const model = genAI.getGenerativeModel({
-  model: "gemini-2.5-flash-lite",
-  systemInstruction,
-});
-const generationConfig = {
-  temperature: 0,
-  topP: 0.95,
-  topK: 40,
-  maxOutputTokens: 8192,
-};
 
 function convertToPrompt(movie) {
   const movieYear = movie.year ? `\nYear: ${movie.year}` : "";
@@ -45,17 +30,10 @@ module.exports = async function askLlm(movie) {
 
   const prompt = convertToPrompt(movie);
 
-  return dailyLlmCache(
-    `ask-llm-${getId(`${systemInstruction}\n${prompt}`)}`,
-    async () => {
-      console.log(` - Asking LLM to identify "${movie.title}"`);
-      const chatSession = model.startChat({ generationConfig, history: [] });
-      const result = await chatSession.sendMessage(prompt);
-      const text = result.response
-        .text()
-        .replace("```json", "")
-        .replace("```", "");
-      return JSON.parse(text);
-    },
-  );
+  return callLlm({
+    systemInstruction,
+    prompt,
+    cacheKeyPrefix: "ask-llm",
+    logMessage: `Asking LLM to identify "${movie.title}"`,
+  });
 };
