@@ -1,26 +1,44 @@
 const { callLlm } = require("./llm-client");
 
-const systemInstruction = `
-  Given the following details from a cinema listing, provide a response with no introduction or summary, just JSON response.
-  The JSON must contain \`isMovie\` boolean on whether it's a movie and \`confidence\` as a number from 0 to 9 (9 being the most confident). Take into account that there may be sessions where movies are discussed but not shown; these should have \`isMovie\` set to false.
-  The JSON must also contain \`isMultipleMovies\` boolean on whether the listing is describing a performance of multiple full-length movies. Sometimes referred to as 'double bills', 'movie marathons', 'trilogy', etc.
-  Take the date that this request is being made into account when considering which movies could match this data. Short names which match older movies may also be referencing mmovies which are currently in the cinema. You should weigh movies currently in the cinema more heavily in your returned matches.
-  If \`isMovie\` is true, the response must have a \`matches\` array of possible matches (up to 5) ordered from most to least likely. Otherwise, do not include a matches array.
-  Each match must include a \`isKnownMovie\` boolean on whether you know the movie being referenced, or are relying on the input content for the properties defined next.
-  If \`isKnownMovie\` is true, then each match must include the properties \`title\` (in original language), \`year\` of initial release (leave blank if uncertain), \`directors\` as an array of director names and \`cast\` as an array of cast member names. Limit each array to no more than 5 names.
-`;
+const systemInstruction = `You identify movies from cinema listing data. Respond with JSON only, no introduction or explanation.
+
+Required fields:
+- "isMovie": boolean - true if this is a movie screening. False for Q&As, discussions, talks, or other non-screening events.
+- "isMultipleMovies": boolean - true if this is a double bill, marathon, trilogy screening, etc.
+- "confidence": number 0-9 (9 = most confident)
+
+If "isMovie" is true, include:
+- "matches": array of up to 5 possible movies, ordered most to least likely
+
+Each match must include:
+- "isKnownMovie": boolean - true if you recognise this movie, false if relying solely on the input
+- "title": string - original language title (required)
+- "year": number or null - year of initial release, null if uncertain
+- "directors": array of up to 5 director names (empty array if unknown)
+- "cast": array of up to 5 cast member names (empty array if unknown)
+
+Use the provided current date to weigh current cinema releases more heavily when titles are ambiguous.
+
+Example response for a movie:
+{"isMovie":true,"isMultipleMovies":false,"confidence":8,"matches":[{"isKnownMovie":true,"title":"Nosferatu","year":2024,"directors":["Robert Eggers"],"cast":["Bill Skarsgård","Lily-Rose Depp"]}]}
+
+Example response for a non-movie:
+{"isMovie":false,"isMultipleMovies":false,"confidence":9}`;
 
 function convertToPrompt(movie) {
-  const movieYear = movie.year ? `\nYear: ${movie.year}` : "";
-  const movieClassification = movie.classification
-    ? `\nClassification: ${movie.classification}`
-    : "";
+  const parts = [`Title: ${movie.title}`];
 
-  return `
-${movie.title}${movieYear}${movieClassification}
+  if (movie.year) {
+    parts.push(`Year: ${movie.year}`);
+  }
+  if (movie.classification) {
+    parts.push(`Classification: ${movie.classification}`);
+  }
 
-${movie.matchingHints.overview}
-`.trim();
+  parts.push(`Current Date: ${new Date().toISOString().split("T")[0]}`);
+  parts.push(`\nDescription:\n${movie.matchingHints.overview}`);
+
+  return parts.join("\n");
 }
 
 module.exports = async function askLlm(movie) {
