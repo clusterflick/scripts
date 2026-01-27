@@ -32,7 +32,9 @@ const systemInstruction = `
 
   Monthly screenings should be categorised as "movie", not "multiple-movies" as only one film is being shown at once.
   Make sure to check whether a film is being shown, or if it's just being discussed, e.g. "New Writings" events at the BFI are discussions hosted in the library
-  When looking at the description, "dir." often indicates the director(s). Multiple lines using this may indicate that it's a multiple movies or shorts.
+  When looking at the description:
+   * "dir." often indicates the director(s). Multiple lines using this may indicate that it's a multiple movies or shorts.
+   * "BBC", "ITV", and "ITN" are channels and companies used for television and may indicate that it's a TV show
 
   If an event does not have an obvious prominant part (e.g an event with screenings, stories and talks) then it may be that no one specific category is suitable.
   However, if the event has multiple films as well as something else extra (e.g. a talk, performance, etc. especially that you might have at an awards ceremony) then the extra thing should be ignored. The aim is to inform users of what the event is mostly about when filtering.

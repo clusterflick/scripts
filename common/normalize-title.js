@@ -342,6 +342,7 @@ function normalizeTitle(title, options) {
     ["Bāhubali", "Baahubali"],
     ["Khatarnaak", "Khatarnak"],
     ["Thalaimayil", "Thalaimaiyil "],
+    [/^En Ghab El Kot /i, "If the Cat is Absent"],
     ["MEMBERS ONLY: Pumpkin Carving", "Members only pumpkin carving"],
     [
       "Two Strangers Who Try Not to Kill Eachother",
