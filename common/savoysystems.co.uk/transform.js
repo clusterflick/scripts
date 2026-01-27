@@ -1,3 +1,4 @@
+const cheerio = require("cheerio");
 const nlp = require("compromise");
 const {
   sanitizeRichText,
@@ -7,8 +8,34 @@ const {
   basicNormalize,
   generateShowingId,
   isPrivateHire,
+  getText,
 } = require("../../common/utils");
 const { parseDate } = require("./utils");
+
+/**
+ * Extract the description from application/ld+json on the movie page.
+ * Savoy Systems pages typically include a ScreeningEvent or Event schema.
+ */
+function extractDescriptionFromLdJson(html) {
+  if (!html) return null;
+
+  const $ = cheerio.load(html);
+  let description = null;
+
+  $('script[type="application/ld+json"]').each((i, el) => {
+    try {
+      const data = JSON.parse(getText($(el)));
+      // Look for description in the JSON-LD data
+      if (data["@graph"][0].description) {
+        description = data["@graph"][0].description;
+      }
+    } catch {
+      // Ignore JSON parse errors
+    }
+  });
+
+  return description;
+}
 
 function getStatus(performance) {
   return { soldOut: basicNormalize(performance.IsSoldOut) === "y" };
@@ -101,11 +128,20 @@ function getNotesList(performance) {
 }
 
 async function transform(attributes, urlSlug, movieData, sourcedEvents) {
-  const movies = movieData.Events.reduce((events, movie) => {
+  const { movieListPage, moviePages } = movieData;
+
+  const movies = movieListPage.Events.reduce((events, movie) => {
     // Remove private hire entries
     if (isPrivateHire(movie.Title)) return events;
 
     const title = sanitizeRichText(movie.Title);
+
+    // Get description from the movie page's ld+json if available
+    const moviePageHtml = moviePages[movie.ID];
+    const ldJsonDescription = extractDescriptionFromLdJson(moviePageHtml);
+    // Use the ld+json description if available, otherwise fall back to the truncated Synopsis
+    const overview = ldJsonDescription || movie.Synopsis;
+
     return events.concat({
       showingId: generateShowingId(attributes, movie.ID),
       title,
@@ -127,13 +163,13 @@ async function transform(attributes, urlSlug, movieData, sourcedEvents) {
           status: getStatus(performance),
           accessibility: createAccessibility(
             title,
-            getAccessibility(performance, movie.Synopsis),
+            getAccessibility(performance, overview),
           ),
         }),
       ),
       matchingHints: {
-        overview: movie.Synopsis,
-        characters: getCharacters(movie.Synopsis),
+        overview,
+        characters: getCharacters(overview),
       },
     });
   }, []);
