@@ -7,7 +7,7 @@ const titleYears = {
   [normalizeTitle("Black Sunday")]: 1960,
   [normalizeTitle("Fear Street Trilogy")]: 2021,
   [normalizeTitle("Suspiria")]: 1977,
-  [normalizeTitle("The Witch")]: 2015,
+  [normalizeTitle("The Witch")]: 2016,
 };
 
 async function transform(data, sourcedEvents) {

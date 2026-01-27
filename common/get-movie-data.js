@@ -381,13 +381,14 @@ const tryFindingMatchUsingLlm = async (movie) => {
 
   const { isMovie, isMultipleMovies, confidence, matches } = result;
 
-  // If we've confidence it's a movie, and it's a movie the LLM actually
-  // knows of, then we can search again with updated information.
   if (
+    // Check it's a single movie
     isMovie &&
     !isMultipleMovies &&
-    confidence >= 8 &&
-    matches[0].isKnownMovie
+    // The LLM is confident it's a movie and has heard of it
+    ((confidence >= 8 && matches[0].isKnownMovie) ||
+      // The LLM is very confident it's a movie, includes a release year, but hasn't heard of it
+      (confidence === 9 && !matches[0].isKnownMovie && !!matches[0].year))
   ) {
     const updatedMovie = updateMovie(movie, {
       title: matches[0].title,
