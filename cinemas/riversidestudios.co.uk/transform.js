@@ -9,9 +9,26 @@ const {
 } = require("../../common/utils");
 const attributes = require("./attributes");
 
+function formatTable($, $el) {
+  return $el
+    .find("tr")
+    .map((_, row) => {
+      const cells = $(row).find("td");
+      if (cells.length < 2) return null;
+      const key = getText(cells.eq(0)).replace(/:$/, "");
+      const value = getText(cells.eq(1));
+      return key && value ? `${key}: ${value}` : null;
+    })
+    .get()
+    .filter(Boolean)
+    .join("\n");
+}
+
 function getOverviewData(pageData) {
   const $ = cheerio.load(pageData);
   const data = {};
+
+  // First, try to get data from .event-details .event-detail-section
   $(".event-details .event-detail-section").each(function () {
     const key = basicNormalize(getText($(this).find("div").eq(0)));
     const value = getText($(this).find("div").eq(1));
@@ -30,13 +47,62 @@ function getOverviewData(pageData) {
       }
     }
   });
+
+  // Also try .te figure table (newer format)
+  $(".te figure table tr").each(function () {
+    const cells = $(this).find("td");
+    if (cells.length < 2) return;
+    const key = basicNormalize(getText(cells.eq(0)));
+    const value = getText(cells.eq(1));
+    switch (key) {
+      case "year of release:": {
+        data.year = value;
+        break;
+      }
+      case "director:": {
+        data.directors = value;
+        break;
+      }
+      case "cast:": {
+        data.actors = value;
+        break;
+      }
+      case "age rating:": {
+        data.classification = value;
+        break;
+      }
+    }
+  });
+
   return data;
+}
+
+/**
+ * Formats the .te content for use as overview text in matchingHints.
+ * Ensures good spacing between paragraphs and formats tables nicely.
+ */
+function formatOverviewText(pageData) {
+  const $ = cheerio.load(pageData);
+  const $te = $(".te");
+  if (!$te.length) return "";
+  return $te
+    .children()
+    .map((_, el) => {
+      const $el = $(el);
+      const $table = $el.find("table");
+      return $table.length ? formatTable($, $table) : getText($el);
+    })
+    .get()
+    .filter(Boolean)
+    .join("\n\n");
 }
 
 async function transform({ movieListPage, moviePages }, sourcedEvents) {
   const movies = movieListPage.map((movieData) => {
     const { title, url: urlRaw } = movieData;
-    const { year, directors, actors } = getOverviewData(moviePages[urlRaw]);
+    const { year, directors, actors, classification } = getOverviewData(
+      moviePages[urlRaw],
+    );
     const url = encodeURI(urlRaw);
     const showingId = generateShowingId(attributes, movieData.id);
 
@@ -45,7 +111,7 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
       year,
       directors,
       actors,
-      classification: movieData.age_rating_class,
+      classification: movieData.age_rating_class || classification,
     });
 
     const performances = Object.keys(movieData.performances).flatMap(
@@ -102,7 +168,7 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
       overview,
       performances: uniquePerformances,
       matchingHints: {
-        overview: getText(cheerio.load(moviePages[urlRaw])(".te")),
+        overview: formatOverviewText(moviePages[urlRaw]),
       },
     };
   });
