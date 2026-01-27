@@ -174,6 +174,10 @@ async function transform(attributes, urlSlug, movieData, sourcedEvents) {
     });
   }, []);
 
+  if (movies.length === 0) {
+    throw new Error("No movies found - the page structure may have changed");
+  }
+
   const listOfSourcedEvents = Object.values(sourcedEvents).flatMap(
     (events) => events,
   );
