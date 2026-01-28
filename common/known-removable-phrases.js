@@ -327,6 +327,7 @@ const knownRemovablePhrases = [
   "Bar Trash: A toast to David Lynch:",
   "Bar Trash: Season Launch:",
   "BAR TRASH: 3rd Birthday — ",
+  "Bar Trash 200:",
   "Bar Trash:",
   "BAR TRASH –",
   "Best Of X-Men:",
