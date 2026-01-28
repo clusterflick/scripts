@@ -20,12 +20,31 @@ class FetchAdapterNoWarning extends FetchAdapter {
   }
 }
 
+// Headers that should be redacted from HAR recordings
+const SENSITIVE_HEADERS = [
+  "authorization",
+  "cookie",
+  "set-cookie",
+  "x-api-key",
+  "x-auth-token",
+];
+
+function redactHeaders(headers) {
+  if (!headers) return headers;
+  return headers.map((header) => {
+    if (SENSITIVE_HEADERS.includes(header.name.toLowerCase())) {
+      return { ...header, value: "[REDACTED]" };
+    }
+    return header;
+  });
+}
+
 function setupPollyWrapper(isRecording, dirname) {
   if (isRecording && process.env.CI) {
     throw new Error("Polly recording turned on on CI");
   }
 
-  return setupPolly({
+  const context = setupPolly({
     adapters: [FetchAdapterNoWarning],
     persister: ChunkedFsPersister,
     recordFailedRequests: true,
@@ -36,9 +55,25 @@ function setupPollyWrapper(isRecording, dirname) {
         maxEntries: 250,
       },
     },
+    matchRequestsBy: {
+      headers: {
+        exclude: SENSITIVE_HEADERS,
+      },
+    },
     // "replay", "record", or "passthrough"
     mode: isRecording ? "record" : "replay",
   });
+
+  // Add hook to redact sensitive headers before persisting
+  beforeEach(() => {
+    const { server } = context.polly;
+    server.any().on("beforePersist", (req, recording) => {
+      recording.request.headers = redactHeaders(recording.request.headers);
+      recording.response.headers = redactHeaders(recording.response.headers);
+    });
+  });
+
+  return context;
 }
 
 function schemaValidate(data) {
