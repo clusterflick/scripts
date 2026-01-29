@@ -63,20 +63,6 @@ function convertToPrompt(movie, results, normalizedTitle) {
   return parts.join("\n");
 }
 
-function parseResponse(text, result) {
-  // Fix for specific LLM issue which generated invalid JSON
-  const cleanedText = text.replace(/"backdrop_path": "[^,]+,\n/i, "");
-  try {
-    return JSON.parse(cleanedText);
-  } catch (e) {
-    console.log("Error parsing LLM answer, full response below:");
-    console.log("----------------------------------------------");
-    console.log(result.response.text());
-    console.log("----------------------------------------------");
-    throw e;
-  }
-}
-
 module.exports = async function askLlmToReviewResults(
   movie,
   results,
@@ -100,6 +86,5 @@ module.exports = async function askLlmToReviewResults(
     prompt,
     cacheKeyPrefix: "ask-llm-with-results",
     logMessage: `Asking LLM to match "${movie.title}" against results`,
-    parseResponse,
   });
 };

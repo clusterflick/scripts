@@ -19,10 +19,6 @@ const generationConfig = {
   maxOutputTokens: 8192,
 };
 
-function parseJsonResponse(text) {
-  return text.replace("```json", "").replace("```", "");
-}
-
 /**
  * Call the LLM with caching and standard configuration.
  *
@@ -31,7 +27,6 @@ function parseJsonResponse(text) {
  * @param {string} options.prompt - The prompt to send
  * @param {string} options.cacheKeyPrefix - Prefix for the cache key
  * @param {string} options.logMessage - Message to log when making a fresh call
- * @param {function} [options.parseResponse] - Optional custom response parser (receives raw text, should return parsed object)
  * @returns {Promise<Object>} Parsed JSON response from the LLM
  */
 async function callLlm({
@@ -39,7 +34,6 @@ async function callLlm({
   prompt,
   cacheKeyPrefix,
   logMessage,
-  parseResponse,
 }) {
   const cacheKey = `${cacheKeyPrefix}-${getId(`${systemInstruction}\n${prompt}`)}`;
 
@@ -53,13 +47,26 @@ async function callLlm({
 
     const chatSession = model.startChat({ generationConfig, history: [] });
     const result = await chatSession.sendMessage(prompt);
-    const text = parseJsonResponse(result.response.text());
+    const response = result.response.text();
+    // Unwrap the string if it's been wrapped in markdown block
+    const jsonString = response.replace("```json", "").replace("```", "");
+    const correctedJsonString = jsonString
+      // Apply corrections for malformed escape characters (perhaps due to truncation)
+      .replace(/\\(?!["\\/bfnrtu]|u[0-9a-fA-F]{4})/g, "")
+      // Apply corrections for hallucinated invalid additions
+      .replace(/"backdrop_path": "[^,]+,\n/i, "");
 
-    if (parseResponse) {
-      return parseResponse(text, result);
+    try {
+      return JSON.parse(correctedJsonString);
+    } catch (e) {
+      console.log("Error parsing LLM answer");
+      console.log("--- Original response: -----------------------");
+      console.log(response);
+      console.log("--- Corrected response: ----------------------");
+      console.log(correctedJsonString);
+      console.log("----------------------------------------------");
+      throw e;
     }
-
-    return JSON.parse(text);
   });
 }
 
