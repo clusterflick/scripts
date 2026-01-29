@@ -128,7 +128,7 @@ async function findEvents(cinema) {
       },
     } = event;
     // Split venue name before matching (e.g., "BFI Southbank, London" -> "BFI Southbank")
-    const [venueName] = name.split(/[,|-]/i);
+    const [venueName] = name.split(/,| - /);
     // localized_address_display is like "265 Lavender Hill, London, SW11 1JB"
     return venueMatchesCinema(
       cinema,

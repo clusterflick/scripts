@@ -75,6 +75,7 @@ function normalizeTitle(title, options) {
     ["Film Africa 2025 -", "Film Africa 2025:"],
     ["Preview Screening - ", "Preview Screening: "],
     ["Cinema Film Screening - ", "Cinema Film Screening "],
+    ["Cinema Film Screening & Talk - ", "Cinema Film Screening & Talk: "],
     ["Closing Night + Awards", "Closing Night and Awards"],
     ["Poetry Slam", "Event: Poetry Slam"],
     ["Scared To Dance -", "Scared To Dance "],
