@@ -388,6 +388,8 @@ function normalizeTitle(title, options) {
       "All You Need Is Love: The Story of Popular Music",
     ],
     ["Goethe Annual Lecture 2025 - ", "Goethe Annual Lecture 2025: "],
+    ["James Acaster - ", "James Acaster: "],
+    ["Black Friday - ", "Black Friday: "],
     [
       /All Out of Bubblegum Film Club \d+ \//i,
       "All Out of Bubblegum Film Club: ",
@@ -478,6 +480,8 @@ function normalizeTitle(title, options) {
       "Master and Commander: The Far Side of the World",
     ],
     [/£\d+ Tickets/i, ""],
+    ["work / memories of work", "work & memories of work"],
+    [/\s+man is not a b$/i, "man is not a bird"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
