@@ -84,6 +84,10 @@ function normalizeTitle(title, options) {
     ["Sky Original -", "Sky Original "],
     ["Green Screen -", "Green Screen "],
     ["Film Club -", "Film Club: "],
+    [/^Film\s+- /i, "Film: "],
+    [/Film\s+- /i, "Film "],
+    ["FREE Film Screening - ", "Free Film Screening: "],
+    ["FREE Screening - ", "Free Screening: "],
     ["Crafty Movie Night - ", "Crafty Movie Night: "],
     ["Girlguiding Screening - ", "Girlguiding Screening: "],
     ["SEEN Charity Film Screening - ", "SEEN Charity Film Screening: "],
@@ -230,7 +234,6 @@ function normalizeTitle(title, options) {
     ["‘PAST PRESENT FUTURE’ PODCAST", "‘PAST+PRESENT+FUTURE’ PODCAST"],
     ["Past Present Future Podcast", "Past+Present+Future Podcast"],
     ["seventeen [right here]", "seventeen right here"], // remove brackets from this band name
-    ["Exclusive Screening of Highly Acclaimed Bengali Feature Film - ", ""],
     ["Festival: Shorts -", "Festival: Shorts –"],
     ["Ori - Rebirth", "Ori: Rebirth"],
     ["Premiere and Networking Event - ", "Premiere and Networking Event: "],
@@ -377,12 +380,11 @@ function normalizeTitle(title, options) {
     ["IN-HOUSE - ", "IN-HOUSE: "],
     ["BAR TRASH - ", "BAR TRASH: "],
     ["Guest Event - ", "Guest Event: "],
-    ["Tony Palmer film - ", "Tony Palmer film: "],
     ["Throwback - ", "Throwback: "],
     ["Toddler - ", "Toddler: "],
     ["Popcorn Nights - ", "Popcorn Nights: "],
     [
-      "Tony Palmer film: Story of Popular Music",
+      /Tony Palmer film Story of Popular Music/i,
       "All You Need Is Love: The Story of Popular Music",
     ],
     ["Goethe Annual Lecture 2025 - ", "Goethe Annual Lecture 2025: "],
@@ -436,7 +438,7 @@ function normalizeTitle(title, options) {
     ["Romford Horror Festival 2026 -", "Romford Horror 2026:"],
     ["Opening Night -", "Opening Night "],
     [
-      /(free |monthly )?mystery ([\w+]+ )?([\w+]+ )?(night|film|movie|cinema|screening)( Nov| \d)?/i,
+      /(free |monthly )?mystery ([\w+]+ )?([\w+]+ )?(night|film|movie|cinema|screening):?( Nov| \d)?/i,
       "mystery movie",
     ],
     [/(classic )?secret scre(e|a)(n|m)ing( \d+)?/i, "mystery movie"],
@@ -475,6 +477,7 @@ function normalizeTitle(title, options) {
       /Master and Commander$/i,
       "Master and Commander: The Far Side of the World",
     ],
+    [/£\d+ Tickets/i, ""],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
