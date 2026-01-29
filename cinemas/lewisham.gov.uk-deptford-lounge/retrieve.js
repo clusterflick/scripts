@@ -2,15 +2,10 @@ const { fetchText } = require("../../common/utils");
 require("dotenv").config();
 
 const SOURCE_URL =
-  "https://api.github.com/repos/clusterflick/host-non-web-sources/contents/deptfortlibrarycinemaclub%40clusterflick.com";
+  "https://raw.githubusercontent.com/clusterflick/host-non-web-sources/refs/heads/main/deptfortlibrarycinemaclub%40clusterflick.com";
 
 async function retrieve() {
-  const emailText = await fetchText(SOURCE_URL, {
-    headers: {
-      Accept: "application/vnd.github.v3.raw",
-      Authorization: `Bearer ${process.env.PAT}`,
-    },
-  });
+  const emailText = await fetchText(SOURCE_URL);
 
   let errorResponse;
   try {
