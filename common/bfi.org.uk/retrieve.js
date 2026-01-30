@@ -97,7 +97,7 @@ async function processSearchResultPage(
         `      - First attempt failed to retrieve data for ${domain}${showUrl} -- waiting before trying again...`,
       );
       await sleep(30_000); // Wait 30 seconds
-      pageContents = getPageContents(url, cacheKey, domain, showUrl);
+      pageContents = await getPageContents(url, cacheKey, domain, showUrl);
     }
     // If we still can't get the page contents, fail the run.
     if (pageContents instanceof Error) {
@@ -105,6 +105,19 @@ async function processSearchResultPage(
         `      - Unable to retrieve data for "${showData.title}"; error page detected at ${domain}${showUrl}`,
       );
       throw pageContents;
+    }
+
+    // Make sure that there's no bugs above where we'll end up saving something
+    // that isn't the HTML string
+    if (typeof pageContents !== "string") {
+      throw new Error(
+        `Invalid page contents at ${domain}${showUrl}; expected string, got ${typeof pageContents}`,
+      );
+    }
+
+    // Additional length check
+    if (pageContents.length === 0) {
+      throw new Error(`Empty page contents at ${domain}${showUrl}`);
     }
 
     moviePages[showUrl].html = pageContents;
