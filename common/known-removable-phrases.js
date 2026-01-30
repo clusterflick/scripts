@@ -496,6 +496,7 @@ const knownRemovablePhrases = [
   "Kinoteka:",
   "MASSIVE:",
   "Matinee:",
+  "Max Richter Scientist of The Soul:",
   "Nagasaki Day:",
   "Philosophical Screens:",
   "Pirates Season :",
