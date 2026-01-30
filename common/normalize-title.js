@@ -482,6 +482,10 @@ function normalizeTitle(title, options) {
     [/£\d+ Tickets/i, ""],
     ["work / memories of work", "work & memories of work"],
     [/\s+man is not a b$/i, "man is not a bird"],
+    [
+      "Dystopia is Not The Future: Panel Discussion",
+      "Dystopia is Not The Future Panel Discussion",
+    ],
   ];
 
   corrections.forEach(([phrase, replacement]) => {

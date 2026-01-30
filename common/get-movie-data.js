@@ -35,6 +35,7 @@ const ignoredIds = [
   681293, // Shortcuts -- https://www.themoviedb.org/movie/681293-shortcuts
   1575833, // Nuremberg: The Real Story -- https://www.themoviedb.org/movie/1575833-nuremberg-the-real-story
   477391, // Film Festival -- https://www.themoviedb.org/movie/477391
+  444768, // Wash It -- https://www.themoviedb.org/movie/444768-wash-it
 ];
 
 /**
