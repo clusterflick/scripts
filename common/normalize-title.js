@@ -486,6 +486,7 @@ function normalizeTitle(title, options) {
       "Dystopia is Not The Future: Panel Discussion",
       "Dystopia is Not The Future Panel Discussion",
     ],
+    ["Wash It Film Premiere", "Wash It (2026)"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
