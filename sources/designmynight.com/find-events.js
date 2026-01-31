@@ -117,12 +117,13 @@ function convertDesignMyNightEvent(
 ) {
   const { event } = eventData;
 
-  // Get the full URL from the listing data or construct it
-  const eventUrl =
-    listingData?.path || `${attributes.domain}${event.event_url}`;
-
   // Use provided movie title or fall back to event title
   const title = movieTitle || event.title;
+
+  // Get the full URL from the listing data or construct it
+  const listingUrl =
+    listingData?.path || `${attributes.domain}${event.event_url}`;
+  const eventUrl = `${listingUrl}#:~:text=${encodeURIComponent(title)}`;
 
   // Calculate duration for each occurrence to check if they're consistent
   const durations = occurrences
