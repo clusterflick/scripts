@@ -1,10 +1,12 @@
 const { parse } = require("date-fns");
+const slugify = require("slugify");
 const {
   generateShowingId,
   createOverview,
   createPerformance,
   createAccessibility,
   getValidClassification,
+  basicNormalize,
 } = require("../../common/utils");
 const attributes = require("./attributes");
 
@@ -42,7 +44,7 @@ async function transform({ emailText }, sourcedEvents) {
 
     const showingId = generateShowingId(
       attributes,
-      `${title}-${date.toISOString()}`,
+      `${slugify(basicNormalize(title))}-${date.getTime()}`,
     );
 
     movies.push({
