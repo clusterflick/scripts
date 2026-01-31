@@ -492,6 +492,10 @@ function normalizeTitle(title, options) {
       "Dystopia is Not The Future Panel Discussion",
     ],
     ["Wash It Film Premiere", "Wash It (2026)"],
+    [
+      "01 | A.I. | New Media | Experimental | Digital Arts Film Festival",
+      "A.I New Media Experimental Digital Arts Film Festival",
+    ],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
