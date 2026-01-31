@@ -50,13 +50,7 @@ async function getYesterdaysRelease(location, releaseList) {
   return await getReleaseData(location, yesterdayRelease);
 }
 
-async function getLatestRelease(location, releaseList) {
-  const latestRelease = releaseList[0];
-  return await getReleaseData(location, latestRelease);
-}
-
 module.exports = {
   getReleaseList,
   getYesterdaysRelease,
-  getLatestRelease,
 };

@@ -3,7 +3,6 @@ const { isAfter } = require("date-fns");
 const {
   sortAndFilterMovies,
   basicNormalize,
-  getId,
   removeMatchingHints,
   isPrivateHire,
 } = require("../../common/utils");
@@ -15,8 +14,8 @@ const categoriseEntries = require("./categorise-entries");
 async function transform(
   location,
   input,
-  yesterdaysRelease = [],
   previousRelease = [],
+  historicalSeen = new Map(),
 ) {
   const { transform, attributes } = require(`../../cinemas/${location}`);
   const sourcedEvents = await getSourcedEventsFor(attributes);
@@ -52,35 +51,16 @@ async function transform(
   }
 
   console.log("Checking historical data ...");
-  const checkFor =
-    (movie) =>
-    ({ showingId }) => {
-      if (showingId === movie.showingId) return true;
-
-      // Support miration of picturehouse IDs to remove venue ID section:
-      // - from "picturehouses.com-finsbury-park-031-HO00015869"
-      // - to   "picturehouses.com-finsbury-park-HO00015869"
-      if (showingId.startsWith("picturehouses.com-")) {
-        const migratedShowingId = showingId.replace(
-          /^picturehouses.com-(.+)-\d{3}-HO(\d+)$/i,
-          "picturehouses.com-$1-HO$2",
-        );
-        if (migratedShowingId === movie.showingId) return true;
-      }
-
-      return false;
-    };
-
   try {
     const start = Date.now();
 
     let newSeen = 0;
     for (const movie of matchedData) {
-      const previouslySeen = previousRelease.find(checkFor(movie));
+      const previouslySeen = historicalSeen.get(movie.showingId);
       if (previouslySeen) {
-        // If we've seen this movie before in a previous run, then copy across
-        // the date is was first seen.
-        movie.seen = previouslySeen.seen;
+        // If we've seen this movie before in a previous run (within the last
+        // 10 days of combined data), copy across the date it was first seen.
+        movie.seen = previouslySeen;
       } else {
         // If we've not seen this movie before in a previous run, then add the
         // current date as this is the first time we've seen it.
@@ -148,14 +128,16 @@ async function transform(
       "thelexicinema.co.uk",
       // "thenickel.co.uk", -- Remove this for now as there's events incorrectly identified as 2026 which are being persisted
     ];
-    const yesterdaysData = optedIn.includes(location) ? yesterdaysRelease : [];
+    const previousReleaseData = optedIn.includes(location)
+      ? previousRelease
+      : [];
 
     // If a movie matches the following, it's been delisted but is still valid:
-    for (const movie of yesterdaysData) {
+    for (const movie of previousReleaseData) {
       // Don't bring unbookable events back in
       if (isPrivateHire(movie.title)) continue;
 
-      // The movie data from yesterday contains future performances .
+      // The movie data from the previous release contains future performances.
       // If there's no future performances, it's a past movie; continue
       const now = new Date();
       const futurePerformances = movie.performances.filter(({ time }) =>
@@ -163,14 +145,14 @@ async function transform(
       );
       if (futurePerformances.length === 0) continue;
 
-      // The movie was in yesterdays data, identified by the showing ID.
+      // The movie was in the previous data, identified by the showing ID.
       // If there's a match, we already have the data; continue
       const showingIdMatch = matchedData.find(
         ({ showingId }) => showingId === movie.showingId,
       );
       if (showingIdMatch) continue;
 
-      // The movie was in yesterdays data, identified by the performances.
+      // The movie was in the previous data, identified by the performances.
       // If there's a match, we already have the data; continue
       const performancesMatch = matchedData.find(({ url, performances }) => {
         if (basicNormalize(url) === basicNormalize(movie.url)) {
@@ -196,7 +178,7 @@ async function transform(
         response = await fetch(movie.url);
         content = (await response.text()).replaceAll("&nbsp;", " ");
       } catch {
-        // If something goes wrong checking the the URL, assume it's been removed
+        // If something goes wrong checking the URL, assume it's been removed
         continue;
       }
       if (!response.ok || response.url.includes("/not-found")) continue;
@@ -240,13 +222,6 @@ async function transform(
 
       // Otherwise, add the movie into the transformed data
       console.log(" - Found missing movie:", movie.title, movie.url);
-      if (!movie.showingId) {
-        // Generate showing id for historic data
-        const prefix = movie.url.includes("eventbrite.co")
-          ? "eventbrite.co.uk"
-          : location;
-        movie.showingId = `${prefix}-${getId(movie.url)}`;
-      }
       matchedData.push(movie);
     }
     // Reprocess the matched data in case missed events have been added

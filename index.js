@@ -73,18 +73,20 @@ const setupDirectory = async (type) => {
     const {
       getReleaseList,
       getYesterdaysRelease,
-      getLatestRelease,
     } = require("./scripts/transform/get-releases");
+    const {
+      getHistoricalData,
+    } = require("./scripts/transform/get-historical-seen");
     const transform = require("./scripts/transform");
     const input = await readJSON(getPath("retrieved-data"));
     const releaseList = await getReleaseList();
     const yesterdaysRelease = await getYesterdaysRelease(location, releaseList);
-    const latestRelease = await getLatestRelease(location, releaseList);
+    const seenMap = await getHistoricalData();
     const output = await transform(
       location,
       input,
       yesterdaysRelease,
-      latestRelease,
+      seenMap,
       ...parameters,
     );
     await writeJSON(
