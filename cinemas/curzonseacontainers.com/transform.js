@@ -42,7 +42,7 @@ async function transform({ movieListPage }, sourcedEvents) {
     movies.push({
       showingId,
       title,
-      url: attributes.url,
+      url: `${attributes.url}#:~:text=${encodeURIComponent(title)}`,
       overview,
       performances,
       // TODO: Remove matching hints. For some reason Curzon Sea Containers
