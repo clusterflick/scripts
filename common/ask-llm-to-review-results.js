@@ -6,6 +6,7 @@ const systemInstruction = `You match cinema listings to TheMovieDB search result
 Required fields:
 - "match": object or null - the matching result from the provided TheMovieDB results, or null if no match
 - "confidence": number 0-9 (9 = most confident)
+- "reason": string - why you chose this match (max 150 characters). Leave blank if no match chosen.
 
 If a match is found, include the full result object from TheMovieDB (id, title, release_date, etc.).
 
@@ -15,7 +16,7 @@ Matching guidelines:
 - Consider original_title for foreign language films.
 
 Example response with match:
-{"match":{"id":426063,"title":"Nosferatu","original_title":"Nosferatu","release_date":"2024-12-25","overview":"..."},"confidence":8}
+{"match":{"id":426063,"title":"Nosferatu","original_title":"Nosferatu","release_date":"2024-12-25","overview":"..."},"confidence":8,"reason":"Listing matched description of a vampire and remake of this classic movie"}
 
 Example response without match:
 {"match":null,"confidence":0}`;
