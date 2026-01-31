@@ -6,6 +6,7 @@ describe("Normalise Title", () => {
     "normalizes the title '$input'",
     ({ input, output }) => {
       expect(normalizeTitle(input)).toBe(output);
+      expect(normalizeTitle(input).length).toBeGreaterThan(0);
     },
   );
 });
