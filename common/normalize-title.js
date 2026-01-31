@@ -390,6 +390,7 @@ function normalizeTitle(title, options) {
     ["Goethe Annual Lecture 2025 - ", "Goethe Annual Lecture 2025: "],
     ["James Acaster - ", "James Acaster: "],
     ["Black Friday - ", "Black Friday: "],
+    ["IMAX exclusive preview - ", "IMAX exclusive preview: "],
     [
       /All Out of Bubblegum Film Club \d+ \//i,
       "All Out of Bubblegum Film Club: ",
@@ -482,6 +483,10 @@ function normalizeTitle(title, options) {
     [/£\d+ Tickets/i, ""],
     ["work / memories of work", "work & memories of work"],
     [/\s+man is not a b$/i, "man is not a bird"],
+    [
+      /\s+Teenage Mutant Ninja Turtles: Mutant M$/i,
+      "Teenage Mutant Ninja Turtles: Mutant Mayhem",
+    ],
     [
       "Dystopia is Not The Future: Panel Discussion",
       "Dystopia is Not The Future Panel Discussion",
