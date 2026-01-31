@@ -496,6 +496,7 @@ function normalizeTitle(title, options) {
       "01 | A.I. | New Media | Experimental | Digital Arts Film Festival",
       "A.I New Media Experimental Digital Arts Film Festival",
     ],
+    ["Journey + A Wedding Suit", "Journey & A Wedding Suit"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
