@@ -27,7 +27,7 @@ function extractDescriptionFromLdJson(html) {
       const data = JSON.parse(getText($(el)));
       // Look for description in the JSON-LD data
       if (data["@graph"][0].description) {
-        description = data["@graph"][0].description;
+        description = data["@graph"][0].description.replaceAll("  ", "\n");
       }
     } catch {
       // Ignore JSON parse errors
@@ -97,7 +97,16 @@ function getCharacters(synopsis) {
   const people = doc.people().json();
   if (people.length === 0) return;
 
-  return people.map(({ text }) => text);
+  return [
+    ...new Set(
+      people.map(({ text }) =>
+        text
+          .replace(/[’']s$/i, "")
+          .replace(/[?,]/, "")
+          .replace(/\.$/, ""),
+      ),
+    ),
+  ];
 }
 
 function getNotesList(performance) {
@@ -127,6 +136,14 @@ function getNotesList(performance) {
   return notes;
 }
 
+function removeSuperfluousInformation(overview) {
+  return (
+    overview
+      // Remove confusing dog-friendly screening specific text from description
+      .replace(/Bring your furry divas[^\n]+\n/i, "")
+  );
+}
+
 async function transform(attributes, urlSlug, movieData, sourcedEvents) {
   const { movieListPage, moviePages } = movieData;
 
@@ -140,7 +157,9 @@ async function transform(attributes, urlSlug, movieData, sourcedEvents) {
     const moviePageHtml = moviePages[movie.ID];
     const ldJsonDescription = extractDescriptionFromLdJson(moviePageHtml);
     // Use the ld+json description if available, otherwise fall back to the truncated Synopsis
-    const overview = ldJsonDescription || movie.Synopsis;
+    const overview = removeSuperfluousInformation(
+      ldJsonDescription || movie.Synopsis,
+    );
 
     return events.concat({
       showingId: generateShowingId(attributes, movie.ID),
@@ -170,6 +189,7 @@ async function transform(attributes, urlSlug, movieData, sourcedEvents) {
       matchingHints: {
         overview,
         characters: getCharacters(overview),
+        crew: getCharacters(overview),
       },
     });
   }, []);

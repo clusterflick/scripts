@@ -356,7 +356,7 @@ async function getBestMatch(titleQuery, rawResults = [], movie) {
 
       // Check if there are matching crew. Most likely this will have been used
       // as a hard coded (but time bound) hint to match a movie with
-      // //insufficient data. e.g. "Close-Up on Abbas Kiarostami"
+      // insufficient data. e.g. "Close-Up on Abbas Kiarostami"
       const hintCrew = movie.matchingHints.crew;
       if (hintCrew && hintCrew.length > 0) {
         const updatedMovie = updateMovie(movie, {
@@ -640,7 +640,7 @@ const searchMovieAndCacheResults = (cacheKey, payload) =>
 
 const searchPersonAndCacheResults = (cacheKey, query) =>
   dailyCache(cacheKey, async () =>
-    apiRetryWrapper(() => moviedb.searchPerson({ query })),
+    apiRetryWrapper(() => moviedb.searchPerson({ query, include_adult: true })),
   );
 
 const getPersonMovieCreditsAndCacheResults = (id) =>
