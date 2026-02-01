@@ -16,7 +16,11 @@ async function getPageWithPlaywright(url, cacheKey, callback, options = {}) {
     try {
       await page.goto(url, options.goto);
       const result = await callback(page);
-      await browser.close();
+      // Don't return Error objects - throw them so they don't get cached
+      // (Error objects serialize to {} and lose their error nature)
+      if (result instanceof Error) {
+        throw result;
+      }
       return result;
     } catch (error) {
       try {

@@ -89,22 +89,25 @@ async function processSearchResultPage(
 
     const slug = slugify(showData.title, { strict: true }).toLowerCase();
     const cacheKey = `bfi.org.uk-${getId(showUrl)}-${articleId}-${slug}`;
-    let pageContents = await getPageContents(url, cacheKey, domain, showUrl);
-    // If we got an error the first time we tried to get the page contents,
-    // wait and then try again.
-    if (pageContents instanceof Error) {
+    let pageContents;
+    try {
+      pageContents = await getPageContents(url, cacheKey, domain, showUrl);
+    } catch {
+      // If we got an error the first time we tried to get the page contents,
+      // wait and then try again.
       console.log(
         `      - First attempt failed to retrieve data for ${domain}${showUrl} -- waiting before trying again...`,
       );
       await sleep(30_000); // Wait 30 seconds
-      pageContents = await getPageContents(url, cacheKey, domain, showUrl);
-    }
-    // If we still can't get the page contents, fail the run.
-    if (pageContents instanceof Error) {
-      console.log(
-        `      - Unable to retrieve data for "${showData.title}"; error page detected at ${domain}${showUrl}`,
-      );
-      throw pageContents;
+      try {
+        pageContents = await getPageContents(url, cacheKey, domain, showUrl);
+      } catch (error) {
+        // If we still can't get the page contents, fail the run.
+        console.log(
+          `      - Unable to retrieve data for "${showData.title}"; error page detected at ${domain}${showUrl}`,
+        );
+        throw error;
+      }
     }
 
     // Make sure that there's no bugs above where we'll end up saving something
@@ -169,7 +172,7 @@ async function retrieve(attributes) {
 
         const $nextPageButton = await page.locator("css=#av-next-link");
         if ((await $nextPageButton.count()) > 0) {
-          $nextPageButton.click();
+          await $nextPageButton.click();
 
           // Wait for the next page to load
           const nextPageNumber = `${pages.length + 1}`;
