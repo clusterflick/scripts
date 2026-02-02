@@ -10,6 +10,7 @@ const findMatchesOnTheMovieDb = require("./find-matches-on-the-movie-db");
 const getSourcedEventsFor = require("./get-sourced-events-for");
 const validateAgainstSchema = require("./validate-against-schema");
 const categoriseEntries = require("./categorise-entries");
+const matchMultipleMovies = require("./match-multiple-movies");
 
 async function transform(
   location,
@@ -420,6 +421,29 @@ async function transform(
     console.log(` - ✅ Categorised (${duration}s)`);
   } catch (e) {
     console.log(` - ❌ Error categorising`);
+    throw e;
+  }
+
+  console.log("Processing multiple-movies events ...");
+  try {
+    const start = Date.now();
+    const multiMovieEvents = matchedData.filter(
+      (m) => m.category === "multiple-movies" && m.matchingHints,
+    );
+
+    for (const movie of multiMovieEvents) {
+      const matches = await matchMultipleMovies(movie);
+      if (matches.length > 0) {
+        movie.themoviedbs = matches;
+      }
+    }
+
+    const duration = Math.round((Date.now() - start) / 1000);
+    console.log(
+      ` - ✅ Processed ${multiMovieEvents.length} multi-movie events (${duration}s)`,
+    );
+  } catch (e) {
+    console.log(` - ❌ Error processing multiple-movies`);
     throw e;
   }
 

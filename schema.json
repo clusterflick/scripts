@@ -164,6 +164,30 @@
         "additionalProperties": false,
         "required": ["id", "title", "releaseDate", "summary"]
       },
+      "themoviedbs": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "number"
+            },
+            "title": {
+              "type": "string",
+              "minLength": 1
+            },
+            "releaseDate": {
+              "type": "string",
+              "minLength": 1
+            },
+            "summary": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false,
+          "required": ["id", "title", "releaseDate", "summary"]
+        }
+      },
       "additionalProperties": false
     },
     "additionalProperties": false
