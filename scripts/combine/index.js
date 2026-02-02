@@ -61,8 +61,45 @@ const getYoutubeTrailer = (movie) => {
   return trailer ? trailer.key : undefined;
 };
 
+const getImdbId = ({ external_ids: externalIds = {} }) => externalIds.imdb_id;
+
+const buildMovieData = (movieInfo, { slugify, siteData }) => {
+  const directors = getDirectors(movieInfo);
+  const actors = getActors(movieInfo);
+  const genres = getGenres(movieInfo);
+
+  // Register people and genres in siteData
+  directors.forEach((crew) => (siteData.people[crew.id] = crew));
+  actors.forEach((cast) => (siteData.people[cast.id] = cast));
+  genres.forEach((genre) => (siteData.genres[genre.id] = genre));
+
+  // Make sure the title can be slugified for use in URLs. If it can't
+  // be we may be trying to use a title in non-roman letters. If so, we
+  // can't use it in the URL and it will be harder to search for, so
+  // let's try swapping to the original title value.
+  const title = slugify(movieInfo.title)
+    ? movieInfo.title
+    : movieInfo.original_title;
+
+  return {
+    id: `${movieInfo.id}`,
+    title,
+    normalizedTitle: normalizeTitle(title),
+    classification: getClassification(movieInfo),
+    overview: movieInfo.overview,
+    year: movieInfo.release_date?.split("-")[0],
+    releaseDate: movieInfo.release_date,
+    duration: parseMinsToMs(movieInfo.runtime),
+    directors: directors.map(({ id }) => id),
+    actors: actors.map(({ id }) => id),
+    genres: genres.map(({ id }) => id),
+    imdbId: getImdbId(movieInfo),
+    youtubeTrailer: getYoutubeTrailer(movieInfo),
+    posterPath: movieInfo.poster_path,
+  };
+};
+
 async function combine() {
-  const getImddId = ({ external_ids: externalIds = {} }) => externalIds.imdb_id;
   const cachePath = path.join(
     process.cwd(),
     "cached-data",
@@ -122,6 +159,8 @@ async function combine() {
 
   siteData.generatedAt = response.data.published_at;
 
+  const movieGenres = await getMovieGenresAndCacheResults();
+
   for (const cinema in data) {
     console.log(`[🎞️  Cinema: ${cinema}]`);
     const {
@@ -151,8 +190,6 @@ async function combine() {
       type,
     };
 
-    const movieGenres = await getMovieGenresAndCacheResults();
-
     for (const {
       showingId,
       title,
@@ -162,6 +199,7 @@ async function combine() {
       overview,
       performances,
       themoviedb,
+      themoviedbs,
     } of movies) {
       let movieInfo;
       if (themoviedb) {
@@ -191,41 +229,31 @@ async function combine() {
         }
       }
 
+      // Process themoviedbs for multiple-movies events
+      let includedMovies;
+      if (themoviedbs && themoviedbs.length > 0) {
+        includedMovies = [];
+        for (const tmdbEntry of themoviedbs) {
+          try {
+            const includedMovieInfo =
+              cache[tmdbEntry.id] ||
+              (await getMovieInfoAndCacheResults(tmdbEntry));
+
+            includedMovies.push(
+              buildMovieData(includedMovieInfo, { slugify, siteData }),
+            );
+          } catch {
+            // Skip this included movie if we can't fetch its data
+          }
+        }
+      }
+
       const movieId = movieInfo ? `${movieInfo.id}` : getId(title);
 
       if (!siteData.movies[movieId]) {
         if (movieInfo) {
-          const directors = getDirectors(movieInfo);
-          const actors = getActors(movieInfo);
-          const genres = getGenres(movieInfo);
-
-          directors.forEach((crew) => (siteData.people[crew.id] = crew));
-          actors.forEach((cast) => (siteData.people[cast.id] = cast));
-          genres.forEach((genre) => (siteData.genres[genre.id] = genre));
-
-          // Make sure the title can be slugified for use in URLs. If it can't
-          // be we may be trying to use a title in non-roman letters. If so, we
-          // can't use it in the URL and it will be harder to search for, so
-          // let's try swapping to the original title value.
-          const title = slugify(movieInfo.title)
-            ? movieInfo.title
-            : movieInfo.original_title;
-
           siteData.movies[movieId] = {
-            id: movieId,
-            title,
-            normalizedTitle: normalizeTitle(title),
-            classification: getClassification(movieInfo),
-            overview: movieInfo.overview,
-            year: movieInfo.release_date.split("-")[0],
-            releaseDate: movieInfo.release_date,
-            duration: parseMinsToMs(movieInfo.runtime),
-            directors: directors.map(({ id }) => id),
-            actors: actors.map(({ id }) => id),
-            genres: genres.map(({ id }) => id),
-            imdbId: getImddId(movieInfo),
-            youtubeTrailer: getYoutubeTrailer(movieInfo),
-            posterPath: movieInfo.poster_path,
+            ...buildMovieData(movieInfo, { slugify, siteData }),
             showings: {},
             performances: [],
           };
@@ -271,6 +299,10 @@ async function combine() {
         category,
         seen,
         overview,
+        includedMovies:
+          includedMovies && includedMovies.length > 0
+            ? includedMovies
+            : undefined,
       };
 
       movie.performances = movie.performances.concat(

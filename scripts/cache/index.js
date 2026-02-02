@@ -23,29 +23,38 @@ async function combine() {
     console.log(`[🎞️  Cinema: ${cinema}]`);
     const { movies } = data[cinema];
 
-    for (const { title, themoviedb } of movies) {
+    for (const { title, themoviedb, themoviedbs } of movies) {
+      // Collect all TMDB entries to cache (single + multiple)
+      const tmdbEntries = [];
       if (themoviedb) {
+        tmdbEntries.push(themoviedb);
+      }
+      if (themoviedbs) {
+        tmdbEntries.push(...themoviedbs);
+      }
+
+      for (const tmdbEntry of tmdbEntries) {
         const outputTitle = title.slice(0, 35);
         const start = Date.now();
         process.stdout.write(
-          ` - Retriving data for ${"".padEnd(7 - `${themoviedb.id}`.length, " ")}[${themoviedb.id}] ${outputTitle} ... ${"".padEnd(35 - outputTitle.length, " ")}`,
+          ` - Retriving data for ${"".padEnd(7 - `${tmdbEntry.id}`.length, " ")}[${tmdbEntry.id}] ${outputTitle} ... ${"".padEnd(35 - outputTitle.length, " ")}`,
         );
 
-        if (movieInfo[themoviedb.id]) {
+        if (movieInfo[tmdbEntry.id]) {
           console.log(`\t🆓 Already retrieved`);
           continue;
         }
 
         try {
           try {
-            movieInfo[themoviedb.id] =
-              await getMovieInfoAndCacheResults(themoviedb);
+            movieInfo[tmdbEntry.id] =
+              await getMovieInfoAndCacheResults(tmdbEntry);
           } catch {
             // Try again to get the data if it fails. The movie info will be
             // cached from the previous run if it was successful.
             process.stdout.write(`\\t🔄`);
-            movieInfo[themoviedb.id] =
-              await getMovieInfoAndCacheResults(themoviedb);
+            movieInfo[tmdbEntry.id] =
+              await getMovieInfoAndCacheResults(tmdbEntry);
           }
 
           console.log(
