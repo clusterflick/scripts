@@ -389,8 +389,10 @@ const tryFindingMatchUsingLlm = async (movie) => {
     !isMultipleMovies &&
     // The LLM is confident it's a movie and has heard of it
     ((confidence >= 8 && matches[0].isKnownMovie) ||
-      // The LLM is very confident it's a movie, includes a release year, but hasn't heard of it
-      (confidence === 9 && !matches[0].isKnownMovie && !!matches[0].year))
+      // The LLM is very confident it's a movie, includes a release year or directors, but hasn't heard of it
+      (confidence === 9 &&
+        !matches[0].isKnownMovie &&
+        (!!matches[0].year || matches[0].directors.length > 0)))
   ) {
     const updatedMovie = updateMovie(movie, {
       title: matches[0].title,

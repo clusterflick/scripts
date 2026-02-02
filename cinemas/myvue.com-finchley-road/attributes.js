@@ -8,7 +8,7 @@ module.exports = {
     instagram: "vue",
   },
   url: "https://www.myvue.com/cinema/finchley-road",
-  address: "O2 Centre, 255 Finchley Rd, London, NW3 6LU, UK",
+  address: "O2 Centre, 255 Finchley Road, London, NW3 6LU, UK",
   geo: { lat: 51.548230431889884, lon: -0.18187623564446753 },
   structure: "group",
   groupName: "Vue",

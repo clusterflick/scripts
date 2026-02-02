@@ -460,10 +460,13 @@ function normalizeTitle(title, options) {
     ["Gothic Film Festival - ", "Gothic Film Festival: "],
     ["Aussies in London - ", "Aussies in London: "],
     ["MOVIE CLUB - ", "Movie Club: "],
+    ["HW4P Solidarity on Screen - ", "HW4P Solidarity on Screen: "],
+    ["Beyond Kino - ", "Beyond Kino: "],
     [
       "Tarot readings, Demi Moore-tinis + ",
       "Tarot readings, Demi Moore-tinis & ",
     ],
+    ["Homage |", "Homage: "],
     [/^\s*Twin Cheeks\s*$/i, "Twin Cheeks: Who Killed The Homecoming King?"],
     ["FRANCESCA WOODMAN", "The Woodmans"],
     [/^Screening(?!(?:\s+of\b|\s*\+|\s*&))(?=\s)/i, "Screening of "],

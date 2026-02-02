@@ -1,7 +1,11 @@
 module.exports = {
   id: "lumiereromford.com",
   name: "Lumiere Cinema Romford",
-  alternativeNames: ["Lumiere Cinema", "Lumiere Romford"],
+  alternativeNames: [
+    "Lumiere Cinema",
+    "Lumiere Romford",
+    "Lumiere Romford Cinema",
+  ],
   domain: "https://www.lumiereromford.com",
   socials: {
     letterboxd: null,

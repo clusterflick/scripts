@@ -51,22 +51,4 @@ describe(`${attributes.name}`, () => {
     },
     isRecording ? 600_000 : undefined,
   );
-  // });
-
-  // describe("Non-matching cinema", () => {
-  //   it("returns no events for unrelated cinema", async () => {
-  //     const { movieListPage, moviePages } = await retrieve();
-
-  //     readJSON.mockImplementation(() => ({ movieListPage, moviePages }));
-
-  //     const cinema = {
-  //       name: "Some Other Cinema",
-  //       alternativeNames: [],
-  //       address: "123 Fake Street, London, E1 1AA, UK",
-  //     };
-  //     const output = await findEvents(cinema);
-
-  //     expect(output).toHaveLength(0);
-  //   });
-  // });
 });

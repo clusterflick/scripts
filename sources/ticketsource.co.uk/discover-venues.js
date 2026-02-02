@@ -37,7 +37,22 @@ async function discoverVenues() {
     // Create a unique key for the venue using name and approximate coordinates
     const venueKey = `${basicNormalize(name)}_${lat}_${lon}`;
     if (!venueMap.has(venueKey)) {
-      venueMap.set(venueKey, { name, coordinates: { lat, lon }, events: [] });
+      const eventAddress = [
+        hit.venueAdd1,
+        hit.venueAdd2,
+        hit.venueAdd3,
+        hit.venueAdd4,
+        hit.venuePostcode,
+      ]
+        .filter(Boolean)
+        .join(", ")
+        .trim();
+      venueMap.set(venueKey, {
+        name,
+        coordinates: { lat, lon },
+        events: [],
+        eventAddress,
+      });
     }
     venueMap.get(venueKey).events.push(hit);
   }
@@ -51,7 +66,10 @@ async function discoverVenues() {
       knownCinemas,
       venue.name,
       venue.coordinates,
-      { supportMisconfiguredCoordinates: true },
+      {
+        supportMisconfiguredCoordinates: true,
+        eventAddress: venue.eventAddress,
+      },
     );
 
     // If venue is far away, coords are misconfigured and assume it's in London

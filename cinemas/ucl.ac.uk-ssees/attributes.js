@@ -11,6 +11,7 @@ module.exports = {
   url: "https://www.ucl.ac.uk/arts-humanities/ssees",
   address: "16 Taviton Street, London, WC1H 0BW, UK",
   geo: { lat: 51.52546232481267, lon: -0.13154819993982766 },
-  structure: "solo",
+  structure: "group",
+  groupName: "University College London",
   type: "University",
 };

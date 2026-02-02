@@ -36,6 +36,7 @@ Categories:
 Rules:
 - Focus on the primary activity. A film + Q&A = "movie". Shorts + discussion = "shorts".
 - Monthly screening series = "movie" (one film per event).
+- Tours and festivals with selections of films may be multiple-movies or shorts. Check the runtime and make a best guess
 - Films being discussed but not shown = "talk" or "event", not "movie".
 - Multiple "dir." credits may indicate "multiple-movies" or "shorts".
 - If no single category clearly fits, use "event".
