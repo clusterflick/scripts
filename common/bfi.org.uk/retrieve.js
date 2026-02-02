@@ -20,29 +20,29 @@ function getPageContents(url, cacheKey, domain, showUrl) {
       // might as well keep going and see if the next waitFor passes.
     }
 
-    try {
-      const errorLocator = page
-        .locator("#content h2")
-        .filter({ hasText: /500 - internal server error/i });
+    // Race between error page and valid content - whichever appears first wins.
+    // Not all pages have film info (that we care about), so check for the rich
+    // text or media areas too. On some fundraising pages we don't have those,
+    // but we may have a list which contains audience list XML attributes.
+    const errorLocator = page
+      .locator("#content h2")
+      .filter({ hasText: /500 - internal server error/i });
+    const validContentLocator = page.locator(
+      ".Film-info__information,.Rich-text,.Media,ul[xmlns\\:av]",
+    );
 
-      // Check if we're on an error page
-      await errorLocator.waitFor({ state: "attached", timeout: 1000 });
+    await errorLocator
+      .or(validContentLocator.first())
+      .waitFor({ state: "attached" });
 
-      return new Error(`Error page detected - ${getText(await errorLocator)}`);
-    } catch {
-      // If waitFor times out, no error page was found, continue normally
+    // Check if we hit an error page
+    if (await errorLocator.isVisible()) {
+      const errorText = await errorLocator.textContent();
+      return new Error(`Error page detected - ${errorText}`);
     }
 
-    // Make sure there's information showing. Not all pages have film info
-    // (that we care about), so check for the rich text or media areas too.
-    // On some fundraising pages we don't have those, but we may have a list
-    // instead which contains audience list XML attributes to match instead.
-    try {
-      await page
-        .locator(".Film-info__information,.Rich-text,.Media,ul[xmlns\\:av]")
-        .waitFor({ strict: false });
-    } catch {
-      // Bail if we can't find the expected information
+    // Check if we found valid content
+    if (!(await validContentLocator.first().isVisible())) {
       return new Error(`Film information not available at ${domain}${showUrl}`);
     }
 
@@ -165,12 +165,23 @@ async function retrieve(attributes) {
           // If this fails, it'll be because it timed out. At that point, we
           // might as well keep going and see if the next waitFor passes.
         }
-        // Make sure there's results showing
-        await page.locator(".detailed-search-results").waitFor();
+
+        // Race between error page and search results
+        const errorLocator = page
+          .locator("#content h2")
+          .filter({ hasText: /500 - internal server error/i });
+        const resultsLocator = page.locator(".detailed-search-results");
+
+        await errorLocator.or(resultsLocator).waitFor({ state: "attached" });
+
+        if (await errorLocator.isVisible()) {
+          const errorText = await errorLocator.textContent();
+          throw new Error(`Error page detected - ${errorText}`);
+        }
 
         pages.push(await page.content());
 
-        const $nextPageButton = await page.locator("css=#av-next-link");
+        const $nextPageButton = page.locator("#av-next-link");
         if ((await $nextPageButton.count()) > 0) {
           await $nextPageButton.click();
 
