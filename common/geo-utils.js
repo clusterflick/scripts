@@ -6,7 +6,7 @@ const { readJSON } = require("./utils");
 // Path to the Greater London boundary GeoJSON file
 const LONDON_BOUNDARY_PATH = path.resolve(
   __dirname,
-  "../analysis/London_GLA_Boundary.geojson",
+  "../data/London_GLA_Boundary.geojson",
 );
 
 async function isInLondon(lat, lon) {
