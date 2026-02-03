@@ -529,6 +529,7 @@ const knownRemovablePhrases = [
   "World Orangutan Day",
   "GIF:",
   "Happy Birthday Hitch:",
+  "Happy Birthday Rik Mayall:",
   "Hidden Figures:",
   "Hiroshima Day:",
   "Holocaust Memorial Day:",
