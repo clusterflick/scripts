@@ -36,6 +36,8 @@ const ignoredIds = [
   1575833, // Nuremberg: The Real Story -- https://www.themoviedb.org/movie/1575833-nuremberg-the-real-story
   477391, // Film Festival -- https://www.themoviedb.org/movie/477391
   444768, // Wash It -- https://www.themoviedb.org/movie/444768-wash-it
+  335380, // Open Door: The Other Cinema -- https://www.themoviedb.org/movie/335380-open-door-the-other-cinema
+  340476, // 5:45 AM -- https://www.themoviedb.org/movie/340476-5-45-am
 ];
 
 /**

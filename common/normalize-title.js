@@ -150,6 +150,7 @@ function normalizeTitle(title, options) {
     [/Anaganaga Oka Raj(?:$|\s+)/i, "Anaganaga Oka Raju"],
     ["Wignyapthi", "Wignyapathi"],
     ["Mahasayulaki", "Mahasayulaku"],
+    ["Lagan Laagi Re", "Lagan Laagii Re"],
     ["Frozen 2", "Frozen II"],
     ["Terminator 2 Live", " Terminator 2"],
     [/\s+terminator 2$/i, " Terminator 2 Judgment Day"],
@@ -500,6 +501,16 @@ function normalizeTitle(title, options) {
       "A.I New Media Experimental Digital Arts Film Festival",
     ],
     ["Journey + A Wedding Suit", "Journey & A Wedding Suit"],
+    ["We Lana Fel Khayal Hob", "Wa Lana Fel Khayal Hob"],
+    ["Wa Lana Fel Khayal Hob", "Love, Imagined"],
+    [
+      "Looney tunes: The day the world blew up",
+      "Looney tunes: The day the earth blew up",
+    ],
+    [
+      /(The Scarecrows' Wedding)\s*\+\s*(The Smeds (and|&) the Smoos)/i,
+      "$1 & $2",
+    ],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
