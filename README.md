@@ -218,3 +218,67 @@ These scripts help manage local data directories:
 | `npm run clear:combined-data`    | Remove combined data        |
 | `npm run clear:matched-data`     | Remove matched data         |
 | `npm run clear:all`              | Remove all of the above     |
+
+## Helper Scripts
+
+Scripts in the `helpers/` directory provide additional functionality for
+development and debugging.
+
+### Download Data from GitHub Releases
+
+These scripts download data from the clusterflick GitHub repositories, useful
+for local development without running the full pipeline:
+
+| Script                                                     | Description                                               |
+| ---------------------------------------------------------- | --------------------------------------------------------- |
+| `./helpers/get-latest-retrieved-data.sh`                   | Download latest retrieved data from all cinemas           |
+| `./helpers/get-latest-transformed-data.sh`                 | Download latest transformed data from all cinemas         |
+| `./helpers/get-latest-combined-data.sh`                    | Download latest combined dataset                          |
+| `./helpers/get-last-10-days-combined-data.sh [dir] [days]` | Download combined data from the last N days (default: 10) |
+
+**Requirements:** `curl`, `wget`, and `jq` (for the 10-days script)
+
+### Debugging Tools
+
+#### run-matcher.js
+
+Manually test the TMDB matching logic for a specific movie title:
+
+```
+node helpers/run-matcher.js "<title>" [year] [directors] [actors] [matchingHints]
+```
+
+**Examples:**
+
+```bash
+# Basic title search
+node helpers/run-matcher.js "The Godfather"
+
+# With year
+node helpers/run-matcher.js "The Godfather" 1972
+
+# With director
+node helpers/run-matcher.js "The Godfather" 1972 "Francis Ford Coppola"
+
+# With multiple actors (comma-separated)
+node helpers/run-matcher.js "The Godfather" 1972 "" "Marlon Brando,Al Pacino"
+```
+
+#### highlight-hydration-misses-for-review.js
+
+List all movies from transformed data that failed to match against TMDB, grouped
+by title. Useful for identifying matching issues:
+
+```
+node helpers/highlight-hydration-misses-for-review.js
+```
+
+Output includes for each unmatched movie:
+
+- Category (movie, event, multiple-movies, etc.)
+- Normalized title and year
+- TMDB search link
+- Source URL
+- Venues where it appears
+
+Also displays a summary of unmatched entries grouped by category.
