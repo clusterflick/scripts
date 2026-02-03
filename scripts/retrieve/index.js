@@ -1,14 +1,15 @@
+const { getAllCinemaNames, getCinema } = require("../../cinemas");
+const { getAllSourceNames, getSource } = require("../../sources");
+
 // Support retrieving both cinemas and sources
 const getModule = (location) => {
-  try {
-    return require(`../../cinemas/${location}`);
-  } catch {
-    try {
-      return require(`../../sources/${location}`);
-    } catch {
-      return {};
-    }
+  if (getAllCinemaNames().includes(location)) {
+    return getCinema(location);
   }
+  if (getAllSourceNames().includes(location)) {
+    return getSource(location);
+  }
+  return {};
 };
 
 async function retrieve(location) {

@@ -1,5 +1,3 @@
-const path = require("node:path");
-const getModuleNamesFor = require("./get-module-names-for");
 const normalizeVenueName = require("./normalize-venue-name");
 const distanceInKmBetweenCoordinates = require("./distance-in-km-between-coordinates");
 
@@ -15,18 +13,6 @@ function extractPostcode(text) {
   if (!text) return null;
   const match = text.match(UK_POSTCODE_REGEX);
   return match ? match[1].toUpperCase().replace(/\s+/g, " ") : null;
-}
-
-/**
- * Load all known cinema attributes from the cinemas directory
- * @returns {Promise<Array>} Array of cinema attribute objects
- */
-async function loadKnownCinemas() {
-  const cinemasPath = path.join(process.cwd(), "cinemas");
-  const cinemaSlugs = await getModuleNamesFor(cinemasPath);
-  return cinemaSlugs.map(
-    (slug) => require(path.join(cinemasPath, slug)).attributes,
-  );
 }
 
 /**
@@ -126,7 +112,6 @@ function venueMatchesCinema(cinema, venueName, coordinates, options = {}) {
 }
 
 module.exports = {
-  loadKnownCinemas,
   sortVenuesByEventCount,
   findMatchingCinema,
   venueMatchesCinema,

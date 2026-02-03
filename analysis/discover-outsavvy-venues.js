@@ -1,4 +1,6 @@
-const discoverVenues = require("../sources/outsavvy.com/discover-venues");
+const { getSourceDiscoverVenues } = require("../sources");
+
+const discoverVenues = getSourceDiscoverVenues("outsavvy.com");
 
 async function main() {
   const venues = await discoverVenues();

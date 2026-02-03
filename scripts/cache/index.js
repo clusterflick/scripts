@@ -1,12 +1,11 @@
 const path = require("node:path");
-const getModuleNamesFor = require("../../common/get-module-names-for");
 const { getMovieInfoAndCacheResults } = require("../../common/get-movie-data");
 const { readJSON } = require("../../common/utils");
+const { getAllCinemaNames } = require("../../cinemas");
 
 async function combine() {
-  const cinemasPath = path.join(__dirname, "..", "..", "cinemas");
   const data = {};
-  const cinemas = await getModuleNamesFor(cinemasPath);
+  const cinemas = getAllCinemaNames();
   for (const cinema of cinemas) {
     try {
       const dataPath = path.join(process.cwd(), "transformed-data", cinema);

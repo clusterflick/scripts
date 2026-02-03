@@ -1,10 +1,8 @@
 require("dotenv").config();
-const path = require("node:path");
 const { fetchJson, sleep } = require("../common/utils");
-const getModuleNamesFor = require("../common/get-module-names-for");
 const distanceInKmBetweenCoordinates = require("../common/distance-in-km-between-coordinates");
 const { dailyCache } = require("../common/cache");
-const { getAttributesFor } = require("./utils");
+const { getAllCinemaNames, getCinemaAttributes } = require("../cinemas");
 
 const MAPS_API_KEY = process.env.MAPS_API_KEY;
 const SIGNIFICANT_DISTANCE_KM = 0.025; // 25 meters
@@ -24,8 +22,7 @@ async function checkCoordinates() {
     process.exit(1);
   }
 
-  const cinemasPath = path.join(__dirname, "..", "cinemas");
-  const cinemas = await getModuleNamesFor(cinemasPath);
+  const cinemas = getAllCinemaNames();
 
   console.log(`Checking coordinates for ${cinemas.length} cinemas...\n`);
 
@@ -36,7 +33,7 @@ async function checkCoordinates() {
       `[🎞️  Location: ${cinema}]${"".padEnd(Math.max(0, 70 - cinema.length), " ")}`,
     );
 
-    const { name, address, geo } = getAttributesFor(cinema);
+    const { name, address, geo } = getCinemaAttributes(cinema);
     // Rate limit: Google allows 50 requests per second, but let's be conservative
     await sleep(100);
 

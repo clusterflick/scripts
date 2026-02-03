@@ -1,5 +1,7 @@
-const discoverVenues = require("../sources/ticketsource.co.uk/discover-venues");
-const attributes = require("../sources/ticketsource.co.uk/attributes");
+const { getSourceDiscoverVenues, getSourceAttributes } = require("../sources");
+
+const discoverVenues = getSourceDiscoverVenues("ticketsource.co.uk");
+const attributes = getSourceAttributes("ticketsource.co.uk");
 
 async function main() {
   const venues = await discoverVenues();

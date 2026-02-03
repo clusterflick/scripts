@@ -6,6 +6,7 @@ const {
   removeMatchingHints,
   isPrivateHire,
 } = require("../../common/utils");
+const { getCinema } = require("../../cinemas");
 const findMatchesOnTheMovieDb = require("./find-matches-on-the-movie-db");
 const getSourcedEventsFor = require("./get-sourced-events-for");
 const validateAgainstSchema = require("./validate-against-schema");
@@ -18,7 +19,7 @@ async function transform(
   previousRelease = [],
   historicalSeen = new Map(),
 ) {
-  const { transform, attributes } = require(`../../cinemas/${location}`);
+  const { transform, attributes } = getCinema(location);
   const sourcedEvents = await getSourcedEventsFor(attributes);
 
   console.log(`[🎞️  Location: ${location}]`);

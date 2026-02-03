@@ -1,12 +1,12 @@
 const path = require("node:path");
 const cheerio = require("cheerio");
 const { readJSON, basicNormalize, getText } = require("../../common/utils");
-const { isInLondon } = require("../../analysis/utils");
+const { isInLondon } = require("../../common/geo-utils");
 const {
-  loadKnownCinemas,
   sortVenuesByEventCount,
   findMatchingCinema,
 } = require("../../common/source-utils");
+const { getAllCinemaAttributes } = require("../../cinemas");
 
 function extractCoordinates($) {
   const mapImg = $(".website-map img[data-src*='marker-point.png']");
@@ -62,7 +62,7 @@ async function discoverVenues() {
     venueMap.get(venueKey).events.push(event);
   }
 
-  const knownCinemas = await loadKnownCinemas();
+  const knownCinemas = getAllCinemaAttributes();
 
   const results = [];
   for (const [, venue] of venueMap.entries()) {

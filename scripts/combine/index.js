@@ -1,6 +1,6 @@
 const path = require("node:path");
-const getModuleNamesFor = require("../../common/get-module-names-for");
 const normalizeTitle = require("../../common/normalize-title");
+const { getAllCinemaNames, getCinemaAttributes } = require("../../cinemas");
 const {
   getMovieInfoAndCacheResults,
   getMovieGenresAndCacheResults,
@@ -111,15 +111,13 @@ async function combine() {
   } catch {
     console.log("⚠️ Unable to load cached data");
   }
-  const cinemasPath = path.join(__dirname, "..", "..", "cinemas");
   const data = {};
-  const cinemas = await getModuleNamesFor(cinemasPath);
+  const cinemas = getAllCinemaNames();
   for (const cinema of cinemas) {
     try {
-      const attributesPath = path.join(cinemasPath, cinema, "attributes");
       const dataPath = path.join(process.cwd(), "transformed-data", cinema);
       data[cinema] = {
-        attributes: require(attributesPath),
+        attributes: getCinemaAttributes(cinema),
         movies: await readJSON(dataPath),
       };
     } catch {

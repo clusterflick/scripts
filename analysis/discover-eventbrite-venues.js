@@ -1,4 +1,6 @@
-const discoverVenues = require("../sources/eventbrite.co.uk/discover-venues");
+const { getSourceDiscoverVenues } = require("../sources");
+
+const discoverVenues = getSourceDiscoverVenues("eventbrite.co.uk");
 
 async function main() {
   const venues = await discoverVenues();

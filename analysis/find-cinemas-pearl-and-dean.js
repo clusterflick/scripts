@@ -1,10 +1,9 @@
-const path = require("node:path");
 const cheerio = require("cheerio");
 const { decode } = require("html-entities");
 const { dailyCache } = require("../common/cache");
-const getModuleNamesFor = require("../common/get-module-names-for");
 const { fetchText, basicNormalize } = require("../common/utils");
 const { isInLondon } = require("./utils");
+const { getAllCinemaAttributes } = require("../cinemas");
 
 const pendingCinemas = [
   "Lumiere Romford",
@@ -82,21 +81,20 @@ async function findCinemasPearlAndDean() {
     }
   }
 
-  const cinemasPath = path.join(__dirname, "..", "cinemas");
-  const cinemasSlugs = await getModuleNamesFor(cinemasPath);
-  const knowninemas = cinemasSlugs.map(
-    (slug) => require(path.join(cinemasPath, slug)).attributes,
+  const allCinemaAttributes = getAllCinemaAttributes();
+  const knownCinemaNameMapping = allCinemaAttributes.reduce(
+    (mapping, cinema) => {
+      const allNames = [cinema.name, ...(cinema.alternativeNames || [])];
+      allNames.forEach((name) => {
+        mapping[normalize(basicNormalize(name))] = cinema;
+        mapping[normalize(basicNormalize(`${name} Cinema`))] = cinema;
+      });
+      return mapping;
+    },
+    {},
   );
-  const knownCinemaNameMapping = knowninemas.reduce((mapping, cinema) => {
-    const allNames = [cinema.name, ...(cinema.alternativeNames || [])];
-    allNames.forEach((name) => {
-      mapping[normalize(basicNormalize(name))] = cinema;
-      mapping[normalize(basicNormalize(`${name} Cinema`))] = cinema;
-    });
-    return mapping;
-  }, {});
 
-  const knownCinemas = []
+  const excludedCinemas = []
     .concat(pendingCinemas)
     .concat(closedCinemas)
     .reduce(
@@ -110,7 +108,7 @@ async function findCinemasPearlAndDean() {
     const normalizedName = normalize(basicNormalize(name));
     const isKnown =
       !!knownCinemaNameMapping[normalizedName] ||
-      !!knownCinemas[normalizedName];
+      !!excludedCinemas[normalizedName];
     if (!isKnown) {
       count++;
       console.log(`${count}. ${name} [${url}]`);

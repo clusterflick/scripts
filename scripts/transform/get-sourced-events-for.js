@@ -1,12 +1,10 @@
-const path = require("node:path");
-const getModuleNamesFor = require("../../common/get-module-names-for");
+const { getAllSourceNames, getSourceFindEvents } = require("../../sources");
 
 async function getSourcedEventsFor(attributes) {
-  const directoryPath = path.join(__dirname, "..", "..", "sources");
-  const sources = await getModuleNamesFor(directoryPath);
+  const sources = getAllSourceNames();
   const sourcedEvents = {};
   for (const source of sources) {
-    const { findEvents } = require(path.join(directoryPath, source));
+    const findEvents = getSourceFindEvents(source);
     sourcedEvents[source] = await findEvents(attributes);
   }
   return sourcedEvents;

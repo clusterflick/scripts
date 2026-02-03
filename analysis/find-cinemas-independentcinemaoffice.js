@@ -2,20 +2,16 @@
 const path = require("node:path");
 const { readJSON } = require("../common/utils");
 const distanceInKmBetweenCoordinates = require("../common/distance-in-km-between-coordinates");
-const getModuleNamesFor = require("../common/get-module-names-for");
 const { isInLondon } = require("./utils");
-
-const cinemasPath = path.join(__dirname, "..", "cinemas");
+const { getAllCinemaNames, getCinema } = require("../cinemas");
 
 const nonMatchStatus = {
   // Add any known closed or excluded venues here
 };
 
 async function findCinemasIndependentCinemaOffice() {
-  const cinemaNames = await getModuleNamesFor(cinemasPath);
-  const cinemas = cinemaNames.map((cinemaName) =>
-    require(path.join(cinemasPath, cinemaName)),
-  );
+  const cinemaNames = getAllCinemaNames();
+  const cinemas = cinemaNames.map((cinemaName) => getCinema(cinemaName));
 
   const data = await readJSON(
     path.resolve(__dirname, "./independentcinemaoffice.json"),

@@ -1,10 +1,9 @@
 const path = require("node:path");
 const fs = require("node:fs");
 const { toKML } = require("@placemarkio/tokml");
-const getModuleNamesFor = require("../common/get-module-names-for");
 const { readJSON } = require("../common/utils");
+const { getAllCinemaNames, getCinemaAttributes } = require("../cinemas");
 
-const cinemasPath = path.join(__dirname, "..", "cinemas");
 const outPath = "./map.kml";
 
 function buildKml(boundary, points) {
@@ -34,9 +33,9 @@ async function generateMap() {
   const boundary = await readJSON(
     path.resolve(__dirname, "./London_GLA_Boundary.geojson"),
   );
-  const cinemas = await getModuleNamesFor(cinemasPath);
-  const points = cinemas.map((cinema) => {
-    const { attributes } = require(path.join(cinemasPath, cinema));
+  const cinemaNames = getAllCinemaNames();
+  const points = cinemaNames.map((cinema) => {
+    const attributes = getCinemaAttributes(cinema);
     return {
       ...attributes.geo,
       name: attributes.name,

@@ -1,4 +1,6 @@
-const discoverVenues = require("../sources/dice.fm/discover-venues");
+const { getSourceDiscoverVenues } = require("../sources");
+
+const discoverVenues = getSourceDiscoverVenues("dice.fm");
 
 async function main() {
   const venues = await discoverVenues();

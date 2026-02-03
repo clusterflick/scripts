@@ -1,12 +1,12 @@
 const path = require("node:path");
 const { readJSON, basicNormalize } = require("../../common/utils");
 const distanceInKmBetweenCoordinates = require("../../common/distance-in-km-between-coordinates");
-const { isInLondon } = require("../../analysis/utils");
+const { isInLondon } = require("../../common/geo-utils");
 const {
-  loadKnownCinemas,
   sortVenuesByEventCount,
   findMatchingCinema,
 } = require("../../common/source-utils");
+const { getAllCinemaAttributes } = require("../../cinemas");
 
 async function discoverVenues() {
   const dataSrc = path.join(
@@ -57,7 +57,7 @@ async function discoverVenues() {
     venueMap.get(venueKey).events.push(hit);
   }
 
-  const knownCinemas = await loadKnownCinemas();
+  const knownCinemas = getAllCinemaAttributes();
 
   const results = [];
   for (const [, venue] of venueMap.entries()) {

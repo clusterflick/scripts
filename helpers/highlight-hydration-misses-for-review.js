@@ -1,7 +1,7 @@
 const path = require("node:path");
 const fs = require("node:fs").promises;
-const getModuleNamesFor = require("../common/get-module-names-for");
 const normalizeTitle = require("../common/normalize-title");
+const { getAllCinemaNames } = require("../cinemas");
 
 // ANSI color codes
 const colors = {
@@ -35,8 +35,7 @@ const formatCategory = (category) => {
 };
 
 (async function () {
-  const cinemasPath = path.join(__dirname, "..", "cinemas");
-  const sites = await getModuleNamesFor(cinemasPath);
+  const sites = getAllCinemaNames();
   const data = {};
   let loadedCount = 0;
   let skippedCount = 0;
@@ -166,7 +165,9 @@ const formatCategory = (category) => {
   );
 
   // Find the longest venue name for padding
-  const maxVenueLength = Math.max(...sortedVenues.map(([venue]) => venue.length));
+  const maxVenueLength = Math.max(
+    ...sortedVenues.map(([venue]) => venue.length),
+  );
 
   for (const [venue, { categories }] of sortedVenues) {
     // Category breakdown for this venue
@@ -174,7 +175,10 @@ const formatCategory = (category) => {
       ([, a], [, b]) => b - a,
     );
     const categoryBreakdown = sortedVenueCategories
-      .map(([cat, count]) => `${colors.dim}${count} ×${colors.reset} ${formatCategory(cat)}`)
+      .map(
+        ([cat, count]) =>
+          `${colors.dim}${count} ×${colors.reset} ${formatCategory(cat)}`,
+      )
       .join(`${colors.dim},${colors.reset} `);
 
     const paddedVenue = venue.padEnd(maxVenueLength + 4);

@@ -1,11 +1,11 @@
 const path = require("node:path");
 const { readJSON, basicNormalize } = require("../../common/utils");
-const { isInLondon } = require("../../analysis/utils");
+const { isInLondon } = require("../../common/geo-utils");
 const {
-  loadKnownCinemas,
   sortVenuesByEventCount,
   findMatchingCinema,
 } = require("../../common/source-utils");
+const { getAllCinemaAttributes } = require("../../cinemas");
 
 function uniqueEvents(events) {
   const ids = {};
@@ -49,7 +49,7 @@ async function discoverVenues() {
     venueMap.get(venueKey).events.push(event);
   }
 
-  const knownCinemas = await loadKnownCinemas();
+  const knownCinemas = getAllCinemaAttributes();
 
   const results = [];
   for (const [, venue] of venueMap.entries()) {
