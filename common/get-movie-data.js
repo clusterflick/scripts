@@ -65,13 +65,13 @@ const applyNameCorrections = (name) =>
 
 const apiRetryWrapper = async (callback) => {
   try {
-    return callback();
+    return await callback();
   } catch (e) {
     console.log(
       `Error contacting themoviedb; trying again in 60 seconds - ${e.message}`,
     );
     await sleep(60_000);
-    return callback();
+    return await callback();
   }
 };
 
