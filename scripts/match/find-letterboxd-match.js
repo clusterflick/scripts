@@ -15,15 +15,18 @@ const getMovieRatings = async (match) => {
 
       // Race between the film page loading and the "not imported" page
       const filmWrapper = page.locator("#film-page-wrapper");
-      const notImportedTitle = page.locator("#content h1.title");
+      const errorPageTitle = page.locator("#content h1.title");
 
-      await filmWrapper.or(notImportedTitle).waitFor({ state: "attached" });
+      await filmWrapper.or(errorPageTitle).waitFor({ state: "attached" });
 
       // Check if we hit the "not imported" page
-      if (await notImportedTitle.isVisible()) {
-        const title = await notImportedTitle.textContent();
+      if (await errorPageTitle.isVisible()) {
+        const title = await errorPageTitle.textContent();
         if (basicNormalize(title) === basicNormalize("Film not imported")) {
-          return { isNotImported: true };
+          return { isNotAvailable: true };
+        }
+        if (basicNormalize(title) === basicNormalize("Film not found")) {
+          return { isNotAvailable: true };
         }
       }
 
@@ -71,9 +74,9 @@ const getScore = async (match) => {
     url,
     ratings,
     stats,
-    isNotImported = false,
+    isNotAvailable = false,
   } = await getMovieRatings(match);
-  if (isNotImported) return null;
+  if (isNotAvailable) return null;
 
   const $rating = cheerio.load(ratings);
   const ratingSummary = $rating(".average-rating a").data("original-title");
