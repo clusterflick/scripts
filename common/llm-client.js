@@ -54,7 +54,14 @@ async function callLlm({
       // Apply corrections for malformed escape characters (perhaps due to truncation)
       .replace(/\\(?!["\\/bfnrtu]|u[0-9a-fA-F]{4})/g, "")
       // Apply corrections for hallucinated invalid additions
-      .replace(/"backdrop_path": "[^,]+,\n/i, "");
+      .replace(/"backdrop_path": "[^,]+,\n/i, "")
+      // Fix unescaped quotes within the "reason" field value
+      // Match from "reason":" to the final "} at end of object
+      .replace(/"reason"\s*:\s*"(.*)"\s*}$/s, (match, reasonContent) => {
+        // Escape any unescaped internal quotes (not already escaped)
+        const fixed = reasonContent.replace(/(?<!\\)"/g, '\\"');
+        return `"reason":"${fixed}"}`;
+      });
 
     try {
       return JSON.parse(correctedJsonString);

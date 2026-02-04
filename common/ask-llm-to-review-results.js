@@ -6,7 +6,7 @@ const systemInstruction = `You match cinema listings to TheMovieDB search result
 Required fields:
 - "match": object or null - the matching result from the provided TheMovieDB results, or null if no match
 - "confidence": number 0-9 (9 = most confident)
-- "reason": string - why you chose this match (max 150 characters). Leave blank if no match chosen.
+- "reason": string - why you chose this match (max 150 characters, no quote characters). Leave blank if no match chosen.
 
 If a match is found, include the full result object from TheMovieDB (id, title, release_date, etc.).
 
