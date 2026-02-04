@@ -15,6 +15,13 @@ Matching guidelines:
 - Use the current date to assess plausibility. Unreleased films or those releasing more than a year in the future are unlikely matches.
 - Consider original_title for foreign language films.
 
+CRITICAL - When NOT to match:
+- If multiple results share the same or similar titles (e.g. remakes, same-name films from different years), you MUST have strong distinguishing evidence to match.
+- Strong evidence includes: matching year, matching director/cast names, specific plot details that uniquely identify one film.
+- If the cinema listing lacks specific identifying details (just a generic synopsis or no synopsis), return null rather than guessing.
+- A vague or generic cinema overview that could apply to multiple same-titled films is NOT sufficient to match.
+- When in doubt between multiple same-titled films, return null with confidence 0.
+
 Example response with match:
 {"match":{"id":426063,"title":"Nosferatu","original_title":"Nosferatu","release_date":"2024-12-25","overview":"..."},"confidence":8,"reason":"Listing matched description of a vampire and remake of this classic movie"}
 
