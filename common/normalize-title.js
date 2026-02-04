@@ -24,6 +24,7 @@ function normalizeTitle(title, options) {
     ["The Fishermen", "The Fisherman"], // NOTE: This can be removed in the future once this specific misname has been removed
     [" + Cat", " and Cat"],
     [" + Zog", " and Zog"],
+    ["Zog + ", "Zog & "],
     [" + Superworm", " and Superworm"],
     [" + The Gruffalo's Child", " and The Gruffalo's Child"],
     [" + 28YL: The Bone Temple", " "],
@@ -184,11 +185,16 @@ function normalizeTitle(title, options) {
       "Films that F*ck 2: Californian Gay Pornotragedies",
       "Victim of Circumstance",
     ],
+    ["End of Evangelion : Double Feature", "End of Evangelion"],
     ["(True True)", "(True)²"], // Fix for Evangelion: Death (True)²
     ["3.0+1.01", "3.0+1.0"], // Fix for Evangelion: 3.0+1.0 Thrice Upon a Time to combine with updated version release
     [
       /^The End of Evangelion$/i,
       "Neon Genesis Evangelion: The End of Evangelion",
+    ],
+    [
+      "Evangelion: Death (True)² + The End of Evangelion",
+      "Neon Genesis Evangelion: Death (True)² & The End of Evangelion",
     ],
     ["Terror Dome", "Terrordome"],
     ["Wu Viet", "Woo Viet"],
@@ -380,6 +386,10 @@ function normalizeTitle(title, options) {
     ["Film Club |", "Film Club: "],
     ["IN-HOUSE - ", "IN-HOUSE: "],
     ["BAR TRASH - ", "BAR TRASH: "],
+    [
+      "BAR TRASH Positive East Fundraiser /",
+      "BAR TRASH Positive East Fundraiser: ",
+    ],
     ["Guest Event - ", "Guest Event: "],
     ["Throwback - ", "Throwback: "],
     ["Toddler - ", "Toddler: "],
@@ -501,8 +511,32 @@ function normalizeTitle(title, options) {
       "A.I New Media Experimental Digital Arts Film Festival",
     ],
     ["Journey + A Wedding Suit", "Journey & A Wedding Suit"],
+    ["A Wedding Suit + Bread and Alley", "A Wedding Suit & Bread and Alley"],
     ["We Lana Fel Khayal Hob", "Wa Lana Fel Khayal Hob"],
     ["Wa Lana Fel Khayal Hob", "Love, Imagined"],
+    [
+      "Corpus Callosum (2002) + Sshtoorrty (2005)",
+      "Corpus Callosum (2002) & Sshtoorrty (2005)",
+    ],
+    [
+      "The Experience + Orderly or Disorderly",
+      "The Experience & Orderly or Disorderly",
+    ],
+    [/Scarecrows['|’] Wedding \+ /i, "Scarecrows' Wedding & "],
+    ["Tiddler + ", "Tiddler & "],
+    ["Lost and Found + Shoom's Odyssey", "Lost and Found & Shoom's Odyssey"],
+    ["Chico and Rita + 20 Años", "Chico and Rita & 20 Años"],
+    ["Black Girl + Jemima + Johnny", "Black Girl & Jemima Johnny"],
+    [
+      "HARD ROCK ZOMBIES + PRINCE OF DARKNESS",
+      "Hard Rock Zombies & Prince of Darkness",
+    ],
+    ["The Traveller + Breaktime", "The Traveller & Breaktime"],
+    [
+      "Under the Silver Lake (2018) + Tropico (2013)",
+      "Under the Silver Lake (2018) & Tropico (2013)",
+    ],
+    ["Tabby McTat + The Highway Rat", "Tabby McTat & The Highway Rat"],
     [
       "Looney tunes: The day the world blew up",
       "Looney tunes: The day the earth blew up",
