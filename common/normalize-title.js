@@ -81,6 +81,7 @@ function normalizeTitle(title, options) {
     ["Poetry Slam", "Event: Poetry Slam"],
     ["Scared To Dance -", "Scared To Dance "],
     ["ODEON Pride Nights - ", "ODEON Pride Nights "],
+    ["VIP TV/FILM INDUSTRY SCREENING - ", "VIP TV/FILM INDUSTRY SCREENING: "],
     ["Hitchcock: The Gainsborough Days -", "Hitchcock: The Gainsborough Days "],
     ["Sky Original -", "Sky Original "],
     ["Green Screen -", "Green Screen "],
