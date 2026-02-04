@@ -22,10 +22,10 @@ Required fields:
 - "confidence": number 0-9 (9 = most confident)
 
 Categories:
-- "movie": A single full-length film screening. Use even if accompanied by shorts or a Q&A.
-- "multiple-movies": Multiple full-length films shown together (double bills, marathons, trilogies).
+- "movie": A feature film (40+ minutes) screening. Use even if accompanied by shorts or a Q&A.
+- "multiple-movies": Multiple feature films (each 40+ minutes) shown together (double bills, marathons, trilogies).
 - "tv": TV show episodes being screened. Look for BBC, ITV, ITN references.
-- "shorts": A programme of short films only, no feature-length film.
+- "shorts": Only short films (each under 40 minutes), with no feature-length film.
 - "quiz": A quiz event.
 - "comedy": Stand-up, open mic, or comedy shows (not a comedy film screening).
 - "music": Primarily a musical performance, album playback, live band, or dance event (not a musical film).

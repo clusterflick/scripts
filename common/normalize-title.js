@@ -512,7 +512,6 @@ function normalizeTitle(title, options) {
       "A.I New Media Experimental Digital Arts Film Festival",
     ],
     ["Journey + A Wedding Suit", "Journey & A Wedding Suit"],
-    ["A Wedding Suit + Bread and Alley", "A Wedding Suit & Bread and Alley"],
     ["We Lana Fel Khayal Hob", "Wa Lana Fel Khayal Hob"],
     ["Wa Lana Fel Khayal Hob", "Love, Imagined"],
     [
