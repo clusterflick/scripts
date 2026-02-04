@@ -19,6 +19,34 @@ const writeJSON = async (filePath, value) => {
 const basicNormalize = (value = "") =>
   value.toLowerCase().replaceAll(",", "").replace(/\s+/g, " ").trim();
 
+// Placeholder names that shouldn't be used for matching
+const unhelpfulCrewNames = [
+  /^various$/i,
+  /^various\s+/i, // "Various Directors", "Various Mystery Directors", etc.
+  /^tbc$/i,
+  /^tba$/i,
+  /^unknown$/i,
+  /^n\/a$/i,
+  /^none$/i,
+  /^multiple$/i,
+  /^multiple\s+/i, // "Multiple Directors", etc.
+  /^mixed$/i,
+  /^who knows/i, // "Who Knows?", etc.
+  /collective$/i, // "Sake Collective", etc.
+  /^the metropolitan opera$/i,
+];
+
+const isHelpfulCrewName = (name) =>
+  !unhelpfulCrewNames.some((pattern) => pattern.test(name.trim()));
+
+// Clean up crew names by removing common prefixes/suffixes
+const cleanCrewName = (name) =>
+  name
+    .trim()
+    .replace(/\s+\.$/g, "") // Remove trailing " ."
+    .replace(/^award[- ]winning\s+(director|filmmaker)\s+/i, "") // "award-winning director X" -> "X"
+    .trim();
+
 const sanitizePathSegment = (value = "") => {
   return value
     .normalize("NFKC")
@@ -249,22 +277,22 @@ const createOverview = ({
   classification,
   trailer,
 }) => {
+  const processedDirectors = Array.isArray(directors)
+    ? directors
+    : convertNamesTextToList(directors);
+
+  const processedActors = Array.isArray(actors)
+    ? actors
+    : convertNamesTextToList(actors);
+
   return {
     duration: parseMinsToMs(duration) || undefined,
     year: year || undefined,
     categories: Array.isArray(categories)
       ? categories
       : splitConjoinedItemsInList(convertToList(categories)),
-    directors: Array.isArray(directors)
-      ? directors
-      : splitConjoinedItemsInList(convertToList(directors))
-          .map(attemptEncodingFix)
-          .map(removeNotes),
-    actors: Array.isArray(actors)
-      ? actors
-      : splitConjoinedItemsInList(convertToList(actors))
-          .map(attemptEncodingFix)
-          .map(removeNotes),
+    directors: processedDirectors.map(cleanCrewName).filter(isHelpfulCrewName),
+    actors: processedActors.map(cleanCrewName).filter(isHelpfulCrewName),
     classification: getValidClassification(classification),
     trailer: trailer || undefined,
   };
