@@ -1,4 +1,4 @@
-var removeDiacritics = require("diacritics").remove;
+const removeDiacritics = require("diacritics").remove;
 
 const normalizeName = (name) =>
   removeDiacritics(name)

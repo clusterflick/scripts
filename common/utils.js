@@ -1,4 +1,4 @@
-var crypto = require("node:crypto");
+const crypto = require("node:crypto");
 const fs = require("node:fs").promises;
 const iconv = require("iconv-lite");
 const { decode } = require("html-entities");

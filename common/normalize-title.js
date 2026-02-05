@@ -1,4 +1,4 @@
-var removeDiacritics = require("diacritics").remove;
+const removeDiacritics = require("diacritics").remove;
 const knownRemovablePhrases = require("./known-removable-phrases");
 const standardizePrefixingForTheatrePerformances = require("./standardize-prefixing-for-theatre-performances");
 
