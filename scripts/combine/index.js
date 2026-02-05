@@ -120,8 +120,9 @@ async function combine() {
         attributes: getCinemaAttributes(cinema),
         movies: await readJSON(dataPath),
       };
-    } catch {
+    } catch(e) {
       console.log(`Error combining data for ${cinema}`);
+      console.log(e);
     }
   }
 
@@ -252,6 +253,7 @@ async function combine() {
         if (movieInfo) {
           siteData.movies[movieId] = {
             ...buildMovieData(movieInfo, { slugify, siteData }),
+            includedMovies: [],
             showings: {},
             performances: [],
           };
@@ -262,6 +264,7 @@ async function combine() {
             normalizedTitle: normalizeTitle(title),
             isUnmatched: true,
             genres: [],
+            includedMovies: [],
             showings: {},
             performances: [],
           };
@@ -269,6 +272,17 @@ async function combine() {
       }
 
       const movie = siteData.movies[movieId];
+
+      // Merge includedMovies from this showing into the movie, deduplicating by id
+      if (includedMovies && includedMovies.length > 0) {
+        const existingIds = new Set(movie.includedMovies.map((m) => m.id));
+        for (const included of includedMovies) {
+          if (!existingIds.has(included.id)) {
+            movie.includedMovies.push(included);
+            existingIds.add(included.id);
+          }
+        }
+      }
 
       if (movie.isUnmatched) {
         const matchedGenres = overview.categories.reduce(
@@ -297,10 +311,6 @@ async function combine() {
         category,
         seen,
         overview,
-        includedMovies:
-          includedMovies && includedMovies.length > 0
-            ? includedMovies
-            : undefined,
       };
 
       movie.performances = movie.performances.concat(
@@ -418,6 +428,20 @@ async function combine() {
         ...container.performances,
         ...movie.performances,
       ];
+
+      // Merge includedMovies, deduplicating by id
+      if (movie.includedMovies && movie.includedMovies.length > 0) {
+        const existingIds = new Set(
+          (container.includedMovies || []).map((m) => m.id),
+        );
+        container.includedMovies = container.includedMovies || [];
+        for (const included of movie.includedMovies) {
+          if (!existingIds.has(included.id)) {
+            container.includedMovies.push(included);
+            existingIds.add(included.id);
+          }
+        }
+      }
 
       delete siteData.movies[movie.id];
     });
