@@ -50,7 +50,12 @@ async function transform({ moviePages }, sourcedEvents) {
 
     // Parse date and time from detail items
     const detailItems = $(".detail-item");
-    const dateTimeString = `${getText(detailItems.first())} ${getText(detailItems.last())}`;
+    const dateString = getText(detailItems.first());
+    // Default the time to 7pm if it's been omitted -- all other events are at
+    // this time. This should be updated if we learn differently.
+    const timeString =
+      detailItems.length === 2 ? getText(detailItems.last()) : "7:00PM";
+    const dateTimeString = `${dateString} ${timeString}`;
     const date = parseDate(dateTimeString);
 
     // Extract year, duration, director from description if available

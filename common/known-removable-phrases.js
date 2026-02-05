@@ -396,6 +396,7 @@ const knownRemovablePhrases = [
   "Cinema Film Screening & Talk:",
   "Cinema Film Screening",
   "Konrad Wolf:",
+  "CineClub:",
   "CineMarx:",
   "CINE MARICA:",
   "Claude Lanzmann:",
