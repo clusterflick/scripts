@@ -120,7 +120,7 @@ async function combine() {
         attributes: getCinemaAttributes(cinema),
         movies: await readJSON(dataPath),
       };
-    } catch(e) {
+    } catch (e) {
       console.log(`Error combining data for ${cinema}`);
       console.log(e);
     }
