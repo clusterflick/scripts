@@ -474,6 +474,7 @@ function normalizeTitle(title, options) {
     ["MOVIE CLUB - ", "Movie Club: "],
     ["HW4P Solidarity on Screen - ", "HW4P Solidarity on Screen: "],
     ["Beyond Kino - ", "Beyond Kino: "],
+    ["LOVE & RAGE - MUNROE BERGDORF", "Love & Rage: Munroe Bergdorf"],
     [
       "Tarot readings, Demi Moore-tinis + ",
       "Tarot readings, Demi Moore-tinis & ",
