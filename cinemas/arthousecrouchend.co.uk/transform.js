@@ -1,4 +1,5 @@
 const cheerio = require("cheerio");
+const nlp = require("compromise");
 const { format } = require("date-fns");
 const {
   createOverview,
@@ -10,6 +11,23 @@ const {
 } = require("../../common/utils");
 const { parseDate } = require("./utils");
 const attributes = require("./attributes");
+
+function getCharacters(synopsis) {
+  const doc = nlp(synopsis);
+  const people = doc.people().json();
+  if (people.length === 0) return;
+
+  return [
+    ...new Set(
+      people.map(({ text }) =>
+        text
+          .replace(/[’']s$/i, "")
+          .replace(/[?,]/, "")
+          .replace(/\.$/, ""),
+      ),
+    ),
+  ];
+}
 
 function getAccessibilityFrom(rawNote) {
   const note = basicNormalize(rawNote);
@@ -82,6 +100,8 @@ async function transform({ moviePages }, sourcedEvents) {
       });
     });
 
+    const synopsis = getText($(".synopsis"));
+
     return {
       showingId: generateShowingId(attributes, id),
       title,
@@ -89,7 +109,8 @@ async function transform({ moviePages }, sourcedEvents) {
       overview,
       performances,
       matchingHints: {
-        overview: getText($(".synopsis")),
+        crew: getCharacters(synopsis),
+        overview: synopsis,
       },
     };
   });
