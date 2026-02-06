@@ -528,7 +528,6 @@ function normalizeTitle(title, options) {
     ["Tiddler + ", "Tiddler & "],
     ["Lost and Found + Shoom's Odyssey", "Lost and Found & Shoom's Odyssey"],
     ["Chico and Rita + 20 Años", "Chico and Rita & 20 Años"],
-    ["Black Girl + Jemima + Johnny", "Black Girl & Jemima Johnny"],
     [
       "HARD ROCK ZOMBIES + PRINCE OF DARKNESS",
       "Hard Rock Zombies & Prince of Darkness",
