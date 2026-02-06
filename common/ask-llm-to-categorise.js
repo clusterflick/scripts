@@ -24,7 +24,7 @@ Required fields:
 Categories:
 - "movie": A single film (40+ minutes) as the main attraction. Use when there is one such film, even with shorts before or after it, or a Q&A.
 - "multiple-movies": Multiple feature films (each 40+ minutes) shown together (double bills, marathons, trilogies).
-- "tv": TV show episodes being screened. Look for BBC, ITV, ITN references.
+- "tv": TV show episodes or series being screened. Strong signals: broadcaster names (BBC, ITV, ITN, Channel 4, Channel 5, Sky, etc.), "TV series", "episode", "from [channel]", or description that it was made for/broadcast on television.
 - "shorts": Only short films (each under 40 minutes); no film in the programme is 40+ minutes. Use for programmes of two or more shorts (e.g. "Stick Man + Superworm", "Oscar shorts"), or a single short with no 40+ minute film.
 - "quiz": A quiz event.
 - "comedy": Stand-up, open mic, or comedy shows (not a comedy film screening).
@@ -35,6 +35,7 @@ Categories:
 
 Rules:
 - Focus on the primary activity. One feature + Q&A = "movie". Only short films (no feature) = "shorts", even when multiple shorts are named.
+- If the description mentions a TV broadcaster (e.g. BBC, ITV, Channel 4) or that the content is a TV series/episode, prefer "tv" over "movie" unless it is clearly a theatrical film being discussed.
 - Monthly screening series = "movie" (one film per event).
 - Tours and festivals with selections of films may be multiple-movies or shorts. Check the runtime and make a best guess.
 - Films being discussed but not shown = "talk" or "event", not "movie".
