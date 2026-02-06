@@ -22,10 +22,10 @@ Required fields:
 - "confidence": number 0-9 (9 = most confident)
 
 Categories:
-- "movie": A feature film (40+ minutes) screening. Use even if accompanied by shorts or a Q&A.
+- "movie": A single film (40+ minutes) as the main attraction. Use when there is one such film, even with shorts before or after it, or a Q&A.
 - "multiple-movies": Multiple feature films (each 40+ minutes) shown together (double bills, marathons, trilogies).
 - "tv": TV show episodes being screened. Look for BBC, ITV, ITN references.
-- "shorts": Only short films (each under 40 minutes), with no feature-length film.
+- "shorts": Only short films (each under 40 minutes); no film in the programme is 40+ minutes. Use for programmes of two or more shorts (e.g. "Stick Man + Superworm", "Oscar shorts"), or a single short with no 40+ minute film.
 - "quiz": A quiz event.
 - "comedy": Stand-up, open mic, or comedy shows (not a comedy film screening).
 - "music": Primarily a musical performance, album playback, live band, or dance event (not a musical film).
@@ -34,15 +34,16 @@ Categories:
 - "event": Use if none of the above fit, or if confidence is low.
 
 Rules:
-- Focus on the primary activity. A film + Q&A = "movie". Shorts + discussion = "shorts".
+- Focus on the primary activity. One feature + Q&A = "movie". Only short films (no feature) = "shorts", even when multiple shorts are named.
 - Monthly screening series = "movie" (one film per event).
-- Tours and festivals with selections of films may be multiple-movies or shorts. Check the runtime and make a best guess
+- Tours and festivals with selections of films may be multiple-movies or shorts. Check the runtime and make a best guess.
 - Films being discussed but not shown = "talk" or "event", not "movie".
 - Multiple "dir." credits may indicate "multiple-movies" or "shorts".
 - If no single category clearly fits, use "event".
 
-Example response:
-{"title":"Nosferatu","category":"movie","reason":"Single feature film screening with director Q&A","confidence":9}`;
+Example responses:
+{"title":"Nosferatu","category":"movie","reason":"Single feature film screening with director Q&A","confidence":9}
+{"title":"Toddler Club: Stick Man + Superworm","category":"shorts","reason":"Screening of two animated short films only; no feature","confidence":9}`;
 
 function convertToPrompt(movie) {
   const parts = [`Title: ${movie.title}`];

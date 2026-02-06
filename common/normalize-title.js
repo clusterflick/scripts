@@ -533,7 +533,6 @@ function normalizeTitle(title, options) {
       "HARD ROCK ZOMBIES + PRINCE OF DARKNESS",
       "Hard Rock Zombies & Prince of Darkness",
     ],
-    ["The Traveller + Breaktime", "The Traveller & Breaktime"],
     [
       "Under the Silver Lake (2018) + Tropico (2013)",
       "Under the Silver Lake (2018) & Tropico (2013)",
