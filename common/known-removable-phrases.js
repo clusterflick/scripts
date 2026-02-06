@@ -447,6 +447,7 @@ const knownRemovablePhrases = [
   "Doc’n Roll Film Festival 2024:",
   "Doc'n Roll Film Festival 2025:",
   "DOC'N ROLL:",
+  "DocHouse: Pompeii:",
   "DocHouse:",
   "Dirty Weekend:",
   "Disabled People's Empowerment Month:",
