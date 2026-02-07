@@ -376,8 +376,32 @@ const compareAsSimilar = (firstString, secondString) => {
 const getId = (value) =>
   crypto.createHash("sha256").update(value).digest("hex").slice(0, 8);
 
-function generateShowingId(attributes, eventId) {
-  return `${attributes.id}-${eventId}`;
+/**
+ * Normalize an API-sourced id to a string for generateShowingId.
+ * Expects only string or number; will convert number to string or return the
+ * input otherwise for generateShowingId to deal with.
+ * Use when the id comes from an external API that might return either type.
+ */
+function normalizeIdComponent(value) {
+  if (typeof value === "string") return value.trim();
+  if (typeof value === "number" && Number.isFinite(value)) {
+    return String(value);
+  }
+  return value;
+}
+
+function generateShowingId(attributes, rawEventId) {
+  const attributesId = normalizeIdComponent(attributes?.id);
+  const eventId = normalizeIdComponent(rawEventId);
+  if (typeof attributesId !== "string" || attributesId === "") {
+    throw new Error(
+      "generateShowingId: attributes.id must be a non-empty string",
+    );
+  }
+  if (typeof eventId !== "string" || eventId === "") {
+    throw new Error("generateShowingId: eventId must be a non-empty string");
+  }
+  return `${attributesId}-${eventId}`;
 }
 
 const isPrivateHire = (title = "") =>

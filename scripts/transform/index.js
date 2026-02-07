@@ -453,6 +453,22 @@ async function transform(
   console.log("Validating data ...");
   try {
     const start = Date.now();
+
+    const invalidShowingIdSuffixes = ["-undefined", "-null", "-NaN"];
+    const invalidShowingIdPrefixes = ["undefined-", "null-", "NaN-"];
+    const invalidEntry = matchedData.find(({ showingId }) => {
+      const s = String(showingId);
+      return (
+        invalidShowingIdSuffixes.some((suffix) => s.endsWith(suffix)) ||
+        invalidShowingIdPrefixes.some((prefix) => s.startsWith(prefix))
+      );
+    });
+    if (invalidEntry) {
+      throw new Error(
+        `Invalid showingId "${invalidEntry.showingId}" (must not start with ${invalidShowingIdPrefixes.join(", ")} or end with ${invalidShowingIdSuffixes.join(", ")})`,
+      );
+    }
+
     await validateAgainstSchema(matchedData);
 
     const addIdToSet = (set, { showingId }) => set.add(showingId);
