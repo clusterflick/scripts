@@ -26,12 +26,12 @@ async function getReleaseList() {
       );
       if (!Array.isArray(res.data)) {
         throw new Error(
-          `Unexpected response: ${JSON.stringify(res.data).slice(0, 200)}`,
+          `Unexpected response (status: ${res.status}, type: ${typeof res.data}): ${JSON.stringify(res.data).slice(0, 500)}`,
         );
       }
       return res;
     },
-    { retries: 1, delayMs: 60_000, label: "GitHub releases API" },
+    { retries: 2, delayMs: 60_000, label: "GitHub releases API" },
   );
 
   return response.data;

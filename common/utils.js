@@ -163,6 +163,8 @@ const withRetry = async (
           ` ! - ${label} failed (${error.message}), retrying in ${delayMs / 1000}s...`,
         );
         await sleep(delayMs);
+      } else {
+        console.log(` ! - ${label} failed (${error.message})`);
       }
     }
   }
