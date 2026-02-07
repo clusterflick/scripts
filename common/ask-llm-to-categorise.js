@@ -40,6 +40,7 @@ Rules:
 - Tours and festivals with selections of films may be multiple-movies or shorts. Check the runtime and make a best guess.
 - Films being discussed but not shown = "talk" or "event", not "movie".
 - Multiple "dir." credits may indicate "multiple-movies" or "shorts".
+- When a programme lists multiple short films and the combined runtime is under 80 minutes, this strongly indicates all are shorts (typical short films are 5–30 minutes each). Do not let combined runtimes reduce your confidence.
 - If no single category clearly fits, use "event".
 
 Example responses:

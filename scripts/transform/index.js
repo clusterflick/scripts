@@ -11,7 +11,9 @@ const findMatchesOnTheMovieDb = require("./find-matches-on-the-movie-db");
 const getSourcedEventsFor = require("./get-sourced-events-for");
 const validateAgainstSchema = require("./validate-against-schema");
 const categoriseEntries = require("./categorise-entries");
-const matchMultipleMovies = require("./match-multiple-movies");
+const matchIdentifiedMovies = require("./match-identified-movies");
+const identifyMultipleMovies = require("./identify-multiple-movies");
+const identifyShorts = require("./identify-shorts");
 
 async function transform(
   location,
@@ -433,7 +435,10 @@ async function transform(
     );
 
     for (const movie of multiMovieEvents) {
-      const matches = await matchMultipleMovies(movie);
+      const matches = await matchIdentifiedMovies(
+        movie,
+        identifyMultipleMovies,
+      );
       if (matches.length > 0) {
         movie.themoviedbs = matches;
       }
@@ -445,6 +450,29 @@ async function transform(
     );
   } catch (e) {
     console.log(` - ❌ Error processing multiple-movies`);
+    throw e;
+  }
+
+  console.log("Processing shorts events ...");
+  try {
+    const start = Date.now();
+    const shortsEvents = matchedData.filter(
+      (m) => m.category === "shorts" && m.matchingHints,
+    );
+
+    for (const movie of shortsEvents) {
+      const matches = await matchIdentifiedMovies(movie, identifyShorts);
+      if (matches.length > 0) {
+        movie.themoviedbs = matches;
+      }
+    }
+
+    const duration = Math.round((Date.now() - start) / 1000);
+    console.log(
+      ` - ✅ Processed ${shortsEvents.length} shorts events (${duration}s)`,
+    );
+  } catch (e) {
+    console.log(` - ❌ Error processing shorts`);
     throw e;
   }
 

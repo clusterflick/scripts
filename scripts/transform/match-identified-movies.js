@@ -2,12 +2,9 @@ const { format } = require("date-fns");
 const { searchForBestMatch } = require("../../common/get-movie-data");
 const normalizeTitle = require("../../common/normalize-title");
 const { runLlmFunction, createOverview } = require("../../common/utils");
-const identifyMultipleMovies = require("./identify-multiple-movies");
 
-async function matchMultipleMovies(movie) {
-  const identification = await runLlmFunction(() =>
-    identifyMultipleMovies(movie),
-  );
+async function matchIdentifiedMovies(movie, identifyFn) {
+  const identification = await runLlmFunction(() => identifyFn(movie));
 
   if (!identification || identification.movies.length === 0) {
     return [];
@@ -77,4 +74,4 @@ async function matchMultipleMovies(movie) {
   });
 }
 
-module.exports = matchMultipleMovies;
+module.exports = matchIdentifiedMovies;
