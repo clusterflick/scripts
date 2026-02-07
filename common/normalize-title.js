@@ -480,6 +480,7 @@ function normalizeTitle(title, options) {
       "Tarot readings, Demi Moore-tinis + ",
       "Tarot readings, Demi Moore-tinis & ",
     ],
+    ["The Scarecrows' Wedding+ ", "The Scarecrows' Wedding & "],
     ["Homage |", "Homage: "],
     [/^\s*Twin Cheeks\s*$/i, "Twin Cheeks: Who Killed The Homecoming King?"],
     ["FRANCESCA WOODMAN", "The Woodmans"],
@@ -545,6 +546,8 @@ function normalizeTitle(title, options) {
       /(The Scarecrows' Wedding)\s*\+\s*(The Smeds (and|&) the Smoos)/i,
       "$1 & $2",
     ],
+    ["Oscars Best Picture", "Academy Awards Best Picture"],
+    ["Academy Best Picture", "Academy Awards Best Picture"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {

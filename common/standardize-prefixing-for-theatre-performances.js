@@ -32,6 +32,7 @@ const nationalTheatreIndicator = [
   /National Theatre Presents/i,
   /National Theatre Live/i,
   /National Theatre[:|\s|$]/i,
+  /^NT: /i,
 ];
 
 function standardizePrefixingForNationalTheatrePerformances(title) {
@@ -229,6 +230,7 @@ function standardizePrefixingForTheatrePerformances(
   }
 
   if (
+    lowercaseTitle.match(/^nt: /i) ||
     lowercaseTitle.match(/(^|\s)nt live:?/i) ||
     lowercaseTitle.startsWith("nt live broadcast:") ||
     lowercaseTitle.includes("national theatre")

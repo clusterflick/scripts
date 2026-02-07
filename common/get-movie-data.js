@@ -39,6 +39,7 @@ const ignoredIds = [
   335380, // Open Door: The Other Cinema -- https://www.themoviedb.org/movie/335380-open-door-the-other-cinema
   340476, // 5:45 AM -- https://www.themoviedb.org/movie/340476-5-45-am
   1424169, // The Birthday Party -- https://www.themoviedb.org/movie/1424169-the-birthday-party
+  628403, // Metallica: Master of Puppets (Deluxe Box Set) -- https://www.themoviedb.org/movie/628403-metallica-master-of-puppets-deluxe-box-set
 ];
 
 /**
