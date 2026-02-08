@@ -41,6 +41,7 @@ const ignoredIds = [
   1424169, // The Birthday Party -- https://www.themoviedb.org/movie/1424169-the-birthday-party
   628403, // Metallica: Master of Puppets (Deluxe Box Set) -- https://www.themoviedb.org/movie/628403-metallica-master-of-puppets-deluxe-box-set
   892807, // The Sunset Strip Killers: Born To Kill? -- https://www.themoviedb.org/movie/892807-the-sunset-strip-killers-born-to-kill
+  77835, // The Beatles - Unsurpassed Promos -- https://www.themoviedb.org/movie/77835-the-beatles-unsurpassed-promos
 ];
 
 /**

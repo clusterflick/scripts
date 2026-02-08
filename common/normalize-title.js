@@ -307,6 +307,7 @@ function normalizeTitle(title, options) {
     ["The Rise and Fall of The Clash Redux", "The Rise and Fall of The Clash"],
     [/\(?with subtitles for.*$/i, ""],
     [/ a$/i, ""], // Remove strange trailing "A"
+    ["Extended Trilogy", "Trilogy"],
     ["Oslo Stories Trilogy:", "Oslo Stories:"],
     [
       /^The Invisible Doctrine /i,
@@ -461,6 +462,7 @@ function normalizeTitle(title, options) {
     [/secret (classic )?bollywood cinema/i, "mystery movie"],
     [/scre(e|a)(n|m) unseen/i, "mystery movie"],
     [/(Orange Box )?Secret Film Screenings?/i, "mystery movie"],
+    [/^.* \+ mystery movie/i, "mystery movie"],
     ["vhs film", "movie"],
     [/The Bill Reunion \d+/i, "The Bill Reunion"],
     ["R.E.M. Buster", "R.E.M. X Buster"],
