@@ -26,14 +26,22 @@ async function match(source) {
   }
   const data = {};
 
-  const movies = Object.values(combinedData.movies);
+  // Collect all movies to match (root level + includedMovies)
+  const moviesToMatch = [];
+  Object.values(combinedData.movies).forEach((movie) => {
+    moviesToMatch.push(movie);
+    if (movie.includedMovies && movie.includedMovies.length > 0) {
+      moviesToMatch.push(...movie.includedMovies);
+    }
+  });
+
   let meta = { index: 0, withInfo: 0, matched: 0 };
-  for (const movie of movies) {
+  for (const movie of moviesToMatch) {
     meta.index++;
     const outputTitle = movie.title.slice(0, 35);
     const start = Date.now();
     process.stdout.write(
-      `[${meta.index} of ${movies.length}]\t- Matching data for ${outputTitle} ... ${"".padEnd(35 - outputTitle.length, " ")}`,
+      `[${meta.index} of ${moviesToMatch.length}]\t- Matching data for ${outputTitle} ... ${"".padEnd(35 - outputTitle.length, " ")}`,
     );
 
     if (movie.isUnmatched) {
@@ -73,7 +81,7 @@ async function match(source) {
   }
 
   console.log(
-    `\nMatched ${meta.matched} of ${movies.length} movies (and ${meta.withInfo} which contained info)`,
+    `\nMatched ${meta.matched} of ${moviesToMatch.length} movies (and ${meta.withInfo} which contained info)`,
   );
 
   return data;
