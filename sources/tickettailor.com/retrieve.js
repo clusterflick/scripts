@@ -13,7 +13,9 @@ async function retrieveVenuePage(slug) {
 
   const page = await getPageWithPlaywright(url, cacheKey, async (page) => {
     await page.waitForLoadState();
-    await page.locator(".main-events-listing__events").waitFor({ strict: false });
+    await page
+      .locator(".main-events-listing__events")
+      .waitFor({ strict: false });
     return await page.content();
   });
 
