@@ -65,6 +65,10 @@ async function identifyShorts(movie) {
     return { movies: [], reason: "Invalid LLM response" };
   }
 
+  // Filter out entries where the LLM couldn't determine a title
+  // (e.g. Isiah Medina's "--, 2013, 4 min." was returned with title: null)
+  response.movies = response.movies.filter((m) => m.title);
+
   return response;
 }
 
