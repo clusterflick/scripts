@@ -550,6 +550,7 @@ function normalizeTitle(title, options) {
     ],
     ["Oscars Best Picture", "Academy Awards Best Picture"],
     ["Academy Best Picture", "Academy Awards Best Picture"],
+    ["Shoom's Odyssey", "Shooom's Odyssey"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
