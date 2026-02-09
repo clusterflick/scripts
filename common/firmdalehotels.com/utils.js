@@ -2,6 +2,9 @@ const { parse, isBefore, startOfDay, addYears } = require("date-fns");
 const { enGB } = require("date-fns/locale/en-GB");
 
 const parseDate = (dateString) => {
+  // Correct if the time is separated by "." instead of ":"
+  dateString = dateString.replace(/(\d+)\.(\d+)/, "$1:$2");
+
   let parsedDate = parse(dateString, "EEEE do LLLL h:mmaaa", new Date(), {
     locale: enGB,
   });
