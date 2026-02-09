@@ -18,6 +18,10 @@ const getSearchResults = async (term) => {
     ),
   );
 
+  if (!metacriticSearch.data?.items) {
+    return [];
+  }
+
   return metacriticSearch.data.items.map(
     ({ id, slug, title, releaseDate, images }) => {
       const imdbId = getImdbIdFromPoster(images[0]?.filename);
