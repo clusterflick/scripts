@@ -3,7 +3,7 @@ const { callLlm } = require("../../common/llm-client");
 const systemInstruction = `You identify individual short films in cinema short film programmes (collections, compilations, showcases, etc.). Respond with JSON only, no introduction or explanation.
 
 Required fields:
-- "movies": array of objects, each with:
+- "movies": array of objects (maximum 5 items), each with:
   - "title": string - the short film title (clean, without year or extra info)
   - "year": string or null - the release year if mentioned or clearly identifiable
   - "director": string or null - the director if mentioned or clearly identifiable
@@ -16,6 +16,7 @@ Rules:
 - If the description mentions specific short films, extract those
 - If you cannot identify specific short films with reasonable confidence, return an empty movies array
 - Do not guess films that aren't mentioned or clearly implied
+- Return a maximum of 5 short films. If there are more than 5, return only the 5 most confidently identified
 - For compilations like "Oscar Nominated Shorts", try to identify individual titles if they are listed
 
 Example input: "Oscar Nominated Animated Shorts 2025 - Featuring Beautiful Men, In the Shadow of the Cypress, Magic Candies, Wander to Wonder, and Yuck!"
