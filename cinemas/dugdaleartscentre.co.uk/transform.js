@@ -71,12 +71,17 @@ async function transform({ moviePages }, sourcedEvents) {
       const dateText = getText($spektrix(this));
       if (!dateText) return;
 
-      const date = parseSpektrixDate(dateText);
+      const status = {
+        soldOut: dateText.toLowerCase().endsWith("sold out"),
+      };
+
+      const date = parseSpektrixDate(dateText.replace(/ - SOLD OUT/i, ""));
       performances.push(
         createPerformance({
           date,
           url: moviePageUrl,
           accessibility: createAccessibility(title, {}),
+          status,
         }),
       );
     });
