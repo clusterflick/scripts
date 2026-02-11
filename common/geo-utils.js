@@ -1,12 +1,10 @@
-const path = require("node:path");
 const { point, polygon } = require("@turf/helpers");
 const { booleanPointInPolygon } = require("@turf/boolean-point-in-polygon");
 const { readJSON } = require("./utils");
 
 // Path to the Greater London boundary GeoJSON file
-const LONDON_BOUNDARY_PATH = path.resolve(
-  __dirname,
-  "../data/London_GLA_Boundary.geojson",
+const LONDON_BOUNDARY_PATH = require.resolve(
+  "data-analysed/data/London_GLA_Boundary.geojson",
 );
 
 async function isInLondon(lat, lon) {
