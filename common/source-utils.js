@@ -57,8 +57,8 @@ function findMatchingCinema(
       (name) => normalizeVenueName(name) === normalizeVenueName(venueName),
     );
 
-    // If no coordinates provided, match by name only
-    if (!coordinates) {
+    // If no coordinates or postcode provided, match by name only
+    if (!coordinates && !eventPostcode) {
       return nameMatches;
     }
 
