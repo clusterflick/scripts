@@ -33,7 +33,7 @@ flowchart TD
 
 | Repository         | What to Change                            | Why                                                                          |
 | ------------------ | ----------------------------------------- | ---------------------------------------------------------------------------- |
-| `scripts`          | Create venue directory with 4 files       | Core venue definition, retrieval, and transformation logic                   |
+| `scripts`          | Create venue directory (2–4 files)        | Core venue definition, retrieval, and transformation logic                   |
 | `data-retrieved`   | Add step to workflow YAML                 | Include the venue in the daily retrieval run                                 |
 | `data-transformed` | Add step to workflow YAML                 | Include the venue in the daily transformation run                            |
 | `data-calendar`    | `npm update scripts` + add row to README  | Lock file pins a specific `scripts` commit; README lists all venue calendars |
@@ -47,10 +47,15 @@ latest `scripts` on install. `data-calendar` and `clusterflick.com` both have a
 
 ## Step 1: Create the Venue Definition
 
-Create a new directory at `scripts/cinemas/<venue-id>/` with four files.
+Create a new directory at `scripts/cinemas/<venue-id>/`.
 
 The venue ID follows the convention `domain` or `domain-location` (e.g.
 `phoenixcinema.co.uk`, `odeon.co.uk-leicester-square`).
+
+Venues that scrape their own website need four files: `attributes.js`,
+`index.js`, `retrieve.js`, and `transform.js`. Source-only venues (those with no
+website to scrape that rely entirely on external ticketing platforms) need only
+two files: `attributes.js` and `index.js`.
 
 ### `attributes.js`
 
@@ -170,14 +175,9 @@ module.exports = retrieve;
 ```
 
 If the venue doesn't have its own website and relies entirely on external
-ticketing platforms (Eventbrite, Dice, etc.), use the source-only retrieve:
-
-```js
-// common/source-only/retrieve.js
-async function retrieve() {
-  return {};
-}
-```
+ticketing platforms (Eventbrite, Dice, etc.), skip this file — source-only
+venues don't need a local `retrieve.js`. The `index.js` imports the shared
+`common/source-only/retrieve` module directly (see above).
 
 For standalone venues that need custom scraping, see the
 [retrieve pipeline documentation](./retrieve.md) for available approaches and
@@ -201,9 +201,12 @@ module.exports = transform;
 ```
 
 The `sourcedEvents` parameter contains events found by external ticketing
-platforms (Eventbrite, Dice, etc.) at the venue's location. See the
-[transform pipeline documentation](./transform.md) for the full standardised
-schema and matching process.
+platforms (Eventbrite, Dice, etc.) at the venue's location. Source-only venues
+don't need a local `transform.js` — the `index.js` imports the shared
+`common/source-only/transform` module directly (see above).
+
+See the [transform pipeline documentation](./transform.md) for the full
+standardised schema and matching process.
 
 ---
 
@@ -313,9 +316,11 @@ array so the release waits for it to complete.
 
 **File:** `data-transformed/.github/workflows/transform.yml`
 
-Add a new step to the matching job group. The grouping should mirror
-`data-retrieved` — if the venue is in the BFI retrieve group, add it to the BFI
-transform group.
+Add a new step to the matching job group. Chain venues should go in the
+corresponding transform group — if the venue is in the BFI retrieve group, add
+it to the BFI transform group. Source-only venues go in one of the
+`transform_external_events_*` groups (corresponding to the
+`retrieve_source_only_*` groups in the retrieve workflow).
 
 ```yaml
 - name: <venue-id>
@@ -399,7 +404,8 @@ This ensures the calendar generation picks up the new venue's attributes.
 ### Add to the README
 
 `data-calendar/README.md` contains a table of all supported venues with links to
-their calendar files. Add a row in alphabetical order by venue name:
+their calendar files. Add a row in alphabetical order by venue name and update
+the venue count above the table:
 
 ```markdown
 | <Venue Name> |
