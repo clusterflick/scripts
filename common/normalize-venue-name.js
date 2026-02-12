@@ -3,12 +3,12 @@ const normalizeName = require("./normalize-name");
 function normalizeVenueName(venueName) {
   return normalizeName(
     venueName
-      .replace("Cinema London", "")
-      .replace(" - London", "")
-      .replace("London", "")
-      .replace("Cinema,", "")
-      .replace("Cinema", "")
-      .replace(/^The /i, "")
+      .toLowerCase()
+      .replace("cinema london", "")
+      .replace(" - london", "")
+      .replace("london", "")
+      .replace("cinema,", "")
+      .replace("cinema", "")
       .trim(),
   );
 }
