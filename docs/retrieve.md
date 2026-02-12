@@ -8,8 +8,8 @@ websites and APIs. It produces the unprocessed data that the
 
 The retrieve step supports two kinds of modules:
 
-- **Cinemas** -- individual venues (e.g. `odeon.co.uk-leicester-square`). Each has
-  its own `retrieve.js`, `transform.js`, and `attributes.js`.
+- **Cinemas** -- individual venues (e.g. `odeon.co.uk-leicester-square`). Each
+  has its own `retrieve.js`, `transform.js`, and `attributes.js`.
 - **Sources** -- external ticketing platforms (e.g. Eventbrite, Dice.fm). These
   supply supplementary event data that cinemas can incorporate during transform.
 
@@ -28,9 +28,10 @@ flowchart TD
     H --> I[Transform Pipeline]
 ```
 
-The entry point (`scripts/retrieve/index.js`) resolves the location name to either
-a cinema or source module, then calls its `retrieve()` function. The returned data
-is opaque to the orchestrator -- each module defines its own structure.
+The entry point (`scripts/retrieve/index.js`) resolves the location name to
+either a cinema or source module, then calls its `retrieve()` function. The
+returned data is opaque to the orchestrator -- each module defines its own
+structure.
 
 ### The Delegation Pattern
 
@@ -69,8 +70,9 @@ module.exports = {
 };
 ```
 
-Of the 145 cinemas with retrieve implementations, 112 delegate to one of 17 shared
-platforms in `common/`. The remaining ~33 have standalone implementations.
+Of the 145 cinemas with retrieve implementations, 112 delegate to one of 17
+shared platforms in `common/`. The remaining ~33 have standalone
+implementations.
 
 ---
 
@@ -92,11 +94,11 @@ async function retrieve({ domain }) {
 
 ### Single HTML Page
 
-Fetches a single HTML page that contains all listing data. No detail page requests
-are needed because the listing page has enough information for the transform step.
+Fetches a single HTML page that contains all listing data. No detail page
+requests are needed because the listing page has enough information for the
+transform step.
 
-**Platforms:** Firmdale Hotels (3 venues)
-**Sources:** Stow Film Lounge
+**Platforms:** Firmdale Hotels (3 venues) **Sources:** Stow Film Lounge
 
 ```js
 // common/firmdalehotels.com/retrieve.js
@@ -108,13 +110,12 @@ async function retrieve({ url }) {
 
 ### HTML Scraping (List + Detail Pages)
 
-The most common pattern for standalone cinemas. Fetches a listing page, parses it
-with Cheerio to extract links, then fetches each detail page individually.
+The most common pattern for standalone cinemas. Fetches a listing page, parses
+it with Cheerio to extract links, then fetches each detail page individually.
 
 **Platforms:** Tate (2 venues), Olympic Studios (3 venues), The Castle Cinema (2
-venues), Admit One (2 venues)
-**Standalone:** ~33 cinemas use this pattern with venue-specific selectors
-**Sources:** OutSavvy, Wimbledon Film Club
+venues), Admit One (2 venues) **Standalone:** ~33 cinemas use this pattern with
+venue-specific selectors **Sources:** OutSavvy, Wimbledon Film Club
 
 ```js
 // cinemas/ica.art/retrieve.js
@@ -138,26 +139,26 @@ async function retrieve() {
 ```
 
 Each venue uses different CSS selectors (`.item.films`, `.card-list .card a`,
-`.programme-tile`, `.whatson_panel`, etc.) but the fetch-parse-fetch structure is
-the same.
+`.programme-tile`, `.whatson_panel`, etc.) but the fetch-parse-fetch structure
+is the same.
 
-**Variant:** Admit One uses `fetchWin1252Text()` instead of `fetchText()` to handle
-legacy Windows-1252 encoded pages.
+**Variant:** Admit One uses `fetchWin1252Text()` instead of `fetchText()` to
+handle legacy Windows-1252 encoded pages.
 
 ### Embedded JSON Extraction
 
 Fetches an HTML page and extracts structured data from embedded `<script>` tags
-using regex or Cheerio. This avoids the need for a separate API call when the page
-already embeds all data in JavaScript.
+using regex or Cheerio. This avoids the need for a separate API call when the
+page already embeds all data in JavaScript.
 
 **Patterns:**
 
-| Pattern                       | Used By                          |
-| ----------------------------- | -------------------------------- |
-| `var Events = {...}`          | Savoy Systems (4 venues)         |
-| `window.initialData = {...}`  | Odeon/Curzon (bootstrapping)     |
-| `#__NEXT_DATA__`              | Dice.fm (source)                 |
-| `window.__SERVER_DATA__`      | Eventbrite (source)              |
+| Pattern                      | Used By                      |
+| ---------------------------- | ---------------------------- |
+| `var Events = {...}`         | Savoy Systems (4 venues)     |
+| `window.initialData = {...}` | Odeon/Curzon (bootstrapping) |
+| `#__NEXT_DATA__`             | Dice.fm (source)             |
+| `window.__SERVER_DATA__`     | Eventbrite (source)          |
 
 ```js
 // common/savoysystems.co.uk/retrieve.js
@@ -177,8 +178,8 @@ async function retrieve({ url }) {
 }
 ```
 
-For Dice.fm, the embedded JSON is in a Next.js `#__NEXT_DATA__` script tag, parsed
-with Cheerio:
+For Dice.fm, the embedded JSON is in a Next.js `#__NEXT_DATA__` script tag,
+parsed with Cheerio:
 
 ```js
 const $ = cheerio.load(page);
@@ -197,13 +198,13 @@ date or item. This is typical of cinema chains with dedicated data APIs.
 // common/cineworld.co.uk/retrieve.js (simplified)
 async function retrieve({ cinemaId }) {
   const activeDates = await fetchJson(
-    `${apiUrl}/quickbook/${tenantId}/dates/in-cinema/${cinemaId}/until/${untilDate}`
+    `${apiUrl}/quickbook/${tenantId}/dates/in-cinema/${cinemaId}/until/${untilDate}`,
   );
 
   const movieListPage = [];
   for (const activeDate of activeDates.body.dates) {
     const showingsOnDate = await fetchJson(
-      `${apiUrl}/quickbook/${tenantId}/film-events/in-cinema/${cinemaId}/at-date/${activeDate}`
+      `${apiUrl}/quickbook/${tenantId}/film-events/in-cinema/${cinemaId}/at-date/${activeDate}`,
     );
     movieListPage.push(showingsOnDate.body);
   }
@@ -212,7 +213,7 @@ async function retrieve({ cinemaId }) {
   const moviePages = {};
   for (const filmId of filmIds) {
     moviePages[filmId] = await fetchJson(
-      `${apiUrl}/${tenantId}/films/byDistributorCode/${filmId}`
+      `${apiUrl}/${tenantId}/films/byDistributorCode/${filmId}`,
     );
   }
 
@@ -227,15 +228,18 @@ movie list and HTML detail pages rather than JSON:
 // common/picturehouses.com/retrieve.js (simplified)
 const moviesResponse = await fetch(`${domain}/api/get-movies-ajax`, {
   method: "POST",
-  body: new URLSearchParams({ start_date: "show_all_dates", cinema_id: cinemaId }),
+  body: new URLSearchParams({
+    start_date: "show_all_dates",
+    cinema_id: cinemaId,
+  }),
 });
 ```
 
 ### OCAPI (Open Cinema API)
 
 A standardised cinema industry REST API authenticated with Bearer tokens. The
-retrieval flow fetches available screening dates, then iterates through each date
-to get showtimes.
+retrieval flow fetches available screening dates, then iterates through each
+date to get showtimes.
 
 **Platforms:** Odeon (20 venues), Curzon (10 venues)
 
@@ -251,14 +255,14 @@ async function retrieve({ cinemaId }, { url, apiUrl, authToken }) {
   const { filmScreeningDates } = await fetch(
     `${prefix}/ocapi/v1/film-screening-dates?siteIds=${cinemaId}`,
     { headers: getHeaders() },
-  ).then(r => r.json());
+  ).then((r) => r.json());
 
   const moviePages = [];
   for (const { businessDate } of filmScreeningDates) {
     const showtimesData = await fetch(
       `${prefix}/ocapi/v1/showtimes/by-business-date/${businessDate}?siteIds=${cinemaId}`,
       { headers: getHeaders() },
-    ).then(r => r.json());
+    ).then((r) => r.json());
     moviePages.push(showtimesData);
   }
 
@@ -266,8 +270,8 @@ async function retrieve({ cinemaId }, { url, apiUrl, authToken }) {
 }
 ```
 
-OCAPI itself is a generic implementation. Each chain wraps it with its own strategy
-to obtain the API URL and auth token:
+OCAPI itself is a generic implementation. Each chain wraps it with its own
+strategy to obtain the API URL and auth token:
 
 ```mermaid
 flowchart TD
@@ -312,7 +316,10 @@ const query = `
 async function retrieve({ siteId, domain }) {
   const response = await fetch(`${domain}/graphql`, {
     method: "POST",
-    body: JSON.stringify({ query, variables: { limit: 1000, orderBy: "magic", type: "all-published" } }),
+    body: JSON.stringify({
+      query,
+      variables: { limit: 1000, orderBy: "magic", type: "all-published" },
+    }),
     headers: {
       "Content-Type": "application/json",
       "client-type": "consumer",
@@ -323,13 +330,13 @@ async function retrieve({ siteId, domain }) {
 }
 ```
 
-The `site_id` cookie determines which venue's data is returned, allowing the same
-endpoint to serve multiple cinemas.
+The `site_id` cookie determines which venue's data is returned, allowing the
+same endpoint to serve multiple cinemas.
 
 ### Static Site Data Extraction (Gatsby)
 
-Reconstructs data from a Gatsby-built site by extracting the webpack hash, fetching
-static query blobs, then calling a BoxOffice API for schedule details.
+Reconstructs data from a Gatsby-built site by extracting the webpack hash,
+fetching static query blobs, then calling a BoxOffice API for schedule details.
 
 **Platform:** Everyman Cinema (16 venues)
 
@@ -344,18 +351,18 @@ flowchart TD
     G --> H["Return { movieListPage: schedule, moviePages: { movieData, movieDetails, attributeData } }"]
 ```
 
-All Gatsby data fetches are wrapped in `dailyCache()` to avoid redundant requests
-when processing multiple Everyman venues in the same run.
+All Gatsby data fetches are wrapped in `dailyCache()` to avoid redundant
+requests when processing multiple Everyman venues in the same run.
 
 ### Browser Automation (Playwright)
 
 For JavaScript-rendered pages or when API credentials can only be obtained by
-running the page in a browser. Uses the shared `get-page-with-playwright.js` helper
-which provides:
+running the page in a browser. Uses the shared `get-page-with-playwright.js`
+helper which provides:
 
 - **Stealth plugin** -- avoids bot detection
-- **Daily caching** -- results are cached to disk so Playwright only runs once per
-  day per cache key
+- **Daily caching** -- results are cached to disk so Playwright only runs once
+  per day per cache key
 - **Error screenshots** -- saved to `playwright-failures/` on failure
 - **90-second timeout** -- extended from default for slower runners
 
@@ -365,41 +372,49 @@ There are two sub-patterns:
 
 Launches a browser, waits for the page to render, and returns the full HTML.
 
-**Platforms:** BFI (2 venues), Ticketek (1 venue)
-**Sources:** TicketSource, Ticket Tailor, Ti.to
+**Platforms:** BFI (2 venues), Ticketek (1 venue) **Sources:** TicketSource,
+Ticket Tailor, Ti.to
 
 ```js
 // common/ticketek.co.uk/retrieve.js (simplified)
-const movieListPage = await getPageWithPlaywright(url, cacheKey, async (page) => {
-  await page.waitForLoadState();
-  await page.locator("#contentShell").waitFor({ strict: false });
-  return await page.content();
-});
+const movieListPage = await getPageWithPlaywright(
+  url,
+  cacheKey,
+  async (page) => {
+    await page.waitForLoadState();
+    await page.locator("#contentShell").waitFor({ strict: false });
+    return await page.content();
+  },
+);
 ```
 
 BFI is the most complex Playwright implementation: it handles paginated search
-results (clicking "next page" and waiting for URL changes), per-movie detail page
-fetches with retry logic and 30-second delays, error page detection, and known bad
-article ID filtering.
+results (clicking "next page" and waiting for URL changes), per-movie detail
+page fetches with retry logic and 30-second delays, error page detection, and
+known bad article ID filtering.
 
 #### In-Browser API Calls
 
-Launches a browser to establish a session, then executes `fetch()` from within the
-page context to call APIs that require browser cookies or session state.
+Launches a browser to establish a session, then executes `fetch()` from within
+the page context to call APIs that require browser cookies or session state.
 
 **Platforms:** MyVue (17 venues), Odeon (20 venues, for `window.initialData`)
 
 ```js
 // common/myvue.com/retrieve.js
 async function retrieve({ domain, url, cinemaId }) {
-  return await getPageWithPlaywright(url, `myvue.com-${cinemaId}`, async (page) => {
-    await page.waitForLoadState();
-    await page.locator(".header__box").waitFor();
-    return page.evaluate(
-      (url) => fetch(url).then((response) => response.json()),
-      `${domain}/api/microservice/showings/cinemas/${cinemaId}/films`,
-    );
-  });
+  return await getPageWithPlaywright(
+    url,
+    `myvue.com-${cinemaId}`,
+    async (page) => {
+      await page.waitForLoadState();
+      await page.locator(".header__box").waitFor();
+      return page.evaluate(
+        (url) => fetch(url).then((response) => response.json()),
+        `${domain}/api/microservice/showings/cinemas/${cinemaId}/films`,
+      );
+    },
+  );
 }
 ```
 
@@ -415,7 +430,8 @@ serialized, and signed with the API key concatenated with a Unix timestamp.
 function generateSignature(body, apiKey, timestamp) {
   const sortedBody = Object.keys(body).sort().reduce(/* ... */);
   const hmacKey = apiKey + timestamp;
-  return crypto.createHmac("sha256", hmacKey)
+  return crypto
+    .createHmac("sha256", hmacKey)
     .update(JSON.stringify(sortedBody))
     .digest("hex");
 }
@@ -428,7 +444,9 @@ The retrieval fetches available dates first, then performances for each date:
 const movieDatesPage = await fetchSignedJson(apiKey, apiUrl, datesQuery);
 const movieListPage = [];
 for (const date of movieDatesPage.data.dates) {
-  movieListPage.push(await fetchSignedJson(apiKey, apiUrl, performancesQuery(date)));
+  movieListPage.push(
+    await fetchSignedJson(apiKey, apiUrl, performancesQuery(date)),
+  );
 }
 return { movieDatesPage, movieListPage };
 ```
@@ -436,8 +454,8 @@ return { movieDatesPage, movieListPage };
 ### Source-Only (No Retrieval)
 
 Some venues have no website to scrape. Their events come entirely from external
-sources (Eventbrite, Dice, etc.) which are incorporated during the transform step.
-Their retrieve function simply returns an empty object:
+sources (Eventbrite, Dice, etc.) which are incorporated during the transform
+step. Their retrieve function simply returns an empty object:
 
 ```js
 async function retrieve() {
@@ -449,26 +467,26 @@ async function retrieve() {
 
 ## Shared Platforms
 
-| Platform          | Venues | Approach                         | Key File                               |
-| ----------------- | ------ | -------------------------------- | -------------------------------------- |
-| Odeon (OCAPI)     | 20     | Playwright + OCAPI               | `common/odeon.co.uk/retrieve.js`       |
-| MyVue             | 17     | Playwright + in-browser fetch    | `common/myvue.com/retrieve.js`         |
-| Everyman          | 16     | Gatsby + BoxOffice API           | `common/everymancinema.com/retrieve.js`|
-| Cineworld         | 12     | Multi-endpoint REST API          | `common/cineworld.co.uk/retrieve.js`   |
-| Picturehouse      | 11     | POST API + HTML detail pages     | `common/picturehouses.com/retrieve.js` |
-| Curzon (OCAPI)    | 10     | Omnia API + OCAPI                | `common/curzon.com/retrieve.js`        |
-| Savoy Systems     | 4      | Embedded JSON extraction         | `common/savoysystems.co.uk/retrieve.js`|
-| Indy Cinema Group | 3      | GraphQL API                      | `common/indycinemagroup.com/retrieve.js`|
-| Firmdale Hotels   | 3      | Single HTML page                 | `common/firmdalehotels.com/retrieve.js`|
-| Olympic Studios   | 3      | HTML list + detail pages         | `common/olympicstudios.com/retrieve.js`|
-| Electric Cinema   | 2      | Direct JSON file                 | `common/electriccinema.co.uk/retrieve.js`|
-| BFI               | 2      | Playwright pagination + details  | `common/bfi.org.uk/retrieve.js`        |
-| Tate              | 2      | HTML list + detail pages         | `common/tate.org.uk/retrieve.js`       |
-| Cinesync          | 2      | Signed REST API                  | `common/cinesync.io/retrieve.js`       |
-| The Castle Cinema | 2      | HTML list + detail pages         | `common/thecastlecinema.com/retrieve.js`|
-| Admit One         | 2      | HTML scraping (Win-1252)         | `common/admit-one.co.uk/retrieve.js`   |
-| Ticketek          | 1      | Playwright + HTML parsing        | `common/ticketek.co.uk/retrieve.js`    |
-| Standalone        | ~33    | Various (mostly HTML scraping)   | Per-cinema `cinemas/*/retrieve.js`     |
+| Platform          | Venues | Approach                        | Key File                                  |
+| ----------------- | ------ | ------------------------------- | ----------------------------------------- |
+| Odeon (OCAPI)     | 20     | Playwright + OCAPI              | `common/odeon.co.uk/retrieve.js`          |
+| MyVue             | 17     | Playwright + in-browser fetch   | `common/myvue.com/retrieve.js`            |
+| Everyman          | 16     | Gatsby + BoxOffice API          | `common/everymancinema.com/retrieve.js`   |
+| Cineworld         | 12     | Multi-endpoint REST API         | `common/cineworld.co.uk/retrieve.js`      |
+| Picturehouse      | 11     | POST API + HTML detail pages    | `common/picturehouses.com/retrieve.js`    |
+| Curzon (OCAPI)    | 10     | Omnia API + OCAPI               | `common/curzon.com/retrieve.js`           |
+| Savoy Systems     | 4      | Embedded JSON extraction        | `common/savoysystems.co.uk/retrieve.js`   |
+| Indy Cinema Group | 3      | GraphQL API                     | `common/indycinemagroup.com/retrieve.js`  |
+| Firmdale Hotels   | 3      | Single HTML page                | `common/firmdalehotels.com/retrieve.js`   |
+| Olympic Studios   | 3      | HTML list + detail pages        | `common/olympicstudios.com/retrieve.js`   |
+| Electric Cinema   | 2      | Direct JSON file                | `common/electriccinema.co.uk/retrieve.js` |
+| BFI               | 2      | Playwright pagination + details | `common/bfi.org.uk/retrieve.js`           |
+| Tate              | 2      | HTML list + detail pages        | `common/tate.org.uk/retrieve.js`          |
+| Cinesync          | 2      | Signed REST API                 | `common/cinesync.io/retrieve.js`          |
+| The Castle Cinema | 2      | HTML list + detail pages        | `common/thecastlecinema.com/retrieve.js`  |
+| Admit One         | 2      | HTML scraping (Win-1252)        | `common/admit-one.co.uk/retrieve.js`      |
+| Ticketek          | 1      | Playwright + HTML parsing       | `common/ticketek.co.uk/retrieve.js`       |
+| Standalone        | ~33    | Various (mostly HTML scraping)  | Per-cinema `cinemas/*/retrieve.js`        |
 
 ---
 
@@ -478,21 +496,21 @@ Sources are external ticketing platforms that aren't cinemas themselves. They're
 used in two ways:
 
 1. **Direct retrieval** -- fetching event listings from the platform
-2. **Event supplementation** -- during transform, cinema modules call each source's
-   `findEvents()` to discover events at their venue that might not appear on their
-   own website
+2. **Event supplementation** -- during transform, cinema modules call each
+   source's `findEvents()` to discover events at their venue that might not
+   appear on their own website
 
-| Source                  | Approach                                 | Key Detail                                |
-| ----------------------- | ---------------------------------------- | ----------------------------------------- |
-| designmynight.com       | Paginated REST API + monthly availability| Deduplicates occurrences across months     |
-| dice.fm                 | Embedded JSON (`#__NEXT_DATA__`) + pages | Also searches theatre category for films   |
-| eventbrite.co.uk        | Embedded JSON (`__SERVER_DATA__`) + pages| Searches "screening" + "film-and-media"    |
-| outsavvy.com            | HTML list + detail pages                 | Cheerio scraping                           |
-| stowfilmlounge.com      | Single HTML page                         | Simple `fetchText`                         |
-| ti.to                   | Playwright list + detail pages           | Per-venue-slug retrieval                   |
-| ticketsource.co.uk      | Algolia search API + Playwright details  | Multiple search filters (geo, location, NT Live, Exhibition On Screen) |
-| tickettailor.com         | Playwright per-venue-slug pages          | Hardcoded venue slugs list                 |
-| wimbledonfilmclub.co.uk | HTML list + detail pages                 | Cheerio scraping                           |
+| Source                  | Approach                                  | Key Detail                                                             |
+| ----------------------- | ----------------------------------------- | ---------------------------------------------------------------------- |
+| designmynight.com       | Paginated REST API + monthly availability | Deduplicates occurrences across months                                 |
+| dice.fm                 | Embedded JSON (`#__NEXT_DATA__`) + pages  | Also searches theatre category for films                               |
+| eventbrite.co.uk        | Embedded JSON (`__SERVER_DATA__`) + pages | Searches "screening" + "film-and-media"                                |
+| outsavvy.com            | HTML list + detail pages                  | Cheerio scraping                                                       |
+| stowfilmlounge.com      | Single HTML page                          | Simple `fetchText`                                                     |
+| ti.to                   | Playwright list + detail pages            | Per-venue-slug retrieval                                               |
+| ticketsource.co.uk      | Algolia search API + Playwright details   | Multiple search filters (geo, location, NT Live, Exhibition On Screen) |
+| tickettailor.com        | Playwright per-venue-slug pages           | Hardcoded venue slugs list                                             |
+| wimbledonfilmclub.co.uk | HTML list + detail pages                  | Cheerio scraping                                                       |
 
 ---
 
@@ -502,13 +520,13 @@ used in two ways:
 
 All retrieval modules use shared fetch helpers from `common/utils.js`:
 
-| Function          | Description                                    |
-| ----------------- | ---------------------------------------------- |
-| `fetchText`       | Fetch URL, return response as text             |
-| `fetchJson`       | Fetch URL, return parsed JSON                  |
-| `fetchWin1252Text`| Fetch URL, decode as Windows-1252 text         |
-| `fetchWithRetry`  | Fetch with configurable retries and delay       |
-| `withRetry`       | Generic retry wrapper for any async function   |
+| Function           | Description                                  |
+| ------------------ | -------------------------------------------- |
+| `fetchText`        | Fetch URL, return response as text           |
+| `fetchJson`        | Fetch URL, return parsed JSON                |
+| `fetchWin1252Text` | Fetch URL, decode as Windows-1252 text       |
+| `fetchWithRetry`   | Fetch with configurable retries and delay    |
+| `withRetry`        | Generic retry wrapper for any async function |
 
 ### Playwright Helper
 
@@ -530,7 +548,8 @@ All retrieval modules use shared fetch helpers from `common/utils.js`:
   result without executing `fn`.
 - Cache files are stored in a `cache/` directory at the project root.
 - Used by Playwright operations, Gatsby blob fetches, and other expensive
-  retrievals to avoid redundant network requests when processing multiple venues.
+  retrievals to avoid redundant network requests when processing multiple
+  venues.
 
 ---
 
@@ -540,22 +559,24 @@ Retrieve functions return raw data in module-specific formats. The most common
 structure is:
 
 ```js
-{ movieListPage, moviePages }
+{
+  movieListPage, moviePages;
+}
 ```
 
-Where `movieListPage` is the listing data (HTML string, JSON object, or array) and
-`moviePages` is a dictionary keyed by URL or ID containing detail page data.
+Where `movieListPage` is the listing data (HTML string, JSON object, or array)
+and `moviePages` is a dictionary keyed by URL or ID containing detail page data.
 
 Notable variants:
 
-| Return Shape                                              | Used By                         |
-| --------------------------------------------------------- | ------------------------------- |
-| `{ movieListPage, moviePages }`                           | Most cinemas and sources        |
-| `moviePages` (plain array)                                | OCAPI (Odeon, Curzon)           |
-| `site` (plain object)                                     | Electric Cinema                 |
-| `{ movieDatesPage, movieListPage }`                       | Cinesync                        |
-| `{ movieListPage, moviePages: { movieData, movieDetails, attributeData } }` | Everyman         |
-| `{ movieListPages, moviePages }`                          | Dice.fm, DesignMyNight, Eventbrite |
-| `{ clubPages }`                                           | Ticket Tailor                   |
-| `{ venues: { [slug]: { movieListPage, moviePages } } }`  | Ti.to                           |
-| `{}`                                                      | Source-only venues              |
+| Return Shape                                                                | Used By                            |
+| --------------------------------------------------------------------------- | ---------------------------------- |
+| `{ movieListPage, moviePages }`                                             | Most cinemas and sources           |
+| `moviePages` (plain array)                                                  | OCAPI (Odeon, Curzon)              |
+| `site` (plain object)                                                       | Electric Cinema                    |
+| `{ movieDatesPage, movieListPage }`                                         | Cinesync                           |
+| `{ movieListPage, moviePages: { movieData, movieDetails, attributeData } }` | Everyman                           |
+| `{ movieListPages, moviePages }`                                            | Dice.fm, DesignMyNight, Eventbrite |
+| `{ clubPages }`                                                             | Ticket Tailor                      |
+| `{ venues: { [slug]: { movieListPage, moviePages } } }`                     | Ti.to                              |
+| `{}`                                                                        | Source-only venues                 |

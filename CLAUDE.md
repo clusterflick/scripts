@@ -2,10 +2,21 @@
 
 ## Project Overview
 
-Node.js data pipeline for aggregating, normalizing, and enriching cinema listing data
-from 240 cinema venues and 9 external ticketing sources. Data is scraped,
+Node.js data pipeline for aggregating, normalizing, and enriching cinema listing
+data from 240 cinema venues and 9 external ticketing sources. Data is scraped,
 transformed, combined with TMDB metadata, and matched against review aggregators
 (IMDb, Letterboxd, Rotten Tomatoes, Metacritic).
+
+## Core Principles
+
+- **Never invent data.** Do not make up URLs, IDs, API responses, or any other
+  values. If data is unknown, ask or flag it — never guess.
+- **Fail loudly over papering over issues.** If required data is missing, throw
+  an exception. Do not silently default or fall back. A failing job is better
+  than one that silently produces incorrect results.
+- **Follow existing patterns.** When adding new code, follow the conventions and
+  approaches already established in the codebase. Do not invent new patterns
+  when existing ones work.
 
 ## Quick Reference
 
@@ -55,16 +66,18 @@ Every cinema/source module exports the same interface:
 
 ```javascript
 module.exports = {
-  attributes,   // { id, name, domain, url, address, geo, structure, type }
-  retrieve,     // async () => raw data from venue website
-  transform,    // async (retrievedData) => normalized listings
+  attributes, // { id, name, domain, url, address, geo, structure, type }
+  retrieve, // async () => raw data from venue website
+  transform, // async (retrievedData) => normalized listings
 };
 ```
 
 ## Testing Conventions
 
-- Each cinema module has `tests/index.test.js` with HTTP recordings in `__recordings__/`
-- Tests use Polly.js to record and replay HTTP interactions (sensitive headers redacted)
+- Each cinema module has `tests/index.test.js` with HTTP recordings in
+  `__recordings__/`
+- Tests use Polly.js to record and replay HTTP interactions (sensitive headers
+  redacted)
 - Test timezone is always `Europe/London`
 - Schema validation via AJV against `schema.json`
 - Shared test utilities in `common/test-utils.js`
@@ -72,6 +85,7 @@ module.exports = {
 ## Environment Variables
 
 Defined in `.env.example`:
+
 - `MOVIEDB_API_KEY` - The Movie Database API key
 - `GEMINI_API_KEY` - Google Gemini API key
 - `PAT` - GitHub personal access token
@@ -79,13 +93,15 @@ Defined in `.env.example`:
 ## CI/CD
 
 GitHub Actions (`.github/workflows/ci.yml`):
+
 - Runs on push/PR to main
 - Steps: install (`npm ci`) -> lint -> test
 - Daily workflow updates test title data automatically
 
 ## Key Files
 
-- `common/utils.js` - Core shared utilities (retries, text processing, data helpers)
+- `common/utils.js` - Core shared utilities (retries, text processing, data
+  helpers)
 - `common/normalize-title.js` - Extensive movie title normalization (31KB)
 - `common/get-movie-data.js` - TMDB API integration and caching
 - `common/ask-llm.js` - Gemini LLM client for categorization
