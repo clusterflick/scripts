@@ -1,4 +1,5 @@
 const cheerio = require("cheerio");
+const slugify = require("slugify");
 const attributes = require("./attributes");
 const {
   getText,
@@ -6,6 +7,7 @@ const {
   generateShowingId,
   createOverview,
   createAccessibility,
+  basicNormalize,
 } = require("../../common/utils");
 const { parseDate } = require("./utils");
 
@@ -13,11 +15,13 @@ async function transform({ movieListPage }, sourcedEvents) {
   const $ = cheerio.load(movieListPage);
   const movies = [];
   $("#sessionsByFilmConent .film").each(function () {
-    const eventId = new URLSearchParams(
-      $(this).find(".poster").attr("src").split("?")[1],
-    ).get("code");
-    const showingId = generateShowingId(attributes, eventId);
     const title = getText($(this).find(".title"));
+    // Use the title slug rather than the Veezi event code from the poster
+    // image, because Veezi IDs rotate when Curzon creates new sessions.
+    const showingId = generateShowingId(
+      attributes,
+      slugify(basicNormalize(title), { strict: true }),
+    );
     const overview = createOverview({
       classification: getText($(this).find(".censor")),
     });

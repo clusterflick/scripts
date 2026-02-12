@@ -42,15 +42,18 @@ async function transform({ emailText }, sourcedEvents) {
 
     const date = parseDateTime(dateLine, currentYear);
 
+    const slug = slugify(basicNormalize(title));
+    const movieUrl = `${attributes.url}#${slug}`;
+
     const showingId = generateShowingId(
       attributes,
-      `${slugify(basicNormalize(title))}-${date.getTime()}`,
+      `${slug}-${date.getTime()}`,
     );
 
     movies.push({
       showingId,
       title: title.trim(),
-      url: attributes.url,
+      url: movieUrl,
       overview: createOverview({
         year,
         directors: [director.trim()],
@@ -60,7 +63,7 @@ async function transform({ emailText }, sourcedEvents) {
       performances: [
         createPerformance({
           date,
-          url: attributes.url,
+          url: movieUrl,
           accessibility: createAccessibility(title, { subtitled: true }),
         }),
       ],
