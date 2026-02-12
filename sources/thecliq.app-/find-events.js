@@ -43,7 +43,7 @@ function convertEvent(event, club) {
 }
 
 async function findEvents(cinema) {
-  const dataSrc = path.join(process.cwd(), "retrieved-data", "thecliq.app");
+  const dataSrc = path.join(process.cwd(), "retrieved-data", "thecliq.app-");
 
   let clubs = {};
   try {
