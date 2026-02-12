@@ -403,7 +403,7 @@ function generateShowingId(attributes, rawEventId) {
   if (typeof eventId !== "string" || eventId === "") {
     throw new Error("generateShowingId: eventId must be a non-empty string");
   }
-  return `${attributesId}-${eventId}`;
+  return `${attributesId.replace(/-$/, "")}-${eventId}`;
 }
 
 const isPrivateHire = (title = "") =>

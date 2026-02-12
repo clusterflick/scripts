@@ -83,7 +83,6 @@ async function retrieve() {
   }
 
   // Fetch all event details in a single batched GraphQL request using aliases
-  console.log(`   - Fetching details for ${allEventIds.length} events...`);
   const aliasedQueries = allEventIds
     .map(
       (id, i) =>

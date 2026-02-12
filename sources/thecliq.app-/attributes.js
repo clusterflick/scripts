@@ -1,5 +1,5 @@
 module.exports = {
-  id: "thecliq.app",
+  id: "thecliq.app-",
   name: "CLIQ",
   domain: "https://www.thecliq.app",
   socials: {
