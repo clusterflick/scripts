@@ -289,6 +289,7 @@ function normalizeTitle(title, options) {
     ],
     ["Silents Synced - ", "Silents Synced: "],
     ["Gama Bomb - ", "Gama Bomb: "],
+    ["STRANGE JOURNEY - ", "STRANGE JOURNEY: "],
     [/\s+extended$/i, ""],
     [/ – A Special.*$/i, ""],
     [/(?:\s|^)LOTR(?:\s|:)(?:\s*the\s+)?/i, "The Lord of the Rings: The "],
@@ -483,6 +484,11 @@ function normalizeTitle(title, options) {
       "Tarot readings, Demi Moore-tinis & ",
     ],
     ["The Scarecrows' Wedding+ ", "The Scarecrows' Wedding & "],
+    ["First Case, Second Case + ", "First Case, Second Case & "],
+    [
+      "100 Nights of Hero + A Friend of Dorothy",
+      "100 Nights of Hero & A Friend of Dorothy",
+    ],
     ["Homage |", "Homage: "],
     [/^\s*Twin Cheeks\s*$/i, "Twin Cheeks: Who Killed The Homecoming King?"],
     ["FRANCESCA WOODMAN", "The Woodmans"],
@@ -554,6 +560,7 @@ function normalizeTitle(title, options) {
     ["THE PRESENT HELP", "PRESENT HELP"],
     ["Dress-up karaoke party + ", "Dress-up karaoke party & "],
     ["Spicy cocktail hour + ", "Spicy cocktail hour & "],
+    ["Playdates with Friends Collection", "Playdates with Friends"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
