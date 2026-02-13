@@ -278,6 +278,7 @@ async function transform(
       "siobhandavies.com",
       "sohoscreeningrooms.co.uk",
       "stmarys.ac.uk-the-1850",
+      "stmchurch.co.uk",
       "strongroombar.com",
       "tate.org.uk-tate-britain",
       "tate.org.uk-tate-modern",

@@ -13,7 +13,7 @@ flowchart TD
         B["2. data-retrieved\n(workflow step)"]
         C["3. data-transformed\n(workflow step)"]
         D["4. data-calendar\n(lock file + README)"]
-        E["5. clusterflick.com\n(lock file + optional blurb/map)"]
+        E["5. clusterflick.com\n(lock file + blurb/images/map)"]
     end
 
     subgraph "Automatic — No Changes Needed"
@@ -31,13 +31,13 @@ flowchart TD
     G --> I
 ```
 
-| Repository         | What to Change                            | Why                                                                          |
-| ------------------ | ----------------------------------------- | ---------------------------------------------------------------------------- |
-| `scripts`          | Create venue directory (2–4 files)        | Core venue definition, retrieval, and transformation logic                   |
-| `data-retrieved`   | Add step to workflow YAML                 | Include the venue in the daily retrieval run                                 |
-| `data-transformed` | Add step to workflow YAML                 | Include the venue in the daily transformation run                            |
-| `data-calendar`    | `npm update scripts` + add row to README  | Lock file pins a specific `scripts` commit; README lists all venue calendars |
-| `clusterflick.com` | `npm update scripts` + optional blurb/map | Lock file pins a specific `scripts` commit; venue page auto-generates        |
+| Repository         | What to Change                           | Why                                                                          |
+| ------------------ | ---------------------------------------- | ---------------------------------------------------------------------------- |
+| `scripts`          | Create venue directory (2–4 files)       | Core venue definition, retrieval, and transformation logic                   |
+| `data-retrieved`   | Add step to workflow YAML                | Include the venue in the daily retrieval run                                 |
+| `data-transformed` | Add step to workflow YAML                | Include the venue in the daily transformation run                            |
+| `data-calendar`    | `npm update scripts` + add row to README | Lock file pins a specific `scripts` commit; README lists all venue calendars |
+| `clusterflick.com` | `npm update scripts` + blurb/images/map  | Lock file pins a specific `scripts` commit; venue page auto-generates        |
 
 `data-retrieved` and `data-transformed` have no lock file — they always pull the
 latest `scripts` on install. `data-calendar` and `clusterflick.com` both have a
@@ -429,23 +429,11 @@ the venue count above the table:
 
 ## Step 5: Update `clusterflick.com`
 
-**One required change, two optional additions.**
+**Four changes needed.** The lock file update and image generation require the
+`scripts` changes to be merged first (see [Post-Merge Steps](#post-merge-steps)
+below). The blurb can be created at any time.
 
-### Update the Lock File
-
-`clusterflick.com` also has a `package-lock.json` that pins the `scripts`
-dependency. After the `scripts` changes are merged:
-
-```bash
-cd clusterflick.com
-npm update scripts
-```
-
-The venue page at `/venues/<slugified-name>` will auto-generate at build time
-from the venue's attributes and transformed data. No additional configuration is
-needed for the page to appear.
-
-### Optional: Custom Blurb
+### Custom Blurb
 
 Create a component at `src/components/venues/<venue-id>.tsx` to provide a custom
 description for the venue page. Without this, the page falls back to an
@@ -468,7 +456,32 @@ export const seoHighlights = "key genres or features";
 export default VenueBlurb;
 ```
 
-### Optional: Map Image
+### Update the Lock File
+
+`clusterflick.com` has a `package-lock.json` that pins the `scripts` dependency.
+After the `scripts` changes are merged:
+
+```bash
+cd clusterflick.com
+npm update scripts
+```
+
+The venue page at `/venues/<slugified-name>` will auto-generate at build time
+from the venue's attributes and transformed data. No additional configuration is
+needed for the page to appear.
+
+### Venue Images
+
+A script at `clusterflick.com/scripts/fetch-venue-images.js` fetches logo/icon
+images for venues. Existing images are skipped, so running it after adding a new
+venue will only fetch the new one:
+
+```bash
+cd clusterflick.com
+node scripts/fetch-venue-images.js
+```
+
+### Map Image
 
 A script at `clusterflick.com/scripts/fetch-venue-maps.js` generates map images
 for all venues using the Google Maps Static API. It reads coordinates from each
@@ -482,6 +495,23 @@ node scripts/fetch-venue-maps.js
 ```
 
 Requires a `GOOGLE_MAPS_API_KEY` in `.env`.
+
+---
+
+## Post-Merge Steps
+
+Steps 4 and 5 include lock file updates (`npm update scripts`) and image
+generation that can only run after the `scripts` changes are merged. These steps
+are easy to forget because they happen later in a separate session.
+
+**If you are an LLM completing the earlier steps**, report the following as
+remaining next steps for the user:
+
+1. After `scripts` is merged, run `npm update scripts` in both `data-calendar`
+   and `clusterflick.com`
+2. Run `node scripts/fetch-venue-images.js` in `clusterflick.com`
+3. Run `node scripts/fetch-venue-maps.js` in `clusterflick.com` (requires
+   `GOOGLE_MAPS_API_KEY`)
 
 ---
 

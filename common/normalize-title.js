@@ -55,6 +55,7 @@ function normalizeTitle(title, options) {
     ["Ex Libris - ", "Ex Libris: "],
     ["Bison - ", "Bison: "],
     ["COLD ISLANDERS - ", "COLD ISLANDERS: "],
+    ["Jozef Van Wissem - ", "Jozef Van Wissem: "],
     ["The World of Hans Zimmer-", "The World of Hans Zimmer: "],
     ["The World of Hans Zimmer -", "The World of Hans Zimmer: "],
     [

@@ -588,6 +588,7 @@ const knownRemovablePhrases = [
   "Jazz In Exile:",
   "Just Evidence 1:",
   "Just Evidence 1.",
+  "Jozef Van Wissem:",
   "Kaleidoscope's",
   "KEF Sound & Screen Presents:",
   "Kung Fu Cinema:",
