@@ -1,5 +1,4 @@
 const path = require("node:path");
-const cheerio = require("cheerio");
 const {
   createOverview,
   createPerformance,
@@ -10,51 +9,29 @@ const {
 const attributes = require("./attributes");
 const { venueMatchesCinema } = require("../../common/source-utils");
 
-function extractEventDetails(html) {
-  const $ = cheerio.load(html);
-
-  // Find the script tag containing ScreeningEvent JSON-LD
-  let screeningEvent = null;
-  $('script[type="application/ld+json"]').each((i, el) => {
-    try {
-      const content = $(el).html();
-      const json = JSON.parse(content);
-      if (
-        json["@type"] === "ScreeningEvent" ||
-        json["@type"] === "TheaterEvent"
-      ) {
-        screeningEvent = json;
-      }
-    } catch {
-      // Skip invalid JSON
-    }
-  });
-
-  return screeningEvent;
-}
-
 function convertDiceEvent(event) {
-  const eventId = event.url.match(/\/event\/([^-]+)/)?.[1];
+  const url = `https://dice.fm/event/${event.perm_name}`;
+  const eventId = event.perm_name.match(/^([^-]+)/)?.[1];
 
-  const startDate = new Date(event.startDate);
-  const endDate = new Date(event.endDate);
+  const startDate = new Date(event.dates.event_start_date);
+  const endDate = new Date(event.dates.event_end_date);
 
   return {
     showingId: generateShowingId(attributes, eventId),
     title: event.name,
-    url: event.url,
+    url,
     overview: createOverview({
       duration: (endDate.getTime() - startDate.getTime()) / 1000 / 60,
     }),
     performances: [
       createPerformance({
         date: startDate,
-        url: event.url,
+        url,
         accessibility: createAccessibility(event.name, {}),
       }),
     ],
     matchingHints: {
-      overview: event.description || "",
+      overview: event.about?.description || "",
     },
   };
 }
@@ -62,28 +39,24 @@ function convertDiceEvent(event) {
 async function findEvents(cinema) {
   const dataSrc = path.join(process.cwd(), "retrieved-data", "dice.fm");
 
-  let moviePages = {};
+  let events = [];
   try {
     const data = await readJSON(dataSrc);
-    moviePages = data.moviePages || {};
+    events = data.events || [];
   } catch {
     // Source data may not always be available or required
   }
 
-  const events = [];
-  for (const [url, html] of Object.entries(moviePages)) {
-    const eventDetails = extractEventDetails(html);
-    events.push({ url, ...eventDetails });
-  }
+  const filteredEvents = events.filter((event) => {
+    const venue = event.venues?.[0];
+    if (!venue) return false;
 
-  const filteredEvents = events.filter(({ location }) => {
     const coordinates = {
-      lat: location.geo.latitude,
-      lon: location.geo.longitude,
+      lat: venue.location.lat,
+      lon: venue.location.lng,
     };
-    // location.address is a string like "438 Kingsland Rd, London E8 4AA, UK"
-    return venueMatchesCinema(cinema, location.name, coordinates, {
-      eventAddress: location.address,
+    return venueMatchesCinema(cinema, venue.name, coordinates, {
+      eventAddress: venue.address,
     });
   });
 

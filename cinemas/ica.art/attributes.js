@@ -1,7 +1,7 @@
 module.exports = {
   id: "ica.art",
   name: "Institute of Contemporary Arts",
-  alternativeNames: ["ICA Cinema"],
+  alternativeNames: ["ICA Cinema", "ICA (Institute of Contemporary Arts)"],
   domain: "https://www.ica.art",
   socials: {
     letterboxd: null,

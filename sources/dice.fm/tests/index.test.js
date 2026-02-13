@@ -17,42 +17,62 @@ jest.mock("../../../common/utils", () => ({
 // Hide script output
 console.log = () => {};
 
-const cinema = {
-  name: "The Clapham Grand",
-  geo: { lat: 51.463318751977546, lon: -0.16939900181385437 },
-};
-
 describe(attributes.name, () => {
   setupPolly(isRecording, __dirname);
-  jest.useFakeTimers().setSystemTime(new Date("2026-01-09"));
+  jest.useFakeTimers().setSystemTime(new Date("2026-02-13"));
 
-  it(
-    "retrieve and find events",
-    async () => {
-      const { movieListPages, moviePages } = await retrieve();
+  let events;
 
-      // Make sure the input looks roughly correct
-      expect(movieListPages).toBeTruthy();
-      expect(moviePages).toBeTruthy();
-      expect(Object.keys(moviePages)).toHaveLength(23);
+  beforeAll(async () => {
+    const data = await retrieve();
+    events = data.events;
+  }, 600_000);
 
-      readJSON.mockImplementation(() => ({ movieListPages, moviePages }));
+  it("retrieves events", () => {
+    expect(events).toBeTruthy();
+    expect(events.length).toBeGreaterThan(0);
+  });
 
-      const output = await findEvents(cinema);
-      expect(
-        output.every((movie) =>
-          Object.prototype.hasOwnProperty.call(movie, "matchingHints"),
-        ),
-      ).toBe(true);
-
-      const data = JSON.parse(JSON.stringify(output))
-        .map(removeMatchingHints)
-        .map(addTestCategory);
-
-      // Make sure the data looks roughly correct
-      expect(data).toHaveLength(3);
-      expect(data).toMatchSnapshot();
+  describe.each([
+    {
+      name: "The Haggerston",
+      geo: { lat: 51.54248341521672, lon: -0.07580767288892457 },
+      expectedMatches: 16,
     },
-    isRecording ? 600_000 : undefined,
-  );
+    {
+      name: "St Matthias Church",
+      alternativeNames: ["Saint Matthias Church"],
+      geo: { lat: 51.55251101625857, lon: -0.07912725093596235 },
+      expectedMatches: 1,
+    },
+    {
+      name: "Institute of Contemporary Arts",
+      alternativeNames: ["ICA Cinema", "ICA (Institute of Contemporary Arts)"],
+      geo: { lat: 51.50606885842036, lon: -0.1311647210085773 },
+      expectedMatches: 1,
+    },
+  ])("$name", ({ name, alternativeNames, geo, expectedMatches }) => {
+    it(
+      "find events",
+      async () => {
+        readJSON.mockImplementation(() => ({ events }));
+
+        const cinema = { name, alternativeNames, geo };
+        const output = await findEvents(cinema);
+        expect(
+          output.every((movie) =>
+            Object.prototype.hasOwnProperty.call(movie, "matchingHints"),
+          ),
+        ).toBe(true);
+
+        const data = JSON.parse(JSON.stringify(output))
+          .map(removeMatchingHints)
+          .map(addTestCategory);
+
+        expect(data).toHaveLength(expectedMatches);
+        expect(data).toMatchSnapshot();
+      },
+      isRecording ? 600_000 : undefined,
+    );
+  });
 });

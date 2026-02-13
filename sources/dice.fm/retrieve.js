@@ -1,45 +1,70 @@
-const cheerio = require("cheerio");
-const { fetchText, basicNormalize } = require("../../common/utils.js");
+const { fetchJson, basicNormalize } = require("../../common/utils.js");
 
-const filmsUrl =
-  "https://dice.fm/browse/london-54d8a23438fe5d27d500001c/culture/film";
-const theatreUrl =
-  "https://dice.fm/browse/london-54d8a23438fe5d27d500001c/culture/theatre";
+const apiUrl = "https://api.dice.fm/unified_search";
+const headers = {
+  Accept: "application/json",
+  "Content-Type": "application/json",
+  "X-Client-Timezone": "Europe/London",
+  "X-Api-Timestamp": "2024-03-25",
+};
 
-const getEvents = (page) => {
-  const $ = cheerio.load(page);
-  const data = JSON.parse($("#__NEXT_DATA__").html());
-  return data.props.pageProps.events;
+const getEventsFromResponse = (response) =>
+  response.sections
+    .filter((section) => section.section_type === "events_vertical")
+    .flatMap((section) => section.events);
+
+const fetchEvents = async (tag) => {
+  const allEvents = [];
+  let cursor;
+
+  do {
+    const body = { count: 100, lat: 51.507653, lng: -0.107722, tag };
+    if (cursor) body.cursor = cursor;
+
+    const response = await fetchJson(apiUrl, {
+      method: "POST",
+      headers,
+      body: JSON.stringify(body),
+    });
+
+    const events = getEventsFromResponse(response);
+    allEvents.push(...events);
+    cursor = response.next_page_cursor;
+  } while (cursor);
+
+  return allEvents;
+};
+
+const nameContainsFilmKeyword = (name) => {
+  const normalized = basicNormalize(name);
+  return (
+    normalized.includes("film") ||
+    normalized.includes("movie") ||
+    normalized.includes("screening") ||
+    normalized.includes("soundtrack")
+  );
 };
 
 async function retrieve() {
-  const movieListPages = {
-    film: await fetchText(filmsUrl),
-    theatre: await fetchText(theatreUrl),
-  };
-  const moviePages = {};
+  const filmEvents = await fetchEvents("culture:film");
 
-  const filmEvents = getEvents(movieListPages.film);
-  for (const event of filmEvents) {
-    const url = `https://dice.fm/event/${event.perm_name}`;
-    const html = await fetchText(url);
-    moviePages[url] = html;
-  }
+  const theatreEvents = await fetchEvents("culture:theatre");
+  const filteredTheatreEvents = theatreEvents.filter((event) =>
+    nameContainsFilmKeyword(event.name),
+  );
 
-  const theatreEvents = getEvents(movieListPages.theatre);
-  for (const event of theatreEvents) {
-    // Only get theatre listings which could be movies in the wrong category
-    if (
-      basicNormalize(event.name).includes("movie") ||
-      basicNormalize(event.name).includes("film")
-    ) {
-      const url = `https://dice.fm/event/${event.perm_name}`;
-      const html = await fetchText(url);
-      moviePages[url] = html;
-    }
-  }
+  const gigEvents = await fetchEvents("music:gig");
+  const filteredGigEvents = gigEvents.filter((event) =>
+    nameContainsFilmKeyword(event.name),
+  );
 
-  return { movieListPages, moviePages };
+  const events = [
+    ...filmEvents,
+    ...filteredTheatreEvents,
+    ...filteredGigEvents,
+  ];
+
+  return { events };
 }
 
 module.exports = retrieve;
