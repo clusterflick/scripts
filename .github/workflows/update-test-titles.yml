@@ -1,8 +1,8 @@
 name: Update Title Normalization Test
 
 on:
-  schedule:
-    - cron: '0 8 * * *' # Run every day at 8am UTC
+  repository_dispatch:
+    types: [release_event]
   workflow_dispatch:
 
 jobs:
@@ -15,8 +15,13 @@ jobs:
         with:
           node-version-file: .node-version
       - run: npm ci
-      - run: npm run clear:all
-      - run: ./helpers/get-latest-transformed-data.sh
+      - uses: clusterflick/release-downloader@v1
+        with:
+          token: ${{ secrets.PAT }}
+          repository: "clusterflick/data-transformed"
+          latest: true
+          fileName: "*"
+          out-file-path: "transformed-data"
       - run: node common/tests/utils/update-test-titles.js
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
