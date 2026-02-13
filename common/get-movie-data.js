@@ -42,6 +42,7 @@ const ignoredIds = [
   628403, // Metallica: Master of Puppets (Deluxe Box Set) -- https://www.themoviedb.org/movie/628403-metallica-master-of-puppets-deluxe-box-set
   892807, // The Sunset Strip Killers: Born To Kill? -- https://www.themoviedb.org/movie/892807-the-sunset-strip-killers-born-to-kill
   77835, // The Beatles - Unsurpassed Promos -- https://www.themoviedb.org/movie/77835-the-beatles-unsurpassed-promos
+  997326, // Father -- https://www.themoviedb.org/movie/997326-father
 ];
 
 /**
