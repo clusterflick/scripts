@@ -1,9 +1,9 @@
 const attributes = require("./attributes");
 const retrieve = require("./retrieve");
-const transform = require("./transform");
+const findEvents = require("./find-events");
 
 module.exports = {
   attributes,
   retrieve,
-  transform,
+  findEvents,
 };
