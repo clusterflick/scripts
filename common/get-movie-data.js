@@ -40,9 +40,11 @@ const ignoredIds = [
   340476, // 5:45 AM -- https://www.themoviedb.org/movie/340476-5-45-am
   1424169, // The Birthday Party -- https://www.themoviedb.org/movie/1424169-the-birthday-party
   628403, // Metallica: Master of Puppets (Deluxe Box Set) -- https://www.themoviedb.org/movie/628403-metallica-master-of-puppets-deluxe-box-set
+  155553, // Rock Milestones: Metallica: Master of Puppets -- https://www.themoviedb.org/movie/-metallica-rock-milestones-master-of-puppets
   892807, // The Sunset Strip Killers: Born To Kill? -- https://www.themoviedb.org/movie/892807-the-sunset-strip-killers-born-to-kill
   77835, // The Beatles - Unsurpassed Promos -- https://www.themoviedb.org/movie/77835-the-beatles-unsurpassed-promos
   997326, // Father -- https://www.themoviedb.org/movie/997326-father
+  1322900, // T. REX 3D -- https://www.themoviedb.org/movie/1322900-t-rex-3d
 ];
 
 /**

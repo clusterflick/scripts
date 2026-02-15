@@ -12,6 +12,7 @@ Matching guidelines:
 - If a TheMovieDB result's overview text appears verbatim (word-for-word) within the cinema listing overview, that is the strongest possible signal and should be treated as a definitive match — even over other results with the same title.
 - Use the current date to assess plausibility. Films releasing more than a year in the future are unlikely matches, but films releasing within the next few months are plausible.
 - Consider original_title for foreign language films.
+- Never prefer a "making of", "behind the scenes", or documentary-about-a-film over the film itself. If both a film and its making-of documentary appear in the results, match the film.
 
 CRITICAL - When NOT to match:
 - You may ONLY match against films in the provided TheMovieDB results list. If you believe the cinema listing refers to a film that is NOT in the results, return null. Do NOT select a different film with a similar title as a substitute.
