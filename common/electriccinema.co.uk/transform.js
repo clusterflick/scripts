@@ -60,7 +60,11 @@ async function transform(
             : [],
         url: screening.link ? `${domain}${screening.link}` : movieUrl,
         status,
-        accessibility: createAccessibility(movie.title, accessibility),
+        accessibility: createAccessibility(
+          movie.title,
+          accessibility,
+          movie.short_synopsis || "",
+        ),
       });
     });
 

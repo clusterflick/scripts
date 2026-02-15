@@ -122,6 +122,9 @@ async function transform({ movieListPage }, sourcedEvents) {
             return; // this doesn't need added to the notes
           }
           if (tag.toLowerCase() === "digital") {
+            // "For our digital screenings, there’s a 95% chance we have an
+            // audio description track that can be transmitted for the
+            // performance." - https://princecharlescinema.com/accessibility/
             accessibility.audioDescription = true;
           }
 

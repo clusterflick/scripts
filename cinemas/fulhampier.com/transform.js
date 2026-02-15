@@ -50,7 +50,11 @@ async function transform({ eventsData }, sourcedEvents) {
           url: eventUrl,
           screen: event.event_venue,
           status: event.isSoldOut ? { soldOut: true } : {},
-          accessibility: createAccessibility(event.event_title, {}),
+          accessibility: createAccessibility(
+            event.event_title,
+            {},
+            event.event_description || "",
+          ),
         }),
       ],
       matchingHints: {

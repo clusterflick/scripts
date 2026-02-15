@@ -150,7 +150,7 @@ async function transform(
           if (alt) {
             const iconType = alt.replace(" icon", "")?.trim();
             if (iconType.toLowerCase() === "subtitled") {
-              accessibility.hardOfHearing = true;
+              accessibility.subtitled = true;
             } else if (iconType.toLowerCase() === "parent & baby") {
               accessibility.babyFriendly = true;
             } else if (iconType.toLowerCase() === "bar") {
@@ -168,7 +168,11 @@ async function transform(
             url: $performance.attr("href") || movies[id].url,
             screen,
             status,
-            accessibility: createAccessibility(title, accessibility),
+            accessibility: createAccessibility(
+              title,
+              accessibility,
+              movies[id].matchingHints?.overview || "",
+            ),
           }),
         );
       });

@@ -62,7 +62,7 @@ async function transform(retrievedData, sourcedEvents) {
             date: startDate,
             url: event.url,
             status: { soldOut },
-            accessibility: createAccessibility(title, {}),
+            accessibility: createAccessibility(title, {}, event.description),
           }),
         ],
         matchingHints: {

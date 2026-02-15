@@ -95,7 +95,11 @@ async function transform({ moviePages }, sourcedEvents) {
         date,
         url: bookingUrl || url,
         status,
-        accessibility: createAccessibility(movies[showingId].title, {}),
+        accessibility: createAccessibility(
+          movies[showingId].title,
+          {},
+          movies[showingId].matchingHints?.overview,
+        ),
       }),
     );
   });

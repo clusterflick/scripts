@@ -127,7 +127,11 @@ async function transform(attributes, { movieListPage }, sourcedEvents) {
           status: {
             soldOut: showTime.sold_out || false,
           },
-          accessibility: createAccessibility(movie.movie_name, accessibility),
+          accessibility: createAccessibility(
+            movie.movie_name,
+            accessibility,
+            movie.synopsis || "",
+          ),
         });
 
         movieEntry.performances.push(performance);

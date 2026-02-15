@@ -300,6 +300,11 @@ const createOverview = ({
   };
 };
 
+const audioDescriptionMatchers = [
+  /\bAD\b/, // "AD: Film Name" or "Film (AD)" — uppercase only to avoid false positives
+  /Audio Descri/i, // "Audio Described", "Audio Description"
+];
+
 const relaxedMatchers = [
   /Relaxed Screen/i,
   /Relaxed Preview/i,
@@ -322,10 +327,21 @@ const subtitledMatchers = [
   /with Subtitles/i,
 ];
 
-const hardOfHearingMatchers = [/Caption(?:ed)?/i];
+const hardOfHearingMatchers = [
+  /Caption(?:ed)?/i,
+  /\bHOH\b/i,
+  /Hard of Hearing/i,
+  /\bSDH\b/i,
+  /\bBSL\b/i,
+  /\bCC\b/,
+  /\bOC\b/,
+];
 
 const getTitleAccessibility = (title) => {
   const titleAccessibility = {};
+  if (audioDescriptionMatchers.some((matcher) => !!title.match(matcher))) {
+    titleAccessibility.audioDescription = true;
+  }
   if (relaxedMatchers.some((matcher) => !!title.match(matcher))) {
     titleAccessibility.relaxed = true;
   }
@@ -341,8 +357,43 @@ const getTitleAccessibility = (title) => {
   return titleAccessibility;
 };
 
-const createAccessibility = (title, accessibility) => {
+const descriptionAccessibilityMatchers = {
+  audioDescription: [/(?:is |this |includes? )audio descri/i],
+  relaxed: [/relaxed screening/i],
+  babyFriendly: [/parent and baby/i, /parent & baby/i, /baby friendly/i],
+  subtitled: [/with (?:english )?subtitles/i],
+  hardOfHearing: [/\bwith captions\b/i, /\bcaptioned screening/i],
+};
+
+const descriptionNegationPattern =
+  /\b(?:not|no|without|doesn't|does not|don't|do not|isn't|is not|won't|will not|cannot|can't|lack)\b/i;
+
+const getDescriptionAccessibility = (description) => {
+  if (!description) return {};
+  const accessibility = {};
+  for (const [key, matchers] of Object.entries(
+    descriptionAccessibilityMatchers,
+  )) {
+    for (const matcher of matchers) {
+      const match = description.match(matcher);
+      if (!match) continue;
+      // Check the 60 characters before the match for negation words
+      const matchIndex = match.index;
+      const preceding = description.slice(
+        Math.max(0, matchIndex - 60),
+        matchIndex,
+      );
+      if (descriptionNegationPattern.test(preceding)) continue;
+      accessibility[key] = true;
+      break;
+    }
+  }
+  return accessibility;
+};
+
+const createAccessibility = (title, accessibility, description = "") => {
   const titleAccessibility = getTitleAccessibility(title.trim());
+  const descriptionAccessibility = getDescriptionAccessibility(description);
 
   const listingAccessibility = Object.keys(accessibility).reduce(
     (mapping, key) => {
@@ -352,7 +403,11 @@ const createAccessibility = (title, accessibility) => {
     {},
   );
 
-  return { ...titleAccessibility, ...listingAccessibility };
+  return {
+    ...descriptionAccessibility,
+    ...titleAccessibility,
+    ...listingAccessibility,
+  };
 };
 
 // eslint-disable-next-line no-unused-vars

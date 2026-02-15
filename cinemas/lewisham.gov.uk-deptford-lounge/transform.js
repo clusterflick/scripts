@@ -64,7 +64,11 @@ async function transform({ emailText }, sourcedEvents) {
         createPerformance({
           date,
           url: movieUrl,
-          accessibility: createAccessibility(title, { subtitled: true }),
+          accessibility: createAccessibility(
+            title,
+            { subtitled: true },
+            description || "",
+          ),
         }),
       ],
       matchingHints: {

@@ -33,7 +33,11 @@ function convertEvent(event, club) {
         url: eventUrl,
         notes: `Presented by ${club.name}`,
         status: { soldOut: event.is_sold_out },
-        accessibility: createAccessibility(event.name, {}),
+        accessibility: createAccessibility(
+          event.name,
+          {},
+          event.description || "",
+        ),
       }),
     ],
     matchingHints: {

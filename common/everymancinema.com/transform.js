@@ -67,7 +67,11 @@ async function transform(
           notesList,
           url: performance.data.ticketing[0].urls[0],
           status: { soldOut: performance.occupancy.rate === 100 },
-          accessibility: createAccessibility(movie.title, accessibility),
+          accessibility: createAccessibility(
+            movie.title,
+            accessibility,
+            movie.synopsis || "",
+          ),
         });
       });
 
