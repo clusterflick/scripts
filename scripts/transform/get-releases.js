@@ -12,7 +12,11 @@ async function getReleaseData(location, release) {
   const data = release.assets.find(({ name }) => name === location);
   if (!data) return;
 
-  return await fetchJson(data.browser_download_url);
+  return await withRetry(() => fetchJson(data.browser_download_url), {
+    retries: 2,
+    delayMs: 30_000,
+    label: `Download ${location}`,
+  });
 }
 
 async function getReleaseList() {
