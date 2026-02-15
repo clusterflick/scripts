@@ -1,7 +1,11 @@
 const { format } = require("date-fns");
 const { searchForBestMatch } = require("../../common/get-movie-data");
 const normalizeTitle = require("../../common/normalize-title");
-const { runLlmFunction, createOverview } = require("../../common/utils");
+const {
+  runLlmFunction,
+  createOverview,
+  convertNamesTextToList,
+} = require("../../common/utils");
 
 async function matchIdentifiedMovies(movie, identifyFn) {
   const identification = await runLlmFunction(() => identifyFn(movie));
@@ -30,7 +34,7 @@ async function matchIdentifiedMovies(movie, identifyFn) {
       matchingHints: {
         ...movie.matchingHints,
         crew: identifiedMovie.director
-          ? [identifiedMovie.director]
+          ? convertNamesTextToList(identifiedMovie.director)
           : movie.matchingHints?.crew,
       },
     };

@@ -21,6 +21,7 @@ CRITICAL - When NOT to match:
 - If the cinema listing lacks specific identifying details (just a generic synopsis or no synopsis), return null rather than guessing.
 - A vague or generic cinema overview that could apply to multiple same-titled films is NOT sufficient to match.
 - When in doubt between multiple same-titled films, return null with confidence 0.
+- A result's overview must describe the SAME story, subject, or plot as the cinema listing. Superficial coincidences (e.g. a shared city name, a single overlapping word) are NOT evidence of a match. If the cinema listing describes a specific story and no result's overview is about that same story, return null.
 
 Example response with match:
 {"reason":"Listing matched description of a vampire and remake of this classic movie","confidence":8,"match":{"id":426063}}

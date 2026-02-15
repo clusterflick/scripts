@@ -430,7 +430,7 @@ const reviewResultsUsingLlm = async (movie, results, normalizedTitle) => {
 
   const { confidence, match } = result;
 
-  if (confidence >= 7) {
+  if (confidence >= 8) {
     const matchingResult = results.find(({ id }) => id === match?.id);
     if (matchingResult) return matchingResult;
   }
