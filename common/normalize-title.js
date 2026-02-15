@@ -562,6 +562,8 @@ function normalizeTitle(title, options) {
     ["Dress-up karaoke party + ", "Dress-up karaoke party & "],
     ["Spicy cocktail hour + ", "Spicy cocktail hour & "],
     ["Playdates with Friends Collection", "Playdates with Friends"],
+    ["BRING ME THE HORIZON - ", "BRING ME THE HORIZON: "],
+    ["EPiC - ", "EPiC: "],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
