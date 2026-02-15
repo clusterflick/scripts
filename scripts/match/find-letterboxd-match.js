@@ -114,8 +114,18 @@ const getScore = async (match) => {
 };
 
 async function findLetterboxdMatch(movie) {
-  const score = await getScore(movie);
-  return score;
+  try {
+    const score = await getScore(movie);
+    return score;
+  } catch (error) {
+    if (error.message && error.message.includes("ERR_TOO_MANY_REDIRECTS")) {
+      console.log(
+        `\nWARN: Too many redirects for Letterboxd TMDB/${movie.id}, skipping`,
+      );
+      return null;
+    }
+    throw error;
+  }
 }
 
 module.exports = findLetterboxdMatch;
