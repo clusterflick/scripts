@@ -1,5 +1,4 @@
 const cheerio = require("cheerio");
-const nlp = require("compromise");
 const {
   sanitizeRichText,
   createPerformance,
@@ -10,6 +9,7 @@ const {
   isPrivateHire,
   getText,
 } = require("../../common/utils");
+const { extractPeopleNames } = require("../../common/extract-people");
 const { parseDate } = require("./utils");
 
 /**
@@ -92,23 +92,6 @@ function getAccessibility(performance, synopsis) {
   };
 }
 
-function getCharacters(synopsis) {
-  const doc = nlp(synopsis);
-  const people = doc.people().json();
-  if (people.length === 0) return;
-
-  return [
-    ...new Set(
-      people.map(({ text }) =>
-        text
-          .replace(/[’']s$/i, "")
-          .replace(/[?,]/, "")
-          .replace(/\.$/, ""),
-      ),
-    ),
-  ];
-}
-
 function getNotesList(performance) {
   const notes = [];
   if (basicNormalize(performance.QA) === "y") {
@@ -188,8 +171,8 @@ async function transform(attributes, urlSlug, movieData, sourcedEvents) {
       ),
       matchingHints: {
         overview,
-        characters: getCharacters(overview),
-        crew: getCharacters(overview),
+        characters: extractPeopleNames(overview),
+        crew: extractPeopleNames(overview),
       },
     });
   }, []);

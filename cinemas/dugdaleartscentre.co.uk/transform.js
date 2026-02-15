@@ -1,5 +1,4 @@
 const cheerio = require("cheerio");
-const nlp = require("compromise");
 const {
   getText,
   generateShowingId,
@@ -7,25 +6,9 @@ const {
   createOverview,
   createAccessibility,
 } = require("../../common/utils");
+const { extractPeopleNames } = require("../../common/extract-people");
 const attributes = require("./attributes");
 const { parseSpektrixDate } = require("./utils");
-
-function getCharacters(synopsis) {
-  const doc = nlp(synopsis);
-  const people = doc.people().json();
-  if (people.length === 0) return;
-
-  return [
-    ...new Set(
-      people.map(({ text }) =>
-        text
-          .replace(/[’']s$/i, "")
-          .replace(/[?,]/, "")
-          .replace(/\.$/, ""),
-      ),
-    ),
-  ];
-}
 
 // Extract classification from description text (e.g. "Cert:- 15" or "Cert: 15")
 const extractClassification = (text) => {
@@ -103,7 +86,7 @@ async function transform({ moviePages }, sourcedEvents) {
       performances,
       matchingHints: {
         overview,
-        crew: getCharacters(overview),
+        crew: extractPeopleNames(overview),
       },
     });
   }

@@ -1,7 +1,6 @@
 const path = require("node:path");
 const { decode } = require("html-entities");
 const cheerio = require("cheerio");
-const nlp = require("compromise");
 const {
   readJSON,
   generateShowingId,
@@ -10,29 +9,13 @@ const {
   getText,
 } = require("../../common/utils");
 const { createOverview, createPerformance } = require("../../common/utils");
+const { extractPeopleNames } = require("../../common/extract-people");
 const attributes = require("./attributes");
 const { venueMatchesCinema } = require("../../common/source-utils");
 
 function getDirector(synopsis) {
   const match = synopsis.match(/^directed by\s+(.+)$/im);
   return match ? match[1].trim() : undefined;
-}
-
-function getCast(synopsis) {
-  const cleaned = synopsis
-    // Strip credited role lines (e.g. "by Arthur Miller", "Directed by Ivo Van Hove")
-    // to avoid extracting playwrights/directors/designers as cast
-    .replace(/^(?:by|directed by|design by|written by|adapted by)\s+.+$/gim, "")
-    // Strip parenthetical content (e.g. "(Breaking Bad)") to prevent
-    // the NLP library from treating film/show titles as person names
-    .replace(/\([^)]*\)/g, "");
-  const doc = nlp(cleaned);
-  const people = doc.people().json();
-  if (people.length === 0) return;
-
-  return people
-    .map(({ text }) => text.replace(/[.,]+$/, "").trim())
-    .filter((name) => name && !name.includes("'s"));
 }
 
 function createPerformanceFromHit(
@@ -87,7 +70,7 @@ function convertTicketSourceEvent(hits, moviePages) {
         eventText ||
         `${eventDescription || ""}\n${hint || ""}`.trim() ||
         undefined,
-      cast: eventText ? getCast(eventText) : undefined,
+      cast: extractPeopleNames(eventText, { stripAttributions: true }),
       crew: eventText ? [getDirector(eventText)].filter(Boolean) : undefined,
     },
   };

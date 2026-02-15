@@ -1,5 +1,4 @@
 const cheerio = require("cheerio");
-const nlp = require("compromise");
 const {
   getText,
   createOverview,
@@ -8,6 +7,7 @@ const {
   generateShowingId,
   basicNormalize,
 } = require("../../common/utils");
+const { extractPeopleNames } = require("../../common/extract-people");
 const { parseDate } = require("./utils");
 
 function getAdditionalDataFor(data) {
@@ -53,38 +53,27 @@ function getOverviewFrom(data) {
 }
 
 function getCast(synopsis) {
-  const cleaned = synopsis
-    // Strip credited role lines (e.g. "by Arthur Miller", "Directed by Ivo Van Hove")
-    // to avoid extracting playwrights/directors/designers as cast
-    .replace(/^(?:by|directed by|design by|written by|adapted by)\s+.+$/gim, "")
-    // Strip parenthetical content (e.g. "(Breaking Bad)") to prevent
-    // the NLP library from treating film/show titles as person names
-    .replace(/\([^)]*\)/g, "");
-  const doc = nlp(cleaned);
-  const people = doc.people().json();
-  if (people.length === 0) return;
+  const names = extractPeopleNames(synopsis, { stripAttributions: true });
+  if (!names) return;
 
-  return people
-    .map(({ text }) => text.replace(/[.,]+$/, "").trim())
-    .filter(
-      (name) =>
-        (name && !name.includes("'s") && !name.includes("’s")) ||
-        basicNormalize(name) === "shakespeare" ||
-        basicNormalize(name).startsWith("tony award"),
-    );
+  // Admit One lists theatre events where "Shakespeare" and "Tony Award..."
+  // are meaningful crew hints even though the possessive filter would
+  // normally discard them.
+  return names.filter(
+    (name) =>
+      basicNormalize(name) === "shakespeare" ||
+      basicNormalize(name).startsWith("tony award") ||
+      (!name.includes("'s") && !name.includes("’s")),
+  );
 }
 
 function getCharacters(synopsis) {
-  const doc = nlp(synopsis);
-  const people = doc.people().json();
-  if (people.length === 0) return;
+  const names = extractPeopleNames(synopsis);
+  if (!names) return;
 
-  return people.reduce((characters, { text }) => {
-    // make sure it's at least first + last name. Won't work for all movies
-    // but solves the immediate problem based on the synopsis from this cinema
-    if (!text.includes(" ")) return characters;
-    return characters.concat(text.replace(/,/g, ""));
-  }, []);
+  // Make sure it's at least first + last name. Won't work for all movies
+  // but solves the immediate problem based on the synopsis from this cinema.
+  return names.filter((name) => name.includes(" "));
 }
 
 async function transform(

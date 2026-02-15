@@ -1,5 +1,4 @@
 const cheerio = require("cheerio");
-const nlp = require("compromise");
 const slugify = require("slugify");
 const {
   getText,
@@ -9,6 +8,10 @@ const {
   generateShowingId,
   isPrivateHire,
 } = require("../utils");
+const {
+  extractPeopleNames,
+  extractBracketedNames,
+} = require("../extract-people");
 const { parseDate } = require("./utils");
 
 function getDetails(data) {
@@ -24,26 +27,6 @@ function getDetails(data) {
 function getSynopsis(data) {
   const $ = cheerio.load(data);
   return getText($(".synopsisDiv"));
-}
-
-function getCharacters(synopsis) {
-  const doc = nlp(synopsis);
-  const people = doc.people().json();
-  if (people.length === 0) return;
-
-  return people.map(({ text }) => text);
-}
-
-function getCast(synopsis) {
-  const doc = nlp(synopsis);
-  const people = doc.people().json();
-  if (people.length === 0) return;
-
-  return people.reduce((cast, { text }) => {
-    const bracketedName = text.trim().match(/^[^(]+\s+\(([^)]+)\)/i);
-    if (!bracketedName) return cast;
-    return cast.concat(bracketedName[1].trim());
-  }, []);
 }
 
 async function transform(
@@ -122,8 +105,8 @@ async function transform(
       }),
       matchingHints: {
         overview: synopsis,
-        characters: synopsis ? getCharacters(synopsis) : undefined,
-        cast: synopsis ? getCast(synopsis) : undefined,
+        characters: extractPeopleNames(synopsis),
+        cast: extractBracketedNames(synopsis),
         year: details["release date"]?.match(/\s+(\d{4})$/i)?.[1],
       },
     };
