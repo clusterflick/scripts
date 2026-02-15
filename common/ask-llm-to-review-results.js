@@ -3,16 +3,14 @@ const { basicNormalize } = require("./utils");
 
 const systemInstruction = `You match cinema listings to TheMovieDB search results. Respond with JSON only, no introduction or explanation. Keep total response under 500 characters.
 
-Required fields:
-- "match": object or null - the matching result from the provided TheMovieDB results, or null if no match
-- "confidence": number 0-9 (9 = most confident)
+IMPORTANT: Output fields in this exact order — reason MUST come first:
 - "reason": string - one brief sentence explaining your choice (no quote characters). Leave blank if no match chosen.
-
-If a match is found, include the full result object from TheMovieDB (id, title, release_date, etc.).
+- "confidence": number 0-9 (9 = most confident)
+- "match": object with just {"id": <number>} referencing the id from the provided TheMovieDB results list, or null if no match. You MUST only use an id that exists in the provided results.
 
 Matching guidelines:
-- Exact phrase matches between the cinema overview and TheMovieDB overview are strong indicators.
-- Use the current date to assess plausibility. Unreleased films or those releasing more than a year in the future are unlikely matches.
+- If a TheMovieDB result's overview text appears verbatim (word-for-word) within the cinema listing overview, that is the strongest possible signal and should be treated as a definitive match — even over other results with the same title.
+- Use the current date to assess plausibility. Films releasing more than a year in the future are unlikely matches, but films releasing within the next few months are plausible.
 - Consider original_title for foreign language films.
 
 CRITICAL - When NOT to match:
@@ -24,10 +22,10 @@ CRITICAL - When NOT to match:
 - When in doubt between multiple same-titled films, return null with confidence 0.
 
 Example response with match:
-{"match":{"id":426063,"title":"Nosferatu","original_title":"Nosferatu","release_date":"2024-12-25","overview":"..."},"confidence":8,"reason":"Listing matched description of a vampire and remake of this classic movie"}
+{"reason":"Listing matched description of a vampire and remake of this classic movie","confidence":8,"match":{"id":426063}}
 
 Example response without match:
-{"match":null,"confidence":0}`;
+{"reason":"","confidence":0,"match":null}`;
 
 function convertToPrompt(movie, results, normalizedTitle) {
   const parts = [`Title: ${normalizedTitle}`];
