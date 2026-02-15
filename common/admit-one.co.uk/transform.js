@@ -6,6 +6,7 @@ const {
   createPerformance,
   createAccessibility,
   generateShowingId,
+  basicNormalize,
 } = require("../../common/utils");
 const { parseDate } = require("./utils");
 
@@ -43,7 +44,34 @@ function getOverviewFrom(data) {
 
   const details = getText($details);
   const overview = getText($overview).split("About the festival")[0].trim();
-  return overview ? `${details}\n\n${overview}` : null;
+  if (!overview) return null;
+  return `${details}\n\n${overview}`
+    .split("\n")
+    .map((line) => line.trim())
+    .filter((line) => line.length > 0)
+    .join("\n");
+}
+
+function getCast(synopsis) {
+  const cleaned = synopsis
+    // Strip credited role lines (e.g. "by Arthur Miller", "Directed by Ivo Van Hove")
+    // to avoid extracting playwrights/directors/designers as cast
+    .replace(/^(?:by|directed by|design by|written by|adapted by)\s+.+$/gim, "")
+    // Strip parenthetical content (e.g. "(Breaking Bad)") to prevent
+    // the NLP library from treating film/show titles as person names
+    .replace(/\([^)]*\)/g, "");
+  const doc = nlp(cleaned);
+  const people = doc.people().json();
+  if (people.length === 0) return;
+
+  return people
+    .map(({ text }) => text.replace(/[.,]+$/, "").trim())
+    .filter(
+      (name) =>
+        (name && !name.includes("'s") && !name.includes("’s")) ||
+        basicNormalize(name) === "shakespeare" ||
+        basicNormalize(name).startsWith("tony award"),
+    );
 }
 
 function getCharacters(synopsis) {
@@ -112,6 +140,7 @@ async function transform(
           matchingHints: {
             overview: matchingHintsOverview,
             characters: getCharacters(matchingHintsOverview),
+            crew: getCast(matchingHintsOverview),
           },
         };
       }
