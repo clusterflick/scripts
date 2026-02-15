@@ -1,12 +1,12 @@
 const { callLlm } = require("./llm-client");
 const { basicNormalize } = require("./utils");
 
-const systemInstruction = `You match cinema listings to TheMovieDB search results. Respond with JSON only, no introduction or explanation.
+const systemInstruction = `You match cinema listings to TheMovieDB search results. Respond with JSON only, no introduction or explanation. Keep total response under 500 characters.
 
 Required fields:
 - "match": object or null - the matching result from the provided TheMovieDB results, or null if no match
 - "confidence": number 0-9 (9 = most confident)
-- "reason": string - why you chose this match (max 150 characters, no quote characters). Leave blank if no match chosen.
+- "reason": string - one brief sentence explaining your choice (no quote characters). Leave blank if no match chosen.
 
 If a match is found, include the full result object from TheMovieDB (id, title, release_date, etc.).
 
@@ -16,6 +16,7 @@ Matching guidelines:
 - Consider original_title for foreign language films.
 
 CRITICAL - When NOT to match:
+- You may ONLY match against films in the provided TheMovieDB results list. If you believe the cinema listing refers to a film that is NOT in the results, return null. Do NOT select a different film with a similar title as a substitute.
 - If multiple results share the same or similar titles (e.g. remakes, same-name films from different years), you MUST have strong distinguishing evidence to match.
 - Strong evidence includes: matching year, matching director/cast names, specific plot details that uniquely identify one film.
 - If the cinema listing lacks specific identifying details (just a generic synopsis or no synopsis), return null rather than guessing.
@@ -94,5 +95,6 @@ module.exports = async function askLlmToReviewResults(
     prompt,
     cacheKeyPrefix: "ask-llm-with-results",
     logMessage: `Asking LLM to match "${movie.title}" against results`,
+    maxOutputTokens: 1024,
   });
 };

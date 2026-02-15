@@ -27,6 +27,7 @@ const generationConfig = {
  * @param {string} options.prompt - The prompt to send
  * @param {string} options.cacheKeyPrefix - Prefix for the cache key
  * @param {string} options.logMessage - Message to log when making a fresh call
+ * @param {number} [options.maxOutputTokens] - Override default max output tokens
  * @returns {Promise<Object>} Parsed JSON response from the LLM
  */
 async function callLlm({
@@ -34,6 +35,7 @@ async function callLlm({
   prompt,
   cacheKeyPrefix,
   logMessage,
+  maxOutputTokens,
 }) {
   const cacheKey = `${cacheKeyPrefix}-${getId(`${systemInstruction}\n${prompt}`)}`;
 
@@ -45,7 +47,13 @@ async function callLlm({
       systemInstruction,
     });
 
-    const chatSession = model.startChat({ generationConfig, history: [] });
+    const config = maxOutputTokens
+      ? { ...generationConfig, maxOutputTokens }
+      : generationConfig;
+    const chatSession = model.startChat({
+      generationConfig: config,
+      history: [],
+    });
     const result = await chatSession.sendMessage(prompt);
     const response = result.response.text();
     // Unwrap the string if it's been wrapped in markdown block
