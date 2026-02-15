@@ -65,7 +65,7 @@ async function transform({ moviePages }, sourcedEvents) {
       let directors;
       const description = getText($(".tribe_events .tribe-events-content"));
       const directedByMatch = description.match(
-        /directed\s+by\s+(.*?)(?:\n|,|;|\sand\s|\swith\s|\sstarring\s)/i,
+        /directed\s+by\s+(.*?)(?:\n|,|;|(?<=\w{2})\.|\sand\s|\swith\s|\sstarring\s)/i,
       );
       if (directedByMatch) {
         directors = directedByMatch[1].replace(/\.$/, "");
