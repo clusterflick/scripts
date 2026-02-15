@@ -564,6 +564,7 @@ function normalizeTitle(title, options) {
     ["Playdates with Friends Collection", "Playdates with Friends"],
     ["BRING ME THE HORIZON - ", "BRING ME THE HORIZON: "],
     ["EPiC - ", "EPiC: "],
+    ["Beats Rhymes & Life' - ", "Beats Rhymes & Life': "],
   ];
 
   corrections.forEach(([phrase, replacement]) => {

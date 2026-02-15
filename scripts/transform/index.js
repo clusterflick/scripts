@@ -79,6 +79,7 @@ async function transform(
 
     // Only check for missing data for the following locations
     const optedIn = [
+      "229.london",
       "acflondon.org",
       "actonecinema.co.uk",
       "allisjoysoho.com",
