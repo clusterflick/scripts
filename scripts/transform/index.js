@@ -370,21 +370,24 @@ async function transform(
       }
       if (!response.ok || response.url.includes("/not-found")) continue;
 
+      // Parse the HTML and extract visible text (excluding scripts and
+      // styles) for content checks. Raw HTML can contain UI strings inside
+      // inlined data (e.g. client-side rendered SPAs) that cause false matches.
+      const $ = cheerio.load(content);
+      $("script, style").remove();
+      const visibleText = basicNormalize($.text());
+
       // Check response content in case the service is misconfigured to respond
       // ok status with not found content
-      const pageNotFound = basicNormalize("page not found");
-      if (basicNormalize(content).includes(pageNotFound)) continue;
-
-      const noScreenings = basicNormalize("no screenings currently scheduled");
-      if (basicNormalize(content).includes(noScreenings)) continue;
-
-      const cancelledEvent = basicNormalize("cancelled event");
-      if (basicNormalize(content).includes(cancelledEvent)) continue;
-
-      const noPerformance = basicNormalize(
+      const removedPhrases = [
+        "page not found",
+        "no screenings currently scheduled",
+        "cancelled event",
         "there are currently no performance scheduled for this event",
-      );
-      if (basicNormalize(content).includes(noPerformance)) continue;
+      ];
+      if (removedPhrases.some((p) => visibleText.includes(basicNormalize(p)))) {
+        continue;
+      }
 
       // The movie may have been renamed, which would cause the title and URL to
       // change. Usually the old URL will redirect to the new URL, so let's
@@ -399,7 +402,6 @@ async function transform(
       // change. If the old URL doesn't redirect to the new URL, it may have an
       // updated canonical URL in the meta data pointing to the new location.
       // If there's a match, we already have the data; continue
-      const $ = cheerio.load(content);
       const canonicalUrl = $('link[rel="canonical"]').attr("href");
       const canonicalMatch = matchedData.find(
         ({ url }) =>
