@@ -99,28 +99,34 @@ async function transform(
         performance.attributeIds.forEach((attributeId) => {
           const attribute = findFor(attributes, attributeId);
           if (attribute) {
+            const attributeName = basicNormalize(attribute.name.text);
+            if (attributeName === "open captioned") {
+              accessibility.subtitled = true;
+              accessibility.hardOfHearing = true;
+              return;
+            }
             if (
-              attribute.name.text.toLowerCase().endsWith(" (sub)") ||
-              attribute.name.text.toLowerCase().startsWith("Subtitled ")
+              attributeName.endsWith(" (sub)") ||
+              attributeName.startsWith("subtitled ")
             ) {
               accessibility.subtitled = true;
               return;
             }
-            if (attribute.name.text.toLowerCase() === "audio described") {
+            if (attributeName === "audio described") {
               accessibility.audioDescription = true;
               return;
             }
-            if (attribute.name.text.toLowerCase() === "closed captioned") {
+            if (attributeName === "closed captioned") {
               accessibility.hardOfHearing = true;
               return;
             }
-            if (attribute.name.text.toLowerCase() === "relaxed") {
+            if (attributeName === "relaxed") {
               accessibility.relaxed = true;
               return;
             }
             if (
-              attribute.name.text.toLowerCase() === "baby club" ||
-              attribute.name.text.toLowerCase() === "kids club"
+              attributeName === "baby club" ||
+              attributeName === "kids club"
             ) {
               accessibility.babyFriendly = true;
               return;
