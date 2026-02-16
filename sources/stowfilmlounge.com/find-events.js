@@ -44,7 +44,7 @@ function parseFilmInfo(filmText) {
  */
 function parseEventDate(dateText, timesText) {
   // Extract film start time from times text (e.g., "Doors 19:00, Film 19:45, Close 22:30")
-  const timeMatch = timesText.match(/Film\s+([^,]+)/i);
+  const timeMatch = timesText.match(/Films?\s+([^,]+)/i);
   if (!timeMatch) {
     throw new Error("Could not extract film time");
   }
@@ -83,15 +83,27 @@ function parseEventSection($, section) {
   // - Second p: "Doors HH:MM, Film HH:MM, Close HH:MM"
   const $captionParagraphs = section.find("figcaption").find("p");
   const filmText = getText($captionParagraphs.eq(0));
-  const timesText = getText($captionParagraphs.eq(1));
+  let timesText = getText($captionParagraphs.eq(1));
+
+  // Times info is also in a paragraph starting with "Doors:" within the content
+  if (!timesText) {
+    const $htmlContent = section.find(".sqs-html-content").eq(1);
+    $htmlContent.find("p").each((i, el) => {
+      const text = getText($(el));
+      if (text.startsWith("Doors:")) {
+        timesText = text;
+        return false;
+      }
+    });
+  }
 
   // Venue info is in the first html block's sqs-html-content
   // - h3: "STOW FILM LOUNGE @ VENUE NAME"
   // - h4: "FRIDAY 16th JANUARY"
-  const $htmlContent = section.find(".sqs-html-content").first();
-  const venueText = getText($htmlContent.find("h3"));
+  const $headerHtmlContent = section.find(".sqs-html-content").eq(0);
+  const venueText = getText($headerHtmlContent.find("h3"));
   const venueName = extractVenueName(venueText);
-  const dateText = getText($htmlContent.find("h4"));
+  const dateText = getText($headerHtmlContent.find("h4"));
 
   // Booking link is in the button container
   const $bookingLink = section.find(".sqs-block-button-container a").first();
