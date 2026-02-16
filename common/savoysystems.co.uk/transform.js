@@ -88,7 +88,9 @@ function getAccessibility(performance, synopsis) {
       basicNormalize(performance.FF) === "y" || // Lexi Cinema
       basicNormalize(performance.CB) === "y", // Rio Cinema
     relaxed: basicNormalize(performance.RS) === "y", // Lexi Cinema, Rio Cinema
-    subtitled: basicNormalize(synopsis).includes("with english subtitles"),
+    subtitled:
+      basicNormalize(performance.HOH) === "y" || // Lexi Cinema
+      basicNormalize(synopsis).includes("with english subtitles"),
   };
 }
 
