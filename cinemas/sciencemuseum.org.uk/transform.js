@@ -79,16 +79,13 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
       details[key] = value;
     });
 
+    const title = movie.searchTitle || movie.productionTitle;
+
     movies.push({
       showingId: generateShowingId(attributes, movie.productionSeasonId),
-      title: movie.productionTitle,
+      title,
       url: movie.moviePageUrl,
-      overview: getOverview(
-        getText($($colophon)),
-        details,
-        trailer,
-        movie.productionTitle,
-      ),
+      overview: getOverview(getText($($colophon)), details, trailer, title),
       performances: movie.performances.map(
         ({
           iso8601DateString,
@@ -106,7 +103,7 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
             status: {
               soldOut: performanceStatusMessage.toLowerCase() === "sold out",
             },
-            accessibility: createAccessibility(movie.productionTitle, {}),
+            accessibility: createAccessibility(title, {}),
           });
         },
       ),

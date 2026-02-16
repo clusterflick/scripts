@@ -21,13 +21,38 @@ async function retrieve() {
     }),
   });
 
+  // Expand season entries where performances have different titles
+  // (e.g. "Star Trek Season" with 12 different films) into individual entries
+  const stripClassification = (title) => title.replace(/\s+\([^)]+\)$/i, "");
+  const expandedMovieListPage = movieListPage.flatMap((entry) => {
+    const uniqueBaseTitles = [
+      ...new Set(
+        entry.performances.map((p) => stripClassification(p.performanceTitle)),
+      ),
+    ];
+    if (uniqueBaseTitles.length <= 1) return [entry];
+
+    return uniqueBaseTitles.map((baseTitle) => {
+      const matchingPerformances = entry.performances.filter(
+        (p) => stripClassification(p.performanceTitle) === baseTitle,
+      );
+      return {
+        ...entry,
+        productionSeasonId: `${entry.productionSeasonId}-${matchingPerformances[0].id}`,
+        performances: matchingPerformances,
+        searchTitle: matchingPerformances[0].performanceTitle,
+      };
+    });
+  });
+
   const moviePages = {};
-  const movies = movieListPage.filter(
+  const movies = expandedMovieListPage.filter(
     ({ performances }) => performances[0].productTypeId === 3, // Movie
   );
   for (const movie of movies) {
+    const searchTerm = movie.searchTitle || movie.productionTitle;
     const searchResults = await fetchText(
-      `${domain}/search?term=${encodeURIComponent(movie.productionTitle)}`,
+      `${domain}/search?term=${encodeURIComponent(searchTerm)}`,
     );
     const $ = cheerio.load(searchResults);
     const resultPath = $(".c-search-results__item")
@@ -39,7 +64,7 @@ async function retrieve() {
   }
 
   return {
-    movieListPage,
+    movieListPage: expandedMovieListPage,
     moviePages,
   };
 }
