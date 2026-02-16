@@ -45,7 +45,10 @@ async function transform(attributes, { result: movieData }, sourcedEvents) {
               accessibility.subtitled = true;
               return;
             }
-            if (value.toLowerCase() === "big-shorts") {
+            if (
+              value.toLowerCase() === "big-shorts" ||
+              value.toLowerCase() === "mighty-mornings"
+            ) {
               accessibility.babyFriendly = true;
               return;
             }
