@@ -2,6 +2,7 @@ module.exports = {
   id: "kcl.ac.uk-strand",
   name: "Strand Building",
   alternativeNames: [
+    "King's College London",
     "King's Building - King's College London",
     "Strand Building - King's College London",
   ],
