@@ -124,7 +124,8 @@ async function transform(
           subtitled:
             tags.includes("subbed") ||
             tags.includes("subtitles") ||
-            tags.includes("subtitled"),
+            tags.includes("subtitled") ||
+            tags.includes("oc"),
         });
 
         return createPerformance({
