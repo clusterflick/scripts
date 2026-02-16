@@ -565,6 +565,10 @@ function normalizeTitle(title, options) {
     ["BRING ME THE HORIZON - ", "BRING ME THE HORIZON: "],
     ["EPiC - ", "EPiC: "],
     ["Beats Rhymes & Life' - ", "Beats Rhymes & Life': "],
+    ["ELLIOTT SMITH - ", "ELLIOTT SMITH: "],
+    ["CINESOCIAL - ", "CINESOCIAL: "],
+    [/O'? Romeo/i, "O'Romeo"],
+    ["HEARTS OF DARKESS", "HEARTS OF DARKNESS"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
