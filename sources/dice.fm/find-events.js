@@ -60,7 +60,12 @@ async function findEvents(cinema) {
     });
   });
 
-  return filteredEvents.map((event) => convertDiceEvent(event));
+  const uniqueEvents = filteredEvents.filter(
+    (event, index, self) =>
+      self.findIndex((e) => e.perm_name === event.perm_name) === index,
+  );
+
+  return uniqueEvents.map((event) => convertDiceEvent(event));
 }
 
 module.exports = findEvents;
