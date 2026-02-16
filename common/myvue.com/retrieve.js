@@ -2,7 +2,7 @@ const getPageWithPlaywright = require("../get-page-with-playwright");
 
 async function retrieve({ domain, url, cinemaId }) {
   const cacheKey = `myvue.com-${cinemaId}`;
-  return await getPageWithPlaywright(url, cacheKey, async (page) => {
+  const data = await getPageWithPlaywright(url, cacheKey, async (page) => {
     await page.waitForLoadState();
     await page.locator(".header__box").waitFor();
     return page.evaluate(
@@ -10,6 +10,14 @@ async function retrieve({ domain, url, cinemaId }) {
       `${domain}/api/microservice/showings/cinemas/${cinemaId}/films`,
     );
   });
+
+  if (data.responseCode !== 0 || !data.result) {
+    throw new Error(
+      `MyVue API error for cinema ${cinemaId}: ${data.errorMessage || "unknown error"} (responseCode: ${data.responseCode})`,
+    );
+  }
+
+  return data;
 }
 
 module.exports = retrieve;
