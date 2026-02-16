@@ -28,6 +28,7 @@ async function transform(attributes, { result: movieData }, sourcedEvents) {
         (showing.attributes || []).forEach(
           ({ shortName: title, description, value }) => {
             if (value.toLowerCase() === "open-captioned") {
+              accessibility.subtitled = true;
               accessibility.hardOfHearing = true;
               return;
             }
