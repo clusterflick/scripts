@@ -569,6 +569,7 @@ function normalizeTitle(title, options) {
     ["CINESOCIAL - ", "CINESOCIAL: "],
     [/O'? Romeo/i, "O'Romeo"],
     ["HEARTS OF DARKESS", "HEARTS OF DARKNESS"],
+    [/\s+peaky blinders$/i, " peaky blinders the immortal man"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
