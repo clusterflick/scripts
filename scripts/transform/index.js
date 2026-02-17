@@ -314,6 +314,11 @@ async function transform(
       "vaginamuseum.co.uk",
       "walthamforest.gov.uk",
       "william-the-fourth.com",
+      "drakeandmorgan.co.uk-the-refinery-citypoint",
+      "drakeandmorgan.co.uk-the-moniker",
+      "not-nowhere.org",
+      "parlourkensal.com",
+      "thevinenw5.co.uk",
     ];
     const previousReleaseData = optedIn.includes(location)
       ? previousRelease
