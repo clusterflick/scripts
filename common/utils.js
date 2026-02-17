@@ -469,6 +469,7 @@ const isPrivateHire = (title = "") =>
   // case they'll contain more information (like the movie title)
   basicNormalize(title) === "private screening" ||
   basicNormalize(title) === "cleaning screen placeholder" ||
+  basicNormalize(title).includes("events placeholder") ||
   basicNormalize(title).includes("do not book");
 
 async function runLlmFunction(llmFunction, options = { run: 0 }) {
