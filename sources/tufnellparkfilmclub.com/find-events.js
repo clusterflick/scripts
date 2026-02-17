@@ -26,7 +26,7 @@ function parseTitleText(titleText) {
   return {
     title: match[1].trim(),
     directors: match[2].trim(),
-    year: parseInt(match[3], 10),
+    year: match[3].trim(),
   };
 }
 

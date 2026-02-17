@@ -289,7 +289,7 @@ const createOverview = ({
 
   return {
     duration: parseMinsToMs(duration) || undefined,
-    year: year || undefined,
+    year: year ? `${year}` : undefined,
     categories: Array.isArray(categories)
       ? categories
       : splitConjoinedItemsInList(convertToList(categories)),

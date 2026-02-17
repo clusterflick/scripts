@@ -1,5 +1,5 @@
 /** @jest-environment setup-polly-jest/jest-environment-node */
-const { setupPolly } = require("../../../common/test-utils");
+const { setupPolly, schemaValidate } = require("../../../common/test-utils");
 const {
   readJSON,
   removeMatchingHints,
@@ -73,6 +73,7 @@ describe(attributes.name, () => {
           .map(addTestCategory);
 
         // Make sure the data looks roughly correct
+        expect(schemaValidate(data)).toBe(true);
         expect(data).toHaveLength(expectedMatches);
         expect(data).toMatchSnapshot();
       },

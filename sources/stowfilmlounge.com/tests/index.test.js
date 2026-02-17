@@ -1,5 +1,5 @@
 /** @jest-environment setup-polly-jest/jest-environment-node */
-const { setupPolly } = require("../../../common/test-utils");
+const { setupPolly, schemaValidate } = require("../../../common/test-utils");
 const {
   readJSON,
   removeMatchingHints,
@@ -57,13 +57,15 @@ describe(`${attributes.name}`, () => {
       expect(townHallData).toHaveLength(3);
       expect(townHallData).toMatchSnapshot("Waltham Forest Town Hall events");
 
-      const signatureOutput = await findEvents(signatureBreweryCinema);
-      const signatureData = JSON.parse(JSON.stringify(signatureOutput))
+      const output = await findEvents(signatureBreweryCinema);
+      const data = JSON.parse(JSON.stringify(output))
         .map(removeMatchingHints)
         .map(addTestCategory);
 
-      expect(signatureData).toHaveLength(2);
-      expect(signatureData).toMatchSnapshot("Signature Brewery events");
+      // Make sure the data looks roughly correct
+      expect(schemaValidate(data)).toBe(true);
+      expect(data).toHaveLength(2);
+      expect(data).toMatchSnapshot("Signature Brewery events");
     },
     isRecording ? 600_000 : undefined,
   );

@@ -1,5 +1,5 @@
 /** @jest-environment setup-polly-jest/jest-environment-node */
-const { setupPolly } = require("../../../common/test-utils");
+const { setupPolly, schemaValidate } = require("../../../common/test-utils");
 const {
   readJSON,
   removeMatchingHints,
@@ -40,7 +40,7 @@ describe(`${attributes.name}`, () => {
     {
       name: "JOIA",
       geo: { lat: 51.48079445146031, lon: -0.14519212515961233 },
-      expectedMatches: 10,
+      expectedMatches: 9,
     },
   ])("$name", ({ name, geo, expectedMatches }) => {
     it(
@@ -69,6 +69,7 @@ describe(`${attributes.name}`, () => {
           .map(addTestCategory);
 
         // Make sure the data looks roughly correct
+        expect(schemaValidate(data)).toBe(true);
         expect(data).toHaveLength(expectedMatches);
         expect(data).toMatchSnapshot();
       },

@@ -1,5 +1,5 @@
 /** @jest-environment setup-polly-jest/jest-environment-node */
-const { setupPolly } = require("../../../common/test-utils");
+const { setupPolly, schemaValidate } = require("../../../common/test-utils");
 const {
   readJSON,
   removeMatchingHints,
@@ -28,13 +28,13 @@ describe(attributes.name, () => {
 
       readJSON.mockImplementation(() => ({ movieListPage }));
 
-      const vineCinema = {
+      const cinema = {
         name: "The Vine",
         alternativeNames: ["Vine NW5", "Vine"],
         address: "86 Highgate Road, London, NW5 1PB, UK",
         geo: { lat: 51.55481925850424, lon: -0.14440595173848939 },
       };
-      const output = await findEvents(vineCinema);
+      const output = await findEvents(cinema);
 
       expect(
         output.every((movie) =>
@@ -46,6 +46,8 @@ describe(attributes.name, () => {
         .map(removeMatchingHints)
         .map(addTestCategory);
 
+      // Make sure the data looks roughly correct
+      expect(schemaValidate(data)).toBe(true);
       expect(data).toHaveLength(3);
       expect(data).toMatchSnapshot();
     },

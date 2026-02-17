@@ -234,15 +234,16 @@ async function findEvents(cinema) {
       );
 
       for (const [movieTitle, occurrences] of movieGroups.entries()) {
-        events.push(
-          convertDesignMyNightEvent(
-            eventId,
-            eventData,
-            listing,
-            movieTitle,
-            occurrences,
-          ),
+        const event = convertDesignMyNightEvent(
+          eventId,
+          eventData,
+          listing,
+          movieTitle,
+          occurrences,
         );
+        if (event.performances.length > 0) {
+          events.push(event);
+        }
       }
     }
   }
