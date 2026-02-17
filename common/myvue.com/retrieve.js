@@ -7,7 +7,7 @@ async function retrieve({ domain, url, cinemaId }) {
     await page.locator(".header__box").waitFor();
     return page.evaluate(
       (url) => fetch(url).then((response) => response.json()),
-      `${domain}/api/microservice/showings/cinemas/${cinemaId}/films`,
+      `${domain}/api/microservice/showings/cinemas/${cinemaId}/films?minEmbargoLevel=1&includesSession=true&includeSessionAttributes=true`,
     );
   });
 
