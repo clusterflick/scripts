@@ -116,7 +116,7 @@ const getValidClassification = (value = "") => {
 
 const parseMinsToMs = (value) => parseInt(value, 10) * 60 * 1000;
 
-const sanitizeRichText = (value) =>
+const sanitizeRichText = (value = "") =>
   decode(
     value
       .replaceAll("\\n", "\n")

@@ -486,7 +486,6 @@ const knownRemovablePhrases = [
   "DH:",
   "Dog-Friendly:",
   "Dog Party:",
-  "Dr. Seuss' ",
   "Dr Seuss'",
   "Dušan Makavejev's",
   "Dystopia is Not the Future:",

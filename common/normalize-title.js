@@ -576,6 +576,7 @@ function normalizeTitle(title, options) {
     ["Bluey At the Cinemas:", "Bluey At the Cinema:"],
     ["La Scala Milan: ", "La Scala: "],
     ["La Scala Opera - Cosi Fan Tutte: Mozart", "La Scala: Cosi Fan Tutte"],
+    ["Pompeii: Below the Clouds", "Pompei: Below the Clouds"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {

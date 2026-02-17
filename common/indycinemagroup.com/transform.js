@@ -130,7 +130,7 @@ async function transform(
               tags.includes("subtitled") ||
               tags.includes("oc"),
           },
-          sanitizeRichText(movie.synopsis),
+          sanitizeRichText(movie.synopsis ?? ""),
         );
 
         return createPerformance({
@@ -142,7 +142,7 @@ async function transform(
           accessibility,
         });
       }),
-      matchingHints: { overview: sanitizeRichText(movie.synopsis) },
+      matchingHints: { overview: sanitizeRichText(movie.synopsis ?? "") },
     };
 
     return moviesAtCinema.concat([transformedMovie]);
