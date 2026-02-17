@@ -15,11 +15,11 @@ jest.mock("../../../common/utils", () => ({
 const isRecording = false;
 
 jest.mock("../../../common/cache");
-setupCacheMock(__dirname, "2026-01-07");
+setupCacheMock(__dirname, "2026-02-17");
 
 describe(`${attributes.name}`, () => {
   setupPolly(isRecording, __dirname);
-  jest.useFakeTimers().setSystemTime(new Date("2026-01-07"));
+  jest.useFakeTimers().setSystemTime(new Date("2026-02-17"));
 
   describe.each([
     {
@@ -27,7 +27,7 @@ describe(`${attributes.name}`, () => {
       alternativeNames: ["Cold Harbour Blue", "Whirled Cinema"],
       address:
         "259-260 Hardess Street, Loughborough Junction, London, SE24 0HN, UK",
-      expectedMatches: 1,
+      expectedMatches: 0,
     },
     {
       name: "Good Shepherd Studios",
@@ -39,7 +39,13 @@ describe(`${attributes.name}`, () => {
       name: "Siobhan Davies Studios",
       alternativeNames: [],
       address: "85 St George's Road, London, SE1 6ER, UK",
-      expectedMatches: 1,
+      expectedMatches: 0,
+    },
+    {
+      name: "Curzon Wimbledon",
+      alternativeNames: [],
+      address: "23 The Broadway, London, SW19 1RE, UK",
+      expectedMatches: 3,
     },
   ])("$name", ({ name, alternativeNames, address, expectedMatches }) => {
     it(
@@ -49,7 +55,7 @@ describe(`${attributes.name}`, () => {
 
         // Make sure the input looks roughly correct
         expect(clubPages).toBeTruthy();
-        expect(Object.keys(clubPages)).toHaveLength(3);
+        expect(Object.keys(clubPages)).toHaveLength(9);
 
         readJSON.mockImplementation(() => ({ clubPages }));
 
