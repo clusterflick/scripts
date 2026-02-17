@@ -53,7 +53,7 @@ async function transform({ eventsData }, sourcedEvents) {
           accessibility: createAccessibility(
             event.event_title,
             {},
-            event.event_description || "",
+            event.event_description,
           ),
         }),
       ],

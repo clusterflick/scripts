@@ -86,6 +86,8 @@ async function transform({ movieListPage }, sourcedEvents) {
       ...parseMovieProperties($, $movieProperties),
     });
 
+    const synopsis = getText($movieDetails.find(".jacro-formatted-text"));
+
     const performances = [];
     const $performanceDays = $entry.find(".performance-list-items .heading");
     $performanceDays.each(function () {
@@ -148,7 +150,7 @@ async function transform({ movieListPage }, sourcedEvents) {
             notesList,
             url: bookingUrl || url,
             status,
-            accessibility: createAccessibility(title, accessibility),
+            accessibility: createAccessibility(title, accessibility, synopsis),
           }),
         );
         $currentElement = $currentElement.next();
@@ -161,9 +163,7 @@ async function transform({ movieListPage }, sourcedEvents) {
       url,
       overview,
       performances,
-      matchingHints: {
-        overview: getText($movieDetails.find(".jacro-formatted-text")),
-      },
+      matchingHints: { overview: synopsis },
     });
   });
 

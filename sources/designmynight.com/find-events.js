@@ -164,7 +164,7 @@ function convertDesignMyNightEvent(
         date,
         url: eventUrl,
         status: { soldOut },
-        accessibility: createAccessibility(title, {}),
+        accessibility: createAccessibility(title, {}, listingData?.excerpt),
       });
     });
 

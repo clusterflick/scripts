@@ -47,6 +47,7 @@ async function transform({ moviePages }, sourcedEvents) {
     }
 
     const $description = $spektrix(".DetailsContainer");
+    const overview = getMatchingDescription($description);
 
     // Extract showtimes from the Spektrix select options
     const performances = [];
@@ -63,7 +64,7 @@ async function transform({ moviePages }, sourcedEvents) {
         createPerformance({
           date,
           url: moviePageUrl,
-          accessibility: createAccessibility(title, {}),
+          accessibility: createAccessibility(title, {}, overview),
           status,
         }),
       );
@@ -72,8 +73,6 @@ async function transform({ moviePages }, sourcedEvents) {
     if (performances.length === 0) {
       throw new Error(`No performances found for ${moviePageUrl}`);
     }
-
-    const overview = getMatchingDescription($description);
 
     movies.push({
       showingId: generateShowingId(attributes, eventId),

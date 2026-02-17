@@ -74,16 +74,20 @@ async function transform(
           soldOut: !!showing.SoldoutStatus,
         };
 
-        const accessibility = createAccessibility(movie.Title, {
-          audioDescription: hasAttribute("audio d"),
-          relaxed: hasAttribute("relaxed"),
-          babyFriendly:
-            hasAttribute("watch baby") ||
-            hasAttribute("toddler ti") ||
-            hasAttribute("kids' club"),
-          hardOfHearing: hasAttribute("hohsub"),
-          subtitled: hasAttribute("sub cinema"),
-        });
+        const accessibility = createAccessibility(
+          movie.Title,
+          {
+            audioDescription: hasAttribute("audio d"),
+            relaxed: hasAttribute("relaxed"),
+            babyFriendly:
+              hasAttribute("watch baby") ||
+              hasAttribute("toddler ti") ||
+              hasAttribute("kids' club"),
+            hardOfHearing: hasAttribute("hohsub"),
+            subtitled: hasAttribute("sub cinema"),
+          },
+          synopsis,
+        );
 
         return createPerformance({
           date: parseDate(showing.Showtime),

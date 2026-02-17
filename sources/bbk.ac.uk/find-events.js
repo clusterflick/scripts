@@ -83,12 +83,10 @@ function parseMoviePage(url, html) {
         date,
         url: bookingUrl,
         notesList: [],
-        accessibility: createAccessibility(title, {}),
+        accessibility: createAccessibility(title, {}, description),
       }),
     ],
-    matchingHints: {
-      overview: description,
-    },
+    matchingHints: { overview: description },
   };
 }
 

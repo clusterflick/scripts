@@ -65,7 +65,7 @@ const getNotesList = ($, $sidebars) => {
     .filter((tag) => basicNormalize(tag) !== "cinema");
 };
 
-const getSinglePerformance = ($, title) => {
+const getSinglePerformance = ($, title, overview) => {
   const url = $(".m-banner__links a.a-btn").eq(0).attr("href");
   const $sidebars = $(".o-sidebar--event.m-entity");
   const $dateSidebar = $sidebars
@@ -92,14 +92,18 @@ const getSinglePerformance = ($, title) => {
       date: parseDate(date),
       notesList: getNotesList($, $sidebars),
       url,
-      accessibility: createAccessibility(title, {
-        subtitled: description.includes("with english subtitles"),
-      }),
+      accessibility: createAccessibility(
+        title,
+        {
+          subtitled: description.includes("with english subtitles"),
+        },
+        overview,
+      ),
     }),
   ];
 };
 
-const getMultiplePerformances = ($, bookingInformation, title) => {
+const getMultiplePerformances = ($, bookingInformation, title, overview) => {
   const $sidebars = $(".o-sidebar--event.m-entity");
   const description = basicNormalize(bookingInformation.description);
   return bookingInformation.instances.map(({ id, start, availability }) => {
@@ -110,9 +114,13 @@ const getMultiplePerformances = ($, bookingInformation, title) => {
       status: {
         soldOut: availability.available === 0,
       },
-      accessibility: createAccessibility(title, {
-        subtitled: description.includes("with english subtitles"),
-      }),
+      accessibility: createAccessibility(
+        title,
+        {
+          subtitled: description.includes("with english subtitles"),
+        },
+        overview,
+      ),
     });
   });
 };
@@ -126,9 +134,11 @@ async function transform({ moviePages }, sourcedEvents) {
     const shortLinkUrl = $("link[rel='shortlink']").attr("href");
     const id = shortLinkUrl.match(/\/node\/([^/]+)$/i)[1];
     const title = getText($(".m-banner__copy h1"));
+    const overview =
+      getText(getSection($, "synopsis")) || getText($(".m-entity__body"));
     const performances = booking
-      ? getMultiplePerformances($, booking, title)
-      : getSinglePerformance($, title);
+      ? getMultiplePerformances($, booking, title, overview)
+      : getSinglePerformance($, title, overview);
 
     if (performances) {
       movies.push({
@@ -137,10 +147,7 @@ async function transform({ moviePages }, sourcedEvents) {
         url: `${attributes.domain}${moviePageUrl}`,
         overview: getOverview($),
         performances,
-        matchingHints: {
-          overview:
-            getText(getSection($, "synopsis")) || getText($(".m-entity__body")),
-        },
+        matchingHints: { overview },
       });
     }
   }

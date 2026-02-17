@@ -56,6 +56,25 @@ async function transform({ moviePages }, sourcedEvents) {
       .attr("onclick")
       .replace('location.href="', "")
       .replace('";', "");
+    const overview = Array.from(
+      $("#detail-body")
+        .children()
+        .not(".subhead")
+        .not("#films-image")
+        .not("#films-trailer")
+        .not("#trailer-control")
+        .not("#colophon")
+        .not("#credit")
+        .not(".row.select"),
+    )
+      .map((el) => {
+        $(el).find("br").replaceWith("\n");
+        return getText($(el));
+      })
+      .filter((value) => value.trim().length > 0)
+      .join("\n")
+      .replace(/[\n]+/g, "\n")
+      .trim();
 
     movies.push({
       showingId: generateShowingId(attributes, id),
@@ -74,35 +93,19 @@ async function transform({ moviePages }, sourcedEvents) {
             date: parseDate(`${date} ${time}`),
             url,
             screen,
-            accessibility: createAccessibility(title, {
-              subtitled: basicNormalize(details).includes(
-                "with english subtitles",
-              ),
-            }),
+            accessibility: createAccessibility(
+              title,
+              {
+                subtitled: basicNormalize(details).includes(
+                  "with english subtitles",
+                ),
+              },
+              overview,
+            ),
           });
         },
       ),
-      matchingHints: {
-        overview: Array.from(
-          $("#detail-body")
-            .children()
-            .not(".subhead")
-            .not("#films-image")
-            .not("#films-trailer")
-            .not("#trailer-control")
-            .not("#colophon")
-            .not("#credit")
-            .not(".row.select"),
-        )
-          .map((el) => {
-            $(el).find("br").replaceWith("\n");
-            return getText($(el));
-          })
-          .filter((value) => value.trim().length > 0)
-          .join("\n")
-          .replace(/[\n]+/g, "\n")
-          .trim(),
-      },
+      matchingHints: { overview },
     });
   }
 

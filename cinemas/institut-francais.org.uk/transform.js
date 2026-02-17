@@ -53,6 +53,7 @@ const getMultiplePerformances = (
   details,
   moviePageUrl,
   title,
+  overview,
 ) => {
   return $multiple
     .find("tbody tr")
@@ -75,17 +76,28 @@ const getMultiplePerformances = (
         ],
         url: performanceUrl ?? moviePageUrl,
         screen: getText($single.find("td").eq(2)),
-        accessibility: createAccessibility(title, {
-          subtitled:
-            languageDetails.includes("with english sub") ||
-            languageDetails.includes("with en sub"),
-        }),
+        accessibility: createAccessibility(
+          title,
+          {
+            subtitled:
+              languageDetails.includes("with english sub") ||
+              languageDetails.includes("with en sub"),
+          },
+          overview,
+        ),
       });
     })
     .get();
 };
 
-const getSinglePerformance = ($, $single, details, moviePageUrl, title) => {
+const getSinglePerformance = (
+  $,
+  $single,
+  details,
+  moviePageUrl,
+  title,
+  overview,
+) => {
   const day = $single.find(".timetable .date time").attr("datetime");
   const time = $single.find(".timetable time.time").attr("datetime");
   const calendarNote = getText($single.find(".timetable .calendar-note"));
@@ -110,11 +122,15 @@ const getSinglePerformance = ($, $single, details, moviePageUrl, title) => {
       ],
       url: performanceUrl ?? moviePageUrl,
       screen: getText($single.find(".timetable .location")),
-      accessibility: createAccessibility(title, {
-        subtitled: basicNormalize(details.language).includes(
-          "with english subtitles",
-        ),
-      }),
+      accessibility: createAccessibility(
+        title,
+        {
+          subtitled: basicNormalize(details.language).includes(
+            "with english subtitles",
+          ),
+        },
+        overview,
+      ),
     }),
   ];
 };
@@ -131,6 +147,7 @@ async function transform({ moviePages }, sourcedEvents) {
     const shortLinkUrl = $("link[rel='shortlink']").attr("href");
     const id = new URLSearchParams(new URL(shortLinkUrl).search).get("p");
     const title = getText($title);
+    const overview = getText($(".definition"));
 
     movies.push({
       showingId: generateShowingId(attributes, id),
@@ -145,6 +162,7 @@ async function transform({ moviePages }, sourcedEvents) {
               details,
               moviePageUrl,
               title,
+              overview,
             )
           : getSinglePerformance(
               $,
@@ -152,8 +170,9 @@ async function transform({ moviePages }, sourcedEvents) {
               details,
               moviePageUrl,
               title,
+              overview,
             ),
-      matchingHints: { overview: getText($(".definition")) },
+      matchingHints: { overview },
     });
   }
 

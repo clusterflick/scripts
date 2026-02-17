@@ -61,9 +61,7 @@ function convertFeverEvent(url, planDetail, sessions) {
         ),
       }),
     ),
-    matchingHints: {
-      overview: planDetail.description || "",
-    },
+    matchingHints: { overview: planDetail.description },
   };
 }
 

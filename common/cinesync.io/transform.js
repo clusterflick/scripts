@@ -130,7 +130,7 @@ async function transform(attributes, { movieListPage }, sourcedEvents) {
           accessibility: createAccessibility(
             movie.movie_name,
             accessibility,
-            movie.synopsis || "",
+            movie.synopsis,
           ),
         });
 

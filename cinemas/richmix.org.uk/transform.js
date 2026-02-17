@@ -36,6 +36,7 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
     $cast.children().each(function () {
       $(this).remove();
     });
+    const overview = getText(cheerio.load(movie.post_content));
 
     return moviesWithPerformances.concat({
       showingId: generateShowingId(attributes, movie.id),
@@ -63,11 +64,11 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
             url: `${attributes.domain}/book-online/${iframeId}`,
             screen: name,
             status,
-            accessibility: createAccessibility(movie.post_title, {}),
+            accessibility: createAccessibility(movie.post_title, {}, overview),
           });
         },
       ),
-      matchingHints: { overview: getText(cheerio.load(movie.post_content)) },
+      matchingHints: { overview },
     });
   }, []);
 

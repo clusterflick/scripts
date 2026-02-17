@@ -44,7 +44,7 @@ function getOverviewFor($) {
   return createOverview(overview);
 }
 
-function getPerformancesFor($, url, { title, performances }) {
+function getPerformancesFor($, url, { title, performances }, overview) {
   const $showInfo = $("ul.Film-info__information li");
   let isSubtitled = false;
   $showInfo.each(function () {
@@ -91,11 +91,15 @@ function getPerformancesFor($, url, { title, performances }) {
         status: {
           soldOut: $(".item-link").hasClass("soldout"),
         },
-        accessibility: createAccessibility(title, {
-          audioDescription: hasAudioDescription,
-          subtitled: isSubtitled,
-          ...accessibilityMapping[key],
-        }),
+        accessibility: createAccessibility(
+          title,
+          {
+            audioDescription: hasAudioDescription,
+            subtitled: isSubtitled,
+            ...accessibilityMapping[key],
+          },
+          overview,
+        ),
       }),
     );
   }
@@ -116,8 +120,16 @@ async function transform(attributes, { moviePages }, sourcedEvents) {
 
     if (!articleId) throw new Error(`Unable to get articleId on ${showPath}`);
 
+    const $articleBody = $(".main-article-body");
+    $articleBody.find(".Breadcrumbs,.Booking").remove();
+    const overview = $articleBody
+      .children()
+      .map((i, el) => getText($(el)))
+      .get()
+      .join("\n");
+
     const showingId = generateShowingId(attributes, articleId);
-    const performances = getPerformancesFor($, url, show);
+    const performances = getPerformancesFor($, url, show, overview);
 
     // Sometimes the same show can be on different URLs with the same ID.
     // Detect this by finding existing showings and adding performances instead
@@ -128,14 +140,6 @@ async function transform(attributes, { moviePages }, sourcedEvents) {
         existingShow.performances.concat(performances);
       continue;
     }
-
-    const $articleBody = $(".main-article-body");
-    $articleBody.find(".Breadcrumbs,.Booking").remove();
-    const overview = $articleBody
-      .children()
-      .map((i, el) => getText($(el)))
-      .get()
-      .join("\n");
 
     shows.push({
       showingId,

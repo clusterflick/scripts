@@ -80,6 +80,13 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
     });
 
     const title = movie.searchTitle || movie.productionTitle;
+    const overview = Array.from($(".c-wysiwyg").first().children())
+      .map((el) => getText($(el)))
+      .join("\n")
+      .split("\n")
+      .map((value) => value.trim())
+      .filter((value) => !!value)
+      .join("\n");
 
     movies.push({
       showingId: generateShowingId(attributes, movie.productionSeasonId),
@@ -103,19 +110,11 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
             status: {
               soldOut: performanceStatusMessage.toLowerCase() === "sold out",
             },
-            accessibility: createAccessibility(title, {}),
+            accessibility: createAccessibility(title, {}, overview),
           });
         },
       ),
-      matchingHints: {
-        overview: Array.from($(".c-wysiwyg").first().children())
-          .map((el) => getText($(el)))
-          .join("\n")
-          .split("\n")
-          .map((value) => value.trim())
-          .filter((value) => !!value)
-          .join("\n"),
-      },
+      matchingHints: { overview },
     });
   }
 

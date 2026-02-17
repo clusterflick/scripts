@@ -189,7 +189,7 @@ async function transform(
             accessibility: createAccessibility(
               title,
               accessibility,
-              movies[id].matchingHints?.overview || "",
+              movies[id].matchingHints.overview,
             ),
           }),
         );

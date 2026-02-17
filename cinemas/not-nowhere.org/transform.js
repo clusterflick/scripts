@@ -73,7 +73,7 @@ async function transform({ moviePages }, sourcedEvents) {
             date,
             notesList,
             url: moviePageUrl,
-            accessibility: createAccessibility(title, {}),
+            accessibility: createAccessibility(title, {}, description),
           }),
         );
       }

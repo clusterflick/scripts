@@ -15,6 +15,7 @@ function convertDiceEvent(event) {
 
   const startDate = new Date(event.dates.event_start_date);
   const endDate = new Date(event.dates.event_end_date);
+  const overview = event.about?.description;
 
   return {
     showingId: generateShowingId(attributes, eventId),
@@ -27,12 +28,10 @@ function convertDiceEvent(event) {
       createPerformance({
         date: startDate,
         url,
-        accessibility: createAccessibility(event.name, {}),
+        accessibility: createAccessibility(event.name, {}, overview),
       }),
     ],
-    matchingHints: {
-      overview: event.about?.description || "",
-    },
+    matchingHints: { overview },
   };
 }
 

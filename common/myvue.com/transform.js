@@ -67,7 +67,11 @@ async function transform(attributes, { result: movieData }, sourcedEvents) {
           screen: showing.screenName,
           notesList,
           url: `${domain}${showing.bookingUrl}`,
-          accessibility: createAccessibility(movie.filmTitle, accessibility),
+          accessibility: createAccessibility(
+            movie.filmTitle,
+            accessibility,
+            movie.synopsisShort,
+          ),
           status,
         });
       }),

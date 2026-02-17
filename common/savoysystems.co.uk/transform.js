@@ -168,6 +168,7 @@ async function transform(attributes, urlSlug, movieData, sourcedEvents) {
           accessibility: createAccessibility(
             title,
             getAccessibility(performance, overview),
+            overview,
           ),
         }),
       ),

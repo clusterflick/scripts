@@ -67,7 +67,7 @@ async function transform({ emailText }, sourcedEvents) {
           accessibility: createAccessibility(
             title,
             { subtitled: true },
-            description || "",
+            description,
           ),
         }),
       ],

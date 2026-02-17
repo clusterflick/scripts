@@ -69,12 +69,13 @@ async function transform({ moviePages }, sourcedEvents) {
     const date = parseEventDate(dateString);
     const bookingUrl = getBookingUrl($);
     const eventId = getEventIdFromUrl(moviePageUrl);
+    const overview = getDescription($);
 
     const performances = [
       createPerformance({
         date,
         url: bookingUrl || moviePageUrl,
-        accessibility: createAccessibility(title, {}),
+        accessibility: createAccessibility(title, {}, overview),
       }),
     ];
 
@@ -84,9 +85,7 @@ async function transform({ moviePages }, sourcedEvents) {
       url: moviePageUrl,
       overview: createOverview({}),
       performances,
-      matchingHints: {
-        overview: getDescription($),
-      },
+      matchingHints: { overview },
     });
   }
 

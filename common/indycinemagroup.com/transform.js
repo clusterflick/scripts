@@ -5,6 +5,7 @@ const {
   createAccessibility,
   generateShowingId,
   isPrivateHire,
+  sanitizeRichText,
 } = require("../../common/utils");
 const standardizePrefixingForTheatrePerformances = require("../standardize-prefixing-for-theatre-performances");
 
@@ -108,25 +109,29 @@ async function transform(
           soldOut: showing.seatsRemaining === 0,
         };
 
-        const accessibility = createAccessibility(movie.name, {
-          audioDescription: tags.includes("ad"),
-          relaxed: tags.includes("relaxed") || tags.includes("ld-friendly"),
-          babyFriendly:
-            tags.includes("carers--babies") ||
-            tags.includes("baby") ||
-            tags.includes("kids-club") ||
-            tags.includes("baby-friendly"),
-          hardOfHearing:
-            tags.includes("hard-of-hearing") ||
-            tags.includes("hoh") ||
-            tags.includes("cc") ||
-            tags.includes("oc"),
-          subtitled:
-            tags.includes("subbed") ||
-            tags.includes("subtitles") ||
-            tags.includes("subtitled") ||
-            tags.includes("oc"),
-        });
+        const accessibility = createAccessibility(
+          movie.name,
+          {
+            audioDescription: tags.includes("ad"),
+            relaxed: tags.includes("relaxed") || tags.includes("ld-friendly"),
+            babyFriendly:
+              tags.includes("carers--babies") ||
+              tags.includes("baby") ||
+              tags.includes("kids-club") ||
+              tags.includes("baby-friendly"),
+            hardOfHearing:
+              tags.includes("hard-of-hearing") ||
+              tags.includes("hoh") ||
+              tags.includes("cc") ||
+              tags.includes("oc"),
+            subtitled:
+              tags.includes("subbed") ||
+              tags.includes("subtitles") ||
+              tags.includes("subtitled") ||
+              tags.includes("oc"),
+          },
+          sanitizeRichText(movie.synopsis),
+        );
 
         return createPerformance({
           date: parseISO(showing.time),
@@ -137,7 +142,7 @@ async function transform(
           accessibility,
         });
       }),
-      matchingHints: { overview: movie.synopsis },
+      matchingHints: { overview: sanitizeRichText(movie.synopsis) },
     };
 
     return moviesAtCinema.concat([transformedMovie]);

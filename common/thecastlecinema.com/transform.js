@@ -124,7 +124,11 @@ async function transform(
           url: `${attributes.domain}${$link.attr("href")}`,
           screen: getText($link.find(".screen")),
           status,
-          accessibility: createAccessibility(movies[id].title, accessibility),
+          accessibility: createAccessibility(
+            movies[id].title,
+            accessibility,
+            movies[id].matchingHints.overview,
+          ),
         }),
       );
     });

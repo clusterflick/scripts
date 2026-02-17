@@ -63,12 +63,10 @@ function convertOutsavvyEvent(event) {
       createPerformance({
         date: event.date,
         url: event.url,
-        accessibility: createAccessibility(event.title, {}),
+        accessibility: createAccessibility(event.title, {}, event.description),
       }),
     ],
-    matchingHints: {
-      overview: event.description,
-    },
+    matchingHints: { overview: event.description },
   };
 }
 

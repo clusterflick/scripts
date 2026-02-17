@@ -70,7 +70,7 @@ async function transform(
           accessibility: createAccessibility(
             movie.title,
             accessibility,
-            movie.synopsis || "",
+            movie.synopsis,
           ),
         });
       });

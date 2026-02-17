@@ -49,12 +49,10 @@ async function transform({ moviePages }, sourcedEvents) {
         createPerformance({
           date,
           url: bookingUrl,
-          accessibility: createAccessibility(title, {}),
+          accessibility: createAccessibility(title, {}, description),
         }),
       ],
-      matchingHints: {
-        overview: description,
-      },
+      matchingHints: { overview: description },
     });
   }
 

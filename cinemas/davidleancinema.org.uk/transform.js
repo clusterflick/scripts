@@ -139,7 +139,7 @@ function toMovie($, showEl) {
       notesList: [comment],
       url: bookingUrl,
       status: { soldOut },
-      accessibility: createAccessibility(title, accessibility),
+      accessibility: createAccessibility(title, accessibility, overview),
     });
   });
 

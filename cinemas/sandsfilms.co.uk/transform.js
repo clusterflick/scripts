@@ -81,7 +81,7 @@ async function transform({ movieListPage }, sourcedEvents) {
       date: parseISO(event.start_time),
       url: eventUrl,
       status: getTicketStatus(event),
-      accessibility: createAccessibility(event.name, {}),
+      accessibility: createAccessibility(event.name, {}, matchingHintsText),
     });
 
     return {

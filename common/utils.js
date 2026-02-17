@@ -358,11 +358,27 @@ const getTitleAccessibility = (title) => {
 };
 
 const descriptionAccessibilityMatchers = {
-  audioDescription: [/(?:is |this |includes? )audio descri/i],
+  audioDescription: [
+    /(?:is |this |includes? )audio descri/i,
+    /audio description (?:is )?available/i,
+  ],
   relaxed: [/relaxed screening/i],
   babyFriendly: [/parent and baby/i, /parent & baby/i, /baby friendly/i],
-  subtitled: [/with (?:english )?subtitles/i],
-  hardOfHearing: [/\bwith captions\b/i, /\bcaptioned screening/i],
+  subtitled: [
+    /with (?:english )?subtitles/i,
+    /english subtitles/i,
+    /subtitles will be displyed/i,
+    /with subtitles from/i,
+    /this film is subtitled/i,
+  ],
+  hardOfHearing: [
+    /\bwith captions\b/i,
+    /\bcaptioned screening/i,
+    /\bsubtitles"? for the he?ard of hearing/i,
+    /\bsubtitles"? for those with hearing loss/i,
+    /\bdescriptive subtitles/i,
+    /BSL interpretation/i,
+  ],
 };
 
 const descriptionNegationPattern =
@@ -370,10 +386,11 @@ const descriptionNegationPattern =
 
 const getDescriptionAccessibility = (description) => {
   if (!description) return {};
+
+  const matchersList = Object.entries(descriptionAccessibilityMatchers);
+
   const accessibility = {};
-  for (const [key, matchers] of Object.entries(
-    descriptionAccessibilityMatchers,
-  )) {
+  for (const [key, matchers] of matchersList) {
     for (const matcher of matchers) {
       const match = description.match(matcher);
       if (!match) continue;

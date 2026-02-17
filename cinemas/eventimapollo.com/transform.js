@@ -17,6 +17,7 @@ async function transform({ moviePages }, sourcedEvents) {
     const $ = cheerio.load(html);
     const canonicalUrl = $('link[rel="canonical"]').attr("href");
     const title = getText($(".event-hero__title"));
+    const overview = getText($("div.variable-color.mt-sm"));
 
     const performances = [];
     $(".showings__table-row").each((_, element) => {
@@ -39,7 +40,7 @@ async function transform({ moviePages }, sourcedEvents) {
           date,
           url: canonicalUrl,
           notesList: showtimeType ? [showtimeType] : [],
-          accessibility: createAccessibility(title, {}),
+          accessibility: createAccessibility(title, {}, overview),
         }),
       );
     });
@@ -53,9 +54,7 @@ async function transform({ moviePages }, sourcedEvents) {
       url: canonicalUrl,
       overview: createOverview({}),
       performances,
-      matchingHints: {
-        overview: getText($("div.variable-color.mt-sm")),
-      },
+      matchingHints: { overview },
     };
 
     movies.push(movie);

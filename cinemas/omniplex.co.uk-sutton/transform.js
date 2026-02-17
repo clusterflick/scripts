@@ -72,7 +72,7 @@ function parseMovieDetails(html) {
   };
 }
 
-function extractPerformances($eventWrapper, $, movieTitle) {
+function extractPerformances($eventWrapper, $, movieTitle, description) {
   const performances = [];
 
   $eventWrapper.find(".OMP_listingDate").each(function () {
@@ -109,12 +109,16 @@ function extractPerformances($eventWrapper, $, movieTitle) {
           date: performanceDate,
           url: () => url,
           screen,
-          accessibility: createAccessibility(movieTitle, {
-            hardOfHearing: accessibilityNotes.includes("audio description"),
-            subtitled: accessibilityNotes.includes("subtitle"),
-            relaxed: accessibilityNotes.includes("sensory"),
-            babyFriendly: accessibilityNotes.includes("kids club"),
-          }),
+          accessibility: createAccessibility(
+            movieTitle,
+            {
+              hardOfHearing: accessibilityNotes.includes("audio description"),
+              subtitled: accessibilityNotes.includes("subtitle"),
+              relaxed: accessibilityNotes.includes("sensory"),
+              babyFriendly: accessibilityNotes.includes("kids club"),
+            },
+            description,
+          ),
           attributes: typeImg ? [typeImg] : undefined,
         }),
       );
@@ -150,6 +154,7 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
       $eventWrapper,
       $,
       movieDetails.title,
+      movieDetails.description,
     );
     if (performances.length === 0) return;
 

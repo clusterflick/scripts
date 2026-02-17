@@ -105,6 +105,7 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
     );
     const url = encodeURI(urlRaw);
     const showingId = generateShowingId(attributes, movieData.id);
+    const synopsis = formatOverviewText(moviePages[urlRaw]);
 
     const overview = createOverview({
       duration: movieData.duration.split("minutes")[0].trim(),
@@ -118,13 +119,17 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
       (dayKey) => {
         const dayPerformances = movieData.performances[dayKey];
         return dayPerformances.map(({ timestamp, tag_ids: tags }) => {
-          const accessibility = createAccessibility(title, {
-            audioDescription: tags.includes("80879"),
-            babyFriendly: tags.includes("80996"),
-            hardOfHearing: tags.includes("80832"),
-            relaxed: tags.includes("80881"),
-            subtitled: tags.includes("80883"),
-          });
+          const accessibility = createAccessibility(
+            title,
+            {
+              audioDescription: tags.includes("80879"),
+              babyFriendly: tags.includes("80996"),
+              hardOfHearing: tags.includes("80832"),
+              relaxed: tags.includes("80881"),
+              subtitled: tags.includes("80883"),
+            },
+            synopsis,
+          );
 
           const notesList = [];
           if (tags.includes("224")) {
@@ -167,9 +172,7 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
       url,
       overview,
       performances: uniquePerformances,
-      matchingHints: {
-        overview: formatOverviewText(moviePages[urlRaw]),
-      },
+      matchingHints: { overview: synopsis },
     };
   });
 

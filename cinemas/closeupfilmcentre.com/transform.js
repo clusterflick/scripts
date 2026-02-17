@@ -75,6 +75,7 @@ async function transform({ moviePages }, sourcedEvents) {
     $info.find("strong").remove(); // Remove title if it's present
     const info = getText($info);
     const overview = createOverview(parseDetailsFrom(info));
+    const description = getText($("#film_program_support"));
 
     const performances = [];
     const $performanceRows = $(".booking_calender #addform tr#row");
@@ -84,7 +85,7 @@ async function transform({ moviePages }, sourcedEvents) {
       const timeString = getText($cells.eq(2));
       const date = parseDate(`${dateString} @ ${timeString}`);
       const bookingUrl = $cells.eq(3).find("a").attr("href");
-      const accessibility = createAccessibility(title, {});
+      const accessibility = createAccessibility(title, {}, description);
       performances.push(
         createPerformance({ date, url: bookingUrl || url, accessibility }),
       );
@@ -107,7 +108,7 @@ async function transform({ moviePages }, sourcedEvents) {
       url,
       overview,
       performances,
-      matchingHints: { overview: getText($("#film_program_support")) },
+      matchingHints: { overview: description },
     });
   });
 

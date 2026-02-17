@@ -106,7 +106,11 @@ async function transform(
         notesList,
         url: event.bookingLink,
         status,
-        accessibility: createAccessibility(movie.title, accessibility),
+        accessibility: createAccessibility(
+          movie.title,
+          accessibility,
+          movie.matchingHints.overview,
+        ),
       }),
     );
   });

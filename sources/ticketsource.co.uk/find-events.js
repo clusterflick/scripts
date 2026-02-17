@@ -22,15 +22,20 @@ function createPerformanceFromHit(
   { timestamp, venueSlug, timeHash, hint },
   title,
   eventText,
+  overview,
 ) {
   return createPerformance({
     date: new Date(timestamp * 1000),
     url: `${attributes.domain}/${venueSlug}/${timeHash}`,
-    accessibility: createAccessibility(title, {
-      subtitled:
-        basicNormalize(hint).includes("subtitle") ||
-        basicNormalize(eventText).includes("subtitle"),
-    }),
+    accessibility: createAccessibility(
+      title,
+      {
+        subtitled:
+          basicNormalize(hint).includes("subtitle") ||
+          basicNormalize(eventText).includes("subtitle"),
+      },
+      overview,
+    ),
   });
 }
 
@@ -57,19 +62,19 @@ function convertTicketSourceEvent(hits, moviePages) {
   if (quotedTitleMatch) title = quotedTitleMatch[1];
   title = decode(title);
 
+  const overview =
+    eventText || `${eventDescription || ""}\n${hint || ""}`.trim() || undefined;
+
   return {
     showingId: generateShowingId(attributes, eventHash),
     title,
     url: `${attributes.domain}/whats-on/${locationSlug}/${venueSlug}/${eventSlug}/${eventHash}`,
     overview: createOverview({}),
     performances: hits.map((hit) =>
-      createPerformanceFromHit(hit, title, eventText),
+      createPerformanceFromHit(hit, title, eventText, overview),
     ),
     matchingHints: {
-      overview:
-        eventText ||
-        `${eventDescription || ""}\n${hint || ""}`.trim() ||
-        undefined,
+      overview,
       cast: extractPeopleNames(eventText, { stripAttributions: true }),
       crew: eventText ? [getDirector(eventText)].filter(Boolean) : undefined,
     },

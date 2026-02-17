@@ -84,12 +84,10 @@ function convertTicketTailorEvent(event) {
         date: parsedDate.start,
         url: fullUrl,
         status: {},
-        accessibility: createAccessibility(title, {}),
+        accessibility: createAccessibility(title, {}), // No overview
       }),
     ],
-    matchingHints: {
-      overview: title,
-    },
+    matchingHints: { overview: title },
   };
 }
 

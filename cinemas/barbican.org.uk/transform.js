@@ -52,6 +52,14 @@ const convertMovieBlurbToDirectors = ($) => {
   return movieBlurb.match(/Directed\s+by\s+(?:.+?\s+)?(\w+\s+\w+)\s+\(/i)?.[1];
 };
 
+function getDescription(data) {
+  const $ = cheerio.load(data);
+  const $aboutTheFilm = $("#about-the-film").parents(".container").next();
+  const aboutMovie = getText($aboutTheFilm);
+  const aboutListing = getText($("#about").next());
+  return aboutMovie || aboutListing;
+}
+
 function processListingPage(data) {
   const $ = cheerio.load(data);
 
@@ -70,8 +78,6 @@ function processListingPage(data) {
   const aboutDirectorDuration = getDirectorDuration(
     getText($aboutTheFilm.find("p").last()),
   );
-  const aboutMovie = getText($aboutTheFilm);
-  const aboutListing = getText($("#about").next());
   const releaseYear = summary["release year"]?.match(/^\d{4}$/)
     ? summary["release year"]
     : null;
@@ -95,7 +101,7 @@ function processListingPage(data) {
         .replace(/[()]/g, "")
         .trim(),
     }),
-    matchingHints: { overview: aboutMovie || aboutListing },
+    matchingHints: { overview: getDescription(data) },
   };
 }
 
@@ -134,18 +140,22 @@ function processPerformancePage(
     const tags = getText($(this).find(".instance-accessibility-tags"))
       .split(/\s+/)
       .map((tag) => tag.trim().toLowerCase());
-    const accessibility = createAccessibility(title, {
-      audioDescription: tags.includes("ad"),
-      relaxed:
-        tags.includes("rel") ||
-        !!listingTags.find((tag) =>
-          basicNormalize(tag).includes("relaxed screening"),
+    const accessibility = createAccessibility(
+      title,
+      {
+        audioDescription: tags.includes("ad"),
+        relaxed:
+          tags.includes("rel") ||
+          !!listingTags.find((tag) =>
+            basicNormalize(tag).includes("relaxed screening"),
+          ),
+        hardOfHearing: tags.includes("cap"),
+        babyFriendly: !!listingTags.find((tag) =>
+          basicNormalize(tag).includes("parent and baby"),
         ),
-      hardOfHearing: tags.includes("cap"),
-      babyFriendly: !!listingTags.find((tag) =>
-        basicNormalize(tag).includes("parent and baby"),
-      ),
-    });
+      },
+      getDescription(listingPage),
+    );
 
     const dateTime = $(this).find(".instance-time__time time").attr("datetime");
     const screen = getText($(this).find(".instance-listing__venue"));

@@ -86,7 +86,7 @@ async function transform(attributes, { movieListPage }, sourcedEvents) {
       if (dateMatch) {
         // Format date string: "SATURDAY 8TH NOVEMBER, 8PM" -> "saturday 8th november 8pm"
         const date = parseDate(basicNormalize(dateMatch[1]));
-        const accessibility = createAccessibility(title, {});
+        const accessibility = createAccessibility(title, {}, details);
         performances.push(createPerformance({ url, date, accessibility }));
       }
     });

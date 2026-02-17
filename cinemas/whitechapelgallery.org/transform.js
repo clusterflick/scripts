@@ -78,13 +78,14 @@ async function transform({ moviePages }, sourcedEvents) {
     const date = parseEventDate(dateTimeString);
     const screen = getScreen($);
     const eventId = getPageId($);
+    const overview = getDescription($);
 
     const performances = [
       createPerformance({
         date,
         url: moviePageUrl,
         screen,
-        accessibility: createAccessibility(title, {}),
+        accessibility: createAccessibility(title, {}, overview),
       }),
     ];
 
@@ -94,9 +95,7 @@ async function transform({ moviePages }, sourcedEvents) {
       url: moviePageUrl,
       overview: createOverview({}),
       performances,
-      matchingHints: {
-        overview: getDescription($),
-      },
+      matchingHints: { overview },
     });
   }
 

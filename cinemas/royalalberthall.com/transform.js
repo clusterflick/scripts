@@ -32,7 +32,7 @@ function parsePerformances(event) {
       notesList: event.Suffix ? [event.Suffix] : [],
       url: event.BookingURL || `${attributes.domain}${event.EventURL}`,
       screen: event.Venue,
-      accessibility: createAccessibility(event.Title, {}),
+      accessibility: createAccessibility(event.Title, {}, event.Summary),
     });
   });
 }

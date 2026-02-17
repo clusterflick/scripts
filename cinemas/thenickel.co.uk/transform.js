@@ -37,7 +37,7 @@ async function transform({ screenings }, sourcedEvents) {
           notesList,
           url: bookingUrl,
           status: soldOut ? { soldOut } : undefined,
-          accessibility: createAccessibility(film.title, {}),
+          accessibility: createAccessibility(film.title, {}, film.description),
         }),
       ],
       matchingHints: { overview: film.description },

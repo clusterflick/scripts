@@ -60,6 +60,8 @@ function convertEventbriteEvent(event, details) {
 
   const crewMatch = eventDescription.match(/Dir:(.*)\n/i);
   const castMatch = eventDescription.match(/Cast:(.*)\n/i);
+  const overview =
+    `Duration: ${duration}\n\n${event.summary}\n\n${eventDescription}`.trim();
 
   return {
     showingId: generateShowingId(attributes, event.id),
@@ -71,12 +73,11 @@ function convertEventbriteEvent(event, details) {
         date: startDate,
         notesList: [],
         url: event.tickets_url,
-        accessibility: createAccessibility(event.name, {}),
+        accessibility: createAccessibility(event.name, {}, overview),
       }),
     ],
     matchingHints: {
-      overview:
-        `Duration: ${duration}\n\n${event.summary}\n\n${eventDescription}`.trim(),
+      overview,
       crew: crewMatch ? convertNamesTextToList(crewMatch[1]) : undefined,
       cast: castMatch ? convertNamesTextToList(castMatch[1]) : undefined,
     },

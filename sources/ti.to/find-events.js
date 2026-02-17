@@ -166,12 +166,10 @@ function convertTitoEvent(url, eventDetails) {
       createPerformance({
         date: parsedDate.startDate,
         url,
-        accessibility: createAccessibility(title, {}),
+        accessibility: createAccessibility(title, {}, description),
       }),
     ],
-    matchingHints: {
-      overview: description,
-    },
+    matchingHints: { overview: description },
   };
 }
 

@@ -56,7 +56,7 @@ async function transform({ movieListPage }, sourcedEvents) {
       date,
       url,
       notesList: [],
-      accessibility: createAccessibility(title, {}),
+      accessibility: createAccessibility(title, {}, description),
     });
 
     movies.push({
@@ -65,9 +65,7 @@ async function transform({ movieListPage }, sourcedEvents) {
       url,
       overview: createOverview({}),
       performances: [performance],
-      matchingHints: {
-        overview: description,
-      },
+      matchingHints: { overview: description },
     });
   });
 

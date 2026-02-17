@@ -25,6 +25,7 @@ async function transform({ movieListPage }, sourcedEvents) {
     const overview = createOverview({
       classification: getText($(this).find(".censor")),
     });
+    const description = getText($(this).find(".film-desc"));
 
     const performances = [];
     const $dateContainer = $(this).find(".date-container");
@@ -37,7 +38,7 @@ async function transform({ movieListPage }, sourcedEvents) {
           createPerformance({
             date: parseDate(`${day} @ ${time}`),
             url: `https://ticketing.eu.veezi.com${$(this).attr("href")}`,
-            accessibility: createAccessibility(title, {}),
+            accessibility: createAccessibility(title, {}, description),
           }),
         );
       });

@@ -45,7 +45,7 @@ function getNotes($el) {
   return notes;
 }
 
-function getPerformances($, $filmScreenings, title) {
+function getPerformances($, $filmScreenings, title, overview) {
   const performances = [];
   const $screenings = $filmScreenings.find(".screening-panel");
   let screeningDate;
@@ -73,7 +73,11 @@ function getPerformances($, $filmScreenings, title) {
         notesList: getNotes($(this)),
         url,
         status: getStatus($(this)),
-        accessibility: createAccessibility(title, getAccessibility($(this))),
+        accessibility: createAccessibility(
+          title,
+          getAccessibility($(this)),
+          overview,
+        ),
       }),
     );
   });
@@ -145,6 +149,7 @@ async function transform({ moviePages }, sourcedEvents) {
         $,
         $(".film-detail__screenings").eq(0),
         title,
+        overview,
       ),
       matchingHints: { overview },
     };

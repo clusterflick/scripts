@@ -126,6 +126,7 @@ function parseEventSection($, section) {
 
   // Use the booking path slug as the event ID (e.g., "/buytickets/p/iswear" -> "iswear")
   const eventId = bookingPath.split("/").pop();
+  const synopsis = descriptions.join("\n\n");
 
   return {
     venueName,
@@ -139,12 +140,10 @@ function parseEventSection($, section) {
           date: eventDate,
           url: bookingUrl || attributes.url,
           status: {},
-          accessibility: createAccessibility(title, {}),
+          accessibility: createAccessibility(title, {}, synopsis),
         }),
       ],
-      matchingHints: {
-        overview: descriptions.join("\n\n"),
-      },
+      matchingHints: { overview: synopsis },
     },
   };
 }

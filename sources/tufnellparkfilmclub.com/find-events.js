@@ -104,12 +104,10 @@ function parseEvent($, article) {
           date,
           notesList: notes ? [notes] : [],
           url: eventUrl,
-          accessibility: createAccessibility(title, {}),
+          accessibility: createAccessibility(title, {}, notes),
         }),
       ],
-      matchingHints: {
-        overview: notes,
-      },
+      matchingHints: { overview: notes },
     },
   };
 }

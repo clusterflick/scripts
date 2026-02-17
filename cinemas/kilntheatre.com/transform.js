@@ -33,13 +33,17 @@ const getTrailer = ($trailer) => {
   return trailerUrl.split("/embed/")[1];
 };
 
-const extractAccessibilityData = (classList, title) => {
+const extractAccessibilityData = (classList, title, overview) => {
   const className = basicNormalize(classList);
 
-  return createAccessibility(title, {
-    babyFriendly: className.includes("parent-and-baby-screening"),
-    hardOfHearing: className.includes("captioned-screening"),
-  });
+  return createAccessibility(
+    title,
+    {
+      babyFriendly: className.includes("parent-and-baby-screening"),
+      hardOfHearing: className.includes("captioned-screening"),
+    },
+    overview,
+  );
 };
 
 async function transform({ moviePages }, sourcedEvents) {
@@ -58,6 +62,12 @@ async function transform({ moviePages }, sourcedEvents) {
     const details = getDetails($, $(".h-row__film-info li"));
     const trailer = getTrailer($('a[data-fresco-group="trailer"]'));
 
+    const overview = getText($(".c-col-txt"))
+      .split("\n")
+      .map((value) => value.trim())
+      .filter((value) => !!value)
+      .join("\n");
+
     // Extract performances from the booking section
     const additionalDetails = {};
     $(".c-single-performance li.instance").each((i, el) => {
@@ -71,6 +81,7 @@ async function transform({ moviePages }, sourcedEvents) {
       const accessibility = extractAccessibilityData(
         $(el).attr("class"),
         title,
+        overview,
       );
       const soldOut = $bookingButton.hasClass("sold-out") || undefined;
       additionalDetails[date.getTime()] = { accessibility, soldOut };
@@ -98,13 +109,7 @@ async function transform({ moviePages }, sourcedEvents) {
         trailer,
       }),
       performances,
-      matchingHints: {
-        overview: getText($(".c-col-txt"))
-          .split("\n")
-          .map((value) => value.trim())
-          .filter((value) => !!value)
-          .join("\n"),
-      },
+      matchingHints: { overview },
     });
   }
 

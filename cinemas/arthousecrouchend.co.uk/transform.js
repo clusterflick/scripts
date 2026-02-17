@@ -51,6 +51,8 @@ async function transform({ moviePages }, sourcedEvents) {
         : undefined,
     });
 
+    const synopsis = getText($(".synopsis"));
+
     const performances = [];
     $(".times").each(function () {
       let day = getText($(this).prev());
@@ -74,16 +76,18 @@ async function transform({ moviePages }, sourcedEvents) {
               accessibilityFromPerformanceNote ? undefined : performanceNote,
             ],
             url: $(this).attr("href"),
-            accessibility: createAccessibility(title, {
-              ...(accessibilityFromPerformanceNote ?? {}),
-              ...accessibilityFromSynopsis,
-            }),
+            accessibility: createAccessibility(
+              title,
+              {
+                ...(accessibilityFromPerformanceNote ?? {}),
+                ...accessibilityFromSynopsis,
+              },
+              synopsis,
+            ),
           }),
         );
       });
     });
-
-    const synopsis = getText($(".synopsis"));
 
     return {
       showingId: generateShowingId(attributes, id),
