@@ -570,6 +570,12 @@ function normalizeTitle(title, options) {
     [/O'? Romeo/i, "O'Romeo"],
     ["HEARTS OF DARKESS", "HEARTS OF DARKNESS"],
     [/\s+peaky blinders$/i, " peaky blinders the immortal man"],
+    ["First Films - ", "First Films: "],
+    ["love island all stars finale", "love island the season finale"],
+    [/^Drinks, /i, ""],
+    ["Bluey At the Cinemas:", "Bluey At the Cinema:"],
+    ["La Scala Milan: ", "La Scala: "],
+    ["La Scala Opera - Cosi Fan Tutte: Mozart", "La Scala: Cosi Fan Tutte"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {

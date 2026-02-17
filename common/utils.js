@@ -362,7 +362,10 @@ const descriptionAccessibilityMatchers = {
     /(?:is |this |includes? )audio descri/i,
     /audio description (?:is )?available/i,
   ],
-  relaxed: [/relaxed screening/i],
+  relaxed: [
+    /relaxed screening/i,
+    /neurodiversity-friendly (?:film )?screening/i,
+  ],
   babyFriendly: [/parent and baby/i, /parent & baby/i, /baby friendly/i],
   subtitled: [
     /with (?:english )?subtitles/i,
