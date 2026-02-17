@@ -58,7 +58,7 @@ async function retrieve() {
 
   const moviePages = {};
   const sessionPages = {};
-  for (const [index, url] of movieUrls.entries()) {
+  for (const [, url] of movieUrls.entries()) {
     const html = await fetchText(url);
     moviePages[url] = html;
 
