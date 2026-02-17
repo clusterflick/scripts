@@ -104,7 +104,6 @@ reference implementation. Key rules:
   2. Tell the user to run it to generate HAR recordings
   3. Verify `__recordings__/` was created and contains `.har` files
   4. Flip `isRecording` back to `false`
-  5. Delete the old snapshot and tell the user to re-run to regenerate it
 - **Always look at multiple existing source tests** before writing a new one. Do
   not copy from a single example — it may itself be non-standard.
 

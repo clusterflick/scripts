@@ -62,19 +62,21 @@ function findMatchingCinema(
       return nameMatches;
     }
 
-    // Check distance
-    const distance = distanceInKmBetweenCoordinates(cinema.geo, coordinates);
-    const distanceCheck = supportMisconfiguredCoordinates
-      ? distance < maxDistance || distance > 5000
-      : distance < maxDistance;
+    // Check distance when coordinates are available
+    if (coordinates) {
+      const distance = distanceInKmBetweenCoordinates(cinema.geo, coordinates);
+      const distanceCheck = supportMisconfiguredCoordinates
+        ? distance < maxDistance || distance > 5000
+        : distance < maxDistance;
 
-    // If coordinates match, we have a match
-    if (nameMatches && distanceCheck) {
-      return true;
+      // If name and distance both match, we have a match
+      if (nameMatches && distanceCheck) {
+        return true;
+      }
     }
 
-    // Fallback: if name matches but coordinates don't, try postcode matching
-    // This handles cases where sources have misconfigured coordinates
+    // Fallback: if name matches, try postcode matching
+    // This handles cases where coordinates are missing or misconfigured
     if (nameMatches && eventPostcode) {
       const cinemaPostcode = extractPostcode(cinema.address);
       const isExactPostcodeMatch =

@@ -500,16 +500,20 @@ used in two ways:
    source's `findEvents()` to discover events at their venue that might not
    appear on their own website
 
-| Source             | Approach                                  | Key Detail                                                             |
-| ------------------ | ----------------------------------------- | ---------------------------------------------------------------------- |
-| designmynight.com  | Paginated REST API + monthly availability | Deduplicates occurrences across months                                 |
-| dice.fm            | Embedded JSON (`#__NEXT_DATA__`) + pages  | Also searches theatre category for films                               |
-| eventbrite.co.uk   | Embedded JSON (`__SERVER_DATA__`) + pages | Searches "screening" + "film-and-media"                                |
-| outsavvy.com       | HTML list + detail pages                  | Cheerio scraping                                                       |
-| stowfilmlounge.com | Single HTML page                          | Simple `fetchText`                                                     |
-| ti.to              | Playwright list + detail pages            | Per-venue-slug retrieval                                               |
-| ticketsource.co.uk | Algolia search API + Playwright details   | Multiple search filters (geo, location, NT Live, Exhibition On Screen) |
-| tickettailor.com   | Playwright per-venue-slug pages           | Hardcoded venue slugs list                                             |
+| Source                  | Approach                                  | Key Detail                                                             |
+| ----------------------- | ----------------------------------------- | ---------------------------------------------------------------------- |
+| bbk.ac.uk               | HTML list + detail pages                  | Cheerio scraping, filtered by tag                                      |
+| designmynight.com       | Paginated REST API + monthly availability | Deduplicates occurrences across months                                 |
+| dice.fm                 | Embedded JSON (`#__NEXT_DATA__`) + pages  | Also searches theatre category for films                               |
+| eventbrite.co.uk        | Embedded JSON (`__SERVER_DATA__`) + pages | Searches "screening" + "film-and-media"                                |
+| feverup.com             | HTML list + detail pages + sessions API   | Fetches calendar dates then session times per plan/place/date          |
+| outsavvy.com            | HTML list + detail pages                  | Cheerio scraping                                                       |
+| stowfilmlounge.com      | Single HTML page                          | Simple `fetchText`                                                     |
+| thecliq.app-            | GraphQL API                               | Queries clubs + events + batched event details                         |
+| ti.to                   | Playwright list + detail pages            | Per-venue-slug retrieval                                               |
+| ticketsource.co.uk      | Algolia search API + Playwright details   | Multiple search filters (geo, location, NT Live, Exhibition On Screen) |
+| tickettailor.com        | Playwright per-venue-slug pages           | Hardcoded venue slugs list                                             |
+| tufnellparkfilmclub.com | Single HTML page                          | Squarespace event list, Cheerio scraping                               |
 
 ---
 
