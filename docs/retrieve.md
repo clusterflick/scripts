@@ -510,7 +510,6 @@ used in two ways:
 | ti.to                   | Playwright list + detail pages            | Per-venue-slug retrieval                                               |
 | ticketsource.co.uk      | Algolia search API + Playwright details   | Multiple search filters (geo, location, NT Live, Exhibition On Screen) |
 | tickettailor.com        | Playwright per-venue-slug pages           | Hardcoded venue slugs list                                             |
-| wimbledonfilmclub.co.uk | HTML list + detail pages                  | Cheerio scraping                                                       |
 
 ---
 

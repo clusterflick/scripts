@@ -5,6 +5,12 @@ const VENUE_SLUGS = [
   "weflockcic", // Good Shepherd Studios
   "maghrebcine", // Maghreb Ciné film club
   "offbeatfolkfilm", // Offbeat Folk Film
+  "sickgirlfilms", // Sick Girl Films
+  "filmlondon", // Film London
+  "sirenscreen", // Siren Screen
+  "eastlondonexperimentalfilmclub", // East London Experimental Film Club
+  "wimbledonfilmclub", // Wimbledon Film Club
+  "yourcinema", // Your Cinema
 ];
 
 async function retrieveVenuePage(slug) {

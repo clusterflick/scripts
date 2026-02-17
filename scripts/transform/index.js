@@ -136,7 +136,7 @@ async function transform(
       "curzon.com-richmond",
       "curzon.com-soho",
       "curzon.com-victoria",
-      "curzon.com-wimbledon",
+      // "curzon.com-wimbledon", // Temporarily turn this off as we move source data
       "curzonseacontainers.com",
       "dalstonsuperstore.com",
       "davidleancinema.org.uk",
