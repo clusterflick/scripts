@@ -6,12 +6,6 @@ const { getText, getId, sleep } = require("../utils");
 
 const dateFormat = "yyyy-MM-dd";
 
-// Known broken article IDs on BFI's website that return 500 errors.
-// These are likely stale/deleted records that their search index hasn't cleaned up.
-const KNOWN_BAD_ARTICLE_IDS = [
-  "A1DBACB6-26A5-4BD6-943F-1BDC2A335900", // Nouvelle Vague (broken as of 2026-02-02)
-];
-
 function getPageContents(url, cacheKey, domain, showUrl) {
   return getPageWithPlaywright(url, cacheKey, async (page) => {
     // Go to the main page first, let it load, and then get the show page
@@ -77,9 +71,6 @@ async function processSearchResultPage(
     // but skip it and hope they fix the issue in a future run.
     if (!href) return;
 
-    // Skip known broken article IDs
-    if (KNOWN_BAD_ARTICLE_IDS.some((id) => href.includes(id))) return;
-
     const showUrl = href.split(
       "&BOparam::WScontent::loadArticle::context_id=",
     )[0];
@@ -111,9 +102,20 @@ async function processSearchResultPage(
       try {
         pageContents = await getPageContents(url, cacheKey, domain, showUrl);
       } catch (error) {
-        // If we still can't get the page contents, fail the run.
+        // If BFI is returning an error page (e.g. 500), skip this film rather
+        // than failing the entire run. BFI's search index regularly links to
+        // broken/stale pages — this isn't something we can fix.
+        if (error.message?.startsWith("Error page detected")) {
+          console.log(
+            `      - Skipping "${showData.title}"; BFI error page at ${domain}${showUrl}`,
+          );
+          delete moviePages[showUrl];
+          continue;
+        }
+        // For other errors (e.g. network failures, timeouts), fail the run so
+        // we can investigate.
         console.log(
-          `      - Unable to retrieve data for "${showData.title}"; error page detected at ${domain}${showUrl}`,
+          `      - Unable to retrieve data for "${showData.title}"; error at ${domain}${showUrl}`,
         );
         throw error;
       }
