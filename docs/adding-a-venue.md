@@ -231,16 +231,26 @@ Add a new step to the appropriate job group. Each job group has setup steps
 
 ### Choosing a Job Group
 
-| Criterion                                     | Job Group Type                                      |
-| --------------------------------------------- | --------------------------------------------------- |
-| Venue belongs to an existing chain            | Add to the chain's existing job group               |
-| Needs Playwright (browser automation)         | Job group with `npx playwright install --with-deps` |
-| Lightweight (simple HTTP/JSON, no browser)    | `ubuntu-latest` runner, no Playwright               |
-| Demanding (heavy scraping, network-intensive) | `self-hosted` runner                                |
+| What you're adding                                | Retrieve job group             | Transform job group              |
+| ------------------------------------------------- | ------------------------------ | -------------------------------- |
+| Source (ticketing platform)                       | `retrieve_sources`             | N/A (sources aren't transformed) |
+| Source-only venue (no website, relies on sources) | `retrieve_source_only_*`       | `transform_external_events_*`    |
+| Venue belonging to an existing chain              | The chain's existing job group | The chain's existing job group   |
+| Standalone venue with its own retriever           | `retrieve_remaining_cinemas_*` | `transform_remaining_*`          |
+
+For numbered groups (e.g. `retrieve_source_only_1` through `_4`), add to the
+last group unless it's getting noticeably larger than the others.
+
+**Playwright dependency:** Check whether the venue's retriever uses Playwright
+(browser automation). If it does, it must go in a job group that runs
+`npx playwright install --with-deps`. The `retrieve_remaining_cinemas_*` and
+`retrieve_sources` groups have Playwright; the `retrieve_source_only_*` groups
+do not.
 
 ### Adding the Step
 
-Add the venue step before the "Upload Artifacts" step in the chosen job group:
+Add the venue step at the end of the chosen job group, before the "Upload
+Artifacts" step:
 
 ```yaml
 - name: <venue-id>
@@ -251,12 +261,12 @@ Add the venue step before the "Upload Artifacts" step in the chosen job group:
     command: npx clusterflick/scripts retrieve <venue-id>
 ```
 
-Adjust `timeout_minutes` and `max_attempts` based on the venue's reliability.
-Standard values are 20 minutes and 3 attempts. For less reliable venues,
-increase as needed.
+Venues and sources that make network calls during retrieve should use the retry
+wrapper since network requests can fail intermittently. Standard values are 20
+minutes timeout and 3 attempts.
 
-For source-only venues (no website to scrape), a simpler step without retry is
-sufficient:
+Source-only venues don't make network calls (their retrieve returns `{}`), so a
+simpler step without retry is sufficient:
 
 ```yaml
 - name: <venue-id>
