@@ -109,6 +109,7 @@ async function transform(
         babyFriendly: filters.includes("parent-baby"),
         hardOfHearing: filters.includes("hard-of-hearing"),
         relaxed: filters.includes("relaxed"),
+        subtitled: filters.includes("hard-of-hearing"),
       };
 
       const [hours, minutes] = getText($link).split(" ")[0].split(":");
