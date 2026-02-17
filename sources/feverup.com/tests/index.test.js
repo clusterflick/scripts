@@ -23,34 +23,44 @@ describe(attributes.name, () => {
 
   describe.each([
     {
-      name: "The Haggerston",
-      geo: { lat: 51.54248341521672, lon: -0.07580767288892457 },
-      expectedMatches: 16,
+      name: "The Refinery Citypoint",
+      alternativeNames: ["The Refinery City Point"],
+      address: "1 Ropemaker Street, London, EC2Y 9HT, UK",
+      geo: { lat: 51.519140879706114, lon: -0.09002136809499772 },
+      expectedMatches: 2,
     },
     {
-      name: "St Matthias Church",
-      alternativeNames: ["Saint Matthias Church"],
-      geo: { lat: 51.55251101625857, lon: -0.07912725093596235 },
-      expectedMatches: 1,
+      name: "The Moniker",
+      alternativeNames: [],
+      address: "25 Fenchurch Avenue, London, EC3M 5AD, UK",
+      geo: { lat: 51.51277895188951, lon: -0.08078508800736149 },
+      expectedMatches: 2,
     },
     {
-      name: "Institute of Contemporary Arts",
-      alternativeNames: ["ICA Cinema", "ICA (Institute of Contemporary Arts)"],
-      geo: { lat: 51.50606885842036, lon: -0.1311647210085773 },
-      expectedMatches: 1,
+      name: "Parlour",
+      alternativeNames: ["Parlour Kensal", "The Parlour"],
+      address: "5 Regent Street, London, NW10 5LG, UK",
+      geo: { lat: 51.52876791379925, lon: -0.2166160120141102 },
+      expectedMatches: 2,
     },
-  ])("$name", ({ name, alternativeNames, geo, expectedMatches }) => {
+  ])("$name", ({ name, alternativeNames, address, geo, expectedMatches }) => {
     it(
       "retrieve and find events",
       async () => {
-        const { events } = await retrieve();
+        const { movieListPage, moviePages, sessionPages } = await retrieve();
 
         // Make sure the input looks roughly correct
-        expect(events).toBeTruthy();
+        expect(movieListPage).toBeTruthy();
+        expect(moviePages).toBeTruthy();
+        expect(sessionPages).toBeTruthy();
 
-        readJSON.mockImplementation(() => ({ events }));
+        readJSON.mockImplementation(() => ({
+          movieListPage,
+          moviePages,
+          sessionPages,
+        }));
 
-        const cinema = { name, alternativeNames, geo };
+        const cinema = { name, alternativeNames, address, geo };
         const output = await findEvents(cinema);
         expect(
           output.every((movie) =>
@@ -62,6 +72,7 @@ describe(attributes.name, () => {
           .map(removeMatchingHints)
           .map(addTestCategory);
 
+        // Make sure the data looks roughly correct
         expect(data).toHaveLength(expectedMatches);
         expect(data).toMatchSnapshot();
       },

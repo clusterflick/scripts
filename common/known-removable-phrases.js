@@ -793,6 +793,7 @@ const knownRemovablePhrases = [
   "RFF 2025:",
   "Team Picks:",
   "Tate Collective Moments",
+  "Taste Film presents",
   "Tibet Film Festival London:",
   "Tim Burton’s ",
   "Times+:",

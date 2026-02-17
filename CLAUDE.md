@@ -82,6 +82,32 @@ module.exports = {
 - Schema validation via AJV against `schema.json`
 - Shared test utilities in `common/test-utils.js`
 
+### Source Test Pattern
+
+Source tests follow a specific structure. Use `sources/bbk.ac.uk/tests/` as the
+reference implementation. Key rules:
+
+- **`describe.each` with retrieve inside each `it()` block.** Each test case
+  calls `retrieve()` then `findEvents()`. Polly replays the same HAR recordings
+  for each case. **Never use `beforeAll` for network calls** — Polly only
+  intercepts fetch inside `it()` blocks (the Polly instance is created on
+  `test_start`). Code in `beforeAll` bypasses Polly entirely and hits real
+  servers silently.
+- **Specific assertions on retrieved data.** Use `toHaveLength(n)` with exact
+  counts for retrieved data (e.g. `Object.keys(moviePages)`). Never use
+  `toBeGreaterThan` — vague assertions hide regressions.
+- **Recordings must exist before the test is considered done.** Tests with
+  `isRecording = false` replay from HAR files in `__recordings__/`. If that
+  directory is empty or missing, the test is broken. When writing a new source
+  test:
+  1. Write the test file with `isRecording = true`
+  2. Tell the user to run it to generate HAR recordings
+  3. Verify `__recordings__/` was created and contains `.har` files
+  4. Flip `isRecording` back to `false`
+  5. Delete the old snapshot and tell the user to re-run to regenerate it
+- **Always look at multiple existing source tests** before writing a new one. Do
+  not copy from a single example — it may itself be non-standard.
+
 ## Environment Variables
 
 Defined in `.env.example`:
