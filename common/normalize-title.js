@@ -802,7 +802,7 @@ function normalizeTitle(title, options) {
     .replace(/\s+/g, " ")
     .replace(/^(.+),\s+the$/, "the $1")
     .trim()
-    .replace(/^the (?=\S+\s)/i, "")
+    .replace(/^the (?=\S+\s+(?![\[(]))/i, "")
     .replace(/([a-z])-([a-z])/gi, "$1$2")
     .replace(/\s+q&a$/i, "")
     .replace(/\s3d$/i, "")
