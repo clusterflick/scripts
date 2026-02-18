@@ -120,13 +120,17 @@ async function transform(
               accessibility.hardOfHearing = true;
               return;
             }
-            if (attributeName === "relaxed") {
+            if (
+              attributeName === "relaxed" ||
+              attributeName === "autism friendly"
+            ) {
               accessibility.relaxed = true;
               return;
             }
             if (
               attributeName === "baby club" ||
-              attributeName === "kids club"
+              attributeName === "kids club" ||
+              attributeName === "odeon kids"
             ) {
               accessibility.babyFriendly = true;
               return;
