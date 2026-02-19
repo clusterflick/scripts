@@ -578,6 +578,7 @@ function normalizeTitle(title, options) {
     ["La Scala Opera - Cosi Fan Tutte: Mozart", "La Scala: Cosi Fan Tutte"],
     ["Pompeii: Below the Clouds", "Pompei: Below the Clouds"],
     [/Guest `?Event - /i, "Guest Event: "],
+    ["forty-five", "forty five"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
