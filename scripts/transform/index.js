@@ -124,6 +124,7 @@ async function transform(
       "claphamgrand.com",
       "closeupfilmcentre.com",
       "coldharbourblue.com",
+      "contactthecaveldn.wixsite.com",
       "courthouse-hotel.com-shoreditch",
       "courthouse-hotel.com-soho",
       "crick.ac.uk",
@@ -136,7 +137,7 @@ async function transform(
       "curzon.com-richmond",
       "curzon.com-soho",
       "curzon.com-victoria",
-      // "curzon.com-wimbledon", // Temporarily turn this off as we move source data
+      "curzon.com-wimbledon",
       "curzonseacontainers.com",
       "dalstonsuperstore.com",
       "davidleancinema.org.uk",
