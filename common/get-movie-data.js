@@ -45,6 +45,7 @@ const ignoredIds = [
   77835, // The Beatles - Unsurpassed Promos -- https://www.themoviedb.org/movie/77835-the-beatles-unsurpassed-promos
   997326, // Father -- https://www.themoviedb.org/movie/997326-father
   1322900, // T. REX 3D -- https://www.themoviedb.org/movie/1322900-t-rex-3d
+  1286035, // Short -- https://www.themoviedb.org/movie/1286035-short
 ];
 
 /**
