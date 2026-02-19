@@ -21,7 +21,11 @@ async function retrieve() {
 
   const screenings = [];
   for (const id of screeningIds) {
-    screenings.push(await fetchJson(`${domain}/api/screenings/${id}`));
+    const screening = await fetchJson(`${domain}/api/screenings/${id}`);
+    if (screening.error) {
+      throw new Error(`API error for screening ${id}: ${screening.error}`);
+    }
+    screenings.push(screening);
   }
 
   return { movieListPage, screenings };
