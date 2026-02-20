@@ -119,6 +119,36 @@ function getListingTags(data) {
     );
 }
 
+function sanitizeDatetime($timeEl) {
+  const datetime = $timeEl.attr("datetime");
+  if (!datetime || !datetime.endsWith("Z")) return datetime;
+
+  const isoMatch = datetime.match(/T(\d{2}):(\d{2})/);
+  if (!isoMatch) return datetime;
+
+  const timeText = getText($timeEl).toLowerCase();
+  const textMatch = timeText.match(
+    /^(\d{1,2})(?:[.:](\d{2}))?\s*(am|pm|noon)$/,
+  );
+  if (!textMatch) return datetime;
+
+  let textHours = parseInt(textMatch[1], 10);
+  const textMinutes = parseInt(textMatch[2] || "0", 10);
+  const period = textMatch[3];
+  if (period === "pm" && textHours !== 12) textHours += 12;
+  if (period === "am" && textHours === 12) textHours = 0;
+  if (period === "noon") textHours = 12;
+
+  const isoHours = parseInt(isoMatch[1], 10);
+  const isoMinutes = parseInt(isoMatch[2], 10);
+
+  if (isoHours === textHours && isoMinutes === textMinutes) {
+    return datetime.slice(0, -1);
+  }
+
+  return datetime;
+}
+
 function processPerformancePage(
   data,
   listingPage,
@@ -157,7 +187,8 @@ function processPerformancePage(
       getDescription(listingPage),
     );
 
-    const dateTime = $(this).find(".instance-time__time time").attr("datetime");
+    const $timeEl = $(this).find(".instance-time__time time");
+    const dateTime = sanitizeDatetime($timeEl);
     const screen = getText($(this).find(".instance-listing__venue"));
     const notesList = listingTags.filter(
       (tag) =>
