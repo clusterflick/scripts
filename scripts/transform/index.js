@@ -79,7 +79,11 @@ async function transform(
 
     // Skip missing-data recovery for venues where we can't reliably
     // distinguish a genuinely removed listing from a stale one.
+    // TODO: Remove genesiscinema.co.uk and olympiccinema.com once their
+    // sports screenings (previously added in error) have expired.
     const optedOut = [
+      "genesiscinema.co.uk",
+      "olympiccinema.com",
       "cineworld.co.uk-bexleyheath",
       "cineworld.co.uk-enfield",
       "cineworld.co.uk-feltham",
