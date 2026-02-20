@@ -18,6 +18,7 @@ Each match must include:
 - "cast": array of up to 5 cast member names (empty array if unknown)
 
 Use the provided current date to weigh current cinema releases more heavily when titles are ambiguous.
+If a Duration is provided, use it to identify the correct version of a film — in particular to distinguish between a feature film and a short with the same name, or between remakes from different years.
 
 Example response for a movie:
 {"isMovie":true,"isMultipleMovies":false,"confidence":8,"matches":[{"isKnownMovie":true,"title":"Nosferatu","year":2024,"directors":["Robert Eggers"],"cast":["Bill Skarsgård","Lily-Rose Depp"]}]}
@@ -28,11 +29,16 @@ Example response for a non-movie:
 function convertToPrompt(movie) {
   const parts = [`Title: ${movie.title}`];
 
-  if (movie.year) {
-    parts.push(`Year: ${movie.year}`);
+  if (movie.overview?.year) {
+    parts.push(`Year: ${movie.overview.year}`);
   }
-  if (movie.classification) {
-    parts.push(`Classification: ${movie.classification}`);
+  if (movie.overview?.classification) {
+    parts.push(`Classification: ${movie.overview.classification}`);
+  }
+  if (movie.overview?.duration) {
+    parts.push(
+      `Duration: ${Math.round(movie.overview.duration / 60000)} minutes`,
+    );
   }
 
   parts.push(`Current Date: ${new Date().toISOString().split("T")[0]}`);

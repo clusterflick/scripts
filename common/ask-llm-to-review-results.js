@@ -13,6 +13,7 @@ Matching guidelines:
 - Use the current date to assess plausibility. Films releasing more than a year in the future are unlikely matches, but films releasing within the next few months are plausible.
 - Consider original_title for foreign language films.
 - Never prefer a "making of", "behind the scenes", or documentary-about-a-film over the film itself. If both a film and its making-of documentary appear in the results, match the film.
+- If a Duration is provided, use it to disambiguate between results — in particular between a feature film and a short film with the same name.
 
 CRITICAL - When NOT to match:
 - You may ONLY match against films in the provided TheMovieDB results list. If you believe the cinema listing refers to a film that is NOT in the results, return null. Do NOT select a different film with a similar title as a substitute.
@@ -22,6 +23,7 @@ CRITICAL - When NOT to match:
 - A vague or generic cinema overview that could apply to multiple same-titled films is NOT sufficient to match.
 - When in doubt between multiple same-titled films, return null with confidence 0.
 - A result's overview must describe the SAME story, subject, or plot as the cinema listing. Superficial coincidences (e.g. a shared city name, a single overlapping word) are NOT evidence of a match. If the cinema listing describes a specific story and no result's overview is about that same story, return null.
+- If the cinema listing describes TV content — episodes, a series, a mini-series, a TV drama, or similar — return null. TMDB results here are theatrical films only.
 
 Example response with match:
 {"reason":"Listing matched description of a vampire and remake of this classic movie","confidence":8,"match":{"id":426063}}
@@ -32,11 +34,16 @@ Example response without match:
 function convertToPrompt(movie, results, normalizedTitle) {
   const parts = [`Title: ${normalizedTitle}`];
 
-  if (movie.year) {
-    parts.push(`Year: ${movie.year}`);
+  if (movie.overview?.year) {
+    parts.push(`Year: ${movie.overview.year}`);
   }
-  if (movie.classification) {
-    parts.push(`Classification: ${movie.classification}`);
+  if (movie.overview?.classification) {
+    parts.push(`Classification: ${movie.overview.classification}`);
+  }
+  if (movie.overview?.duration) {
+    parts.push(
+      `Duration: ${Math.round(movie.overview.duration / 60000)} minutes`,
+    );
   }
 
   parts.push(`Current Date: ${new Date().toISOString().split("T")[0]}`);

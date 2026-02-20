@@ -50,11 +50,11 @@ Example responses:
 function convertToPrompt(movie) {
   const parts = [`Title: ${movie.title}`];
 
-  if (movie.year) {
-    parts.push(`Year: ${movie.year}`);
+  if (movie.overview?.year) {
+    parts.push(`Year: ${movie.overview.year}`);
   }
-  if (movie.classification) {
-    parts.push(`Classification: ${movie.classification}`);
+  if (movie.overview?.classification) {
+    parts.push(`Classification: ${movie.overview.classification}`);
   }
   if (movie.matchingHints?.overview) {
     parts.push(`\nDescription:\n${movie.matchingHints.overview}`);
