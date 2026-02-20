@@ -208,18 +208,6 @@ don't need a local `transform.js` — the `index.js` imports the shared
 See the [transform pipeline documentation](./transform.md) for the full
 standardised schema and matching process.
 
-### Add to the `optedIn` List
-
-**File:** `scripts/scripts/transform/index.js`
-
-The transform pipeline has an `optedIn` array that controls which venues get
-"missing data" recovery. When a venue is opted in, the pipeline checks if movies
-from the previous release have disappeared and, if their listing pages are still
-live, adds them back into the output. This prevents movies from temporarily
-dropping off when a venue's website has a transient issue.
-
-Add the new venue ID to the `optedIn` array in alphabetical order.
-
 ---
 
 ## Step 2: Add to `data-retrieved` Workflow

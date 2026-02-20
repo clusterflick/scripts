@@ -115,8 +115,8 @@ disappears and reappears.
 
 ### 5. Recover Missing Movies
 
-For opted-in locations, the pipeline checks if any movies from the previous
-release are missing:
+For all locations (unless explicitly opted out), the pipeline checks if any
+movies from the previous release are missing:
 
 ```mermaid
 flowchart TD
