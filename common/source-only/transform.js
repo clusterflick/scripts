@@ -1,20 +1,7 @@
-const { basicNormalize } = require("../../common/utils");
-
-const sportShowings = [
-  /\s+Cup Screening$/i,
-  /\s+League Screening$/i,
-  /Union Jack Classic/i,
-  /Super Bowl/i,
-  /Six Nations/i,
-  /AFCON\s+/i,
-  /GRAND PRIX:/i,
-  /^\w+\s+FANPARK:/i,
-];
+const { isNotSportShowing } = require("../../common/is-sport-showing");
+const { basicNormalize } = require("../utils");
 
 const nonFilmEvents = [/Community Pilates/i];
-
-const isNotSportShowing = ({ title }) =>
-  !sportShowings.some((sports) => basicNormalize(title).match(sports));
 
 const isNotNonFilmEvent = ({ title }) =>
   !nonFilmEvents.some((nonFilm) => basicNormalize(title).match(nonFilm));
