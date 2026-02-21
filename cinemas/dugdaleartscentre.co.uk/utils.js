@@ -3,8 +3,8 @@ const { enGB } = require("date-fns/locale/en-GB");
 
 // Parse Spektrix date format: "05 Feb 2026 - 19:30 (Thu)"
 const parseSpektrixDate = (dateString) => {
-  // Remove the day of week suffix e.g. "(Thu)"
-  const cleanedDate = dateString.replace(/\s*\([^)]+\)\s*$/, "").trim();
+  // Remove the day of week suffix e.g. "(Thu)" and "(Sat) - Online booking closed"
+  const cleanedDate = dateString.replace(/\s*\([^)]+\)( - .+)?$/, "").trim();
 
   const parsedDate = parse(cleanedDate, "dd MMM yyyy - HH:mm", new Date(), {
     locale: enGB,
