@@ -106,9 +106,24 @@ async function processSearchResultPage(
         // than failing the entire run. BFI's search index regularly links to
         // broken/stale pages — this isn't something we can fix.
         if (error.message?.startsWith("Error page detected")) {
-          console.log(
-            `      - Skipping "${showData.title}"; BFI error page at ${domain}${showUrl}`,
+          // If another URL for this title was already successfully fetched,
+          // rescue its performances by merging them into that entry.
+          const goodUrl = Object.keys(moviePages).find(
+            (url) =>
+              url !== showUrl &&
+              moviePages[url].title === showData.title &&
+              moviePages[url].html,
           );
+          if (goodUrl) {
+            console.log(
+              `      - Adding "${showData.title}" to previously found ${domain}${goodUrl} -- BFI error page at ${domain}${showUrl}`,
+            );
+            moviePages[goodUrl].performances.push(...showData.performances);
+          } else {
+            console.log(
+              `      - Skipping "${showData.title}"; BFI error page at ${domain}${showUrl}`,
+            );
+          }
           delete moviePages[showUrl];
           continue;
         }
