@@ -16,11 +16,8 @@ async function getAzPage(festival) {
     festival.azUrl,
     `bfi.org.uk-bfi-festivals-az-${festival.id}`,
     async (page) => {
-      try {
-        await page.waitForLoadState("networkidle");
-      } catch {
-        // If this fails it timed out — keep going and let the next wait handle it
-      }
+      await page.waitForLoadState("domcontentloaded");
+      await page.waitForTimeout(2000);
       await page.locator("#content").waitFor({ strict: false });
       return page.content();
     },
@@ -35,11 +32,10 @@ async function getMoviePage(articleUrl) {
     articleUrl,
     `bfi.org.uk-bfi-festivals-${slug}`,
     async (page) => {
-      try {
-        await page.waitForLoadState("networkidle");
-      } catch {
-        // If this fails it timed out — keep going and let the next wait handle it
-      }
+      // All details needed are in the HTML, but let's go gently when getting
+      // data from the BFI site.
+      await page.waitForLoadState("domcontentloaded");
+      await page.waitForTimeout(2000);
 
       const errorLocator = page
         .locator("#content h2")
