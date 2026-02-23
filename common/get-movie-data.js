@@ -397,6 +397,7 @@ const tryFindingMatchUsingLlm = async (movie) => {
     // Check it's a single movie
     isMovie &&
     !isMultipleMovies &&
+    !!matches[0] &&
     // The LLM is confident it's a movie and has heard of it
     ((confidence >= 8 && matches[0].isKnownMovie) ||
       // The LLM is very confident it's a movie, includes a release year or directors, but hasn't heard of it
