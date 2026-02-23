@@ -106,8 +106,8 @@ const setupCacheMock = (dirname, suffix) => {
       // A hash ID value was added to BFI cache. Instead of updating all manual
       // recording filenames, let's remove the ID here so they continue to map.
       if (filename.startsWith("bfi.org.uk-")) {
-        const [prefix, , ...remainder] = filename.split("-");
-        filename = `${prefix}-${remainder.join("-")}`;
+        const [prefix, venue, ...remainder] = filename.split("-");
+        if (venue !== "bfi") filename = `${prefix}-${remainder.join("-")}`;
       }
       return path.join(
         dirname,
