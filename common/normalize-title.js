@@ -579,6 +579,9 @@ function normalizeTitle(title, options) {
     ["Pompeii: Below the Clouds", "Pompei: Below the Clouds"],
     [/Guest `?Event - /i, "Guest Event: "],
     ["forty-five", "forty five"],
+    [/ in \w+: live(?: viewing)?$/i, ""],
+    [/Fri-GAY/i, "Friday"],
+    ["If I Had Legs I Would Kick You", "If I Had Legs I'd Kick You"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {

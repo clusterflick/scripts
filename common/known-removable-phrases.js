@@ -82,6 +82,7 @@ const knownRemovablePhrases = [
   ": ANI DiFRANCO",
   " Watch Party",
   ": Live Q&A with Director Kevin Macdonald",
+  ": LIVE VIEWING",
   ": Chicken Jockey Screening",
   ": The Block Party",
   ": Members Preview",
