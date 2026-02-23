@@ -83,6 +83,7 @@ async function retrieve() {
       articleUrls.add(articleUrl);
     });
 
+    console.log(`    - Found ${articleUrls.size} articles to retrieve`);
     for (const url of articleUrls) {
       const absoluteUrl = `${festival.domain}${url}`;
       console.log(
