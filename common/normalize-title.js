@@ -199,6 +199,7 @@ function normalizeTitle(title, options) {
       "Evangelion: Death (True)² + The End of Evangelion",
       "Neon Genesis Evangelion: Death (True)² & The End of Evangelion",
     ],
+    ["We Live Here + Chornobyl 22", "We Live Here & Chornobyl 22"],
     ["Terror Dome", "Terrordome"],
     ["Wu Viet", "Woo Viet"],
     ["The Adventures of Tintin: ", "Tintin and "],
@@ -551,6 +552,7 @@ function normalizeTitle(title, options) {
       "Looney tunes: The day the world blew up",
       "Looney tunes: The day the earth blew up",
     ],
+    ["Looney tunes - ", "Looney tunes: "],
     [
       /(The Scarecrows' Wedding)\s*\+\s*(The Smeds (and|&) the Smoos)/i,
       "$1 & $2",
@@ -582,6 +584,7 @@ function normalizeTitle(title, options) {
     [/ in \w+: live(?: viewing)?$/i, ""],
     [/Fri-GAY/i, "Friday"],
     ["If I Had Legs I Would Kick You", "If I Had Legs I'd Kick You"],
+    [/: One Battle$/i, ": One Battle After Another"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
