@@ -587,6 +587,7 @@ function normalizeTitle(title, options) {
     ["If I Had Legs I Would Kick You", "If I Had Legs I'd Kick You"],
     [/: One Battle$/i, ": One Battle After Another"],
     ["(When the Rainbow Is Enuf)", "When the Rainbow Is Enuf"],
+    ["?Arirang", "Arirang"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
