@@ -19,6 +19,7 @@ function normalizeTitle(title, options) {
 
   // Specific corrections
   const corrections = [
+    ["&amp;", "&"],
     [/:? The Movie$/i, ""],
     [/F1\s?®? The Movie/i, "F1"],
     ["The Fishermen", "The Fisherman"], // NOTE: This can be removed in the future once this specific misname has been removed
@@ -585,6 +586,7 @@ function normalizeTitle(title, options) {
     [/Fri-GAY/i, "Friday"],
     ["If I Had Legs I Would Kick You", "If I Had Legs I'd Kick You"],
     [/: One Battle$/i, ": One Battle After Another"],
+    ["(When the Rainbow Is Enuf)", "When the Rainbow Is Enuf"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
