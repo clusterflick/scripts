@@ -18,6 +18,36 @@ const RESULT_YEAR = 11; // "2026"
 const RESULT_BOOKING_URL = 18; // "default.asp?doWork::WScontent..."
 const RESULT_SCREEN_FULL_NAME = 64; // "BFI Southbank, Screen NFT1"
 
+function getOverviewText($) {
+  const $articleBody = $(".main-article-body").clone();
+  $articleBody.find(".Breadcrumbs,.Booking").remove();
+  $articleBody
+    .find(".Film-info__content__heading")
+    .filter(function () {
+      return getText($(this)) === "Access screenings";
+    })
+    .parent()
+    .remove();
+  for (const heading of ["How to book", "Our programmers recommend..."]) {
+    $articleBody
+      .find(".Section__heading")
+      .filter(function () {
+        return getText($(this)) === heading;
+      })
+      .each(function () {
+        const $heading = $(this);
+        $heading.next().remove();
+        $heading.remove();
+      });
+  }
+  $articleBody.find("script").remove();
+  return getText($articleBody)
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .join("\n");
+}
+
 function getOverviewFor($) {
   const overview = {
     categories: "",
@@ -159,23 +189,10 @@ async function findEvents(cinema) {
     const $ = cheerio.load(html);
     const title = searchResults[0][5];
 
-    const overview = getOverviewFor($);
+    const isShortFilmCollection = $(".Short__film").length > 1;
+    const overview = isShortFilmCollection ? createOverview({}) : getOverviewFor($);
 
-    const $articleBody = $(".main-article-body").clone();
-    $articleBody.find(".Breadcrumbs,.Booking").remove();
-    $articleBody
-      .find(".Film-info__content__heading")
-      .filter(function () {
-        return getText($(this)) === "Access screenings";
-      })
-      .parent()
-      .remove();
-    $articleBody.find("script").remove();
-    const overviewText = getText($articleBody)
-      .split("\n")
-      .map((line) => line.trim())
-      .filter(Boolean)
-      .join("\n");
+    const overviewText = getOverviewText($);
 
     const accessibilityByTime = buildAccessibilityByTime($, searchResults);
 
