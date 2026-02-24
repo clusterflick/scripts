@@ -46,7 +46,7 @@ const ignoredIds = [
   997326, // Father -- https://www.themoviedb.org/movie/997326-father
   1322900, // T. REX 3D -- https://www.themoviedb.org/movie/1322900-t-rex-3d
   1286035, // Short -- https://www.themoviedb.org/movie/1286035-short
-  491034 // This is Home -- https://www.themoviedb.org/movie/491034-this-is-home
+  491034, // This is Home -- https://www.themoviedb.org/movie/491034-this-is-home
 ];
 
 /**

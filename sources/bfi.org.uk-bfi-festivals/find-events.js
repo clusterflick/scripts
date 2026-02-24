@@ -190,7 +190,9 @@ async function findEvents(cinema) {
     const title = searchResults[0][5];
 
     const isShortFilmCollection = $(".Short__film").length > 1;
-    const overview = isShortFilmCollection ? createOverview({}) : getOverviewFor($);
+    const overview = isShortFilmCollection
+      ? createOverview({})
+      : getOverviewFor($);
 
     const overviewText = getOverviewText($);
 
