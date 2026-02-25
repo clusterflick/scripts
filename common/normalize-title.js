@@ -588,6 +588,7 @@ function normalizeTitle(title, options) {
     [/: One Battle$/i, ": One Battle After Another"],
     ["(When the Rainbow Is Enuf)", "When the Rainbow Is Enuf"],
     ["?Arirang", "Arirang"],
+    ["BTS World Tour - ", "BTS World Tour: "],
     ["Records, cocktails + ", "Records, cocktails: "],
     ["Roman party, divine chorals + ", "Roman party, divine chorals: "],
   ];
