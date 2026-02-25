@@ -588,6 +588,8 @@ function normalizeTitle(title, options) {
     [/: One Battle$/i, ": One Battle After Another"],
     ["(When the Rainbow Is Enuf)", "When the Rainbow Is Enuf"],
     ["?Arirang", "Arirang"],
+    ["Records, cocktails + ", "Records, cocktails: "],
+    ["Roman party, divine chorals + ", "Roman party, divine chorals: "],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
