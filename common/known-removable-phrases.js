@@ -1,3 +1,26 @@
+/**
+ * Phrases to strip from raw venue listing titles during semantic extraction.
+ *
+ * This file handles one job only: removing venue branding, series names, event
+ * descriptors, screening qualifiers, and other non-title text that cinemas
+ * append or prepend to film titles.
+ *
+ * Rules for adding entries:
+ * - Add here if the phrase is a label added by a venue that is NOT part of the
+ *   film title (e.g. "Film Club:", "Q&A with director", "(4K Remaster)").
+ * - Do NOT add here if the phrase corrects a spelling, fixes encoding, or
+ *   normalises Unicode — those belong in the corrections array in normalize-title.js.
+ * - Do NOT add near-identical variants of an existing entry as separate strings;
+ *   raise a PR to convert the variant family into a regex pattern in normalize-title.js.
+ * - Always add a corresponding test case to common/tests/test-titles.json alongside
+ *   any new entry so the phrase's effect is covered by the test suite.
+ *
+ * Sections:
+ *   Suffixes            — phrases that appear at the end of a title
+ *   Prefixes            — phrases that appear at the start of a title
+ *   Weirdly specific    — one-off fixes for particular events/titles
+ *   Common superfluous  — generic words/labels that appear anywhere
+ */
 const knownRemovablePhrases = [
   // Suffixes
   "[16mm]",
@@ -284,8 +307,6 @@ const knownRemovablePhrases = [
   "FILM PREMIERE & STARLITT SOIRÉE",
   "Live Q&A with Cynthia Erivo",
   " Q&A with George Mackay",
-  " Q&A withÂ Producer Kevin Loader",
-  " Q&A with Producer Kevin Loader",
   "*WORKSHOP SOLD OUT",
   " x Flower Workshop",
   " x Free Vocafest Screening",
@@ -495,7 +516,6 @@ const knownRemovablePhrases = [
   "Disney's ",
   "Disney’s ",
   "DH:",
-  "Dog-Friendly:",
   "Dog Party:",
   "Dr Seuss'",
   "Dušan Makavejev's",
@@ -778,7 +798,6 @@ const knownRemovablePhrases = [
   "Silent Film & Live Music:",
   "Silents Synced:",
   ": Silents Synced",
-  "SLA:",
   "SLA:",
   "SLA 2025:",
   "Shakespeare's ",

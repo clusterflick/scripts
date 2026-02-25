@@ -133,6 +133,28 @@ GitHub Actions (`.github/workflows/ci.yml`):
 - `scripts/transform/index.js` - Main transformation orchestrator
 - `scripts/combine/index.js` - Data merging and TMDB enrichment
 
+## Title Normalisation Files
+
+Two files handle title normalisation. Know which to edit:
+
+- **`common/normalize-title.js`** — corrections (spelling fixes, encoding,
+  unicode, Roman numerals, etc.) and structural rules. Add here when fixing how
+  a title is _written_.
+- **`common/known-removable-phrases.js`** — string phrases to strip (venue
+  series names, event descriptors, screening qualifiers). Add here when removing
+  a _label_ a cinema wraps around a film title.
+
+When adding an entry to either file, **also add a test case to
+`common/tests/test-titles.json`**:
+
+```json
+{ "input": "Film Club: Some Film", "output": "some film" }
+```
+
+Do not add near-identical variants of an existing phrase as separate strings in
+`known-removable-phrases.js` — raise a PR to convert the family to a regex
+pattern in `normalize-title.js` instead.
+
 ## Common Categories
 
 Listings are categorized as: `movie`, `multiple-movies`, `tv`, `quiz`, `comedy`,
