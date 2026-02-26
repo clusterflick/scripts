@@ -591,6 +591,20 @@ function normalizeTitle(title, options) {
     ["BTS World Tour - ", "BTS World Tour: "],
     ["Records, cocktails + ", "Records, cocktails: "],
     ["Roman party, divine chorals + ", "Roman party, divine chorals: "],
+    // Variant families collapsed from known-removable-phrases.js
+    // Each pattern covers multiple near-identical string entries that shared a common structure
+    [/dog[- ]?friendly(?:\s+screening)?[:\s]*/i, ""],
+    [/ld[- ]?friendly(?:\s+screen(?:ing)?)?[:\s]*/i, ""],
+    [/autism[- ]?friendly(?:\s+screening)?[:\s]*/i, ""],
+    [/thrill seekers(?:\s+(?:ii|2\.0))?[:\s]*/i, ""],
+    [/green screen[;:\s]+/i, ""],
+    [/safar[:\s]+/i, ""],
+    [/silver\s*screen[:\s]+/i, ""],
+    [/world\s+\w+\s+day(?:\s+special)?[:\s]*/i, ""],
+    [/earth day(?:\s+\d+)?[:\s]+/i, ""],
+    [/l.ff(?:\s+202\d)?:/i, ""],
+    [/liaf(?:\s+\d+)?:/i, ""],
+    [/hkff(?:uk)?(?:\s+\d+)?:/i, ""],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
