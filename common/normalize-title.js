@@ -11,6 +11,8 @@ const matchesStartingPrefix = (title, phrase) =>
 function normalizeTitle(title, options) {
   // Remove any odd whitespace including non-breaking spaces which could cause matching issues later
   title = title.replace(/\s+/g, " ");
+  // Normalise curly/smart apostrophes to straight for consistent phrase matching
+  title = title.replace(/[\u2018\u2019]/g, "'");
 
   title = standardizePrefixingForTheatrePerformances(
     title,
@@ -121,7 +123,7 @@ function normalizeTitle(title, options) {
     ["- Classics", " - Classics"],
     ["- Pride", " - Pride"],
     ["- International", " - International"],
-    ["Björk’s", "Björk"],
+    ["Björk's", "Björk"],
     ["Funny Games / Funny Games US", "Funny Games Double Bill"],
     // Fix spelling which causes missed match
     [/^seven$/i, "se7en"],
@@ -179,7 +181,7 @@ function normalizeTitle(title, options) {
     ["14 Days (Girlfriend Intlo)", "14 Days Girlfriend Intlo"],
     ["SCSEVENTEEN", "SEVENTEEN"],
     ["Björk's", "Björk:"],
-    ["Children’s Cinema", "The Notebook Children's Cinema"], // Stop this accidentally matching "Children in the Cinema"
+    ["Presents: Children's Cinema", "Presents: The Notebook Children's Cinema"], // Stop this accidentally matching "Children in the Cinema"
     ["Eurovision Grand Final Live", "Eurovision Grand Final"], // Remove live for better combining
     [
       "Films That Fuck",
@@ -226,10 +228,10 @@ function normalizeTitle(title, options) {
     ["Sanrizuka 3", "Sanrizuka Notes 3"],
     [
       "Bluey Let's Play Chef",
-      "Bluey at the Cinema: Let’s Play Chef Collection",
+      "Bluey at the Cinema: Let's Play Chef Collection",
     ],
-    [": Let's Chef Collection", " Let’s Play Chef Collection"],
-    [": Chef Collection", " Let’s Play Chef Collection"],
+    [": Let's Chef Collection", " Let's Play Chef Collection"],
+    [": Chef Collection", " Let's Play Chef Collection"],
     ["the cinema show", "cinema show"],
     ["Maastricht:", "Maastricht Concert:"],
     ["Sardaar Ji", "Sardaarji"],
@@ -243,7 +245,7 @@ function normalizeTitle(title, options) {
     [" S/O ", " son of "], // Fixes Arjun S/O Vyjayanthi
     ["Ep III-", "episode III "],
     // Sanitise use of "PRESENT" which is confused with "X presents"
-    ["‘PAST PRESENT FUTURE’ PODCAST", "‘PAST+PRESENT+FUTURE’ PODCAST"],
+    ["'PAST PRESENT FUTURE' PODCAST", "'PAST+PRESENT+FUTURE' PODCAST"],
     ["Past Present Future Podcast", "Past+Present+Future Podcast"],
     ["seventeen [right here]", "seventeen right here"], // remove brackets from this band name
     ["Festival: Shorts -", "Festival: Shorts –"],
@@ -272,7 +274,7 @@ function normalizeTitle(title, options) {
     [/M:I Season: (?!Mission)/i, "M:I Season: Mission: Impossible – "],
     [/Dead Reckoning$/i, "Dead Reckoning Part One"],
     [/Dead Reckoning (?!Part)/i, "Dead Reckoning Part One "],
-    ["Children’s Classics on 16mm", "Children’s Classics 16mm"],
+    ["Children's Classics on 16mm", "Children's Classics 16mm"],
     ["[TOWARDS THE LIGHT", "TOWARDS THE LIGHT"],
     // Fixes accidental match on "I Like To Watch", which in this case is a movie marathon
     ["Animus Presents: I Like To Watch", "Animus Magazine – I Like To Watch"],
@@ -536,7 +538,7 @@ function normalizeTitle(title, options) {
       "The Experience + Orderly or Disorderly",
       "The Experience & Orderly or Disorderly",
     ],
-    [/Scarecrows['|’] Wedding \+ /i, "Scarecrows' Wedding & "],
+    [/Scarecrows['|'] Wedding \+ /i, "Scarecrows' Wedding & "],
     ["Tiddler + ", "Tiddler & "],
     ["Lost and Found + Shoom's Odyssey", "Lost and Found & Shoom's Odyssey"],
     ["Chico and Rita + 20 Años", "Chico and Rita & 20 Años"],
