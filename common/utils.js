@@ -310,6 +310,7 @@ const relaxedMatchers = [
   /Relaxed Preview/i,
   /^Relaxed /i,
   /\(Relaxed\)/i,
+  /Dementia[-|\s]Friendly/i,
 ];
 
 const babyFriendlyMatchers = [
