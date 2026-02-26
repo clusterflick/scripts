@@ -531,6 +531,8 @@ const knownRemovablePhrases = [
   "Family Film Week:",
   "Father's Day:",
   "FFC x The Old Ways:",
+  "Senior Community Cinema x The Old Ways:",
+  "Senior Community Cinema:",
   "The Old Ways:",
   "SCS: The Old Ways",
   "FILM CLUB FRIDAYS:",
