@@ -15,7 +15,9 @@ async function retrieveVenue(slug) {
     cacheKey,
     async (page) => {
       await page.waitForLoadState();
-      await page.locator(".tito-events--upcoming").waitFor({ strict: false });
+      await page
+        .locator(".tito-events--upcoming")
+        .waitFor({ strict: false, state: "attached" });
       return await page.content();
     },
   );
