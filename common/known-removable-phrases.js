@@ -972,6 +972,7 @@ const knownRemovablePhrases = [
   "Film Screening & FILM TALK",
   "Free Film Screening",
   "IWD Film Screening",
+  "’ Short Film Screening",
   "Film Screening",
   "Fundraising Screening",
   "London Premiere",
