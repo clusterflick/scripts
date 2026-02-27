@@ -594,6 +594,8 @@ function normalizeTitle(title, options) {
     ["Records, cocktails + ", "Records, cocktails: "],
     ["Roman party, divine chorals + ", "Roman party, divine chorals: "],
     ["SPICE WORLD MOVIE", "SPICE WORLD"],
+    ["Lumiere Cinema, Romford", "Lumiere"],
+    ["Lumiere Cinema", "Lumiere"],
     // Variant families collapsed from known-removable-phrases.js
     // Each pattern covers multiple near-identical string entries that shared a common structure
     [/dog[- ]?friendly(?:\s+screening)?[:\s]*/i, ""],
