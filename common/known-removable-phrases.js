@@ -296,6 +296,7 @@ const knownRemovablePhrases = [
   "MILKTEA Community Preview of",
   "Miskatonic:",
   "Exclusive Advance Film Screening",
+  "Exclusive Screening & After-Party",
   "Singles Night Screening",
   "Soft Limit Cinema",
   "Making theatre amid Lebanon's collapse",
