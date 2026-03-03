@@ -29,7 +29,7 @@ async function transform({ movieListPage }, sourcedEvents) {
     // or a bare time range like "6.30pm-8.30pm"
     const startsMatch =
       timeText.match(/Starts[:\s]\s*(\d{1,2}(?:[.:]\d{2})?(?:am|pm))/i) ||
-      timeText.match(/^(\d{1,2}(?:[.:]\d{2})?(?:am|pm))-/i);
+      timeText.match(/^(\d{1,2}(?:[.:]\d{2})?(?:am|pm))\s*-/i);
     if (!startsMatch) {
       throw new Error(`Could not extract start time from "${timeText}"`);
     }
