@@ -8,10 +8,11 @@ const {
 } = require("../../common/utils");
 const normalizeTitle = require("../../common/normalize-title");
 const { parseDate } = require("./utils");
-const { endOfMonth, isBefore } = require("date-fns");
 const attributes = require("./attributes");
 
 const infoMatcher = /^([^,]+),\s+(\d{4}),\s+(\d+)\s+min(\s+|$|,)/i;
+
+const getTicketSourceId = (url) => url.split("/close-up-cinema/")[1];
 
 const parseDetailsFrom = (info) => {
   const match = info.match(infoMatcher);
@@ -84,7 +85,13 @@ async function transform({ moviePages }, sourcedEvents) {
       const dateString = getText($cells.eq(1));
       const timeString = getText($cells.eq(2));
       const date = parseDate(`${dateString} @ ${timeString}`);
-      const bookingUrl = $cells.eq(3).find("a").attr("href");
+      const rawBookingUrl = $cells.eq(3).find("a").attr("href");
+      const ticketSourceId = getTicketSourceId(rawBookingUrl);
+      const bookingUrl =
+        // Correct for when malformed ticketsource URLs are added
+        rawBookingUrl && !rawBookingUrl.startsWith("http") && ticketSourceId
+          ? `https://www.ticketsource.co.uk/close-up-cinema/${ticketSourceId}`
+          : rawBookingUrl;
       const accessibility = createAccessibility(title, {}, description);
       performances.push(
         createPerformance({ date, url: bookingUrl || url, accessibility }),
@@ -99,7 +106,7 @@ async function transform({ moviePages }, sourcedEvents) {
     const href = [...hrefs][0];
     const id =
       hrefs.size === 1 && href
-        ? href.split("/close-up-cinema/")[1]
+        ? getTicketSourceId(href)
         : url.split("/film_programmes/")[1];
     const showingId = generateShowingId(attributes, id);
     movies.push({
@@ -122,27 +129,7 @@ async function transform({ moviePages }, sourcedEvents) {
     movies,
   );
 
-  // Set nmatching hint for director on sourced events without one, if all
-  // performances are before end of February. These are most likely part of
-  // the "Close-Up on Abbas Kiarostami" series.
-  // TODO: We can remove this after February 2026
-  const endOfFebruary = endOfMonth(new Date(2026, 1)); // February is month index 1
-  const sourcedEventsWithDirector = deduplicatedSourcedEvents.map((event) => {
-    const isMissingDirector = !event.overview?.directors?.length;
-    const isFinishedBeforeEndOfFebruary = event.performances.every(({ time }) =>
-      isBefore(time, endOfFebruary),
-    );
-
-    if (isMissingDirector && isFinishedBeforeEndOfFebruary) {
-      return {
-        ...event,
-        matchingHints: { ...event.matchingHints, crew: ["Abbas Kiarostami"] },
-      };
-    }
-    return event;
-  });
-
-  return movies.concat(sourcedEventsWithDirector);
+  return movies.concat(deduplicatedSourcedEvents);
 }
 
 module.exports = transform;
