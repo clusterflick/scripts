@@ -19,6 +19,9 @@ function normalizeTitle(title, options) {
     options,
   ).toLowerCase();
 
+  // Keep a copy after basic processing in case we need a different return value
+  const backReturnTitle = title;
+
   // Specific corrections
   const corrections = [
     ["&amp;", "&"],
@@ -390,6 +393,8 @@ function normalizeTitle(title, options) {
     ],
     ["Sapphic Cinema - ", "Sapphic Cinema: "],
     ["Cinema Club - ", "Cinema Club: "],
+    ["Film Premiere - ", "Film Premiere: "],
+    ["Karaoke, crafts + ", "Karaoke, crafts & "],
     [/^(.+)- National Theatre Live$/i, "National Theatre Live: $1"],
     [
       "MUPPET PUPPETS CHRISTMAS CAROL WORKSHOP & SING-ALONG",
@@ -816,6 +821,8 @@ function normalizeTitle(title, options) {
 
   title = title.replace(/\s+screening$/i, "");
   title = title.replace(/^relaxed /i, "");
+
+  if (title.trim() === "") return backReturnTitle;
 
   return removeDiacritics(title)
     .normalize("NFD")
