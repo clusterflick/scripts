@@ -388,6 +388,8 @@ function normalizeTitle(title, options) {
       "Sapphic Cinema and BFI Melodrama -",
       "Sapphic Cinema and BFI Melodrama: ",
     ],
+    ["Sapphic Cinema - ", "Sapphic Cinema: "],
+    ["Cinema Club - ", "Cinema Club: "],
     [/^(.+)- National Theatre Live$/i, "National Theatre Live: $1"],
     [
       "MUPPET PUPPETS CHRISTMAS CAROL WORKSHOP & SING-ALONG",
@@ -496,6 +498,7 @@ function normalizeTitle(title, options) {
       "100 Nights of Hero + A Friend of Dorothy",
       "100 Nights of Hero & A Friend of Dorothy",
     ],
+    ["I Was a Teenage Serial Killer + ", "I Was a Teenage Serial Killer & "],
     ["Homage |", "Homage: "],
     [/^\s*Twin Cheeks\s*$/i, "Twin Cheeks: Who Killed The Homecoming King?"],
     ["FRANCESCA WOODMAN", "The Woodmans"],
@@ -558,6 +561,7 @@ function normalizeTitle(title, options) {
       "Looney tunes: The day the earth blew up",
     ],
     ["Looney tunes - ", "Looney tunes: "],
+    [/ A Looney$/i, " Looney tunes"],
     [
       /(The Scarecrows' Wedding)\s*\+\s*(The Smeds (and|&) the Smoos)/i,
       "$1 & $2",
@@ -598,6 +602,8 @@ function normalizeTitle(title, options) {
     ["SPICE WORLD MOVIE", "SPICE WORLD"],
     ["Lumiere Cinema, Romford", "Lumiere"],
     ["Lumiere Cinema", "Lumiere"],
+    ["Kreator - Hate & Hope", "Kreator: Hate & Hope"],
+    ["TNB XPO 2026 - ", "TNB XPO 2026: "],
     // Variant families collapsed from known-removable-phrases.js
     // Each pattern covers multiple near-identical string entries that shared a common structure
     [/dog[- ]?friendly(?:\s+screening)?[:\s]*/i, ""],
