@@ -55,6 +55,7 @@ function extractMovieTitleFromTicketName(ticketName) {
       normalizeTitle.includes("cinema") ||
       normalizeTitle.includes("seating") ||
       normalizeTitle.includes("ticket") ||
+      normalizeTitle.includes("2 for £") || // E.g. 2 for £20
       normalizeTitle.includes("royal box") ||
       normalizeTitle.includes("table for") ||
       normalizeTitle.includes("advance adult") ||
