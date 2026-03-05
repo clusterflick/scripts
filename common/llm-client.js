@@ -58,6 +58,13 @@ async function callLlm({
     const response = result.response.text();
     // Unwrap the string if it's been wrapped in markdown block
     const jsonString = response.replace("```json", "").replace("```", "");
+
+    try {
+      return JSON.parse(jsonString);
+    } catch {
+      // Fall through to apply corrections
+    }
+
     const correctedJsonString = jsonString
       // Apply corrections for malformed escape characters (perhaps due to truncation)
       .replace(/\\(?!["\\/bfnrtu]|u[0-9a-fA-F]{4})/g, "")
@@ -66,7 +73,7 @@ async function callLlm({
       // Fix unescaped quotes within the "reason" field value
       // Match from "reason":" to the closing quote followed by , or }
       .replace(
-        /"reason"\s*:\s*"(.*)"\s*([,}])/s,
+        /"reason"\s*:\s*"(.*)"\s*([,}])/,
         (_match, reasonContent, terminator) => {
           // Escape any unescaped internal quotes (not already escaped)
           const fixed = reasonContent.replace(/(?<!\\)"/g, '\\"');
