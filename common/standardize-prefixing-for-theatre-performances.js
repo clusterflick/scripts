@@ -66,6 +66,7 @@ const metOperaPrefixes = [
   /Met:/i,
   /The Metropolitan Opera:/i,
   /RBO.+The Metropolitan Opera:/i,
+  /La Scala \w+:/i,
   /La Scala[:|\s]/i,
 ];
 
@@ -244,6 +245,7 @@ function standardizePrefixingForTheatrePerformances(
     lowercaseTitle.startsWith("the met:") ||
     lowercaseTitle.startsWith("met:") ||
     lowercaseTitle.startsWith("la scala:") ||
+    lowercaseTitle.startsWith("la scala ") ||
     lowercaseTitle.startsWith("matinee: la scala:") ||
     lowercaseTitle.startsWith("the metropolitan opera:") ||
     (lowercaseTitle.startsWith("rbo ") &&

@@ -590,8 +590,7 @@ function normalizeTitle(title, options) {
     ["love island all stars finale", "love island the season finale"],
     [/^Drinks, /i, ""],
     ["Bluey At the Cinemas:", "Bluey At the Cinema:"],
-    ["La Scala Milan: ", "La Scala: "],
-    ["La Scala Opera - Cosi Fan Tutte: Mozart", "La Scala: Cosi Fan Tutte"],
+    ["Cosi Fan Tutte: Mozart", "Cosi Fan Tutte"],
     ["Pompeii: Below the Clouds", "Pompei: Below the Clouds"],
     [/Guest `?Event - /i, "Guest Event: "],
     ["forty-five", "forty five"],
@@ -609,6 +608,9 @@ function normalizeTitle(title, options) {
     ["Lumiere Cinema", "Lumiere"],
     ["Kreator - Hate & Hope", "Kreator: Hate & Hope"],
     ["TNB XPO 2026 - ", "TNB XPO 2026: "],
+    ["ADA - My Mother the Architect", "ADA: My Mother the Architect"],
+    ["B-Movie Women / ", "B-Movie Women: "],
+    ["UK Cinema Premiere + Q&A: ", "UK Cinema Premiere & Q&A: "],
     // Variant families collapsed from known-removable-phrases.js
     // Each pattern covers multiple near-identical string entries that shared a common structure
     [/dog[- ]?friendly(?:\s+screening)?[:\s]*/i, ""],
