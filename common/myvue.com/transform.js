@@ -26,7 +26,7 @@ async function transform(attributes, { result: movieData }, sourcedEvents) {
         const notesList = [];
 
         (showing.attributes || []).forEach(
-          ({ shortName: title, description, value }) => {
+          ({ shortName: title, description, value, shortName }) => {
             if (value.toLowerCase() === "open-captioned") {
               accessibility.subtitled = true;
               accessibility.hardOfHearing = true;
@@ -41,7 +41,10 @@ async function transform(attributes, { result: movieData }, sourcedEvents) {
               accessibility.relaxed = true;
               return;
             }
-            if (value.toLowerCase() === "subtitled") {
+            if (
+              value.toLowerCase() === "subtitled" ||
+              shortName.toLowerCase() === "subtitled"
+            ) {
               accessibility.subtitled = true;
               return;
             }
