@@ -14,6 +14,28 @@ const infoMatcher = /^([^,]+),\s+(\d{4}),\s+(\d+)\s+min(\s+|$|,)/i;
 
 const getTicketSourceId = (url) => url.split("/close-up-cinema/")[1];
 
+// Returns corrected { id, url } when a venue links to the wrong booking page
+const bookingCorrections = [
+  {
+    title: "Clay + Lunar Visions II",
+    wrongId: "e-grbzlo",
+    correctId: "t-lddxzxd",
+  },
+];
+
+function getCorrectBooking(title, id) {
+  const correction = bookingCorrections.find(
+    (c) =>
+      normalizeTitle(title) === normalizeTitle(c.title) && id === c.wrongId,
+  );
+  if (!correction)
+    return { id, url: `https://www.ticketsource.co.uk/close-up-cinema/${id}` };
+  return {
+    id: correction.correctId,
+    url: `https://www.ticketsource.co.uk/close-up-cinema/${correction.correctId}`,
+  };
+}
+
 const parseDetailsFrom = (info) => {
   const match = info.match(infoMatcher);
   if (!match) return {};
@@ -87,11 +109,9 @@ async function transform({ moviePages }, sourcedEvents) {
       const date = parseDate(`${dateString} @ ${timeString}`);
       const rawBookingUrl = $cells.eq(3).find("a").attr("href");
       const ticketSourceId = getTicketSourceId(rawBookingUrl);
-      const bookingUrl =
-        // Correct for when malformed ticketsource URLs are added
-        rawBookingUrl && !rawBookingUrl.startsWith("http") && ticketSourceId
-          ? `https://www.ticketsource.co.uk/close-up-cinema/${ticketSourceId}`
-          : rawBookingUrl;
+      const bookingUrl = ticketSourceId
+        ? getCorrectBooking(title, ticketSourceId).url
+        : rawBookingUrl;
       const accessibility = createAccessibility(title, {}, description);
       performances.push(
         createPerformance({ date, url: bookingUrl || url, accessibility }),
@@ -104,10 +124,11 @@ async function transform({ moviePages }, sourcedEvents) {
         .get(),
     );
     const href = [...hrefs][0];
-    const id =
-      hrefs.size === 1 && href
-        ? getTicketSourceId(href)
-        : url.split("/film_programmes/")[1];
+    const ticketSourceIdForEvent =
+      hrefs.size === 1 && href ? getTicketSourceId(href) : null;
+    const id = ticketSourceIdForEvent
+      ? getCorrectBooking(title, ticketSourceIdForEvent).id
+      : url.split("/film_programmes/")[1];
     const showingId = generateShowingId(attributes, id);
     movies.push({
       showingId,
