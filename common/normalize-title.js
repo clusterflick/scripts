@@ -395,6 +395,7 @@ function normalizeTitle(title, options) {
     ["Cinema Club - ", "Cinema Club: "],
     ["Film Premiere - ", "Film Premiere: "],
     ["Karaoke, crafts + ", "Karaoke, crafts & "],
+    ["FOLIES MEURTRIÈRES + ", "FOLIES MEURTRIÈRES & "],
     [/^(.+)- National Theatre Live$/i, "National Theatre Live: $1"],
     [
       "MUPPET PUPPETS CHRISTMAS CAROL WORKSHOP & SING-ALONG",
@@ -611,6 +612,8 @@ function normalizeTitle(title, options) {
     ["ADA - My Mother the Architect", "ADA: My Mother the Architect"],
     ["B-Movie Women / ", "B-Movie Women: "],
     ["UK Cinema Premiere + Q&A: ", "UK Cinema Premiere & Q&A: "],
+    ["LONDON | ", ""],
+    [" / Bootlickers / ", " & Bootlickers & "],
     // Variant families collapsed from known-removable-phrases.js
     // Each pattern covers multiple near-identical string entries that shared a common structure
     [/dog[- ]?friendly(?:\s+screening)?[:\s]*/i, ""],
