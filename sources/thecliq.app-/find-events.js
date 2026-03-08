@@ -72,9 +72,11 @@ async function findEvents(cinema) {
           ? { lat: location.latitude, lon: location.longitude }
           : null;
 
+      // Split venue name before matching (e.g., "BFI Southbank, London" -> "BFI Southbank")
+      const [venueName] = location.name.split(/,| - /);
       const locationMatches = venueMatchesCinema(
         cinema,
-        location.name,
+        venueName,
         coordinates,
         { eventAddress: location.address },
       );
