@@ -470,6 +470,7 @@ const knownRemovablePhrases = [
   "Konrad Wolf:",
   "CineClub:",
   "CineMarx:",
+  "CineMediterra FF 2026:",
   "CINE MARICA:",
   "Claude Lanzmann:",
   "Copy of ",
