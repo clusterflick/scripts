@@ -62,6 +62,9 @@ async function identifyMultipleMovies(movie) {
     return { movies: [], reason: "Invalid LLM response" };
   }
 
+  // Drop movies matched with no title, e.g. if the director has been named but
+  // the actual movie hasn't
+  response.movies = response.movies.filter(({ title }) => !!title);
   return response;
 }
 
