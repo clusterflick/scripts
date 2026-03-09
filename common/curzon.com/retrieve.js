@@ -13,7 +13,7 @@ async function retrieve(attributes) {
 
       const [workflowDataData, inititialiseData] = await Promise.all([
         page.evaluate((url) => fetch(url).then((r) => r.json()), omniaUrl),
-        page.evaluate(() => window.initialData),
+        page.evaluate(() => /* global window */ window.initialData),
       ]);
 
       return {
