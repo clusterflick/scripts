@@ -613,6 +613,7 @@ function normalizeTitle(title, options) {
     ["B-Movie Women / ", "B-Movie Women: "],
     ["UK Cinema Premiere + Q&A: ", "UK Cinema Premiere & Q&A: "],
     ["LONDON | ", ""],
+    ["BLOC CINEMA | ", ""],
     [" / Bootlickers / ", " & Bootlickers & "],
     // Variant families collapsed from known-removable-phrases.js
     // Each pattern covers multiple near-identical string entries that shared a common structure
