@@ -1,19 +1,29 @@
 const ocapiv1Retrieve = require("../ocapi-v1/retrieve");
-const { fetchText, fetchJson } = require("../../common/utils");
+const getPageWithPlaywright = require("../get-page-with-playwright");
 
 async function retrieve(attributes) {
   const path = attributes.url.replace(attributes.domain, "");
-  const workflowDataData = await fetchJson(
-    `https://www.curzon.com/api/omnia/v1/page?friendly=${path}/`,
-  );
-  const cinemaId = workflowDataData.vistaCinema.key;
+  const omniaUrl = `https://www.curzon.com/api/omnia/v1/page?friendly=${path}/`;
 
-  const mainPage = await fetchText(attributes.url);
-  const inititialiseData = JSON.parse(
-    mainPage.match(/^\s+window\.initialData\s+=\s+({.+});$/im)[1],
+  const { cinemaId, api } = await getPageWithPlaywright(
+    attributes.url,
+    `curzon.com-${attributes.id}`,
+    async (page) => {
+      await page.waitForLoadState("domcontentloaded");
+
+      const [workflowDataData, inititialiseData] = await Promise.all([
+        page.evaluate((url) => fetch(url).then((r) => r.json()), omniaUrl),
+        page.evaluate(() => window.initialData),
+      ]);
+
+      return {
+        cinemaId: workflowDataData.vistaCinema.key,
+        api: inititialiseData.api,
+      };
+    },
   );
 
-  return ocapiv1Retrieve({ ...attributes, cinemaId }, inititialiseData.api);
+  return ocapiv1Retrieve({ ...attributes, cinemaId }, api);
 }
 
 module.exports = retrieve;

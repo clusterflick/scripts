@@ -27,7 +27,7 @@ describe(attributes.name, () => {
 
       // Make sure the input looks roughly correct
       expect(moviePages).toBeTruthy();
-      expect(moviePages).toHaveLength(23);
+      expect(moviePages).toHaveLength(17);
 
       const output = sortAndFilterMovies(await transform(moviePages, {}));
       expect(
@@ -41,7 +41,7 @@ describe(attributes.name, () => {
         .map(addTestCategory);
 
       // Make sure the data looks roughly correct
-      expect(data).toHaveLength(19); // This count is not related to the above
+      expect(data).toHaveLength(21); // This count is not related to the above
 
       expect(schemaValidate(data)).toBe(true);
       expect(data).toMatchSnapshot();

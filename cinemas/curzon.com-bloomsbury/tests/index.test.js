@@ -1,5 +1,9 @@
 /** @jest-environment setup-polly-jest/jest-environment-node */
-const { setupPolly, schemaValidate } = require("../../../common/test-utils");
+const {
+  setupPolly,
+  schemaValidate,
+  setupCacheMock,
+} = require("../../../common/test-utils");
 const {
   sortAndFilterMovies,
   removeMatchingHints,
@@ -8,6 +12,9 @@ const {
 const { retrieve, transform, attributes } = require("..");
 
 const isRecording = false;
+
+jest.mock("../../../common/cache");
+setupCacheMock(__dirname, "2026-01-28");
 
 describe(attributes.name, () => {
   setupPolly(isRecording, __dirname);
