@@ -1,7 +1,12 @@
 module.exports = {
   id: "qmul.ac.uk-bloc",
   name: "BLOC Cinema",
-  alternativeNames: ["BLOC", "1 Westfield Way", "ArtsOne Building"],
+  alternativeNames: [
+    "BLOC",
+    "1 Westfield Way",
+    "ArtsOne Building",
+    "Bloc Cinema ArtsOne Building",
+  ],
   domain: "https://www.qmul.ac.uk/bloc",
   socials: {
     letterboxd: null,
