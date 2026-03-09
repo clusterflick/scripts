@@ -58,6 +58,7 @@ const getUserReview = async (match) => {
 
 const getDirectorsForMatch = async (match) => {
   const matchPage = await getMoviePage(match);
+  if (!matchPage.data?.item) return [];
   return matchPage.data.item.production.crew
     .filter(({ roleTypeGroupId, name }) => roleTypeGroupId === 1 && name) // Director
     .map(({ name }) => name);
