@@ -397,21 +397,9 @@ array.
 
 ## Step 4: Update `data-calendar`
 
-**Two changes needed.**
+**Two changes needed** — one now, one after `scripts` is merged.
 
-### Update the Lock File
-
-`data-calendar` has a `package-lock.json` that pins the `scripts` dependency to
-a specific commit. After the `scripts` changes are merged, update the lock:
-
-```bash
-cd data-calendar
-npm update scripts
-```
-
-This ensures the calendar generation picks up the new venue's attributes.
-
-### Add to the README
+### Add to the README _(do now)_
 
 `data-calendar/README.md` contains a table of all supported venues with links to
 their calendar files. Add a row in alphabetical order by venue name and update
@@ -423,19 +411,34 @@ the venue count above the table:
 |
 ```
 
+### Update the Lock File _(post-merge)_
+
+`data-calendar` has a `package-lock.json` that pins the `scripts` dependency to
+a specific commit. After the `scripts` changes are merged, update the lock:
+
+```bash
+cd data-calendar
+npm update scripts
+```
+
+This ensures the calendar generation picks up the new venue's attributes.
+
 ---
 
 ## Step 5: Update `clusterflick.com`
 
-**Four changes needed.** The lock file update and image generation require the
-`scripts` changes to be merged first (see [Post-Merge Steps](#post-merge-steps)
-below). The blurb can be created at any time.
+**Four changes needed** — one now, three after `scripts` is merged.
 
-### Custom Blurb
+### Custom Blurb _(do now)_
 
 Create a component at `src/components/venues/<venue-id>.tsx` to provide a custom
 description for the venue page. Without this, the page falls back to an
 auto-generated description.
+
+**Always research the venue before writing the blurb.** Fetch the venue's
+website and read about their cinema programme before writing anything. Do not
+write from general knowledge or make assumptions — only include what the venue
+actually says about itself.
 
 ```tsx
 // src/components/venues/<venue-id>.tsx
@@ -454,7 +457,7 @@ export const seoHighlights = "key genres or features";
 export default VenueBlurb;
 ```
 
-### Update the Lock File
+### Update the Lock File _(post-merge)_
 
 `clusterflick.com` has a `package-lock.json` that pins the `scripts` dependency.
 After the `scripts` changes are merged:
@@ -468,7 +471,7 @@ The venue page at `/venues/<slugified-name>` will auto-generate at build time
 from the venue's attributes and transformed data. No additional configuration is
 needed for the page to appear.
 
-### Venue Images
+### Venue Images _(post-merge)_
 
 A script at `clusterflick.com/scripts/fetch-venue-images.js` fetches logo/icon
 images for venues. Existing images are skipped, so running it after adding a new
@@ -479,7 +482,7 @@ cd clusterflick.com
 node scripts/fetch-venue-images.js
 ```
 
-### Map Image
+### Map Image _(post-merge)_
 
 A script at `clusterflick.com/scripts/fetch-venue-maps.js` generates map images
 for all venues using the Google Maps Static API. It reads coordinates from each
