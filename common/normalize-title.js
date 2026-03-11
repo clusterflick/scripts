@@ -616,6 +616,8 @@ function normalizeTitle(title, options) {
     ["BLOC CINEMA | ", ""],
     [" / Bootlickers / ", " & Bootlickers & "],
     ["Sambhavam - Adhyayam Onnu", "Sambhavam Adhyayam Onnu"],
+    ["Afronauts + ", "Afronauts & "],
+    ["Cockroach + ", "Cockroach & "],
     // Variant families collapsed from known-removable-phrases.js
     // Each pattern covers multiple near-identical string entries that shared a common structure
     [/dog[- ]?friendly(?:\s+screening)?[:\s]*/i, ""],

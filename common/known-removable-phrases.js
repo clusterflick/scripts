@@ -713,6 +713,7 @@ const knownRemovablePhrases = [
   "OCDF:",
   "Open City Documentary Festival Combined Programme:",
   "Open City Documentary Festival:",
+  "Open City Documentary Fest:",
   "Open City Doc Fest:",
   "Opening Night ",
   "Olivia Laing: The Silver Book",
@@ -882,6 +883,8 @@ const knownRemovablePhrases = [
   "Yugesh Walia and the Birmingham Film Workshop:",
 
   // Weirdly specific fixes
+  "Afronauts & ",
+  "Cockroach & ",
   " D.C.",
   " Joplin The Musical",
   " Joplin, The Musical",
@@ -968,6 +971,7 @@ const knownRemovablePhrases = [
   "Film Screening",
   "Film Premiere:",
   "Fundraising Screening",
+  "Fundraiser Q&A:",
   "London Premiere",
   "Mosh-Along",
   "premiere screening",
