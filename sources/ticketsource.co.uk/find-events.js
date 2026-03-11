@@ -1,6 +1,8 @@
 const path = require("node:path");
 const { decode } = require("html-entities");
 const cheerio = require("cheerio");
+const { parse } = require("date-fns");
+const { enGB } = require("date-fns/locale/en-GB");
 const {
   readJSON,
   generateShowingId,
@@ -19,13 +21,17 @@ function getDirector(synopsis) {
 }
 
 function createPerformanceFromHit(
-  { timestamp, venueSlug, timeHash, hint },
+  { dateTimeString, venueSlug, timeHash, hint },
   title,
   eventText,
   overview,
 ) {
   return createPerformance({
-    date: new Date(timestamp * 1000),
+    // `timestamp` is also available on the hit, but TicketSource encodes local
+    // UK time as if it were UTC, making it wrong by 1 hour during BST.
+    date: parse(dateTimeString, "EEEE do MMMM yyyy hh:mm:ss aa", new Date(), {
+      locale: enGB,
+    }),
     url: `${attributes.domain}/${venueSlug}/${timeHash}`,
     accessibility: createAccessibility(
       title,
