@@ -43,14 +43,24 @@ const getParams = (page) =>
 const convertDurationStringToMinutes = (duration) => {
   if (!duration) return undefined;
 
-  const hrsAndMinsString = duration
-    .toLowerCase()
-    .replace("approx", "")
-    .trim()
-    .match(/^(?:(\d+)\s*ho?u?r?s?,?\s+?)?(\d+)\s*mi?n?s?/i);
-  const hoursString = duration.trim().match(/^(\d+)\s*ho?u?rs?/i);
-  const [, hours = 0, minutes = 0] = hrsAndMinsString || hoursString;
-  return parseInt(hours, 10) * 60 + parseInt(minutes, 10);
+  const normalized = duration.toLowerCase().replace("approx", "").trim();
+
+  const hrsAndMins = normalized.match(
+    /^(?:(\d+)\s*ho?u?r?s?[,\s]+)?(\d+)\s*mi?n?s?/,
+  );
+  if (hrsAndMins) {
+    return (
+      parseInt(hrsAndMins[1] || "0", 10) * 60 + parseInt(hrsAndMins[2], 10)
+    );
+  }
+
+  const hrsOnly = normalized.match(/^(\d+)\s*ho?u?r?s?/);
+  if (hrsOnly) return parseInt(hrsOnly[1], 10) * 60;
+
+  const minsOnly = normalized.match(/^(\d+)\s*mi?n?s?/);
+  if (minsOnly) return parseInt(minsOnly[1], 10);
+
+  throw new Error(`Unrecognised duration format: "${duration}"`);
 };
 
 const getYear = (value) => value.match(/^(?:[^\s]+\s+)?(\d{4})\s+\w/i)?.[1];
