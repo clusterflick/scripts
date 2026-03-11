@@ -43,7 +43,11 @@ const getParams = (page) =>
 const convertDurationStringToMinutes = (duration) => {
   if (!duration) return undefined;
 
-  const normalized = duration.toLowerCase().replace("approx", "").trim();
+  const normalized = duration
+    .toLowerCase()
+    .replace("approx", "")
+    .replace("programme length:", "")
+    .trim();
 
   const hrsAndMins = normalized.match(
     /^(?:(\d+)\s*ho?u?r?s?[,\s]+)?(\d+)\s*mi?n?s?/,
