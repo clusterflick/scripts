@@ -563,6 +563,7 @@ const knownRemovablePhrases = [
   "FFC x Marsh:",
   "FFC x Marsm:",
   "Fighting Spirit 2025:",
+  "Film & Flirt:",
   "Film Africa:",
   "Film Africa 2025:",
   "Film Club x Bounce Cinema:",
