@@ -31,7 +31,7 @@ function convertEvent(event, club) {
       createPerformance({
         date: startDate,
         url: eventUrl,
-        notes: `Presented by ${club.name}`,
+        notesList: [`Presented by ${club.name}`],
         status: { soldOut: event.is_sold_out },
         accessibility: createAccessibility(event.name, {}, event.description),
       }),
