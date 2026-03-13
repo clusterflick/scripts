@@ -618,6 +618,8 @@ function normalizeTitle(title, options) {
     ["Sambhavam - Adhyayam Onnu", "Sambhavam Adhyayam Onnu"],
     ["Afronauts + ", "Afronauts & "],
     ["Cockroach + ", "Cockroach & "],
+    ["READY OT NOT 2", "READY OR NOT 2"],
+    [/^Charak \(Hindi\)$/i, "Charak: Fair of Faith"],
     // Variant families collapsed from known-removable-phrases.js
     // Each pattern covers multiple near-identical string entries that shared a common structure
     [/dog[- ]?friendly(?:\s+screening)?[:\s]*/i, ""],
