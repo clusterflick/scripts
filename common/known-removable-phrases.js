@@ -691,6 +691,7 @@ const knownRemovablePhrases = [
   "NEVERWATCHINGMOVIES x TRANSMISSIONS:",
   "Noah Davis Film Programme:",
   "Noah Baumbach:",
+  "Now screening :",
   "March 2025",
   "MMEMBERS ONLY:",
   "MEMBERS ONLY:",
