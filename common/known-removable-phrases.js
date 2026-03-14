@@ -974,6 +974,7 @@ const knownRemovablePhrases = [
   "Extended Version 2026 RI",
   "Extended Version",
   "Free Event:",
+  "Filmmaker Networking & ",
   "Festive Film Screening & FILM TALK",
   "Film Screening & FILM TALK",
   "Free Film Screening",
