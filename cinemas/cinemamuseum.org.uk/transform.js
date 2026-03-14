@@ -56,6 +56,7 @@ async function transform({ moviePages }, sourcedEvents) {
     const status = !soldOut ? undefined : { soldOut };
     $title.find("span").remove();
     const title = getText($title);
+    if (basicNormalize(title).includes("screening cancelled")) return;
     const postId = $(".tribe_events.type-tribe_events")
       .attr("id")
       .replace("post-", "");
