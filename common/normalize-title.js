@@ -613,13 +613,15 @@ function normalizeTitle(title, options) {
     ["B-Movie Women / ", "B-Movie Women: "],
     ["UK Cinema Premiere + Q&A: ", "UK Cinema Premiere & Q&A: "],
     ["LONDON | ", ""],
-    ["BLOC CINEMA | ", ""],
+    ["BLOC CINEMA | ", "BLOC CINEMA: "],
+    ["Faith Walk Film Premiere | ", "Faith Walk Film Premiere: "],
     [" / Bootlickers / ", " & Bootlickers & "],
     ["Sambhavam - Adhyayam Onnu", "Sambhavam Adhyayam Onnu"],
     ["Afronauts + ", "Afronauts & "],
     ["Cockroach + ", "Cockroach & "],
     ["READY OT NOT 2", "READY OR NOT 2"],
     [/^Charak \(Hindi\)$/i, "Charak: Fair of Faith"],
+    ["CLOSING Nuit de Chien", "Nuit de Chien"],
     // Variant families collapsed from known-removable-phrases.js
     // Each pattern covers multiple near-identical string entries that shared a common structure
     [/dog[- ]?friendly(?:\s+screening)?[:\s]*/i, ""],
