@@ -631,6 +631,7 @@ const knownRemovablePhrases = [
   "Horror with Hitchcock:",
   "Hosted by Cinebug for International Women's Day",
   "Hosted by Cinebug & Women Without Borders Film Festival for International Women's Day",
+  "Cinebug turns 1:",
   "Hussein Kamal's",
   "IFF:",
   "IFF 2024:",

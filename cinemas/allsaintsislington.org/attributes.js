@@ -1,7 +1,12 @@
 module.exports = {
   id: "allsaintsislington.org",
   name: "All Saints Church",
-  alternativeNames: ["All Saints Caledonian Road", "All Saints"],
+  alternativeNames: [
+    "All Saints Caledonian Road",
+    "All Saints",
+    "Carnegie St",
+    "Carnegie Street",
+  ],
   domain: "https://www.allsaintsislington.org",
   socials: {
     letterboxd: null,

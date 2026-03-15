@@ -617,6 +617,7 @@ function normalizeTitle(title, options) {
     ["Faith Walk Film Premiere | ", "Faith Walk Film Premiere: "],
     [" / Bootlickers / ", " & Bootlickers & "],
     ["Sambhavam - Adhyayam Onnu", "Sambhavam Adhyayam Onnu"],
+    ["Cinebug turns 1 - ", "Cinebug turns 1: "],
     ["Afronauts + ", "Afronauts & "],
     ["Cockroach + ", "Cockroach & "],
     ["READY OT NOT 2", "READY OR NOT 2"],
