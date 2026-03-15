@@ -69,6 +69,9 @@ async function transform({ movieListPage }, sourcedEvents) {
     movies.push(movie);
   });
 
+  // No movies.length === 0 check here: this is a community cinema that
+  // doesn't always have screenings scheduled, so an empty list is expected.
+
   const listOfSourcedEvents = Object.values(sourcedEvents).flatMap(
     (events) => events,
   );
