@@ -388,6 +388,7 @@ const knownRemovablePhrases = [
   "Animation at War:",
   "Animation in Love:",
   "Annemarie Jacir:",
+  "April Fool's Day:",
   "April Fools'",
   "Art of Action:",
   "Artist's Film Picks:",
