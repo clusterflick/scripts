@@ -618,6 +618,10 @@ function normalizeTitle(title, options) {
     [" / Bootlickers / ", " & Bootlickers & "],
     ["Sambhavam - Adhyayam Onnu", "Sambhavam Adhyayam Onnu"],
     ["Cinebug turns 1 - ", "Cinebug turns 1: "],
+    [
+      "Academy Awards Best Picture Winner 2026 - ",
+      "Academy Awards Best Picture Winner 2026: ",
+    ],
     ["Afronauts + ", "Afronauts & "],
     ["Cockroach + ", "Cockroach & "],
     ["READY OT NOT 2", "READY OR NOT 2"],
