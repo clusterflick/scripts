@@ -1,28 +1,39 @@
 const cheerio = require("cheerio");
-const { fetchText } = require("../../common/utils");
-const { domain } = require("./attributes");
+const getPageWithPlaywright = require("../../common/get-page-with-playwright");
+const { id, domain } = require("./attributes");
 
 async function retrieve() {
   const movieListPageUrl = `${domain}/search_film_programmes/`;
-  const movieListPage = await fetchText(movieListPageUrl);
 
-  const $ = cheerio.load(movieListPage);
+  return getPageWithPlaywright(movieListPageUrl, id, async (page) => {
+    await page.waitForLoadState();
+    try {
+      await page.waitForSelector(".inner_block_3");
+    } catch {
+      console.log(
+        " - ⚠️  Unexpected page detected (Cloudflare challenge?) - falling back to sourced events",
+      );
+      return { movieListPage: "", moviePages: {} };
+    }
 
-  const moviePageUrls = new Set();
-  $(".inner_block_3 a").each(function () {
-    const url = $(this).attr("href");
-    moviePageUrls.add(url);
+    const movieListPage = await page.content();
+
+    const $ = cheerio.load(movieListPage);
+    const moviePageUrls = new Set();
+    $(".inner_block_3 a").each(function () {
+      const url = $(this).attr("href");
+      moviePageUrls.add(url);
+    });
+
+    const moviePages = {};
+    for (const moviePageUrl of [...moviePageUrls]) {
+      await page.goto(moviePageUrl);
+      await page.waitForLoadState("networkidle");
+      moviePages[moviePageUrl] = await page.content();
+    }
+
+    return { movieListPage, moviePages };
   });
-
-  const moviePages = {};
-  for (const moviePageUrl of [...moviePageUrls]) {
-    moviePages[moviePageUrl] = await fetchText(moviePageUrl);
-  }
-
-  return {
-    movieListPage,
-    moviePages,
-  };
 }
 
 module.exports = retrieve;

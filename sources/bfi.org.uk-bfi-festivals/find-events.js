@@ -92,7 +92,7 @@ function getAccessibilityFlagsForType(typeText) {
   if (typeText === "Descriptive Subtitles") {
     return { hardOfHearing: true };
   }
-  if (typeText === "BSL") {
+  if (typeText === "BSL" || typeText === "BSL intro / Q&A") {
     return { hardOfHearing: true };
   }
   if (typeText === "Live captioned") {

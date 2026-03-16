@@ -141,7 +141,18 @@ async function transform({ moviePages }, sourcedEvents) {
   });
 
   if (movies.length === 0) {
-    throw new Error("No movies found - the page structure may have changed");
+    // The venue's website is behind a Cloudflare Turnstile challenge that
+    // blocks automated retrieval. When that happens, we get empty `moviePages`
+    // and fall back to events from the TicketSource source.
+    // Only throw if TicketSource also has nothing, which would indicate a
+    // genuine breakage rather than a Cloudflare block.
+    const allSourcedEvents = Object.values(sourcedEvents).flatMap((e) => e);
+    if (allSourcedEvents.length === 0) {
+      throw new Error("No movies found - the page structure may have changed");
+    }
+    console.log(
+      " - ⚠️  No movies from venue website - falling back to sourced events only",
+    );
   }
 
   const listOfSourcedEvents = Object.values(sourcedEvents).flatMap(
