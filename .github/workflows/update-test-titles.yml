@@ -17,7 +17,7 @@ jobs:
         with:
           node-version-file: .node-version
       - run: npm ci
-      - uses: clusterflick/release-downloader@v2
+      - uses: clusterflick/release-downloader@v3
         with:
           token: ${{ secrets.PAT }}
           repository: "clusterflick/data-transformed"
