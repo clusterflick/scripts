@@ -51,6 +51,12 @@ describe(`${attributes.name}`, () => {
       address: "23 The Broadway, London, SW19 1RE, UK",
       expectedMatches: 3,
     },
+    {
+      name: "Lost Cinema",
+      alternativeNames: [],
+      address: "135 Shaftesbury Avenue, London, WC2H 8AH, UK",
+      expectedMatches: 0,
+    },
   ])("$name", ({ name, alternativeNames, address, expectedMatches }) => {
     it(
       "retrieve and find events",
@@ -59,7 +65,7 @@ describe(`${attributes.name}`, () => {
 
         // Make sure the input looks roughly correct
         expect(clubPages).toBeTruthy();
-        expect(Object.keys(clubPages)).toHaveLength(9);
+        expect(Object.keys(clubPages)).toHaveLength(10);
 
         readJSON.mockImplementation(() => ({ clubPages }));
 
