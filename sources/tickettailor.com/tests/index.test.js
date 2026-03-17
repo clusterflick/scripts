@@ -19,11 +19,11 @@ jest.mock("../../../common/utils", () => ({
 const isRecording = false;
 
 jest.mock("../../../common/cache");
-setupCacheMock(__dirname, "2026-02-17");
+setupCacheMock(__dirname, "2026-03-17");
 
 describe(`${attributes.name}`, () => {
   setupPolly(isRecording, __dirname);
-  jest.useFakeTimers().setSystemTime(new Date("2026-02-17"));
+  jest.useFakeTimers().setSystemTime(new Date("2026-03-17"));
 
   describe.each([
     {
@@ -49,7 +49,7 @@ describe(`${attributes.name}`, () => {
       name: "Curzon Wimbledon",
       alternativeNames: [],
       address: "23 The Broadway, London, SW19 1RE, UK",
-      expectedMatches: 3,
+      expectedMatches: 8,
     },
     {
       name: "Lost Cinema",
