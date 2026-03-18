@@ -628,6 +628,7 @@ function normalizeTitle(title, options) {
     [/^Charak \(Hindi\)$/i, "Charak: Fair of Faith"],
     ["CLOSING Nuit de Chien", "Nuit de Chien"],
     [/ search 4 square$/i, "search for squarepants"],
+    ["John & Yoko in NYC", "John & Yoko Live in NYC"],
     // Variant families collapsed from known-removable-phrases.js
     // Each pattern covers multiple near-identical string entries that shared a common structure
     [/dog[- ]?friendly(?:\s+screening)?[:\s]*/i, ""],
