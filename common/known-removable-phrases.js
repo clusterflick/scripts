@@ -368,6 +368,7 @@ const knownRemovablePhrases = [
   "A FESTIVE FEAST",
   "a film by Akinola Davies Jr.",
   "a film by David Kew",
+  "A Focus on Gabriel Abrantes:",
   "a Screening and Talk of",
   "Academy Awards Best Picture 2025:",
   "Academy Awards Best Picture 2026:",
