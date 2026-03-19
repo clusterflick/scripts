@@ -12,11 +12,13 @@ const attributes = require("./attributes");
 const { venueMatchesCinema } = require("../../common/source-utils");
 
 function extractCoordinates($) {
-  const mapImg = $(".website-map img[data-src*='marker-point.png']");
+  const mapImg = $(".website-map img[data-src*='marker-point']");
   const dataSrc = mapImg.attr("data-src");
 
   // Extract coordinates from URL like: marker-point.png(-0.1011974,51.46507)
-  const match = dataSrc.match(/marker-point\.png\(([^,]+),([^)]+)\)/);
+  // or marker-point-small.png(-0.1011974,51.46507)
+  const match =
+    dataSrc && dataSrc.match(/marker-point(?:-small)?\.png\(([^,]+),([^)]+)\)/);
   if (!match) return null;
 
   return {
