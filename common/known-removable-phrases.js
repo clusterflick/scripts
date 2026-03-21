@@ -796,6 +796,7 @@ const knownRemovablePhrases = [
   "Romford Horror Festival:",
   "Sapphic Cinema:",
   "Sapphic Cinema Valentine's Afternoon Screening",
+  "Sapphic screening and social",
   "Sake, onigiri +",
   "Sanrizuka 5:",
   "Scared To Dance:",
