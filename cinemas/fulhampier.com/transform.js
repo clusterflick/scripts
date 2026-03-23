@@ -50,7 +50,7 @@ async function transform({ eventsData }, sourcedEvents) {
 
     movies.push({
       showingId,
-      title: event.event_title,
+      title: event.event_title.trim(),
       url: eventUrl,
       overview: createOverview({ duration }),
       performances: [

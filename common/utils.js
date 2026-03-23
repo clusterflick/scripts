@@ -310,14 +310,15 @@ const relaxedMatchers = [
   /Relaxed Preview/i,
   /^Relaxed /i,
   /\(Relaxed\)/i,
-  /Dementia[-|\s]Friendly/i,
+  /Dementia[-\s]Friendly/i,
 ];
 
 const babyFriendlyMatchers = [
-  /Parents? [&|+|and] Baby/i,
-  /Baby\s*[&|+|and]\s*1/i,
+  /Parents? ([&+]|and) Baby/i,
+  /Baby\s*([&+]|and)\s*1/i,
   /Kids Club:/i,
   /Babykino:/i,
+  /Family Film Club/i,
 ];
 
 const subtitledMatchers = [
@@ -371,7 +372,7 @@ const descriptionAccessibilityMatchers = {
   subtitled: [
     /with (?:english )?subtitles/i,
     /english subtitles/i,
-    /subtitles will be displyed/i,
+    /subtitles will be displayed/i,
     /with subtitles from/i,
     /this film is subtitled/i,
   ],
