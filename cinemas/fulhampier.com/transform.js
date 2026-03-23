@@ -17,7 +17,16 @@ function parseDate(dateString) {
 
 function isFilmEvent(event) {
   const keywords = (event.meta_keywords || "").toLowerCase();
-  return keywords.includes("cinema") || keywords.includes("film");
+  if (keywords.includes("cinema") || keywords.includes("film")) {
+    return true;
+  }
+
+  const title = event.event_title.toLowerCase();
+  if (title.includes("screening") || title.includes("film club")) {
+    return true;
+  }
+
+  return false;
 }
 
 function getDurationMins(startDate, endDate) {
