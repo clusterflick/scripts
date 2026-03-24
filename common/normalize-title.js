@@ -628,6 +628,8 @@ function normalizeTitle(title, options) {
     ["Afronauts + ", "Afronauts & "],
     ["Cockroach + ", "Cockroach & "],
     ["The Room + ", "The Room & "],
+    ["The Mystery of Chess Boxing + ", "The Mystery of Chess Boxing & "],
+    ["Hitman In The Hand Of Buddha + ", "Hitman In The Hand Of Buddha & "],
     ["READY OT NOT 2", "READY OR NOT 2"],
     [/^Charak \(Hindi\)$/i, "Charak: Fair of Faith"],
     ["CLOSING Nuit de Chien", "Nuit de Chien"],
