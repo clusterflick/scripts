@@ -419,6 +419,7 @@ function normalizeTitle(title, options) {
       "All You Need Is Love: The Story of Popular Music",
     ],
     ["Goethe Annual Lecture 2025 - ", "Goethe Annual Lecture 2025: "],
+    ["Goethe-Kino - Mascha Schilinski - ", "Goethe-Kino & Mascha Schilinski: "],
     ["James Acaster - ", "James Acaster: "],
     ["Black Friday - ", "Black Friday: "],
     ["IMAX exclusive preview - ", "IMAX exclusive preview: "],
@@ -550,7 +551,7 @@ function normalizeTitle(title, options) {
       "The Experience + Orderly or Disorderly",
       "The Experience & Orderly or Disorderly",
     ],
-    [/Scarecrows['|'] Wedding \+ /i, "Scarecrows' Wedding & "],
+    [/Scarecrows' Wedding \+ /i, "Scarecrows' Wedding & "],
     ["Tiddler + ", "Tiddler & "],
     ["Lost and Found + Shoom's Odyssey", "Lost and Found & Shoom's Odyssey"],
     ["Chico and Rita + 20 Años", "Chico and Rita & 20 Años"],
@@ -625,6 +626,7 @@ function normalizeTitle(title, options) {
     ],
     ["Di'Anno - ", "Di'Anno: "],
     ["Gigi & Olive -", "Gigi & Olive: "],
+    ["Community Cinema at UCL East - ", "Community Cinema at UCL East: "],
     ["Afronauts + ", "Afronauts & "],
     ["Cockroach + ", "Cockroach & "],
     ["The Room + ", "The Room & "],
@@ -858,7 +860,7 @@ function normalizeTitle(title, options) {
     .replace(/™/g, "") // Remove trademark symbol
     .replace(/\\/g, "")
     .replace(/\s*:\s+/g, ": ")
-    .replace(/\s+[a|u]nd\s+/gi, " ")
+    .replace(/\s+[au]nd\s+/gi, " ")
     .replace(/(?:\s+|^)&\s+/gi, " ")
     .replace(/[:|&]$/, "")
     .replace(/'|`|\u200B|‘|’|"|“|”|²|®|,|/g, "")

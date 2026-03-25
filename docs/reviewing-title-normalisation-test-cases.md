@@ -1,0 +1,255 @@
+# Reviewing Title Normalisation Test Cases
+
+This guide covers how to review new entries in `common/tests/test-titles.json`
+after the daily CI job adds them, decide whether each output is correct, and fix
+anything that isn't.
+
+## Background
+
+`common/normalize-title.js` converts raw cinema listing titles into a normalised
+string used for TMDB matching and deduplication. The same function is applied to
+both the venue's title **and** the TMDB title before comparison, so
+normalization only needs to be **consistent**, not perfectly readable —
+`"james the giant peach"` still matches TMDB's `"James and the Giant Peach"`
+because both are normalized identically.
+
+The two files you'll edit most often:
+
+| File                                | Purpose                                         |
+| ----------------------------------- | ----------------------------------------------- |
+| `common/normalize-title.js`         | Structural rules, corrections, processing order |
+| `common/known-removable-phrases.js` | Flat list of strings to strip verbatim          |
+
+## Normalization processing order
+
+Understanding the order matters when debugging why an output looks wrong.
+
+1. **Basic cleanup** — whitespace collapse, smart-quote normalisation,
+   `standardizePrefixingForTheatrePerformances`, lowercase.
+
+2. **Corrections array** (`normalize-title.js` lines ~26–652) — applied first.
+   Each entry is `[pattern, replacement]` where pattern is a string or regex.
+   Strings are lowercased before matching. Use this for one-off title fixes,
+   format normalisation (e.g. dash→colon), and extraction patterns.
+
+3. **Structural prefix extractors** — a series of named checks:
+
+   - `hasPresents` — strips everything before `presents:` / `presents`
+   - `hasScreenings` — strips everything before `screenings of:` / `screenings:`
+   - `matchesOpenPrefix(title, "club|night|festival|gala|…")` — strips a `Word:`
+     or `Word;` prefix mid-title, keeping what follows the colon
+   - `matchesStartingPrefix(title, "film|throwback|member|…")` — same but
+     anchored to the start
+
+4. **`hasSeparator`** — the most important rule to understand:
+
+   ```js
+   title.match(/^(.*?)\s+(?:\+|-|\/|\||•)\s*/);
+   ```
+
+   Takes everything **before the first** `+`, `-`, `/`, `|`, or `•`. This is
+   correct for stripping add-ons like `Film + Q&A` or `Film - 20th Anniversary`,
+   but **it will silently discard the film title** if the venue formats their
+   listing as `Venue - Film Title`. See the
+   [dash-prefix pattern](#the-dash-prefix-problem) below.
+
+5. **`knownRemovablePhrases`** — iterates `known-removable-phrases.js` and calls
+   `title.replace(phrase.toLowerCase(), "")` for each. Phrases are matched as
+   plain substrings, case-insensitively (title is already lowercase).
+
+6. **Year / parentheses handling** — if the title ends with `(YYYY)` the year is
+   preserved; otherwise trailing `(...)` is removed. A lone trailing `)` is
+   removed by `/^([^(]+)\)$/`.
+
+7. **Final cleanup** — diacritics, hyphens between letters, `and`/`und` removal,
+   punctuation stripping, whitespace collapse, `.trim()`.
+
+   Notable rules in this phase:
+
+   - `/\s+[a|u]nd\s+/gi → " "` — removes `and` and `und` everywhere. This is
+     intentional and consistent; TMDB titles receive the same treatment.
+   - `/ a$/i → ""` — removes a trailing ` A` (e.g. left over after `Q and A`
+     suffix removal).
+   - `/^the (?=\S+\s+)/i → ""` — strips a leading `The ` when the title has
+     three or more words.
+
+## The review workflow
+
+### Step 1 — run the current output
+
+```bash
+node -e "
+const n = require('./common/normalize-title.js');
+console.log(n('Your Input Title Here'));
+"
+```
+
+The `output` field in `test-titles.json` is what the test **expects**, not
+necessarily what is correct. When the daily job adds new entries it records
+whatever the normaliser currently produces. Your job is to decide whether that
+output is good or wrong.
+
+### Step 2 — search for analogous examples before judging
+
+Before deciding whether an output is correct, **search `test-titles.json` for
+similar patterns**. This is the most important step and the easiest to skip.
+
+```bash
+# Is this prefix already stripped in other titles?
+grep -A2 '"Babykino:' common/tests/test-titles.json
+
+# How are other film festival prefixes handled?
+grep -B1 -A2 'Film Festival' common/tests/test-titles.json | grep '"output"'
+
+# How are other "Venue - Film" dash patterns handled?
+grep -B1 '"output": "' common/tests/test-titles.json | grep ' - '
+```
+
+The existing test data is the authoritative record of intended behaviour.
+
+### Step 3 — classify the issue
+
+| Symptom                                           | Likely cause                               | Fix                                                                             |
+| ------------------------------------------------- | ------------------------------------------ | ------------------------------------------------------------------------------- |
+| Venue/series name left in output                  | Phrase not in `known-removable-phrases.js` | Add it                                                                          |
+| Film title stripped, only venue name left         | `hasSeparator` ate the film (dash format)  | Dash→colon correction + removable phrase                                        |
+| Stray character(s) left (e.g. a lone `s`)         | A phrase partially matches a longer word   | Add the longer form **before** the shorter form in `known-removable-phrases.js` |
+| Event suffix not removed (Q&A, anniversary, etc.) | Phrase not in `known-removable-phrases.js` | Add it                                                                          |
+| Film title in parentheses dropped                 | Parentheses removal rule stripped it       | Follow the `"Prefix ("` pattern (see below)                                     |
+
+### Step 4 — apply the right fix
+
+There are three approaches, in order of preference:
+
+#### 1. Simple: add to `known-removable-phrases.js`
+
+For labels that should just be removed wholesale. The file is broadly
+alphabetical — place new entries accordingly.
+
+```js
+"Preschool Pics:",     // → removes "Preschool Pics: Finding Nemo" prefix
+" Q&A with the director",  // → strips this suffix from any title
+```
+
+#### 2. Correction + removable phrase (the dash-prefix problem)
+
+`hasSeparator` runs **before** `knownRemovablePhrases`, so a title like
+`Community Cinema at UCL East - Monk in Pieces` loses the film before the phrase
+list even runs.
+
+The fix is a two-step correction in `normalize-title.js`:
+
+```js
+// Step 1 — convert dash to colon so hasSeparator no longer fires
+["Community Cinema at UCL East - ", "Community Cinema at UCL East: "],
+```
+
+```js
+// Step 2 — now the colon prefix is removable as normal
+"Community Cinema at UCL East:",   // in known-removable-phrases.js
+```
+
+Check whether an existing entry for the venue already exists (e.g.
+`"UCL East Community Cinema:"`) so you don't duplicate.
+
+#### 3. Parenthetical film title
+
+When the film is in parentheses after an event label, follow the existing
+`"Bridal Cinema Club Community Night ("` pattern:
+
+```js
+// In known-removable-phrases.js — note the trailing open-paren
+"Cinema Club Community Night (",
+```
+
+This removes the prefix _including_ the `(`, leaving `Film Title)`. The trailing
+`)` is then cleaned up by the `/^([^(]+)\)$/` rule in the final phase.
+
+## Key pitfalls
+
+**Plural/singular ordering** — `known-removable-phrases.js` uses substring
+matching. `"Documentary Screening"` will partially match
+`"Documentary Screenings"`, leaving a stray `s`. Always add the **longer
+(plural) form first**:
+
+```js
+"Documentary Screenings",   // matched first
+"Documentary Screening",    // catches remaining singular cases
+```
+
+**Prefer specific strings over regexes in corrections** — if there is only one
+known instance of a pattern, use the exact string. Only reach for a regex when
+multiple distinct values need the same treatment.
+
+```js
+// Preferred — one known director for this series
+["Goethe-Kino - Mascha Schilinski - ", "Goethe-Kino & Mascha Schilinski: "],
+
+// Avoid — general regex when a specific string will do
+[/^goethe-kino - [^-]+ - /i, ""],
+```
+
+**Prefer `known-removable-phrases.js` over corrections** — a regex removal in
+`corrections` (e.g. `[/documentary screenings?/i, ""]`) is a smell when two
+plain-string removable phrases would work just as cleanly.
+
+**Festival and series prefixes are always stripped** — if a title begins with a
+recognisable film festival or venue screening-series name followed by a colon,
+it belongs in `known-removable-phrases.js`. Search the file and the test data
+before deciding a prefix is "intentional":
+
+```bash
+grep '"output"' common/tests/test-titles.json | grep 'film festival' | head -10
+```
+
+## Adding a test case
+
+When you add or correct a rule, also add an entry to `test-titles.json`:
+
+```json
+{ "input": "Film Club: Some Film", "output": "some film" }
+```
+
+`input` is the raw venue title. `output` is what `normalizeTitle()` should
+return after your fix. Run the tests to confirm:
+
+```bash
+npm test -- common/tests/normalize-title.test.js
+```
+
+## Reference: worked examples
+
+These cases illustrate the patterns above. `test-titles.json` contains thousands
+more historical examples — always search there first.
+
+### Simple prefix removal
+
+| Input                                                    | Output                 | Fix                                                                                                                                            |
+| -------------------------------------------------------- | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Preschool Pics: Finding Nemo`                           | `finding nemo`         | Added `"Preschool Pics:"` to known-removable-phrases, following the same pattern as `"Babykino:"`                                              |
+| `Little Venice Film Festival 2026: Swiss Films in Focus` | `swiss films in focus` | Added `"Little Venice Film Festival 2026:"` — all festival colon-prefixes should be stripped; confirmed by searching existing festival entries |
+
+### Suffix removal
+
+| Input                                            | Output                     | Fix                                                         |
+| ------------------------------------------------ | -------------------------- | ----------------------------------------------------------- |
+| `The Conspiracists (2025) Q&A with the director` | `the conspiracists (2025)` | Added `" Q&A with the director"` to known-removable-phrases |
+
+### Dash-prefix problem
+
+| Input                                                    | Bad output                     | Good output        | Fix                                                                                                                                   |
+| -------------------------------------------------------- | ------------------------------ | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `Community Cinema at UCL East - Monk in Pieces`          | `community cinema at ucl east` | `monk in pieces`   | Correction `"Community Cinema at UCL East - " → "Community Cinema at UCL East: "` + phrase `"Community Cinema at UCL East:"`          |
+| `Goethe-Kino - Mascha Schilinski - The Sound of Falling` | `goethekino`                   | `sound of falling` | Correction `"Goethe-Kino - Mascha Schilinski - " → "Goethe-Kino & Mascha Schilinski: "` + phrase `"Goethe-Kino & Mascha Schilinski:"` |
+
+### Partial phrase match (plural/singular)
+
+| Input                                                    | Bad output                      | Good output                   | Fix                                                                                              |
+| -------------------------------------------------------- | ------------------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------ |
+| `Little Venice Film Festival Documentary Screenings - 1` | `little venice film festival s` | `little venice film festival` | Added `"Documentary Screenings"` **before** `"Documentary Screening"` in known-removable-phrases |
+
+### Parenthetical film title
+
+| Input                                                                   | Bad output                    | Good output               | Fix                                                                                                                                         |
+| ----------------------------------------------------------------------- | ----------------------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Gigi & Olive - Cinema Club Community Night (My Best Friend's Wedding)` | `cinema club community night` | `my best friends wedding` | Added `"Cinema Club Community Night ("` to known-removable-phrases, following the existing `"Bridal Cinema Club Community Night ("` pattern |
