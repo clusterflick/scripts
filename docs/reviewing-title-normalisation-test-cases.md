@@ -53,6 +53,14 @@ Understanding the order matters when debugging why an output looks wrong.
    listing as `Venue - Film Title`. See the
    [dash-prefix pattern](#the-dash-prefix-problem) below.
 
+   **Em-dash `–` is not in this list.** A title like `Venue – Film` passes
+   through `hasSeparator` untouched. The em-dash is instead collapsed to a space
+   by the final cleanup phase (`/\s+(-|–)\s+/g → " "`), and any leading `–` left
+   after phrase removal is stripped by `/^(-|–)/g`. This means em-dash venue
+   prefixes can be handled with a plain removable phrase rather than the
+   two-step correction approach — see the [em-dash variant](#em-dash-variant)
+   worked example.
+
 5. **`knownRemovablePhrases`** — iterates `known-removable-phrases.js` and calls
    `title.replace(phrase.toLowerCase(), "")` for each. Phrases are matched as
    plain substrings, case-insensitively (title is already lowercase).
@@ -109,13 +117,14 @@ The existing test data is the authoritative record of intended behaviour.
 
 ### Step 3 — classify the issue
 
-| Symptom                                           | Likely cause                               | Fix                                                                             |
-| ------------------------------------------------- | ------------------------------------------ | ------------------------------------------------------------------------------- |
-| Venue/series name left in output                  | Phrase not in `known-removable-phrases.js` | Add it                                                                          |
-| Film title stripped, only venue name left         | `hasSeparator` ate the film (dash format)  | Dash→colon correction + removable phrase                                        |
-| Stray character(s) left (e.g. a lone `s`)         | A phrase partially matches a longer word   | Add the longer form **before** the shorter form in `known-removable-phrases.js` |
-| Event suffix not removed (Q&A, anniversary, etc.) | Phrase not in `known-removable-phrases.js` | Add it                                                                          |
-| Film title in parentheses dropped                 | Parentheses removal rule stripped it       | Follow the `"Prefix ("` pattern (see below)                                     |
+| Symptom                                           | Likely cause                                  | Fix                                                                             |
+| ------------------------------------------------- | --------------------------------------------- | ------------------------------------------------------------------------------- |
+| Venue/series name left in output                  | Phrase not in `known-removable-phrases.js`    | Add it                                                                          |
+| Film title stripped, only venue name left         | `hasSeparator` ate the film (hyphen format)   | Dash→colon correction + removable phrase                                        |
+| Venue name + film title run together (em-dash)    | `–` not in `hasSeparator`; collapses to space | Removable phrase with trailing space (see [em-dash variant](#em-dash-variant))  |
+| Stray character(s) left (e.g. a lone `s`)         | A phrase partially matches a longer word      | Add the longer form **before** the shorter form in `known-removable-phrases.js` |
+| Event suffix not removed (Q&A, anniversary, etc.) | Phrase not in `known-removable-phrases.js`    | Add it                                                                          |
+| Film title in parentheses dropped                 | Parentheses removal rule stripped it          | Follow the `"Prefix ("` pattern (see below)                                     |
 
 ### Step 4 — apply the right fix
 
@@ -166,6 +175,15 @@ This removes the prefix _including_ the `(`, leaving `Film Title)`. The trailing
 `)` is then cleaned up by the `/^([^(]+)\)$/` rule in the final phase.
 
 ## Key pitfalls
+
+**Removing a phrase can empty the entire title** — if `knownRemovablePhrases`
+strips the last content from a title (e.g. the input is literally
+`"Short Film Screening"` with no film name), the normaliser falls back to
+`backReturnTitle` — the lowercased title as of after basic cleanup — rather than
+returning an empty string. So `n("Short Film Screening")` returns
+`"short film screening"`, not `""`. This is intentional: an empty result would
+be worse than the original. Keep it in mind when adding broad phrases and
+wondering why a standalone case isn't being stripped.
 
 **Phrase removal can expose a leading space that matches other phrases** —
 `knownRemovablePhrases` does a plain substring replace with no post-trim. If you
@@ -249,6 +267,18 @@ more historical examples — always search there first.
 | -------------------------------------------------------- | ------------------------------ | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
 | `Community Cinema at UCL East - Monk in Pieces`          | `community cinema at ucl east` | `monk in pieces`   | Correction `"Community Cinema at UCL East - " → "Community Cinema at UCL East: "` + phrase `"Community Cinema at UCL East:"`          |
 | `Goethe-Kino - Mascha Schilinski - The Sound of Falling` | `goethekino`                   | `sound of falling` | Correction `"Goethe-Kino - Mascha Schilinski - " → "Goethe-Kino & Mascha Schilinski: "` + phrase `"Goethe-Kino & Mascha Schilinski:"` |
+
+### Em-dash variant
+
+Em-dash `–` is **not** matched by `hasSeparator`, so the film title is never
+lost. Instead the em-dash collapses to a space in final cleanup, producing
+`"venue name film title"` as one run. The fix is a plain removable phrase with a
+trailing space — no correction needed. The leading `–` left in the title after
+removal is stripped by the `/^(-|–)/g` final cleanup rule.
+
+| Input                                  | Bad output                           | Good output | Fix                                                                |
+| -------------------------------------- | ------------------------------------ | ----------- | ------------------------------------------------------------------ |
+| `Community Cinema at UCL East – Pride` | `community cinema at ucl east pride` | `pride`     | Added `"Community Cinema at UCL East "` to known-removable-phrases |
 
 ### Partial phrase match (plural/singular)
 
