@@ -167,6 +167,14 @@ This removes the prefix _including_ the `(`, leaving `Film Title)`. The trailing
 
 ## Key pitfalls
 
+**Phrase removal can expose a leading space that matches other phrases** —
+`knownRemovablePhrases` does a plain substring replace with no post-trim. If you
+add `"Foo Bar:"` and the title is `"foo bar: uncut gems"`, removing `"foo bar:"`
+leaves `" uncut gems"`, and a phrase like `" uncut"` (with a leading space) will
+then match, producing just `"gems"`. The fix is to include the trailing space in
+the phrase: `"Foo Bar: "`. Do this whenever the phrase is always followed by
+more content (i.e. it is a prefix label, not a suffix or mid-title fragment).
+
 **Plural/singular ordering** — `known-removable-phrases.js` uses substring
 matching. `"Documentary Screening"` will partially match
 `"Documentary Screenings"`, leaving a stray `s`. Always add the **longer

@@ -627,6 +627,7 @@ function normalizeTitle(title, options) {
     ["Di'Anno - ", "Di'Anno: "],
     ["Gigi & Olive -", "Gigi & Olive: "],
     ["Community Cinema at UCL East - ", "Community Cinema at UCL East: "],
+    ["Cinema Night London - ", "Cinema Night London: "],
     ["Afronauts + ", "Afronauts & "],
     ["Cockroach + ", "Cockroach & "],
     ["The Room + ", "The Room & "],
