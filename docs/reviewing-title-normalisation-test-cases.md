@@ -53,6 +53,11 @@ Understanding the order matters when debugging why an output looks wrong.
    listing as `Venue - Film Title`. See the
    [dash-prefix pattern](#the-dash-prefix-problem) below.
 
+   **The separator must be preceded by whitespace.** The regex requires `\s+`
+   before the separator character. A suffix like `Title/Q&A` (no space before
+   `/`) will not be caught — `hasSeparator` won't fire, and the `/Q&A` part will
+   survive into the output. Add it as a removable phrase instead.
+
    **Em-dash `–` is not in this list.** A title like `Venue – Film` passes
    through `hasSeparator` untouched. The em-dash is instead collapsed to a space
    by the final cleanup phase (`/\s+(-|–)\s+/g → " "`), and any leading `–` left
@@ -127,6 +132,12 @@ The existing test data is the authoritative record of intended behaviour.
 | Film title in parentheses dropped                 | Parentheses removal rule stripped it          | Follow the `"Prefix ("` pattern (see below)                                     |
 
 ### Step 4 — apply the right fix
+
+> **Default to `known-removable-phrases.js`.** Only reach for the corrections
+> array when the fix requires structural transformation (e.g. dash→colon,
+> rewriting a title) rather than pure removal. A regex removal in `corrections`
+> is a smell when a plain string in `known-removable-phrases.js` would do the
+> same job.
 
 There are three approaches, in order of preference:
 
@@ -216,8 +227,10 @@ multiple distinct values need the same treatment.
 ```
 
 **Prefer `known-removable-phrases.js` over corrections** — a regex removal in
-`corrections` (e.g. `[/documentary screenings?/i, ""]`) is a smell when two
-plain-string removable phrases would work just as cleanly.
+`corrections` (e.g. `[/documentary screenings?/i, ""]`) is a smell when one or
+two plain-string removable phrases would work just as cleanly. The corrections
+array is for structural transformations (rewriting a title, converting a dash to
+a colon), not for stripping unwanted text.
 
 **Festival and series prefixes are always stripped** — if a title begins with a
 recognisable film festival or venue screening-series name followed by a colon,
@@ -257,9 +270,10 @@ more historical examples — always search there first.
 
 ### Suffix removal
 
-| Input                                            | Output                     | Fix                                                         |
-| ------------------------------------------------ | -------------------------- | ----------------------------------------------------------- |
-| `The Conspiracists (2025) Q&A with the director` | `the conspiracists (2025)` | Added `" Q&A with the director"` to known-removable-phrases |
+| Input                                                         | Output                     | Fix                                                                                                                                                                                                       |
+| ------------------------------------------------------------- | -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `The Conspiracists (2025) Q&A with the director`              | `the conspiracists (2025)` | Added `" Q&A with the director"` to known-removable-phrases                                                                                                                                               |
+| `LVFF 2026: Beautiful and Neat Room/Q&A with Maria Petschnig` | `beautiful neat room`      | Added `"/Q&A with Maria Petschnig"` to known-removable-phrases — `hasSeparator` only fires when `/` is preceded by whitespace, so `Room/Q&A` (no space) falls through and the suffix needs its own phrase |
 
 ### Dash-prefix problem
 
@@ -271,14 +285,24 @@ more historical examples — always search there first.
 ### Em-dash variant
 
 Em-dash `–` is **not** matched by `hasSeparator`, so the film title is never
-lost. Instead the em-dash collapses to a space in final cleanup, producing
-`"venue name film title"` as one run. The fix is a plain removable phrase with a
-trailing space — no correction needed. The leading `–` left in the title after
-removal is stripped by the `/^(-|–)/g` final cleanup rule.
+lost. The em-dash collapses to a space in final cleanup, and any leading `–`
+remaining after phrase removal is stripped by `/^(-|–)/g`.
 
-| Input                                  | Bad output                           | Good output | Fix                                                                |
-| -------------------------------------- | ------------------------------------ | ----------- | ------------------------------------------------------------------ |
-| `Community Cinema at UCL East – Pride` | `community cinema at ucl east pride` | `pride`     | Added `"Community Cinema at UCL East "` to known-removable-phrases |
+There are two sub-cases depending on which side of the em-dash the film title is
+on:
+
+**Venue prefix** (`Venue – Film`): the em-dash produces
+`"venue name film title"` as one run. The fix is a removable phrase for the
+venue name with a trailing space — no correction needed.
+
+**Event suffix** (`Film – Event Descriptor`): the em-dash and everything after
+it must be removed. Because the em-dash is still present at step 5 (final
+cleanup hasn't run yet), include it in the removable phrase.
+
+| Input                                                                                   | Bad output                                                    | Good output     | Fix                                                                                                                              |
+| --------------------------------------------------------------------------------------- | ------------------------------------------------------------- | --------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `Community Cinema at UCL East – Pride`                                                  | `community cinema at ucl east pride`                          | `pride`         | Added `"Community Cinema at UCL East "` to known-removable-phrases                                                               |
+| `Ugetsu (1953) – Japanese Golden Age Classic Screening & Q&A with Irene González-López` | `ugetsu (1953) japanese golden age classic screening q&a ...` | `ugetsu (1953)` | Added `" – Japanese Golden Age Classic Screening & Q&A with Irene González-López"` to known-removable-phrases (em-dash included) |
 
 ### Partial phrase match (plural/singular)
 
