@@ -55,8 +55,10 @@ Understanding the order matters when debugging why an output looks wrong.
 
    **The separator must be preceded by whitespace.** The regex requires `\s+`
    before the separator character. A suffix like `Title/Q&A` (no space before
-   `/`) will not be caught — `hasSeparator` won't fire, and the `/Q&A` part will
-   survive into the output. Add it as a removable phrase instead.
+   `/`) or `Title- Sold Out` (no space before `-`) will not be caught —
+   `hasSeparator` won't fire, and the suffix will survive into the output. Add
+   it as a removable phrase, including the leading separator character (e.g.
+   `"- sold out"`, `"/Q&A with Maria Petschnig"`).
 
    **Em-dash `–` is not in this list.** A title like `Venue – Film` passes
    through `hasSeparator` untouched. The em-dash is instead collapsed to a space
@@ -120,16 +122,22 @@ grep -B1 '"output": "' common/tests/test-titles.json | grep ' - '
 
 The existing test data is the authoritative record of intended behaviour.
 
+When checking whether a series/venue prefix already exists in
+`known-removable-phrases.js`, also search for the hyphen/space variant — cinemas
+often format the same name both ways (e.g. `"Fetish-Friendly:"` and
+`"Fetish Friendly:"`). If only one variant is present, add the other alongside
+it.
+
 ### Step 3 — classify the issue
 
-| Symptom                                           | Likely cause                                  | Fix                                                                             |
-| ------------------------------------------------- | --------------------------------------------- | ------------------------------------------------------------------------------- |
-| Venue/series name left in output                  | Phrase not in `known-removable-phrases.js`    | Add it                                                                          |
-| Film title stripped, only venue name left         | `hasSeparator` ate the film (hyphen format)   | Dash→colon correction + removable phrase                                        |
-| Venue name + film title run together (em-dash)    | `–` not in `hasSeparator`; collapses to space | Removable phrase with trailing space (see [em-dash variant](#em-dash-variant))  |
-| Stray character(s) left (e.g. a lone `s`)         | A phrase partially matches a longer word      | Add the longer form **before** the shorter form in `known-removable-phrases.js` |
-| Event suffix not removed (Q&A, anniversary, etc.) | Phrase not in `known-removable-phrases.js`    | Add it                                                                          |
-| Film title in parentheses dropped                 | Parentheses removal rule stripped it          | Follow the `"Prefix ("` pattern (see below)                                     |
+| Symptom                                           | Likely cause                                  | Fix                                                                                                                                                    |
+| ------------------------------------------------- | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Venue/series name left in output                  | Phrase not in `known-removable-phrases.js`    | Add it                                                                                                                                                 |
+| Film title stripped, only venue name left         | `hasSeparator` ate the film (hyphen format)   | Dash→colon correction + removable phrase                                                                                                               |
+| Venue name + film title run together (em-dash)    | `–` not in `hasSeparator`; collapses to space | Removable phrase with trailing space (see [em-dash variant](#em-dash-variant))                                                                         |
+| Stray character(s) left (e.g. a lone `s`)         | A phrase partially matches a longer word      | Add the longer form **before** the shorter form in `known-removable-phrases.js`                                                                        |
+| Event suffix not removed (Q&A, anniversary, etc.) | Phrase not in `known-removable-phrases.js`    | Add it; if suffix is attached directly to the last word (no space before separator), include the leading separator in the phrase (e.g. `"- sold out"`) |
+| Film title in parentheses dropped                 | Parentheses removal rule stripped it          | Follow the `"Prefix ("` pattern (see below)                                                                                                            |
 
 ### Step 4 — apply the right fix
 

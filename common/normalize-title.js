@@ -404,6 +404,7 @@ function normalizeTitle(title, options) {
     ],
     ["Film Club |", "Film Club: "],
     ["IN-HOUSE - ", "IN-HOUSE: "],
+    ["RIO FOREVER /", "RIO FOREVER: "],
     ["BAR TRASH - ", "BAR TRASH: "],
     [
       "BAR TRASH Positive East Fundraiser /",
