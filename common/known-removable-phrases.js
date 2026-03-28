@@ -796,6 +796,7 @@ const knownRemovablePhrases = [
   "Queer Horror Nights:",
   "Rebel Reel Christmas Party:",
   "Rebel Reel:",
+  "Record Store Day: ",
   "Records, cocktails: ",
   "Refugee Week:",
   "REFUGEE WEEK FREE EVENT:",
