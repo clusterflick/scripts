@@ -6,6 +6,8 @@ const {
   generateShowingId,
 } = require("../../common/utils");
 
+const getUrl = (data) => data.ticketing[0].urls[0];
+
 async function transform(
   attributes,
   { movieListPage, moviePages: { movieData, movieDetails, attributeData } },
@@ -32,6 +34,16 @@ async function transform(
 
     const performances = Object.values(movieListPage[movie.id])
       .flatMap((dayPerformances) => dayPerformances)
+      .filter((performance, index, all) => {
+        // The Everyman API occasionally returns duplicate performance entries.
+        // Deduplicate by startsAt + booking URL to avoid schema validation failures.
+        const matchingIndex = all.findIndex(
+          ({ startsAt, data }) =>
+            startsAt === performance.startsAt &&
+            getUrl(data) === getUrl(performance.data),
+        );
+        return index === matchingIndex;
+      })
       .map((performance) => {
         let accessibility = {};
         let notesList = [];
