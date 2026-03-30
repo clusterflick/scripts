@@ -629,6 +629,7 @@ function normalizeTitle(title, options) {
     ["Gigi & Olive -", "Gigi & Olive: "],
     ["Community Cinema at UCL East - ", "Community Cinema at UCL East: "],
     ["Cinema Night London - ", "Cinema Night London: "],
+    ["An Afternoon Of Cinema - ", "An Afternoon Of Cinema: "],
     ["Afronauts + ", "Afronauts & "],
     ["Cockroach + ", "Cockroach & "],
     ["The Room + ", "The Room & "],
@@ -639,6 +640,9 @@ function normalizeTitle(title, options) {
     ["CLOSING Nuit de Chien", "Nuit de Chien"],
     [/ search 4 square$/i, "search for squarepants"],
     ["John & Yoko in NYC", "John & Yoko Live in NYC"],
+    ["Man Marked for Death, Twenty Years Later", "Twenty Years Later"],
+    ["Scott Walker: 30th Century Man", "Scott Walker: 30 Century Man"],
+    [/Raakaasaa?/i, "Rākāsā"],
     // Variant families collapsed from known-removable-phrases.js
     // Each pattern covers multiple near-identical string entries that shared a common structure
     [/dog[- ]?friendly(?:\s+screening)?[:\s]*/i, ""],
