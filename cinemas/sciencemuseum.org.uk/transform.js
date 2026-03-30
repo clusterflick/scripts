@@ -106,7 +106,7 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
               ? ["Limited seating available"]
               : [],
             url: actionUrl,
-            screen: details.location.split(",")[0]?.trim(),
+            screen: details.location?.split(",")[0]?.trim(),
             status: {
               soldOut: performanceStatusMessage.toLowerCase() === "sold out",
             },
