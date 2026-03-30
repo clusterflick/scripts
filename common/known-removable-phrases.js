@@ -761,6 +761,7 @@ const knownRemovablePhrases = [
   "OUT @ Clapham:",
   "OUT:",
   "OAC:",
+  "OFN: ",
   "OCDF: x FFC:",
   "OCDF x FFC:",
   "OCDF:",
