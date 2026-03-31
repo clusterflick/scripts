@@ -183,17 +183,36 @@ const fetchWithRetry = async (
   });
 };
 
-const fetchText = async (url, options) =>
-  (await fetchWithRetry(url, options)).text();
+const fetchText = async (url, options) => {
+  const response = await fetchWithRetry(url, options);
+  if (!response.ok) {
+    throw new Error(
+      `Failed to fetch ${url}: ${response.status} ${response.statusText}`,
+    );
+  }
+  return response.text();
+};
 
 const fetchWin1252Text = async (url) => {
   const response = await fetchWithRetry(url);
+  if (!response.ok) {
+    throw new Error(
+      `Failed to fetch ${url}: ${response.status} ${response.statusText}`,
+    );
+  }
   const buffer = Buffer.from(await response.arrayBuffer());
   return iconv.decode(buffer, "win1252");
 };
 
-const fetchJson = async (url, options) =>
-  (await fetchWithRetry(url, options)).json();
+const fetchJson = async (url, options) => {
+  const response = await fetchWithRetry(url, options);
+  if (!response.ok) {
+    throw new Error(
+      `Failed to fetch ${url}: ${response.status} ${response.statusText}`,
+    );
+  }
+  return response.json();
+};
 
 const getText = ($el) => $el.text().trim();
 
