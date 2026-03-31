@@ -1,5 +1,5 @@
 const cheerio = require("cheerio");
-const { setHours, setMinutes } = require("date-fns");
+const { parseISO } = require("date-fns");
 const {
   getText,
   createPerformance,
@@ -8,7 +8,6 @@ const {
   convertToList,
   generateShowingId,
 } = require("../../common/utils");
-const { parseDate } = require("./utils");
 
 const getEntry = (attributes, $el, movieAdditionalData) => {
   const url = `${attributes.domain}${$el.find(".tile-details > a").attr("href")}`;
@@ -62,17 +61,10 @@ async function transform(
 
   const movieAdditionalData = await getAdditionalDataFor(moviePages);
   const movies = {};
-  let date;
 
   $listEntry.each(function () {
     const $entry = $(this);
-    if ($entry.hasClass("date")) {
-      // Ignore the final heading which doesn't have a date
-      if (getText($entry).toLowerCase() !== "the end") {
-        date = parseDate(getText($entry));
-      }
-      return;
-    }
+    if ($entry.hasClass("date")) return;
 
     // Ignore the intro text element
     if ($entry.hasClass("intro")) return;
@@ -97,9 +89,9 @@ async function transform(
 
       const status = { soldOut: false };
       let notesList = [getText($link.find(".screening-type"))];
-      if ($link.hasClass("is-sold-out")) {
+      if ($link.find(".sold-out").length > 0) {
         status.soldOut = true;
-      } else if ($link.hasClass("low-availability")) {
+      } else if ($link.find(".last-few").length > 0) {
         notesList.push("Last few seats");
       }
 
@@ -112,14 +104,9 @@ async function transform(
         subtitled: filters.includes("hard-of-hearing"),
       };
 
-      const [hours, minutes] = getText($link).split(" ")[0].split(":");
-
       movies[id].performances = movies[id].performances.concat(
         createPerformance({
-          date: setMinutes(
-            setHours(date, parseInt(hours, 10)),
-            parseInt(minutes, 10),
-          ),
+          date: parseISO($link.attr("data-start-time")),
           notesList,
           url: `${attributes.domain}${$link.attr("href")}`,
           screen: getText($link.find(".screen")),
