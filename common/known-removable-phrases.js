@@ -288,6 +288,7 @@ const knownRemovablePhrases = [
   "with Sammy Baloji",
   "with Selina Robertson & Isabel Moir",
   "with Special Guest Sviatoslav Vakarchuk",
+  "with special guest Yukari Oshima",
   "with Steve Zissou",
   "with wine tasting",
   "with Molly Miles",
