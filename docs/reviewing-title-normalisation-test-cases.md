@@ -159,13 +159,17 @@ alphabetical — place new entries accordingly.
 " Q&A with the director",  // → strips this suffix from any title
 ```
 
-#### 2. Correction + removable phrase (the dash-prefix problem)
+#### 2. Correction + removable phrase (the dash-prefix and plus-prefix problems)
 
 `hasSeparator` runs **before** `knownRemovablePhrases`, so a title like
 `Community Cinema at UCL East - Monk in Pieces` loses the film before the phrase
-list even runs.
+list even runs. The same applies to `+` when it appears inside a venue prefix
+rather than between a film and an add-on.
 
-The fix is a two-step correction in `normalize-title.js`:
+The fix is always the same two-step pattern: convert the separator to one that
+won't fire `hasSeparator`, then remove the prefix as normal.
+
+**Dash variant** — convert `-` to `: `:
 
 ```js
 // Step 1 — convert dash to colon so hasSeparator no longer fires
@@ -175,6 +179,18 @@ The fix is a two-step correction in `normalize-title.js`:
 ```js
 // Step 2 — now the colon prefix is removable as normal
 "Community Cinema at UCL East:",   // in known-removable-phrases.js
+```
+
+**Plus variant** — convert `+` to `&` (see `["Afronauts + ", "Afronauts & "]`):
+
+```js
+// Step 1 — convert + to & so hasSeparator no longer fires
+["Argentine season launch: Live music + ", "Argentine season launch: Live music & "],
+```
+
+```js
+// Step 2 — now the full prefix is removable as normal
+"Argentine season launch: Live music & ",   // in known-removable-phrases.js
 ```
 
 Check whether an existing entry for the venue already exists (e.g.
@@ -283,12 +299,13 @@ more historical examples — always search there first.
 | `The Conspiracists (2025) Q&A with the director`              | `the conspiracists (2025)` | Added `" Q&A with the director"` to known-removable-phrases                                                                                                                                               |
 | `LVFF 2026: Beautiful and Neat Room/Q&A with Maria Petschnig` | `beautiful neat room`      | Added `"/Q&A with Maria Petschnig"` to known-removable-phrases — `hasSeparator` only fires when `/` is preceded by whitespace, so `Room/Q&A` (no space) falls through and the suffix needs its own phrase |
 
-### Dash-prefix problem
+### Dash-prefix and plus-prefix problem
 
-| Input                                                    | Bad output                     | Good output        | Fix                                                                                                                                   |
-| -------------------------------------------------------- | ------------------------------ | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
-| `Community Cinema at UCL East - Monk in Pieces`          | `community cinema at ucl east` | `monk in pieces`   | Correction `"Community Cinema at UCL East - " → "Community Cinema at UCL East: "` + phrase `"Community Cinema at UCL East:"`          |
-| `Goethe-Kino - Mascha Schilinski - The Sound of Falling` | `goethekino`                   | `sound of falling` | Correction `"Goethe-Kino - Mascha Schilinski - " → "Goethe-Kino & Mascha Schilinski: "` + phrase `"Goethe-Kino & Mascha Schilinski:"` |
+| Input                                                    | Bad output                           | Good output        | Fix                                                                                                                                                                      |
+| -------------------------------------------------------- | ------------------------------------ | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `Community Cinema at UCL East - Monk in Pieces`          | `community cinema at ucl east`       | `monk in pieces`   | Correction `"Community Cinema at UCL East - " → "Community Cinema at UCL East: "` + phrase `"Community Cinema at UCL East:"`                                             |
+| `Goethe-Kino - Mascha Schilinski - The Sound of Falling` | `goethekino`                         | `sound of falling` | Correction `"Goethe-Kino - Mascha Schilinski - " → "Goethe-Kino & Mascha Schilinski: "` + phrase `"Goethe-Kino & Mascha Schilinski:"`                                    |
+| `Argentine season launch: Live music + Wild Tales`       | `argentine season launch live music` | `wild tales`       | Correction `"Argentine season launch: Live music + " → "Argentine season launch: Live music & "` + phrase `"Argentine season launch: Live music & "` (`+` → `&` pattern) |
 
 ### Em-dash variant
 
