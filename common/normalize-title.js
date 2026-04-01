@@ -541,6 +541,7 @@ function normalizeTitle(title, options) {
       "01 | A.I. | New Media | Experimental | Digital Arts Film Festival",
       "A.I New Media Experimental Digital Arts Film Festival",
     ],
+    ["A.I. - Artificial Intelligence", "A.I. Artificial Intelligence"],
     ["Journey + A Wedding Suit", "Journey & A Wedding Suit"],
     ["We Lana Fel Khayal Hob", "Wa Lana Fel Khayal Hob"],
     ["Wa Lana Fel Khayal Hob", "Love, Imagined"],
