@@ -657,6 +657,11 @@ function normalizeTitle(title, options) {
     [/l.ff(?:\s+202\d)?:/i, ""],
     [/liaf(?:\s+\d+)?:/i, ""],
     [/hkff(?:uk)?(?:\s+\d+)?:/i, ""],
+    ["Tercera Video Club #2 - ", "Tercera Video Club #2: "],
+    [
+      "Argentine season launch: Live music + ",
+      "Argentine season launch: Live music & ",
+    ],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
