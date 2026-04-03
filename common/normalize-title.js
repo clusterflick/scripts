@@ -635,7 +635,8 @@ function normalizeTitle(title, options) {
     ["Record Store Day - ", "Record Store Day: "],
     ["Drink & Dine - ", "Drink & Dine: "],
     ["Afronauts + ", "Afronauts & "],
-    ["Cockroach + ", "Cockroach & "],
+    ["Fight Club: 4K Restoration", "Fight Club"],
+    ["Cockroach + Hedwig", "Cockroach & Hedwig"],
     ["The Room + ", "The Room & "],
     ["The Mystery of Chess Boxing + ", "The Mystery of Chess Boxing & "],
     ["Hitman In The Hand Of Buddha + ", "Hitman In The Hand Of Buddha & "],
@@ -721,7 +722,10 @@ function normalizeTitle(title, options) {
   }
 
   const hasClub = matchesOpenPrefix(title, "club");
-  if (hasClub) {
+  // e.g. "Kids Club: Paddington in Peru" → "Paddington in Peru"
+  // However, "Fight Club", which is a film title, could also match as a false
+  // positive (e.g. "Fight Club: 4K Restoration"), so we need to check for it.
+  if (hasClub && !title.startsWith("fight club")) {
     title = hasClub[1];
   }
 
