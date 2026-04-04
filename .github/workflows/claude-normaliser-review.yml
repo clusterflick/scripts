@@ -29,12 +29,15 @@ jobs:
           show_full_output: true
           claude_args: >-
             --dangerously-skip-permissions
-            --max-turns 30
-            --allowedTools Bash,Read,Edit,Write
+            --max-turns 15
+            --disallowedTools Task,WebFetch,WebSearch,Glob,Grep,TodoWrite,ToolSearch
           prompt: |
             In this branch we've had some automated updates to `common/tests/test-titles.json`.
             Use git diff to identify the newly added entries, then confirm those changes are correct,
             or fix them if they're not.
             There's details on how this setup works in `docs/reviewing-title-normalisation-test-cases.md`
-            If a case is ambiguous and you cannot determine whether the output is correct from the
-            available files, accept the current output rather than investigating further.
+            For each new entry: run the normalizer on the input, and check the output matches what's
+            in the JSON. If it matches, accept it — do not investigate further whether the output
+            is "ideally" correct. Only investigate and fix cases where the recorded output does NOT
+            match what the normalizer currently produces.
+            If a case is ambiguous, accept the current output rather than investigating further.
