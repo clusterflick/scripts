@@ -439,7 +439,7 @@ function normalizeTitle(title, options) {
     ["Migrant Cinema - ", "Migrant Cinema: "],
     ["muppets christmas carol", "muppet christmas carol"],
     [
-      /^Dr\.? Strangelove$/i,
+      /^(?:(.*?\b(?:screening|day))\s*:?\s+)?Dr\.? Strangelove$/i,
       "Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb",
     ],
     ["Prime Minster", "Prime Minister"],
@@ -640,6 +640,7 @@ function normalizeTitle(title, options) {
     ["The Room + ", "The Room & "],
     ["The Mystery of Chess Boxing + ", "The Mystery of Chess Boxing & "],
     ["Hitman In The Hand Of Buddha + ", "Hitman In The Hand Of Buddha & "],
+    ["+ A Look to Kill", " & A Look to Kill"],
     ["READY OT NOT 2", "READY OR NOT 2"],
     [/^Charak \(Hindi\)$/i, "Charak: Fair of Faith"],
     ["CLOSING Nuit de Chien", "Nuit de Chien"],

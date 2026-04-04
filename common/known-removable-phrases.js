@@ -1,5 +1,5 @@
 /**
- * Phrases to strip from raw venue listing titles during semantic extraction.
+ * Phrases to strip from raw venue listing titLe during semantic extraction.
  *
  * This file handles one job only: removing venue branding, series names, event
  * descriptors, screening qualifiers, and other non-title text that cinemas
@@ -830,6 +830,7 @@ const knownRemovablePhrases = [
   "Trans Pride:",
   "Trans Rights Fundraiser",
   "Bi Pride:",
+  "Lesbian Visibility Day:",
   "hits Red Carpet",
   "Q&A & After Party",
   "Red Carpet Screening",
@@ -907,6 +908,7 @@ const knownRemovablePhrases = [
   "RELAXED: ",
   "RFF 2025:",
   "Team Picks:",
+  "TALENTED U:",
   "Tate Collective Moments",
   "Taste Film presents",
   "Tibet Film Festival London:",
