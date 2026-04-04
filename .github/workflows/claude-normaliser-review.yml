@@ -1,19 +1,12 @@
-name: Claude Normaliser Review
-
 on:
   issue_comment:
-    types: [created]
-  pull_request_review_comment:
     types: [created]
 
 jobs:
   claude-review:
     if: >-
       contains(github.event.comment.body, '@claude review titles') &&
-      (
-        github.event.issue.pull_request != null ||
-        github.event_name == 'pull_request_review_comment'
-      )
+      github.event.issue.pull_request != null
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -25,14 +18,23 @@ jobs:
         with:
           ref: refs/pull/${{ github.event.issue.number }}/head
           fetch-depth: 0
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .node-version
+      - run: npm ci
 
       - uses: anthropics/claude-code-action@v1
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           show_full_output: true
-          claude_args: "--dangerously-skip-permissions --max-turns 20"
+          claude_args: >-
+            --dangerously-skip-permissions
+            --max-turns 30
+            --allowedTools Bash,Read,Edit,Write
           prompt: |
             In this branch we've had some automated updates to `common/tests/test-titles.json`.
             Use git diff to identify the newly added entries, then confirm those changes are correct,
             or fix them if they're not.
             There's details on how this setup works in `docs/reviewing-title-normalisation-test-cases.md`
+            If a case is ambiguous and you cannot determine whether the output is correct from the
+            available files, accept the current output rather than investigating further.
