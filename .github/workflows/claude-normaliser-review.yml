@@ -29,6 +29,7 @@ jobs:
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           allowed_users: "alistairjcbrown"
+          claude_args: "--dangerously-skip-permissions --max-turns 20"
           prompt: |
             In this branch we've had some automated updates to `common/tests/test-titles.json`.
             Confirm these changes are correct, or if they're not correct then fix them.
