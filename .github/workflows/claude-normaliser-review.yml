@@ -21,16 +21,18 @@ jobs:
       issues: write
       id-token: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
+          ref: refs/pull/${{ github.event.issue.number }}/head
           fetch-depth: 0
 
       - uses: anthropics/claude-code-action@v1
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-          allowed_users: "alistairjcbrown"
+          show_full_output: true
           claude_args: "--dangerously-skip-permissions --max-turns 20"
           prompt: |
             In this branch we've had some automated updates to `common/tests/test-titles.json`.
-            Confirm these changes are correct, or if they're not correct then fix them.
+            Use git diff to identify the newly added entries, then confirm those changes are correct,
+            or fix them if they're not.
             There's details on how this setup works in `docs/reviewing-title-normalisation-test-cases.md`
