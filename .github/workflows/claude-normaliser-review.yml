@@ -26,14 +26,14 @@ jobs:
       - uses: anthropics/claude-code-action@v1
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-          show_full_output: true
+          show_full_output: false
           claude_args: >-
             --dangerously-skip-permissions
             --max-turns 15
             --disallowedTools Task,WebFetch,WebSearch,Glob,Grep,TodoWrite,ToolSearch
           prompt: |
             In this branch we've had some automated updates to `common/tests/test-titles.json`.
-            Use git diff to identify the newly added entries, then confirm those changes are correct,
+            Use git show HEAD to identify the newly added entries, then confirm those changes are correct,
             or fix them if they're not.
             There's details on how this setup works in `docs/reviewing-title-normalisation-test-cases.md`
             For each new entry: run the normalizer on the input, and check the output matches what's
