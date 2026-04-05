@@ -514,6 +514,7 @@ const knownRemovablePhrases = [
   "CNFW:",
   "CineMediterra FF 2025:",
   "MediCinema:",
+  "Choose What You Pay:",
   "(Christmas Bring It Back)",
   "Christmas Cinema-",
   "Christmas pop up cinema- ",

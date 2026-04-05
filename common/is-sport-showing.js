@@ -10,6 +10,7 @@ const sportShowings = [
   /GRAND PRIX:/i,
   /^\w+\s+FANPARK:/i,
   /WORLD CUP FINAL/i,
+  /TROPHY FINAL/i,
 ];
 
 const isSportShowing = ({ title }) =>
