@@ -388,6 +388,7 @@ function normalizeTitle(title, options) {
     ["Le Litre de lait + Les Contrebandières", "Les Contrebandières"],
     ["ELF MOVIE", "Elf"],
     ["Screening + Q&A:", "Screening & Q&A:"],
+    ["Q&A: Marcin Wierzchowski - ", "Q&A: Marcin Wierzchowski: "],
     [
       "Sapphic Cinema and BFI Melodrama -",
       "Sapphic Cinema and BFI Melodrama: ",
