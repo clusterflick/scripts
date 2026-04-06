@@ -834,6 +834,7 @@ const knownRemovablePhrases = [
   "Lesbian Visibility Day:",
   "hits Red Carpet",
   "Q&A & After Party",
+  "Q&A: Marcin Wierzchowski:",
   "Red Carpet Screening",
   "Red Carpet Premiere & Film Industry Networking",
   "Rio Feminist Film Group:",
