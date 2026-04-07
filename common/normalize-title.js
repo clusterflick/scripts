@@ -388,7 +388,7 @@ function normalizeTitle(title, options) {
     ["Le Litre de lait + Les Contrebandières", "Les Contrebandières"],
     ["ELF MOVIE", "Elf"],
     ["Screening + Q&A:", "Screening & Q&A:"],
-    ["Q&A: Marcin Wierzchowski - ", "Q&A: Marcin Wierzchowski: "],
+    ["Marcin Wierzchowski - ", "Marcin Wierzchowski: "],
     [
       "Sapphic Cinema and BFI Melodrama -",
       "Sapphic Cinema and BFI Melodrama: ",
@@ -650,6 +650,7 @@ function normalizeTitle(title, options) {
     ["Man Marked for Death, Twenty Years Later", "Twenty Years Later"],
     ["Scott Walker: 30th Century Man", "Scott Walker: 30 Century Man"],
     [/Raakaasaa?/i, "Rākāsā"],
+    ["NAN GOLDIN - IN MY LIFE", "NAN GOLDIN: IN MY LIFE"],
     // Variant families collapsed from known-removable-phrases.js
     // Each pattern covers multiple near-identical string entries that shared a common structure
     [/dog[- ]?friendly(?:\s+screening)?[:\s]*/i, ""],
