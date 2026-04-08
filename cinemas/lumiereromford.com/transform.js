@@ -7,7 +7,7 @@ async function transform(data, sourcedEvents) {
     // Remove Basking Babies events (e.g. "Baby Yoga Classes")
     // "At Lumiere, we are more than just a cinema, we are a community space for
     // a variety of activities - from art classes to meditation to exercise."
-    return !title.trim().toLowerCase().endsWith("with basking babies");
+    return !title.trim().toLowerCase().endsWith("basking babies");
   });
 }
 
