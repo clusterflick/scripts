@@ -641,6 +641,7 @@ function normalizeTitle(title, options) {
     ["The Room + ", "The Room & "],
     ["The Mystery of Chess Boxing + ", "The Mystery of Chess Boxing & "],
     ["Hitman In The Hand Of Buddha + ", "Hitman In The Hand Of Buddha & "],
+    ["Just Drifting + ", "Just Drifting & "],
     ["+ A Look to Kill", " & A Look to Kill"],
     ["READY OT NOT 2", "READY OR NOT 2"],
     [/^Charak \(Hindi\)$/i, "Charak: Fair of Faith"],
@@ -651,6 +652,7 @@ function normalizeTitle(title, options) {
     ["Scott Walker: 30th Century Man", "Scott Walker: 30 Century Man"],
     [/Raakaasaa?/i, "Rākāsā"],
     ["NAN GOLDIN - IN MY LIFE", "NAN GOLDIN: IN MY LIFE"],
+    ["Dacoit: A Love Story", "Dacoit"],
     // Variant families collapsed from known-removable-phrases.js
     // Each pattern covers multiple near-identical string entries that shared a common structure
     [/dog[- ]?friendly(?:\s+screening)?[:\s]*/i, ""],
