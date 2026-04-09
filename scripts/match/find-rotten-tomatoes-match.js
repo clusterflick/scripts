@@ -42,7 +42,12 @@ const getMoviePage = async (match) => {
 };
 
 const getDirectorsForMatch = async (match) => {
-  const matchPage = await getMoviePage(match);
+  let matchPage;
+  try {
+    matchPage = await getMoviePage(match);
+  } catch {
+    return [];
+  }
   const $matchPage = cheerio.load(matchPage);
   const $directorRoles = $matchPage(
     [
