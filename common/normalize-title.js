@@ -653,6 +653,7 @@ function normalizeTitle(title, options) {
     [/Raakaasaa?/i, "Rākāsā"],
     ["NAN GOLDIN - IN MY LIFE", "NAN GOLDIN: IN MY LIFE"],
     ["Dacoit: A Love Story", "Dacoit"],
+    ["Elvira Notari: Beyond the Silence", "Elvira Notari: Beyond Silence"],
     // Variant families collapsed from known-removable-phrases.js
     // Each pattern covers multiple near-identical string entries that shared a common structure
     [/dog[- ]?friendly(?:\s+screening)?[:\s]*/i, ""],
