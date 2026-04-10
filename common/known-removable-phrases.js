@@ -511,6 +511,7 @@ const knownRemovablePhrases = [
   "Clermont-Ferrand 2025:",
   "Clermont-Ferrand 2026:",
   "Clermont-Ferrand:",
+  "Closing Ceremony: “Shaw Festival – London 2026”",
   "Create 2026:",
   "Copy of ",
   "CIFF2025:",
