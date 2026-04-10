@@ -636,6 +636,8 @@ function normalizeTitle(title, options) {
     ["Record Store Day - ", "Record Store Day: "],
     ["Drink & Dine - ", "Drink & Dine: "],
     ["Dog Friendly Cinema Screening - ", "Dog Friendly Cinema Screening: "],
+    ["Jimmy Somerville - ", "Jimmy Somerville: "],
+    ["Queer Rebel of English Pop", "Queer Rebel of British Pop"],
     ["Afronauts + ", "Afronauts & "],
     ["Fight Club: 4K Restoration", "Fight Club"],
     ["Cockroach + Hedwig", "Cockroach & Hedwig"],
@@ -657,6 +659,7 @@ function normalizeTitle(title, options) {
     ["Elvira Notari: Beyond the Silence", "Elvira Notari: Beyond Silence"],
     ["National Emergency Briefing", "People's Emergency Briefing"],
     ["People's Emergency Briefing Twickenham", "People's Emergency Briefing"],
+    ["TESTMortal Kombat IITEST", "Mortal Kombat II"],
     // Variant families collapsed from known-removable-phrases.js
     // Each pattern covers multiple near-identical string entries that shared a common structure
     [/dog[- ]?friendly(?:\s+screening)?[:\s]*/i, ""],
