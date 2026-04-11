@@ -657,6 +657,7 @@ function normalizeTitle(title, options) {
     ["NAN GOLDIN - IN MY LIFE", "NAN GOLDIN: IN MY LIFE"],
     ["Dacoit: A Love Story", "Dacoit"],
     ["Elvira Notari: Beyond the Silence", "Elvira Notari: Beyond Silence"],
+    ["National Emergency Briefing Film", "People's Emergency Briefing"],
     ["National Emergency Briefing", "People's Emergency Briefing"],
     ["People's Emergency Briefing Twickenham", "People's Emergency Briefing"],
     ["TESTMortal Kombat IITEST", "Mortal Kombat II"],
