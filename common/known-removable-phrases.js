@@ -948,6 +948,7 @@ const knownRemovablePhrases = [
   "UFF 2025:",
   "UKJFF 2025:",
   "UKJFF:",
+  "UKAFF:",
   "Anti-Valentine's Day:",
   "Valentine's Day:",
   "Galentine's Day:",
