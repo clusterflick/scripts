@@ -645,6 +645,7 @@ function normalizeTitle(title, options) {
     ["The Mystery of Chess Boxing + ", "The Mystery of Chess Boxing & "],
     ["Hitman In The Hand Of Buddha + ", "Hitman In The Hand Of Buddha & "],
     ["Just Drifting + ", "Just Drifting & "],
+    ["with Greg Sestero in Audience + ", "with Greg Sestero in Audience & "],
     ["+ A Look to Kill", " & A Look to Kill"],
     ["READY OT NOT 2", "READY OR NOT 2"],
     [/^Charak \(Hindi\)$/i, "Charak: Fair of Faith"],
