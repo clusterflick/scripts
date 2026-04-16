@@ -137,7 +137,7 @@ function normalizeTitle(title, options) {
     ["Wildnerness", "Wilderness"],
     [/\s+dub?$/i, ""], // Dubbed
     [/\s+sub?$/i, ""], // subbed
-    [/\s+(3|2)d$/i, ""], // 3d or 2d
+    [/\s+(?:in\s+)?(3|2)d$/i, ""], // 3d or 2d
     [/\s+2026$/i, ""], // Year
     ["Vasthunnam", "Vasthunam"],
     ["Melagaon", "Malegaon"],
