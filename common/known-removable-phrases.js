@@ -632,6 +632,7 @@ const knownRemovablePhrases = [
   "Films For Workers:",
   "Fist Club X The Castle:",
   "Fitting Room & ",
+  "Flemish Film Classics:",
   "French Impressions:",
   "French Sundaes:",
   "friends & crew screening",

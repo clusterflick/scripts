@@ -638,6 +638,8 @@ function normalizeTitle(title, options) {
     ["Drink & Dine - ", "Drink & Dine: "],
     ["Dog Friendly Cinema Screening - ", "Dog Friendly Cinema Screening: "],
     ["Jimmy Somerville - ", "Jimmy Somerville: "],
+    ["Billie Eilish - ", "Billie Eilish: "],
+    ["Hit Me Hard and Soft - ", "Hit Me Hard and Soft: "],
     ["Queer Rebel of English Pop", "Queer Rebel of British Pop"],
     ["Afronauts + ", "Afronauts & "],
     ["Fight Club: 4K Restoration", "Fight Club"],
