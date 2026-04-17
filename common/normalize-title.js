@@ -368,6 +368,7 @@ function normalizeTitle(title, options) {
     ["Bāhubali", "Baahubali"],
     ["Khatarnaak", "Khatarnak"],
     ["Thalaimayil", "Thalaimaiyil "],
+    ["Bhoot Bangla", "Bhooth Bangla"],
     [/^En Ghab El Kot /i, "If the Cat is Absent"],
     ["MEMBERS ONLY: Pumpkin Carving", "Members only pumpkin carving"],
     [
@@ -670,6 +671,7 @@ function normalizeTitle(title, options) {
     ["People's Emergency Briefing Twickenham", "People's Emergency Briefing"],
     ["TESTMortal Kombat IITEST", "Mortal Kombat II"],
     [/^The Mandalorian/i, "Star Wars: The Mandalorian"],
+    [/^LIK\s+/i, "LIK: Love Insurance Kompany "],
     // Variant families collapsed from known-removable-phrases.js
     // Each pattern covers multiple near-identical string entries that shared a common structure
     [/dog[- ]?friendly(?:\s+screening)?[:\s]*/i, ""],
