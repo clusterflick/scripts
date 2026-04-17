@@ -19,29 +19,29 @@ jest.mock("../../../common/utils", () => ({
 const isRecording = false;
 
 jest.mock("../../../common/cache");
-setupCacheMock(__dirname, "2025-12-30");
+setupCacheMock(__dirname, "2026-04-17");
 
 describe(`${attributes.name}`, () => {
   setupPolly(isRecording, __dirname);
-  jest.useFakeTimers().setSystemTime(new Date("2025-12-30"));
+  jest.useFakeTimers().setSystemTime(new Date("2026-04-17T19:00"));
 
   describe.each([
     {
       name: "Everyman Chelsea",
       geo: { lat: 51.48545760933609, lon: -0.17337379614330337 },
-      expectedMatches: 1,
+      expectedMatches: 0,
     },
     {
       name: "Close-Up Film Centre",
       alternativeNames: ["Close-Up Cinema"],
       geo: { lat: 51.52363533860424, lon: -0.07204024586584808 },
-      expectedMatches: 28,
+      expectedMatches: 18,
     },
     {
       name: "The Exchange Twickenham",
       alternativeNames: ["The Exchange"],
       geo: { lat: 51.45004001959767, lon: -0.3313163212241062 },
-      expectedMatches: 18,
+      expectedMatches: 10,
     },
   ])("$name", ({ name, alternativeNames, geo, expectedMatches }) => {
     it(
@@ -51,7 +51,8 @@ describe(`${attributes.name}`, () => {
 
         // Make sure the input looks roughly correct
         expect(movieListPages).toBeTruthy();
-        expect(Object.keys(movieListPages)).toHaveLength(11);
+        // Each request returns only one page of up to 100 results
+        expect(movieListPages).toHaveLength(4);
 
         readJSON.mockImplementation(() => ({ movieListPages, moviePages }));
 

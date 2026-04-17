@@ -3,108 +3,119 @@ const { fetchJson } = require("../../common/utils");
 const attributes = require("./attributes");
 const getPageWithPlaywright = require("../../common/get-page-with-playwright");
 
-// Algolia API configuration
-const ALGOLIA_CONFIG = {
-  appId: "LH632P1UP5",
-  apiKey: "239323e27e42c7e84a9f43482ff0d662",
-  indexName: "dev_EVENT",
-  baseUrl: "https://lh632p1up5-dsn.algolia.net/1/indexes",
+// Meilisearch API configuration
+const MEILISEARCH_CONFIG = {
+  baseUrl: "https://search.ticketsource.com",
+  indexName: "events_PROD",
+  apiKey: "8a9086965b57cfe51cf3bcdf05f9380b4673cae831135a2eb48afcbbac9d991b",
 };
 
-function buildSearchParams(page, overrides = {}) {
+const HITS_PER_PAGE = 100;
+
+function buildTimestampFilter() {
   const oneMonthAgo = subMonths(new Date(), 1);
   const oneMonthAgoTimestamp = Math.floor(oneMonthAgo.getTime() / 1000);
   const currentTimestamp = Math.floor(Date.now() / 1000);
+  return `timestamp >= ${oneMonthAgoTimestamp} AND filterTimestamp >= ${currentTimestamp}`;
+}
 
+function buildSearchBody(offset, filter, overrides = {}) {
   return {
-    query: "",
-    removeStopWords: true,
-    page,
-    getRankingInfo: true,
-    facets: "*",
-    filters: `category:'film'`,
-    numericFilters: [
-      `timestamp >= ${oneMonthAgoTimestamp}`,
-      `filterTimestamp >= ${currentTimestamp}`,
-    ],
+    q: "",
+    filter,
+    facets: ["genre", "category", "location"],
+    sort: ["timestamp:asc"],
+    limit: HITS_PER_PAGE,
+    offset,
+    showRankingScore: true,
+    showRankingScoreDetails: true,
     ...overrides,
   };
 }
 
-function buildSearchParamsForGeoFilter({ page = 0 } = {}) {
-  return buildSearchParams(page, {
-    aroundLatLng: "51.49028, -0.12324", // Center point of London
-    aroundRadius: "24140", // 25km
-    aroundPrecision: "24140",
+function buildSearchBodyForGeoFilter(timestampFilter, { offset = 0 } = {}) {
+  const lat = 51.49028;
+  const lng = -0.12324;
+  const radiusMeters = 24140; // ~15 miles, center of London
+  const filter = `${timestampFilter} AND category = "film" AND _geoRadius(${lat}, ${lng}, ${radiusMeters})`;
+  return buildSearchBody(offset, filter, {
+    sort: [`timestamp:asc`, `_geoPoint(${lat}, ${lng}):asc`],
   });
 }
 
-function buildSearchParamsForLocationFilter({ page = 0 } = {}) {
-  return buildSearchParams(page, {
-    filters: `category:'film' AND location:'london'`,
-  });
+function buildSearchBodyForLocationFilter(
+  timestampFilter,
+  { offset = 0 } = {},
+) {
+  const filter = `${timestampFilter} AND category = "film" AND location = "london"`;
+  return buildSearchBody(offset, filter);
 }
 
-function buildSearchParamsForNtLive({ page = 0 } = {}) {
-  return buildSearchParams(page, {
-    filters: `category:'theatre'`,
-    query: "NT Live",
-  });
+function buildSearchBodyForNtLive(timestampFilter, { offset = 0 } = {}) {
+  const filter = `${timestampFilter} AND category = "theatre"`;
+  return buildSearchBody(offset, filter, { q: "NT Live" });
 }
 
-function buildSearchParamsForExhibitionOnScreen({ page = 0 } = {}) {
-  return buildSearchParams(page, {
-    filters: `category:'theatre'`,
-    query: "Exhibition On Screen",
-  });
+function buildSearchBodyForExhibitionOnScreen(
+  timestampFilter,
+  { offset = 0 } = {},
+) {
+  const filter = `${timestampFilter} AND category = "theatre"`;
+  return buildSearchBody(offset, filter, { q: "Exhibition On Screen" });
 }
 
-async function fetchAlgoliaEvents(params) {
-  const urlParameters = new URLSearchParams({
-    "x-algolia-agent": "Algolia for JavaScript (3.35.1); Browser",
-    "x-algolia-application-id": ALGOLIA_CONFIG.appId,
-    "x-algolia-api-key": ALGOLIA_CONFIG.apiKey,
-  });
-  const url = `${ALGOLIA_CONFIG.baseUrl}/${ALGOLIA_CONFIG.indexName}/query?${urlParameters}`;
-
-  const body = JSON.stringify({
-    params: new URLSearchParams(params).toString(),
-  });
+async function fetchMeilisearchEvents(body) {
+  const url = `${MEILISEARCH_CONFIG.baseUrl}/indexes/${MEILISEARCH_CONFIG.indexName}/search`;
 
   return fetchJson(url, {
     method: "POST",
-    headers: { "content-type": "application/json" },
-    body,
+    headers: {
+      "content-type": "application/json",
+      authorization: `Bearer ${MEILISEARCH_CONFIG.apiKey}`,
+    },
+    body: JSON.stringify(body),
   });
 }
 
 /**
- * Fetch all pages of events from TicketSource via Algolia API
+ * Fetch all pages of events from TicketSource via Meilisearch API
  */
-async function retrieveFilterEvents(buildSearchParamsForFilter) {
+async function retrieveFilterEvents(buildSearchBodyForFilter) {
   const movieListPages = [];
-  const searchParams = buildSearchParamsForFilter({ page: 0 });
-  const firstPage = await fetchAlgoliaEvents(searchParams);
+  const firstBody = buildSearchBodyForFilter({ offset: 0 });
+  const firstPage = await fetchMeilisearchEvents(firstBody);
   movieListPages.push(firstPage);
 
-  const totalPages = firstPage.nbPages;
-  let currentPage = 1; // Continue from the second page
-  while (currentPage + 1 <= totalPages) {
-    const pageParams = buildSearchParamsForFilter({ page: currentPage });
-    const pageResponse = await fetchAlgoliaEvents(pageParams);
+  const { estimatedTotalHits: totalHits } = firstPage;
+  if (totalHits === undefined) {
+    throw new Error("Missing estimatedTotalHits in Meilisearch response");
+  }
+  let currentOffset = HITS_PER_PAGE;
+  while (currentOffset < totalHits) {
+    const pageBody = buildSearchBodyForFilter({ offset: currentOffset });
+    const pageResponse = await fetchMeilisearchEvents(pageBody);
     movieListPages.push(pageResponse);
-    currentPage++;
+    currentOffset += HITS_PER_PAGE;
   }
 
   return movieListPages;
 }
 
 async function retrieve() {
+  const timestampFilter = buildTimestampFilter();
   const movieListPages = [].concat(
-    await retrieveFilterEvents(buildSearchParamsForGeoFilter),
-    await retrieveFilterEvents(buildSearchParamsForLocationFilter),
-    await retrieveFilterEvents(buildSearchParamsForNtLive),
-    await retrieveFilterEvents(buildSearchParamsForExhibitionOnScreen),
+    await retrieveFilterEvents((opts) =>
+      buildSearchBodyForGeoFilter(timestampFilter, opts),
+    ),
+    await retrieveFilterEvents((opts) =>
+      buildSearchBodyForLocationFilter(timestampFilter, opts),
+    ),
+    await retrieveFilterEvents((opts) =>
+      buildSearchBodyForNtLive(timestampFilter, opts),
+    ),
+    await retrieveFilterEvents((opts) =>
+      buildSearchBodyForExhibitionOnScreen(timestampFilter, opts),
+    ),
   );
 
   const allHits = movieListPages
@@ -112,7 +123,9 @@ async function retrieve() {
     // Remove duplicates; as we're running more than one search, it's possible
     // to get the same values back for both.
     .reduce((acc, hit) => {
-      const missingValue = !acc.find((item) => item.objectID === hit.objectID);
+      const missingValue = !acc.find(
+        (item) => item.performanceId === hit.performanceId,
+      );
       if (missingValue) acc.push(hit);
       return acc;
     }, []);

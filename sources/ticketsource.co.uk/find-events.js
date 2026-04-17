@@ -112,13 +112,15 @@ async function findEvents(cinema) {
     // Remove duplicates; as we're running more than one search, it's possible
     // to get the same values back for both.
     .reduce((acc, hit) => {
-      const missingValue = !acc.find((item) => item.objectID === hit.objectID);
+      const missingValue = !acc.find(
+        (item) => item.performanceId === hit.performanceId,
+      );
       if (missingValue) acc.push(hit);
       return acc;
     }, []);
 
   const matchingEvents = allHits.filter((hit) => {
-    const coordinates = { lat: hit._geoloc.lat, lon: hit._geoloc.lng };
+    const coordinates = { lat: hit._geo.lat, lon: hit._geo.lng };
     return venueMatchesCinema(cinema, hit.venue, coordinates, {
       supportMisconfiguredCoordinates: true,
       eventAddress: [
@@ -134,10 +136,10 @@ async function findEvents(cinema) {
     });
   });
 
-  // Group by eventID
+  // Group by eventId
   const groupedByEventId = matchingEvents.reduce((acc, hit) => {
-    if (!acc[hit.eventID]) acc[hit.eventID] = [];
-    acc[hit.eventID].push(hit);
+    if (!acc[hit.eventId]) acc[hit.eventId] = [];
+    acc[hit.eventId].push(hit);
     return acc;
   }, {});
 
