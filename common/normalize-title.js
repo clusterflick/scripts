@@ -670,8 +670,9 @@ function normalizeTitle(title, options) {
     ["National Emergency Briefing", "People's Emergency Briefing"],
     ["People's Emergency Briefing Twickenham", "People's Emergency Briefing"],
     ["TESTMortal Kombat IITEST", "Mortal Kombat II"],
-    [/^The Mandalorian/i, "Star Wars: The Mandalorian"],
+    [/^(?:Dog Friendly: )?The Mandalorian/i, "Star Wars: The Mandalorian"],
     [/^LIK\s+/i, "LIK: Love Insurance Kompany "],
+    [": TOTAS", " The Movie: Tears of the Azure Sea"],
     // Variant families collapsed from known-removable-phrases.js
     // Each pattern covers multiple near-identical string entries that shared a common structure
     [/dog[- ]?friendly(?:\s+screening)?[:\s]*/i, ""],
