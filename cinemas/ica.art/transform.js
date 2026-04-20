@@ -81,16 +81,27 @@ async function transform({ moviePages }, sourcedEvents) {
       title,
       url: moviePageUrl,
       overview: getOverview(details, trailer),
-      performances: Array.from($(".performance-list .performance")).map(
-        (el) => {
+      performances: Array.from($(".performance-list .performance"))
+        .map((el) => {
           const screen = getText($(el).find(".venue"));
           const date = getText($(el).find(".date"));
           const time = getText($(el).find(".time"));
           const url = bookingUrl.match(/^https?:\/\//i)
             ? bookingUrl
             : `${attributes.domain}${bookingUrl}`;
+          return { screen, dateTime: `${date} ${time}`, url };
+        })
+        .reduce((uniquePerformances, p) => {
+          const existingPerformance = uniquePerformances.find(
+            ({ screen, dateTime, url }) =>
+              screen === p.screen && dateTime === p.dateTime && url === p.url,
+          );
+          if (!existingPerformance) uniquePerformances.push(p);
+          return uniquePerformances;
+        }, [])
+        .map(({ screen, dateTime, url }) => {
           return createPerformance({
-            date: parseDate(`${date} ${time}`),
+            date: parseDate(dateTime),
             url,
             screen,
             accessibility: createAccessibility(
@@ -103,8 +114,7 @@ async function transform({ moviePages }, sourcedEvents) {
               overview,
             ),
           });
-        },
-      ),
+        }),
       matchingHints: { overview },
     });
   }
