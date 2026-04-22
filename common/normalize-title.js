@@ -674,6 +674,7 @@ function normalizeTitle(title, options) {
     [/^LIK\s+/i, "LIK: Love Insurance Kompany "],
     [": TOTAS", " The Movie: Tears of the Azure Sea"],
     ["Bluey:", "Bluey at the Cinema:"],
+    ["The Magick Lantern Cycle", "Magick Lantern Cycle"],
     // Variant families collapsed from known-removable-phrases.js
     // Each pattern covers multiple near-identical string entries that shared a common structure
     [/dog[- ]?friendly(?:\s+screening)?[:\s]*/i, ""],
@@ -866,7 +867,7 @@ function normalizeTitle(title, options) {
   }
 
   title = title.replace(
-    /(^|\s+)\d+th ann(iversary)?( screenings?)?( edition)?(\s+|$)/i,
+    /(^|\s+)\d+th ann(iversary)?( screenings?)?( edition)?( show)?(\s+|$)/i,
     " ",
   );
 
