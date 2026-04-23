@@ -131,6 +131,7 @@ function normalizeTitle(title, options) {
     ["- International", " - International"],
     ["Björk's", "Björk"],
     ["Funny Games / Funny Games US", "Funny Games Double Bill"],
+    ["The Tou 3D", "The Tour 3D"],
     // Fix spelling which causes missed match
     [/^seven$/i, "se7en"],
     ["The Return The Return", "The Return"],
