@@ -676,6 +676,7 @@ function normalizeTitle(title, options) {
     [": TOTAS", " The Movie: Tears of the Azure Sea"],
     ["Bluey:", "Bluey at the Cinema:"],
     ["The Magick Lantern Cycle", "Magick Lantern Cycle"],
+    ["Shrek: Swamp", "Shrek"],
     // Variant families collapsed from known-removable-phrases.js
     // Each pattern covers multiple near-identical string entries that shared a common structure
     [/dog[- ]?friendly(?:\s+screening)?[:\s]*/i, ""],

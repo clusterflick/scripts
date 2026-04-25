@@ -282,6 +282,7 @@ const knownRemovablePhrases = [
   "with Introduction and Discussion",
   "with Introduction",
   "with intro",
+  "with Illusion-O",
   "with Arcana",
   "WITH CATEGORY H",
   "with Dan Frye",
