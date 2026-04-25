@@ -73,6 +73,11 @@ const metOperaPrefixes = [
 function standardizePrefixingForMetropolitanOperaPerformances(title, options) {
   title = title.replace(/\s+&\s+/, " and ").replace(/\s+-\s+/, ": ");
 
+  // Update if "met opera" is a suffix
+  if (title.toLowerCase().includes(": met opera ")) {
+    title = `The Metropolitan Opera: ${title.replace(/: Met Opera /i, " ")}`;
+  }
+
   let updatedPrefixTitle = metOperaPrefixes.reduce(
     (value, prefix) => value.replace(prefix, "The Metropolitan Opera: "),
     title,
@@ -251,7 +256,8 @@ function standardizePrefixingForTheatrePerformances(
     (lowercaseTitle.startsWith("rbo ") &&
       lowercaseTitle.includes("the metropolitan opera:")) ||
     (lowercaseTitle.startsWith("rbo ") &&
-      lowercaseTitle.includes("the met opera -"))
+      lowercaseTitle.includes("the met opera -")) ||
+    lowercaseTitle.includes(" - met opera")
   ) {
     return standardizePrefixingForMetropolitanOperaPerformances(title, options);
   }
