@@ -788,6 +788,7 @@ const knownRemovablePhrases = [
   "NEVER WATCHING MOVIES:",
   "NEVERWATCHINGMOVIES x TRANSMISSIONS:",
   "TRANSMISSIONS x DREAM EMULATOR:",
+  "Niki de Saint Phalle:",
   "Noah Davis Film Programme:",
   "Noah Baumbach:",
   "Now screening :",
