@@ -48,6 +48,7 @@ const ignoredIds = [
   1286035, // Short -- https://www.themoviedb.org/movie/1286035-short
   491034, // This is Home -- https://www.themoviedb.org/movie/491034-this-is-home
   1047214, // Global -- https://www.themoviedb.org/movie/1047214-global
+  848261, // Drive, Come On -- https://www.themoviedb.org/movie/848261
 ];
 
 /**
