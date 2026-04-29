@@ -94,7 +94,8 @@ function normalizeTitle(title, options) {
     ["Hitchcock: The Gainsborough Days -", "Hitchcock: The Gainsborough Days "],
     ["Sky Original -", "Sky Original "],
     ["Green Screen -", "Green Screen "],
-    ["Film Club -", "Film Club: "],
+    [/Film Club\s*-\s*/i, "Film Club: "],
+    ["Film Club: Rebels:", "Film Club: "],
     [/^Film\s+- /i, "Film: "],
     [/Film\s+- /i, "Film "],
     ["FREE screening - at ", "FREE screening at "],
@@ -408,6 +409,10 @@ function normalizeTitle(title, options) {
     ["FOLIES MEURTRIÈRES + ", "FOLIES MEURTRIÈRES & "],
     [/^(.+)- National Theatre Live$/i, "National Theatre Live: $1"],
     [
+      "National Theatre Live: Playboy of the Western World",
+      "National Theatre Live: The Playboy of the Western World",
+    ],
+    [
       "MUPPET PUPPETS CHRISTMAS CAROL WORKSHOP & SING-ALONG",
       "Muppet Christmas Carol",
     ],
@@ -662,6 +667,7 @@ function normalizeTitle(title, options) {
     ["Iggy the Eskimo Girl (1968) + ", "Iggy the Eskimo Girl (1968) & "],
     ["Psychedelia (1969) + ", "Psychedelia (1969) & "],
     ["San Francisco (1968) + ", "San Francisco (1968) & "],
+    ["In the Year of the Quiet Sun + ", "In the Year of the Quiet Sun & "],
     ["+ A Look to Kill", " & A Look to Kill"],
     ["READY OT NOT 2", "READY OR NOT 2"],
     [/^Charak \(Hindi\)$/i, "Charak: Fair of Faith"],
