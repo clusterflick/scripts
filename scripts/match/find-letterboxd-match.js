@@ -14,8 +14,11 @@ const getMovieRatings = async (match) => {
       await page.waitForLoadState();
 
       // Race between the film page loading and the "not imported" page
-      const filmWrapper = page.locator("#film-page-wrapper");
-      const errorPageTitle = page.locator("#content h1.title");
+      // .first() handles Letterboxd's Tenet easter egg, which injects a
+      // duplicate backwards page at the bottom, containing a second copy of
+      // these elements.
+      const filmWrapper = page.locator("#film-page-wrapper").first();
+      const errorPageTitle = page.locator("#content h1.title").first();
 
       await filmWrapper.or(errorPageTitle).waitFor({ state: "attached" });
 
