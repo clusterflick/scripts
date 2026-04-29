@@ -220,6 +220,7 @@ function normalizeTitle(title, options) {
     ],
     ["Where Is the Friend's Home?", "Where Is the Friend's House?"],
     ["Ghidrah", "Ghidorah"], // Fix for Ghidorah, the Three-Headed Monster
+    ["100 Sunsets", "100 Sunset"], // https://www.themoviedb.org/movie/1511781-100-sunset
     ["½", " 1/2"],
     [/Mr\.? Hulot/i, "Monsieur Hulot"], // Fix for Monsieur Hulot's Holiday
     [/^Mishima$/i, "Mishima: A Life in Four Chapters"],
