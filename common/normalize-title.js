@@ -51,8 +51,9 @@ function normalizeTitle(title, options) {
     [/^LD:/i, "LD Friendly:"],
     [/^Re-Viewing /i, ""],
     [/housefull 5 (a|b)(\s+|$)/i, "housefull 5 "],
+    ["Star Wars Sundays", "Star Wars"],
     // Remove prefix separators which will cause later processing to strip the wrong section
-    [/Star Wars: Episode ([IV]+) - /i, "Star Wars: Episode $1 "], // Remove the dash
+    [/Star Wars: Ep(?:isode)? ([IV]+) - /i, "Star Wars: Episode $1 "], // Remove the dash
     ["Rafadan Tayfa - Kapadokya", "Rafadan Tayfa: Kapadokya"],
     ["Average Rob -", "Average Rob:"],
     ["Roger Waters -", "Roger Waters:"],
@@ -256,6 +257,7 @@ function normalizeTitle(title, options) {
     ["Past Present Future Podcast", "Past+Present+Future Podcast"],
     ["seventeen [right here]", "seventeen right here"], // remove brackets from this band name
     ["Festival: Shorts -", "Festival: Shorts –"],
+    [/^UK Asian Film Festival\s+/i, "UK Asian Film Festival: "],
     ["Ori - Rebirth", "Ori: Rebirth"],
     ["Premiere and Networking Event - ", "Premiere and Networking Event: "],
     ["R.S.V.P - ", ""], // Fixes R.S.V.P - Ronde Saare Viah Picho
@@ -373,6 +375,7 @@ function normalizeTitle(title, options) {
     ["Bhoot Bangla", "Bhooth Bangla"],
     [/^En Ghab El Kot /i, "If the Cat is Absent"],
     ["MEMBERS ONLY: Pumpkin Carving", "Members only pumpkin carving"],
+    ["MEMBERS ONLY PREVIEW -", "MEMBERS ONLY PREVIEW: "],
     [
       "Two Strangers Who Try Not to Kill Eachother",
       "Two Strangers Trying Not To Kill Each Other",
