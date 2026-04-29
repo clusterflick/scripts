@@ -21,6 +21,7 @@ describe("isSportShowing", () => {
     ["Arsenal FANPARK: North London Derby"],
     ["World Cup Final"],
     ["FIFA World Cup Final 2026"],
+    ["ENGLAND V CROATIA: WORLD CUP 2026 (WEMBLEY)"],
   ])("flags '%s' as a sport showing", (title) => {
     expect(isSportShowing({ title })).toBe(true);
   });
