@@ -709,6 +709,7 @@ function normalizeTitle(title, options) {
       "Argentine season launch: Live music + ",
       "Argentine season launch: Live music & ",
     ],
+    ["BA Media Degree Show — Screening:", "BA Media Degree Show - "],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
