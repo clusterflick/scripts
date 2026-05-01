@@ -1,5 +1,5 @@
 const cheerio = require("cheerio");
-const { format, addYears } = require("date-fns");
+const { format, addMonths } = require("date-fns");
 const { fetchText, fetchJson } = require("../../common/utils");
 const { domain } = require("./attributes");
 
@@ -16,7 +16,9 @@ async function retrieve() {
       productionSeasonIdFilter: [],
       keywordIds: null,
       startDate: `${format(now, "yyyy-MM-dd")}T00:00`,
-      endDate: `${format(addYears(now, 1), "yyyy-MM-dd")}T23:59`,
+      // Only request 6 months ahead. The science museum doesn't schedule
+      // further ahead than that, and requesting 1 year returns an error.
+      endDate: `${format(addMonths(now, 6), "yyyy-MM-dd")}T23:59`,
       keywords: [],
     }),
   });
