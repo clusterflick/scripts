@@ -690,6 +690,7 @@ function normalizeTitle(title, options) {
     ["Bluey:", "Bluey at the Cinema:"],
     ["The Magick Lantern Cycle", "Magick Lantern Cycle"],
     ["Shrek: Swamp", "Shrek"],
+    [/Kapodistrias[\s–:]+ The Governor/i, "Kapodistrias"],
     // Variant families collapsed from known-removable-phrases.js
     // Each pattern covers multiple near-identical string entries that shared a common structure
     [/dog[- ]?friendly(?:\s+screening)?[:\s]*/i, ""],
