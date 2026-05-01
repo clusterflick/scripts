@@ -71,7 +71,10 @@ async function transform({ moviePages }, sourcedEvents) {
     });
 
     if (performances.length === 0) {
-      throw new Error(`No performances found for ${moviePageUrl}`);
+      // It's possible for an entry to be added which doesn't yet have any
+      // performances. For now, skip the entry. We'll still catch if the page
+      // structure changes with the `movies.length` check below.
+      continue;
     }
 
     movies.push({

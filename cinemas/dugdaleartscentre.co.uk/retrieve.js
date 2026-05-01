@@ -30,6 +30,10 @@ async function retrieve() {
     const spektrixUrl = `https://tickets.dugdaleartscentre.co.uk/millfieldartscentre/website/EventDetails.aspx?EventId=${eventId}`;
     const spektrixPage = await fetchText(spektrixUrl);
 
+    if (!spektrixPage.includes("EventDates")) {
+      throw new Error(`Performance dates not included in ${spektrixUrl}`);
+    }
+
     moviePages[moviePageUrl] = {
       moviePage,
       spektrixPage,
