@@ -19,19 +19,37 @@ const parseRuntime = (runtime) => {
   return (hours * 60 + minutes) * 60 * 1000;
 };
 
-// Parse date like "Thursday 8th January – 6:00pm"
+// Format 1: "Thursday 8th January – 6:00pm"
 const parseDateTime = (dateLine, year) => {
-  // Replace the dash (and surrounding spaces) with the year
   const normalized = dateLine.replace(/\s*[–-]\s*/, ` ${year} `);
   return parse(normalized, "EEEE do MMMM yyyy h:mma", new Date());
 };
 
-async function transform({ emailText }, sourcedEvents) {
+// Format 2: "Thursday 14th May – Deptford Library – 6:30 – 8:00pm"
+// am/pm only appears on end time; we apply it to start time too
+const parseFestivalDateTime = (dateLine, year) => {
+  const parts = dateLine.split(/\s*[–-]\s*/);
+  if (parts.length < 3) return null;
+
+  const datePart = parts[0].trim();
+  const endTime = parts[parts.length - 1].trim();
+  const startTime = parts[parts.length - 2].trim();
+
+  const period = endTime.match(/(am|pm)/i)?.[1];
+  if (!period || !/^\d+:\d+$/.test(startTime)) return null;
+
+  return parse(
+    `${datePart} ${year} ${startTime}${period}`,
+    "EEEE do MMMM yyyy h:mma",
+    new Date(),
+  );
+};
+
+// Format 1: "Title\n\nDirector – Year – Runtime – Cert.\n\nDate – Time\n\nDescription"
+function transformFormat1(emailText) {
   const movies = [];
   const currentYear = new Date().getFullYear();
 
-  // Split into sections by looking for the film info pattern
-  // Pattern: Title\n\nDirector – Year – Runtime – Cert\n\nDate – Time
   const filmPattern =
     /^(.+?)\n\n(.+?)\s+[–-]\s+(\d{4})\s+[–-]\s+(\dH\d+M)\s+[–-]\s+Cert\.\s*(\d+[A-Za-z]?)\n\n(.+?[–-]\s+\d+:\d+(?:am|pm))\n\n([\s\S]+?)(?=\n\n(?:[A-Z][^–\n]+\n\n[A-Za-z]+ [–-] \d{4})|(?:Discussion Group)|(?:Now you know)|$)/gim;
 
@@ -76,6 +94,70 @@ async function transform({ emailText }, sourcedEvents) {
       },
     });
   }
+
+  return movies;
+}
+
+// Format 2: Festival format delimited by ===... (titles) and ---... (content boundaries)
+// "Title\n====\n\n\nDate – Venue – StartTime – EndTime\n----\n\nDescription\n\nTicket URL\n----"
+// Events with no parseable date/time (e.g. ongoing displays) are skipped.
+function transformFormat2(emailText) {
+  const movies = [];
+  const currentYear = new Date().getFullYear();
+
+  const parts = emailText.split(/\n={10,}\n/);
+
+  for (let i = 1; i < parts.length; i++) {
+    const prevLines = parts[i - 1].split("\n").filter((l) => l.trim());
+    const title = prevLines[prevLines.length - 1]?.trim();
+    if (!title) continue;
+
+    const dashParts = parts[i].split(/\n-{10,}\n/);
+    const dateLine = dashParts[0]?.trim();
+    if (!dateLine) continue;
+
+    const date = parseFestivalDateTime(dateLine, currentYear);
+    if (!date || isNaN(date.getTime())) continue;
+
+    const body = dashParts.slice(1).join("\n").trim();
+
+    const ticketUrlMatch = body.match(/here!:\s*(https?:\/\/\S+)/);
+    const url = ticketUrlMatch ? ticketUrlMatch[1] : attributes.url;
+
+    const description = body.split(/\n\nGet your free ticket/)[0].trim();
+
+    const slug = slugify(basicNormalize(title));
+    const showingId = generateShowingId(
+      attributes,
+      `${slug}-${date.getTime()}`,
+    );
+
+    movies.push({
+      showingId,
+      title,
+      url,
+      overview: createOverview({}),
+      performances: [
+        createPerformance({
+          date,
+          url,
+          accessibility: createAccessibility(title, {}, description),
+        }),
+      ],
+      matchingHints: {
+        overview: description.split("\n\n")[0],
+      },
+    });
+  }
+
+  return movies;
+}
+
+async function transform({ emailText }, sourcedEvents) {
+  const movies = [
+    ...transformFormat1(emailText),
+    ...transformFormat2(emailText),
+  ];
 
   const listOfSourcedEvents = Object.values(sourcedEvents).flatMap(
     (events) => events,
