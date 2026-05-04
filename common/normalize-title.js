@@ -655,6 +655,7 @@ function normalizeTitle(title, options) {
     ["Hit Me Hard and Soft - ", "Hit Me Hard and Soft: "],
     ["Big Mama Thornton - ", "Big Mama Thornton: "],
     ["SinoUK - ", "SinoUK: "],
+    [/Romford Film Festival 2026\s*- /i, "Romford Film Festival 2026: "],
     ["Queer Rebel of English Pop", "Queer Rebel of British Pop"],
     ["Afronauts + ", "Afronauts & "],
     ["Fight Club: 4K Restoration", "Fight Club"],
