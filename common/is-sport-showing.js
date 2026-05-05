@@ -12,7 +12,9 @@ const sportShowings = [
   /^\w+\s+FANPARK:/i,
   /WORLD CUP FINAL/i,
   /WORLD CUP 202\d/i,
+  /World Cup Live/,
   /TROPHY FINAL/i,
+  /Wimbledon Live/i,
 ];
 
 const isSportShowing = ({ title }) =>
