@@ -140,7 +140,7 @@ function normalizeTitle(title, options) {
     ["Wildnerness", "Wilderness"],
     [/\s+dub?$/i, ""], // Dubbed
     [/\s+sub?$/i, ""], // subbed
-    [/\s+(?:in\s+)?(3|2)d$/i, ""], // 3d or 2d
+    [/\s+(?:live\s+)?(?:in\s+)?(3|2)d$/i, ""], // 3d or 2d, with optional "live in" prefix
     [/\s+2026$/i, ""], // Year
     ["Vasthunnam", "Vasthunam"],
     ["Melagaon", "Malegaon"],
@@ -652,7 +652,12 @@ function normalizeTitle(title, options) {
     ["Dog Friendly Cinema Screening - ", "Dog Friendly Cinema Screening: "],
     ["Jimmy Somerville - ", "Jimmy Somerville: "],
     ["Billie Eilish - ", "Billie Eilish: "],
-    ["Hit Me Hard and Soft - ", "Hit Me Hard and Soft: "],
+    [/Hit Me Hard (and|&) Soft - /i, "Hit Me Hard and Soft: "],
+    [
+      /Hit Me Hard (and|&) Soft(?::\s*3D)?:?$/i,
+      "Hit Me Hard and Soft: The Tour",
+    ],
+    [/Hit Me Hard (and|&) Soft\s*:?\s*Tour/i, "Hit Me Hard and Soft: The Tour"],
     ["Big Mama Thornton - ", "Big Mama Thornton: "],
     ["SinoUK - ", "SinoUK: "],
     [/Romford Film Festival 2026\s*- /i, "Romford Film Festival 2026: "],
