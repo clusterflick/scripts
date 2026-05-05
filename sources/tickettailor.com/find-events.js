@@ -30,9 +30,11 @@ function parseDateText(dateText) {
   const start = parse(date, "EEE d MMM yyyy h:mm a", new Date(), {
     locale: enGB,
   });
-  const end = parse(endTime, "h:mm a", start, {
-    locale: enGB,
-  });
+  const end = endTime
+    ? parse(endTime.replace(/BST/i, "").trim(), "h:mm a", start, {
+        locale: enGB,
+      })
+    : null;
   return { start, end };
 }
 
@@ -77,7 +79,9 @@ function convertTicketTailorEvent(event) {
     title,
     url: fullUrl,
     overview: createOverview({
-      duration: differenceInMinutes(parsedDate.end, parsedDate.start),
+      duration: parsedDate.end
+        ? differenceInMinutes(parsedDate.end, parsedDate.start)
+        : undefined,
     }),
     performances: [
       createPerformance({
