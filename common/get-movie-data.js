@@ -252,9 +252,16 @@ async function getBestMatch(titleQuery, rawResults = [], movie) {
   const hasCrewForMovie = hasCrewFor(movie);
   const hasCrewHintsForMovie = hasCrewHintsFor(movie);
 
+  // Filter out entries without a release date - if it's in the cinema, it
+  // should have a release date available. This also excludes collections, which
+  // share a numeric ID namespace with movies but return 404 from movieInfo.
+  const resultsWithReleaseDate = rawResults.filter(
+    ({ release_date: date }) => !!date,
+  );
+
   // If there's only one result ...
-  if (rawResults.length === 1) {
-    const result = rawResults[0];
+  if (resultsWithReleaseDate.length === 1) {
+    const result = resultsWithReleaseDate[0];
     // ... and there's no crew info, pick the result if it matches the title
     if (!hasCrewForMovie && matchesMovieTitle(titleQuery)(result)) {
       return result;
@@ -263,13 +270,6 @@ async function getBestMatch(titleQuery, rawResults = [], movie) {
     const hasCastCrewMatch = await matchesExpectedCastCrew(result, movie);
     return hasCastCrewMatch ? result : undefined;
   }
-
-  // As we have more than 1 result, filter these down by removing any which
-  // don't have a release date (if it's in the cinema, it should have a release
-  // date available).
-  const resultsWithReleaseDate = rawResults.filter(
-    ({ release_date: date }) => !!date,
-  );
 
   // If there's only a few results remaining ...
   if (
