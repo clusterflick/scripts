@@ -675,6 +675,7 @@ function normalizeTitle(title, options) {
     ["Psychedelia (1969) + ", "Psychedelia (1969) & "],
     ["San Francisco (1968) + ", "San Francisco (1968) & "],
     ["In the Year of the Quiet Sun + ", "In the Year of the Quiet Sun & "],
+    ["Season 2 Premiere + Q&A:", "Season 2 Premiere & Q&A:"],
     ["+ A Look to Kill", " & A Look to Kill"],
     ["READY OT NOT 2", "READY OR NOT 2"],
     [/^Charak \(Hindi\)$/i, "Charak: Fair of Faith"],

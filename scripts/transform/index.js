@@ -95,6 +95,7 @@ async function transform(
       // Sports screenings can sneak in and then will be readded here. Given how
       // few actual screenings come from boxpark, skip this recovery flow
       "boxpark.co.uk-wembley",
+      "fulhampier.com",
     ];
     const previousReleaseData = optedOut.includes(location)
       ? []

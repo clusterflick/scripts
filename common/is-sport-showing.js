@@ -11,9 +11,14 @@ const sportShowings = [
   /GRAND PRIX:/i,
   /^\w+\s+FANPARK:/i,
   /WORLD CUP FINAL/i,
+  /WORLD CUP QUALIFIER/i,
+  /FIFA Club World/i,
+  /FIFA CWC/i,
+  /NON-LEAGUE FINAL/i,
   /WORLD CUP 202\d/i,
-  /World Cup Live/,
+  /World Cup Live/i,
   /TROPHY FINAL/i,
+  /NON-LEAGUE FINALS/i,
   /Wimbledon Live/i,
 ];
 

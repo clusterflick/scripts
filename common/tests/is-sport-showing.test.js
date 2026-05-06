@@ -22,6 +22,8 @@ describe("isSportShowing", () => {
     ["World Cup Final"],
     ["FIFA World Cup Final 2026"],
     ["ENGLAND V CROATIA: WORLD CUP 2026 (WEMBLEY)"],
+    ["FIFA World Cup Live Screenings"],
+    ["Wimbledon Live Screenings & Activities"],
   ])("flags '%s' as a sport showing", (title) => {
     expect(isSportShowing({ title })).toBe(true);
   });
