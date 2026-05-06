@@ -246,18 +246,18 @@ const matchesMovieTitle =
     (normalizeTitle(title) === normalizedTitle ||
       normalizeTitle(originalTitle) === normalizedTitle);
 
+// Movies in cinemas always have a release date. Entries without one are likely
+// collections, which share a numeric ID namespace with movies but return 404
+// from movieInfo.
+const isReleasedMovie = ({ release_date: date }) => !!date;
+
 async function getBestMatch(titleQuery, rawResults = [], movie) {
   if (rawResults.length === 0) return undefined;
 
   const hasCrewForMovie = hasCrewFor(movie);
   const hasCrewHintsForMovie = hasCrewHintsFor(movie);
 
-  // Filter out entries without a release date - if it's in the cinema, it
-  // should have a release date available. This also excludes collections, which
-  // share a numeric ID namespace with movies but return 404 from movieInfo.
-  const resultsWithReleaseDate = rawResults.filter(
-    ({ release_date: date }) => !!date,
-  );
+  const resultsWithReleaseDate = rawResults.filter(isReleasedMovie);
 
   // If there's only one result ...
   if (resultsWithReleaseDate.length === 1) {
@@ -487,10 +487,12 @@ const searchForBestMatch = async ({
 
     // Only run the LLM on this is we haven't already done so
     if (!isUsingLlmData) {
-      if (searchTitle.results.length > 0) {
+      const searchTitleResultsWithReleaseDate =
+        searchTitle.results.filter(isReleasedMovie);
+      if (searchTitleResultsWithReleaseDate.length > 0) {
         const bestLlmMatchFromResults = await reviewResultsUsingLlm(
           movie,
-          searchTitle.results,
+          searchTitleResultsWithReleaseDate,
           normalizedTitle,
         );
         if (bestLlmMatchFromResults) return bestLlmMatchFromResults;
@@ -601,10 +603,12 @@ const searchForBestMatch = async ({
 
   // Only run the LLM on this is we haven't already done so
   if (!isUsingLlmData) {
-    if (seachRelatedYear.results.length > 0) {
+    const seachRelatedYearResultsWithReleaseDate =
+      seachRelatedYear.results.filter(isReleasedMovie);
+    if (seachRelatedYearResultsWithReleaseDate.length > 0) {
       const bestLlmMatchFromResults = await reviewResultsUsingLlm(
         movie,
-        seachRelatedYear.results,
+        seachRelatedYearResultsWithReleaseDate,
       );
       if (bestLlmMatchFromResults) return bestLlmMatchFromResults;
     }
