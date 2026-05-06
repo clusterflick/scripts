@@ -28,6 +28,7 @@ const generationConfig = {
  * @param {string} options.cacheKeyPrefix - Prefix for the cache key
  * @param {string} options.logMessage - Message to log when making a fresh call
  * @param {number} [options.maxOutputTokens] - Override default max output tokens
+ * @param {Object} [options.responseSchema] - OpenAPI schema for structured JSON output
  * @returns {Promise<Object>} Parsed JSON response from the LLM
  */
 async function callLlm({
@@ -36,6 +37,7 @@ async function callLlm({
   cacheKeyPrefix,
   logMessage,
   maxOutputTokens,
+  responseSchema,
 }) {
   const cacheKey = `${cacheKeyPrefix}-${getId(`${systemInstruction}\n${prompt}`)}`;
 
@@ -47,9 +49,12 @@ async function callLlm({
       systemInstruction,
     });
 
-    const config = maxOutputTokens
-      ? { ...generationConfig, maxOutputTokens }
-      : generationConfig;
+    const config = { ...generationConfig };
+    if (maxOutputTokens) config.maxOutputTokens = maxOutputTokens;
+    if (responseSchema) {
+      config.responseMimeType = "application/json";
+      config.responseSchema = responseSchema;
+    }
     const chatSession = model.startChat({
       generationConfig: config,
       history: [],

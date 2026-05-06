@@ -1,6 +1,31 @@
 const { callLlm } = require("./llm-client");
 
-const systemInstruction = `You identify movies from cinema listing data. Respond with JSON only, no introduction or explanation.
+const responseSchema = {
+  type: "object",
+  properties: {
+    isMovie: { type: "boolean" },
+    isMultipleMovies: { type: "boolean" },
+    confidence: { type: "number" },
+    matches: {
+      type: "array",
+      maxItems: 5,
+      items: {
+        type: "object",
+        properties: {
+          isKnownMovie: { type: "boolean" },
+          title: { type: "string" },
+          year: { type: "number", nullable: true },
+          directors: { type: "array", maxItems: 5, items: { type: "string" } },
+          cast: { type: "array", maxItems: 5, items: { type: "string" } },
+        },
+        required: ["isKnownMovie", "title", "directors", "cast"],
+      },
+    },
+  },
+  required: ["isMovie", "isMultipleMovies", "confidence"],
+};
+
+const systemInstruction = `You identify movies from cinema listing data.
 
 Required fields:
 - "isMovie": boolean - true if this is a movie screening. False for Q&As, discussions, talks, or other non-screening events.
@@ -59,5 +84,7 @@ module.exports = async function askLlm(movie) {
     prompt,
     cacheKeyPrefix: "ask-llm",
     logMessage: `Asking LLM to identify "${movie.title}"`,
+    maxOutputTokens: 1024,
+    responseSchema,
   });
 };
