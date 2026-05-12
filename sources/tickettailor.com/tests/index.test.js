@@ -65,7 +65,7 @@ describe(`${attributes.name}`, () => {
 
         // Make sure the input looks roughly correct
         expect(clubPages).toBeTruthy();
-        expect(Object.keys(clubPages)).toHaveLength(10);
+        expect(Object.keys(clubPages)).toHaveLength(11);
 
         readJSON.mockImplementation(() => ({ clubPages }));
 
