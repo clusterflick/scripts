@@ -542,8 +542,8 @@ async function runLlmFunction(llmFunction, options = { run: 0 }) {
       return await runLlmFunction(llmFunction, { ...options, run: run + 1 });
     }
 
-    // Model is overloaded; wait a few minutes and try again.
-    if (e.status === 503) {
+    // Model is overloaded or bad gateway; wait a few minutes and try again.
+    if (e.status === 502 || e.status === 503) {
       console.log(" ! - Error asking LLM; pausing for model availability...");
       await sleep(180_000);
       return await runLlmFunction(llmFunction, { ...options, run: run + 1 });
