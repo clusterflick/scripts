@@ -1,5 +1,4 @@
 const { subMonths } = require("date-fns");
-const { fetchJson } = require("../../common/utils");
 const attributes = require("./attributes");
 const getPageWithPlaywright = require("../../common/get-page-with-playwright");
 
@@ -64,26 +63,33 @@ function buildSearchBodyForExhibitionOnScreen(
   return buildSearchBody(offset, filter, { q: "Exhibition On Screen" });
 }
 
-async function fetchMeilisearchEvents(body) {
+async function fetchMeilisearchEvents(page, body) {
   const url = `${MEILISEARCH_CONFIG.baseUrl}/indexes/${MEILISEARCH_CONFIG.indexName}/search`;
+  const apiKey = MEILISEARCH_CONFIG.apiKey;
 
-  return fetchJson(url, {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-      authorization: `Bearer ${MEILISEARCH_CONFIG.apiKey}`,
+  return page.evaluate(
+    async ({ url, body, apiKey }) => {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+          authorization: `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify(body),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status} ${response.statusText}`);
+      }
+      return response.json();
     },
-    body: JSON.stringify(body),
-  });
+    { url, body, apiKey },
+  );
 }
 
-/**
- * Fetch all pages of events from TicketSource via Meilisearch API
- */
-async function retrieveFilterEvents(buildSearchBodyForFilter) {
+async function retrieveFilterEvents(page, buildSearchBodyForFilter) {
   const movieListPages = [];
   const firstBody = buildSearchBodyForFilter({ offset: 0 });
-  const firstPage = await fetchMeilisearchEvents(firstBody);
+  const firstPage = await fetchMeilisearchEvents(page, firstBody);
   movieListPages.push(firstPage);
 
   const { estimatedTotalHits: totalHits } = firstPage;
@@ -93,7 +99,7 @@ async function retrieveFilterEvents(buildSearchBodyForFilter) {
   let currentOffset = HITS_PER_PAGE;
   while (currentOffset < totalHits) {
     const pageBody = buildSearchBodyForFilter({ offset: currentOffset });
-    const pageResponse = await fetchMeilisearchEvents(pageBody);
+    const pageResponse = await fetchMeilisearchEvents(page, pageBody);
     movieListPages.push(pageResponse);
     currentOffset += HITS_PER_PAGE;
   }
@@ -103,19 +109,28 @@ async function retrieveFilterEvents(buildSearchBodyForFilter) {
 
 async function retrieve() {
   const timestampFilter = buildTimestampFilter();
-  const movieListPages = [].concat(
-    await retrieveFilterEvents((opts) =>
-      buildSearchBodyForGeoFilter(timestampFilter, opts),
-    ),
-    await retrieveFilterEvents((opts) =>
-      buildSearchBodyForLocationFilter(timestampFilter, opts),
-    ),
-    await retrieveFilterEvents((opts) =>
-      buildSearchBodyForNtLive(timestampFilter, opts),
-    ),
-    await retrieveFilterEvents((opts) =>
-      buildSearchBodyForExhibitionOnScreen(timestampFilter, opts),
-    ),
+
+  const movieListPages = await getPageWithPlaywright(
+    `${attributes.domain}/whats-on?category=film`,
+    "ticketsource-events-list",
+    async (page) => {
+      await page.waitForLoadState("domcontentloaded");
+
+      return [].concat(
+        await retrieveFilterEvents(page, (opts) =>
+          buildSearchBodyForGeoFilter(timestampFilter, opts),
+        ),
+        await retrieveFilterEvents(page, (opts) =>
+          buildSearchBodyForLocationFilter(timestampFilter, opts),
+        ),
+        await retrieveFilterEvents(page, (opts) =>
+          buildSearchBodyForNtLive(timestampFilter, opts),
+        ),
+        await retrieveFilterEvents(page, (opts) =>
+          buildSearchBodyForExhibitionOnScreen(timestampFilter, opts),
+        ),
+      );
+    },
   );
 
   const allHits = movieListPages

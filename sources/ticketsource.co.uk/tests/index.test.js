@@ -19,11 +19,11 @@ jest.mock("../../../common/utils", () => ({
 const isRecording = false;
 
 jest.mock("../../../common/cache");
-setupCacheMock(__dirname, "2026-04-17");
+setupCacheMock(__dirname, "2026-05-14");
 
 describe(`${attributes.name}`, () => {
   setupPolly(isRecording, __dirname);
-  jest.useFakeTimers().setSystemTime(new Date("2026-04-17T19:00"));
+  jest.useFakeTimers().setSystemTime(new Date("2026-05-14T00:00"));
 
   describe.each([
     {
@@ -35,7 +35,7 @@ describe(`${attributes.name}`, () => {
       name: "Close-Up Film Centre",
       alternativeNames: ["Close-Up Cinema"],
       geo: { lat: 51.52363533860424, lon: -0.07204024586584808 },
-      expectedMatches: 18,
+      expectedMatches: 17,
     },
     {
       name: "The Exchange Twickenham",
