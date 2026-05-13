@@ -707,6 +707,7 @@ function normalizeTitle(title, options) {
     [/Kapodistrias[\s–:]+ The Governor/i, "Kapodistrias"],
     [/Film Festival:? Opening Night/i, "Film Festival - Opening Night"],
     ["Washington, DC", "Washington, D.C."],
+    ["Glastonbury The Movie:", "Glastonbury The Movie in Flashback:"],
     // Variant families collapsed from known-removable-phrases.js
     // Each pattern covers multiple near-identical string entries that shared a common structure
     [/dog[- ]?friendly(?:\s+screening)?[:\s]*/i, ""],
@@ -900,7 +901,7 @@ function normalizeTitle(title, options) {
   }
 
   title = title.replace(
-    /(^|\s+)\d+th ann(iversary)?( screenings?)?( edition)?( show)?(\s+|$)/i,
+    /(^|\s+)\d+th ann(iversary)?( screenings?)?( edition)?( show)?( cut)?( of)?(\s+|$|:)/i,
     " ",
   );
 
