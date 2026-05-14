@@ -7,8 +7,8 @@ const {
 } = require("../../common/utils");
 const { domain } = require("./attributes");
 
-const getSearchUrl = (page = 0) =>
-  `${domain}/whats-on?genre[3]=3&type=All&page=${page}`;
+const getSearchUrl = (page = 1) =>
+  `${domain}/whats-on?genres[]=19&max=27&page=${page}`;
 
 async function retrieve() {
   const movieListPages = [];
@@ -17,7 +17,7 @@ async function retrieve() {
   while (true) {
     const searchResults = await fetchText(getSearchUrl(page));
     const $ = cheerio.load(searchResults);
-    const urlsOnPage = $(".alt-teasers article h3 a")
+    const urlsOnPage = $(".eventCard .thumb a")
       .map((i, el) => $(el).attr("href"))
       .get();
     if (urlsOnPage.length === 0) break;
@@ -35,21 +35,26 @@ async function retrieve() {
   for (const url of Array.from(urls)) {
     const listing = await fetchText(`${domain}${url}`);
     const $ = cheerio.load(listing);
-    const bookingUrl = $(".m-banner__links a.a-btn").eq(0).attr("href");
     let eventId;
     try {
-      // Try getting event ID from the booking URL
-      eventId = new URLSearchParams(new URL(bookingUrl).search).get("EventId");
+      const pageDataLayer = page.match(
+        /<script>\s*var\s+dataLayer\s+=\s+(.*);\s+<\/script>/i,
+      );
+      const pageData = JSON.parse(pageDataLayer[1]);
+      const itemProductionId = pageData[0].detail_items[0].item_production;
+      // The ID used for getting events is the starting 6 digit numerical part
+      eventId = itemProductionId.match(/^(\d{6,7})/)[1];
     } catch {
       // If we can't, try finding an event with the same name from the events
       // list and using that ID instead
-      const listingTitle = getText($("#block-mainpagecontent h1").eq(0));
+      const listingTitle = getText($(".desc h1").eq(0));
       const event = eventsData.find(
         ({ name }) => basicNormalize(name) === basicNormalize(listingTitle),
       );
       if (event) {
         // The ID used for getting events is the starting 6 digit numerical part
-        eventId = event.id.slice(0, 6);
+        const idMatch = event.id.match(/^(\d{6,7})/);
+        if (idMatch) eventId = idMatch[1];
       }
     }
     let booking = null;

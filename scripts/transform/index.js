@@ -96,6 +96,8 @@ async function transform(
       // few actual screenings come from boxpark, skip this recovery flow
       "boxpark.co.uk-wembley",
       "fulhampier.com",
+      // Temporarily remove jw3 which. has updates its system
+      "jw3.org.uk",
     ];
     const previousReleaseData = optedOut.includes(location)
       ? []
