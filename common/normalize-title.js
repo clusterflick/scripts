@@ -709,6 +709,8 @@ function normalizeTitle(title, options) {
     [/Film Festival:? Opening Night/i, "Film Festival - Opening Night"],
     ["Washington, DC", "Washington, D.C."],
     [/Glastonbury The Movie:?\s/i, "Glastonbury The Movie in Flashback: "],
+    ["Andre Rieu - ", "Andre Rieu: "],
+    ["Andre Rieu: Summer 2026:", "Andre Rieu's 2026 Summer Concert:"],
     // Variant families collapsed from known-removable-phrases.js
     // Each pattern covers multiple near-identical string entries that shared a common structure
     [/dog[- ]?friendly(?:\s+screening)?[:\s]*/i, ""],
