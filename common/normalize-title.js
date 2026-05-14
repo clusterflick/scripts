@@ -678,6 +678,7 @@ function normalizeTitle(title, options) {
     ["Phantom Beirut (1998) + ", "Phantom Beirut (1998) & "],
     ["Scorpio Rising + ", "Scorpio Rising & "],
     ["In the Year of the Quiet Sun + ", "In the Year of the Quiet Sun & "],
+    ["Screening + Performance", "Screening & Performance"],
     ["Season 2 Premiere + Q&A:", "Season 2 Premiere & Q&A:"],
     [/Members' wine tasting \+ (?:optional)?/i, "Members' wine tasting: "],
     ["+ A Look to Kill", " & A Look to Kill"],
@@ -707,7 +708,7 @@ function normalizeTitle(title, options) {
     [/Kapodistrias[\s–:]+ The Governor/i, "Kapodistrias"],
     [/Film Festival:? Opening Night/i, "Film Festival - Opening Night"],
     ["Washington, DC", "Washington, D.C."],
-    ["Glastonbury The Movie:", "Glastonbury The Movie in Flashback:"],
+    [/Glastonbury The Movie:?\s/i, "Glastonbury The Movie in Flashback: "],
     // Variant families collapsed from known-removable-phrases.js
     // Each pattern covers multiple near-identical string entries that shared a common structure
     [/dog[- ]?friendly(?:\s+screening)?[:\s]*/i, ""],

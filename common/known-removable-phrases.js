@@ -394,6 +394,7 @@ const knownRemovablePhrases = [
   "A Nuclear Nightmare",
   "Test Screening",
   "starring RMD",
+  "– Dr Ghassan Abu-Sittah Speaks",
 
   // Prefixes
   "(4DX) ",
@@ -415,6 +416,7 @@ const knownRemovablePhrases = [
   "a film by David Kew",
   "A Focus on Gabriel Abrantes:",
   "a Screening and Talk of",
+  "Screening & Performance",
   "A Screening for Pancreatic Cancer UK",
   "Academy Awards Best Picture 2025:",
   "Academy Awards Best Picture 2026:",
@@ -1092,6 +1094,7 @@ const knownRemovablePhrases = [
 
   // Common superfluous pieces
   "** SCREENING CANCELLED **",
+  "NEW DATE:",
   "DRINK-AND-SING-ALONG",
   "A Sing-Along Event",
   "Sing-along-a",
