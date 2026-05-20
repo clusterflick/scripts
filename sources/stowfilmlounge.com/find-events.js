@@ -108,6 +108,12 @@ function parseEventSection($, section) {
   // Booking link is in the button container
   const $bookingLink = section.find(".sqs-block-button-container a").first();
   const bookingPath = $bookingLink.attr("href") || "";
+
+  // Bail if there's no ticket link (this may be a placeholder with "coming soon" text)
+  if (!bookingPath) {
+    return { venueName: "", event: {} };
+  }
+
   const bookingUrl = bookingPath.startsWith("/")
     ? `${attributes.domain}${bookingPath}`
     : bookingPath;
