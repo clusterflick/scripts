@@ -720,13 +720,17 @@ function normalizeTitle(title, options) {
     ["Andre Rieu - ", "Andre Rieu: "],
     ["Andre Rieu: Summer 2026:", "Andre Rieu's 2026 Summer Concert:"],
     [" + UK Premiere: Replikka", " + Replikka"],
+    [" + Iggy Pop – Lust for life", " & Lust for life"],
     [
       /Bluey At The Cinema - Playdates$/i,
       "Bluey At The Cinema: Playdates with Friends",
     ],
     ["A Night of Latin Jazz - ", "A Night of Latin Jazz: "],
+    ["Classic Night - ", "Classic Night: "],
+    ["Weird Wednesday - ", "Weird Wednesday: "],
     ["The Life + Legacy", "The Life and Legacy"],
     [" - Oggi", ": Oggi"],
+    [" x metropolis", " metropolis"],
     // Variant families collapsed from known-removable-phrases.js
     // Each pattern covers multiple near-identical string entries that shared a common structure
     [/dog[- ]?friendly(?:\s+screening)?[:\s]*/i, ""],
