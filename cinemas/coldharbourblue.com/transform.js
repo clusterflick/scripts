@@ -1,5 +1,6 @@
 const cheerio = require("cheerio");
-const { parseISO, differenceInMinutes } = require("date-fns");
+const { parse, differenceInMinutes } = require("date-fns");
+const { enGB } = require("date-fns/locale/en-GB");
 const {
   sanitizeRichText,
   createPerformance,
@@ -9,6 +10,15 @@ const {
 } = require("../../common/utils");
 const attributes = require("./attributes");
 const { decode } = require("html-entities");
+
+function parseDate(dateString) {
+  // Ignore offset which is incorrect
+  // (times are currently in BST but incorrectly have 00:00 offset)
+  const [date] = dateString.split("+");
+  return parse(date, "yyyy-MM-dd'T'HH:mm:ss", new Date(), {
+    locale: enGB,
+  });
+}
 
 function extractEventIdFromUrl(url) {
   const urlParts = url.split("/");
@@ -40,8 +50,8 @@ async function transform(retrievedData, sourcedEvents) {
       const title = decode(event.name).replaceAll("\\", "");
 
       // Calculate duration from start and end dates
-      const startDate = parseISO(event.startDate);
-      const endDate = parseISO(event.endDate);
+      const startDate = parseDate(event.startDate);
+      const endDate = parseDate(event.endDate);
       const duration = differenceInMinutes(endDate, startDate);
 
       // Check offer availability for sold out status
