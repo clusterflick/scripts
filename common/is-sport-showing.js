@@ -26,6 +26,7 @@ const sportShowings = [
   /World Cup Live/i,
   /TROPHY FINAL/i,
   /Wimbledon Live/i,
+  /PLAYOFF FINAL/i,
 ];
 
 const isSportShowing = ({ title }) =>
