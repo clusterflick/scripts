@@ -23,6 +23,7 @@
  */
 const knownRemovablePhrases = [
   // Suffixes
+  "Nolan in 35mm:",
   "[16mm]",
   "[35mm]",
   "on 16mm film",
@@ -312,6 +313,7 @@ const knownRemovablePhrases = [
   "with Steve Zissou",
   "with wine tasting",
   "with Molly Miles",
+  "with Illustrated Lecture!",
   "with Live Acoustic Guitar & Introduction",
   "with Live Performance",
   "with Loose Willis & Maxim Melton",
@@ -583,6 +585,7 @@ const knownRemovablePhrases = [
   "Classic Movies:",
   "Classic Movies :",
   "Classics Night",
+  "Classic Night:",
   "CLUB ROOM:",
   "CLUB ROOM x MUSE:",
   "Concession:",
@@ -1041,6 +1044,7 @@ const knownRemovablePhrases = [
   "Vladimir Pogacic's",
   "Wallace & Gromit in ",
   "Wallace & Gromit :",
+  "Weird Wednesday:",
   "Windrush Caribbean Film Festival 2025:",
   "Work in Progress:",
   "Women's Only Event:",
@@ -1105,6 +1109,7 @@ const knownRemovablePhrases = [
   "14 February 8:30pm:",
   "× MILKTEA Post-Screening Creative Workshop",
   "Thanga Natchathiram",
+  " & Gathering",
 
   // Common superfluous pieces
   "** SCREENING CANCELLED **",
