@@ -391,7 +391,7 @@ const descriptionAccessibilityMatchers = {
   ],
   babyFriendly: [/parent and baby/i, /parent & baby/i, /baby friendly/i],
   subtitled: [
-    /with (?:english )?subtitles/i,
+    /with (?:english )?(?:and \w+ )?subtitles/i,
     /english subtitles/i,
     /subtitles will be displayed/i,
     /with subtitles from/i,
@@ -599,4 +599,5 @@ module.exports = {
   runLlmFunction,
   getValidClassification,
   convertNamesTextToList,
+  getDescriptionAccessibility,
 };

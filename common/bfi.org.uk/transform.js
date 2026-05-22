@@ -7,6 +7,7 @@ const {
   convertToList,
   splitConjoinedItemsInList,
   generateShowingId,
+  getDescriptionAccessibility,
 } = require("../utils");
 const { parseDate } = require("./utils");
 
@@ -49,7 +50,7 @@ function getPerformancesFor($, url, { title, performances }, overview) {
   let isSubtitled = false;
   $showInfo.each(function () {
     if (isSubtitled) return;
-    isSubtitled = getText($(this)).toLowerCase().includes(" subtitles");
+    isSubtitled = getDescriptionAccessibility(getText($(this))).subtitled;
   });
 
   const movieBlurb = getText($(".Rich-text")).toLowerCase();
