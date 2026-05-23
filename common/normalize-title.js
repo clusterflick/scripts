@@ -720,7 +720,7 @@ function normalizeTitle(title, options) {
     ["Andre Rieu - ", "Andre Rieu: "],
     ["Andre Rieu: Summer 2026:", "Andre Rieu's 2026 Summer Concert:"],
     [" + UK Premiere: Replikka", " + Replikka"],
-    [" + Iggy Pop – Lust for life", " & Lust for life"],
+    [/ \+ Iggy Pop [–�] Lust for life/i, " & Lust for life"],
     [
       /Bluey At The Cinema - Playdates$/i,
       "Bluey At The Cinema: Playdates with Friends",

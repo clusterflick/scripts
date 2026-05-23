@@ -362,6 +362,7 @@ const knownRemovablePhrases = [
   " x Flower Workshop",
   " x Free Vocafest Screening",
   " x FIST CLUB for IWD",
+  " x Film House: Pride Edition",
   " x Gala Screening",
   " X Migrants' Rights Network",
   " x SCRT",
