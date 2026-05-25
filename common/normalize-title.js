@@ -731,6 +731,7 @@ function normalizeTitle(title, options) {
     ["The Life + Legacy", "The Life and Legacy"],
     [" - Oggi", ": Oggi"],
     [" x metropolis", " metropolis"],
+    ["Nick Drake: A Skin Too Few", "A Skin Too Few: The Days of Nick Drake"],
     // Variant families collapsed from known-removable-phrases.js
     // Each pattern covers multiple near-identical string entries that shared a common structure
     [/dog[- ]?friendly(?:\s+screening)?[:\s]*/i, ""],

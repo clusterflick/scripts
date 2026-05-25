@@ -1076,6 +1076,7 @@ const knownRemovablePhrases = [
   "3rd annual screening",
   "4th annual screening",
   "5th annual screening",
+  "80 Years of Martin and Lewis:",
   "aka daughters of darkness",
   "aka The Devil's Bride",
   "aka Dracula's Dog",
