@@ -1045,6 +1045,7 @@ const knownRemovablePhrases = [
   "Vladimir Pogacic's",
   "Wallace & Gromit in ",
   "Wallace & Gromit :",
+  "Wanted: Undead or Alive –",
   "Weird Wednesday:",
   "Windrush Caribbean Film Festival 2025:",
   "Work in Progress:",
