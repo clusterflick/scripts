@@ -720,7 +720,7 @@ function normalizeTitle(title, options) {
     ["Andre Rieu - ", "Andre Rieu: "],
     ["Andre Rieu: Summer 2026:", "Andre Rieu's 2026 Summer Concert:"],
     [" + UK Premiere: Replikka", " + Replikka"],
-    [/ \+ Iggy Pop [–�] Lust for life/i, " & Lust for life"],
+    [/ [+&] Iggy Pop [–\-�] Lust for life/i, " & Lust for life"],
     [
       /Bluey At The Cinema - Playdates$/i,
       "Bluey At The Cinema: Playdates with Friends",
@@ -732,6 +732,7 @@ function normalizeTitle(title, options) {
     [" - Oggi", ": Oggi"],
     [" x metropolis", " metropolis"],
     ["Nick Drake: A Skin Too Few", "A Skin Too Few: The Days of Nick Drake"],
+    ["(Screening) / ", "(Screening) & "],
     // Variant families collapsed from known-removable-phrases.js
     // Each pattern covers multiple near-identical string entries that shared a common structure
     [/dog[- ]?friendly(?:\s+screening)?[:\s]*/i, ""],
@@ -746,6 +747,7 @@ function normalizeTitle(title, options) {
     [/l.ff(?:\s+202\d)?:/i, ""],
     [/liaf(?:\s+\d+)?:/i, ""],
     [/hkff(?:uk)?(?:\s+\d+)?:/i, ""],
+    [/ AV SHOW$/i, ""],
     ["Tercera Video Club #2 - ", "Tercera Video Club #2: "],
     [
       "Argentine season launch: Live music + ",
