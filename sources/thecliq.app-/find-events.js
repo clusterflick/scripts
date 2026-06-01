@@ -85,6 +85,11 @@ async function findEvents(cinema) {
       const titleMatches =
         titleVenue && venueMatchesCinema(cinema, titleVenue, coordinates);
 
+      const isSocialOnly = event.description
+        .toLowerCase()
+        .includes("tickets are not included");
+      if (isSocialOnly) continue;
+
       if (locationMatches || titleMatches) {
         results.push(convertEvent(event, club));
       }

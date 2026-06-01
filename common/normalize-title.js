@@ -497,7 +497,10 @@ function normalizeTitle(title, options) {
     [/(classic )?secret scre(e|a)(n|m)ing( \d+)?/i, "mystery movie"],
     [/secret (classic )?bollywood cinema/i, "mystery movie"],
     [/scre(e|a)(n|m) unseen/i, "mystery movie"],
-    [/(Orange Box )?Secret Film Screenings?/i, "mystery movie"],
+    [
+      /(Orange Box )?Secret Film Screenings?(: Summer Series)?/i,
+      "mystery movie",
+    ],
     [/^.* \+ mystery movie/i, "mystery movie"],
     ["vhs film", "movie"],
     [/The Bill Reunion \d+/i, "The Bill Reunion"],
@@ -728,11 +731,19 @@ function normalizeTitle(title, options) {
     ["A Night of Latin Jazz - ", "A Night of Latin Jazz: "],
     ["Classic Night - ", "Classic Night: "],
     ["Weird Wednesday - ", "Weird Wednesday: "],
+    ["Bar Trash: 4TH BIRTHDAY - ", "Bar Trash: 4TH BIRTHDAY: "],
+    ["Elon Musk Unveiled -", "Elon Musk Unveiled: "],
+    ["Goethe-Kino - ", "Goethe-Kino: "],
     ["The Life + Legacy", "The Life and Legacy"],
     [" - Oggi", ": Oggi"],
     [" x metropolis", " metropolis"],
     ["Nick Drake: A Skin Too Few", "A Skin Too Few: The Days of Nick Drake"],
     ["(Screening) / ", "(Screening) & "],
+    [
+      "BEYOND ILLUSION - MAGIC DOCUMENTARY",
+      "Beyond Illusion: The Making of a Magician - ",
+    ],
+    [/The Band - The Show/i, "The Band The Show"],
     // Variant families collapsed from known-removable-phrases.js
     // Each pattern covers multiple near-identical string entries that shared a common structure
     [/dog[- ]?friendly(?:\s+screening)?[:\s]*/i, ""],
@@ -987,6 +998,7 @@ function normalizeTitle(title, options) {
     .replace(/^the (?=\S+\s+(?![[(]))/i, "")
     .replace(/([a-z])-([a-z])/gi, "$1$2")
     .replace(/\s+q&a$/i, "")
+    .replace("?s", "s")
     .replace(/\s3d$/i, "")
     .replace(/[+?]$/, "")
     .replace(/\(\d{4}-[^)]+\)$/, "") // Remove any date range suffixes
