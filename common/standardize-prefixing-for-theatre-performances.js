@@ -74,8 +74,11 @@ function standardizePrefixingForMetropolitanOperaPerformances(title, options) {
   title = title.replace(/\s+&\s+/, " and ").replace(/\s+-\s+/, ": ");
 
   // Update if "met opera" is a suffix
-  if (title.toLowerCase().includes(": met opera ")) {
-    title = `The Metropolitan Opera: ${title.replace(/: Met Opera /i, " ")}`;
+  if (
+    title.toLowerCase().includes(": met opera ") ||
+    title.toLowerCase().includes(": the met opera ")
+  ) {
+    title = `The Metropolitan Opera: ${title.replace(/: (The )?Met Opera /i, " ")}`;
   }
 
   let updatedPrefixTitle = metOperaPrefixes.reduce(
@@ -144,6 +147,8 @@ const rboPrefixes = [
   /Royal Opera House[:|\s]/i,
   /^The Royal Ballet[:|\s]/i,
   /^The Royal Opera[:|\s]/i,
+  /: The Royal Ballet[:|\s]/i,
+  /: The Royal Opera[:|\s]/i,
   /RB&O Live:/i,
   /RB&O:/i,
   /Live From Royal Ballet/i,
@@ -152,6 +157,7 @@ const rboPrefixes = [
 function standardizePrefixingForRoyalBalletOperaPerformances(title) {
   title = title
     .replace(/Captured Live /i, "")
+    .replace(/-\s?Live\s?-/i, "-")
     .replace(/Hoffman(\s|$)/i, "Hoffmann$1")
     .replace(/\s+&\s+/, " and ")
     .replace(/\s+-\s+/, ": ");
@@ -257,7 +263,8 @@ function standardizePrefixingForTheatrePerformances(
       lowercaseTitle.includes("the metropolitan opera:")) ||
     (lowercaseTitle.startsWith("rbo ") &&
       lowercaseTitle.includes("the met opera -")) ||
-    lowercaseTitle.includes(" - met opera")
+    lowercaseTitle.includes(" - met opera") ||
+    lowercaseTitle.includes(" - the met opera")
   ) {
     return standardizePrefixingForMetropolitanOperaPerformances(title, options);
   }
@@ -270,7 +277,9 @@ function standardizePrefixingForTheatrePerformances(
     lowercaseTitle.startsWith("royal opera") ||
     lowercaseTitle.startsWith("royal ballet") ||
     lowercaseTitle.startsWith("the royal opera") ||
+    lowercaseTitle.includes("- the royal opera") ||
     lowercaseTitle.startsWith("the royal ballet") ||
+    lowercaseTitle.includes("- the royal ballet") ||
     lowercaseTitle.startsWith("roh royal opera") ||
     lowercaseTitle.startsWith("roh ") ||
     lowercaseTitle.startsWith("roh: ") ||
