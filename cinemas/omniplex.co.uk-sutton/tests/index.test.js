@@ -16,16 +16,14 @@ describe(attributes.name, () => {
   it(
     "retrieve and transform",
     async () => {
-      const { movieListPage, moviePages } = await retrieve();
+      const { indexPage, datePages } = await retrieve();
 
       // Make sure the input looks roughly correct
-      expect(movieListPage).toBeTruthy();
-      expect(moviePages).toBeTruthy();
-      expect(Object.keys(moviePages)).toHaveLength(45);
+      expect(indexPage).toBeTruthy();
+      expect(datePages).toBeTruthy();
+      expect(Object.keys(datePages)).toHaveLength(47);
 
-      const output = sortAndFilterMovies(
-        await transform({ movieListPage, moviePages }, {}),
-      );
+      const output = sortAndFilterMovies(await transform({ datePages }, {}));
       expect(
         output.every((movie) =>
           Object.prototype.hasOwnProperty.call(movie, "matchingHints"),
@@ -35,9 +33,6 @@ describe(attributes.name, () => {
       const data = JSON.parse(JSON.stringify(output))
         .map(removeMatchingHints)
         .map(addTestCategory);
-
-      // Make sure the data looks roughly correct
-      expect(data).toHaveLength(45);
 
       expect(schemaValidate(data)).toBe(true);
       expect(data).toMatchSnapshot();

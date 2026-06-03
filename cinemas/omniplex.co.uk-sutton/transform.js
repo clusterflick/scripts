@@ -7,182 +7,160 @@ const {
   createOverview,
   createAccessibility,
   generateShowingId,
-  getValidClassification,
-  basicNormalize,
 } = require("../../common/utils");
 const attributes = require("./attributes");
 
-function fixHtmlTypos(html) {
-  return html.replace(/<soan /g, "<span ");
-}
-
-function extractDurationInMinutes(durationText) {
-  if (!durationText) return undefined;
-  const hoursMatch = durationText.match(/(\d+)\s*hr/i);
-  const minutesMatch = durationText.match(/(\d+)\s*min/i);
+function extractDurationInMinutes(text) {
+  if (!text) return undefined;
+  const hoursMatch = text.match(/(\d+)\s*hr/i);
+  const minutesMatch = text.match(/(\d+)\s*min/i);
   const hours = hoursMatch ? parseInt(hoursMatch[1], 10) : 0;
   const minutes = minutesMatch ? parseInt(minutesMatch[1], 10) : 0;
-  return hours * 60 + minutes;
+  const total = hours * 60 + minutes;
+  return total || undefined;
 }
 
-function parseMovieDetails(html) {
-  const correctedHtml = fixHtmlTypos(html);
-  const $ = cheerio.load(correctedHtml);
+function extractClassification(imgSrc) {
+  const m = imgSrc?.match(/UK_([^.]+)\.png/);
+  return m ? m[1] : undefined;
+}
 
-  const title = getText($("h1.OMP_bannerTitle"));
+// Walk up from the favourite-button img until we find an ancestor that owns
+// .showTimeBox descendants. The img is in the info column; showtimes are in a
+// sibling column — their first common ancestor is the movie-level inner grid.
+function findMovieCard($anchor) {
+  let $el = $anchor.parent();
+  for (let depth = 0; depth < 10; depth++) {
+    if (!$el.length) return null;
+    if ($el.find(".showTimeBox").length > 0) return $el;
+    $el = $el.parent();
+  }
+  return null;
+}
 
-  // Find "Running Time" and get the next p tag
-  let runningTime;
-  $("p strong").each(function () {
-    if (getText($(this)) === "Running Time") {
-      runningTime = getText($(this).parent().next("p.OMP_colourD"));
-    }
+function parseMovieCard($card, $, dateStr) {
+  const eventId = $card
+    .find('img[id^="favourite"]')
+    .attr("id")
+    ?.replace("favourite", "");
+  if (!eventId) return null;
+
+  const $titleLink = $card.find("p.font-medium a").first();
+  const title = getText($titleLink);
+  const moviePath = $titleLink.attr("href");
+  if (!title || !moviePath) return null;
+  const url = moviePath.startsWith("http")
+    ? moviePath
+    : `${attributes.domain}${moviePath}`;
+
+  const ratingImgSrc =
+    $card.find('img[src*="ratings/UK_"]').first().attr("src") || "";
+  const classification = extractClassification(ratingImgSrc);
+  const genre = getText(
+    $card.find('img[src*="ratings/UK_"]').first().siblings("p").first(),
+  );
+
+  const durationText = getText(
+    $card
+      .find("p")
+      .filter((i, el) => /\d+\s*(hr|min)/i.test($(el).text()))
+      .first(),
+  );
+  const duration = extractDurationInMinutes(durationText);
+
+  const synopsis =
+    getText($card.find(".synopsis-full").first()) ||
+    getText($card.find(".synopsis-short").first());
+
+  const baseDate = parse(dateStr, "yyyy-MM-dd", new Date(), { locale: enGB });
+  const performances = [];
+
+  $card.find(".showTimeBox").each((i, perfEl) => {
+    const $box = $(perfEl);
+    const bookingUrl = $box.parent("a").attr("href");
+
+    const timeText = getText($box.find(".bigText").first());
+    const timeMatch = timeText.match(/^(\d{1,2}):(\d{2})/);
+    if (!timeMatch) return;
+
+    const hours = parseInt(timeMatch[1], 10);
+    const minutes = parseInt(timeMatch[2], 10);
+    const performanceDate = set(baseDate, { hours, minutes, seconds: 0 });
+
+    const screen = getText($box.find(".bottomSection p.smallText").first());
+
+    performances.push(
+      createPerformance({
+        date: performanceDate,
+        url: () => bookingUrl,
+        screen,
+        accessibility: createAccessibility(title, {}, synopsis),
+      }),
+    );
   });
-
-  // Find sections within OMP_descriptionSection
-  let description, starring, director, genres;
-  $(".OMP_descriptionSection h6").each(function () {
-    const heading = getText($(this));
-    const value = getText($(this).next("p.OMP_colourD"));
-
-    if (heading === "Description") {
-      description = value;
-    } else if (heading === "Starring") {
-      starring = value;
-    } else if (heading === "Director") {
-      director = value;
-    } else if (heading === "Genres") {
-      genres = value;
-    }
-  });
-
-  // Extract BBFC rating (UK rating)
-  const ratingImg = $('img[title*="BBFC"]').attr("title");
-  const ratingMatch = ratingImg?.match(/BBFC\s*-\s*(\S+)/);
-  const classification = ratingMatch ? ratingMatch[1] : undefined;
 
   return {
+    eventId,
     title,
-    runningTime,
-    description,
-    starring,
-    director,
-    genres,
+    url,
     classification,
+    genre,
+    duration,
+    synopsis,
+    performances,
   };
 }
 
-function extractPerformances($eventWrapper, $, movieTitle, description) {
-  const performances = [];
+async function transform({ datePages }, sourcedEvents) {
+  const movieMap = new Map();
 
-  $eventWrapper.find(".OMP_listingDate").each(function () {
-    const $dateSection = $(this);
-    const dateStr = $dateSection.attr("data-date"); // e.g., "11-11-2025"
-    const baseDate = parse(dateStr, "dd-MM-yyyy", new Date(), {
-      locale: enGB,
+  for (const [date, html] of Object.entries(datePages)) {
+    const $ = cheerio.load(html);
+
+    $('img[id^="favourite"]').each((i, el) => {
+      const $movieCard = findMovieCard($(el));
+      if (!$movieCard) return;
+
+      const movie = parseMovieCard($movieCard, $, date);
+      if (!movie) return;
+      const {
+        eventId,
+        title,
+        url,
+        classification,
+        genre,
+        duration,
+        synopsis,
+        performances,
+      } = movie;
+
+      if (performances.length === 0) return;
+
+      if (movieMap.has(url)) {
+        movieMap.get(url).performances.push(...performances);
+      } else {
+        movieMap.set(url, {
+          showingId: generateShowingId(attributes, eventId),
+          title,
+          url,
+          overview: createOverview({
+            duration,
+            categories: genre,
+            classification,
+          }),
+          performances,
+          matchingHints: { overview: synopsis },
+        });
+      }
     });
+  }
 
-    $dateSection.find(".OMP_buttonSelection").each(function () {
-      const $showtime = $(this);
-      const timeText = getText($showtime.find(".time").first());
-      const timeMatch = timeText.match(/^(\d{1,2}):(\d{2})/);
-
-      if (!timeMatch) return;
-
-      const hours = parseInt(timeMatch[1], 10);
-      const minutes = parseInt(timeMatch[2], 10);
-      const performanceDate = set(baseDate, { hours, minutes, seconds: 0 });
-
-      const url = $showtime.attr("href");
-      const screen = getText($showtime.find(".hall"));
-      const accessText = basicNormalize(
-        getText($showtime.find(".omp_accessText")),
-      );
-      const additionalLabels = basicNormalize(
-        getText($showtime.find(".price")),
-      );
-      const accessibilityNotes = `${additionalLabels} ${accessText}`;
-      const typeImg = $showtime.find(".OMP_perfTypeImage").attr("title");
-
-      performances.push(
-        createPerformance({
-          date: performanceDate,
-          url: () => url,
-          screen,
-          accessibility: createAccessibility(
-            movieTitle,
-            {
-              hardOfHearing: accessibilityNotes.includes("audio description"),
-              subtitled: accessibilityNotes.includes("subtitle"),
-              relaxed: accessibilityNotes.includes("sensory"),
-              babyFriendly: accessibilityNotes.includes("kids club"),
-            },
-            description,
-          ),
-          attributes: typeImg ? [typeImg] : undefined,
-        }),
-      );
-    });
-  });
-
-  return performances;
-}
-
-async function transform({ movieListPage, moviePages }, sourcedEvents) {
-  const movies = [];
-  const correctedListPage = fixHtmlTypos(movieListPage);
-  const $ = cheerio.load(correctedListPage);
-
-  // Process each movie on the listing page
-  $(".OMP_eventWrapper").each(function () {
-    const $eventWrapper = $(this);
-    const eventId = $eventWrapper.attr("id");
-
-    // Get movie title and link from the listing page
-    const movieUrl = $eventWrapper
-      .find('a[href*="/whatson/movie/showtimes/"]')
-      .first()
-      .attr("href");
-
-    // Build full URL
-    const fullMovieUrl = movieUrl.startsWith("http")
-      ? movieUrl
-      : `${attributes.domain}${movieUrl}`;
-
-    const movieDetails = parseMovieDetails(moviePages[fullMovieUrl]);
-    const performances = extractPerformances(
-      $eventWrapper,
-      $,
-      movieDetails.title,
-      movieDetails.description,
-    );
-    if (performances.length === 0) return;
-
-    movies.push({
-      showingId: generateShowingId(attributes, eventId),
-      title: movieDetails.title,
-      url: fullMovieUrl,
-      overview: createOverview({
-        duration: extractDurationInMinutes(movieDetails.runningTime),
-        categories: movieDetails.genres,
-        classification: getValidClassification(movieDetails.classification),
-        directors: movieDetails.director,
-        actors: movieDetails.starring,
-      }),
-      performances,
-      matchingHints: {
-        overview: movieDetails.description,
-      },
-    });
-  });
-
+  const movies = Array.from(movieMap.values());
   if (movies.length === 0) {
     throw new Error("No movies found - the page structure may have changed");
   }
 
-  const listOfSourcedEvents = Object.values(sourcedEvents).flatMap(
-    (events) => events,
-  );
+  const listOfSourcedEvents = Object.values(sourcedEvents).flatMap((e) => e);
   return movies.concat(listOfSourcedEvents);
 }
 
