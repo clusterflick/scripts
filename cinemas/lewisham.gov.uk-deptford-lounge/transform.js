@@ -98,6 +98,75 @@ function transformFormat1(emailText) {
   return movies;
 }
 
+// Format 3: New regular schedule format using ===... (titles) and ---... (section boundaries)
+// "Title\n====\n\nDirector – Year – Runtime – Cert. N\n----\n\nDate – Time\n----\n\nDescription"
+function transformFormat3(emailText) {
+  const movies = [];
+  const currentYear = new Date().getFullYear();
+
+  const metaPattern =
+    /^(.+?)\s+[–-]\s+(\d{4})\s+[–-]\s+(\dH\d+M)\s+[–-]\s+Cert\.\s*(\S+)/;
+
+  const parts = emailText.split(/\n={10,}\n/);
+
+  for (let i = 1; i < parts.length; i++) {
+    const prevLines = parts[i - 1].split("\n").filter((l) => l.trim());
+    const title = prevLines[prevLines.length - 1]?.trim();
+    if (!title) continue;
+
+    const dashParts = parts[i].split(/\n-{10,}\n/);
+    const metaLine = dashParts[0]?.trim();
+    if (!metaLine) continue;
+
+    const metaMatch = metaLine.match(metaPattern);
+    if (!metaMatch) continue;
+
+    const [, director, year, runtime, cert] = metaMatch;
+    const dateLine = dashParts[1]?.trim();
+    if (!dateLine) continue;
+
+    const date = parseDateTime(dateLine, currentYear);
+    if (!date || isNaN(date.getTime())) continue;
+
+    const description = dashParts.slice(2).join("\n").trim();
+
+    const slug = slugify(basicNormalize(title));
+    const movieUrl = `${attributes.url}#${slug}`;
+    const showingId = generateShowingId(
+      attributes,
+      `${slug}-${date.getTime()}`,
+    );
+
+    movies.push({
+      showingId,
+      title,
+      url: movieUrl,
+      overview: createOverview({
+        year,
+        directors: [director.trim()],
+        runtime: parseRuntime(runtime),
+        classification: getValidClassification(cert),
+      }),
+      performances: [
+        createPerformance({
+          date,
+          url: movieUrl,
+          accessibility: createAccessibility(
+            title,
+            { subtitled: true },
+            description,
+          ),
+        }),
+      ],
+      matchingHints: {
+        overview: description.trim().split("\n\n")[0],
+      },
+    });
+  }
+
+  return movies;
+}
+
 // Format 2: Festival format delimited by ===... (titles) and ---... (content boundaries)
 // "Title\n====\n\n\nDate – Venue – StartTime – EndTime\n----\n\nDescription\n\nTicket URL\n----"
 // Events with no parseable date/time (e.g. ongoing displays) are skipped.
@@ -157,6 +226,7 @@ async function transform({ emailText }, sourcedEvents) {
   const movies = [
     ...transformFormat1(emailText),
     ...transformFormat2(emailText),
+    ...transformFormat3(emailText),
   ];
 
   const listOfSourcedEvents = Object.values(sourcedEvents).flatMap(
