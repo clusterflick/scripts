@@ -1,11 +1,11 @@
 const cheerio = require("cheerio");
-const { fetchText } = require("../../common/utils");
+const { fetchText, assertSelector } = require("../../common/utils");
 const { domain } = require("./attributes");
 
 async function retrieve() {
   const movieListPageUrl = `${domain}/whats-on/?type=72&period=any#/`;
   const movieListPage = await fetchText(movieListPageUrl);
-
+  assertSelector(movieListPage, "article.card--film");
   const $ = cheerio.load(movieListPage);
 
   const moviePageUrls = new Set();

@@ -1,9 +1,10 @@
-const { fetchText } = require("../../common/utils");
+const { fetchText, assertSelector } = require("../../common/utils");
 const { domain, url } = require("./attributes");
 const cheerio = require("cheerio");
 
 async function retrieve() {
   const movieListPage = await fetchText(url);
+  assertSelector(movieListPage, "[data-search-text]");
   const $ = cheerio.load(movieListPage);
 
   const filmEvents = [];

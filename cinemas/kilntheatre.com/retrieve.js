@@ -1,9 +1,10 @@
 const cheerio = require("cheerio");
-const { fetchText } = require("../../common/utils");
+const { fetchText, assertSelector } = require("../../common/utils");
 const { url } = require("./attributes");
 
 async function retrieve() {
   const movieListPage = await fetchText(url);
+  assertSelector(movieListPage, ".c-film-listing");
   const $ = cheerio.load(movieListPage);
 
   const moviePageUrls = $(".c-film-listing a")

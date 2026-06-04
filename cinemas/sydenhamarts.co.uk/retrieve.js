@@ -1,10 +1,10 @@
 const cheerio = require("cheerio");
-const { fetchText } = require("../../common/utils");
+const { fetchText, assertSelector } = require("../../common/utils");
 const { url, domain } = require("./attributes");
 
 async function retrieve() {
   const movieListPage = await fetchText(url);
-
+  assertSelector(movieListPage, ".event-card");
   const $ = cheerio.load(movieListPage);
 
   // Extract film event URLs from the listing page

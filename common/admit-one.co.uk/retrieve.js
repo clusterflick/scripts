@@ -1,8 +1,9 @@
 const cheerio = require("cheerio");
-const { fetchWin1252Text } = require("../utils");
+const { fetchWin1252Text, assertSelector } = require("../utils");
 
 async function retrieve({ domain }) {
   const movieListPage = await fetchWin1252Text(domain);
+  assertSelector(movieListPage, ".whatson_panel");
   const $ = cheerio.load(movieListPage);
   const moviePageUrls = new Set();
   $(".whatson_panel").each(function () {

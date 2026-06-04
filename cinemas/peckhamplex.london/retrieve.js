@@ -1,5 +1,5 @@
 const cheerio = require("cheerio");
-const { fetchText } = require("../../common/utils");
+const { fetchText, assertSelector } = require("../../common/utils");
 const { domain } = require("./attributes");
 
 /**
@@ -19,6 +19,7 @@ async function retrieve() {
   const comingSoonUrl = `${domain}/films/coming-soon`;
 
   const outNowHtml = await fetchText(outNowUrl);
+  assertSelector(outNowHtml, ".title-wrapper");
   const comingSoonHtml = await fetchText(comingSoonUrl);
 
   const outNowUrls = extractMovieUrls(outNowHtml);

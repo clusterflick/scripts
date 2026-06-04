@@ -1,5 +1,6 @@
 const crypto = require("node:crypto");
 const fs = require("node:fs").promises;
+const cheerio = require("cheerio");
 const iconv = require("iconv-lite");
 const { decode } = require("html-entities");
 const { isAfter, startOfDay } = require("date-fns");
@@ -215,6 +216,16 @@ const fetchJson = async (url, options) => {
 };
 
 const getText = ($el) => $el.text().trim();
+
+const assertSelector = (html, selector, message) => {
+  const $ = cheerio.load(html);
+  if ($(selector).length === 0) {
+    throw new Error(
+      message ||
+        `Expected "${selector}" not found — the page structure may have changed`,
+    );
+  }
+};
 
 const screenNumberMapping = {
   one: 1,
@@ -587,6 +598,7 @@ module.exports = {
   fetchWin1252Text,
   fetchJson,
   getText,
+  assertSelector,
   createPerformance,
   createOverview,
   createAccessibility,

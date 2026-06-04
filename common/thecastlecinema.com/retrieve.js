@@ -1,10 +1,10 @@
 const cheerio = require("cheerio");
-const { fetchText } = require("../../common/utils");
+const { fetchText, assertSelector } = require("../../common/utils");
 
 async function retrieve({ domain }) {
   const movieListPageUrl = `${domain}/calendar/`;
   const movieListPage = await fetchText(movieListPageUrl);
-
+  assertSelector(movieListPage, ".programme-tile");
   const $ = cheerio.load(movieListPage);
 
   const moviePageUrls = new Set();

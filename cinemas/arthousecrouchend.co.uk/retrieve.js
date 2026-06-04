@@ -1,5 +1,5 @@
 const cheerio = require("cheerio");
-const { fetchText } = require("../../common/utils");
+const { fetchText, assertSelector } = require("../../common/utils");
 const { domain } = require("./attributes");
 
 async function retrieve() {
@@ -9,6 +9,7 @@ async function retrieve() {
     fetchText(movieListPageUrl),
     fetchText(streamedTheatreListPageUrl),
   ]);
+  assertSelector(movieListPages[0], ".performance");
 
   const moviePageUrls = new Set();
   movieListPages.forEach((movieListPage) => {
