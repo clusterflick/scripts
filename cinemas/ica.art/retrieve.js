@@ -9,7 +9,7 @@ async function retrieve() {
   const movieListResponse = await fetch(url);
   if (!movieListResponse.ok && movieListResponse.status !== 404) {
     throw new Error(
-      `Failed to fetch ${url}: ${movieListResponse.status} ${movieListResponse.statusText}`,
+      `Failed to fetch ${url} - ${movieListResponse.status} ${movieListResponse.statusText}`,
     );
   }
   const movieListPage = await movieListResponse.text();

@@ -188,7 +188,7 @@ const fetchText = async (url, options) => {
   const response = await fetchWithRetry(url, options);
   if (!response.ok) {
     throw new Error(
-      `Failed to fetch ${url}: ${response.status} ${response.statusText}`,
+      `Failed to fetch ${url} - ${response.status} ${response.statusText}`,
     );
   }
   return response.text();
@@ -198,7 +198,7 @@ const fetchWin1252Text = async (url) => {
   const response = await fetchWithRetry(url);
   if (!response.ok) {
     throw new Error(
-      `Failed to fetch ${url}: ${response.status} ${response.statusText}`,
+      `Failed to fetch ${url} - ${response.status} ${response.statusText}`,
     );
   }
   const buffer = Buffer.from(await response.arrayBuffer());
@@ -209,7 +209,7 @@ const fetchJson = async (url, options) => {
   const response = await fetchWithRetry(url, options);
   if (!response.ok) {
     throw new Error(
-      `Failed to fetch ${url}: ${response.status} ${response.statusText}`,
+      `Failed to fetch ${url} - ${response.status} ${response.statusText}`,
     );
   }
   return response.json();
