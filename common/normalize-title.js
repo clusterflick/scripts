@@ -744,6 +744,8 @@ function normalizeTitle(title, options) {
       "Beyond Illusion: The Making of a Magician - ",
     ],
     [/The Band - The Show/i, "The Band The Show"],
+    ["Presentation & Screening - ", "Presentation & Screening: "],
+    [/.*\(A (.*) EXHIBITION\)/i, "$1"],
     // Variant families collapsed from known-removable-phrases.js
     // Each pattern covers multiple near-identical string entries that shared a common structure
     [/dog[- ]?friendly(?:\s+screening)?[:\s]*/i, ""],
