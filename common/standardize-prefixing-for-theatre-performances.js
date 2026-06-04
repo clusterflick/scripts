@@ -32,6 +32,7 @@ const nationalTheatreIndicator = [
   /National Theatre Presents/i,
   /National Theatre Live/i,
   /National Theatre[:|\s|$]/i,
+  /: National Theatre$/i,
   /^NT: /i,
 ];
 
@@ -41,8 +42,7 @@ function standardizePrefixingForNationalTheatrePerformances(title) {
   let updatedTitle = nationalTheatreIndicator
     .reduce((value, prefix) => value.replace(prefix, " "), title)
     .replace(/Preview Screening/i, "")
-    .replace(/Preview/i, "")
-    .replace(/: National Theatre$/i, "");
+    .replace(/Preview/i, "");
 
   return `National Theatre Live: ${updatedTitle}`
     .replace(/\s+:\s+/, " ")
@@ -76,9 +76,10 @@ function standardizePrefixingForMetropolitanOperaPerformances(title, options) {
   // Update if "met opera" is a suffix
   if (
     title.toLowerCase().includes(": met opera ") ||
-    title.toLowerCase().includes(": the met opera ")
+    title.toLowerCase().includes(": the met opera ") ||
+    title.toLowerCase().includes(": metropolitan opera")
   ) {
-    title = `The Metropolitan Opera: ${title.replace(/: (The )?Met Opera /i, " ")}`;
+    title = `The Metropolitan Opera: ${title.replace(/: (The )?Met(ropolitan)? Opera\s*/i, " ")}`;
   }
 
   let updatedPrefixTitle = metOperaPrefixes.reduce(
@@ -147,8 +148,10 @@ const rboPrefixes = [
   /Royal Opera House[:|\s]/i,
   /^The Royal Ballet[:|\s]/i,
   /^The Royal Opera[:|\s]/i,
-  /: The Royal Ballet[:|\s]/i,
-  /: The Royal Opera[:|\s]/i,
+  /:( The)? Royal Ballet[:|\s]/i,
+  /:( The)? Royal Opera[:|\s]/i,
+  /:( The)? Royal Ballet$/i,
+  /:( The)? Royal Opera$/i,
   /RB&O Live:/i,
   /RB&O:/i,
   /Live From Royal Ballet/i,
@@ -264,7 +267,8 @@ function standardizePrefixingForTheatrePerformances(
     (lowercaseTitle.startsWith("rbo ") &&
       lowercaseTitle.includes("the met opera -")) ||
     lowercaseTitle.includes(" - met opera") ||
-    lowercaseTitle.includes(" - the met opera")
+    lowercaseTitle.includes(" - the met opera") ||
+    lowercaseTitle.includes(": metropolitan opera")
   ) {
     return standardizePrefixingForMetropolitanOperaPerformances(title, options);
   }
@@ -276,7 +280,9 @@ function standardizePrefixingForTheatrePerformances(
     lowercaseTitle.startsWith("rbo:") ||
     lowercaseTitle.startsWith("royal opera") ||
     lowercaseTitle.startsWith("royal ballet") ||
+    lowercaseTitle.includes(": royal ballet") ||
     lowercaseTitle.startsWith("the royal opera") ||
+    lowercaseTitle.includes(": royal opera") ||
     lowercaseTitle.includes("- the royal opera") ||
     lowercaseTitle.startsWith("the royal ballet") ||
     lowercaseTitle.includes("- the royal ballet") ||

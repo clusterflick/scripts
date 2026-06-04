@@ -25,6 +25,7 @@ const sportShowings = [
   /NON-LEAGUE FINALS?/i,
   /WORLD CUP 202\d/i,
   /World Cup Live/i,
+  /World Cup: /i,
   /TROPHY FINAL/i,
   /Wimbledon Live/i,
   /PLAYOFF FINAL/i,
