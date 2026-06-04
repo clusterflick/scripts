@@ -734,9 +734,12 @@ function normalizeTitle(title, options) {
     ["Bar Trash: 4TH BIRTHDAY - ", "Bar Trash: 4TH BIRTHDAY: "],
     ["Elon Musk Unveiled -", "Elon Musk Unveiled: "],
     ["Goethe-Kino - ", "Goethe-Kino: "],
+    ["Henry Henry Henry + ", "Henry Henry Henry & "],
+    ["Fundraiser + ", "Fundraiser & "],
     ["The Life + Legacy", "The Life and Legacy"],
     [" - Oggi", ": Oggi"],
     [" x metropolis", " metropolis"],
+    ["Nick Drake - ", "Nick Drake: "],
     ["Nick Drake: A Skin Too Few", "A Skin Too Few: The Days of Nick Drake"],
     ["(Screening) / ", "(Screening) & "],
     [
