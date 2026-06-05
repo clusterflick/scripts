@@ -748,6 +748,7 @@ function normalizeTitle(title, options) {
     ],
     [/The Band - The Show/i, "The Band The Show"],
     ["Presentation & Screening - ", "Presentation & Screening: "],
+    ["Tour Party", "Tour"],
     [/.*\(A (.*) EXHIBITION\)/i, "$1"],
     // Variant families collapsed from known-removable-phrases.js
     // Each pattern covers multiple near-identical string entries that shared a common structure
