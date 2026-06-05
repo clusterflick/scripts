@@ -6,6 +6,7 @@ const {
   removeMatchingHints,
   isPrivateHire,
 } = require("../../common/utils");
+const { isSportShowing } = require("../../common/is-sport-showing");
 const { getCinema } = require("../../cinemas");
 const findMatchesOnTheMovieDb = require("./find-matches-on-the-movie-db");
 const getSourcedEventsFor = require("./get-sourced-events-for");
@@ -92,12 +93,6 @@ async function transform(
       "cineworld.co.uk-wembley",
       "cineworld.co.uk-west-india-quay",
       "cineworld.co.uk-wood-green",
-      // Sports screenings can sneak in and then will be readded here. Given how
-      // few actual screenings come from boxpark, skip this recovery flow
-      "boxpark.co.uk-wembley",
-      "fulhampier.com",
-      // Temporarily remove jw3 which. has updates its system
-      "jw3.org.uk",
     ];
     const previousReleaseData = optedOut.includes(location)
       ? []
@@ -107,6 +102,9 @@ async function transform(
     for (const movie of previousReleaseData) {
       // Don't bring unbookable events back in
       if (isPrivateHire(movie.title)) continue;
+
+      // Don't bring sports showings back in
+      if (isSportShowing(movie)) continue;
 
       // The movie data from the previous release contains future performances.
       // If there's no future performances, it's a past movie; continue
