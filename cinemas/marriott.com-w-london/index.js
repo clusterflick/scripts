@@ -1,6 +1,6 @@
 const attributes = require("./attributes");
 const retrieve = require("../../common/source-only/retrieve");
-const transform = require("../../common/source-only/transform");
+const transform = require("./transform");
 
 module.exports = {
   attributes,
