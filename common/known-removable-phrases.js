@@ -1009,6 +1009,7 @@ const knownRemovablePhrases = [
   "SUBTITLED:",
   "Summer Nights in Brazil:",
   "Sürreal Sinema:",
+  "SMartphone Film Fest:",
   "Special Guest x",
   "Special preview with London premiere footage:",
   "Street Celebration: Pre",
