@@ -746,7 +746,13 @@ function normalizeTitle(title, options) {
       "BEYOND ILLUSION - MAGIC DOCUMENTARY",
       "Beyond Illusion: The Making of a Magician - ",
     ],
+    [/ELEPHANT SOCIAL - /i, "ELEPHANT SOCIAL: "],
     [/The Band - The Show/i, "The Band The Show"],
+    ["DAVID HOCKNEY - A BIGGER SPLASH", "A BIGGER SPLASH"],
+    [
+      "The Day Innocence Died: Bloody Sunday + ",
+      "The Day Innocence Died: Bloody Sunday and the Fight for Justice + ",
+    ],
     ["Presentation & Screening - ", "Presentation & Screening: "],
     ["Tour Party", "Tour"],
     [/.*\(A (.*) EXHIBITION\)/i, "$1"],
