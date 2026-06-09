@@ -13,7 +13,7 @@ async function getReleaseData(location, release) {
   if (!data) return;
 
   return await withRetry(() => fetchJson(data.browser_download_url), {
-    retries: 2,
+    retries: 5,
     delayMs: 30_000,
     label: `Download ${location}`,
   });
