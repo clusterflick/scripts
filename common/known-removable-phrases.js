@@ -905,6 +905,7 @@ const knownRemovablePhrases = [
   "Play for Today:",
   "Queer 60s:",
   "Queer Awards:",
+  "QUEER BRITAIN:",
   "Queer Cognition:",
   "Queer Horror Nights:",
   "Rebel Reel Christmas Party:",

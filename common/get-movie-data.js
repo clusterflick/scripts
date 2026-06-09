@@ -49,6 +49,13 @@ const ignoredIds = [
   491034, // This is Home -- https://www.themoviedb.org/movie/491034-this-is-home
   1047214, // Global -- https://www.themoviedb.org/movie/1047214-global
   848261, // Drive, Come On -- https://www.themoviedb.org/movie/848261
+  1040037, // Whitney Houston: I Wanna Dance With Somebody -- https://www.themoviedb.org/movie/-whitney-houston-i-wanna-dance-with-somebody
+  1139605, // Back to the Future -- https://www.themoviedb.org/movie/1139605-back-to-the-future
+  492541, // Legally Blonde -- https://www.themoviedb.org/movie/492541-legally-blonde
+  1354515, // ratatouille -- https://www.themoviedb.org/movie/1354515-ratatouille
+  837734, // Ratatouille (C) -- https://www.themoviedb.org/movie/837734-ratatouille-c
+  1399098, // Encanto -- https://www.themoviedb.org/movie/1399098-encanto
+  41233, // Step Up 3D -- https://www.themoviedb.org/movie/41233-step-up-3d
 ];
 
 /**
@@ -57,14 +64,52 @@ const ignoredIds = [
  * word titles which will therefore not match.
  */
 const forcedMatches = {
+  aladdin: 812, // https://www.themoviedb.org/movie/812-aladdin
+  babe: 9598, // https://www.themoviedb.org/movie/9598-babe
+  barbie: 346698, // https://www.themoviedb.org/movie/346698-barbie
+  big: 2280, // https://www.themoviedb.org/movie/2280-big
+  coda: 776503, // https://www.themoviedb.org/movie/776503-coda
+  casablanca: 289, // https://www.themoviedb.org/movie/289-casablanca
+  "catch me if you can": 640, // https://www.themoviedb.org/movie/640-catch-me-if-you-can
+  "cheaper by the dozen": 11007, // https://www.themoviedb.org/movie/11007-cheaper-by-the-dozen
+  clueless: 9603, // https://www.themoviedb.org/movie/9603-clueless
+  coco: 354912, // https://www.themoviedb.org/movie/354912-coco
+  "dirty dancing": 88, // https://www.themoviedb.org/movie/88-dirty-dancing
+  dogman: 944401, // https://www.themoviedb.org/movie/944401-dogman
+  "dune part one": 438631, // https://www.themoviedb.org/movie/438631-dune
   elf: 10719, // https://www.themoviedb.org/movie/10719-elf
+  elvis: 614934, // https://www.themoviedb.org/movie/614934-elvis
+  flow: 823219, // https://www.themoviedb.org/movie/823219-straume
+  goat: 1297842, // https://www.themoviedb.org/movie/1297842-goat
+  grease: 621, // https://www.themoviedb.org/movie/621-grease
+  honey: 10028, // https://www.themoviedb.org/movie/10028-honey
+  "high school musical": 10947, // https://www.themoviedb.org/movie/10947-high-school-musical
   holiday: 1581, // https://www.themoviedb.org/movie/1581-the-holiday
-  notebook: 11036, // https://www.themoviedb.org/movie/11036-the-notebook
-  sham: 1423983, // https://www.themoviedb.org/movie/1423983
-  mummy: 564, // https://www.themoviedb.org/movie/564-the-mummy
-  "oversabi aunty": 1594952, // https://www.themoviedb.org/movie/1594952-oversabi-aunty
-  "romeo+juliet": 454, // https://www.themoviedb.org/movie/454-romeo-juliet
+  "independence day": 602, // https://www.themoviedb.org/movie/602-independence-day
+  jaws: 578, // https://www.themoviedb.org/movie/578-jaws
+  "la la land": 313369, // https://www.themoviedb.org/movie/313369-la-la-land
+  labyrinth: 13597, //https://www.themoviedb.org/movie/13597-labyrinth
   lorax: 73723, // https://www.themoviedb.org/movie/73723-the-lorax
+  madagascar: 953, // https://www.themoviedb.org/movie/953-madagascar
+  migration: 940551, // https://www.themoviedb.org/movie/940551-migration
+  mummy: 564, // https://www.themoviedb.org/movie/564-the-mummy
+  notebook: 11036, // https://www.themoviedb.org/movie/11036-the-notebook
+  "oversabi aunty": 1594952, // https://www.themoviedb.org/movie/1594952-oversabi-aunty
+  pocahontas: 10530, // https://www.themoviedb.org/movie/10530-pocahontas
+  "rental family": 1208348, // https://www.themoviedb.org/movie/1208348-rental-family
+  "roman holiday": 804, // https://www.themoviedb.org/movie/804-roman-holiday
+  "romeo+juliet": 454, // https://www.themoviedb.org/movie/454-romeo-juliet
+  "seven year itch": 10653, // https://www.themoviedb.org/movie/10653-the-seven-year-itch
+  "some like it hot": 239, // https://www.themoviedb.org/movie/239-some-like-it-hot
+  sham: 1423983, // https://www.themoviedb.org/movie/1423983
+  "singin in the rain": 872, // https://www.themoviedb.org/movie/872-singin-in-the-rain
+  tangled: 38757, // https://www.themoviedb.org/movie/38757-tangled
+  "theory of everything": 266856, // https://www.themoviedb.org/movie/266856-the-theory-of-everything
+  "top gun": 744, // https://www.themoviedb.org/movie/744-top-gun
+  twilight: 8966, // https://www.themoviedb.org/movie/8966-twilight
+  "walk the line": 69, // https://www.themoviedb.org/movie/
+  wicked: 402431, // https://www.themoviedb.org/movie/402431-wicked
+  "wizard of oz": 630, // https://www.themoviedb.org/movie/630-the-wizard-of-oz
 };
 
 function getForcedMatch(normalizedTitle) {

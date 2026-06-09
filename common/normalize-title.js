@@ -25,6 +25,7 @@ function normalizeTitle(title, options) {
   // Specific corrections
   const corrections = [
     ["&amp;", "&"],
+    ["HANNAH MONTANA: THE MOVIE", "HANNAH MONTANA MOVIE"],
     [/:? The Movie$/i, ""],
     [/F1\s?®? The Movie/i, "F1"],
     ["The Fishermen", "The Fisherman"], // NOTE: This can be removed in the future once this specific misname has been removed
@@ -297,6 +298,7 @@ function normalizeTitle(title, options) {
     ],
     ["Demon Slayer-Infinity Castle", "Demon Slayer Infinity Castle"],
     ["Demon Slayer: The Movie -", "Demon Slayer "],
+    ["OCEAN: DAVID ATTENBOROUGH", "OCEAN WITH DAVID ATTENBOROUGH"],
     ["OCEAN WITH DAVID ATTENBOROUGH", "David Attenborough: Ocean"],
     [/(^|\s)Sylvanian Families$/i, " Sylvanian Families The Movie"],
     ["Gravy Train Screening", "Gravy Train Short Film"],
@@ -353,6 +355,8 @@ function normalizeTitle(title, options) {
     [/^(.+) Block \d+(.+FF(\s+\d{4})?)?$/i, "$1 Block $2"],
     [/Kantara:? A Legend/i, "Kantara"],
     [" - Chapter ", ": Chapter "],
+    [" - Live on Stage", ": Live on Stage"],
+    [" - A Sneak Peek", ": A Sneak Peek"],
     [
       /Royal Ballet & Opera \d{4}: La Sonnambula/i,
       "The Metropolitan Opera: La Sonnambula",
@@ -365,6 +369,7 @@ function normalizeTitle(title, options) {
     ["Love + War", "Love+War"],
     ["Neighbour Totoro", "Neighbor Totoro"],
     ["The Extra Terrestrial", "The Extra-Terrestrial"],
+    [/^E\.T\.$/i, "E.T. the Extra-Terrestrial"],
     // Work around a weird issue with the moviedb API and a soft hyphen in the listing title
     [/Tales from the Mag(\u00AD)?ic Garden/i, "Tales from the Garden"],
     [" – Q&A with ", " + Q&A with "],
@@ -756,6 +761,8 @@ function normalizeTitle(title, options) {
     ["Presentation & Screening - ", "Presentation & Screening: "],
     ["Tour Party", "Tour"],
     [/.*\(A (.*) EXHIBITION\)/i, "$1"],
+    ["ZOOTROPOLIS", "Zootopia"],
+    ["DR DOLITTLE", "DOCTOR DOLITTLE"],
     // Variant families collapsed from known-removable-phrases.js
     // Each pattern covers multiple near-identical string entries that shared a common structure
     [/dog[- ]?friendly(?:\s+screening)?[:\s]*/i, ""],
