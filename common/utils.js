@@ -341,6 +341,7 @@ const relaxedMatchers = [
   /^Relaxed /i,
   /\(Relaxed\)/i,
   /Dementia[-\s]Friendly/i,
+  /SEND[-\s]Friendly/i,
 ];
 
 const babyFriendlyMatchers = [
@@ -359,6 +360,7 @@ const subtitledMatchers = [
   /\(Sub\)/i,
   /Subs\)/i,
   /with Subtitles/i,
+  /\(SS\)/i,
 ];
 
 const hardOfHearingMatchers = [
