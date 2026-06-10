@@ -28,6 +28,7 @@ const sportShowings = [
   /World Cup Live/i,
   /World Cup: /i,
   /World Cup\s?- /i,
+  /World Cup Match/i,
   /TROPHY FINAL/i,
   /Wimbledon Live/i,
   /Wimbledon Finals/i,

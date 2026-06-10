@@ -485,6 +485,7 @@ const knownRemovablePhrases = [
   "BACK BY POPULAR DEMAND",
   "BAFTA 2026 Best Picture Winner:",
   "Black to the Beginning-",
+  "The Black Music Coalition:",
   "Bar Screening x Muse:",
   "BAR TRASH Positive East Fundraiser:",
   "Bar Trash: A toast to David Lynch:",
