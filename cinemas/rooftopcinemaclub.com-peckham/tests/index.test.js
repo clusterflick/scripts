@@ -33,7 +33,7 @@ describe(attributes.name, () => {
         .map(removeMatchingHints)
         .map(addTestCategory);
 
-      expect(data).toHaveLength(54);
+      expect(data).toHaveLength(53);
 
       expect(schemaValidate(data)).toBe(true);
       expect(data).toMatchSnapshot();
