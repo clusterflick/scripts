@@ -172,6 +172,7 @@ function normalizeTitle(title, options) {
     ["Vidhaata", "Viddhaata"],
     ["Badhu Alright che", "Badhu Alright chhe"],
     ["Maa Inti Bangaaram", "Maa Inti Bangaram"],
+    ["Main Vaapas Aunga", "Main Vaapas Aaunga"],
     ["Frozen 2", "Frozen II"],
     ["Terminator 2 Live", " Terminator 2"],
     [/\s+terminator 2$/i, " Terminator 2 Judgment Day"],
