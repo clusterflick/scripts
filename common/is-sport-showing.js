@@ -19,6 +19,7 @@ const sportShowings = [
   /EUROPA LEAGUE QUALIFIER/i,
   /EUROPA LEAGUE FINAL/i,
   /Enterprise National League/i,
+  /FINALS WORLD CUP/i,
   /Fifa World Cup/i,
   /FIFA Club World/i,
   /FIFA CWC/i,
@@ -28,6 +29,7 @@ const sportShowings = [
   /World Cup: /i,
   /TROPHY FINAL/i,
   /Wimbledon Live/i,
+  /Wimbledon Finals/i,
   /PLAYOFF FINAL/i,
 ];
 

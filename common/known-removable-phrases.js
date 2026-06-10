@@ -378,6 +378,7 @@ const knownRemovablePhrases = [
   " x Gala Screening",
   " X Migrants' Rights Network",
   " x SCRT",
+  " x Sofar Sounds",
   "COCKTAIL PARTY",
   "(Black & White) Version",
   "Episode Showcase",

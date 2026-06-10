@@ -60,9 +60,8 @@ async function transform({ csvText }, sourcedEvents) {
 
   const movies = [...moviesByTitle.values()];
 
-  if (movies.length === 0) {
-    throw new Error("No movies found - the CSV may be empty or malformed");
-  }
+  // We can't have the usual check for no movies as this venue is seasonal
+  // and only has showings in the Summer
 
   const listOfSourcedEvents = Object.values(sourcedEvents).flatMap(
     (events) => events,
