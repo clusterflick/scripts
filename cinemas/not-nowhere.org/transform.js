@@ -1,5 +1,5 @@
 const cheerio = require("cheerio");
-const { parse, isBefore, startOfDay, addYears } = require("date-fns");
+const { parse, isBefore, startOfDay, addYears, subDays } = require("date-fns");
 const { enGB } = require("date-fns/locale/en-GB");
 const {
   createOverview,
@@ -22,7 +22,7 @@ const parseDateTime = (dateString, timeString) => {
   }
 
   const today = startOfDay(new Date());
-  if (isBefore(parsedDate, today)) return addYears(parsedDate, 1);
+  if (isBefore(parsedDate, subDays(today, 14))) return addYears(parsedDate, 1);
 
   return parsedDate;
 };

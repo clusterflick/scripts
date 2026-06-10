@@ -1,5 +1,5 @@
 const cheerio = require("cheerio");
-const { parse, isBefore, startOfDay, addYears } = require("date-fns");
+const { parse, isBefore, startOfDay, addYears, subDays } = require("date-fns");
 const {
   getText,
   createOverview,
@@ -11,19 +11,21 @@ const { isNotSportShowing } = require("../is-sport-showing");
 
 function parseScreeningDate(dateText, timeText) {
   const dateOnly = parse(dateText, "EEE, MMM d", new Date());
-  let date = parse(timeText, "h:mm a", dateOnly);
+  const parsedDate = parse(timeText, "h:mm a", dateOnly);
 
-  if (isNaN(date.getTime())) {
+  if (isNaN(parsedDate.getTime())) {
     throw new Error(
       `Unable to parse screening date: "${dateText}" / "${timeText}"`,
     );
   }
 
-  if (isBefore(date, startOfDay(new Date()))) {
-    date = addYears(date, 1);
-  }
+  // If the date is more than 14 days in the past, it's likely a year-boundary
+  // case (e.g. a December showing scraped in January) and we need to add a year.
+  // Events within 14 days may just be recently passed events still listed on the page.
+  const today = startOfDay(new Date());
+  if (isBefore(parsedDate, subDays(today, 14))) return addYears(parsedDate, 1);
 
-  return date;
+  return parsedDate;
 }
 
 async function transform(
