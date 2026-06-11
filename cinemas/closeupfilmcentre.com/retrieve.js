@@ -11,9 +11,8 @@ async function retrieve() {
       await page.waitForSelector(".inner_block_3");
     } catch {
       console.log(
-        " - ⚠️  Unexpected page detected (Cloudflare challenge?) - falling back to sourced events",
+        " - ⚠️  Unexpected page detected (Cloudflare challenge?)",
       );
-      return { movieListPage: "", moviePages: {} };
     }
 
     const movieListPage = await page.content();
