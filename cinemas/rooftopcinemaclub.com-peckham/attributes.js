@@ -9,7 +9,7 @@ module.exports = {
   },
   url: "https://rooftopcinemaclub.com/uk/london/peckham",
   address:
-    "Roof A, Bussey Building, 133 Rye Lane, Peckham, London, SE15 4ST, United Kingdom",
+    "Roof A, Bussey Building, 133 Rye Lane, Peckham, London, SE15 4ST, UK",
   geo: { lat: 51.469950928857074, lon: -0.06749762291952636 },
   structure: "group",
   groupName: "Rooftop Cinema Club",

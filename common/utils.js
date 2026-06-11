@@ -107,6 +107,8 @@ const getValidClassification = (value = "") => {
     .toLowerCase()
     .replace("+", "")
     .replace("*", "")
+    .replace("(", "")
+    .replace(")", "")
     .replace(" certificate", "")
     .replace("advised ", "")
     .replace("r18", "18")
@@ -614,4 +616,5 @@ module.exports = {
   getValidClassification,
   convertNamesTextToList,
   getDescriptionAccessibility,
+  getTitleAccessibility,
 };

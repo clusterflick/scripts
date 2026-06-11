@@ -85,12 +85,14 @@ const forcedMatches = {
   honey: 10028, // https://www.themoviedb.org/movie/10028-honey
   "high school musical": 10947, // https://www.themoviedb.org/movie/10947-high-school-musical
   holiday: 1581, // https://www.themoviedb.org/movie/1581-the-holiday
+  "i swear": 1317149, // https://www.themoviedb.org/movie/1317149-i-swear
   "independence day": 602, // https://www.themoviedb.org/movie/602-independence-day
   jaws: 578, // https://www.themoviedb.org/movie/578-jaws
   "la la land": 313369, // https://www.themoviedb.org/movie/313369-la-la-land
   labyrinth: 13597, //https://www.themoviedb.org/movie/13597-labyrinth
   lorax: 73723, // https://www.themoviedb.org/movie/73723-the-lorax
   madagascar: 953, // https://www.themoviedb.org/movie/953-madagascar
+  "mamma mia": 11631, // https://www.themoviedb.org/movie/11631-mamma-mia
   migration: 940551, // https://www.themoviedb.org/movie/940551-migration
   mummy: 564, // https://www.themoviedb.org/movie/564-the-mummy
   notebook: 11036, // https://www.themoviedb.org/movie/11036-the-notebook

@@ -8,8 +8,7 @@ module.exports = {
     instagram: "everymancinema",
   },
   url: "https://www.everymancinema.com/everyman-on-the-canal-at-kings-cross/",
-  address:
-    "Canalside Green Steps, Regent's Canal Towpath, London, N1C 4PQ, United Kingdom",
+  address: "Canalside Green Steps, Regent's Canal Towpath, London, N1C 4PQ, UK",
   geo: { lat: 51.534998259964524, lon: -0.1251344872238579 },
   structure: "group",
   groupName: "Everyman",
