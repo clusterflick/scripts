@@ -1,7 +1,7 @@
 module.exports = {
   id: "fellowshipinn.co.uk",
   name: "The Fellowship Cinema",
-  alternativeNames: ["The Fellowship Inn"],
+  alternativeNames: ["The Fellowship Inn", "The Fellowship Inn Cinema"],
   domain: "https://fellowshipinn.co.uk",
   socials: {
     letterboxd: null,
