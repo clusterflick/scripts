@@ -6,6 +6,7 @@ const {
   createAccessibility,
   generateShowingId,
 } = require("../../common/utils");
+const { isNotSportShowing } = require("../../common/is-sport-showing");
 
 async function transform(attributes, { result: movieData }, sourcedEvents) {
   const { domain, url } = attributes;
@@ -99,7 +100,7 @@ async function transform(attributes, { result: movieData }, sourcedEvents) {
     (events) => events,
   );
 
-  return movies.concat(listOfSourcedEvents);
+  return movies.concat(listOfSourcedEvents).filter(isNotSportShowing);
 }
 
 module.exports = transform;

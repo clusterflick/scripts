@@ -773,6 +773,8 @@ function normalizeTitle(title, options) {
       "The Day Innocence Died: Bloody Sunday and the Fight for Justice + ",
     ],
     ["Presentation & Screening - ", "Presentation & Screening: "],
+    ["Hopper - ", "Hopper: "],
+    ["Cezanne - ", "Cezanne: "],
     ["Tour Party", "Tour"],
     [/.*\(A (.*) EXHIBITION\)/i, "$1"],
     ["ZOOTROPOLIS", "Zootopia"],
