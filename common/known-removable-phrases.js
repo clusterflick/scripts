@@ -207,6 +207,7 @@ const knownRemovablePhrases = [
   "– Poetry Film Screening and Fundraiser",
   "— Restoration",
   "- the new film by Mai HUA & Jerry HYDE",
+  ", new film from Chrystal Rose",
   "Film By Mahmoud Hojeij",
   ": Rise For Mayreau Fundraiser",
   "| The Ritzy",
