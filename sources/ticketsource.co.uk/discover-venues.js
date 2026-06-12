@@ -31,8 +31,8 @@ async function discoverVenues() {
 
   for (const hit of allHits) {
     const name = hit.venue;
-    const lat = hit._geoloc.lat;
-    const lon = hit._geoloc.lng;
+    const lat = hit._geo.lat;
+    const lon = hit._geo.lng;
 
     // Create a unique key for the venue using name and approximate coordinates
     const venueKey = `${basicNormalize(name)}_${lat}_${lon}`;

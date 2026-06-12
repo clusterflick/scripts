@@ -9,11 +9,13 @@ const {
 const { getAllCinemaAttributes } = require("../../cinemas");
 
 function extractCoordinates($) {
-  const mapImg = $(".website-map img[data-src*='marker-point.png']");
+  const mapImg = $(".website-map img[data-src*='MapboxHandler.ashx']");
   const dataSrc = mapImg.attr("data-src");
 
-  // Extract coordinates from URL like: marker-point.png(-0.1011974,51.46507)
-  const match = dataSrc.match(/marker-point\.png\(([^,]+),([^)]+)\)/);
+  // Extract coordinates from map URL
+  const match = (dataSrc || "").match(
+    /MapboxHandler\.ashx\?lng=([^&]+)&lat=([^&]+)&/,
+  );
   if (!match) return null;
 
   return {
