@@ -1185,6 +1185,7 @@ const knownRemovablePhrases = [
   " uncut",
   "Theatrical Cut",
   "Introducing",
+  "intro:",
   "The Director's Cut",
   "The Directors Cut",
   "Director's Cut",

@@ -7,15 +7,9 @@ const {
   createPerformance,
   createOverview,
   createAccessibility,
+  parseTitleAndClassification,
 } = require("../../common/utils");
 const attributes = require("./attributes");
-
-function parseTitleAndClassification(cellText) {
-  const match = cellText.match(/^(.*?)\s*\(([A-Z0-9]+)\)\s*$/);
-  return match
-    ? { title: match[1], classification: match[2] }
-    : { title: cellText };
-}
 
 function normalizeTime(timeStr) {
   return timeStr.replace(".", ":").replace(/^(\d+)(am|pm)$/i, "$1:00$2");

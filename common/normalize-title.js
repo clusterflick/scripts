@@ -545,6 +545,7 @@ function normalizeTitle(title, options) {
       "100 Nights of Hero & A Friend of Dorothy",
     ],
     ["I Was a Teenage Serial Killer + ", "I Was a Teenage Serial Killer & "],
+    ["MUBI Screening + ", "MUBI Screening: "],
     ["Homage |", "Homage: "],
     [/^\s*Twin Cheeks\s*$/i, "Twin Cheeks: Who Killed The Homecoming King?"],
     ["FRANCESCA WOODMAN", "The Woodmans"],

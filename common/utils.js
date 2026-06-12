@@ -117,6 +117,18 @@ const getValidClassification = (value = "") => {
   return classifications.includes(sanitizedValue) ? sanitizedValue : undefined;
 };
 
+// Split a trailing classification off a title, e.g. "Harvest (18)" ->
+// { title: "Harvest", classification: "18" }. Only strips the parenthetical
+// when it's a valid certificate, so titles ending in other parens (years,
+// etc.) are left untouched.
+const parseTitleAndClassification = (titleText) => {
+  const match = titleText.match(/^(.*?)\s*\(([A-Z0-9]+)\)\s*$/);
+  const classification = match && getValidClassification(match[2]);
+  return classification
+    ? { title: match[1], classification }
+    : { title: titleText };
+};
+
 const parseMinsToMs = (value) => parseInt(value, 10) * 60 * 1000;
 
 const sanitizeRichText = (value = "") =>
@@ -614,6 +626,7 @@ module.exports = {
   isPrivateHire,
   runLlmFunction,
   getValidClassification,
+  parseTitleAndClassification,
   convertNamesTextToList,
   getDescriptionAccessibility,
   getTitleAccessibility,
