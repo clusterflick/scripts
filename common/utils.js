@@ -540,6 +540,7 @@ const isPrivateHire = (title = "") =>
   basicNormalize(title) === "private screening" ||
   basicNormalize(title) === "cleaning screen placeholder" ||
   basicNormalize(title).includes("events placeholder") ||
+  basicNormalize(title).includes("conferencing 6 hour") ||
   basicNormalize(title).includes("do not book");
 
 async function runLlmFunction(llmFunction, options = { run: 0 }) {

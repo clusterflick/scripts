@@ -796,8 +796,16 @@ function normalizeTitle(title, options) {
     [/liaf(?:\s+\d+)?:/i, ""],
     [/hkff(?:uk)?(?:\s+\d+)?:/i, ""],
     [/ AV SHOW$/i, ""],
+    [/ Movie Screening$/i, ""],
     ["Tercera Video Club #2 - ", "Tercera Video Club #2: "],
+    ["Paw Patrol Dino Movie", "Paw Patrol 3: The Dino Movie"],
     ["Medicinema - ", "Medicinema: "],
+    ["Subtitle Cinema - ", "Subtitle Cinema: "],
+    ["Disappearing Images (", "Disappearing Images -"],
+    [
+      "Protest & Recognition In Queer Islington: Film | ",
+      "Protest & Recognition In Queer Islington: Film: ",
+    ],
     [
       "Argentine season launch: Live music + ",
       "Argentine season launch: Live music & ",

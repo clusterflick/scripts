@@ -93,11 +93,6 @@ async function transform(
       "cineworld.co.uk-wembley",
       "cineworld.co.uk-west-india-quay",
       "cineworld.co.uk-wood-green",
-      // Temporarily opt out of data recovery for firmdalehotels
-      // which added finished performances to next year
-      "firmdalehotels.com-charlotte-street",
-      "firmdalehotels.com-covent-garden",
-      "firmdalehotels.com-soho",
     ];
     const previousReleaseData = optedOut.includes(location)
       ? []
