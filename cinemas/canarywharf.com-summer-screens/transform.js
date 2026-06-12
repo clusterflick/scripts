@@ -8,6 +8,8 @@ const {
   createOverview,
   createAccessibility,
   parseTitleAndClassification,
+  getId,
+  basicNormalize,
 } = require("../../common/utils");
 const attributes = require("./attributes");
 
@@ -38,8 +40,9 @@ async function transform({ movieListPage }, sourcedEvents) {
     const synopsis = getText($(this).next("tr").find("td").first());
     const date = parseEventDate(dayName, dayNum, month, timeStr);
 
+    const id = getId(`${basicNormalize(title)}-${dayNum}-${month}`);
     movies.push({
-      showingId: generateShowingId(attributes, `${dayNum}-${month}`),
+      showingId: generateShowingId(attributes, id),
       title,
       url: attributes.url,
       overview: createOverview({ classification }),
