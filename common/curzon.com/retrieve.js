@@ -12,7 +12,15 @@ async function retrieve(attributes) {
       await page.waitForLoadState("domcontentloaded");
 
       const [workflowDataData, inititialiseData] = await Promise.all([
-        page.evaluate((url) => fetch(url).then((r) => r.json()), omniaUrl),
+        page.evaluate(async (url) => {
+          try {
+            return await fetch(url).then((r) => r.json());
+          } catch {
+            // Retry once - the first response is occasionally a non-JSON
+            // block/error page
+            return await fetch(url).then((r) => r.json());
+          }
+        }, omniaUrl),
         page.evaluate(() => /* global window */ window.initialData),
       ]);
 

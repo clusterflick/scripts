@@ -1,3 +1,4 @@
+const fs = require("node:fs").promises;
 const path = require("node:path");
 const { chromium } = require("playwright-extra");
 const { dailyCache } = require("./cache");
@@ -23,18 +24,34 @@ async function getPageWithPlaywright(url, cacheKey, callback, options = {}) {
       }
       return result;
     } catch (error) {
+      const failuresDir = path.join(process.cwd(), "playwright-failures");
       try {
         await page.screenshot({
-          path: path.join(
-            process.cwd(),
-            "playwright-failures",
-            `error--${cacheKey}.png`,
-          ),
+          path: path.join(failuresDir, `error--${cacheKey}.png`),
         });
       } catch (screenshotError) {
         console.log(
           `Unable to take error screenshot: ${screenshotError.message}`,
         );
+      }
+      try {
+        const content = await page.content();
+        await fs.mkdir(failuresDir, { recursive: true });
+        await fs.writeFile(
+          path.join(failuresDir, `error--${cacheKey}.txt`),
+          content,
+        );
+        const limit = 500;
+        const snippet =
+          content.length > limit
+            ? `${content.slice(0, limit)}\n... [truncated, see error--${cacheKey}.txt for full content]`
+            : content;
+
+        console.log(
+          `Page content at failure (${page.url()}), snippet:\n\n-----\n${snippet}\n-----`,
+        );
+      } catch (contentError) {
+        console.log(`Unable to capture page content: ${contentError.message}`);
       }
       throw error;
     } finally {

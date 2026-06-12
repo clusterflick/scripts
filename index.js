@@ -97,4 +97,7 @@ const setupDirectory = async (type) => {
   }
 
   throw new Error(`Unknown action provided, ${action}`);
-})();
+})().catch((error) => {
+  console.error(`\n❌ ${error.stack || error.message || error}`);
+  process.exit(1);
+});
