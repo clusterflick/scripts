@@ -1071,6 +1071,7 @@ const knownRemovablePhrases = [
   "Valentine's Classic:",
   "Valentine's Classic :",
   "Valentines Cinema-",
+  "Vauxhall Summer Screens:",
   "VE Day Anniversary:",
   "viewing party",
   "VIP TV/FILM INDUSTRY SCREENING:",

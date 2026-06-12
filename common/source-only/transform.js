@@ -1,7 +1,7 @@
 const { isNotSportShowing } = require("../../common/is-sport-showing");
 const { basicNormalize } = require("../utils");
 
-const nonFilmEvents = [/Community Pilates/i];
+const nonFilmEvents = [/Community Pilates/i, /Bearpit Karaoke/i];
 
 const isNotNonFilmEvent = ({ title }) =>
   !nonFilmEvents.some((nonFilm) => basicNormalize(title).match(nonFilm));

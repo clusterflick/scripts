@@ -14,6 +14,7 @@ const VENUE_SLUGS = [
   "offbeatfolkfilm", // Offbeat Folk Film Club
   "lost", // Lost Cinema
   "bellbottomsproductions", // Bellbottoms Productions
+  "vauxhallone", // Vauxhall
 ];
 
 async function retrieveVenuePage(slug) {
