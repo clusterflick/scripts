@@ -796,6 +796,7 @@ function normalizeTitle(title, options) {
     [/hkff(?:uk)?(?:\s+\d+)?:/i, ""],
     [/ AV SHOW$/i, ""],
     ["Tercera Video Club #2 - ", "Tercera Video Club #2: "],
+    ["Medicinema - ", "Medicinema: "],
     [
       "Argentine season launch: Live music + ",
       "Argentine season launch: Live music & ",
