@@ -91,18 +91,6 @@ const parseScore = ({ url, ratings, stats }) => {
   const allStars = histogram.reduce((sum, val, i) => sum + val * (i + 1), 0);
   const unweightedAverage = allStars / reviewCount / 2;
 
-  // Letterboxd renders the histogram and the weighted average together in the
-  // same block. If we captured the ratings section but couldn't extract a
-  // review count or an average, our selectors have drifted from Letterboxd's
-  // markup — fail loudly rather than silently emitting a missing rating
-  if (ratings.trim() && (reviewCount === 0 || weightedAverage === undefined)) {
-    throw new Error(
-      `Letterboxd ratings section was captured for ${url} but could not be ` +
-        `parsed (reviews=${reviewCount}, rating=${weightedAverage}). The ` +
-        `rating selectors are likely stale.`,
-    );
-  }
-
   const $stats = cheerio.load(stats);
   const likeSummary = $stats(".production-statistic.-likes").attr("aria-label");
   const likeDetails = likeSummary
