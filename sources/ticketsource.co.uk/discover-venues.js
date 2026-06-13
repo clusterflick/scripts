@@ -21,7 +21,9 @@ async function discoverVenues() {
     // Remove duplicates; as we're running more than one search, it's possible
     // to get the same values back for both.
     .reduce((acc, hit) => {
-      const missingValue = !acc.find((item) => item.objectID === hit.objectID);
+      const missingValue = !acc.find(
+        (item) => item.performanceId === hit.performanceId,
+      );
       if (missingValue) acc.push(hit);
       return acc;
     }, []);
