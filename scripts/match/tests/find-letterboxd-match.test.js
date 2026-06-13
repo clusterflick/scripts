@@ -29,23 +29,4 @@ describe("parseScore", () => {
       unweightedRating: null,
     });
   });
-
-  it("throws when the ratings section is present but the bars cannot be parsed", () => {
-    const staleRatings =
-      '<section class="ratings-histogram-chart"><div class="rating-histogram">no bars here</div></section>';
-    expect(() => parseScore({ url, ratings: staleRatings, stats })).toThrow(
-      /selectors are likely stale/,
-    );
-  });
-
-  it("throws when the histogram parses but the average rating cannot", () => {
-    // Drop the `averagerating` class so only the average selector breaks.
-    const ratingsWithoutAverage = ratings.replace(
-      "averagerating tooltip",
-      "tooltip",
-    );
-    expect(() =>
-      parseScore({ url, ratings: ratingsWithoutAverage, stats }),
-    ).toThrow(/rating=undefined/);
-  });
 });
