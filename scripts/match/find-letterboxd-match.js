@@ -72,33 +72,18 @@ const getMovieRatings = async (match) => {
   );
 };
 
-const getScore = async (match) => {
-  const {
-    url,
-    ratings,
-    stats,
-    isNotAvailable = false,
-  } = await getMovieRatings(match);
-  if (isNotAvailable) return null;
-
+const parseScore = ({ url, ratings, stats }) => {
   const $rating = cheerio.load(ratings);
-  const ratingSummary = $rating(".average-rating a").data("original-title");
+  const ratingSummary = $rating("a.averagerating").data("original-title");
   const ratingDetails = ratingSummary
     ? ratingSummary.toLowerCase().match(/weighted average of ([^\s]+) based/i)
     : null;
-
-  const $stats = cheerio.load(stats);
-  const likeSummary = $stats(".production-statistic.-likes").attr("aria-label");
-  const likeDetails = likeSummary
-    ? likeSummary.toLowerCase().match(/liked by\s+([\d,]+)\s+member/i)
-    : null;
-
   const weightedAverage = ratingDetails
     ? parseFloat(ratingDetails[1])
     : undefined;
 
-  // Calculate unweighted average
-  const $histogramBars = $rating(".rating-histogram-bar a");
+  // Calculate unweighted average from the per-star histogram bars.
+  const $histogramBars = $rating("a.barcolumn");
   const histogram = Array.from(
     $histogramBars.map((i, el) => $rating(el).data("original-title")),
   ).map((value) => normaliseAndParseInt(value.split(" ")[0]));
@@ -106,14 +91,41 @@ const getScore = async (match) => {
   const allStars = histogram.reduce((sum, val, i) => sum + val * (i + 1), 0);
   const unweightedAverage = allStars / reviewCount / 2;
 
+  // Letterboxd renders the histogram and the weighted average together in the
+  // same block. If we captured the ratings section but couldn't extract a
+  // review count or an average, our selectors have drifted from Letterboxd's
+  // markup — fail loudly rather than silently emitting a missing rating
+  if (ratings.trim() && (reviewCount === 0 || weightedAverage === undefined)) {
+    throw new Error(
+      `Letterboxd ratings section was captured for ${url} but could not be ` +
+        `parsed (reviews=${reviewCount}, rating=${weightedAverage}). The ` +
+        `rating selectors are likely stale.`,
+    );
+  }
+
+  const $stats = cheerio.load(stats);
+  const likeSummary = $stats(".production-statistic.-likes").attr("aria-label");
+  const likeDetails = likeSummary
+    ? likeSummary.toLowerCase().match(/liked by\s+([\d,]+)\s+member/i)
+    : null;
+  const likes = likeDetails ? normaliseAndParseInt(likeDetails[1]) : undefined;
+  const unweightedRating = Number.isFinite(unweightedAverage)
+    ? Math.round(unweightedAverage * 100) / 100
+    : null;
+
   return {
-    id: match.id,
     url,
-    likes: likeDetails ? normaliseAndParseInt(likeDetails[1]) : undefined,
+    likes,
     reviews: reviewCount,
     rating: weightedAverage,
-    unweightedRating: Math.round(unweightedAverage * 100) / 100,
+    unweightedRating,
   };
+};
+
+const getScore = async (match) => {
+  const data = await getMovieRatings(match);
+  if (data.isNotAvailable) return null;
+  return { id: match.id, ...parseScore(data) };
 };
 
 async function findLetterboxdMatch(movie) {
@@ -132,3 +144,4 @@ async function findLetterboxdMatch(movie) {
 }
 
 module.exports = findLetterboxdMatch;
+module.exports.parseScore = parseScore;

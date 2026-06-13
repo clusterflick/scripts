@@ -5,6 +5,7 @@ const findRottenTomatoesMatch = require("./find-rotten-tomatoes-match");
 const findMetacriticMatch = require("./find-metacritic-match");
 const findLetterboxdMatch = require("./find-letterboxd-match");
 const findImdbMatch = require("./find-imdb-match");
+const findMovieDbMatch = require("./find-moviedb-match");
 
 async function match(source) {
   const dataPath = path.join(
@@ -63,6 +64,10 @@ async function match(source) {
       const movieInfo =
         cache[movie.id] || (await getMovieInfoAndCacheResults(movie));
       matchData = await findLetterboxdMatch(movieInfo);
+    } else if (source === "moviedb") {
+      const movieInfo =
+        cache[movie.id] || (await getMovieInfoAndCacheResults(movie));
+      matchData = await findMovieDbMatch(movieInfo);
     } else if (source === "imdb") {
       matchData = await findImdbMatch(movie);
     } else {
