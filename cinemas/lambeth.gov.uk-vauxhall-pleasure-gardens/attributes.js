@@ -11,5 +11,5 @@ module.exports = {
   address: "Tyers Street, Vauxhall, London, SE11 5HL, UK",
   geo: { lat: 51.487598908994805, lon: -0.12091864079930818 },
   structure: "solo",
-  type: "Cinema",
+  type: "Park",
 };
