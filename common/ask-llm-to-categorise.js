@@ -13,6 +13,17 @@ const categories = [
   "event",
 ];
 
+const responseSchema = {
+  type: "object",
+  properties: {
+    title: { type: "string" },
+    category: { type: "string", enum: categories },
+    reason: { type: "string" },
+    confidence: { type: "number" },
+  },
+  required: ["category", "confidence"],
+};
+
 const systemInstruction = `You categorise cinema listings. Respond with JSON only, no introduction or explanation.
 
 Required fields:
@@ -75,6 +86,7 @@ async function askLlmToCategorise(movie) {
     prompt,
     cacheKeyPrefix: "ask-llm-to-categorise",
     logMessage: `Asking LLM to categorise "${movie.title}"`,
+    responseSchema,
   });
 
   const hasCategory = !!response.category && response.confidence > 7;

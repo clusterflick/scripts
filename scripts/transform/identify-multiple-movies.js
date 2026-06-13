@@ -1,5 +1,26 @@
 const { callLlm } = require("../../common/llm-client");
 
+const responseSchema = {
+  type: "object",
+  properties: {
+    movies: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: {
+          title: { type: "string" },
+          year: { type: "string", nullable: true },
+          director: { type: "string", nullable: true },
+          confidence: { type: "number" },
+        },
+        required: ["title", "confidence"],
+      },
+    },
+    reason: { type: "string" },
+  },
+  required: ["movies", "reason"],
+};
+
 const systemInstruction = `You identify individual films in multi-film cinema events (double bills, marathons, trilogies, etc.). Respond with JSON only, no introduction or explanation.
 
 Required fields:
@@ -55,6 +76,7 @@ async function identifyMultipleMovies(movie) {
     prompt,
     cacheKeyPrefix: "identify-multiple-movies",
     logMessage: `Identifying films in "${movie.title}"`,
+    responseSchema,
   });
 
   // Ensure we have a valid response structure

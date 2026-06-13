@@ -1,5 +1,27 @@
 const { callLlm } = require("../../common/llm-client");
 
+const responseSchema = {
+  type: "object",
+  properties: {
+    movies: {
+      type: "array",
+      maxItems: 5,
+      items: {
+        type: "object",
+        properties: {
+          title: { type: "string" },
+          year: { type: "string", nullable: true },
+          director: { type: "string", nullable: true },
+          confidence: { type: "number" },
+        },
+        required: ["title", "confidence"],
+      },
+    },
+    reason: { type: "string" },
+  },
+  required: ["movies", "reason"],
+};
+
 const systemInstruction = `You identify individual short films in cinema short film programmes (collections, compilations, showcases, etc.). Respond with JSON only, no introduction or explanation.
 
 Required fields:
@@ -59,6 +81,7 @@ async function identifyShorts(movie) {
     prompt,
     cacheKeyPrefix: "identify-shorts",
     logMessage: `Identifying short films in "${movie.title}"`,
+    responseSchema,
   });
 
   // Ensure we have a valid response structure
