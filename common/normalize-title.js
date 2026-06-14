@@ -811,6 +811,7 @@ function normalizeTitle(title, options) {
       "Argentine season launch: Live music & ",
     ],
     ["BA Media Degree Show — Screening:", "BA Media Degree Show - "],
+    ["CANCELLED DUE TO ILLNESS - ", "CANCELLED DUE TO ILLNESS: "],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
