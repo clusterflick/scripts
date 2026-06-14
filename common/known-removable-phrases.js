@@ -1232,6 +1232,7 @@ const knownRemovablePhrases = [
   "London Premier Screening of:",
   "London Premiere Screening of:",
   "London Premiere",
+  "London Premier",
   "Mosh-Along",
   "restoration premiere",
   "premiere screening",
