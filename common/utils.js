@@ -591,6 +591,15 @@ async function runLlmFunction(llmFunction, options = { run: 0 }) {
       return null;
     }
 
+    // The model degenerated and produced unparseable/truncated JSON (e.g. a
+    // field looping a repeated character until it hit the output token limit).
+    // Retrying is pointless at temperature 0, and the raw response has already
+    // been logged in full by callLlm. Give up on this one entry rather than
+    // killing the whole run; callers fall back to a safe default.
+    if (e instanceof SyntaxError) {
+      return null;
+    }
+
     // If it fails for an unknown reason, we need to throw and stop the script
     console.log("Error asking LLM", e);
     throw new Error("Error asking LLM");
