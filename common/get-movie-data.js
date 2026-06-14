@@ -56,6 +56,7 @@ const ignoredIds = [
   837734, // Ratatouille (C) -- https://www.themoviedb.org/movie/837734-ratatouille-c
   1399098, // Encanto -- https://www.themoviedb.org/movie/1399098-encanto
   41233, // Step Up 3D -- https://www.themoviedb.org/movie/41233-step-up-3d
+  129284, // The Dude -- https://www.themoviedb.org/movie/129284-the-dude
 ];
 
 /**

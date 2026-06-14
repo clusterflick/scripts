@@ -515,7 +515,7 @@ function normalizeTitle(title, options) {
     [/secret (classic )?bollywood cinema/i, "mystery movie"],
     [/scre(e|a)(n|m) unseen/i, "mystery movie"],
     [
-      /(Orange Box )?Secret Film Screenings?(: Summer Series)?/i,
+      /(Orange Box )?Secret Film Screenings?(:? Summer Series)?/i,
       "mystery movie",
     ],
     [/^.* \+ mystery movie/i, "mystery movie"],
