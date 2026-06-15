@@ -299,8 +299,9 @@ If the venue needs Playwright, add the setup steps before the venue steps:
 ```yaml
 - name: Set Playwright path
   run:
-    echo "PLAYWRIGHT_BROWSERS_PATH=$HOME/.cache/playwright-browsers" >>
+    echo "PLAYWRIGHT_BROWSERS_PATH=/mnt/runner-work/playwright-browsers" >>
     $GITHUB_ENV
+
 # ... (after npm install)
 - run: npx playwright install --with-deps
 ```
