@@ -10,7 +10,8 @@ async function retrieve() {
     try {
       await page.waitForSelector(".inner_block_3");
     } catch {
-      console.log(" - ⚠️  Unexpected page detected (Cloudflare challenge?)");
+      console.log(" - ⚠️ Unexpected page detected (Cloudflare challenge?)");
+      throw new Error("Unexpected page detected");
     }
 
     const movieListPage = await page.content();
