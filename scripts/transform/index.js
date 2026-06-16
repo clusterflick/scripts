@@ -93,6 +93,8 @@ async function transform(
       "cineworld.co.uk-wembley",
       "cineworld.co.uk-west-india-quay",
       "cineworld.co.uk-wood-green",
+      // Temporarily remove richmix due to changing IDs after moving systems
+      "richmix.org.uk",
     ];
     const previousReleaseData = optedOut.includes(location)
       ? []

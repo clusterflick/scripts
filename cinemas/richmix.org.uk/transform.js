@@ -1,6 +1,7 @@
 const cheerio = require("cheerio");
 const {
   getText,
+  sanitizeRichText,
   createOverview,
   createPerformance,
   generateShowingId,
@@ -9,68 +10,99 @@ const {
 const { parseDate } = require("./utils");
 const attributes = require("./attributes");
 
-async function transform({ movieListPage, moviePages }, sourcedEvents) {
-  const movies = movieListPage.reduce((moviesWithPerformances, movie) => {
-    const performances = Object.values(movie.spektrix_data.instances).flatMap(
-      (value) => value,
-    );
+// Vue component attributes hold HTML-escaped JSON, e.g.
+// :event-data="{&quot;eventId&quot;:41475,...}".
+function parseComponentData(value) {
+  return JSON.parse(value.replace(/&quot;/g, '"'));
+}
 
-    if (performances.length === 0) return moviesWithPerformances;
-
-    const $ = cheerio.load(moviePages[movie.id]);
-
-    const $director = $(".crew .director");
-    $director.children().each(function () {
-      $(this).remove();
-    });
-
-    let directors = getText($director);
-    if (!directors) {
-      const directsMatch = getText($(".article-body")).match(
-        /\s+(\w+\s+\w+)\s+\([^)]+\)\s+directs\s+/i,
-      );
-      if (directsMatch) directors = directsMatch[1];
+// The ld+json Event blocks contain raw control characters (unescaped newlines
+// in descriptions) and trailing commas left by empty fields, so they can't be
+// parsed as-is. Sanitize before parsing and keep only the Event blocks (one
+// per showtime).
+function getScreeningEvents($) {
+  const events = [];
+  $('script[type="application/ld+json"]').each(function () {
+    const sanitized = $(this)
+      .html()
+      .replace(/[\n\r\t]/g, " ")
+      .replace(/,\s*([}\]])/g, "$1");
+    let parsed;
+    try {
+      parsed = JSON.parse(sanitized);
+    } catch {
+      return;
     }
+    if (parsed["@type"] === "Event") events.push(parsed);
+  });
+  return events;
+}
 
-    const $cast = $(".crew .cast");
-    $cast.children().each(function () {
-      $(this).remove();
-    });
-    const overview = getText(cheerio.load(movie.post_content));
+function getDetails($) {
+  const details = {};
+  $(".c-meta__item").each(function () {
+    const key = getText($(this).find(".c-meta__key")).toLowerCase();
+    const value = getText($(this).find(".c-meta__value"));
+    if (key) details[key] = value;
+  });
+  return details;
+}
 
-    return moviesWithPerformances.concat({
-      showingId: generateShowingId(attributes, movie.id),
-      title: movie.post_title,
-      url: `${attributes.domain}/cinema/${movie.slug}/`,
-      overview: createOverview({
-        duration: movie.spektrix_data.duration,
-        classification: movie.spektrix_data.rating,
-        directors,
-        actors: getText($cast),
-      }),
-      performances: performances.map(
-        ({ start, status: { available, capacity, name }, iframeId }) => {
-          const notesList = [`${available} of ${capacity} seats remaining`];
+async function transform({ moviePages }, sourcedEvents) {
+  const movies = Object.entries(moviePages).reduce(
+    (moviesWithPerformances, [url, html]) => {
+      const $ = cheerio.load(html);
 
-          const status = {
-            soldOut: $(
-              `#dates-and-times a[href="/book-online/${iframeId}"]`,
-            ).hasClass("sold-out"),
-          };
+      // One ld+json Event per showtime (start dates), and one
+      // event-manager[type=instance] per showtime (booking links), both in the
+      // same chronological order.
+      const events = getScreeningEvents($);
+      if (events.length === 0) return moviesWithPerformances;
 
-          return createPerformance({
-            date: parseDate(start),
-            notesList,
-            url: `${attributes.domain}/book-online/${iframeId}`,
-            screen: name,
-            status,
-            accessibility: createAccessibility(movie.post_title, {}, overview),
-          });
-        },
-      ),
-      matchingHints: { overview },
-    });
-  }, []);
+      const bookingUrls = $("event-manager[type=instance]")
+        .map(function () {
+          return parseComponentData($(this).attr(":button-data"))
+            .buttonDefaultUrl;
+        })
+        .get();
+
+      if (events.length !== bookingUrls.length) {
+        throw new Error(
+          `Found ${events.length} showtimes but ${bookingUrls.length} booking links for ${url} - the page structure may have changed`,
+        );
+      }
+
+      const eventData = parseComponentData(
+        $("event-manager").first().attr(":event-data"),
+      );
+      const title = sanitizeRichText(eventData.eventName);
+      // Descriptions are double-encoded (e.g. "&amp;amp;"), so decode twice.
+      const overview = sanitizeRichText(
+        sanitizeRichText(events[0].description || ""),
+      );
+      const details = getDetails($);
+
+      return moviesWithPerformances.concat({
+        showingId: generateShowingId(attributes, eventData.eventId),
+        title,
+        url,
+        overview: createOverview({
+          duration: details.duration,
+          classification: details.certificate,
+          directors: details.director || "",
+        }),
+        performances: events.map((event, index) =>
+          createPerformance({
+            date: parseDate(event.startDate),
+            url: bookingUrls[index],
+            accessibility: createAccessibility(title, {}, overview),
+          }),
+        ),
+        matchingHints: { overview },
+      });
+    },
+    [],
+  );
 
   if (movies.length === 0) {
     throw new Error("No movies found - the page structure may have changed");

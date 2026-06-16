@@ -1,14 +1,26 @@
-const { fetchJson, fetchText } = require("../../common/utils");
+const cheerio = require("cheerio");
+const { fetchText, assertSelector } = require("../../common/utils");
 const { domain } = require("./attributes");
 
 async function retrieve() {
-  const url = `${domain}/whats-on/cinema/?ajax=1&json=1`;
-  const movieListPage = await fetchJson(url);
+  const movieListPageUrl = `${domain}/cinema/`;
+  const movieListPage = (await fetchText(movieListPageUrl)).trim();
+  assertSelector(
+    movieListPage,
+    "#page-content .c-card .c-card__actions .c-card__action--primary",
+  );
+  const $ = cheerio.load(movieListPage);
+
+  const moviePageUrls = new Set();
+  $("#page-content .c-card .c-card__actions .c-card__action--primary").each(
+    function () {
+      moviePageUrls.add($(this).attr("href"));
+    },
+  );
 
   const moviePages = {};
-  for (const movie of movieListPage) {
-    const moviePageUrl = `https://richmix.org.uk/cinema/${movie.slug}/`;
-    moviePages[movie.id] = await fetchText(moviePageUrl);
+  for (const moviePageUrl of moviePageUrls) {
+    moviePages[moviePageUrl] = (await fetchText(moviePageUrl)).trim();
   }
 
   return {
