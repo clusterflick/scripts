@@ -815,6 +815,10 @@ function normalizeTitle(title, options) {
       "Argentine season launch: Live music + ",
       "Argentine season launch: Live music & ",
     ],
+    [
+      "Pineapple cocktails, live music + ",
+      "Pineapple cocktails, live music & ",
+    ],
     ["BA Media Degree Show — Screening:", "BA Media Degree Show - "],
     ["CANCELLED DUE TO ILLNESS - ", "CANCELLED DUE TO ILLNESS: "],
     ["libya in motion (2015) film shorts", "libya in motion (2015)"],
