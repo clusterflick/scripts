@@ -80,7 +80,7 @@ async function transform({ moviePages }, sourcedEvents) {
     movies.push({
       showingId: generateShowingId(attributes, eventId),
       title,
-      url: moviePageUrl,
+      url: encodeURI(moviePageUrl),
       overview: createOverview({
         classification: extractClassification(overview),
         trailer: extractTrailer($description),
