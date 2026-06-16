@@ -8,7 +8,13 @@ chromium.use(stealth);
 
 async function getPageWithPlaywright(url, cacheKey, callback, options = {}) {
   return dailyCache(cacheKey, async () => {
-    const browser = await chromium.launch({ headless: true });
+    // Default to headless. Venues behind a Cloudflare challenge can opt into
+    // headed mode (via `options.launch`) which has a much better chance of
+    // passing the challenge - the headless fingerprint is the main giveaway.
+    const browser = await chromium.launch({
+      headless: true,
+      ...options.launch,
+    });
     const context = await browser.newContext();
     // Make the timeout much higher than default for running on slower runners
     context.setDefaultTimeout(90_000);
