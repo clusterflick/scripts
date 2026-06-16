@@ -431,6 +431,7 @@ function normalizeTitle(title, options) {
     ["Film Club |", "Film Club: "],
     ["IN-HOUSE - ", "IN-HOUSE: "],
     ["RIO FOREVER /", "RIO FOREVER: "],
+    [/^Rio - /i, ""],
     ["BAR TRASH - ", "BAR TRASH: "],
     [
       "BAR TRASH Positive East Fundraiser /",
@@ -776,6 +777,10 @@ function normalizeTitle(title, options) {
     ["Presentation & Screening - ", "Presentation & Screening: "],
     ["Hopper - ", "Hopper: "],
     ["Cezanne - ", "Cezanne: "],
+    [
+      "Haruki Murakami in Conversation + ",
+      "Haruki Murakami in Conversation & ",
+    ],
     ["Tour Party", "Tour"],
     [/.*\(A (.*) EXHIBITION\)/i, "$1"],
     ["ZOOTROPOLIS", "Zootopia"],
@@ -812,6 +817,11 @@ function normalizeTitle(title, options) {
     ],
     ["BA Media Degree Show — Screening:", "BA Media Degree Show - "],
     ["CANCELLED DUE TO ILLNESS - ", "CANCELLED DUE TO ILLNESS: "],
+    ["libya in motion (2015) film shorts", "libya in motion (2015)"],
+    [
+      "Paul McCarthy: Selected Video Works 1970-2025",
+      "Paul McCarthy: Selected Video Works (1970-2025)",
+    ],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
