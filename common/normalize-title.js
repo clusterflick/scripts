@@ -757,6 +757,7 @@ function normalizeTitle(title, options) {
     ["Goethe-Kino - ", "Goethe-Kino: "],
     ["Henry Henry Henry + ", "Henry Henry Henry & "],
     ["Fundraiser + ", "Fundraiser & "],
+    ["Le Beau Mec + ", "Le Beau Mec & "],
     ["The Life + Legacy", "The Life and Legacy"],
     [" - Oggi", ": Oggi"],
     [" x metropolis", " metropolis"],

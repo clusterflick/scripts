@@ -28,6 +28,7 @@ function standardizePrefixingForLesMiserablesPerformances(title) {
 const nationalTheatreIndicator = [
   /NT Live Broadcast[:|\s]/i,
   /NT Live[:|\s]/i,
+  /NT Encore[:|\s]/i,
   /National Theatre Live Presents/i,
   /National Theatre Presents/i,
   /National Theatre Live/i,
@@ -247,6 +248,7 @@ function standardizePrefixingForTheatrePerformances(
   if (
     lowercaseTitle.match(/^nt: /i) ||
     lowercaseTitle.match(/(^|\s)nt live:?/i) ||
+    lowercaseTitle.match(/(^|\s)nt encore:?/i) ||
     lowercaseTitle.startsWith("nt live broadcast:") ||
     lowercaseTitle.includes("national theatre")
   ) {
