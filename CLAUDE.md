@@ -3,9 +3,9 @@
 ## Project Overview
 
 Node.js data pipeline for aggregating, normalizing, and enriching cinema listing
-data from over 300 cinema venues and 10 external ticketing sources. Data is scraped,
-transformed, combined with TMDB metadata, and matched against review aggregators
-(IMDb, Letterboxd, Rotten Tomatoes, Metacritic).
+data from over 300 cinema venues and 10 external ticketing sources. Data is
+scraped, transformed, combined with TMDB metadata, and matched against review
+aggregators (IMDb, Letterboxd, Rotten Tomatoes, Metacritic).
 
 ## Core Principles
 

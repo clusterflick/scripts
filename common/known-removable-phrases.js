@@ -987,6 +987,7 @@ const knownRemovablePhrases = [
   "Sanrizuka 5:",
   "Scared To Dance:",
   "Schools Screening IWD26:",
+  "Social Screening",
   "Doc Screening & Discussion",
   "Screening & Discussion",
   "Screening & Social",
