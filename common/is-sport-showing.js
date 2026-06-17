@@ -33,6 +33,7 @@ const sportShowings = [
   /Wimbledon Live/i,
   /Wimbledon Finals/i,
   /PLAYOFF FINAL/i,
+  /BIG SCREEN FOOTBALL/i,
 ];
 
 const isSportShowing = ({ title }) =>
