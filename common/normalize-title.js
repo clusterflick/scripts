@@ -740,7 +740,7 @@ function normalizeTitle(title, options) {
     [/Kapodistrias[\s–:]+ The Governor/i, "Kapodistrias"],
     [/Film Festival:? Opening Night/i, "Film Festival - Opening Night"],
     ["Washington, DC", "Washington, D.C."],
-    [/Glastonbury The Movie:?\s/i, "Glastonbury The Movie in Flashback: "],
+    [/Glastonbury:? The Movie:?\s/i, "Glastonbury The Movie in Flashback: "],
     ["Andre Rieu - ", "Andre Rieu: "],
     ["Andre Rieu: Summer 2026:", "Andre Rieu's 2026 Summer Concert:"],
     [" + UK Premiere: Replikka", " + Replikka"],
