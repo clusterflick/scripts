@@ -21,6 +21,9 @@ const isRecording = false;
 jest.mock("../../../common/cache");
 setupCacheMock(__dirname, "2026-05-14");
 
+// Hide script output
+console.log = () => {};
+
 describe(`${attributes.name}`, () => {
   setupPolly(isRecording, __dirname);
   jest.useFakeTimers().setSystemTime(new Date("2026-05-14T00:00"));
