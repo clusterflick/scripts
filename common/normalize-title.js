@@ -826,6 +826,7 @@ function normalizeTitle(title, options) {
       "Paul McCarthy: Selected Video Works 1970-2025",
       "Paul McCarthy: Selected Video Works (1970-2025)",
     ],
+    ["Burlesque Movie", "Burlesque"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {

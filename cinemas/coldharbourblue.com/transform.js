@@ -1,4 +1,3 @@
-const cheerio = require("cheerio");
 const { parse, differenceInMinutes } = require("date-fns");
 const { enGB } = require("date-fns/locale/en-GB");
 const {
@@ -8,6 +7,7 @@ const {
   generateShowingId,
   createAccessibility,
 } = require("../../common/utils");
+const { extractJsonLdEvents } = require("../../common/tribe-events/transform");
 const attributes = require("./attributes");
 const { decode } = require("html-entities");
 
@@ -27,21 +27,13 @@ function extractEventIdFromUrl(url) {
   return eventSlug;
 }
 
-function extractJsonLdFromHtml(html) {
-  const $ = cheerio.load(html);
-  const jsonLdScript = $('script[type="application/ld+json"]');
-  // For months with no events, we don't have any JSON-LD data
-  if (!jsonLdScript.length) return [];
-  return JSON.parse(jsonLdScript.html());
-}
-
 async function transform(retrievedData, sourcedEvents) {
   // Map to track events by URL to avoid duplicates across months
   const eventsMap = new Map();
 
   // Process each API response (one per month)
   for (const apiResponse of retrievedData) {
-    const events = extractJsonLdFromHtml(apiResponse.html);
+    const events = extractJsonLdEvents(apiResponse.html);
 
     for (const event of events) {
       if (eventsMap.has(event.url)) continue;

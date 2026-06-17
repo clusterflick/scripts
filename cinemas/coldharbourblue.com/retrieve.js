@@ -1,16 +1,10 @@
-const cheerio = require("cheerio");
 const { addMonths, format } = require("date-fns");
-const { fetchText, fetchJson } = require("../../common/utils");
+const { fetchText } = require("../../common/utils");
+const {
+  extractNonce,
+  fetchViewHtml,
+} = require("../../common/tribe-events/retrieve");
 const { domain } = require("./attributes");
-
-function extractNonce(html) {
-  const $ = cheerio.load(html);
-  const nonceScript = $("script[data-js='tribe-events-view-nonce-data']");
-  if (!nonceScript.length) {
-    throw new Error("Could not find nonce data in HTML");
-  }
-  return JSON.parse(nonceScript.html());
-}
 
 function getMonthsToFetch() {
   const months = [];
@@ -41,9 +35,8 @@ async function retrieve() {
       tvn2,
     });
 
-    const apiUrl = `${domain}/wp-json/tribe/views/v2/html?${params}`;
-    const response = await fetchJson(apiUrl);
-    apiResponses.push(response);
+    const html = await fetchViewHtml(domain, params);
+    apiResponses.push({ html });
   }
 
   return apiResponses;

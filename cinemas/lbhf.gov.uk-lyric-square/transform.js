@@ -1,45 +1,51 @@
-const cheerio = require("cheerio");
+const { decode } = require("html-entities");
 const {
+  sanitizeRichText,
   generateShowingId,
   createPerformance,
   createOverview,
   createAccessibility,
-  getTitleAccessibility,
 } = require("../../common/utils");
 const { extractJsonLdEvents } = require("../../common/tribe-events/transform");
 const attributes = require("./attributes");
 
-function decodeDescription(rawDescription) {
-  return cheerio.load(rawDescription).text().trim().replace(/\s+/g, " ");
+function extractEventSlug(url) {
+  return url.split("/event/")[1].replace(/\/$/, "");
 }
 
 async function transform({ movieListPages }, sourcedEvents) {
-  const movies = [];
+  // Events can recur across pages, so dedupe by URL.
+  const eventsMap = new Map();
 
   for (const html of movieListPages) {
     for (const event of extractJsonLdEvents(html)) {
       if (event.eventStatus === "https://schema.org/EventCancelled") continue;
+      if (eventsMap.has(event.url)) continue;
 
-      const slug = event.url.split("/event/")[1].replace(/\/$/, "");
-      const synopsis = decodeDescription(event.description);
+      const title = decode(event.name).replaceAll("\\", "");
+      // The calendar lists all kinds of BID events; only the film nights (which
+      // carry "Film" in the title) are relevant here.
+      if (!title.toLowerCase().includes("film")) continue;
+
+      // Descriptions are double-encoded HTML, so sanitise twice.
+      const synopsis = sanitizeRichText(
+        sanitizeRichText(event.description || ""),
+      );
+
       const startDate = new Date(event.startDate);
       const endDate = new Date(event.endDate);
-      const durationMins = (endDate - startDate) / 60_000;
+      const duration = (endDate - startDate) / 60_000;
 
-      movies.push({
-        showingId: generateShowingId(attributes, slug),
-        title: event.name,
+      eventsMap.set(event.url, {
+        showingId: generateShowingId(attributes, extractEventSlug(event.url)),
+        title,
         url: event.url,
-        overview: createOverview({ duration: durationMins }),
+        overview: createOverview({ duration }),
         performances: [
           createPerformance({
             date: startDate,
             url: event.url,
-            accessibility: createAccessibility(
-              event.name,
-              getTitleAccessibility(synopsis),
-              synopsis,
-            ),
+            accessibility: createAccessibility(title, {}, synopsis),
           }),
         ],
         matchingHints: {
@@ -48,6 +54,8 @@ async function transform({ movieListPages }, sourcedEvents) {
       });
     }
   }
+
+  const movies = Array.from(eventsMap.values());
 
   if (movies.length === 0) {
     throw new Error("No movies found — page structure may have changed");
