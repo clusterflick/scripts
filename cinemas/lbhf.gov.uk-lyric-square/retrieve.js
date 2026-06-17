@@ -19,9 +19,12 @@ const buildParams = (page, { tvn1, tvn2 }) => {
 };
 
 async function retrieve() {
+  // The BID site sits behind a CDN that full-page-caches /calendar/list/ with a
+  // Tribe REST nonce baked in. A stale cached nonce is rejected (401) by the
+  // view endpoint, so cache-bust the initial fetch to force a fresh, valid nonce.
   return retrievePaginatedListView({
     domain: listingDomain,
-    initialPageUrl: `${listingDomain}/calendar/list/`,
+    initialPageUrl: `${listingDomain}/calendar/list/?nocache=${Date.now()}`,
     buildParams,
   });
 }
