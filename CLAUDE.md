@@ -3,7 +3,7 @@
 ## Project Overview
 
 Node.js data pipeline for aggregating, normalizing, and enriching cinema listing
-data from 240 cinema venues and 9 external ticketing sources. Data is scraped,
+data from over 300 cinema venues and 10 external ticketing sources. Data is scraped,
 transformed, combined with TMDB metadata, and matched against review aggregators
 (IMDb, Letterboxd, Rotten Tomatoes, Metacritic).
 
@@ -40,7 +40,7 @@ npm run format         # Format with Prettier (JS, JSON, MD)
 
 ```
 index.js                 # CLI entry point (retrieve|transform|combine|match|cache)
-cinemas/                 # 240 cinema venue modules (each has attributes/retrieve/transform)
+cinemas/                 # 300+ cinema venue modules (each has attributes/retrieve/transform)
 sources/                 # 9 external ticketing platform modules
 common/                  # Shared utilities (utils.js, normalize-title.js, get-movie-data.js, etc.)
 scripts/                 # Pipeline stages: retrieve/, transform/, combine/, match/, cache/
