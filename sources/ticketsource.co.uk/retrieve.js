@@ -1,6 +1,19 @@
 const { subMonths } = require("date-fns");
 const attributes = require("./attributes");
 const getPageWithPlaywright = require("../../common/get-page-with-playwright");
+const { withRetry } = require("../../common/utils");
+
+// TicketSource sits behind a "checking your connection" bot challenge that
+// triggers when event pages are requested too quickly back-to-back. Space the
+// requests out and, if we do get blocked, back off and try again rather than
+// failing the whole run on a single page.
+const REQUEST_DELAY_MS = 3_000;
+const RETRY_DELAY_MS = 60_000;
+
+// Visible text on TicketSource's Cloudflare bot-challenge page. Used to fail
+// fast rather than waiting the full timeout for content that will never load.
+const CHALLENGE_TEXT =
+  /Checking if your connection to the TicketSource website is secure/i;
 
 // Meilisearch API configuration
 const MEILISEARCH_CONFIG = {
@@ -146,18 +159,47 @@ async function retrieve() {
     }, []);
 
   const moviePages = {};
+  console.log(`    - Found ${allHits.length} event pages to retrieve`);
+  let pageNumber = 0;
   for (const hit of allHits) {
     const { locationSlug, venueSlug, eventSlug, eventHash } = hit;
     const url = `${attributes.domain}/whats-on/${locationSlug}/${venueSlug}/${eventSlug}/${eventHash}`;
     const cacheKey = `ticketsource-${eventSlug}-${eventHash}`;
-    moviePages[eventHash] = await getPageWithPlaywright(
-      url,
-      cacheKey,
-      async (page) => {
-        await page.waitForLoadState();
-        await page.locator("#js-navigation-wrapper").waitFor({ strict: false });
-        return await page.content();
-      },
+
+    pageNumber += 1;
+    console.log(
+      `    - [${Date.now()}] (${pageNumber}/${allHits.length}) Getting data for ${url} ...`,
+    );
+
+    moviePages[eventHash] = await withRetry(
+      () =>
+        getPageWithPlaywright(url, cacheKey, async (page) => {
+          await page.waitForLoadState();
+          // Go gently - space requests out so we're less likely to trip the
+          // bot challenge. This only runs on a real fetch (cache miss), so
+          // cached replays in tests aren't delayed.
+          await page.waitForTimeout(REQUEST_DELAY_MS);
+
+          const challengeLocator = page.getByText(CHALLENGE_TEXT);
+          const validContentLocator = page.locator("#js-navigation-wrapper");
+
+          // Whichever resolves first - the bot challenge or the real page -
+          // settle as soon as one is present rather than waiting out the
+          // timeout on a challenge page that will never render the content.
+          await challengeLocator
+            .or(validContentLocator)
+            .first()
+            .waitFor({ state: "attached" });
+
+          // Throw (don't return) so the result isn't cached and withRetry can
+          // back off and try again with a fresh browser session.
+          if (await challengeLocator.isVisible()) {
+            return new Error(`Bot challenge page detected at ${url}`);
+          }
+
+          return await page.content();
+        }),
+      { retries: 2, delayMs: RETRY_DELAY_MS, label: `Retrieving ${url}` },
     );
   }
 
