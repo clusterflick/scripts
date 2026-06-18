@@ -828,6 +828,9 @@ function normalizeTitle(title, options) {
       "Paul McCarthy: Selected Video Works (1970-2025)",
     ],
     ["Burlesque Movie", "Burlesque"],
+    [/ At The RA$/i, " at the Royal Academy of Arts"],
+    ["Mamma Mia Party", "Mamma Mia"],
+    ["Familier Touch", "Familiar Touch"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
