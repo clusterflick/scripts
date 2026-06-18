@@ -259,6 +259,7 @@ const knownRemovablePhrases = [
   "Vagabond Special Screening",
   "Special Screening & Q&A",
   "Special Screening in London!",
+  "Special Screening Evening",
   "special screening",
   "Special Presentation:",
   "Spielberg Sci-Fi Week:",
