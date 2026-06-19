@@ -26,6 +26,7 @@ const sportShowings = [
   /NON-LEAGUE FINALS?/i,
   /WORLD CUP 202\d/i,
   /World Cup Live/i,
+  /WORLD CUP FAN/i,
   /World Cup: /i,
   /World Cup\s?- /i,
   /World Cup Match/i,
