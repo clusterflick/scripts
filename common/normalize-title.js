@@ -28,6 +28,7 @@ function normalizeTitle(title, options) {
     ["HANNAH MONTANA: THE MOVIE", "HANNAH MONTANA MOVIE"],
     [/:? The Movie$/i, ""],
     [/F1\s?®? The Movie/i, "F1"],
+    [/Batman\s?:? The Movie/i, "Batman"],
     ["The Fishermen", "The Fisherman"], // NOTE: This can be removed in the future once this specific misname has been removed
     [" + Cat", " and Cat"],
     [" + Zog", " and Zog"],
@@ -831,6 +832,9 @@ function normalizeTitle(title, options) {
     [/ At The RA$/i, " at the Royal Academy of Arts"],
     ["Mamma Mia Party", "Mamma Mia"],
     ["Familier Touch", "Familiar Touch"],
+    ["The Wrong Trousers + ", "The Wrong Trousers & "],
+    [" - THE CALAMITY", ": THE CALAMITY"],
+    [/Lolaki Video Club #\d{1,2} - /i, ""],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
