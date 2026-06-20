@@ -835,6 +835,7 @@ function normalizeTitle(title, options) {
     ["The Wrong Trousers + ", "The Wrong Trousers & "],
     [" - THE CALAMITY", ": THE CALAMITY"],
     [/Lolaki Video Club #\d{1,2} - /i, ""],
+    ["JLG/JLG + ", "JLG/JLG: Self-Portrait in December + "],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
