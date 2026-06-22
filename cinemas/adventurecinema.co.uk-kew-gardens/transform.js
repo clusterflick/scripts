@@ -123,7 +123,9 @@ async function transform({ moviePages }, sourcedEvents) {
     });
   }
 
-  if (movies.length === 0) {
+  // Out of season the listing has no event pages, which is legitimate. Only
+  // treat zero movies as an error when there were pages that failed to parse.
+  if (movies.length === 0 && Object.keys(moviePages).length > 0) {
     throw new Error("No movies found — page structure may have changed");
   }
 

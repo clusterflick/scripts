@@ -41,4 +41,21 @@ describe(attributes.name, () => {
     },
     isRecording ? 240_000 : undefined,
   );
+
+  it(
+    "retrieve and transform when out of season",
+    async () => {
+      const { movieListPage, moviePages } = await retrieve();
+
+      expect(movieListPage).toBeTruthy();
+      expect(Object.keys(moviePages)).toHaveLength(0);
+
+      const output = sortAndFilterMovies(
+        await transform({ movieListPage, moviePages }, {}),
+      );
+
+      expect(output).toEqual([]);
+    },
+    isRecording ? 240_000 : undefined,
+  );
 });

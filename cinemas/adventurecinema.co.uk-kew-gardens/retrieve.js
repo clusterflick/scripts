@@ -4,7 +4,12 @@ const { url } = require("./attributes");
 
 async function retrieve() {
   const movieListPage = await fetchText(url);
-  assertSelector(movieListPage, ".upcomingEvents a[href*='/event/']");
+  // Guard that we loaded the venue page itself, not the listing section: this
+  // is a seasonal outdoor venue, and out of season the whole ".upcomingEvents"
+  // section is dropped. "body.single-venue" is present whether or not there
+  // are shows, so it still catches a redirect/error/redesign while tolerating
+  // a legitimate empty season.
+  assertSelector(movieListPage, "body.single-venue");
 
   const $ = cheerio.load(movieListPage);
   const eventUrls = new Set();
