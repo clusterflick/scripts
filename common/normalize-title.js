@@ -342,7 +342,7 @@ function normalizeTitle(title, options) {
     ["Pip and Posy's", "Pip and Posy"],
     ["10 + 10", "10 plus 10"],
     ["Super Connected Live", "Super Connected"],
-    ["wall-e", "WALL·E"],
+    [/wall[-•]e/i, "WALL·E"],
     ["Die Hard 2: Die Harder", "Die Hard 2"],
     ["PRINCE - SIGN O'THE TIMES", "PRINCE: SIGN O THE TIMES"],
     [" 2.1 ", " 2 "],
@@ -836,6 +836,8 @@ function normalizeTitle(title, options) {
     [" - THE CALAMITY", ": THE CALAMITY"],
     [/Lolaki Video Club #\d{1,2} - /i, ""],
     ["JLG/JLG + ", "JLG/JLG: Self-Portrait in December + "],
+    [/^Classic - /i, ""],
+    ["THE WICKER MAN + ", "THE WICKER MAN & "],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
