@@ -550,7 +550,7 @@ async function runLlmFunction(llmFunction, options = { run: 0 }) {
     const { run } = options;
 
     // If it fails after a few retries, then don't keep trying
-    if (run === 3) {
+    if (run === 4) {
       console.log(` ! - Error asking LLM; failed after ${run + 1} attempts`);
       throw e;
     }
