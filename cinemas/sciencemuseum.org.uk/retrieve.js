@@ -27,7 +27,7 @@ async function retrieve() {
 
   // Expand season entries where performances have different titles
   // (e.g. "Star Trek Season" with 12 different films) into individual entries
-  const expandedMovieListPage = movieListPage.flatMap((entry) => {
+  const expandedMovieListPage = movieListPage.productions.flatMap((entry) => {
     const uniqueBaseTitles = [
       ...new Set(
         entry.performances.map((p) => stripClassification(p.performanceTitle)),
