@@ -32,7 +32,10 @@ function convertEvent(event, club) {
         date: startDate,
         url: eventUrl,
         notesList: [`Presented by ${club.name}`],
-        status: { soldOut: event.is_sold_out },
+        // EventDetail has no boolean sold-out field; `status` is the closest
+        // real signal. Observed values are "OPEN" and "SOLD_OUT" (the latter
+        // matches what the club page badges as sold out / waitlist).
+        status: { soldOut: event.status === "SOLD_OUT" },
         accessibility: createAccessibility(event.name, {}, event.description),
       }),
     ],
@@ -62,6 +65,11 @@ async function findEvents(cinema) {
       if (new Date(event.end_time) < now) continue;
       // Skip discussion only events
       if (/film discussion/i.test(event.name)) continue;
+      // Skip CINESOCIAL meetups — attendees book the screening directly with
+      // the cinema ("PLEASE BOOK YOUR TICKET DIRECTLY THROUGH THE CINEMA'S
+      // WEBSITE"), so the screening itself is already covered by that cinema's
+      // own listing. The CLIQ entry is just a social RSVP around it.
+      if (/cinesocial/i.test(event.name)) continue;
 
       const location = event.location;
       // Some events don't set their location. Nothing we can do

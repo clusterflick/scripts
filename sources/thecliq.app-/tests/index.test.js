@@ -23,9 +23,12 @@ describe(attributes.name, () => {
 
   describe.each([
     {
-      name: "Galleria Objets",
-      geo: { lat: 51.519474, lon: -0.0716479 },
-      expectedMatches: 1,
+      // The only CLIQ event at this venue is a "CINESOCIAL" social — attendees
+      // book the screening directly with the cinema, so it's filtered out and
+      // we expect no matches (the screening comes from the cinema's own data).
+      name: "Prince Charles Cinema",
+      geo: { lat: 51.51144790649414, lon: -0.13019779324531555 },
+      expectedMatches: 0,
     },
     {
       name: "Ciné-Real",
@@ -41,7 +44,7 @@ describe(attributes.name, () => {
 
         // Make sure the input looks roughly correct
         expect(clubs).toBeTruthy();
-        expect(Object.keys(clubs)).toHaveLength(4);
+        expect(Object.keys(clubs)).toHaveLength(5);
 
         readJSON.mockImplementation(() => ({ clubs }));
 
