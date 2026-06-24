@@ -840,6 +840,12 @@ function normalizeTitle(title, options) {
     ["THE WICKER MAN + ", "THE WICKER MAN & "],
     ["Virgina Woolf", "Virginia Woolf"],
     ["Wham! 10 Days in China Party", "Wham! 10 Days in China"],
+    ["AJ Brennan Screening - ", "AJ Brennan Screening: "],
+    ["Lamo Auru - ", "Lamo Auru: "],
+    [
+      "What’s Up Daiquiris, bag switcheroos + ",
+      "What's Up Daiquiris, bag switcheroos: ",
+    ],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
