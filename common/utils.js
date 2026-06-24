@@ -582,6 +582,20 @@ async function runLlmFunction(llmFunction, options = { run: 0 }) {
       return await retry();
     }
 
+    // A 429 with an insufficient_quota code is a billing condition, not a
+    // transient rate limit — the account has no usable credit, so no amount of
+    // waiting fixes it (OpenAI wears the same 429 status for both). Fail loudly
+    // and immediately instead of grinding through the retry budget.
+    if (
+      e.status === 429 &&
+      (e.code === "insufficient_quota" || e.type === "insufficient_quota")
+    ) {
+      console.log(
+        " ! - Error asking LLM; provider quota exhausted (no usable credit) — add billing credit and retry",
+      );
+      throw e;
+    }
+
     // Rate limit was met; it should reset after 1 minute but it's had issues
     // before of not resetting correctly. Wait 90 seconds and try again.
     if (e.status === 429) {

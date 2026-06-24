@@ -42,7 +42,7 @@ Categories:
 - "music": Primarily a musical performance, album playback, live band, or dance event (not a musical film).
 - "talk": Primarily a talk or discussion (not a film screening with Q&A).
 - "workshop": A workshop event.
-- "event": Use if none of the above fit, or if confidence is low.
+- "event": A last resort — use only when no other category has a clear signal. Not a default for "slightly unsure" or "no film matched"; prefer the most specific category that fits.
 
 Rules:
 - Focus on the primary activity. One feature + Q&A = "movie". Only short films (no feature) = "shorts", even when multiple shorts are named.
@@ -52,7 +52,7 @@ Rules:
 - Films being discussed but not shown = "talk" or "event", not "movie".
 - Multiple "dir." credits may indicate "multiple-movies" or "shorts".
 - When a programme lists multiple short films and the combined runtime is under 80 minutes, this strongly indicates all are shorts (typical short films are 5–30 minutes each). Do not let combined runtimes reduce your confidence.
-- If no single category clearly fits, use "event".
+- Prefer the most specific applicable category over "event". Reserve "event" for listings with no identifiable type — do not fall back to it just because no film matched or there is some ambiguity. An "evening with" or "in conversation with" a person is "talk"; a party, album playback, or concert framing is "music"; a named film shown with a Q&A or intro is "movie"; a programme of only short films is "shorts". When one of these clearly fits, score it 8 or 9 so the choice isn't discarded as low-confidence. Use "event" only when none of these signals are present.
 
 Example responses:
 {"title":"Nosferatu","category":"movie","reason":"Single feature film screening with director Q&A","confidence":9}

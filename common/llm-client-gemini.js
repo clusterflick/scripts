@@ -1,0 +1,64 @@
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+const { dailyLlmCache } = require("./cache");
+const { getId } = require("./utils");
+const { parseLlmJson } = require("./parse-llm-json");
+require("dotenv").config();
+
+let genAI = null;
+
+function getGenAI() {
+  if (!genAI) {
+    genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+  }
+  return genAI;
+}
+
+const generationConfig = {
+  temperature: 0,
+  topP: 0.95,
+  topK: 40,
+  maxOutputTokens: 8192,
+};
+
+const MODEL = "gemini-2.5-flash-lite";
+
+/**
+ * Call Gemini with caching and standard configuration. See ./llm-client.js for
+ * the provider-agnostic contract this implements.
+ */
+async function callLlm({
+  systemInstruction,
+  prompt,
+  cacheKeyPrefix,
+  logMessage,
+  maxOutputTokens,
+  responseSchema,
+}) {
+  // Namespace by provider + model so it's clear which model produced each cache
+  // file, and so switching models never replays another model's cached answers.
+  const cacheKey = `${cacheKeyPrefix}-gemini-${MODEL}-${getId(`${systemInstruction}\n${prompt}`)}`;
+
+  return dailyLlmCache(cacheKey, async () => {
+    console.log(` - ${logMessage}`);
+
+    const model = getGenAI().getGenerativeModel({
+      model: MODEL,
+      systemInstruction,
+    });
+
+    const config = { ...generationConfig };
+    if (maxOutputTokens) config.maxOutputTokens = maxOutputTokens;
+    if (responseSchema) {
+      config.responseMimeType = "application/json";
+      config.responseSchema = responseSchema;
+    }
+    const chatSession = model.startChat({
+      generationConfig: config,
+      history: [],
+    });
+    const result = await chatSession.sendMessage(prompt);
+    return parseLlmJson(result.response.text());
+  });
+}
+
+module.exports = { callLlm };

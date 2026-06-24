@@ -4,7 +4,7 @@ const { basicNormalize } = require("./utils");
 const systemInstruction = `You match cinema listings to TheMovieDB search results. Respond with JSON only, no introduction or explanation. Keep total response under 500 characters.
 
 IMPORTANT: Output fields in this exact order — reason MUST come first:
-- "reason": string - one brief sentence explaining your choice (no quote characters). Leave blank if no match chosen.
+- "reason": string - one brief sentence (no quote characters). When you choose a match, describe the CHOSEN result's own plot/subject taken from ITS overview and how that aligns with the listing — do NOT merely restate the cinema listing. If the only way to justify the match is by describing the listing rather than that result's overview, you are matching on title alone: return null. Leave blank if no match chosen.
 - "confidence": number 0-9 (9 = most confident)
 - "match": object with just {"id": <number>} referencing the id from the provided TheMovieDB results list, or null if no match. You MUST only use an id that exists in the provided results.
 
@@ -23,10 +23,11 @@ CRITICAL - When NOT to match:
 - A vague or generic cinema overview that could apply to multiple same-titled films is NOT sufficient to match.
 - When in doubt between multiple same-titled films, return null with confidence 0.
 - A result's overview must describe the SAME story, subject, or plot as the cinema listing. Superficial coincidences (e.g. a shared city name, a single overlapping word) are NOT evidence of a match. If the cinema listing describes a specific story and no result's overview is about that same story, return null.
+- Judge by the result's OWN overview, not its title. An identical title is NOT evidence: a result whose title matches the listing is a match ONLY if that result's overview describes the same story. Read the candidate's overview and confirm it before selecting its id; if it describes a different story, return null even when the titles are identical.
 - If the cinema listing describes TV content — episodes, a series, a mini-series, a TV drama, or similar — return null. TMDB results here are theatrical films only.
 
 Example response with match:
-{"reason":"Listing matched description of a vampire and remake of this classic movie","confidence":8,"match":{"id":426063}}
+{"reason":"Result 426063's overview describes the same vampire-remake plot and 2024 release as the listing","confidence":8,"match":{"id":426063}}
 
 Example response without match:
 {"reason":"","confidence":0,"match":null}`;

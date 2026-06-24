@@ -324,6 +324,7 @@ const knownRemovablePhrases = [
   "with TOMISIN ADEPEJU",
   "with tommy wiseau live on stage",
   "with Rebelle Voices",
+  "with Rosie Turner",
   "with Sammy Baloji",
   "with Selina Robertson & Isabel Moir",
   "with Special Guest Sviatoslav Vakarchuk",
