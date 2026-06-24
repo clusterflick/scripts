@@ -838,6 +838,7 @@ function normalizeTitle(title, options) {
     ["JLG/JLG + ", "JLG/JLG: Self-Portrait in December + "],
     [/^Classic - /i, ""],
     ["THE WICKER MAN + ", "THE WICKER MAN & "],
+    ["Virgina Woolf", "Virginia Woolf"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
