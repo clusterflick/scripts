@@ -543,38 +543,70 @@ const isPrivateHire = (title = "") =>
   basicNormalize(title).includes("conferencing 6 hour") ||
   basicNormalize(title).includes("do not book");
 
+// Backoff schedule (ms) for an overloaded model (502/503). Observed 503 "high
+// demand" failures cluster into bad windows of up to ~12 min rather than being
+// independent, so a higher attempt count alone doesn't help — total elapsed
+// budget vs window length is what determines survival. We probe often early
+// (to clear short dips fast, and to land *between* two nearby dips rather than
+// sleep through both) then widen, capped at 2 min, for ~18 min of total budget
+// to outlast the long windows with margin. One pause per entry, so the schedule
+// length + 1 is the max number of attempts.
+const MODEL_OVERLOAD_BACKOFF_MS = [
+  20_000, 30_000, 30_000, 45_000, 45_000, 60_000, 75_000, 90_000, 105_000,
+  120_000, 120_000, 120_000, 120_000, 120_000,
+];
+
+// Apply +/- 20% jitter so the ~10 concurrent venue jobs hitting the same shared
+// capacity pool don't retry in lockstep and synchronise their load spikes.
+const withJitter = (ms, ratio = 0.2) => {
+  const delta = ms * ratio;
+  return Math.round(ms - delta + Math.random() * 2 * delta);
+};
+
 async function runLlmFunction(llmFunction, options = { run: 0 }) {
   try {
     return await llmFunction();
   } catch (e) {
     const { run } = options;
-
-    // If it fails after a few retries, then don't keep trying
-    if (run === 4) {
-      console.log(` ! - Error asking LLM; failed after ${run + 1} attempts`);
-      throw e;
-    }
+    const retry = () =>
+      runLlmFunction(llmFunction, { ...options, run: run + 1 });
 
     // Fetch failed for an unknown reason; wait 30 seconds and try again.
     if (basicNormalize(e?.message).includes("fetch failed")) {
+      if (run >= 4) {
+        console.log(` ! - Error asking LLM; failed after ${run + 1} attempts`);
+        throw e;
+      }
       console.log(" ! - Error asking LLM; pausing before trying again...");
       await sleep(30_000);
-      return await runLlmFunction(llmFunction, { ...options, run: run + 1 });
+      return await retry();
     }
 
     // Rate limit was met; it should reset after 1 minute but it's had issues
     // before of not resetting correctly. Wait 90 seconds and try again.
     if (e.status === 429) {
+      if (run >= 4) {
+        console.log(` ! - Error asking LLM; failed after ${run + 1} attempts`);
+        throw e;
+      }
       console.log(" ! - Error asking LLM; pausing for quota reset...");
       await sleep(90_000);
-      return await runLlmFunction(llmFunction, { ...options, run: run + 1 });
+      return await retry();
     }
 
-    // Model is overloaded or bad gateway; wait a few minutes and try again.
+    // Model is overloaded or bad gateway; back off on the schedule above and
+    // try again.
     if (e.status === 502 || e.status === 503) {
-      console.log(" ! - Error asking LLM; pausing for model availability...");
-      await sleep(180_000);
-      return await runLlmFunction(llmFunction, { ...options, run: run + 1 });
+      if (run >= MODEL_OVERLOAD_BACKOFF_MS.length) {
+        console.log(` ! - Error asking LLM; failed after ${run + 1} attempts`);
+        throw e;
+      }
+      const pause = withJitter(MODEL_OVERLOAD_BACKOFF_MS[run]);
+      console.log(
+        ` ! - Error asking LLM; pausing ${Math.round(pause / 1000)}s for model availability (attempt ${run + 1}/${MODEL_OVERLOAD_BACKOFF_MS.length + 1})...`,
+      );
+      await sleep(pause);
+      return await retry();
     }
 
     // If we error on recitation, there's not much we can do. We don't want the
