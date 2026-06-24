@@ -409,6 +409,7 @@ const knownRemovablePhrases = [
   "London Film Premier",
   "POSTPONED Film Premiere",
   "2025 MEET-UP",
+  "& creative hangout",
   "& Special Introduction",
   "& Recorded Intro",
   "& Celebrations",
@@ -754,6 +755,7 @@ const knownRemovablePhrases = [
   "Little Venice Film Festival 2026:",
   "Little White Lies:",
   "Live stand-up &",
+  "Liberating Cinema",
   "Horace Ové's",
   "Kinoteka:",
   "Kino Polonia:",
@@ -824,6 +826,7 @@ const knownRemovablePhrases = [
   "Laurel Halo performs",
   "Laurel and Hardy:",
   "Late Nights:",
+  "Lawrence Abu Hamdan:",
   "Life Journeys: Morag Ross & ",
   "Live from the British Museum",
   "Live From Prague The Movie",
@@ -977,6 +980,7 @@ const knownRemovablePhrases = [
   "RIO FILM FEMINISTS x ",
   "RIO FOREVER x ",
   "ASIF KAPADIA:",
+  "AJ Brennan Screening:",
   "QUEER EAST:",
   "RIO FOREVER: DAILIES X ICO:",
   "RIO FOREVER:",
@@ -1079,6 +1083,7 @@ const knownRemovablePhrases = [
   "The Ritzy's ",
   "The Partition Trilogy:",
   "The Solidarity Trilogy:",
+  "The Story of Harry Belafonte",
   "The War Trilogy:",
   "The World of Austen:",
   "tlor:",
@@ -1127,6 +1132,7 @@ const knownRemovablePhrases = [
   "X-Mas Season 2025:",
   "YouTube Ciné-Club:",
   "Yugesh Walia and the Birmingham Film Workshop:",
+  "What's Up Daiquiris, bag switcheroos:",
 
   // Weirdly specific fixes
   "Afronauts & ",
@@ -1183,6 +1189,8 @@ const knownRemovablePhrases = [
   "× MILKTEA Post-Screening Creative Workshop",
   "Thanga Natchathiram",
   " & Gathering",
+  "Živorad Mitrović's",
+  "Vinko Möderndorfer's",
 
   // Common superfluous pieces
   "** SCREENING CANCELLED **",
