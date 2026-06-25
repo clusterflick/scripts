@@ -1,5 +1,5 @@
 const cheerio = require("cheerio");
-const { fetchText } = require("../../common/utils.js");
+const { fetchText, sleep } = require("../../common/utils.js");
 const attributes = require("./attributes");
 
 function uniqueEvents(events) {
@@ -11,8 +11,19 @@ function uniqueEvents(events) {
   });
 }
 
+// Eventbrite rate-limits bursts of page requests with 429s. Give each fetch a
+// generous retry budget so we back off and ride out the limit (honouring any
+// Retry-After header) rather than failing the whole run.
+const RETRY_CONFIG = { retries: 5, delayMs: 30_000 };
+
+// Space out requests so we don't provoke the rate limit in the first place.
+// Eventbrite's actual threshold is unknown; this is deliberately conservative
+// since a slower unattended run is far cheaper than a rate-limited failure, and
+// the retry/backoff above is the real safety net if we do clip the limit.
+const REQUEST_DELAY_MS = 500;
+
 const getPageServerData = async (url) => {
-  const html = await fetchText(url);
+  const html = await fetchText(url, undefined, RETRY_CONFIG);
   const serverDataMatch = html.match(/\s+window.__SERVER_DATA__ = ({.+});/i);
   if (serverDataMatch) {
     // Remove tabs from string the JSON parser throws on
@@ -28,6 +39,7 @@ const getSearchResultsFor = async (searchTerm) => {
   let page = 1;
   let lastPage = 1;
   while (page <= lastPage) {
+    if (page > 1) await sleep(REQUEST_DELAY_MS);
     const url = `${attributes.url}/${searchTerm}/?page=${page}`;
     const pageData = await getPageServerData(url);
 
@@ -52,6 +64,7 @@ async function retrieve() {
   const moviePages = {};
   for (const [index, event] of events.entries()) {
     try {
+      if (index > 0) await sleep(REQUEST_DELAY_MS);
       if (index % 10 === 0)
         console.log(
           `    - ${Math.round((index / events.length) * 100)}% complete`,

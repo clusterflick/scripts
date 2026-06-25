@@ -29,7 +29,13 @@ describe(attributes.name, () => {
   it(
     "retrieve and find events",
     async () => {
-      const { movieListPages, moviePages } = await retrieve();
+      // retrieve() throttles between page fetches with sleep(). Under fake
+      // timers those setTimeouts never fire on their own, so drive them with
+      // runAllTimersAsync (which also flushes the fetch promises in between)
+      // while retrieve runs, rather than waiting out the real delays.
+      const retrievePromise = retrieve();
+      await jest.runAllTimersAsync();
+      const { movieListPages, moviePages } = await retrievePromise;
 
       // Make sure the input looks roughly correct
       expect(movieListPages).toBeTruthy();

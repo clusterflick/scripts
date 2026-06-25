@@ -174,10 +174,13 @@ const withRetry = async (
     } catch (error) {
       lastError = error;
       if (attempt < retries) {
+        // Honour a server-provided Retry-After (e.g. on a 429) when present,
+        // otherwise fall back to the configured fixed delay.
+        const wait = error.retryAfterMs ?? delayMs;
         console.log(
-          ` ! - ${label} failed (${error.message}), retrying in ${delayMs / 1000}s...`,
+          ` ! - ${label} failed (${error.message}), retrying in ${Math.round(wait / 1000)}s...`,
         );
-        await sleep(delayMs);
+        await sleep(wait);
       } else {
         console.log(` ! - ${label} failed (${error.message})`);
       }
@@ -186,20 +189,50 @@ const withRetry = async (
   throw lastError;
 };
 
+// HTTP statuses worth retrying: 429 (rate limited) and transient upstream
+// failures. Other non-ok statuses (404, 401, etc.) are not transient and
+// should fail immediately rather than burning the retry budget.
+const RETRYABLE_STATUSES = new Set([429, 502, 503, 504]);
+
+// Retry-After is either a number of seconds or an HTTP date. Returns ms, or
+// undefined when absent/unparseable so the caller falls back to its own delay.
+const parseRetryAfter = (value) => {
+  if (!value) return undefined;
+  const seconds = Number(value);
+  if (!Number.isNaN(seconds)) return Math.max(0, seconds * 1000);
+  const date = Date.parse(value);
+  if (!Number.isNaN(date)) return Math.max(0, date - Date.now());
+  return undefined;
+};
+
 const fetchWithRetry = async (
   url,
   options = {},
   { retries = 1, delayMs = 30_000 } = {},
 ) => {
-  return withRetry(async () => fetch(url, options), {
-    retries,
-    delayMs,
-    label: "Fetch",
-  });
+  return withRetry(
+    async () => {
+      const response = await fetch(url, options);
+      // A 429/503 is a *successful* fetch with a non-ok response, so it never
+      // throws on its own — surface it as an error here so withRetry backs off
+      // and retries instead of passing the failure straight through.
+      if (RETRYABLE_STATUSES.has(response.status)) {
+        const error = new Error(
+          `Failed to fetch ${url} - ${response.status} ${response.statusText}`,
+        );
+        error.retryAfterMs = parseRetryAfter(
+          response.headers.get("retry-after"),
+        );
+        throw error;
+      }
+      return response;
+    },
+    { retries, delayMs, label: "Fetch" },
+  );
 };
 
-const fetchText = async (url, options) => {
-  const response = await fetchWithRetry(url, options);
+const fetchText = async (url, options, retryConfig) => {
+  const response = await fetchWithRetry(url, options, retryConfig);
   if (!response.ok) {
     throw new Error(
       `Failed to fetch ${url} - ${response.status} ${response.statusText}`,
@@ -219,8 +252,8 @@ const fetchWin1252Text = async (url) => {
   return iconv.decode(buffer, "win1252");
 };
 
-const fetchJson = async (url, options) => {
-  const response = await fetchWithRetry(url, options);
+const fetchJson = async (url, options, retryConfig) => {
+  const response = await fetchWithRetry(url, options, retryConfig);
   if (!response.ok) {
     throw new Error(
       `Failed to fetch ${url} - ${response.status} ${response.statusText}`,
