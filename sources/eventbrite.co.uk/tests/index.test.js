@@ -1,5 +1,9 @@
 /** @jest-environment setup-polly-jest/jest-environment-node */
-const { setupPolly, schemaValidate } = require("../../../common/test-utils");
+const {
+  setupPolly,
+  schemaValidate,
+  disableCache,
+} = require("../../../common/test-utils");
 const {
   readJSON,
   removeMatchingHints,
@@ -13,6 +17,11 @@ jest.mock("../../../common/utils", () => ({
   ...jest.requireActual("../../../common/utils"),
   readJSON: jest.fn(),
 }));
+
+// Make dailyCache a passthrough so every request still replays through Polly
+// (rather than reading/writing real cache files on disk during the test).
+jest.mock("../../../common/cache");
+disableCache();
 
 // Hide script output
 console.log = () => {};

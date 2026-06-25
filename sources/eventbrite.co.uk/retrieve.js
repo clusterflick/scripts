@@ -1,5 +1,6 @@
 const cheerio = require("cheerio");
-const { fetchText, sleep } = require("../../common/utils.js");
+const { fetchText, sleep, withJitter } = require("../../common/utils.js");
+const { dailyCache } = require("../../common/cache.js");
 const attributes = require("./attributes");
 
 function uniqueEvents(events) {
@@ -17,31 +18,42 @@ function uniqueEvents(events) {
 const RETRY_CONFIG = { retries: 5, delayMs: 30_000 };
 
 // Space out requests so we don't provoke the rate limit in the first place.
-// Eventbrite's actual threshold is unknown; this is deliberately conservative
-// since a slower unattended run is far cheaper than a rate-limited failure, and
-// the retry/backoff above is the real safety net if we do clip the limit.
-const REQUEST_DELAY_MS = 500;
+// Eventbrite's threshold is unknown and the 429 behaves like a temporary IP
+// block (it persists across the whole run rather than clearing on the next
+// request), so prevention matters more than retrying — be deliberately slow.
+// Jittered so we don't hammer at robotically exact intervals.
+const REQUEST_DELAY_MS = 2_500;
 
-const getPageServerData = async (url) => {
-  const html = await fetchText(url, undefined, RETRY_CONFIG);
-  const serverDataMatch = html.match(/\s+window.__SERVER_DATA__ = ({.+});/i);
-  if (serverDataMatch) {
-    // Remove tabs from string the JSON parser throws on
-    return JSON.parse(serverDataMatch[1].replace(/\t/g, " "));
-  }
+// Wrap every page fetch in the daily cache. A successfully-fetched page is
+// written to disk keyed by today's date, so when a 429 kills the run partway
+// through, the nick-fields/retry rerun replays the pages we already have (no
+// network, no delay) and resumes from where it stopped — instead of
+// re-hammering the same pages and keeping the rate-limit block hot. The throttle
+// lives inside the cached function so it only paces real fetches, not replays.
+const getPageServerData = (cacheKey, url) =>
+  dailyCache(cacheKey, async () => {
+    await sleep(withJitter(REQUEST_DELAY_MS));
+    const html = await fetchText(url, undefined, RETRY_CONFIG);
+    const serverDataMatch = html.match(/\s+window.__SERVER_DATA__ = ({.+});/i);
+    if (serverDataMatch) {
+      // Remove tabs from string the JSON parser throws on
+      return JSON.parse(serverDataMatch[1].replace(/\t/g, " "));
+    }
 
-  const $ = cheerio.load(html);
-  return JSON.parse($("#__NEXT_DATA__").html());
-};
+    const $ = cheerio.load(html);
+    return JSON.parse($("#__NEXT_DATA__").html());
+  });
 
 const getSearchResultsFor = async (searchTerm) => {
   const movieListPages = [];
   let page = 1;
   let lastPage = 1;
   while (page <= lastPage) {
-    if (page > 1) await sleep(REQUEST_DELAY_MS);
     const url = `${attributes.url}/${searchTerm}/?page=${page}`;
-    const pageData = await getPageServerData(url);
+    const pageData = await getPageServerData(
+      `eventbrite-search-${searchTerm}-${page}`,
+      url,
+    );
 
     page += 1;
     lastPage = pageData.page_count;
@@ -64,12 +76,14 @@ async function retrieve() {
   const moviePages = {};
   for (const [index, event] of events.entries()) {
     try {
-      if (index > 0) await sleep(REQUEST_DELAY_MS);
       if (index % 10 === 0)
         console.log(
           `    - ${Math.round((index / events.length) * 100)}% complete`,
         );
-      const eventData = await getPageServerData(event.url);
+      const eventData = await getPageServerData(
+        `eventbrite-event-${event.id}`,
+        event.url,
+      );
       moviePages[event.url] = eventData;
     } catch (e) {
       // Event may have been removed

@@ -697,6 +697,7 @@ module.exports = {
   parseMinsToMs,
   sanitizeRichText,
   sleep,
+  withJitter,
   withRetry,
   fetchWithRetry,
   fetchText,
