@@ -21,8 +21,12 @@ const RETRY_CONFIG = { retries: 5, delayMs: 30_000 };
 // Eventbrite's threshold is unknown and the 429 behaves like a temporary IP
 // block (it persists across the whole run rather than clearing on the next
 // request), so prevention matters more than retrying — be deliberately slow.
-// Jittered so we don't hammer at robotically exact intervals.
-const REQUEST_DELAY_MS = 2_500;
+// Jittered so we don't hammer at robotically exact intervals. The /d/... search
+// listing endpoints rate-limit far more aggressively than individual event
+// pages (heavier queries, classic scraper target), so pace them separately:
+// search is where the 429s actually bite, details cruise through.
+const SEARCH_REQUEST_DELAY_MS = 5_000;
+const EVENT_REQUEST_DELAY_MS = 2_000;
 
 // Wrap every page fetch in the daily cache. A successfully-fetched page is
 // written to disk keyed by today's date, so when a 429 kills the run partway
@@ -30,9 +34,9 @@ const REQUEST_DELAY_MS = 2_500;
 // network, no delay) and resumes from where it stopped — instead of
 // re-hammering the same pages and keeping the rate-limit block hot. The throttle
 // lives inside the cached function so it only paces real fetches, not replays.
-const getPageServerData = (cacheKey, url) =>
+const getPageServerData = (cacheKey, url, delayMs) =>
   dailyCache(cacheKey, async () => {
-    await sleep(withJitter(REQUEST_DELAY_MS));
+    await sleep(withJitter(delayMs));
     const html = await fetchText(url, undefined, RETRY_CONFIG);
     const serverDataMatch = html.match(/\s+window.__SERVER_DATA__ = ({.+});/i);
     if (serverDataMatch) {
@@ -53,6 +57,7 @@ const getSearchResultsFor = async (searchTerm) => {
     const pageData = await getPageServerData(
       `eventbrite-search-${searchTerm}-${page}`,
       url,
+      SEARCH_REQUEST_DELAY_MS,
     );
 
     page += 1;
@@ -83,10 +88,16 @@ async function retrieve() {
       const eventData = await getPageServerData(
         `eventbrite-event-${event.id}`,
         event.url,
+        EVENT_REQUEST_DELAY_MS,
       );
       moviePages[event.url] = eventData;
     } catch (e) {
-      // Event may have been removed
+      // A 429 that survived all its retries means we're rate-limited, not that
+      // the event is gone. Fail loudly so the job errors (and the next retry
+      // resumes from cache) rather than silently shipping partial data.
+      if (e.status === 429) throw e;
+      // Any other error (404/unparseable page) means the event was likely
+      // removed — skip it and carry on.
       console.log(`! Error retriving page data at ${event.url} - ${e.message}`);
     }
   }

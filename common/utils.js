@@ -205,6 +205,17 @@ const parseRetryAfter = (value) => {
   return undefined;
 };
 
+// Build a fetch error that carries the HTTP status, so callers can tell a
+// rate-limit/upstream failure (429/503/...) apart from a not-found (404) and
+// react accordingly rather than treating every failure the same.
+const fetchError = (url, response) => {
+  const error = new Error(
+    `Failed to fetch ${url} - ${response.status} ${response.statusText}`,
+  );
+  error.status = response.status;
+  return error;
+};
+
 const fetchWithRetry = async (
   url,
   options = {},
@@ -217,9 +228,7 @@ const fetchWithRetry = async (
       // throws on its own — surface it as an error here so withRetry backs off
       // and retries instead of passing the failure straight through.
       if (RETRYABLE_STATUSES.has(response.status)) {
-        const error = new Error(
-          `Failed to fetch ${url} - ${response.status} ${response.statusText}`,
-        );
+        const error = fetchError(url, response);
         error.retryAfterMs = parseRetryAfter(
           response.headers.get("retry-after"),
         );
@@ -233,32 +242,20 @@ const fetchWithRetry = async (
 
 const fetchText = async (url, options, retryConfig) => {
   const response = await fetchWithRetry(url, options, retryConfig);
-  if (!response.ok) {
-    throw new Error(
-      `Failed to fetch ${url} - ${response.status} ${response.statusText}`,
-    );
-  }
+  if (!response.ok) throw fetchError(url, response);
   return response.text();
 };
 
 const fetchWin1252Text = async (url) => {
   const response = await fetchWithRetry(url);
-  if (!response.ok) {
-    throw new Error(
-      `Failed to fetch ${url} - ${response.status} ${response.statusText}`,
-    );
-  }
+  if (!response.ok) throw fetchError(url, response);
   const buffer = Buffer.from(await response.arrayBuffer());
   return iconv.decode(buffer, "win1252");
 };
 
 const fetchJson = async (url, options, retryConfig) => {
   const response = await fetchWithRetry(url, options, retryConfig);
-  if (!response.ok) {
-    throw new Error(
-      `Failed to fetch ${url} - ${response.status} ${response.statusText}`,
-    );
-  }
+  if (!response.ok) throw fetchError(url, response);
   return response.json();
 };
 
