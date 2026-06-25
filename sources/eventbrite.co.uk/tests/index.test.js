@@ -70,6 +70,9 @@ describe(attributes.name, () => {
       expect(data).toHaveLength(5);
       expect(data).toMatchSnapshot();
     },
-    isRecording ? 3_600_000 : undefined,
+    // Replaying ~1000 cached page fetches (each driven by runAllTimersAsync +
+    // a Polly HAR replay) is compute-heavy and overruns the default 5s timeout
+    // under full-suite parallelism, so give it generous headroom.
+    isRecording ? 3_600_000 : 30_000,
   );
 });
