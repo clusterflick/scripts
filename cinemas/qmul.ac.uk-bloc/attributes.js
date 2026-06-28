@@ -4,8 +4,10 @@ module.exports = {
   alternativeNames: [
     "BLOC",
     "1 Westfield Way",
+    "ArtsOne",
     "ArtsOne Building",
     "Bloc Cinema ArtsOne Building",
+    "QMUL",
   ],
   domain: "https://www.qmul.ac.uk/bloc",
   socials: {
