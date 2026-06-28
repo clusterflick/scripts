@@ -56,6 +56,10 @@ async function transform({ moviePages }, sourcedEvents) {
       .attr("onclick")
       .replace('location.href="', "")
       .replace('";', "");
+    const seasons = Array.from($(".season-item"))
+      .map((el) => getText($(el)))
+      .map((value) => value.trim())
+      .filter((value) => value.length > 0);
     const overview = Array.from(
       $("#detail-body")
         .children()
@@ -65,6 +69,7 @@ async function transform({ moviePages }, sourcedEvents) {
         .not("#trailer-control")
         .not("#colophon")
         .not("#credit")
+        .not(".season-item")
         .not(".row.select"),
     )
       .map((el) => {
@@ -102,6 +107,7 @@ async function transform({ moviePages }, sourcedEvents) {
         .map(({ screen, dateTime, url }) => {
           return createPerformance({
             date: parseDate(dateTime),
+            notesList: seasons.map((season) => `Part of ${season}`),
             url,
             screen,
             accessibility: createAccessibility(
