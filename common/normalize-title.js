@@ -846,6 +846,7 @@ function normalizeTitle(title, options) {
       "What’s Up Daiquiris, bag switcheroos + ",
       "What's Up Daiquiris, bag switcheroos: ",
     ],
+    ["One Day in Whitechapel + ", "One Day in Whitechapel & "],
   ];
 
   corrections.forEach(([phrase, replacement]) => {

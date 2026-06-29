@@ -8,6 +8,7 @@ const {
   createAccessibility,
 } = require("../../common/utils");
 const { extractJsonLdEvents } = require("../../common/tribe-events/transform");
+const { isNotSportShowing } = require("../../common/is-sport-showing");
 const attributes = require("./attributes");
 const { decode } = require("html-entities");
 
@@ -83,7 +84,7 @@ async function transform(retrievedData, sourcedEvents) {
   const listOfSourcedEvents = Object.values(sourcedEvents).flatMap(
     (events) => events,
   );
-  return movies.concat(listOfSourcedEvents);
+  return movies.filter(isNotSportShowing).concat(listOfSourcedEvents);
 }
 
 module.exports = transform;
