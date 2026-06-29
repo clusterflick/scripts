@@ -438,6 +438,7 @@ function normalizeTitle(title, options) {
       "BAR TRASH Positive East Fundraiser /",
       "BAR TRASH Positive East Fundraiser: ",
     ],
+    ["Bar Trash: Queer Horror / ", "Bar Trash: Queer Horror & "],
     [/^BAR TRASH: (.+) \+ (.+)$/i, "BAR TRASH: $1 & $2"],
     ["Guest Event - ", "Guest Event: "],
     ["Throwback - ", "Throwback: "],
@@ -847,6 +848,7 @@ function normalizeTitle(title, options) {
       "What's Up Daiquiris, bag switcheroos: ",
     ],
     ["One Day in Whitechapel + ", "One Day in Whitechapel & "],
+    ["Backrooms: Everything Must Go", "Backrooms"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
