@@ -156,6 +156,21 @@ async function transform(attributes, { moviePages }, sourcedEvents) {
     throw new Error("No movies found - the page structure may have changed");
   }
 
+  // Remove duplicate showings at the same time in the same screen. This
+  // fixes the issue where BFI's paginated search results lists the same
+  // performance on more than one page.
+  for (const show of shows) {
+    show.performances = Object.values(
+      show.performances.reduce(
+        (mapping, performance) => ({
+          ...mapping,
+          [`${performance.time}-${performance.screen}`]: performance,
+        }),
+        {},
+      ),
+    );
+  }
+
   const listOfSourcedEvents = Object.values(sourcedEvents).flatMap(
     (events) => events,
   );

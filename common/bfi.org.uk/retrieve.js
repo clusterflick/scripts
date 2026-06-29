@@ -75,7 +75,13 @@ async function processSearchResultPage(
       "&BOparam::WScontent::loadArticle::context_id=",
     )[0];
     moviePages[showUrl] = moviePages[showUrl] || { performances: [] };
-    moviePages[showUrl].performances.push($(this).html());
+    // BFI's paginated search results can list the same performance on more than
+    // one page. The HTML for an overlapping item is identical, so skip it rather
+    // than recording the same performance twice.
+    const performanceHtml = $(this).html();
+    if (!moviePages[showUrl].performances.includes(performanceHtml)) {
+      moviePages[showUrl].performances.push(performanceHtml);
+    }
     moviePages[showUrl].title = getText($showLink);
   });
 
