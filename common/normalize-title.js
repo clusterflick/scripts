@@ -522,6 +522,7 @@ function normalizeTitle(title, options) {
       "mystery movie",
     ],
     [/^.* \+ mystery movie/i, "mystery movie"],
+    [/Surprise Film (\d{1,2}\.\d{1,2}\.\d{1,2})?/i, "mystery movie"],
     ["vhs film", "movie"],
     [/The Bill Reunion \d+/i, "The Bill Reunion"],
     ["R.E.M. Buster", "R.E.M. X Buster"],
@@ -848,7 +849,7 @@ function normalizeTitle(title, options) {
       "What's Up Daiquiris, bag switcheroos: ",
     ],
     ["One Day in Whitechapel + ", "One Day in Whitechapel & "],
-    ["Backrooms: Everything Must Go", "Backrooms"],
+    [/Backrooms\s*:\s+Everything Must Go( Bonus)?( Edition)?/i, "Backrooms"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {

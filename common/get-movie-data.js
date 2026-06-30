@@ -58,6 +58,7 @@ const ignoredIds = [
   41233, // Step Up 3D -- https://www.themoviedb.org/movie/41233-step-up-3d
   129284, // The Dude -- https://www.themoviedb.org/movie/129284-the-dude
   1666176, // Inferno -- https://www.themoviedb.org/movie/1666176-inferno
+  1662113, // Test Film -- https://www.themoviedb.org/movie/1662113-test-film
 ];
 
 /**

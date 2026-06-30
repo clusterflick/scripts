@@ -163,7 +163,10 @@ function toMovie($, showEl) {
 async function transform({ movieListPage }, sourcedEvents) {
   const $ = cheerio.load(movieListPage, { xmlMode: true });
   const shows = $("venues > venue > shows > show").toArray();
-  const movies = shows.map((el) => toMovie($, el));
+  const movies = shows
+    .map((el) => toMovie($, el))
+    // Remove template placeholder entries (e.g. "Templates:", "Template - ")
+    .filter(({ title }) => !/^Templates?\s*[:-]/i.test(title));
 
   if (movies.length === 0) {
     throw new Error("No movies found - the page structure may have changed");
