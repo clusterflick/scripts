@@ -850,6 +850,7 @@ function normalizeTitle(title, options) {
     ],
     ["One Day in Whitechapel + ", "One Day in Whitechapel & "],
     [/Backrooms\s*:\s+Everything Must Go( Bonus)?( Edition)?/i, "Backrooms"],
+    ["(500) Days of Summer", "500 Days of Summer"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {

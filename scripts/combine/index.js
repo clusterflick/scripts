@@ -84,7 +84,7 @@ const buildMovieData = (movieInfo, { slugify, siteData }) => {
   return {
     id: `${movieInfo.id}`,
     title,
-    normalizedTitle: normalizeTitle(title),
+    normalizedTitle: normalizeTitle(title).replace(/^the /i, "").trim(),
     classification: getClassification(movieInfo),
     overview: movieInfo.overview,
     year: movieInfo.release_date?.split("-")[0],
