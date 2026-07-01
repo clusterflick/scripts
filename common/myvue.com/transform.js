@@ -92,8 +92,7 @@ async function transform(attributes, { result: movieData }, sourcedEvents) {
     return moviesAtCinema.concat(transformedMovie);
   }, []);
 
-  // Put in a carve out for recently closed Shepherds Bush until it can be removed
-  if (movies.length === 0 && attributes.id !== "myvue.com-shepherds-bush") {
+  if (movies.length === 0) {
     throw new Error("No movies found - the page structure may have changed");
   }
 
