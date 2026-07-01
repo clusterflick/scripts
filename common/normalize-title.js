@@ -845,12 +845,13 @@ function normalizeTitle(title, options) {
     ["AJ Brennan Screening - ", "AJ Brennan Screening: "],
     ["Lamo Auru - ", "Lamo Auru: "],
     [
-      "What’s Up Daiquiris, bag switcheroos + ",
+      /(What's Up )?Daiquiris, bag switcheroos \+ /i,
       "What's Up Daiquiris, bag switcheroos: ",
     ],
     ["One Day in Whitechapel + ", "One Day in Whitechapel & "],
     [/Backrooms\s*:\s+Everything Must Go( Bonus)?( Edition)?/i, "Backrooms"],
     ["(500) Days of Summer", "500 Days of Summer"],
+    ["Cucumbers Restoration", "Cucumbers"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
