@@ -10,13 +10,13 @@ const {
 } = require("../../common/utils");
 const attributes = require("./attributes");
 
-// Parse runtime like "1H21M" or "1H47M" to milliseconds
-const parseRuntime = (runtime) => {
-  const match = runtime.match(/(\d+)H(\d+)M/i);
+// Parse runtime like "1H21M", "1H47M", or "2H" (minutes optional) to minutes
+const parseRuntimeMins = (runtime) => {
+  const match = runtime.match(/(\d+)H(?:(\d+)M)?/i);
   if (!match) return null;
   const hours = parseInt(match[1], 10);
-  const minutes = parseInt(match[2], 10);
-  return (hours * 60 + minutes) * 60 * 1000;
+  const minutes = match[2] ? parseInt(match[2], 10) : 0;
+  return hours * 60 + minutes;
 };
 
 // Format 1: "Thursday 8th January – 6:00pm"
@@ -75,7 +75,7 @@ function transformFormat1(emailText) {
       overview: createOverview({
         year,
         directors: [director.trim()],
-        runtime: parseRuntime(runtime),
+        duration: parseRuntimeMins(runtime),
         classification: getValidClassification(cert),
       }),
       performances: [
@@ -105,7 +105,7 @@ function transformFormat3(emailText) {
   const currentYear = new Date().getFullYear();
 
   const metaPattern =
-    /^(.+?)\s+[–-]\s+(\d{4})\s+[–-]\s+(\dH\d+M)\s+[–-]\s+Cert\.\s*(\S+)/;
+    /^(.+?)\s+[–-]\s+(\d{4})\s+[–-]\s+(\d+H(?:\d+M)?)\s+[–-]\s+Cert\.\s*(\S+)/;
 
   const parts = emailText.split(/\n={10,}\n/);
 
@@ -144,7 +144,7 @@ function transformFormat3(emailText) {
       overview: createOverview({
         year,
         directors: [director.trim()],
-        runtime: parseRuntime(runtime),
+        duration: parseRuntimeMins(runtime),
         classification: getValidClassification(cert),
       }),
       performances: [
@@ -222,12 +222,18 @@ function transformFormat2(emailText) {
   return movies;
 }
 
+// Non-film entries that appear in the newsletter alongside screenings
+const nonFilmTitlePatterns = [/^Discussion Group$/i];
+
 async function transform({ emailText }, sourcedEvents) {
   const movies = [
     ...transformFormat1(emailText),
     ...transformFormat2(emailText),
     ...transformFormat3(emailText),
-  ];
+  ].filter(
+    (movie) =>
+      !nonFilmTitlePatterns.some((pattern) => pattern.test(movie.title)),
+  );
 
   const listOfSourcedEvents = Object.values(sourcedEvents).flatMap(
     (events) => events,
