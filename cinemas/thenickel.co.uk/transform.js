@@ -15,6 +15,7 @@ async function transform({ screenings }, sourcedEvents) {
     const bookingUrl = `${attributes.domain}/screening/${screening.id}`;
     const hasDirector = film.director && film.director !== "?";
     const soldOut = screening.ticketsSold >= screening.capacity;
+    const hasValidYear = /^\d{4}$/.test(`${film.year}`);
 
     const notesList = [];
     if (screening.doorsTime) {
@@ -27,7 +28,7 @@ async function transform({ screenings }, sourcedEvents) {
       url: bookingUrl,
       overview: createOverview({
         duration: film.runtime,
-        year: film.year ? `${film.year}` : undefined,
+        year: hasValidYear ? `${film.year}` : undefined,
         directors: hasDirector ? film.director : undefined,
         classification: film.ageCertificate,
       }),
