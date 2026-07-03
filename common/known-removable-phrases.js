@@ -507,6 +507,7 @@ const knownRemovablePhrases = [
   "The Black Music Coalition:",
   "Bar Screening x Muse:",
   "Bar Trash: Queer Horror & Double Bill",
+  "Bar Trash: Silent Horror & Double Bill",
   "BAR TRASH Positive East Fundraiser:",
   "Bar Trash: A toast to David Lynch:",
   "Bar Trash: Season Launch:",
