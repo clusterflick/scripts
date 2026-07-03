@@ -306,6 +306,7 @@ const knownRemovablePhrases = [
   "with a Talk by Paul Merton",
   "With Bonus Footage",
   "w/ Bonus Footage",
+  "w/Bonus Footage",
   "with subtitles for the D/deaf",
   "with intro and post-film discussion",
   "with introduction and post-film discussion",

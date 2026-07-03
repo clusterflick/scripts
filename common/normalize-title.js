@@ -856,6 +856,7 @@ function normalizeTitle(title, options) {
     [/Backrooms\s*:\s+Everything Must Go( Bonus)?( Edition)?/i, "Backrooms"],
     ["(500) Days of Summer", "500 Days of Summer"],
     ["Cucumbers Restoration", "Cucumbers"],
+    ["T4T - ", "T4T: "],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
