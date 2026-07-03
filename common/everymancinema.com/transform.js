@@ -62,6 +62,10 @@ async function transform(
             accessibility.subtitled = true;
             return;
           }
+          if (tag.toLowerCase() === "showtime.accessibility.closedcaption") {
+            accessibility.hardOfHearing = true;
+            return;
+          }
           if (
             tag.toLowerCase() === "showtime.restriction.babyclub" ||
             tag.toLowerCase() === "showtime.restriction.kidsfriendly"

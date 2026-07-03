@@ -399,7 +399,7 @@ const babyFriendlyMatchers = [
 ];
 
 const subtitledMatchers = [
-  /Subtitl?ed/i,
+  /Subtitl?e[ds]/i,
   /Subbed/i,
   /\(Sub\)/i,
   /Subs\)/i,
