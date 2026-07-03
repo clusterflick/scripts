@@ -93,9 +93,6 @@ async function transform(
       "cineworld.co.uk-wembley",
       "cineworld.co.uk-west-india-quay",
       "cineworld.co.uk-wood-green",
-      // Temporarily remove venues to drop extraneous test data
-      "davidleancinema.org.uk",
-      "lumiereromford.com",
     ];
     const previousReleaseData = optedOut.includes(location)
       ? []
