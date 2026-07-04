@@ -27,7 +27,7 @@ const parseDateTime = (dateString, timeString) => {
   return parsedDate;
 };
 
-async function transform({ moviePages }, sourcedEvents) {
+async function transform({ movieListPage, moviePages }, sourcedEvents) {
   const movies = [];
 
   for (const [moviePageUrl, html] of Object.entries(moviePages)) {
@@ -94,7 +94,10 @@ async function transform({ moviePages }, sourcedEvents) {
   }
 
   if (movies.length === 0) {
-    throw new Error("No movies found - the page structure may have changed");
+    const $movieListPage = cheerio.load(movieListPage);
+    if ($movieListPage(".nothing-on").length === 0) {
+      throw new Error("No movies found - the page structure may have changed");
+    }
   }
 
   const listOfSourcedEvents = Object.values(sourcedEvents).flatMap(
