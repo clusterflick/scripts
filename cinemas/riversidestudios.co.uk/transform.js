@@ -71,6 +71,10 @@ function getOverviewData(pageData) {
         data.classification = value;
         break;
       }
+      case "language:": {
+        data.language = value;
+        break;
+      }
     }
   });
 
@@ -100,9 +104,8 @@ function formatOverviewText(pageData) {
 async function transform({ movieListPage, moviePages }, sourcedEvents) {
   const movies = movieListPage.map((movieData) => {
     const { title, url: urlRaw } = movieData;
-    const { year, directors, actors, classification } = getOverviewData(
-      moviePages[urlRaw],
-    );
+    const { year, directors, actors, classification, language } =
+      getOverviewData(moviePages[urlRaw]);
     const url = encodeURI(urlRaw);
     const showingId = generateShowingId(attributes, movieData.id);
     const synopsis = formatOverviewText(moviePages[urlRaw]);
@@ -126,7 +129,10 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
               babyFriendly: tags.includes("80996"),
               hardOfHearing: tags.includes("80832"),
               relaxed: tags.includes("80881"),
-              subtitled: tags.includes("80883"),
+              subtitled:
+                tags.includes("80883") ||
+                basicNormalize(language).includes("with subtitles") ||
+                basicNormalize(language).includes("with english subtitles"),
             },
             synopsis,
           );
