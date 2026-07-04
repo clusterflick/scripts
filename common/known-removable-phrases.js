@@ -1091,6 +1091,7 @@ const knownRemovablePhrases = [
   "Taste Film presents",
   "Tatau to Tattoo:",
   "TFFF:",
+  "- TFFF",
   "Tibet Film Festival London:",
   "Tim Burton's ",
   "Times+:",
