@@ -1007,6 +1007,16 @@ function normalizeTitle(title, options) {
     title = hasBrackets[1];
   }
 
+  // Collapse multiple years
+  title = title.replace(/\((\d{4}),\s+(\d{4})\)/i, "($1/$2)");
+
+  // Remove diretor or other notes from bracketted years
+  // E.g. Convert "(1964, Glauber Rocha)" to "(1964)"
+  const hasYearWithComment = title.match(/^(.*?)\s+\((\d{4}),\s[^)]+\)/i);
+  if (hasYearWithComment) {
+    title = `${hasYearWithComment[1]} (${hasYearWithComment[2]})`;
+  }
+
   const hasSlavicPremier = title.match(/Кинопремиера на "([^"]+)" /i);
   if (hasSlavicPremier) {
     title = hasSlavicPremier[1];
