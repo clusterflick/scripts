@@ -857,6 +857,7 @@ function normalizeTitle(title, options) {
     ["(500) Days of Summer", "500 Days of Summer"],
     ["Cucumbers Restoration", "Cucumbers"],
     ["T4T - ", "T4T: "],
+    ["Remembering David Hockney", "David Hockney at the Royal Academy of Arts"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
