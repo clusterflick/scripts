@@ -59,6 +59,7 @@ const ignoredIds = [
   129284, // The Dude -- https://www.themoviedb.org/movie/129284-the-dude
   1666176, // Inferno -- https://www.themoviedb.org/movie/1666176-inferno
   1662113, // Test Film -- https://www.themoviedb.org/movie/1662113-test-film
+  1698863, // The Odyssey -- https://www.themoviedb.org/movie/1698863-the-odyssey
 ];
 
 /**
