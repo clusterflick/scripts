@@ -286,8 +286,11 @@ async function findMovieByDirector(normalizedTitle, movie) {
   }
 }
 
-const hasCrewFor = (movie) =>
-  movie.overview.directors.length > 0 || movie.overview.actors.length > 0;
+// Check for crew and actors, but ignore live threatre events which have poor data
+const hasCrewFor = (movie, normalizeTitle) =>
+  (movie.overview.directors.length > 0 || movie.overview.actors.length > 0) &&
+  !normalizeTitle.startsWith("metropolitan opera") &&
+  !normalizeTitle.startsWith("royal ballet opera");
 
 const hasCrewHintsFor = (movie) => movie.matchingHints?.crew?.length > 0;
 
@@ -306,7 +309,7 @@ const isReleasedMovie = ({ release_date: date }) => !!date;
 async function getBestMatch(titleQuery, rawResults = [], movie) {
   if (rawResults.length === 0) return undefined;
 
-  const hasCrewForMovie = hasCrewFor(movie);
+  const hasCrewForMovie = hasCrewFor(movie, titleQuery);
   const hasCrewHintsForMovie = hasCrewHintsFor(movie);
 
   const resultsWithReleaseDate = rawResults.filter(isReleasedMovie);
@@ -640,7 +643,7 @@ const searchForBestMatch = async ({
 
   // If we have crew information for the movie, maybe the year is wrong so let's
   // try matching without it
-  if (hasCrewFor(movie)) {
+  if (hasCrewFor(movie, normalizedTitle)) {
     const searchWithoutYear = await searchMovieAndCacheResults(
       `moviedb-search-without-year-${cacheKeySuffix}`,
       getPayload(),
