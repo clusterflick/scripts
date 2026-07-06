@@ -171,6 +171,7 @@ const rboPrefixes = [
 function standardizePrefixingForRoyalBalletOperaPerformances(title) {
   title = title
     .replace(/Captured Live /i, "")
+    .replace(/\(\d{4} Encore\)/i, "")
     .replace(/-\s?Live\s?-/i, "-")
     .replace(/Hoffman(\s|$)/i, "Hoffmann$1")
     .replace(/\s+&\s+/, " and ")
