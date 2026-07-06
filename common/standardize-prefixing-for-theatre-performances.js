@@ -65,20 +65,21 @@ const metOperaPrefixes = [
   /The Met:? Live[:|\s]/i,
   /The Met[:|\s]/i,
   /Met:/i,
+  /The Metropolitan Opera: RBO/i,
   /The Metropolitan Opera:/i,
-  /RBO.+The Metropolitan Opera:/i,
   /La Scala \w+:/i,
-  /La Scala[:|\s]/i,
+  /(Matinee:\s+)?La Scala[:|\s]/i,
 ];
 
-function standardizePrefixingForMetropolitanOperaPerformances(title, options) {
+function standardizePrefixingForMetropolitanOperaPerformances(title) {
   title = title.replace(/\s+&\s+/, " and ").replace(/\s+-\s+/, ": ");
 
   // Update if "met opera" is a suffix
   if (
-    title.toLowerCase().includes(": met opera ") ||
-    title.toLowerCase().includes(": the met opera ") ||
-    title.toLowerCase().includes(": metropolitan opera")
+    title.toLowerCase().includes(": met opera") ||
+    title.toLowerCase().includes(": the met opera") ||
+    title.toLowerCase().includes(": metropolitan opera") ||
+    title.toLowerCase().includes(": the metropolitan opera")
   ) {
     title = `The Metropolitan Opera: ${title.replace(/: (The )?Met(ropolitan)? Opera\s*/i, " ")}`;
   }
@@ -94,36 +95,43 @@ function standardizePrefixingForMetropolitanOperaPerformances(title, options) {
 
   const fullYearRangeMatch = updatedPrefixTitle.match(fullYearRangeMatcher);
   if (fullYearRangeMatch) {
-    year = fullYearRangeMatch[2];
+    year = fullYearRangeMatch[1];
     updatedPrefixTitle = updatedPrefixTitle.replace(fullYearRangeMatcher, "");
   }
 
   const yearRangeMatch = updatedPrefixTitle.match(yearRangeMatcher);
   if (yearRangeMatch) {
-    year = `${yearRangeMatch[1]}${yearRangeMatch[3]}`;
+    year = `${yearRangeMatch[1]}${yearRangeMatch[2]}`;
     updatedPrefixTitle = updatedPrefixTitle.replace(yearRangeMatcher, "");
   }
 
   const shortYearRangeMatch = updatedPrefixTitle.match(shortYearRangeMatcher);
   if (shortYearRangeMatch) {
-    year = `20${shortYearRangeMatch[2]}`;
+    year = `20${shortYearRangeMatch[1]}`;
     updatedPrefixTitle = updatedPrefixTitle.replace(shortYearRangeMatcher, "");
+  }
+
+  const yearSuffixMatch = updatedPrefixTitle.match(yearSuffixMatcher);
+  if (yearSuffixMatch) {
+    const yearSuffix = yearSuffixMatch[0].replaceAll(/[()]/g, "");
+    const yearNumber = parseInt(yearSuffix, 10);
+    const isFutureYear = yearNumber > getBaselineYear();
+    year = isFutureYear ? `${yearNumber - 1}` : yearSuffix;
+    updatedPrefixTitle = updatedPrefixTitle.replace(yearMatcher, "");
   }
 
   const yearMatch = updatedPrefixTitle.match(yearMatcher);
   if (yearMatch) {
-    year = `${yearMatch[1]}`;
+    year = yearMatch[1];
     updatedPrefixTitle = updatedPrefixTitle.replace(yearMatcher, "");
   }
 
-  const yearNumber = parseInt(year, 10);
-  const isFutureYear = yearNumber > getBaselineYear();
-  year = isFutureYear ? `${yearNumber - 1}` : year;
-  updatedPrefixTitle = `${updatedPrefixTitle} (${year})`;
+  // Add the year value in (either calcualted or defaulted to this year)
+  const [before, ...after] = updatedPrefixTitle.split(":");
+  updatedPrefixTitle = `${before} ${year}:${after.join(":")}`;
 
-  if (!options.retainYear) {
-    updatedPrefixTitle = updatedPrefixTitle.replace(yearSuffixMatcher, "");
-  }
+  // Remove any year value -- they can't be relied upon
+  updatedPrefixTitle = updatedPrefixTitle.replace(yearSuffixMatcher, "");
 
   return updatedPrefixTitle
     .replace(/(\(\))+/, "")
@@ -266,6 +274,7 @@ function standardizePrefixingForTheatrePerformances(
     lowercaseTitle.startsWith("la scala ") ||
     lowercaseTitle.startsWith("matinee: la scala:") ||
     lowercaseTitle.startsWith("the metropolitan opera:") ||
+    lowercaseTitle.startsWith("the metropolitan opera ") ||
     (lowercaseTitle.startsWith("rbo ") &&
       lowercaseTitle.includes("the metropolitan opera:")) ||
     (lowercaseTitle.startsWith("rbo ") &&
