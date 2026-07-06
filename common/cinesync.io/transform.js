@@ -5,6 +5,8 @@ const {
   sanitizeRichText,
   isPrivateHire,
   createAccessibility,
+  basicNormalize,
+  getValidClassification,
 } = require("../../common/utils");
 const { parse } = require("date-fns");
 const { enGB } = require("date-fns/locale/en-GB");
@@ -96,19 +98,37 @@ async function transform(attributes, { movieListPage }, sourcedEvents) {
 
         showTime.show_times_tags.forEach((tag) => {
           tags.add(tag.name);
-          if (tag.name.toLowerCase().includes("hoh")) {
+
+          // Ignore pointless tags like "Standard", "2D" and "PG"
+          if (
+            basicNormalize(tag.short_name) === "standard" ||
+            basicNormalize(tag.short_name) === "2d" ||
+            !!getValidClassification(tag.name)
+          ) {
+            return;
+          }
+
+          if (
+            basicNormalize(tag.name).includes("hoh") ||
+            basicNormalize(tag.name).includes("hard of hearing")
+          ) {
             accessibility.hardOfHearing = true;
             return; // this doesn't need added to the notes
           }
-          if (tag.name.toLowerCase().includes("parent and baby")) {
+          if (basicNormalize(tag.name).includes("parent and baby")) {
             accessibility.babyFriendly = true;
+            // E.g. "Parent and Baby Only Screening (with subtitles)"
+            if (basicNormalize(tag.name).includes("subtitles")) {
+              accessibility.subtitled = true;
+            }
             return; // this doesn't need added to the notes
           }
-          if (tag.name.toLowerCase().includes("relaxed")) {
+          if (basicNormalize(tag.name).includes("relaxed")) {
             accessibility.relaxed = true;
             // Don't return as often this is part of a more specific tag
+            // May include subtitles too, e.g. "Relaxed Screening (with subtitles)"
           }
-          if (tag.name.toLowerCase().includes("subtitles")) {
+          if (basicNormalize(tag.name).includes("subtitles")) {
             accessibility.subtitled = true;
             // Don't return as often this is part of a more specific tag
           }
