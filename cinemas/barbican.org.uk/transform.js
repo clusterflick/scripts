@@ -116,7 +116,10 @@ function getListingTags(data) {
         basicNormalize(tag) !== "cinema" &&
         basicNormalize(tag) !== "new releases" &&
         basicNormalize(tag) !== "more..." &&
-        basicNormalize(tag) !== "barbican presents",
+        basicNormalize(tag) !== "barbican presents" &&
+        // Tags applied to the movie, but only apply to specific performances
+        basicNormalize(tag) !== "magic mondays" &&
+        basicNormalize(tag) !== "pay what you can screening",
     );
 }
 
