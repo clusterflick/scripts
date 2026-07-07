@@ -866,6 +866,12 @@ function normalizeTitle(title, options) {
     ["Remembering David Hockney", "David Hockney at the Royal Academy of Arts"],
     ["Parents & Baby Screening - ", "Parents & Baby Screening: "],
     ["RAMPAGE + ", "RAMPAGE & "],
+    [" - live at the Blue", ": live at the Blue"],
+    ["DEATH WISH CLUB + ", "DEATH WISH CLUB & "],
+    [
+      'Sapphic Cinema + BFI "Rip it Up" - ',
+      'Sapphic Cinema & BFI "Rip it Up": ',
+    ],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
