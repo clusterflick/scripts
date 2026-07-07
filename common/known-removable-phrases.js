@@ -253,6 +253,7 @@ const knownRemovablePhrases = [
   "Intergalactic Experience",
   "Film Screening and Q&A",
   "screening and Q&A with Byline Times",
+  "Special Screening and Q&A",
   "Screening and Q&A",
   ": screening and discussion",
   "Screening, Director Q&A, and Meet and Greet",
@@ -438,6 +439,7 @@ const knownRemovablePhrases = [
   "Test Screening",
   "starring RMD",
   "– Dr Ghassan Abu-Sittah Speaks",
+  "– The Play",
 
   // Prefixes
   "(4DX) ",
@@ -718,6 +720,7 @@ const knownRemovablePhrases = [
   "The Old Ways:",
   "SCS: The Old Ways",
   "FILM CLUB FRIDAYS:",
+  "Fellini's",
   "Festival of Creativity:",
   "Fetish-Friendly:",
   "Fetish Friendly:",
@@ -1014,6 +1017,7 @@ const knownRemovablePhrases = [
   "Sapphic Cinema:",
   "Sapphic Cinema Valentine's Afternoon Screening",
   "Sapphic screening and social",
+  'Sapphic Cinema & BFI "Rip it Up": ',
   "Sake, onigiri +",
   "Samosa Haus x Lumiere:",
   "Sanrizuka 5:",
