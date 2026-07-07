@@ -193,7 +193,12 @@ function normalizeTitle(title, options) {
     ["Veera Dheera Sooran: Part 2", "Veera Dheera Sooran"],
     ["Mulholland Dr.", "Mulholland Drive"], // Otherwise we match the TV pilot of the same name
     ["W&G:", "Wallace & Gromit:"],
-    [": Curse Of The Were-Rabbit", ": The Curse Of The Were-Rabbit"],
+    [
+      /(?<!\bThe\s)Curse of the Were[-\s]Rabbit/i,
+      "The Curse Of The Were-Rabbit",
+    ],
+    [/(?<!\bThe\s)Wrong Trousers/i, "The Wrong Trousers"],
+    [/Wallace & Gromit:(.*)\//i, "Wallace & Gromit:$1 "], // Remove slash
     ["14 Days (Girlfriend Intlo)", "14 Days Girlfriend Intlo"],
     ["SCSEVENTEEN", "SEVENTEEN"],
     ["Björk's", "Björk:"],
@@ -859,6 +864,8 @@ function normalizeTitle(title, options) {
     ["Cucumbers Restoration", "Cucumbers"],
     ["T4T - ", "T4T: "],
     ["Remembering David Hockney", "David Hockney at the Royal Academy of Arts"],
+    ["Parents & Baby Screening - ", "Parents & Baby Screening: "],
+    ["RAMPAGE + ", "RAMPAGE & "],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
