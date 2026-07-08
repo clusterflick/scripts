@@ -1113,7 +1113,8 @@ function normalizeTitle(title, options) {
     .replace(/\s+(-|–)\s+/g, " ")
     .replace(/^(-|–)/g, "")
     .replace(/(-|–|\()$/g, "")
-    .replace(/!|:|;|\.|\*|…|—|]|<|>/g, " ")
+    .replace("?s", "s")
+    .replace(/!|¡|\?|¿|:|;|\.|\*|…|—|]|<|>/g, " ")
     .replaceAll("–", "–")
     .replace(
       // Remove emoji
@@ -1126,7 +1127,6 @@ function normalizeTitle(title, options) {
     .replace(/^the (?=\S+\s+(?![[(]))/i, "")
     .replace(/([a-z])-([a-z])/gi, "$1$2")
     .replace(/\s+q&a$/i, "")
-    .replace("?s", "s")
     .replace(/\s3d$/i, "")
     .replace(/[+?]$/, "")
     .replace(/\(\d{4}-[^)]+\)$/, "") // Remove any date range suffixes
