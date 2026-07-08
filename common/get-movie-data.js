@@ -61,6 +61,7 @@ const ignoredIds = [
   1662113, // Test Film -- https://www.themoviedb.org/movie/1662113-test-film
   1698863, // The Odyssey -- https://www.themoviedb.org/movie/1698863-the-odyssey
   1389260, // Così fan tutte -- https://www.themoviedb.org/movie/1389260-cosi-fan-tutte
+  858680, // World CUP -- https://www.themoviedb.org/movie/858680-world-cup
 ];
 
 /**
