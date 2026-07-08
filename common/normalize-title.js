@@ -805,7 +805,7 @@ function normalizeTitle(title, options) {
     [/thrill seekers(?:\s+(?:ii|2\.0))?[:\s]*/i, ""],
     [/green screen[;:\s]+/i, ""],
     [/safar[:\s]+/i, ""],
-    [/silver\s*screen[:\s]+/i, ""],
+    [/(MJ's\s+)?silver\s*screen[:\s]+/i, ""],
     [/world\s+\w+\s+day(?:\s+special)?[:\s]*/i, ""],
     [/earth day(?:\s+\d+)?[:\s]+/i, ""],
     [/l.ff(?:\s+202\d)?:/i, ""],
@@ -872,6 +872,17 @@ function normalizeTitle(title, options) {
       'Sapphic Cinema + BFI "Rip it Up" - ',
       'Sapphic Cinema & BFI "Rip it Up": ',
     ],
+    [/(?<!A\s)Shaun The Sheep( Movie)?:/i, "A Shaun The Sheep Movie:"],
+    [
+      /The Pirates! In An Adventure$/i,
+      "The Pirates! In An Adventure with Scientists!",
+    ],
+    [/ Curse Were-Rabb$/i, " The Curse of the Were-Rabbit"],
+    [
+      "Wallace & Gromit Grand Day/Wrong",
+      "Wallace & Gromit A Grand Day Out & The Wrong Trousers",
+    ],
+    [/, (\d{4}) @/, ", ($1) @"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
