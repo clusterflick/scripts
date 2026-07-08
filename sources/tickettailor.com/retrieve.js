@@ -15,6 +15,7 @@ const VENUE_SLUGS = [
   "lost", // Lost Cinema
   "bellbottomsproductions", // Bellbottoms Productions
   "vauxhallone", // Vauxhall
+  "debutnights", // Debut Nights
 ];
 
 async function retrieveVenuePage(slug) {
