@@ -882,6 +882,11 @@ function normalizeTitle(title, options) {
       "Wallace & Gromit Grand Day/Wrong",
       "Wallace & Gromit A Grand Day Out & The Wrong Trousers",
     ],
+    [
+      "Wallace & Gromit A Close/A Matter",
+      "Wallace & Gromit A Close Shave & A Matter of Loaf and Death",
+    ],
+    [/^(The Music of Zimmer vs Williams) \d{4}/i, "$1"],
     [/, (\d{4}) @/, ", ($1) @"],
   ];
 
