@@ -86,6 +86,7 @@ const knownRemovablePhrases = [
   ": A Kabuki Salon",
   ": an anthology of true tales by the restless workers of the city",
   ": Black & White Version",
+  ": Black & White",
   ": Bleak Week",
   ": The Final Cut",
   ": stu spasm",
