@@ -8,7 +8,7 @@ module.exports = {
     twitter: "rafmuseum",
     instagram: "rafmuseum",
   },
-  url: "https://www.rafmuseum.org.uk/london/whats-going-on/propellors-popcorn/",
+  url: "https://www.rafmuseum.org.uk/london/",
   address: "Grahame Park Way, London, NW9 5LL, UK",
   geo: { lat: 51.59823889094015, lon: -0.23831386207641975 },
   structure: "solo",
