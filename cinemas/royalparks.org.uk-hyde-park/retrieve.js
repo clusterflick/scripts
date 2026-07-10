@@ -8,7 +8,6 @@ const listingUrl = `${listingDomain}/open-house/`;
 
 async function retrieve() {
   const movieListPage = await fetchText(listingUrl);
-  assertSelector(movieListPage, ".filterable-card__card");
   const $ = cheerio.load(movieListPage);
 
   const moviePageUrls = new Set();

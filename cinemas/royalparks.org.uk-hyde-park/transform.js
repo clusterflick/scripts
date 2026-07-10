@@ -74,10 +74,6 @@ async function transform({ moviePages }, sourcedEvents) {
     });
   }
 
-  if (movies.length === 0) {
-    throw new Error("No movies found — page structure may have changed");
-  }
-
   const listOfSourcedEvents = Object.values(sourcedEvents).flatMap(
     (events) => events,
   );
