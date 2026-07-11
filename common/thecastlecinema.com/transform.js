@@ -10,8 +10,7 @@ const {
   generateShowingId,
 } = require("../../common/utils");
 
-const getEntry = (attributes, $el, movieAdditionalData) => {
-  const url = `${attributes.domain}${$el.find(".tile-details > a").attr("href")}`;
+const getEntry = (attributes, url, $el, movieAdditionalData) => {
   const id = url.match(/\/programme\/([^/]+)\//i)[1];
   const showingId = generateShowingId(attributes, id);
   const title = getText($el.find(".tile-name"));
@@ -30,7 +29,7 @@ const getEntry = (attributes, $el, movieAdditionalData) => {
   };
 };
 
-async function getAdditionalDataFor(moviePages) {
+function getAdditionalDataFor(moviePages) {
   return Object.keys(moviePages).reduce((mapping, url) => {
     const $ = cheerio.load(moviePages[url]);
 
@@ -40,6 +39,21 @@ async function getAdditionalDataFor(moviePages) {
       actors: getText($(".meta .meta-line .film-cast")),
       classification: $(".bbfc img").attr("alt")?.replace("BBFC ", "")?.trim(),
     });
+
+    return { ...mapping, [url]: data };
+  }, {});
+}
+
+function getFilmLevelAccessibility(moviePages) {
+  return Object.keys(moviePages).reduce((mapping, url) => {
+    const $ = cheerio.load(moviePages[url]);
+
+    const data = {
+      // From https://thecastlecinema.com/access/
+      // Wherever possible we play films with the audio description soundtrack. These films can be
+      // recognised by the [AD] image beside the film title.
+      audioDescription: $(".film-details .audio-described").length > 0,
+    };
 
     return { ...mapping, [url]: data };
   }, {});
@@ -60,7 +74,8 @@ async function transform(
   const $ = cheerio.load(fixMarkup(movieListPage));
   const $listEntry = $("#slim-tiles").children();
 
-  const movieAdditionalData = await getAdditionalDataFor(moviePages);
+  const movieAdditionalData = getAdditionalDataFor(moviePages);
+  const filmLevelAccessibility = getFilmLevelAccessibility(moviePages);
   const movies = {};
 
   $listEntry.each(function () {
@@ -73,8 +88,9 @@ async function transform(
     const id = $entry.attr("data-prog-id");
     if (!id) throw new Error("No listing ID found");
 
+    const url = `${attributes.domain}${$entry.find(".tile-details > a").attr("href")}`;
     if (!movies[id]) {
-      movies[id] = getEntry(attributes, $entry, movieAdditionalData);
+      movies[id] = getEntry(attributes, url, $entry, movieAdditionalData);
     }
 
     const $performanceLinks = $entry.find(".film-times a");
@@ -98,7 +114,9 @@ async function transform(
 
       const filters = convertToList($link.data("filters").toLowerCase());
       const accessibility = {
-        audioDescription: filters.includes("audio-described"),
+        audioDescription:
+          filters.includes("audio-described") ||
+          filmLevelAccessibility[url].audioDescription,
         babyFriendly: filters.includes("parent-baby"),
         hardOfHearing: filters.includes("hard-of-hearing"),
         relaxed: filters.includes("relaxed"),
