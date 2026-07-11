@@ -5,6 +5,7 @@ const {
   createPerformance,
   createAccessibility,
   createFormat,
+  getValidFormat,
   convertToList,
   splitConjoinedItemsInList,
   generateShowingId,
@@ -58,8 +59,22 @@ function getOverviewFor($) {
   return createOverview(overview);
 }
 
+// BFI states the print/presentation for a whole listing in the Film-info panel
+// (e.g. "IMAX 70mm", "70mm", "IMAX with Laser", "Digital 4K"). This is a
+// structured, listing-level fact, unlike the prose blurb which describes the
+// film's format in general and leaks across a venue's 70mm/digital variants of
+// the same film. We tokenise only that panel and keep the recognised tokens
+// (getValidFormat drops "Laser", "Digital", "4K", cast, certificate, etc.).
+function getListingFormat($) {
+  return getText($("ul.Film-info__information"))
+    .split(/[^a-z0-9]+/i)
+    .reduce((format, token) => ({ ...format, ...getValidFormat(token) }), {});
+}
+
 function getPerformancesFor($, url, show, overview, venueFormat) {
   const { title, performances, html } = show;
+  // Format applies to every performance under this listing, so resolve it once.
+  const listingFormat = { ...venueFormat, ...getListingFormat($) };
   const $showInfo = $("ul.Film-info__information li");
   let isSubtitled = false;
   $showInfo.each(function () {
@@ -115,10 +130,7 @@ function getPerformancesFor($, url, show, overview, venueFormat) {
           },
           overview,
         ),
-        // The shared Rich-text blurb describes format options across both BFI
-        // venues, so it can't be trusted per-screening — format comes from the
-        // title plus the venue-level default (every BFI IMAX screening is IMAX).
-        format: createFormat(title, venueFormat),
+        format: createFormat(title, listingFormat),
       }),
     );
   }
@@ -137,7 +149,7 @@ function getPerformancesFor($, url, show, overview, venueFormat) {
       hasAudioDescription,
       isSubtitled,
       accessibilityMapping,
-      venueFormat,
+      listingFormat,
     }),
   );
 }
@@ -156,7 +168,7 @@ function getRecoveredPerformances(
     hasAudioDescription,
     isSubtitled,
     accessibilityMapping,
-    venueFormat,
+    listingFormat,
   },
 ) {
   const seenContextIds = new Set(
@@ -197,7 +209,7 @@ function getRecoveredPerformances(
           },
           overview,
         ),
-        format: createFormat(title, venueFormat),
+        format: createFormat(title, listingFormat),
       }),
     );
   }
