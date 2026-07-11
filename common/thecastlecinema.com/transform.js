@@ -8,6 +8,7 @@ const {
   createFormat,
   convertToList,
   generateShowingId,
+  getValidFormat,
 } = require("../../common/utils");
 
 const getEntry = (attributes, url, $el, movieAdditionalData) => {
@@ -105,7 +106,9 @@ async function transform(
       });
 
       const status = { soldOut: false };
-      let notesList = [getText($link.find(".screening-type"))];
+      const note = getText($link.find(".screening-type"));
+      const formatFromNotes = getValidFormat(note);
+      let notesList = Object.keys(formatFromNotes).length > 0 ? [] : [note];
       if ($link.find(".sold-out").length > 0) {
         status.soldOut = true;
       } else if ($link.find(".last-few").length > 0) {
@@ -137,7 +140,7 @@ async function transform(
           ),
           format: createFormat(
             movies[id].title,
-            {},
+            formatFromNotes,
             movies[id].matchingHints.overview,
           ),
         }),

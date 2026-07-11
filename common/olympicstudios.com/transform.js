@@ -7,6 +7,7 @@ const {
   basicNormalize,
   createAccessibility,
   createFormat,
+  getTitleFormat,
   generateShowingId,
   getId,
 } = require("../utils");
@@ -62,16 +63,23 @@ const getPerformances = ($, attributes, performanceData, title, overview) => {
         basicNormalize(tag) !== "sold out",
     );
 
-    // Add note for 3D screening
+    // Record 3D screenings as a structured format rather than a note
     const format = {};
     if ($button.find(".bi-badge-3d-fill").length > 0) {
-      notesList.push("3D Screening");
       format.dimension = "3d";
     }
 
-    // Add note for Dolby cinema
+    // The cert-16 badge is a per-screening format marker whose alt text is a
+    // compound label (e.g. "Movie Sound Dolby Cinema"); extract any recognised
+    // format from it as structured data, otherwise keep the label as a note.
     if ($button.find("img.cert-16").length > 0) {
-      notesList.push($button.find("img.cert-16").eq(0).attr("alt"));
+      const alt = $button.find("img.cert-16").eq(0).attr("alt");
+      const altFormat = getTitleFormat(alt);
+      if (Object.keys(altFormat).length > 0) {
+        Object.assign(format, altFormat);
+      } else {
+        notesList.push(alt);
+      }
     }
 
     return performances.concat(

@@ -837,6 +837,7 @@ module.exports = {
   createAccessibility,
   createFormat,
   getValidFormat,
+  getTitleFormat,
   removeMatchingHints,
   addTestCategory,
   compareAsSimilar,

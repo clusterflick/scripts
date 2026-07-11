@@ -5,7 +5,7 @@ const {
   createOverview,
   createAccessibility,
   createFormat,
-  getValidFormat,
+  getTitleFormat,
   generateShowingId,
   isPrivateHire,
   basicNormalize,
@@ -141,8 +141,22 @@ async function transform(
             }
 
             // Screen format (IMAX, Dolby Cinema, 70mm, ...) is captured in the
-            // structured format rather than left in notes.
-            const attributeFormat = getValidFormat(attributeName);
+            // structured format rather than left in notes. The attribute name is
+            // a curated label (e.g. "IMAX", "70mm Web") so any format token in it
+            // is trustworthy; the description resolves ambiguous names (bare
+            // "Dolby" -> "Dolby Cinema™ ..."), but from that prose we only trust a
+            // presentation *system* - a gauge there could be blurb ("35mm
+            // restoration") rather than the exhibition format.
+            const attributeFormat = getTitleFormat(attribute.name.text);
+            const descriptionFormat = getTitleFormat(
+              attribute.description?.text ?? "",
+            );
+            if (
+              descriptionFormat.presentation &&
+              !attributeFormat.presentation
+            ) {
+              attributeFormat.presentation = descriptionFormat.presentation;
+            }
             if (Object.keys(attributeFormat).length > 0) {
               Object.assign(format, attributeFormat);
               return;
