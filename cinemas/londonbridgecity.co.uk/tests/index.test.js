@@ -11,7 +11,7 @@ const isRecording = false;
 
 describe(attributes.name, () => {
   setupPolly(isRecording, __dirname);
-  jest.useFakeTimers().setSystemTime(new Date("2026-06-17"));
+  jest.useFakeTimers().setSystemTime(new Date("2026-07-11"));
 
   it(
     "retrieve and transform",
@@ -38,7 +38,7 @@ describe(attributes.name, () => {
 
       // Make sure the data looks roughly correct (past-dated screenings are
       // filtered out, leaving the upcoming ones)
-      expect(data).toHaveLength(7);
+      expect(data).toHaveLength(5);
 
       expect(schemaValidate(data)).toBe(true);
       expect(data).toMatchSnapshot();

@@ -8,7 +8,14 @@ const parseEventDate = (dateString) => {
   // Clean up the date string
   let cleaned = dateString
     .replace(/\|.*$/, "") // Remove everything after |
-    .replace(/-\d+(?::\d+)?(?:am|pm)/i, "") // Remove end time (e.g., "-9pm")
+    // Collapse a time range to its start time (e.g. "6pm-9pm" -> "6pm").
+    // When only the end time carries the am/pm marker (e.g. "12-5pm"),
+    // apply that marker to the start time -> "12pm".
+    .replace(
+      /(\d+(?:[:.]\d+)?)(am|pm)?\s*-\s*\d+(?:[:.]\d+)?(am|pm)/i,
+      (_match, start, startMeridiem, endMeridiem) =>
+        `${start}${startMeridiem || endMeridiem}`,
+    )
     .replace(/\s+/g, " ")
     .trim();
 
