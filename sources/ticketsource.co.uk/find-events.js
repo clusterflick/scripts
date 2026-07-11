@@ -7,6 +7,7 @@ const {
   readJSON,
   generateShowingId,
   createAccessibility,
+  createFormat,
   basicNormalize,
   getText,
 } = require("../../common/utils");
@@ -42,6 +43,7 @@ function createPerformanceFromHit(
       },
       overview,
     ),
+    format: createFormat(title, {}, overview),
   });
 }
 

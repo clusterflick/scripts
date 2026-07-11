@@ -6,6 +6,7 @@ const {
   createOverview,
   createPerformance,
   createAccessibility,
+  createFormat,
   basicNormalize,
 } = require("../../common/utils");
 const attributes = require("./attributes");
@@ -119,6 +120,7 @@ async function transform({ moviePages }, sourcedEvents) {
               },
               overview,
             ),
+            format: createFormat(title, {}, overview),
           });
         }),
       matchingHints: { overview },

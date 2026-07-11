@@ -7,6 +7,7 @@ const {
   createPerformance,
   getText,
   createAccessibility,
+  createFormat,
   basicNormalize,
   readJSON,
 } = require("../../common/utils");
@@ -84,6 +85,7 @@ function parseMoviePage(url, html) {
         url: bookingUrl,
         notesList: [],
         accessibility: createAccessibility(title, {}, description),
+        format: createFormat(title, {}, description),
       }),
     ],
     matchingHints: { overview: description },

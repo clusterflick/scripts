@@ -4,9 +4,11 @@ const { enGB } = require("date-fns/locale/en-GB");
 const {
   createOverview,
   createPerformance,
+  createFormat,
   generateShowingId,
   getText,
   basicNormalize,
+  createAccessibility,
 } = require("../../common/utils");
 const attributes = require("./attributes");
 
@@ -53,9 +55,10 @@ async function transform({ moviePages }, sourcedEvents) {
       throw new Error(`No ID found for ${url}`);
     }
 
+    const title = getText($("h1").eq(0));
     movies.push({
       showingId: generateShowingId(attributes, id),
-      title: getText($("h1").eq(0)),
+      title,
       url,
       overview: createOverview({}),
       performances: [
@@ -63,6 +66,8 @@ async function transform({ moviePages }, sourcedEvents) {
           date: parseDateTime(dateStr, startingTime),
           notesList: doorsOpen ? [`Doors open: ${doorsOpen}`] : [],
           url: $bookNowButton.attr("href"),
+          accessibility: createAccessibility(title, {}, description),
+          format: createFormat(getText($("h1").eq(0)), {}, description),
         }),
       ],
       matchingHints: {

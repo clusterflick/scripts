@@ -4,6 +4,7 @@ const {
   createOverview,
   createPerformance,
   createAccessibility,
+  createFormat,
   generateShowingId,
   getText,
   basicNormalize,
@@ -93,7 +94,8 @@ async function transform({ moviePages }, sourcedEvents) {
       return createPerformance({
         date,
         url: offers.url,
-        accessibility: data?.accessibility,
+        accessibility: data?.accessibility || {},
+        format: createFormat(title, {}, overview),
         status: { soldOut: data?.soldOut },
       });
     });

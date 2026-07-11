@@ -5,6 +5,7 @@ const {
   createOverview,
   createPerformance,
   createAccessibility,
+  createFormat,
   isPrivateHire,
   basicNormalize,
 } = require("../../common/utils");
@@ -54,6 +55,7 @@ async function transform({ csvText }, sourcedEvents) {
         date: performanceDate,
         url: attributes.url,
         accessibility: createAccessibility(title, {}),
+        format: createFormat(title, {}, ""),
       }),
     );
   }

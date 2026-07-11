@@ -5,6 +5,7 @@ const {
   createOverview,
   createPerformance,
   createAccessibility,
+  createFormat,
   generateShowingId,
 } = require("../utils");
 const { isNotSportShowing } = require("../is-sport-showing");
@@ -114,12 +115,14 @@ async function transform(
       });
 
       const accessibility = createAccessibility(title, {}, overviewText);
+      const format = createFormat(title, {}, overviewText);
       const performance = createPerformance({
         date,
         notesList,
         url,
         status: isSoldOut ? { soldOut: true } : {},
         accessibility,
+        format,
       });
 
       if (!moviesBySlug[filmSlug]) {

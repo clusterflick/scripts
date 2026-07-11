@@ -6,6 +6,7 @@ const {
   createPerformance,
   generateShowingId,
   createAccessibility,
+  createFormat,
 } = require("../../common/utils");
 const { parseDate } = require("./utils");
 const attributes = require("./attributes");
@@ -96,6 +97,7 @@ async function transform({ moviePages }, sourcedEvents) {
             date: parseDate(event.startDate),
             url: bookingUrls[index],
             accessibility: createAccessibility(title, {}, overview),
+            format: createFormat(title, {}, overview),
           }),
         ),
         matchingHints: { overview },

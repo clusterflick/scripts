@@ -4,6 +4,7 @@ const {
   createPerformance,
   createOverview,
   createAccessibility,
+  createFormat,
   basicNormalize,
   generateShowingId,
   isPrivateHire,
@@ -170,6 +171,7 @@ async function transform(attributes, urlSlug, movieData, sourcedEvents) {
             getAccessibility(performance, overview),
             overview,
           ),
+          format: createFormat(title, {}, overview),
         }),
       ),
       matchingHints: {

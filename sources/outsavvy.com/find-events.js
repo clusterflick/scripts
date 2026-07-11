@@ -5,6 +5,7 @@ const {
   generateShowingId,
   getText,
   createAccessibility,
+  createFormat,
 } = require("../../common/utils");
 const { createOverview, createPerformance } = require("../../common/utils");
 const { parseDate } = require("./utils");
@@ -66,6 +67,7 @@ function convertOutsavvyEvent(event) {
         date: event.date,
         url: event.url,
         accessibility: createAccessibility(event.title, {}, event.description),
+        format: createFormat(event.title, {}, event.description),
       }),
     ],
     matchingHints: { overview: event.description },

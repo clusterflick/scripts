@@ -4,6 +4,7 @@ const {
   getText,
   createPerformance,
   createAccessibility,
+  createFormat,
   convertToList,
   splitConjoinedItemsInList,
   generateShowingId,
@@ -101,6 +102,9 @@ function getPerformancesFor($, url, { title, performances }, overview) {
           },
           overview,
         ),
+        // Title-only: the shared Rich-text blurb describes format options
+        // across both BFI venues, so it can't be trusted per-screening.
+        format: createFormat(title),
       }),
     );
   }

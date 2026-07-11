@@ -5,6 +5,7 @@ const {
   createOverview,
   createPerformance,
   createAccessibility,
+  createFormat,
   basicNormalize,
   generateShowingId,
 } = require("../../common/utils");
@@ -160,6 +161,7 @@ function processPerformancePage(
       },
       getDescription(listingPage),
     );
+    const format = createFormat(title, {}, getDescription(listingPage));
 
     const $timeEl = $(this).find(".instance-time__time time");
     const dateTime = sanitizeDatetime($timeEl);
@@ -177,6 +179,7 @@ function processPerformancePage(
         screen: screen || fallbackScreen,
         status,
         accessibility,
+        format,
       }),
     );
   });

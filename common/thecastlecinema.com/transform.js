@@ -5,6 +5,7 @@ const {
   createPerformance,
   createOverview,
   createAccessibility,
+  createFormat,
   convertToList,
   generateShowingId,
 } = require("../../common/utils");
@@ -114,6 +115,11 @@ async function transform(
           accessibility: createAccessibility(
             movies[id].title,
             accessibility,
+            movies[id].matchingHints.overview,
+          ),
+          format: createFormat(
+            movies[id].title,
+            {},
             movies[id].matchingHints.overview,
           ),
         }),

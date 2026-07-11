@@ -6,6 +6,7 @@ const {
   getText,
   createPerformance,
   createAccessibility,
+  createFormat,
   generateShowingId,
 } = require("../../common/utils");
 const { parseDate } = require("./utils");
@@ -54,6 +55,7 @@ const getSinglePerformance = ($, title, overview) => {
       notesList: [],
       url,
       accessibility: createAccessibility(title, { subtitled }, overview),
+      format: createFormat(title, {}, overview),
     }),
   ];
 };
@@ -73,6 +75,7 @@ const getMultiplePerformances = ($, bookingInformation, title, overview) => {
         soldOut: availability.available === 0,
       },
       accessibility: createAccessibility(title, { subtitled }, overview),
+      format: createFormat(title, {}, overview),
     });
   });
 };

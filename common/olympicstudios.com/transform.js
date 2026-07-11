@@ -6,6 +6,7 @@ const {
   createPerformance,
   basicNormalize,
   createAccessibility,
+  createFormat,
   generateShowingId,
   getId,
 } = require("../utils");
@@ -62,8 +63,10 @@ const getPerformances = ($, attributes, performanceData, title, overview) => {
     );
 
     // Add note for 3D screening
+    const format = {};
     if ($button.find(".bi-badge-3d-fill").length > 0) {
       notesList.push("3D Screening");
+      format.dimension = "3d";
     }
 
     // Add note for Dolby cinema
@@ -89,6 +92,7 @@ const getPerformances = ($, attributes, performanceData, title, overview) => {
           },
           overview,
         ),
+        format: createFormat(title, format, overview),
       }),
     );
   }, []);

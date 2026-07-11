@@ -6,6 +6,7 @@ const {
   createOverview,
   generateShowingId,
   createAccessibility,
+  createFormat,
 } = require("../../common/utils");
 const { extractJsonLdEvents } = require("../../common/tribe-events/transform");
 const { isNotSportShowing } = require("../../common/is-sport-showing");
@@ -66,6 +67,7 @@ async function transform(retrievedData, sourcedEvents) {
             url: event.url,
             status: { soldOut },
             accessibility: createAccessibility(title, {}, event.description),
+            format: createFormat(title, {}, event.description),
           }),
         ],
         matchingHints: {

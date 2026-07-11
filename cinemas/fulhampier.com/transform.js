@@ -4,6 +4,7 @@ const {
   createOverview,
   generateShowingId,
   createAccessibility,
+  createFormat,
 } = require("../../common/utils");
 const attributes = require("./attributes");
 
@@ -65,6 +66,7 @@ async function transform({ eventsData }, sourcedEvents) {
             {},
             event.event_description,
           ),
+          format: createFormat(event.event_title, {}, event.event_description),
         }),
       ],
       matchingHints: {

@@ -7,6 +7,7 @@ const {
   generateShowingId,
   readJSON,
   createAccessibility,
+  createFormat,
   getText,
 } = require("../../common/utils");
 const { venueMatchesCinema } = require("../../common/source-utils");
@@ -105,6 +106,7 @@ function parseEvent($, article) {
           notesList: notes ? [notes] : [],
           url: eventUrl,
           accessibility: createAccessibility(title, {}, notes),
+          format: createFormat(title, {}, notes),
         }),
       ],
       matchingHints: { overview: notes },

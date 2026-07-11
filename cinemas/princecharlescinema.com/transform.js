@@ -5,6 +5,8 @@ const {
   createPerformance,
   createOverview,
   createAccessibility,
+  createFormat,
+  getValidFormat,
   generateShowingId,
   isPrivateHire,
 } = require("../../common/utils");
@@ -113,6 +115,7 @@ async function transform({ movieListPage }, sourcedEvents) {
         };
 
         const accessibility = {};
+        const format = {};
         $currentElement.find(".movietag .tag").each(function () {
           const tag = getText($(this));
           if (tag.toLowerCase() === "hoh" || tag.toLowerCase() === "sdh") {
@@ -128,6 +131,13 @@ async function transform({ movieListPage }, sourcedEvents) {
             // audio description track that can be transmitted for the
             // performance." - https://princecharlescinema.com/accessibility/
             accessibility.audioDescription = true;
+          }
+
+          // Format tags (35mm, 70mm, ...) become structured format, not notes.
+          const tagFormat = getValidFormat(tag);
+          if (Object.keys(tagFormat).length > 0) {
+            Object.assign(format, tagFormat);
+            return;
           }
 
           notesList.push(tagMapping[tag.toLowerCase()] || tag);
@@ -151,6 +161,7 @@ async function transform({ movieListPage }, sourcedEvents) {
             url: bookingUrl || url,
             status,
             accessibility: createAccessibility(title, accessibility, synopsis),
+            format: createFormat(title, format, synopsis),
           }),
         );
         $currentElement = $currentElement.next();

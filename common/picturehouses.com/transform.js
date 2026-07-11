@@ -5,6 +5,8 @@ const {
   createOverview,
   createPerformance,
   createAccessibility,
+  createFormat,
+  getValidFormat,
   generateShowingId,
   isPrivateHire,
 } = require("../utils");
@@ -67,10 +69,13 @@ async function transform(
         url: `${domain}/movie-details/${cinemaId}/${id}/${slug}`,
         overview,
         performances: showings.map((showing) => {
+          const showingAttributes = showing.attributes || [];
           const hasAttribute = (value) =>
-            !!(showing.attributes || []).find(
+            !!showingAttributes.find(
               ({ attribute }) => attribute.toLowerCase() === value,
             );
+          const isFormatAttribute = ({ attribute }) =>
+            Object.keys(getValidFormat(attribute)).length > 0;
 
           const status = {
             soldOut: !!showing.SoldoutStatus,
@@ -91,15 +96,24 @@ async function transform(
             synopsis,
           );
 
+          // Format markers come from two places: source/presentation (35mm,
+          // 70mm, IMAX) live in the attribute objects, while dimension (2D/3D)
+          // lives in SessionAttributesNames. Collect both into structured format
+          // instead of leaving them in notes.
+          const format = [
+            ...showingAttributes.map(({ attribute }) => attribute),
+            ...(showing.SessionAttributesNames || []),
+          ].reduce((acc, token) => ({ ...acc, ...getValidFormat(token) }), {});
+
           return createPerformance({
             date: parseDate(showing.Showtime),
             screen: showing.ScreenName,
-            notesList: (showing.attributes || [])
+            notesList: showingAttributes
               .filter(
-                ({ attribute }) =>
+                (attribute) =>
                   !["audio d", "relaxed", "hohsub", "sub cinema"].includes(
-                    attribute.toLowerCase(),
-                  ),
+                    attribute.attribute.toLowerCase(),
+                  ) && !isFormatAttribute(attribute),
               )
               .map(({ attribute_full: title, description }) =>
                 description ? `${title}: ${description}` : title,
@@ -107,6 +121,7 @@ async function transform(
             url: `https://web.picturehouses.com/order/showtimes/${cinemaId}-${showing.SessionId}/seats`,
             status,
             accessibility,
+            format: createFormat(movie.Title, format, synopsis),
           });
         }),
         matchingHints: {

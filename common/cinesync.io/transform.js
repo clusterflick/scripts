@@ -5,6 +5,8 @@ const {
   sanitizeRichText,
   isPrivateHire,
   createAccessibility,
+  createFormat,
+  getValidFormat,
   basicNormalize,
   getValidClassification,
 } = require("../../common/utils");
@@ -90,6 +92,7 @@ async function transform(attributes, { movieListPage }, sourcedEvents) {
       for (const showTime of movie.show_times) {
         const notesList = [];
         const accessibility = {};
+        const format = {};
 
         // Add language if specified
         if (showTime.movie_language?.name) {
@@ -98,6 +101,10 @@ async function transform(attributes, { movieListPage }, sourcedEvents) {
 
         showTime.show_times_tags.forEach((tag) => {
           tags.add(tag.name);
+
+          // Capture format tokens (2D/3D dimension, etc.) before the ignore
+          // checks below strip "2D"/"Standard" from the notes.
+          Object.assign(format, getValidFormat(tag.short_name));
 
           // Ignore pointless tags like "Standard", "2D" and "PG"
           if (
@@ -152,6 +159,7 @@ async function transform(attributes, { movieListPage }, sourcedEvents) {
             accessibility,
             movie.synopsis,
           ),
+          format: createFormat(movie.movie_name, format, movie.synopsis),
         });
 
         movieEntry.performances.push(performance);

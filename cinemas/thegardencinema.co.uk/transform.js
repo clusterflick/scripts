@@ -5,6 +5,7 @@ const {
   createPerformance,
   createOverview,
   createAccessibility,
+  createFormat,
   generateShowingId,
 } = require("../../common/utils");
 const { parseDate } = require("./utils");
@@ -78,6 +79,7 @@ function getPerformances($, $filmScreenings, title, overview) {
           getAccessibility($(this)),
           overview,
         ),
+        format: createFormat(title, {}, overview),
       }),
     );
   });

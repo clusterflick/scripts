@@ -4,6 +4,7 @@ const {
   readJSON,
   generateShowingId,
   createAccessibility,
+  createFormat,
   createOverview,
   createPerformance,
 } = require("../../common/utils");
@@ -59,6 +60,7 @@ function convertFeverEvent(url, planDetail, sessions) {
           {},
           planDetail.description,
         ),
+        format: createFormat(planDetail.name, {}, planDetail.description),
       }),
     ),
     matchingHints: { overview: planDetail.description },

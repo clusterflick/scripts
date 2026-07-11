@@ -2,6 +2,7 @@ const {
   createOverview,
   createPerformance,
   createAccessibility,
+  createFormat,
   generateShowingId,
 } = require("../utils");
 const { parseDate } = require("./utils");
@@ -65,6 +66,7 @@ async function transform(
           accessibility,
           movie.short_synopsis,
         ),
+        format: createFormat(movie.title, {}, movie.short_synopsis),
       });
     });
 

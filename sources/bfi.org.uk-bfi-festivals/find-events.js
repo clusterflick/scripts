@@ -6,6 +6,7 @@ const {
   createPerformance,
   getText,
   createAccessibility,
+  createFormat,
   readJSON,
 } = require("../../common/utils");
 const { venueMatchesCinema } = require("../../common/source-utils");
@@ -217,6 +218,7 @@ async function findEvents(cinema) {
             accessibilityFlags,
             overviewText,
           ),
+          format: createFormat(title, {}, overviewText),
         }),
       );
     }

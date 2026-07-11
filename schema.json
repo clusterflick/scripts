@@ -137,10 +137,42 @@
               },
               "additionalProperties": false
             },
+            "format": {
+              "type": "object",
+              "properties": {
+                "source": {
+                  "type": "string",
+                  "enum": [
+                    "70mm",
+                    "35mm",
+                    "16mm",
+                    "vhs",
+                    "laserdisc",
+                    "nitrate"
+                  ]
+                },
+                "presentation": {
+                  "type": "string",
+                  "enum": ["imax", "4dx", "screenx", "dolby-cinema"]
+                },
+                "dimension": {
+                  "type": "string",
+                  "enum": ["2d", "3d"]
+                }
+              },
+              "additionalProperties": false
+            },
             "additionalProperties": false
           },
           "additionalProperties": false,
-          "required": ["time", "notes", "bookingUrl", "status", "accessibility"]
+          "required": [
+            "time",
+            "notes",
+            "bookingUrl",
+            "status",
+            "accessibility",
+            "format"
+          ]
         }
       },
       "themoviedb": {

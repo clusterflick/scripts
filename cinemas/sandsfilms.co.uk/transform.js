@@ -6,6 +6,7 @@ const {
   generateShowingId,
   getText,
   createAccessibility,
+  createFormat,
 } = require("../../common/utils");
 const attributes = require("./attributes");
 
@@ -82,6 +83,7 @@ async function transform({ movieListPage }, sourcedEvents) {
       url: eventUrl,
       status: getTicketStatus(event),
       accessibility: createAccessibility(event.name, {}, matchingHintsText),
+      format: createFormat(event.name, {}, matchingHintsText),
     });
 
     return {

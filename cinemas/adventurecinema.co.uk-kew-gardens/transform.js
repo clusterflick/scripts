@@ -7,6 +7,7 @@ const {
   createPerformance,
   createOverview,
   createAccessibility,
+  createFormat,
   basicNormalize,
 } = require("../../common/utils");
 const attributes = require("./attributes");
@@ -115,6 +116,7 @@ async function transform({ moviePages }, sourcedEvents) {
           url: getBookingUrl(mainSection),
           status: isSoldOut(mainSection) ? { soldOut: true } : {},
           accessibility: createAccessibility(title, {}, synopsis),
+          format: createFormat(title, {}, synopsis),
         }),
       ],
       matchingHints: {

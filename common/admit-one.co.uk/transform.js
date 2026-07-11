@@ -4,6 +4,8 @@ const {
   createOverview,
   createPerformance,
   createAccessibility,
+  createFormat,
+  getValidFormat,
   generateShowingId,
   basicNormalize,
 } = require("../../common/utils");
@@ -160,6 +162,7 @@ async function transform(
           soldOut: !$performance.attr("href"),
         };
         const accessibility = {};
+        const format = {};
         let screen = undefined;
 
         const $iconImage = $performance.children().first().find("img");
@@ -173,6 +176,8 @@ async function transform(
               accessibility.babyFriendly = true;
             } else if (iconType.toLowerCase() === "bar") {
               screen = "Bar";
+            } else if (Object.keys(getValidFormat(iconType)).length > 0) {
+              Object.assign(format, getValidFormat(iconType));
             } else {
               notesList.push(iconType);
             }
@@ -189,6 +194,11 @@ async function transform(
             accessibility: createAccessibility(
               title,
               accessibility,
+              movies[id].matchingHints.overview,
+            ),
+            format: createFormat(
+              title,
+              format,
               movies[id].matchingHints.overview,
             ),
           }),

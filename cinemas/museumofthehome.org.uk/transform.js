@@ -5,6 +5,7 @@ const {
   createPerformance,
   createOverview,
   createAccessibility,
+  createFormat,
   parseTitleAndClassification,
 } = require("../../common/utils");
 const attributes = require("./attributes");
@@ -48,6 +49,7 @@ async function transform(data, sourcedEvents) {
             url: event.link,
             status: { soldOut: !!event.event_sold_out },
             accessibility: createAccessibility(title, {}, event.summary),
+            format: createFormat(title, {}, event.summary),
           }),
         ],
         matchingHints: {

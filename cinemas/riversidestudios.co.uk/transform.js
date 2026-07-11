@@ -3,6 +3,7 @@ const {
   createOverview,
   createPerformance,
   createAccessibility,
+  createFormat,
   basicNormalize,
   getText,
   generateShowingId,
@@ -136,6 +137,7 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
             },
             synopsis,
           );
+          const format = createFormat(title, {}, synopsis);
 
           const notesList = [];
           if (tags.includes("224")) {
@@ -155,6 +157,7 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
             notesList,
             url,
             accessibility,
+            format,
           });
         });
       },

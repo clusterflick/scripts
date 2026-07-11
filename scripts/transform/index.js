@@ -16,6 +16,18 @@ const matchIdentifiedMovies = require("./match-identified-movies");
 const identifyMultipleMovies = require("./identify-multiple-movies");
 const identifyShorts = require("./identify-shorts");
 
+// A movie carried forward from a previous release may predate the required
+// per-performance `accessibility` / `format` objects. Backfill empty objects
+// where missing so the delisted-but-still-valid movie satisfies the schema.
+const withRequiredPerformanceDefaults = (movie) => ({
+  ...movie,
+  performances: movie.performances.map((performance) => ({
+    accessibility: {},
+    format: {},
+    ...performance,
+  })),
+});
+
 async function transform(
   location,
   input,
@@ -194,7 +206,7 @@ async function transform(
 
       // Otherwise, add the movie into the transformed data
       console.log(" - Found missing movie:", movie.title, movie.url);
-      matchedData.push(movie);
+      matchedData.push(withRequiredPerformanceDefaults(movie));
     }
     // Reprocess the matched data in case missed events have been added
     matchedData = sortAndFilterMovies(matchedData);

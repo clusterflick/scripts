@@ -9,6 +9,7 @@ const {
   generateShowingId,
   basicNormalize,
   createAccessibility,
+  createFormat,
 } = require("../../common/utils");
 const attributes = require("./attributes");
 
@@ -97,6 +98,11 @@ async function transform({ moviePages }, sourcedEvents) {
         url: bookingUrl || url,
         status,
         accessibility: createAccessibility(
+          movies[showingId].title,
+          {},
+          movies[showingId].matchingHints?.overview,
+        ),
+        format: createFormat(
           movies[showingId].title,
           {},
           movies[showingId].matchingHints?.overview,

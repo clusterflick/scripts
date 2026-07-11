@@ -3,6 +3,7 @@ const {
   createOverview,
   generateShowingId,
   createAccessibility,
+  createFormat,
 } = require("../../common/utils");
 const attributes = require("./attributes");
 
@@ -39,6 +40,7 @@ async function transform({ screenings }, sourcedEvents) {
           url: bookingUrl,
           status: soldOut ? { soldOut } : undefined,
           accessibility: createAccessibility(film.title, {}, film.description),
+          format: createFormat(film.title, {}, film.description),
         }),
       ],
       matchingHints: { overview: film.description },

@@ -5,6 +5,7 @@ const {
   sanitizeRichText,
   generateShowingId,
   createAccessibility,
+  createFormat,
   convertNamesTextToList,
 } = require("../../common/utils");
 const { createOverview, createPerformance } = require("../../common/utils");
@@ -74,6 +75,7 @@ function convertEventbriteEvent(event, details) {
         notesList: [],
         url: event.tickets_url,
         accessibility: createAccessibility(event.name, {}, overview),
+        format: createFormat(event.name, {}, overview),
       }),
     ],
     matchingHints: {

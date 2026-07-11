@@ -7,6 +7,7 @@ const {
   basicNormalize,
   createPerformance,
   createAccessibility,
+  createFormat,
 } = require("../../common/utils");
 const { extractPeopleNames } = require("../../common/extract-people");
 const { parseDate } = require("./utils");
@@ -84,6 +85,7 @@ async function transform({ moviePages }, sourcedEvents) {
               },
               synopsis,
             ),
+            format: createFormat(title, {}, synopsis),
           }),
         );
       });

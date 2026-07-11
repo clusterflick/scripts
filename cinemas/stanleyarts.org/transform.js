@@ -4,6 +4,7 @@ const {
   createPerformance,
   createOverview,
   createAccessibility,
+  createFormat,
   getTitleAccessibility,
 } = require("../../common/utils");
 const { extractJsonLdEvents } = require("../../common/tribe-events/transform");
@@ -40,6 +41,7 @@ async function transform({ movieListPages }, sourcedEvents) {
               getTitleAccessibility(synopsis),
               synopsis,
             ),
+            format: createFormat(event.name, {}, synopsis),
           }),
         ],
         matchingHints: {

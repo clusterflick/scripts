@@ -3,6 +3,8 @@ const {
   createOverview,
   createPerformance,
   createAccessibility,
+  createFormat,
+  getValidFormat,
   generateShowingId,
 } = require("../../common/utils");
 
@@ -80,6 +82,7 @@ async function transform(
       soldOut: event.soldOut,
     };
     const accessibility = {};
+    const format = {};
     const notesList = [];
     event.attributeIds.forEach((attributeId) => {
       if (attributeId === "audio-described") {
@@ -97,6 +100,9 @@ async function transform(
       if (attributeId === "classicfilm") {
         notesList.push("This is a classic film");
       }
+      // Screen format lives in the same per-performance attribute list
+      // (e.g. "imax", "4dx", "screenx"); getValidFormat drops the rest.
+      Object.assign(format, getValidFormat(attributeId));
     });
 
     movie.performances = movie.performances.concat(
@@ -111,6 +117,7 @@ async function transform(
           accessibility,
           movie.matchingHints.overview,
         ),
+        format: createFormat(movie.title, format, movie.matchingHints.overview),
       }),
     );
   });

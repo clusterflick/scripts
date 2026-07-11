@@ -7,6 +7,7 @@ const {
   createPerformance,
   getValidClassification,
   createAccessibility,
+  createFormat,
 } = require("../../common/utils");
 const attributes = require("./attributes");
 const { parseISO } = require("date-fns");
@@ -80,6 +81,15 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
     });
 
     const title = movie.searchTitle || movie.productionTitle;
+
+    // The Science Museum is an IMAX venue with no structured format data - it
+    // marks dimension only in the title as a bare "2D"/"3D" before the
+    // classification (e.g. "T. Rex 3D (PG)", "Apollo 11 ... 2D (U)"). That bare
+    // form is too risky to match generically ("Piranha 3D (18)"), but here every
+    // "2D"/"3D" reliably denotes the screening, so read it as structured format.
+    const dimensionMatch = title.match(/\b([23])d\b/i);
+    const format = dimensionMatch ? { dimension: `${dimensionMatch[1]}d` } : {};
+
     const overview = Array.from($(".c-wysiwyg").first().children())
       .map((el) => getText($(el)))
       .join("\n")
@@ -111,6 +121,7 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
               soldOut: performanceStatusMessage.toLowerCase() === "sold out",
             },
             accessibility: createAccessibility(title, {}, overview),
+            format: createFormat(title, format, overview),
           });
         },
       ),

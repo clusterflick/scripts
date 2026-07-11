@@ -5,6 +5,7 @@ const {
   createOverview,
   createPerformance,
   createAccessibility,
+  createFormat,
   getValidClassification,
   basicNormalize,
 } = require("../../common/utils");
@@ -87,6 +88,7 @@ function transformFormat1(emailText) {
             { subtitled: true },
             description,
           ),
+          format: createFormat(title, {}, description),
         }),
       ],
       matchingHints: {
@@ -156,6 +158,7 @@ function transformFormat3(emailText) {
             { subtitled: true },
             description,
           ),
+          format: createFormat(title, {}, description),
         }),
       ],
       matchingHints: {
@@ -211,6 +214,7 @@ function transformFormat2(emailText) {
           date,
           url,
           accessibility: createAccessibility(title, {}, description),
+          format: createFormat(title, {}, description),
         }),
       ],
       matchingHints: {

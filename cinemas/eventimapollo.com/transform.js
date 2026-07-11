@@ -5,6 +5,7 @@ const {
   createPerformance,
   getText,
   createAccessibility,
+  createFormat,
 } = require("../../common/utils");
 const { parse } = require("date-fns");
 const { enGB } = require("date-fns/locale/en-GB");
@@ -41,6 +42,7 @@ async function transform({ moviePages }, sourcedEvents) {
           url: canonicalUrl,
           notesList: showtimeType ? [showtimeType] : [],
           accessibility: createAccessibility(title, {}, overview),
+          format: createFormat(title, {}, overview),
         }),
       );
     });

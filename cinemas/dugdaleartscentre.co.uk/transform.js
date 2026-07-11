@@ -5,6 +5,7 @@ const {
   createPerformance,
   createOverview,
   createAccessibility,
+  createFormat,
 } = require("../../common/utils");
 const { extractPeopleNames } = require("../../common/extract-people");
 const attributes = require("./attributes");
@@ -65,6 +66,7 @@ async function transform({ moviePages }, sourcedEvents) {
           date,
           url: moviePageUrl,
           accessibility: createAccessibility(title, {}, overview),
+          format: createFormat(title, {}, overview),
           status,
         }),
       );

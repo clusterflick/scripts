@@ -5,6 +5,7 @@ const {
   createPerformance,
   createOverview,
   createAccessibility,
+  createFormat,
   generateShowingId,
   getValidClassification,
 } = require("../../common/utils");
@@ -46,6 +47,7 @@ function extractPerformances($, title, overview) {
             },
             overview,
           ),
+          format: createFormat(title, {}, overview),
         }),
       );
     });

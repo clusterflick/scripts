@@ -4,6 +4,7 @@ const {
   getText,
   createPerformance,
   createAccessibility,
+  createFormat,
   basicNormalize,
   generateShowingId,
 } = require("../../common/utils");
@@ -85,6 +86,7 @@ const getMultiplePerformances = (
           },
           overview,
         ),
+        format: createFormat(title, {}, overview),
       });
     })
     .get();
@@ -131,6 +133,7 @@ const getSinglePerformance = (
         },
         overview,
       ),
+      format: createFormat(title, {}, overview),
     }),
   ];
 };

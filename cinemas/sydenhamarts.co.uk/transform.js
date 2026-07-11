@@ -5,6 +5,7 @@ const {
   createPerformance,
   createOverview,
   createAccessibility,
+  createFormat,
   getId,
   basicNormalize,
 } = require("../../common/utils");
@@ -76,6 +77,7 @@ async function transform({ moviePages }, sourcedEvents) {
         date,
         url: bookingUrl || moviePageUrl,
         accessibility: createAccessibility(title, {}, overview),
+        format: createFormat(title, {}, overview),
       }),
     ];
 

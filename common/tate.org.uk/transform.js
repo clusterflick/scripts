@@ -3,8 +3,10 @@ const { parse } = require("date-fns");
 const {
   getText,
   createPerformance,
+  createFormat,
   createOverview,
   generateShowingId,
+  createAccessibility,
 } = require("../utils");
 
 function parseDateTime(dateTimeString) {
@@ -46,6 +48,7 @@ async function transform(attributes, { moviePages }, sourcedEvents) {
       .toArray()
       .map((el) => getText($(el)))
       .join("\n\n");
+    const overview = `${getText($filmEvent.find(".content__standfirst"))}\n\n${description}`;
 
     shows.push({
       showingId: generateShowingId(attributes, eventId),
@@ -58,11 +61,11 @@ async function transform(attributes, { moviePages }, sourcedEvents) {
         createPerformance({
           date: parseDateTime(dateTimeText),
           url: bookingUrl,
+          accessibility: createAccessibility(title, {}, overview),
+          format: createFormat(title, {}, description),
         }),
       ],
-      matchingHints: {
-        overview: `${getText($filmEvent.find(".content__standfirst"))}\n\n${description}`,
-      },
+      matchingHints: { overview },
     });
   }
 

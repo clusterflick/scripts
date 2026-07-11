@@ -9,6 +9,7 @@ const {
   getText,
   basicNormalize,
   createAccessibility,
+  createFormat,
   readJSON,
 } = require("../../common/utils");
 const attributes = require("./attributes");
@@ -116,6 +117,7 @@ function convertTicketTailorEvent(event) {
         url: fullUrl,
         status: {},
         accessibility: createAccessibility(title, {}), // No overview
+        format: createFormat(title, {}),
       }),
     ],
     matchingHints: { overview: title },

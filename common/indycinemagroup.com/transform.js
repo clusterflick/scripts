@@ -3,6 +3,8 @@ const {
   createOverview,
   createPerformance,
   createAccessibility,
+  createFormat,
+  getValidFormat,
   generateShowingId,
   isPrivateHire,
   sanitizeRichText,
@@ -109,6 +111,12 @@ async function transform(
           soldOut: showing.seatsRemaining === 0,
         };
 
+        // Screen format markers (35mm, 70mm, imax, ...) are among the tags.
+        const format = tags.reduce(
+          (acc, tag) => ({ ...acc, ...getValidFormat(tag) }),
+          {},
+        );
+
         const accessibility = createAccessibility(
           movie.name,
           {
@@ -140,6 +148,11 @@ async function transform(
           url: `${domain}/checkout/showing/${movie.urlSlug}/${showing.id}`,
           status,
           accessibility,
+          format: createFormat(
+            movie.name,
+            format,
+            sanitizeRichText(movie.synopsis ?? ""),
+          ),
         });
       }),
       matchingHints: { overview: sanitizeRichText(movie.synopsis ?? "") },

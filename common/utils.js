@@ -312,7 +312,8 @@ const createPerformance = ({
   url,
   screen,
   status = {},
-  accessibility = {},
+  accessibility,
+  format,
 }) => ({
   time: date.getTime(),
   notes: notesList
@@ -324,6 +325,7 @@ const createPerformance = ({
   screen: getScreen(screen),
   status,
   accessibility,
+  format,
 });
 
 const attemptEncodingFix = (value) => {
@@ -509,6 +511,138 @@ const createAccessibility = (title, accessibility, description = "") => {
     ...listingAccessibility,
   };
 };
+
+// ---------------------------------------------------------------------------
+// Format - how a performance is being shown. Two orthogonal axes:
+//   source       - the print / picture source (70mm, 35mm, 16mm, vhs, nitrate)
+//   presentation - a premium screen system (imax, 4dx, screenx, dolby-cinema)
+//
+// A standard digital screening has no notable format and resolves to {} - like
+// createAccessibility, only notable values are emitted. "Production" formats
+// (how a film was *shot*, e.g. "shot on 35mm", "VistaVision cinematography")
+// are deliberately NOT treated as a screening format.
+// ---------------------------------------------------------------------------
+// Maps a normalised single token (spacing/punctuation stripped) to axis+value.
+// This is the source of truth for supported formats; the schema enums for
+// performances[].format.{source,presentation,dimension} mirror the values below.
+//   source       - the print / picture source (a screening has at most one)
+//   presentation - a premium screen system (at most one)
+//   dimension    - 2D vs 3D (orthogonal to the above; combines with them)
+const formatTokens = {
+  "70mm": { source: "70mm" },
+  "35mm": { source: "35mm" },
+  "16mm": { source: "16mm" },
+  vhs: { source: "vhs" },
+  laserdisc: { source: "laserdisc" },
+  nitrate: { source: "nitrate" },
+  imax: { presentation: "imax" },
+  "4dx": { presentation: "4dx" },
+  screenx: { presentation: "screenx" },
+  dolbycinema: { presentation: "dolby-cinema" },
+  "2d": { dimension: "2d" },
+  "3d": { dimension: "3d" },
+};
+
+const normalizeFormatToken = (value = "") =>
+  (value ?? "")
+    .toString()
+    .toLowerCase()
+    .replace(/[\s._-]+/g, "")
+    .trim();
+
+// Validate a single raw token (e.g. a listing attribute id like "IMAX", "70mm"
+// or "3D") into { source } | { presentation } | { dimension } | {}. Unknown
+// tokens (4k, dolby-atmos, ...) are intentionally dropped.
+const getValidFormat = (value = "") =>
+  formatTokens[normalizeFormatToken(value)] || {};
+
+// Validate an already-split { source, presentation, dimension } object, dropping
+// any value that isn't a recognised member of its axis.
+const getValidFormatObject = ({ source, presentation, dimension } = {}) => {
+  const result = {};
+  const validSource = source && getValidFormat(source).source;
+  const validPresentation =
+    presentation && getValidFormat(presentation).presentation;
+  const validDimension = dimension && getValidFormat(dimension).dimension;
+  if (validSource) result.source = validSource;
+  if (validPresentation) result.presentation = validPresentation;
+  if (validDimension) result.dimension = validDimension;
+  return result;
+};
+
+const titleFormatMatchers = [
+  { regex: /\b70\s?mm\b/i, format: { source: "70mm" } },
+  { regex: /\b35\s?mm\b/i, format: { source: "35mm" } },
+  { regex: /\b16\s?mm\b/i, format: { source: "16mm" } },
+  { regex: /\bvhs\b/i, format: { source: "vhs" } },
+  { regex: /\blaser\s?disc\b/i, format: { source: "laserdisc" } },
+  // Negative lookbehind avoids the venue name "BFI IMAX" reading as a format.
+  { regex: /(?<!bfi\s)\bimax\b/i, format: { presentation: "imax" } },
+  { regex: /\b4dx\b/i, format: { presentation: "4dx" } },
+  { regex: /\bscreenx\b/i, format: { presentation: "screenx" } },
+  { regex: /\bdolby\s+cinema\b/i, format: { presentation: "dolby-cinema" } },
+  // Dimension from a title is only read from a parenthetical "(3D)"/"(2D)"
+  // qualifier - a venue-added marker (e.g. BFI IMAX, Omniplex). A *bare* "3D" is
+  // deliberately NOT matched: it's usually part of a film's name ("Piranha 3D")
+  // or a pun ("Mark Kermode Live in 3D"), and structured listing data covers the
+  // multiplexes anyway.
+  { regex: /\(\s*3d\s*\)/i, format: { dimension: "3d" } },
+  { regex: /\(\s*2d\s*\)/i, format: { dimension: "2d" } },
+];
+
+const getTitleFormat = (title) =>
+  titleFormatMatchers.reduce(
+    (acc, { regex, format }) =>
+      regex.test(title) ? { ...acc, ...format } : acc,
+    {},
+  );
+
+// Description matching is source-only (presentation systems are effectively
+// never described in prose).
+const descriptionFormatMatchers = [
+  { regex: /\b70\s?mm\b/gi, format: { source: "70mm" } },
+  { regex: /\b35\s?mm\b/gi, format: { source: "35mm" } },
+  { regex: /\b16\s?mm\b/gi, format: { source: "16mm" } },
+  { regex: /\bnitrate\b/gi, format: { source: "nitrate" } },
+];
+
+// A description only contributes a source when there's an explicit *exhibition*
+// cue right by the gauge ("projected on 16mm", "a new 35mm print", "presented
+// on nitrate"). This deliberately ignores the far more common prose about how a
+// film was made or its medium - "shot on 16mm", "16mm cinematography", "16mm
+// Bolex camera", "immortalized on 8mm and 16mm" - which are not screening
+// formats. Preferring these false negatives keeps arty/repertory venues honest.
+const exhibitionAfterPattern =
+  /^\s*(?:prints?|presentations?|screenings?|projections?)\b/i;
+const exhibitionBeforePattern =
+  /\b(?:presented|projected|screened|screening|shown|showing|projection)\b[^.]{0,30}$/i;
+
+const getDescriptionFormat = (description) => {
+  if (!description) return {};
+  const result = {};
+  for (const { regex, format } of descriptionFormatMatchers) {
+    for (const match of description.matchAll(regex)) {
+      const start = match.index;
+      const end = start + match[0].length;
+      const before = description.slice(Math.max(0, start - 35), start);
+      const after = description.slice(end, end + 20);
+      const hasExhibitionCue =
+        exhibitionAfterPattern.test(after) ||
+        exhibitionBeforePattern.test(before);
+      if (!hasExhibitionCue) continue;
+      Object.assign(result, format);
+      break;
+    }
+  }
+  return result;
+};
+
+// Structured listing data is most reliable, then the title, then description.
+const createFormat = (title = "", format = {}, description = "") => ({
+  ...getDescriptionFormat(description),
+  ...getTitleFormat(title.trim()),
+  ...getValidFormatObject(format),
+});
 
 // eslint-disable-next-line no-unused-vars
 const removeMatchingHints = ({ matchingHints, ...movie }) => movie;
@@ -705,6 +839,8 @@ module.exports = {
   createPerformance,
   createOverview,
   createAccessibility,
+  createFormat,
+  getValidFormat,
   removeMatchingHints,
   addTestCategory,
   compareAsSimilar,

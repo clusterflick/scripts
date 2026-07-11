@@ -4,6 +4,8 @@ const {
   createPerformance,
   createOverview,
   createAccessibility,
+  createFormat,
+  getValidFormat,
   generateShowingId,
   isPrivateHire,
   basicNormalize,
@@ -90,11 +92,13 @@ async function transform(
 
         const notesList = [];
         const accessibility = {};
+        const format = {};
         if (basicNormalize(movie.title).includes("(subbed)")) {
           accessibility.subtitled = true;
         }
         if (performance.requires3dGlasses) {
           notesList.push("Requires 3D glasses");
+          format.dimension = "3d";
         }
         performance.attributeIds.forEach((attributeId) => {
           const attribute = findFor(attributes, attributeId);
@@ -136,6 +140,14 @@ async function transform(
               return;
             }
 
+            // Screen format (IMAX, Dolby Cinema, 70mm, ...) is captured in the
+            // structured format rather than left in notes.
+            const attributeFormat = getValidFormat(attributeName);
+            if (Object.keys(attributeFormat).length > 0) {
+              Object.assign(format, attributeFormat);
+              return;
+            }
+
             // Anything not directly related to accessibility features can be
             // added into the performance notes
             if (!attribute.description?.text) {
@@ -158,6 +170,11 @@ async function transform(
             accessibility: createAccessibility(
               movie.title,
               accessibility,
+              movie.matchingHints.overview,
+            ),
+            format: createFormat(
+              movie.title,
+              format,
               movie.matchingHints.overview,
             ),
           }),

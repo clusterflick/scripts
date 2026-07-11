@@ -6,6 +6,7 @@ const {
   createPerformance,
   createOverview,
   createAccessibility,
+  createFormat,
   generateShowingId,
 } = require("../../common/utils");
 const attributes = require("./attributes");
@@ -95,6 +96,7 @@ function parseMovieCard($card, $, dateStr) {
         url: () => bookingUrl,
         screen,
         accessibility: createAccessibility(title, {}, synopsis),
+        format: createFormat(title, {}, synopsis),
       }),
     );
   });

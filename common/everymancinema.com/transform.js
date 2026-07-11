@@ -3,6 +3,8 @@ const {
   createOverview,
   createPerformance,
   createAccessibility,
+  createFormat,
+  getValidFormat,
   generateShowingId,
 } = require("../../common/utils");
 
@@ -46,6 +48,7 @@ async function transform(
       })
       .map((performance) => {
         let accessibility = {};
+        let format = {};
         let notesList = [];
 
         if (performance.occupancy.rate !== 100) {
@@ -74,6 +77,14 @@ async function transform(
             return;
           }
 
+          // Format.Projection.35mm / .70mm etc. - capture the leaf as structured
+          // format rather than leaving it in notes (Digital is skipped above).
+          const tagFormat = getValidFormat(tag.split(".").pop());
+          if (Object.keys(tagFormat).length > 0) {
+            format = { ...format, ...tagFormat };
+            return;
+          }
+
           // Any tags which aren't accessibility related can be added to notes
           notesList = notesList.concat(tagData.localizations[0].description);
         });
@@ -88,6 +99,7 @@ async function transform(
             accessibility,
             movie.synopsis,
           ),
+          format: createFormat(movie.title, format, movie.synopsis),
         });
       });
 

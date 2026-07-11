@@ -6,6 +6,7 @@ const {
   createPerformance,
   generateShowingId,
   createAccessibility,
+  createFormat,
   getText,
 } = require("../../common/utils");
 const attributes = require("./attributes");
@@ -140,6 +141,7 @@ function toMovie($, showEl) {
       url: bookingUrl,
       status: { soldOut },
       accessibility: createAccessibility(title, accessibility, overview),
+      format: createFormat(title, {}, overview),
     });
   });
 

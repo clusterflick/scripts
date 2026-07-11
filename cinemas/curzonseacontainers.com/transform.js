@@ -7,6 +7,7 @@ const {
   generateShowingId,
   createOverview,
   createAccessibility,
+  createFormat,
   basicNormalize,
 } = require("../../common/utils");
 const { parseDate } = require("./utils");
@@ -39,6 +40,7 @@ async function transform({ movieListPage }, sourcedEvents) {
             date: parseDate(`${day} @ ${time}`),
             url: `https://ticketing.eu.veezi.com${$(this).attr("href")}`,
             accessibility: createAccessibility(title, {}, description),
+            format: createFormat(title, {}, description),
           }),
         );
       });

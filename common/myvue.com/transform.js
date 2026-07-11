@@ -4,6 +4,8 @@ const {
   createOverview,
   createPerformance,
   createAccessibility,
+  createFormat,
+  getValidFormat,
   generateShowingId,
 } = require("../../common/utils");
 const { isNotSportShowing } = require("../../common/is-sport-showing");
@@ -24,6 +26,7 @@ async function transform(attributes, { result: movieData }, sourcedEvents) {
     const performances = movie.showingGroups.flatMap(({ sessions }) =>
       sessions.map((showing) => {
         const accessibility = {};
+        const format = {};
         const notesList = [];
 
         (showing.attributes || []).forEach(
@@ -56,6 +59,15 @@ async function transform(attributes, { result: movieData }, sourcedEvents) {
               accessibility.babyFriendly = true;
               return;
             }
+            // Screen format (IMAX, ...) is captured as structured format.
+            const attributeFormat = {
+              ...getValidFormat(value),
+              ...getValidFormat(shortName),
+            };
+            if (Object.keys(attributeFormat).length > 0) {
+              Object.assign(format, attributeFormat);
+              return;
+            }
             if (title && description) {
               notesList.push(`${title}: ${sanitizeRichText(description)}`);
             }
@@ -76,6 +88,7 @@ async function transform(attributes, { result: movieData }, sourcedEvents) {
             accessibility,
             movie.synopsisShort,
           ),
+          format: createFormat(movie.filmTitle, format, movie.synopsisShort),
           status,
         });
       }),

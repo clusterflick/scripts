@@ -8,6 +8,7 @@ const {
   generateShowingId,
   readJSON,
   createAccessibility,
+  createFormat,
   getText,
 } = require("../../common/utils");
 const { venueMatchesCinema } = require("../../common/source-utils");
@@ -147,6 +148,7 @@ function parseEventSection($, section) {
           url: bookingUrl || attributes.url,
           status: {},
           accessibility: createAccessibility(title, {}, synopsis),
+          format: createFormat(title, {}, synopsis),
         }),
       ],
       matchingHints: { overview: synopsis },

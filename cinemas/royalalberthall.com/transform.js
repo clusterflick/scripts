@@ -5,6 +5,7 @@ const {
   generateShowingId,
   getValidClassification,
   createAccessibility,
+  createFormat,
 } = require("../../common/utils");
 const { extractPeopleNames } = require("../../common/extract-people");
 const attributes = require("./attributes");
@@ -33,6 +34,7 @@ function parsePerformances(event) {
       url: event.BookingURL || `${attributes.domain}${event.EventURL}`,
       screen: event.Venue,
       accessibility: createAccessibility(event.Title, {}, event.Summary),
+      format: createFormat(event.Title, {}, event.Summary),
     });
   });
 }

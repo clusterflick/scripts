@@ -5,6 +5,7 @@ const {
   createOverview,
   createPerformance,
   createAccessibility,
+  createFormat,
 } = require("../../common/utils");
 const { venueMatchesCinema } = require("../../common/source-utils");
 const attributes = require("./attributes");
@@ -37,6 +38,7 @@ function convertEvent(event, club) {
         // matches what the club page badges as sold out / waitlist).
         status: { soldOut: event.status === "SOLD_OUT" },
         accessibility: createAccessibility(event.name, {}, event.description),
+        format: createFormat(event.name, {}, event.description),
       }),
     ],
     matchingHints: { overview: event.description },
