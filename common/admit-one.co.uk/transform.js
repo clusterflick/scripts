@@ -165,22 +165,28 @@ async function transform(
         const format = {};
         let screen = undefined;
 
-        const $iconImage = $performance.children().first().find("img");
-        if ($iconImage) {
-          const alt = $iconImage.attr("alt");
-          if (alt) {
-            const iconType = alt.replace(" icon", "")?.trim();
-            if (iconType.toLowerCase() === "subtitled") {
-              accessibility.subtitled = true;
-            } else if (iconType.toLowerCase() === "parent & baby") {
-              accessibility.babyFriendly = true;
-            } else if (iconType.toLowerCase() === "bar") {
-              screen = "Bar";
-            } else if (Object.keys(getValidFormat(iconType)).length > 0) {
-              Object.assign(format, getValidFormat(iconType));
-            } else {
-              notesList.push(iconType);
-            }
+        const $iconImages = $performance.find("img");
+        if ($iconImages.length > 0) {
+          const alts = $iconImages
+            .map((i, $iconImage) =>
+              $($iconImage).attr("alt")?.replace(" icon", "")?.trim(),
+            )
+            .get()
+            .filter(Boolean);
+          if (alts.length > 0) {
+            alts.forEach((iconType) => {
+              if (basicNormalize(iconType) === "subtitled") {
+                accessibility.subtitled = true;
+              } else if (basicNormalize(iconType) === "parent & baby") {
+                accessibility.babyFriendly = true;
+              } else if (basicNormalize(iconType) === "bar") {
+                screen = "Bar";
+              } else if (Object.keys(getValidFormat(iconType)).length > 0) {
+                Object.assign(format, getValidFormat(iconType));
+              } else {
+                notesList.push(iconType);
+              }
+            });
           }
         }
 

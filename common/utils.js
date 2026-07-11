@@ -544,11 +544,7 @@ const formatTokens = {
 };
 
 const normalizeFormatToken = (value = "") =>
-  (value ?? "")
-    .toString()
-    .toLowerCase()
-    .replace(/[\s._-]+/g, "")
-    .trim();
+  basicNormalize(value.replace(/[\s._-]+/g, ""));
 
 // Validate a single raw token (e.g. a listing attribute id like "IMAX", "70mm"
 // or "3D") into { source } | { presentation } | { dimension } | {}. Unknown
