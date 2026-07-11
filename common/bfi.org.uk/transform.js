@@ -10,7 +10,19 @@ const {
   generateShowingId,
   getDescriptionAccessibility,
 } = require("../utils");
-const { parseDate } = require("./utils");
+const { parseDate, extractSearchResults } = require("./utils");
+
+// A `searchResults` row is a positional array; these are the fields we read.
+// row[7] and row[64] are byte-identical to the calendar's `.start-date` and
+// `.item-venue`, so a recovered performance keys into `accessibilityMapping`
+// exactly as a calendar-derived one does.
+const SEARCH_RESULT_CONTEXT_ID = 0;
+const SEARCH_RESULT_START_DATE = 7;
+const SEARCH_RESULT_SCREEN = 64;
+
+function getContextId(href = "") {
+  return href.split("context_id=")[1] || "";
+}
 
 function getOverviewFor($) {
   const overview = {
@@ -46,7 +58,8 @@ function getOverviewFor($) {
   return createOverview(overview);
 }
 
-function getPerformancesFor($, url, { title, performances }, overview) {
+function getPerformancesFor($, url, show, overview) {
+  const { title, performances, html } = show;
   const $showInfo = $("ul.Film-info__information li");
   let isSubtitled = false;
   $showInfo.each(function () {
@@ -108,7 +121,84 @@ function getPerformancesFor($, url, { title, performances }, overview) {
       }),
     );
   }
-  return showPerformances;
+
+  // Patch: the BFI calendar occasionally renders a performance without a
+  // booking link, so retrieve skips it and it never reaches `performances`. The
+  // film page embeds a (capped, first-few) `searchResults` array, so if the
+  // missing performance happens to be in it we can recover it. Remove this once
+  // we move BFI to a better data source.
+  return showPerformances.concat(
+    getRecoveredPerformances(performances, {
+      html,
+      url,
+      title,
+      overview,
+      hasAudioDescription,
+      isSubtitled,
+      accessibilityMapping,
+    }),
+  );
+}
+
+// Build performances that are present in the film page's `searchResults` array
+// but missing from the calendar (identified by their context id, which the
+// calendar exposes on each booking link). The film page's `searchResults` is
+// always scoped to this film, so any row we don't already have belongs here.
+function getRecoveredPerformances(
+  performances,
+  {
+    html,
+    url,
+    title,
+    overview,
+    hasAudioDescription,
+    isSubtitled,
+    accessibilityMapping,
+  },
+) {
+  const seenContextIds = new Set(
+    performances.map((performance) =>
+      getContextId(cheerio.load(performance)("a.more-info").attr("href")),
+    ),
+  );
+
+  const recovered = [];
+  for (const row of extractSearchResults(html)) {
+    const contextId = row[SEARCH_RESULT_CONTEXT_ID];
+    const startDate = row[SEARCH_RESULT_START_DATE];
+    const screen = row[SEARCH_RESULT_SCREEN];
+    // Skip rows we can't fully reconstruct or that we already have.
+    if (!contextId || !startDate || !screen) continue;
+    if (seenContextIds.has(contextId)) continue;
+    seenContextIds.add(contextId);
+
+    const key = `${startDate.replace(/\d{4}/, "")} ${screen}`
+      .replace(/\s+/g, " ")
+      .trim()
+      .toLowerCase();
+    recovered.push(
+      createPerformance({
+        url,
+        screen,
+        // The calendar is the source of truth for sold-out status; a recovered
+        // performance has no booking link so we can't know it — default to not
+        // sold out rather than hide the screening entirely.
+        status: { soldOut: false },
+        date: parseDate(startDate),
+        accessibility: createAccessibility(
+          title,
+          {
+            audioDescription: hasAudioDescription,
+            subtitled: isSubtitled,
+            ...accessibilityMapping[key],
+          },
+          overview,
+        ),
+        format: createFormat(title),
+      }),
+    );
+  }
+  return recovered;
 }
 
 async function transform(attributes, { moviePages }, sourcedEvents) {
