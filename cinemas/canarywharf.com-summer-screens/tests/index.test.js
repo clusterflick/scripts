@@ -10,10 +10,10 @@ const {
 const { retrieve, transform, attributes } = require("..");
 
 jest.mock("../../../common/cache");
-setupCacheMock(__dirname, "2026-06-11");
+setupCacheMock(__dirname, "2026-07-11");
 
 describe(attributes.name, () => {
-  jest.useFakeTimers().setSystemTime(new Date("2026-06-11"));
+  jest.useFakeTimers().setSystemTime(new Date("2026-07-11"));
 
   it("retrieve and transform", async () => {
     const { movieListPage } = await retrieve();
@@ -31,7 +31,7 @@ describe(attributes.name, () => {
       .map(removeMatchingHints)
       .map(addTestCategory);
 
-    expect(data).toHaveLength(18);
+    expect(data).toHaveLength(12);
 
     expect(schemaValidate(data)).toBe(true);
     expect(data).toMatchSnapshot();

@@ -14,11 +14,11 @@ const { retrieve, transform, attributes } = require("..");
 const isRecording = false;
 
 jest.mock("../../../common/cache");
-setupCacheMock(__dirname, "2026-01-28");
+setupCacheMock(__dirname, "2026-07-11");
 
 describe(attributes.name, () => {
   setupPolly(isRecording, __dirname);
-  jest.useFakeTimers().setSystemTime(new Date("2026-01-28"));
+  jest.useFakeTimers().setSystemTime(new Date("2026-07-11"));
 
   it(
     "retrieve and transform",
@@ -27,7 +27,7 @@ describe(attributes.name, () => {
 
       // Make sure the input looks roughly correct
       expect(moviePages).toBeTruthy();
-      expect(moviePages).toHaveLength(45);
+      expect(moviePages).toHaveLength(43);
 
       const output = sortAndFilterMovies(await transform(moviePages, {}));
       expect(
@@ -41,7 +41,7 @@ describe(attributes.name, () => {
         .map(addTestCategory);
 
       // Make sure the data looks roughly correct
-      expect(data).toHaveLength(57);
+      expect(data).toHaveLength(49);
 
       expect(schemaValidate(data)).toBe(true);
       expect(data).toMatchSnapshot();
