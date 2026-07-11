@@ -1,5 +1,5 @@
 const cheerio = require("cheerio");
-const { fetchText, assertSelector } = require("../../common/utils");
+const { fetchText } = require("../../common/utils");
 
 // Hyde Park's outdoor cinema screenings are listed on the BST Hyde Park "Open
 // House" microsite (AEG), which is separate from the venue's Royal Parks page.

@@ -889,6 +889,10 @@ function normalizeTitle(title, options) {
     [/^(The Music of Zimmer vs Williams) \d{4}/i, "$1"],
     [/, (\d{4}) @/, ", ($1) @"],
     ["TCB - ", "TCB: "],
+    [
+      /^Talking Tom Heroes:?( Suddenly Super)?( on the Big Screen)?$/i,
+      "Talking Tom Heroes: Suddenly Super on the Big Screen",
+    ],
   ];
 
   corrections.forEach(([phrase, replacement]) => {

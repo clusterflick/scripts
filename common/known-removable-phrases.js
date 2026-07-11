@@ -106,6 +106,7 @@ const knownRemovablePhrases = [
   ": Parents & Baby Screening",
   "Parents & Baby Screening:",
   ": Love in the Age of Anarchy",
+  ": James Bond Season",
   ": japanese/ english subtitled version",
   " (Japanese with English Subtitles)- Anime Season",
   " (Japanese)",
