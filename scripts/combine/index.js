@@ -322,6 +322,7 @@ async function combine() {
             screen,
             status = {},
             accessibility = {},
+            format = {},
           }) => ({
             showingId,
             time,
@@ -331,6 +332,7 @@ async function combine() {
             status: Object.keys(status).length > 0 ? status : undefined,
             accessibility:
               Object.keys(accessibility).length > 0 ? accessibility : undefined,
+            format: Object.keys(format).length > 0 ? format : undefined,
           }),
         ),
       );
