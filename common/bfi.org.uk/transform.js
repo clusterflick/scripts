@@ -58,7 +58,7 @@ function getOverviewFor($) {
   return createOverview(overview);
 }
 
-function getPerformancesFor($, url, show, overview) {
+function getPerformancesFor($, url, show, overview, venueFormat) {
   const { title, performances, html } = show;
   const $showInfo = $("ul.Film-info__information li");
   let isSubtitled = false;
@@ -115,9 +115,10 @@ function getPerformancesFor($, url, show, overview) {
           },
           overview,
         ),
-        // Title-only: the shared Rich-text blurb describes format options
-        // across both BFI venues, so it can't be trusted per-screening.
-        format: createFormat(title),
+        // The shared Rich-text blurb describes format options across both BFI
+        // venues, so it can't be trusted per-screening — format comes from the
+        // title plus the venue-level default (every BFI IMAX screening is IMAX).
+        format: createFormat(title, venueFormat),
       }),
     );
   }
@@ -136,6 +137,7 @@ function getPerformancesFor($, url, show, overview) {
       hasAudioDescription,
       isSubtitled,
       accessibilityMapping,
+      venueFormat,
     }),
   );
 }
@@ -154,6 +156,7 @@ function getRecoveredPerformances(
     hasAudioDescription,
     isSubtitled,
     accessibilityMapping,
+    venueFormat,
   },
 ) {
   const seenContextIds = new Set(
@@ -194,7 +197,7 @@ function getRecoveredPerformances(
           },
           overview,
         ),
-        format: createFormat(title),
+        format: createFormat(title, venueFormat),
       }),
     );
   }
@@ -204,6 +207,12 @@ function getRecoveredPerformances(
 async function transform(attributes, { moviePages }, sourcedEvents) {
   const { domain } = attributes;
   const shows = [];
+
+  // The BFI IMAX is a single-screen IMAX cinema, so every screening there is an
+  // IMAX presentation. This is a venue-level fact that can't be read from the
+  // title (the "BFI IMAX" venue name is deliberately not matched as a format).
+  const venueFormat =
+    attributes.id === "bfi.org.uk-imax" ? { presentation: "imax" } : {};
 
   for (const showPath in moviePages) {
     const url = `${domain}${showPath}`;
@@ -224,7 +233,13 @@ async function transform(attributes, { moviePages }, sourcedEvents) {
       .join("\n");
 
     const showingId = generateShowingId(attributes, articleId);
-    const performances = getPerformancesFor($, url, show, overview);
+    const performances = getPerformancesFor(
+      $,
+      url,
+      show,
+      overview,
+      venueFormat,
+    );
 
     // Sometimes the same show can be on different URLs with the same ID.
     // Detect this by finding existing showings and adding performances instead

@@ -7,7 +7,7 @@ module.exports = {
     twitter: "dolby",
     instagram: "dolbylabs",
   },
-  url: "https://professional.dolby.com/contact-us/dolby-screening-room-london/",
+  url: "https://professional.dolby.com/en-in/contact-us/dolby-screening-room-london/",
   address: "4-6 Soho Square, London, W1D 3PZ, UK",
   geo: { lat: 51.51542953696887, lon: -0.13311546317807785 },
   structure: "solo",
