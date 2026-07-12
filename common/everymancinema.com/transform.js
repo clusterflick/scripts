@@ -51,9 +51,6 @@ async function transform(
         let format = {};
         let notesList = [];
 
-        if (performance.occupancy.rate !== 100) {
-          notesList.push(`${performance.occupancy.rate}% of seats sold`);
-        }
         performance.tags.forEach((tag) => {
           if (tag === "Format.Projection.Digital") return;
 

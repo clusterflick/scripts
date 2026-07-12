@@ -2,6 +2,7 @@ const slugify = require("slugify");
 const { parseISO } = require("date-fns");
 const {
   createPerformance,
+  stripNoteLabels,
   createOverview,
   createAccessibility,
   createFormat,
@@ -16,7 +17,7 @@ const findFor = (list, idMatch) => list.find(({ id }) => id === idMatch);
 async function transform(
   attributes,
   showtimeDays,
-  { getBookingUrl },
+  { getBookingUrl, noteLabels = {} },
   sourcedEvents,
 ) {
   const movies = showtimeDays.reduce(
@@ -178,7 +179,7 @@ async function transform(
           createPerformance({
             date: parseISO(schedule.startsAt),
             screen: findFor(screens, screenId).name.text,
-            notesList,
+            notesList: stripNoteLabels(notesList, noteLabels),
             url: getBookingUrl(performance),
             status: { soldOut: performance.isSoldOut },
             accessibility: createAccessibility(

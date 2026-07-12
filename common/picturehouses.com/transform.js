@@ -4,6 +4,7 @@ const {
   getText,
   createOverview,
   createPerformance,
+  stripNoteLabels,
   createAccessibility,
   createFormat,
   getValidFormat,
@@ -16,6 +17,24 @@ const {
 } = require("../extract-people");
 const { isNotSportShowing } = require("../is-sport-showing");
 const { parseDate } = require("./utils");
+
+// Strand/marketing labels whose description is just blurb ("Screen Arts:
+// Bringing world-class arts productions to the big screen") - keep the strand
+// label alone. Info-bearing notes (Silver Screen, Toddler Time, ...) are left
+// untouched.
+const noteLabels = {
+  strip: [
+    "Laser Projection",
+    "Screen Arts",
+    "Picturehouse Docs",
+    "Discover",
+    "reDiscover",
+    "Rephouse",
+    "Preview",
+    "Live via Satellite",
+    "Q&A",
+  ],
+};
 
 function getDetails(data) {
   const $ = cheerio.load(data);
@@ -108,16 +127,19 @@ async function transform(
           return createPerformance({
             date: parseDate(showing.Showtime),
             screen: showing.ScreenName,
-            notesList: showingAttributes
-              .filter(
-                (attribute) =>
-                  !["audio d", "relaxed", "hohsub", "sub cinema"].includes(
-                    attribute.attribute.toLowerCase(),
-                  ) && !isFormatAttribute(attribute),
-              )
-              .map(({ attribute_full: title, description }) =>
-                description ? `${title}: ${description}` : title,
-              ),
+            notesList: stripNoteLabels(
+              showingAttributes
+                .filter(
+                  (attribute) =>
+                    !["audio d", "relaxed", "hohsub", "sub cinema"].includes(
+                      attribute.attribute.toLowerCase(),
+                    ) && !isFormatAttribute(attribute),
+                )
+                .map(({ attribute_full: title, description }) =>
+                  description ? `${title}: ${description}` : title,
+                ),
+              noteLabels,
+            ),
             url: `https://web.picturehouses.com/order/showtimes/${cinemaId}-${showing.SessionId}/seats`,
             status,
             accessibility,

@@ -3,12 +3,36 @@ const {
   sanitizeRichText,
   createOverview,
   createPerformance,
+  stripNoteLabels,
   createAccessibility,
   createFormat,
   getValidFormat,
   generateShowingId,
 } = require("../../common/utils");
 const { isNotSportShowing } = require("../../common/is-sport-showing");
+
+// Vue appends a generic description to every tag. For these labels the
+// description just restates the label, so keep the label alone; "Event" is
+// generic on both sides, so drop it entirely.
+const noteLabels = {
+  strip: [
+    "Ultra Lux and Lux",
+    "Laser",
+    "Dolby Atmos",
+    "HDR by Barco",
+    "Biggest Screen",
+    "Hindi",
+    "Malayalam",
+    "Punjabi",
+    "Nepali",
+    "Sing-Along",
+    "Big Screen Events - Theatre",
+    "Big Screen Events - Music",
+    "Big Screen Events - Dance",
+    "Big Screen Events - Opera",
+  ],
+  drop: ["Event"],
+};
 
 async function transform(attributes, { result: movieData }, sourcedEvents) {
   const { domain, url } = attributes;
@@ -81,7 +105,7 @@ async function transform(attributes, { result: movieData }, sourcedEvents) {
         return createPerformance({
           date: parseISO(showing.showTimeWithTimeZone),
           screen: showing.screenName,
-          notesList,
+          notesList: stripNoteLabels(notesList, noteLabels),
           url: `${domain}${showing.bookingUrl}`,
           accessibility: createAccessibility(
             movie.filmTitle,

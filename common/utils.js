@@ -328,6 +328,30 @@ const createPerformance = ({
   format,
 });
 
+// Refine a list of performance notes against a venue's curated label lists.
+// Each note is either a bare label ("Requires 3D glasses") or a
+// "Label: description" pair. The label (text before the first ": ") is matched
+// against two sets:
+//   - strip: the description is redundant gloss, so keep the label alone
+//     (e.g. "Dolby Atmos: Screenings that use Dolby Atmos sound" -> "Dolby Atmos")
+//   - drop: both label and description are generic, so remove the note entirely
+// Anything not listed is passed through untouched, so info-bearing notes
+// (prices, ID/age requirements, safety warnings) are preserved.
+const stripNoteLabels = (notesList, { strip = [], drop = [] } = {}) => {
+  const stripSet = new Set(strip);
+  const dropSet = new Set(drop);
+  return notesList.reduce((refined, note) => {
+    if (typeof note !== "string") return refined;
+    const separatorIndex = note.indexOf(": ");
+    const label = (
+      separatorIndex === -1 ? note : note.slice(0, separatorIndex)
+    ).trim();
+    if (dropSet.has(label)) return refined;
+    if (stripSet.has(label)) return refined.concat(label);
+    return refined.concat(note);
+  }, []);
+};
+
 const attemptEncodingFix = (value) => {
   try {
     return decodeURIComponent(escape(value));
@@ -833,6 +857,7 @@ module.exports = {
   getText,
   assertSelector,
   createPerformance,
+  stripNoteLabels,
   createOverview,
   createAccessibility,
   createFormat,
