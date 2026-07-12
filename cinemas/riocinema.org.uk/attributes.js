@@ -1,7 +1,7 @@
 module.exports = {
   id: "riocinema.org.uk",
   name: "Rio Cinema",
-  alternativeNames: ["The Rio"],
+  alternativeNames: ["The Rio", "Rio Cinema Dalston"],
   domain: "https://riocinema.org.uk",
   socials: {
     letterboxd: "riocinema",
