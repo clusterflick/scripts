@@ -154,6 +154,26 @@ describe("createAccessibility", () => {
       ).toEqual({ hardOfHearing: true });
     });
 
+    test("ignores subtitles mentioned in a signpost to other screenings", () => {
+      expect(
+        createAccessibility(
+          "The Odyssey",
+          {},
+          "Experience The Odyssey in IMAX 70mm. Find screenings of The Odyssey with subtitles for the D/deaf and those experiencing hearing loss.",
+        ),
+      ).toEqual({});
+    });
+
+    test("still detects real subtitles alongside a signpost", () => {
+      expect(
+        createAccessibility(
+          "The Odyssey",
+          {},
+          "This screening is shown with english subtitles. Find screenings of The Odyssey with subtitles for the D/deaf and those experiencing hearing loss.",
+        ),
+      ).toEqual({ subtitled: true });
+    });
+
     test("title detection takes precedence over description", () => {
       expect(
         createAccessibility(

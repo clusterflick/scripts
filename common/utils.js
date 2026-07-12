@@ -493,19 +493,27 @@ const descriptionAccessibilityMatchers = {
 const descriptionNegationPattern =
   /\b(?:not|no|without|doesn't|does not|don't|do not|isn't|is not|won't|will not|cannot|can't|lack)\b/i;
 
+// Blurbs sometimes signpost OTHER accessible screenings with a cross-link,
+// e.g. "Find screenings of The Odyssey with subtitles for the D/deaf and those
+// experiencing hearing loss". That describes a different listing, not these
+// performances, so strip the whole clause before scanning for features.
+const descriptionSignpostPattern = /\bfind (?:more )?screenings? of\b[^.\n]*/gi;
+
 const getDescriptionAccessibility = (description) => {
   if (!description) return {};
+
+  const scannable = description.replace(descriptionSignpostPattern, " ");
 
   const matchersList = Object.entries(descriptionAccessibilityMatchers);
 
   const accessibility = {};
   for (const [key, matchers] of matchersList) {
     for (const matcher of matchers) {
-      const match = description.match(matcher);
+      const match = scannable.match(matcher);
       if (!match) continue;
       // Check the 60 characters before the match for negation words
       const matchIndex = match.index;
-      const preceding = description.slice(
+      const preceding = scannable.slice(
         Math.max(0, matchIndex - 60),
         matchIndex,
       );
