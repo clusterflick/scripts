@@ -108,8 +108,18 @@ function parseEventsFromPage(html, slug) {
   return events;
 }
 
+// Some Ticket Tailor slugs aren't venues but festivals/organisers whose events
+// take place across several real venues. For those, note the provenance on each
+// performance so consumers can see the event is part of a wider programme —
+// plain venue slugs (whose events are already matched to that venue) need no note.
+const SLUG_NOTES = {
+  colfilmslimited: "Part of the London Colombian Film Festival",
+};
+
 function convertTicketTailorEvent(event) {
-  const { title, fullUrl, eventId, parsedDate } = event;
+  const { title, fullUrl, eventId, parsedDate, slug } = event;
+
+  const slugNote = SLUG_NOTES[slug];
 
   return {
     showingId: generateShowingId(attributes, eventId),
@@ -127,6 +137,7 @@ function convertTicketTailorEvent(event) {
         status: {},
         accessibility: createAccessibility(title, {}), // No overview
         format: createFormat(title, {}),
+        notesList: slugNote ? [slugNote] : [],
       }),
     ],
     matchingHints: { overview: title },
