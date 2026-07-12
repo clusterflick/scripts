@@ -34,7 +34,8 @@ async function transform(
   { screeningPages, soldOutDetails },
   sourcedEvents,
 ) {
-  const { domain } = attributes;
+  const { domain, url } = attributes;
+  const listingUrl = `${url}/screenings#:~:text=`;
   const moviesBySlug = {};
 
   for (const html of screeningPages) {
@@ -129,7 +130,7 @@ async function transform(
         moviesBySlug[filmSlug] = {
           showingId: generateShowingId(attributes, filmSlug),
           title,
-          url,
+          url: `${listingUrl}${encodeURIComponent(title)}`,
           overview: createOverview({}),
           performances: [],
           matchingHints: { overview: overviewText },
