@@ -16,6 +16,7 @@ const VENUE_SLUGS = [
   "bellbottomsproductions", // Bellbottoms Productions
   "vauxhallone", // Vauxhall
   "debutnights", // Debut Nights
+  "colfilmslimited", // The London Colombian Film Festival
 ];
 
 async function retrieveVenuePage(slug) {

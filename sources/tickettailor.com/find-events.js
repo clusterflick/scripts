@@ -28,6 +28,8 @@ function extractEventIdFromUrl(url) {
 const DATE_FORMATS = ["EEE d MMM yyyy h:mm a", "EEE d MMM yyyy HH:mm"];
 // A bare time chunk on the start's day, e.g. "22:30" or "10:30 PM"
 const TIME_FORMATS = ["h:mm a", "HH:mm"];
+// A full date with no time, e.g. "Sun 26 Jul 2026"
+const DATE_ONLY_FORMATS = ["EEE d MMM yyyy"];
 
 // Try each format in turn and return the first valid parse, or null if none match.
 function parseWithFormats(text, formats, reference) {
@@ -49,6 +51,13 @@ function parseDateText(dateText) {
   const start = parseWithFormats(startText, DATE_FORMATS, new Date());
   if (!start) {
     throw new Error(`Unable to parse start date from date text: "${dateText}"`);
+  }
+
+  if (endText && parseWithFormats(endText, DATE_ONLY_FORMATS, new Date())) {
+    // A bare end date with no time (e.g. "Sun 26 Jul 2026") means the listing
+    // spans multiple days — a festival/discovery pass rather than a single movie
+    // showing — so drop it.
+    return null;
   }
 
   let end = null;
