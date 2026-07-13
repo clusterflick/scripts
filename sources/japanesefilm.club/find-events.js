@@ -14,6 +14,15 @@ const {
 const { venueMatchesCinema } = require("../../common/source-utils");
 const attributes = require("./attributes");
 
+// japanesefilm.club is a UK-wide directory, but we only cover London venues.
+// Some out-of-London cinemas share a name with a London venue — e.g.
+// "Showroom, Sheffield" collides with "The Showroom" in London — and this
+// source has no per-venue coordinates for the matcher to disambiguate with. As
+// a stopgap, drop screenings whose location (the part after the venue name) is
+// a city we don't cover, before they ever reach venue matching. The durable
+// fix is to fetch each venue page and match on its address/postcode.
+const EXCLUDED_LOCATIONS = ["Cardiff", "Oxford", "Sheffield"];
+
 // ".director_country_release" reads like "Suo Masayuki、Japan、1996", using a
 // fullwidth comma as the separator.
 function parseDirectorCountryRelease(text) {
@@ -84,11 +93,24 @@ function parseMovie($, moviePage, url) {
     const $item = $page(item);
 
     const cinemaText = getText($item.find("a.cinema_title"));
-    const venueName = cinemaText.split(",")[0].trim();
+    const [venueName, ...locationParts] = cinemaText
+      .split(",")
+      .map((part) => part.trim());
     if (!venueName) {
       throw new Error(
         `Unable to extract a venue name from a screening on ${url} — the schedule structure may have changed`,
       );
+    }
+
+    // Drop screenings at cities we don't cover before venue matching (see
+    // EXCLUDED_LOCATIONS above).
+    const location = locationParts.join(", ");
+    if (
+      EXCLUDED_LOCATIONS.some(
+        (excluded) => excluded.toLowerCase() === location.toLowerCase(),
+      )
+    ) {
+      return;
     }
 
     // A missing date means the screening is legitimately undated (TBC); skip it.

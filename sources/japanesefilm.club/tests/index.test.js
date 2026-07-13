@@ -82,9 +82,16 @@ describe(`${attributes.name}`, () => {
       name: "Some Other Cinema",
       alternativeNames: [],
     };
-    const output = await findEvents(unrelatedCinema);
+    expect(await findEvents(unrelatedCinema)).toHaveLength(0);
 
-    expect(output).toHaveLength(0);
+    // "Showroom, Sheffield" shares a normalized name with the London venue
+    // "The Showroom", but is in a city we don't cover, so it must not match.
+    const theShowroomLondon = {
+      name: "The Showroom",
+      alternativeNames: ["The Showroom Gallery"],
+      geo: { lat: 51.52570188553431, lon: -0.17261733935585413 },
+    };
+    expect(await findEvents(theShowroomLondon)).toHaveLength(0);
   });
 
   describe("fails loudly when the page structure changes", () => {
