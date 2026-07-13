@@ -14,15 +14,6 @@ const {
 const { venueMatchesCinema } = require("../../common/source-utils");
 const attributes = require("./attributes");
 
-// japanesefilm.club is a UK-wide directory, but we only cover London venues.
-// Some out-of-London cinemas share a name with a London venue — e.g.
-// "Showroom, Sheffield" collides with "The Showroom" in London — and this
-// source has no per-venue coordinates for the matcher to disambiguate with. As
-// a stopgap, drop screenings whose location (the part after the venue name) is
-// a city we don't cover, before they ever reach venue matching. The durable
-// fix is to fetch each venue page and match on its address/postcode.
-const EXCLUDED_LOCATIONS = ["Cardiff", "Oxford", "Sheffield"];
-
 // ".director_country_release" reads like "Suo Masayuki、Japan、1996", using a
 // fullwidth comma as the separator.
 function parseDirectorCountryRelease(text) {
@@ -92,26 +83,21 @@ function parseMovie($, moviePage, url) {
   $page(".item.screening_schedule").each((i, item) => {
     const $item = $page(item);
 
-    const cinemaText = getText($item.find("a.cinema_title"));
-    const [venueName, ...locationParts] = cinemaText
-      .split(",")
-      .map((part) => part.trim());
+    const $cinema = $item.find("a.cinema_title");
+    const venueName = getText($cinema).split(",")[0].trim();
     if (!venueName) {
       throw new Error(
         `Unable to extract a venue name from a screening on ${url} — the schedule structure may have changed`,
       );
     }
 
-    // Drop screenings at cities we don't cover before venue matching (see
-    // EXCLUDED_LOCATIONS above).
-    const location = locationParts.join(", ");
-    if (
-      EXCLUDED_LOCATIONS.some(
-        (excluded) => excluded.toLowerCase() === location.toLowerCase(),
-      )
-    ) {
-      return;
-    }
+    // The venue page linked here carries the address (with postcode) we use to
+    // match the screening to a known cinema; keep the URL so find-events can
+    // look it up in the retrieved venuePages.
+    const venueHref = $cinema.attr("href");
+    const venueUrl = venueHref
+      ? new URL(venueHref, attributes.domain).href
+      : undefined;
 
     // A missing date means the screening is legitimately undated (TBC); skip it.
     const date = parseScheduleDate(getText($item.find("h6")));
@@ -119,7 +105,7 @@ function parseMovie($, moviePage, url) {
 
     const bookingUrl = $item.find(".seven_day_button a").attr("href") || url;
 
-    performances.push({ venueName, date, bookingUrl, subtitled });
+    performances.push({ venueName, venueUrl, date, bookingUrl, subtitled });
   });
 
   return {
@@ -132,6 +118,17 @@ function parseMovie($, moviePage, url) {
     metaText,
     performances,
   };
+}
+
+// A venue page's ".venue_event" reads like
+// "15 Paternoster Row, Sheffield, S1 2BX - view map ›". We keep the address and
+// drop the trailing "- view map" link text. Some venues have no address here,
+// in which case we return an empty string and matching falls back to name only.
+function parseVenueAddress($, venuePage) {
+  const $page = $.load(venuePage);
+  return getText($page(".venue_event").first())
+    .replace(/-\s*view map.*$/i, "")
+    .trim();
 }
 
 async function findEvents(cinema) {
@@ -148,14 +145,22 @@ async function findEvents(cinema) {
     return [];
   }
 
+  const venuePages = data.venuePages || {};
   const events = [];
 
   for (const [url, moviePage] of Object.entries(data.moviePages || {})) {
     const movie = parseMovie(cheerio, moviePage, url);
 
-    const matchingPerformances = movie.performances.filter((performance) =>
-      venueMatchesCinema(cinema, performance.venueName),
-    );
+    const matchingPerformances = movie.performances.filter((performance) => {
+      const venuePage =
+        performance.venueUrl && venuePages[performance.venueUrl];
+      const eventAddress = venuePage
+        ? parseVenueAddress(cheerio, venuePage)
+        : undefined;
+      return venueMatchesCinema(cinema, performance.venueName, null, {
+        eventAddress,
+      });
+    });
 
     if (matchingPerformances.length === 0) continue;
 

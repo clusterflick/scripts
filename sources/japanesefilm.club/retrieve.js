@@ -37,6 +37,27 @@ function getNowShowingMoviePageUrls(movieListPage) {
   return moviePageUrls;
 }
 
+// Each screening on a movie page links to its venue page via an
+// "a.cinema_title" anchor. We fetch those pages so find-events can read each
+// venue's address (postcode) and match it to a known cinema accurately —
+// venue names alone collide across this UK-wide directory (e.g. "Showroom,
+// Sheffield" vs the London "The Showroom").
+function getVenuePageUrls(moviePages) {
+  const venuePageUrls = [];
+  for (const moviePage of Object.values(moviePages)) {
+    const $ = cheerio.load(moviePage);
+    $("a.cinema_title").each((i, el) => {
+      const href = $(el).attr("href");
+      if (!href) return;
+      const absoluteUrl = new URL(href, attributes.domain).href;
+      if (!venuePageUrls.includes(absoluteUrl)) {
+        venuePageUrls.push(absoluteUrl);
+      }
+    });
+  }
+  return venuePageUrls;
+}
+
 async function retrieve() {
   const movieListPage = await fetchText(attributes.url);
 
@@ -47,9 +68,17 @@ async function retrieve() {
     moviePages[moviePageUrl] = await fetchText(moviePageUrl);
   }
 
+  const venuePageUrls = getVenuePageUrls(moviePages);
+
+  const venuePages = {};
+  for (const venuePageUrl of venuePageUrls) {
+    venuePages[venuePageUrl] = await fetchText(venuePageUrl);
+  }
+
   return {
     movieListPage,
     moviePages,
+    venuePages,
   };
 }
 
