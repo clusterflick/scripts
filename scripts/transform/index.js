@@ -105,7 +105,7 @@ async function transform(
       "cineworld.co.uk-wembley",
       "cineworld.co.uk-west-india-quay",
       "cineworld.co.uk-wood-green",
-      "labs.thedrum.com",
+      "theshowroom.org",
     ];
     const previousReleaseData = optedOut.includes(location)
       ? []
