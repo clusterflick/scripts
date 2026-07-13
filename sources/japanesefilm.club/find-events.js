@@ -152,6 +152,7 @@ async function findEvents(cinema) {
         createPerformance({
           date: performance.date,
           url: performance.bookingUrl,
+          notesList: [`Presented by ${attributes.name}`],
           accessibility: createAccessibility(
             movie.title,
             { subtitled: performance.subtitled },
