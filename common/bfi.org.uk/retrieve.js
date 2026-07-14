@@ -10,7 +10,23 @@ function getPageContents(url, cacheKey, domain, showUrl) {
   return getPageWithPlaywright(url, cacheKey, async (page) => {
     // Go to the main page first, let it load, and then get the show page
     await page.waitForLoadState("domcontentloaded");
-    await page.goto(`${domain}${showUrl}`);
+    const response = await page.goto(`${domain}${showUrl}`);
+
+    // A broken BFI article renders as a blank page with a hard 500 and none of
+    // the content or soft-error text we look for below, so the locator race
+    // would just time out after 90s and throw an unrecoverable error. Detect it
+    // from the response status instead and treat it as an error page so the
+    // rescue logic downstream can recover the performances by title.
+    //
+    // Match 500 exactly rather than any >= 400: Cloudflare challenge/block pages
+    // emit 403/503/429 and origin errors emit 520-527, all of which are
+    // transient and should fall through to the normal retry, not be skipped as a
+    // permanently-broken article.
+    if (response && response.status() === 500) {
+      return new Error(
+        `Error page detected - HTTP ${response.status()} at ${domain}${showUrl}`,
+      );
+    }
 
     // Wait until the page is finished everything
     try {
