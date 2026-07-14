@@ -247,6 +247,8 @@ function standardizePrefixingForTheatrePerformances(
   title,
   options = { retainYear: false },
 ) {
+  title = title.replace("Lower Marsh Summer Saturdays:", "");
+
   const lowercaseTitle = title.toLowerCase().trim();
 
   if (

@@ -38,7 +38,8 @@ const sportShowings = [
   /Wimbledon Finals/i,
   /PLAYOFF FINAL/i,
   /BIG SCREEN FOOTBALL/i,
-  /^England vs? /i,
+  /^England vs?\.? /i,
+  /^France vs?\.? /i,
 ];
 
 const isSportShowing = ({ title }) =>
