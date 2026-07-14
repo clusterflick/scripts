@@ -104,13 +104,16 @@ async function transform(attributes, { movieListPage }, sourcedEvents) {
 
           // Capture format tokens (2D/3D dimension, etc.) before the ignore
           // checks below strip "2D"/"Standard" from the notes.
-          Object.assign(format, getValidFormat(tag.short_name));
+          const formatFromTag = getValidFormat(tag.short_name);
+          Object.assign(format, formatFromTag);
 
           // Ignore pointless tags like "Standard", "2D" and "PG"
+          // or if we've already got the format data
           if (
             basicNormalize(tag.short_name) === "standard" ||
             basicNormalize(tag.short_name) === "2d" ||
-            !!getValidClassification(tag.name)
+            !!getValidClassification(tag.name) ||
+            Object.keys(formatFromTag).length > 0
           ) {
             return;
           }
@@ -151,9 +154,6 @@ async function transform(attributes, { movieListPage }, sourcedEvents) {
           notesList,
           url: `${attributes.domain}/movies/${movie.url_key}/showtimes/${showTime.session_start_date}/${attributes.location}/seat-plan?showtime=${showTime.show_time_uuid}`,
           screen: showTime.screen_name,
-          status: {
-            soldOut: showTime.sold_out || false,
-          },
           accessibility: createAccessibility(
             movie.movie_name,
             accessibility,
