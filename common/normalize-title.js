@@ -893,6 +893,7 @@ function normalizeTitle(title, options) {
       /^Talking Tom Heroes:?( Suddenly Super)?( on the Big Screen)?$/i,
       "Talking Tom Heroes: Suddenly Super on the Big Screen",
     ],
+    ["Martini cocktail hour + ", "Martini cocktail hour: "],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
