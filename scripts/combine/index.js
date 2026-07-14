@@ -83,7 +83,7 @@ const buildMovieData = (movieInfo, { slugify, siteData }) => {
 
   return {
     id: `${movieInfo.id}`,
-    title,
+    title: title,
     normalizedTitle: normalizeTitle(title).replace(/^the /i, "").trim(),
     classification: getClassification(movieInfo),
     overview: movieInfo.overview,
@@ -261,7 +261,7 @@ async function combine() {
           siteData.movies[movieId] = {
             id: movieId,
             title: title,
-            normalizedTitle: normalizeTitle(title),
+            normalizedTitle: normalizeTitle(title).replace(/^the /i, "").trim(),
             isUnmatched: true,
             genres: [],
             includedMovies: [],
