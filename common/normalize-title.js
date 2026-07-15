@@ -520,7 +520,7 @@ function normalizeTitle(title, options) {
       /(free |monthly )?mystery ([\w+]+ )?([\w+]+ )?(night|film|movie|cinema|screening):?( Nov| \d)?/i,
       "mystery movie",
     ],
-    [/(classic )?secret scre(e|a)(n|m)ing( \d+)?/i, "mystery movie"],
+    [/(classic |MUBI )?secret scre(e|a)(n|m)ing( \d+)?/i, "mystery movie"],
     [/secret (classic )?bollywood cinema/i, "mystery movie"],
     [/scre(e|a)(n|m) unseen/i, "mystery movie"],
     [
