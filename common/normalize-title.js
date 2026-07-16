@@ -35,6 +35,7 @@ function normalizeTitle(title, options) {
     ["Zog + ", "Zog & "],
     [" + Superworm", " and Superworm"],
     [" + The Gruffalo's Child", " and The Gruffalo's Child"],
+    [" + The Scarecrow's Wedding", " and The Scarecrow's Wedding"],
     [" + 28YL: The Bone Temple", " "],
     [" + The Bone Temple (", " "],
     [" + Jackie", " & Jackie"],
@@ -894,6 +895,9 @@ function normalizeTitle(title, options) {
       "Talking Tom Heroes: Suddenly Super on the Big Screen",
     ],
     ["Martini cocktail hour + ", "Martini cocktail hour: "],
+    [/^The Blinking Buzzards – .*$/i, "The Blinking Buzzards"],
+    [/The Live Ghost Tent – .*$/i, "The Live Ghost Tent"],
+    [/^Mastercard Preferred Tickets: Last Chance to Buy:$/i, "American Utopia"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
