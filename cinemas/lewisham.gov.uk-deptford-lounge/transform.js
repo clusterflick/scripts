@@ -239,6 +239,10 @@ async function transform({ emailText }, sourcedEvents) {
       !nonFilmTitlePatterns.some((pattern) => pattern.test(movie.title)),
   );
 
+  if (movies.length === 0) {
+    throw new Error("No movies found — the email format may have changed");
+  }
+
   const listOfSourcedEvents = Object.values(sourcedEvents).flatMap(
     (events) => events,
   );

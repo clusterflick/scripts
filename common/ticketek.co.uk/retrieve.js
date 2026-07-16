@@ -1,6 +1,6 @@
 const cheerio = require("cheerio");
 const getPageWithPlaywright = require("../../common/get-page-with-playwright");
-const { generateShowingId } = require("../../common/utils");
+const { generateShowingId, assertSelector } = require("../../common/utils");
 
 async function retrieve(attributes) {
   const url = `https://premier.ticketek.co.uk/shows/show.aspx?sh=${attributes.siteId}`;
@@ -14,6 +14,7 @@ async function retrieve(attributes) {
     },
   );
 
+  assertSelector(movieListPage, ".event-buttons a");
   const $ = cheerio.load(movieListPage);
   const movieUrls = $(".event-buttons a")
     .map((_, element) => $(element).attr("href"))
