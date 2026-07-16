@@ -40,6 +40,7 @@ const sportShowings = [
   /BIG SCREEN FOOTBALL/i,
   /^England v\/?s?\.? /i,
   /^France v\/?s?\.? /i,
+  /^Spain v\/?s?\.? /i,
 ];
 
 const isSportShowing = ({ title }) =>
