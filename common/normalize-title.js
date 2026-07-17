@@ -903,6 +903,7 @@ function normalizeTitle(title, options) {
       "Summer Screenings at Greenford Quay -",
       "Summer Screenings at Greenford Quay: ",
     ],
+    [/^35mm - (.*)/i, "$1 [35mm]"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
