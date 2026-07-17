@@ -898,6 +898,11 @@ function normalizeTitle(title, options) {
     [/^The Blinking Buzzards – .*$/i, "The Blinking Buzzards"],
     [/The Live Ghost Tent – .*$/i, "The Live Ghost Tent"],
     [/^Mastercard Preferred Tickets: Last Chance to Buy:$/i, "American Utopia"],
+    ["The Price of Memory: Reparations", "The Price of Memory"],
+    [
+      "Summer Screenings at Greenford Quay -",
+      "Summer Screenings at Greenford Quay: ",
+    ],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
