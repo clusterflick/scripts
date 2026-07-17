@@ -1,6 +1,6 @@
 const cheerio = require("cheerio");
 const getPageWithPlaywright = require("../../common/get-page-with-playwright");
-const { generateShowingId, assertSelector } = require("../../common/utils");
+const { generateShowingId } = require("../../common/utils");
 
 async function retrieve(attributes) {
   const url = `https://premier.ticketek.co.uk/shows/show.aspx?sh=${attributes.siteId}`;
