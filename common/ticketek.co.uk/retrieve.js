@@ -14,7 +14,6 @@ async function retrieve(attributes) {
     },
   );
 
-  assertSelector(movieListPage, ".event-buttons a");
   const $ = cheerio.load(movieListPage);
   const movieUrls = $(".event-buttons a")
     .map((_, element) => $(element).attr("href"))

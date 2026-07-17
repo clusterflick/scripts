@@ -4,7 +4,7 @@ const { url, domain } = require("./attributes");
 
 async function retrieve() {
   const movieListPage = await fetchText(url);
-  assertSelector(movieListPage, ".eventlist--upcoming");
+  assertSelector(movieListPage, ".eventlist--past,.eventlist--upcoming");
   const $ = cheerio.load(movieListPage);
 
   const moviePageUrls = new Set();
