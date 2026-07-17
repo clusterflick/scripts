@@ -3,6 +3,7 @@
 const fs = require("node:fs").promises;
 const path = require("node:path");
 const { readJSON, writeJSON, sanitizePathSegment } = require("./common/utils");
+const { getVersion } = require("./common/get-version");
 
 const setupDirectory = async (type) => {
   const directoryPath = path.join(process.cwd(), type);
@@ -17,6 +18,8 @@ const setupDirectory = async (type) => {
 
 (async function () {
   const [, , action, location, ...parameters] = process.argv;
+
+  console.log(`🏷️  scripts @ ${getVersion()}`);
 
   if (action.toLowerCase() === "combine") {
     const combine = require("./scripts/combine");
