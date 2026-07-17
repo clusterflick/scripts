@@ -1244,6 +1244,7 @@ const knownRemovablePhrases = [
   " & Gathering",
   "Živorad Mitrović's",
   "Vinko Möderndorfer's",
+  '("Biye Fiye Niye")',
 
   // Common superfluous pieces
   "** SCREENING CANCELLED **",
