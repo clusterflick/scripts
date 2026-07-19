@@ -6,8 +6,6 @@ const {
   createAccessibility,
   createFormat,
   getValidFormat,
-  convertToList,
-  splitConjoinedItemsInList,
   generateShowingId,
   getDescriptionAccessibility,
 } = require("../utils");
@@ -47,19 +45,42 @@ function getOverviewFor($) {
   return createOverview(overview);
 }
 
-// BFI states the print/presentation for a whole listing in the Film-info panel
-// (e.g. "IMAX 70mm", "70mm", "IMAX with Laser", "Digital 4K"). This is a
-// structured, listing-level fact, unlike the prose blurb which describes the
-// film's format in general and leaks across a venue's 70mm/digital variants of
-// the same film. We tokenise only that panel and keep the recognised tokens
-// (getValidFormat drops "Laser", "Digital", "4K", cast, certificate, etc.).
-function getListingFormat($) {
-  return getText($("ul.Film-info__information"))
+// Each performance's searchResults row carries a comma-separated `keywords`
+// field - the venue's own per-performance markers (e.g. "Audio description,
+// Closed captions,Digital", "IMAX 70mm"). Accessibility and format are read
+// straight from these rather than the shared prose blurb / Film-info panel:
+// they're per-performance (so format no longer leaks across a film's 70mm and
+// digital screenings) and don't roll an event-level claim onto every showing.
+
+// Only the accessibility features BFI actually tags as keywords; anything else
+// is a false negative we accept rather than guess at. Note descriptive
+// subtitles are for the D/deaf (hardOfHearing), not a foreign-language subtitle.
+const keywordAccessibilityMatchers = [
+  { regex: /audio description/i, key: "audioDescription" },
+  { regex: /closed captions?/i, key: "hardOfHearing" },
+  { regex: /descriptive subtitles/i, key: "hardOfHearing" },
+];
+
+function getKeywordAccessibility(keywords) {
+  const accessibility = {};
+  for (const keyword of keywords) {
+    for (const { regex, key } of keywordAccessibilityMatchers) {
+      if (regex.test(keyword)) accessibility[key] = true;
+    }
+  }
+  return accessibility;
+}
+
+// Tokenise the keywords the same way as a listing attribute id and keep the
+// recognised format tokens (getValidFormat drops "Digital", "Releases", etc.).
+function getKeywordFormat(keywords) {
+  return keywords
+    .join(" ")
     .split(/[^a-z0-9]+/i)
     .reduce((format, token) => ({ ...format, ...getValidFormat(token) }), {});
 }
 
-function getPerformancesFor($, url, show, overview, venueFormat) {
+function getPerformancesFor($, url, show, venueFormat) {
   const { title, articleContext } = show;
 
   // Performances arrive as raw `searchResults` rows - positional arrays whose
@@ -71,43 +92,26 @@ function getPerformancesFor($, url, show, overview, venueFormat) {
   const startDateColumn = searchNames.indexOf("start_date");
   const screenColumn = searchNames.indexOf("venue_description");
   const availabilityColumn = searchNames.indexOf("availability_num");
+  const keywordsColumn = searchNames.indexOf("keywords");
   if (
     searchResults.length > 0 &&
-    (startDateColumn === -1 || screenColumn === -1 || availabilityColumn === -1)
+    (startDateColumn === -1 ||
+      screenColumn === -1 ||
+      availabilityColumn === -1 ||
+      keywordsColumn === -1)
   ) {
     throw new Error(`BFI searchNames is missing an expected column on ${url}`);
   }
 
-  // Format applies to every performance under this listing, so resolve it once.
-  const listingFormat = { ...venueFormat, ...getListingFormat($) };
+  // Foreign-language subtitles are a property of the film (all its screenings),
+  // stated in the Film-info panel - genuinely listing-level, unlike the
+  // per-performance accessibility keywords below.
   const $showInfo = $("ul.Film-info__information li");
   let isSubtitled = false;
   $showInfo.each(function () {
     if (isSubtitled) return;
     isSubtitled = getDescriptionAccessibility(getText($(this))).subtitled;
   });
-
-  const movieBlurb = getText($(".Rich-text")).toLowerCase();
-  const hasAudioDescription =
-    movieBlurb.includes("Audio Description available at all screenings") ||
-    movieBlurb.includes("Audio Description is available at this screening");
-
-  const presentedMatch = movieBlurb.match(
-    /The screenings on\s+(.+?)\s+will be presented with([^.]+)\./i,
-  );
-  let accessibilityMapping = {};
-  if (presentedMatch) {
-    const times = splitConjoinedItemsInList(convertToList(presentedMatch[1]));
-    const accessibilityFeature = presentedMatch[2].toLowerCase();
-    accessibilityMapping = times.reduce((mapping, time) => {
-      const key = time.trim();
-      mapping[key] = mapping[key] || {};
-      mapping[key].hardOfHearing = accessibilityFeature.includes(
-        "descriptive subtitles",
-      );
-      return mapping;
-    }, accessibilityMapping);
-  }
 
   return searchResults.map((row) => {
     const startDate = row[startDateColumn];
@@ -117,26 +121,23 @@ function getPerformancesFor($, url, show, overview, venueFormat) {
     // availability_num is the seat count: 0 = sold out, -1 = unavailable
     // ("Error" on the page). Both mean unbookable, so we mark both sold out.
     const soldOut = Number(row[availabilityColumn]) <= 0;
-    const key = `${startDate.replace(/\d{4}/, "")} ${screen}`
-      .replace(/\s+/g, " ")
-      .trim()
-      .toLowerCase();
+    const keywords = (row[keywordsColumn] || "")
+      .split(",")
+      .map((k) => k.trim());
     return createPerformance({
       url,
       screen,
       notesList: [],
       date: parseDate(startDate),
       status: { soldOut },
-      accessibility: createAccessibility(
-        title,
-        {
-          audioDescription: hasAudioDescription,
-          subtitled: isSubtitled,
-          ...accessibilityMapping[key],
-        },
-        overview,
-      ),
-      format: createFormat(title, listingFormat),
+      accessibility: createAccessibility(title, {
+        subtitled: isSubtitled,
+        ...getKeywordAccessibility(keywords),
+      }),
+      format: createFormat(title, {
+        ...venueFormat,
+        ...getKeywordFormat(keywords),
+      }),
     });
   });
 }
@@ -170,13 +171,7 @@ async function transform(attributes, { moviePages }, sourcedEvents) {
       .join("\n");
 
     const showingId = generateShowingId(attributes, articleId);
-    const performances = getPerformancesFor(
-      $,
-      url,
-      show,
-      overview,
-      venueFormat,
-    );
+    const performances = getPerformancesFor($, url, show, venueFormat);
 
     // Sometimes the same show can be on different URLs with the same ID.
     // Detect this by finding existing showings and adding performances instead
