@@ -1253,6 +1253,7 @@ const knownRemovablePhrases = [
   "CANCELLED DUE TO ILLNESS:",
   "NEW DATE:",
   "DRINK-AND-SING-ALONG",
+  "A Sing-A-Long Event",
   "A Sing-Along Event",
   "SING-ALONG SCREENING",
   "Sing-along-a",
