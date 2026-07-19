@@ -994,6 +994,7 @@ const knownRemovablePhrases = [
   "REProduce Viewing Room:",
   "RFF:",
   "Rob Reiner Celebration",
+  "ROBERT ALTMAN'S ",
   "Roman party, divine chorals: ",
   "Mastercard Outdoor Cinema:",
   "Mastercard Preferred Tickets: Last Chance to Buy:",

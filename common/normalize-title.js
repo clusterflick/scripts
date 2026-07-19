@@ -904,6 +904,7 @@ function normalizeTitle(title, options) {
       "Summer Screenings at Greenford Quay: ",
     ],
     [/^35mm - (.*)/i, "$1 [35mm]"],
+    ["Madonna - The Confessions Tour", "Madonna: The Confessions Tour"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
