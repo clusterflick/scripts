@@ -14,7 +14,7 @@ const { retrieve, transform, attributes } = require("..");
 const isRecording = false;
 
 jest.mock("../../../common/cache");
-setupCacheMock(__dirname, "2025-01-23");
+setupCacheMock(__dirname, "2025-01-23", true);
 
 // Hide script output
 console.log = () => {};

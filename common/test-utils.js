@@ -96,7 +96,7 @@ const disableCache = () => {
   dailyCache.mockImplementation((key, callback) => callback());
 };
 
-const setupCacheMock = (dirname, suffix) => {
+const setupCacheMock = (dirname, suffix, bfiCorrection) => {
   const { dailyCache, readDailyCache } = require("./cache");
   const { readCache } = jest.requireActual("./cache");
 
@@ -105,7 +105,7 @@ const setupCacheMock = (dirname, suffix) => {
       if (!filename) return path.join(dirname, "__manual-recordings__");
       // A hash ID value was added to BFI cache. Instead of updating all manual
       // recording filenames, let's remove the ID here so they continue to map.
-      if (filename.startsWith("bfi.org.uk-")) {
+      if (bfiCorrection) {
         const [prefix, venue, ...remainder] = filename.split("-");
         if (venue !== "bfi") filename = `${prefix}-${remainder.join("-")}`;
       }
