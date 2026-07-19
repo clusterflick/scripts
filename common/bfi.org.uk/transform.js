@@ -11,19 +11,7 @@ const {
   generateShowingId,
   getDescriptionAccessibility,
 } = require("../utils");
-const { parseDate, extractSearchResults } = require("./utils");
-
-// A `searchResults` row is a positional array; these are the fields we read.
-// row[7] and row[64] are byte-identical to the calendar's `.start-date` and
-// `.item-venue`, so a recovered performance keys into `accessibilityMapping`
-// exactly as a calendar-derived one does.
-const SEARCH_RESULT_CONTEXT_ID = 0;
-const SEARCH_RESULT_START_DATE = 7;
-const SEARCH_RESULT_SCREEN = 64;
-
-function getContextId(href = "") {
-  return href.split("context_id=")[1] || "";
-}
+const { parseDate } = require("./utils");
 
 function getOverviewFor($) {
   const overview = {
@@ -72,7 +60,24 @@ function getListingFormat($) {
 }
 
 function getPerformancesFor($, url, show, overview, venueFormat) {
-  const { title, performances, html } = show;
+  const { title, articleContext } = show;
+
+  // Performances arrive as raw `searchResults` rows - positional arrays whose
+  // fields are named by `searchNames`. Resolve the columns we need by name so
+  // we're resilient to BFI reordering them. An article with no performances
+  // (passed run, non-film index entry) omits `searchResults` entirely.
+  const searchResults = articleContext.searchResults || [];
+  const searchNames = articleContext.searchNames || [];
+  const startDateColumn = searchNames.indexOf("start_date");
+  const screenColumn = searchNames.indexOf("venue_description");
+  const availabilityColumn = searchNames.indexOf("availability_num");
+  if (
+    searchResults.length > 0 &&
+    (startDateColumn === -1 || screenColumn === -1 || availabilityColumn === -1)
+  ) {
+    throw new Error(`BFI searchNames is missing an expected column on ${url}`);
+  }
+
   // Format applies to every performance under this listing, so resolve it once.
   const listingFormat = { ...venueFormat, ...getListingFormat($) };
   const $showInfo = $("ul.Film-info__information li");
@@ -104,116 +109,36 @@ function getPerformancesFor($, url, show, overview, venueFormat) {
     }, accessibilityMapping);
   }
 
-  const showPerformances = [];
-  for (const performance of performances) {
-    const $ = cheerio.load(performance);
-    const key =
-      `${getText($(".start-date")).replace(/\d{4}/, "")} ${getText($(".item-venue"))}`
-        .replace(/\s+/g, " ")
-        .trim()
-        .toLowerCase();
-    showPerformances.push(
-      createPerformance({
-        url,
-        screen: getText($(".item-venue")),
-        notesList: [],
-        date: parseDate(getText($(".start-date"))),
-        status: {
-          soldOut: $(".item-link").hasClass("soldout"),
-        },
-        accessibility: createAccessibility(
-          title,
-          {
-            audioDescription: hasAudioDescription,
-            subtitled: isSubtitled,
-            ...accessibilityMapping[key],
-          },
-          overview,
-        ),
-        format: createFormat(title, listingFormat),
-      }),
-    );
-  }
-
-  // Patch: the BFI calendar occasionally renders a performance without a
-  // booking link, so retrieve skips it and it never reaches `performances`. The
-  // film page embeds a (capped, first-few) `searchResults` array, so if the
-  // missing performance happens to be in it we can recover it. Remove this once
-  // we move BFI to a better data source.
-  return showPerformances.concat(
-    getRecoveredPerformances(performances, {
-      html,
-      url,
-      title,
-      overview,
-      hasAudioDescription,
-      isSubtitled,
-      accessibilityMapping,
-      listingFormat,
-    }),
-  );
-}
-
-// Build performances that are present in the film page's `searchResults` array
-// but missing from the calendar (identified by their context id, which the
-// calendar exposes on each booking link). The film page's `searchResults` is
-// always scoped to this film, so any row we don't already have belongs here.
-function getRecoveredPerformances(
-  performances,
-  {
-    html,
-    url,
-    title,
-    overview,
-    hasAudioDescription,
-    isSubtitled,
-    accessibilityMapping,
-    listingFormat,
-  },
-) {
-  const seenContextIds = new Set(
-    performances.map((performance) =>
-      getContextId(cheerio.load(performance)("a.more-info").attr("href")),
-    ),
-  );
-
-  const recovered = [];
-  for (const row of extractSearchResults(html)) {
-    const contextId = row[SEARCH_RESULT_CONTEXT_ID];
-    const startDate = row[SEARCH_RESULT_START_DATE];
-    const screen = row[SEARCH_RESULT_SCREEN];
-    // Skip rows we can't fully reconstruct or that we already have.
-    if (!contextId || !startDate || !screen) continue;
-    if (seenContextIds.has(contextId)) continue;
-    seenContextIds.add(contextId);
-
+  return searchResults.map((row) => {
+    const startDate = row[startDateColumn];
+    // venue_description can carry a location suffix (e.g. "BFI IMAX, Waterloo");
+    // keep just the screen name.
+    const screen = row[screenColumn].split(",")[0].trim();
+    // availability_num is the seat count: 0 = sold out, -1 = unavailable
+    // ("Error" on the page). Both mean unbookable, so we mark both sold out.
+    const soldOut = Number(row[availabilityColumn]) <= 0;
     const key = `${startDate.replace(/\d{4}/, "")} ${screen}`
       .replace(/\s+/g, " ")
       .trim()
       .toLowerCase();
-    recovered.push(
-      createPerformance({
-        url,
-        screen,
-        // The calendar is the source of truth for sold-out status; a recovered
-        // performance has no booking link so we can't know it — default to not
-        // sold out rather than hide the screening entirely.
-        status: { soldOut: false },
-        date: parseDate(startDate),
-        accessibility: createAccessibility(
-          title,
-          {
-            audioDescription: hasAudioDescription,
-            subtitled: isSubtitled,
-            ...accessibilityMapping[key],
-          },
-          overview,
-        ),
-        format: createFormat(title, listingFormat),
-      }),
-    );
-  }
-  return recovered;
+    return createPerformance({
+      url,
+      screen,
+      notesList: [],
+      date: parseDate(startDate),
+      status: { soldOut },
+      accessibility: createAccessibility(
+        title,
+        {
+          audioDescription: hasAudioDescription,
+          subtitled: isSubtitled,
+          ...accessibilityMapping[key],
+        },
+        overview,
+      ),
+      format: createFormat(title, listingFormat),
+    });
+  });
 }
 
 async function transform(attributes, { moviePages }, sourcedEvents) {
@@ -277,9 +202,9 @@ async function transform(attributes, { moviePages }, sourcedEvents) {
     throw new Error("No movies found - the page structure may have changed");
   }
 
-  // Remove duplicate showings at the same time in the same screen. This
-  // fixes the issue where BFI's paginated search results lists the same
-  // performance on more than one page.
+  // Remove duplicate showings at the same time in the same screen. Belt and
+  // braces now that performances come from a single authoritative fetch, but it
+  // also collapses the case where the same show is split across two URLs.
   for (const show of shows) {
     show.performances = Object.values(
       show.performances.reduce(

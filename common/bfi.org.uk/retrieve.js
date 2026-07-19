@@ -2,83 +2,15 @@ const cheerio = require("cheerio");
 const { format, addYears } = require("date-fns");
 const slugify = require("slugify");
 const getPageWithPlaywright = require("../get-page-with-playwright");
-const { getText, getId, sleep } = require("../utils");
+const getShow = require("./get-show");
+const { getText, getId } = require("../utils");
 
 const dateFormat = "yyyy-MM-dd";
 
-function getPageContents(url, cacheKey, domain, showUrl) {
-  return getPageWithPlaywright(url, cacheKey, async (page) => {
-    // Go to the main page first, let it load, and then get the show page
-    await page.waitForLoadState("domcontentloaded");
-    const response = await page.goto(`${domain}${showUrl}`);
-
-    // A broken BFI article renders as a blank page with a hard 500 and none of
-    // the content or soft-error text we look for below, so the locator race
-    // would just time out after 90s and throw an unrecoverable error. Detect it
-    // from the response status instead and treat it as an error page so the
-    // rescue logic downstream can recover the performances by title.
-    //
-    // Match 500 exactly rather than any >= 400: Cloudflare challenge/block pages
-    // emit 403/503/429 and origin errors emit 520-527, all of which are
-    // transient and should fall through to the normal retry, not be skipped as a
-    // permanently-broken article.
-    if (response && response.status() === 500) {
-      return new Error(
-        `Error page detected - HTTP ${response.status()} at ${domain}${showUrl}`,
-      );
-    }
-
-    // Wait until the page is finished everything
-    try {
-      await page.waitForLoadState("networkidle");
-    } catch {
-      // If this fails, it'll be because it timed out. At that point, we
-      // might as well keep going and see if the next waitFor passes.
-    }
-
-    // Race between error page and valid content - whichever appears first wins.
-    // Not all pages have film info (that we care about), so check for the rich
-    // text or media areas too. On some fundraising pages we don't have those,
-    // but we may have a list which contains audience list XML attributes.
-    const errorLocator = page
-      .locator("#content h2")
-      .filter({ hasText: /500 - internal server error/i });
-    const validContentLocator = page.locator(
-      ".Film-info__information,.Rich-text,.Media,ul[xmlns\\:av]",
-    );
-
-    await errorLocator
-      .or(validContentLocator.first())
-      .waitFor({ state: "attached" });
-
-    // Check if we hit an error page
-    if (await errorLocator.isVisible()) {
-      const errorText = await errorLocator.textContent();
-      return new Error(`Error page detected - ${errorText}`);
-    }
-
-    // Check if we found valid content
-    if (!(await validContentLocator.first().isVisible())) {
-      return new Error(`Film information not available at ${domain}${showUrl}`);
-    }
-
-    // There have been instances where the page contents have been an empty
-    // object. Detect this and break the run to retry.
-    const content = await page.content();
-    if (typeof content !== "string" || content.length === 0) {
-      return new Error(`Empty page contents at ${domain}${showUrl}`);
-    }
-
-    return content;
-  });
-}
-
-async function processSearchResultPage(
-  { url, domain, articleId },
-  moviePages,
-  html,
-) {
-  const $ = cheerio.load(html);
+// Collect the show URLs (one per article) from a calendar search results page.
+// We only take the URL and title here - the performances come from each show's
+// own listing page (see getShow), not from the calendar rows.
+function discoverShows($, moviePages) {
   const $showLinks = $(".result-box-item");
   $showLinks.each(function () {
     const $showLink = $(this).find("a.more-info");
@@ -90,95 +22,15 @@ async function processSearchResultPage(
     const showUrl = href.split(
       "&BOparam::WScontent::loadArticle::context_id=",
     )[0];
-    moviePages[showUrl] = moviePages[showUrl] || { performances: [] };
-    // BFI's paginated search results can list the same performance on more than
-    // one page. The HTML for an overlapping item is identical, so skip it rather
-    // than recording the same performance twice.
-    const performanceHtml = $(this).html();
-    if (!moviePages[showUrl].performances.includes(performanceHtml)) {
-      moviePages[showUrl].performances.push(performanceHtml);
-    }
+    moviePages[showUrl] = moviePages[showUrl] || {};
     moviePages[showUrl].title = getText($showLink);
   });
-
-  for (const showUrl in moviePages) {
-    const showData = moviePages[showUrl];
-    if (showData.html) continue;
-
-    console.log(
-      `    - [${Date.now()}] Getting data for "${showData.title}" ... `,
-    );
-
-    const slug = slugify(showData.title, { strict: true }).toLowerCase();
-    const cacheKey = `bfi.org.uk-${getId(showUrl)}-${articleId}-${slug}`;
-    let pageContents;
-    try {
-      pageContents = await getPageContents(url, cacheKey, domain, showUrl);
-    } catch {
-      // If we got an error the first time we tried to get the page contents,
-      // wait and then try again.
-      console.log(
-        `      - First attempt failed to retrieve data for ${domain}${showUrl} -- waiting before trying again...`,
-      );
-      await sleep(30_000); // Wait 30 seconds
-      try {
-        pageContents = await getPageContents(url, cacheKey, domain, showUrl);
-      } catch (error) {
-        // If BFI is returning an error page (e.g. 500), skip this film rather
-        // than failing the entire run. BFI's search index regularly links to
-        // broken/stale pages — this isn't something we can fix.
-        if (error.message?.startsWith("Error page detected")) {
-          // If another URL for this title was already successfully fetched,
-          // rescue its performances by merging them into that entry.
-          const goodUrl = Object.keys(moviePages).find(
-            (url) =>
-              url !== showUrl &&
-              moviePages[url].title === showData.title &&
-              moviePages[url].html,
-          );
-          if (goodUrl) {
-            console.log(
-              `      - Adding "${showData.title}" to previously found ${domain}${goodUrl} -- BFI error page at ${domain}${showUrl}`,
-            );
-            moviePages[goodUrl].performances.push(...showData.performances);
-          } else {
-            console.log(
-              `      - Skipping "${showData.title}"; BFI error page at ${domain}${showUrl}`,
-            );
-          }
-          delete moviePages[showUrl];
-          continue;
-        }
-        // For other errors (e.g. network failures, timeouts), fail the run so
-        // we can investigate.
-        console.log(
-          `      - Unable to retrieve data for "${showData.title}"; error at ${domain}${showUrl}`,
-        );
-        throw error;
-      }
-    }
-
-    // Make sure that there's no bugs above where we'll end up saving something
-    // that isn't the HTML string
-    if (typeof pageContents !== "string") {
-      throw new Error(
-        `Invalid page contents at ${domain}${showUrl}; expected string, got ${typeof pageContents}`,
-      );
-    }
-
-    // Additional length check
-    if (pageContents.length === 0) {
-      throw new Error(`Empty page contents at ${domain}${showUrl}`);
-    }
-
-    moviePages[showUrl].html = pageContents;
-  }
 
   return moviePages;
 }
 
 async function retrieve(attributes) {
-  const { articleId, url } = attributes;
+  const { articleId, url, domain } = attributes;
 
   const today = new Date();
   const start = format(today, dateFormat);
@@ -256,17 +108,34 @@ async function retrieve(attributes) {
     },
   );
 
-  console.log(
-    `    - [${Date.now()}] Processing ${movieListPage.length} search results pages ... `,
-  );
+  // Discover the show URLs from the calendar search results ...
   let moviePages = {};
   for (const searchResultPage of movieListPage) {
-    moviePages = await processSearchResultPage(
-      attributes,
-      moviePages,
-      searchResultPage,
-    );
+    moviePages = discoverShows(cheerio.load(searchResultPage), moviePages);
   }
+
+  // ... then load each show's own listing page for its full set of performances.
+  console.log(
+    `    - [${Date.now()}] Loading ${Object.keys(moviePages).length} show pages ... `,
+  );
+  for (const showUrl in moviePages) {
+    const showData = moviePages[showUrl];
+    console.log(
+      `    - [${Date.now()}] Getting data for "${showData.title}" ... `,
+    );
+
+    const slug = slugify(showData.title, { strict: true }).toLowerCase();
+    const showCacheKey = `bfi.org.uk-${getId(showUrl)}-${articleId}-${slug}`;
+    const { html, articleContext } = await getShow(
+      url,
+      showCacheKey,
+      domain,
+      showUrl,
+    );
+    showData.html = html;
+    showData.articleContext = articleContext;
+  }
+
   return { movieListPage, moviePages };
 }
 
