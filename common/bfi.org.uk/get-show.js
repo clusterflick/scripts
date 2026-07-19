@@ -9,28 +9,35 @@ const { sleep } = require("../utils");
 // ~156 performances, so this has comfortable headroom.
 const PAGE_SIZE = 500;
 
-function getShowPage(url, cacheKey, domain, showUrl) {
+function getShowPage(url, cacheKey, domain, showUrl, delayMs) {
   return getPageWithPlaywright(url, cacheKey, async (page) => {
+    // Pace requests to stay under BFI's burst throttle. This lives inside the
+    // cache callback so it only delays on an actual fetch, never a cache hit.
+    if (delayMs) await sleep(delayMs);
+
     // Go to the main page first, let it load, and then get the show page - but
     // ask for every performance in one page rather than the default 5.
     await page.waitForLoadState("domcontentloaded");
+    // Calendar-derived show URLs (default.asp?...) already carry a query string;
+    // films-index permalinks (article/{slug}) don't - pick the right separator.
+    const separator = showUrl.includes("?") ? "&" : "?";
     const pagedShowUrl =
-      `${showUrl}&BOset::WScontent::SearchResultsInfo::current_page=1` +
+      `${showUrl}${separator}BOset::WScontent::SearchResultsInfo::current_page=1` +
       `&BOset::WScontent::SearchResultsInfo::page_size=${PAGE_SIZE}`;
     const response = await page.goto(`${domain}${pagedShowUrl}`);
 
-    // A broken BFI article renders as a blank page with a hard 500 and none of
-    // the content or soft-error text we look for below, so the locator race
-    // would just time out after 90s and throw an unrecoverable error. Detect it
-    // from the response status instead.
+    // A broken BFI article renders as a blank page with a hard 500 (the films
+    // index lists some of these - e.g. an article mis-linked to the IMAX
+    // domain). Skip it by returning null - which the caller drops, and which
+    // (unlike throwing) gets cached like any other result, so replay tests read
+    // a recording rather than hitting a missing-file error.
     //
     // Match 500 exactly rather than any >= 400: Cloudflare challenge/block pages
-    // emit 403/503/429 and origin errors emit 520-527, all of which are
-    // transient and should fall through to the normal retry.
+    // emit 403/503/429 and origin errors emit 520-527, which are transient and
+    // fall through to the content wait / retry below instead of being skipped.
     if (response && response.status() === 500) {
-      return new Error(
-        `Error page detected - HTTP ${response.status()} at ${domain}${showUrl}`,
-      );
+      console.log(`      - Skipping broken article (500): ${domain}${showUrl}`);
+      return null;
     }
 
     // Wait until the page is finished everything
@@ -56,10 +63,11 @@ function getShowPage(url, cacheKey, domain, showUrl) {
       .or(validContentLocator.first())
       .waitFor({ state: "attached" });
 
-    // Check if we hit an error page
+    // Soft error page (a rendered "500 - internal server error") - skip it the
+    // same way as the hard 500 above: return null (cached) rather than throw.
     if (await errorLocator.isVisible()) {
-      const errorText = await errorLocator.textContent();
-      return new Error(`Error page detected - ${errorText}`);
+      console.log(`      - Skipping broken article (500): ${domain}${showUrl}`);
+      return null;
     }
 
     // Check if we found valid content
@@ -113,18 +121,20 @@ function getShowPage(url, cacheKey, domain, showUrl) {
 }
 
 // Load a single show's listing page, returning its article HTML (for overview /
-// format / blurb) alongside its full, structured set of performances. Retries
-// once after a pause on failure, then throws - a listing page that still fails
-// (including a 500) fails the run rather than being skipped.
-async function getShow(url, cacheKey, domain, showUrl) {
+// format / blurb) alongside its whole articleContext - or null if the article
+// is a broken 500 (skipped inside getShowPage, and cached as such). Any other
+// failure retries once after a pause, then throws and fails the run.
+async function getShow(url, cacheKey, domain, showUrl, delayMs = 0) {
   try {
-    return await getShowPage(url, cacheKey, domain, showUrl);
+    return await getShowPage(url, cacheKey, domain, showUrl, delayMs);
   } catch {
+    // A non-500 failure (network, timeout, transient block); 500s are skipped
+    // as null inside getShowPage. Pause, retry once, then let it throw.
     console.log(
       `      - First attempt failed to retrieve data for ${domain}${showUrl} -- waiting before trying again...`,
     );
     await sleep(30_000); // Wait 30 seconds
-    return await getShowPage(url, cacheKey, domain, showUrl);
+    return await getShowPage(url, cacheKey, domain, showUrl, delayMs);
   }
 }
 
