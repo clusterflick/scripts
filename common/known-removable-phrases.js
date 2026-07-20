@@ -829,6 +829,7 @@ const knownRemovablePhrases = [
   "Women Without Borders Film Festival 2026 —",
   "The Woman Behind Visconti's Masterpiece",
   "Cinebug turns 1:",
+  "Cinebug Summer Social and",
   "Hussein Kamal's",
   "Ido Fluk:",
   "IFF:",
