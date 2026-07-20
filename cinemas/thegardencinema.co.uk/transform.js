@@ -142,7 +142,7 @@ async function transform({ moviePages }, sourcedEvents) {
       url: new URL($('link[rel="canonical"]').attr("href")).href,
       overview: createOverview({
         year,
-        duration: stats[stats.length - 1].replace("m.", ""),
+        duration: stats[stats.length - 1]?.replace("m.", ""),
         classification,
         directors,
         actors: getText($cast),
