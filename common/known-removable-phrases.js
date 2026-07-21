@@ -276,6 +276,7 @@ const knownRemovablePhrases = [
   "Special Presentation:",
   "Spielberg Sci-Fi Week:",
   "Spielberg Week:",
+  "Steven Spielberg season",
   "Presentation & Screening:",
   "Black Cinema Film Nights at the The Source",
   "BLACK CINEMA FILM NIGHTS at The Source",

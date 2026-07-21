@@ -905,6 +905,7 @@ function normalizeTitle(title, options) {
     ],
     [/^35mm - (.*)/i, "$1 [35mm]"],
     ["Madonna - The Confessions Tour", "Madonna: The Confessions Tour"],
+    ["CARRY GREENHAM HOME + ", "CARRY GREENHAM HOME & "],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
