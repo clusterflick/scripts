@@ -177,7 +177,11 @@ function normalizeTitle(title, options) {
     ["Main Vaapas Aunga", "Main Vaapas Aaunga"],
     ["Frozen 2", "Frozen II"],
     ["Terminator 2 Live", " Terminator 2"],
-    [/\s+terminator 2$/i, " Terminator 2 Judgment Day"],
+    [/\s+terminator 2($| \()/i, " Terminator 2 Judgment Day$1"],
+    [
+      "Indiana Jones and the Raiders Of The Lost Ark",
+      "Raiders Of The Lost Ark ",
+    ],
     [/^Relaxed Mufasa/i, "Relaxed screening: Mufasa"],
     ["behaviour", "behavior"],
     ["Lynch: Fire Walk With Me", "Lynch: Twin Peaks Fire Walk With Me"],
@@ -881,11 +885,19 @@ function normalizeTitle(title, options) {
     [/ Curse Were-Rabb$/i, " The Curse of the Were-Rabbit"],
     [
       "Wallace & Gromit Grand Day/Wrong",
-      "Wallace & Gromit A Grand Day Out & The Wrong Trousers",
+      "Wallace & Gromit: A Grand Day Out & The Wrong Trousers",
+    ],
+    [
+      "Wallace & Gromit: A Grand Day Out + ",
+      "Wallace & Gromit: A Grand Day Out & ",
     ],
     [
       "Wallace & Gromit A Close/A Matter",
-      "Wallace & Gromit A Close Shave & A Matter of Loaf and Death",
+      "Wallace & Gromit: A Close Shave & A Matter of Loaf and Death",
+    ],
+    [
+      "Wallace & Gromit: A Close Shave + ",
+      "Wallace & Gromit: A Close Shave & ",
     ],
     [/^(The Music of Zimmer vs Williams) \d{4}/i, "$1"],
     [/, (\d{4}) @/, ", ($1) @"],
