@@ -181,7 +181,10 @@ async function retrieve() {
           await page.waitForTimeout(REQUEST_DELAY_MS);
 
           const challengeLocator = page.getByText(CHALLENGE_TEXT);
-          const validContentLocator = page.locator("#js-navigation-wrapper");
+          // Anchor on the event content itself rather than the site header -
+          // TicketSource serves promoter-branded pages with a stripped-down
+          // header, so navigation markup isn't a reliable signal.
+          const validContentLocator = page.locator("#performanceInfo");
 
           // Whichever resolves first - the bot challenge or the real page -
           // settle as soon as one is present rather than waiting out the
@@ -194,7 +197,7 @@ async function retrieve() {
           // Throw (don't return) so the result isn't cached and withRetry can
           // back off and try again with a fresh browser session.
           if (await challengeLocator.isVisible()) {
-            return new Error(`Bot challenge page detected at ${url}`);
+            throw new Error(`Bot challenge page detected at ${url}`);
           }
 
           return await page.content();
