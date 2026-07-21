@@ -1,5 +1,7 @@
 const cheerio = require("cheerio");
-const getPageWithPlaywright = require("../../common/get-page-with-playwright");
+const {
+  withPlaywrightSession,
+} = require("../../common/get-page-with-playwright");
 const discoverCalendarShows = require("../../common/bfi.org.uk/discover-calendar");
 const { loadShowInto } = require("../../common/bfi.org.uk/load-shows");
 const { getText, getId } = require("../../common/utils");
@@ -29,7 +31,7 @@ const jitteredDelay = () =>
   REQUEST_DELAY_MIN_MS +
   Math.floor(Math.random() * (REQUEST_DELAY_MAX_MS - REQUEST_DELAY_MIN_MS + 1));
 
-async function getFilmsIndex() {
+async function getFilmsIndex(getPageWithPlaywright) {
   // Distinct from the calendar search's cache key (which also keys on the venue
   // articleId) so the two don't clobber each other.
   const cacheKey = `bfi.org.uk-${getId(FILMS_INDEX_URL)}-${articleId}`;
@@ -65,47 +67,55 @@ function discoverIndexShows(filmsIndexPage) {
 }
 
 async function retrieve() {
-  const moviePages = {};
-  const loadedIds = new Set();
+  // Share one browser across the whole run - films index, every show page, and
+  // the calendar - to reuse cookies and skip per-page launch/teardown.
+  return withPlaywrightSession(async (getPage) => {
+    const moviePages = {};
+    const loadedIds = new Set();
 
-  // 1. Films index - load every listed article.
-  console.log("");
-  console.log(`    - [${Date.now()}] Retrieving films index ... `);
-  const filmsIndexPage = await getFilmsIndex();
-  const indexShows = discoverIndexShows(filmsIndexPage);
-  console.log(
-    `    - [${Date.now()}] Loading ${indexShows.length} index show pages ... `,
-  );
-  for (const show of indexShows) {
-    await loadShowInto(
-      attributes,
-      show,
-      moviePages,
-      loadedIds,
-      jitteredDelay(),
+    // 1. Films index - load every listed article.
+    console.log("");
+    console.log(`    - [${Date.now()}] Retrieving films index ... `);
+    const filmsIndexPage = await getFilmsIndex(getPage);
+    const indexShows = discoverIndexShows(filmsIndexPage);
+    console.log(
+      `    - [${Date.now()}] Loading ${indexShows.length} index show pages ... `,
     );
-  }
+    for (const show of indexShows) {
+      await loadShowInto(
+        getPage,
+        attributes,
+        show,
+        moviePages,
+        loadedIds,
+        jitteredDelay(),
+      );
+    }
 
-  // 2. Calendar - gap-fill only the articles the index didn't already cover.
-  const { movieListPage, shows: calendarShows } =
-    await discoverCalendarShows(attributes);
-  const gaps = calendarShows.filter(
-    (show) => show.articleId && !loadedIds.has(show.articleId.toUpperCase()),
-  );
-  console.log(
-    `    - [${Date.now()}] Gap-filling ${gaps.length} calendar-only show pages ... `,
-  );
-  for (const show of gaps) {
-    await loadShowInto(
+    // 2. Calendar - gap-fill only the articles the index didn't already cover.
+    const { movieListPage, shows: calendarShows } = await discoverCalendarShows(
+      getPage,
       attributes,
-      show,
-      moviePages,
-      loadedIds,
-      jitteredDelay(),
     );
-  }
+    const gaps = calendarShows.filter(
+      (show) => show.articleId && !loadedIds.has(show.articleId.toUpperCase()),
+    );
+    console.log(
+      `    - [${Date.now()}] Gap-filling ${gaps.length} calendar-only show pages ... `,
+    );
+    for (const show of gaps) {
+      await loadShowInto(
+        getPage,
+        attributes,
+        show,
+        moviePages,
+        loadedIds,
+        jitteredDelay(),
+      );
+    }
 
-  return { filmsIndexPage, movieListPage, moviePages };
+    return { filmsIndexPage, movieListPage, moviePages };
+  });
 }
 
 module.exports = retrieve;

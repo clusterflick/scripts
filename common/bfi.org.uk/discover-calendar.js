@@ -1,6 +1,5 @@
 const cheerio = require("cheerio");
 const { format, addYears } = require("date-fns");
-const getPageWithPlaywright = require("../get-page-with-playwright");
 const { getText, getId } = require("../utils");
 
 const dateFormat = "yyyy-MM-dd";
@@ -29,7 +28,7 @@ function extractShows($) {
 // Page through the year-long calendar search and return the discovered shows
 // (deduped by URL - the same article can appear on several pages) alongside the
 // raw result pages. Does not load any article pages.
-async function discoverCalendarShows(attributes) {
+async function discoverCalendarShows(getPageWithPlaywright, attributes) {
   const { articleId, url } = attributes;
 
   const today = new Date();

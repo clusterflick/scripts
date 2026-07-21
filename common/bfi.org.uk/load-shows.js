@@ -21,6 +21,7 @@ function buildShowPath(articleId) {
 // already loaded from the other source without a second fetch. A broken (500)
 // article is skipped by getShow (returns null) and simply left out.
 async function loadShowInto(
+  getPage,
   attributes,
   { showUrl, title, articleId: knownId },
   moviePages,
@@ -34,7 +35,14 @@ async function loadShowInto(
 
   const slug = slugify(title, { strict: true }).toLowerCase();
   const cacheKey = `bfi.org.uk-${getId(showUrl)}-${articleId}-${slug}`;
-  const loaded = await getShow(url, cacheKey, domain, showUrl, delayMs);
+  const loaded = await getShow(
+    getPage,
+    url,
+    cacheKey,
+    domain,
+    showUrl,
+    delayMs,
+  );
   if (!loaded) return; // broken (500) article, skipped
 
   const id = loaded.articleContext.articleId;

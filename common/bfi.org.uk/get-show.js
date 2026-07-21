@@ -1,4 +1,3 @@
-const getPageWithPlaywright = require("../get-page-with-playwright");
 const { sleep } = require("../utils");
 
 // BFI's performance widget paginates at 5 per page by default, but the page size
@@ -9,7 +8,14 @@ const { sleep } = require("../utils");
 // ~156 performances, so this has comfortable headroom.
 const PAGE_SIZE = 500;
 
-function getShowPage(url, cacheKey, domain, showUrl, delayMs) {
+function getShowPage(
+  getPageWithPlaywright,
+  url,
+  cacheKey,
+  domain,
+  showUrl,
+  delayMs,
+) {
   return getPageWithPlaywright(url, cacheKey, async (page) => {
     // Pace requests to stay under BFI's burst throttle. This lives inside the
     // cache callback so it only delays on an actual fetch, never a cache hit.
@@ -124,9 +130,23 @@ function getShowPage(url, cacheKey, domain, showUrl, delayMs) {
 // format / blurb) alongside its whole articleContext - or null if the article
 // is a broken 500 (skipped inside getShowPage, and cached as such). Any other
 // failure retries once after a pause, then throws and fails the run.
-async function getShow(url, cacheKey, domain, showUrl, delayMs = 0) {
+async function getShow(
+  getPageWithPlaywright,
+  url,
+  cacheKey,
+  domain,
+  showUrl,
+  delayMs = 0,
+) {
   try {
-    return await getShowPage(url, cacheKey, domain, showUrl, delayMs);
+    return await getShowPage(
+      getPageWithPlaywright,
+      url,
+      cacheKey,
+      domain,
+      showUrl,
+      delayMs,
+    );
   } catch {
     // A non-500 failure (network, timeout, transient block); 500s are skipped
     // as null inside getShowPage. Pause, retry once, then let it throw.
@@ -134,7 +154,14 @@ async function getShow(url, cacheKey, domain, showUrl, delayMs = 0) {
       `      - First attempt failed to retrieve data for ${domain}${showUrl} -- waiting before trying again...`,
     );
     await sleep(30_000); // Wait 30 seconds
-    return await getShowPage(url, cacheKey, domain, showUrl, delayMs);
+    return await getShowPage(
+      getPageWithPlaywright,
+      url,
+      cacheKey,
+      domain,
+      showUrl,
+      delayMs,
+    );
   }
 }
 
