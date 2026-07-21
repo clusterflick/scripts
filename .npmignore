@@ -1,0 +1,26 @@
+# Consumers of this package (data-retrieved, data-transformed, ...) install it
+# as a git dependency and only ever run the pipeline code. The Polly HTTP
+# recordings and snapshots under tests/ are ~1.2GB, which every CI job was
+# downloading and unpacking on every run for no reason. Excluding them takes the
+# installed package from ~1166MB to ~1MB.
+#
+# Note: npm uses this file *instead of* .gitignore when packing, so the output
+# directories below are repeated from .gitignore to keep them out of the tarball
+# when packing from a working tree that has them.
+tests/
+
+# output files
+transformed-data/
+retrieved-data/
+combined-data/
+matched-data/
+cached-data/
+cache-llm/
+cache/
+playwright-failures/
+
+# local tooling
+.claude/
+.env
+*.log
+*.tgz

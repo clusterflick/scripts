@@ -62,17 +62,17 @@ const todayIso = () =>
     day: "2-digit",
   }).format(new Date());
 
-// Resolve the venue's test directory. Most venues use `tests/`, a handful `test/`.
+// Resolve the venue's test directory.
 function resolveTestDir(venueId) {
   const venueDir = path.join(ROOT, "cinemas", venueId);
   if (!fs.existsSync(venueDir)) {
     fail(`No such venue: cinemas/${venueId}`);
   }
-  for (const name of ["tests", "test"]) {
-    const dir = path.join(venueDir, name);
-    if (fs.existsSync(path.join(dir, "index.test.js"))) return dir;
+  const dir = path.join(venueDir, "tests");
+  if (!fs.existsSync(path.join(dir, "index.test.js"))) {
+    fail(`No index.test.js found under cinemas/${venueId}/tests`);
   }
-  fail(`No index.test.js found under cinemas/${venueId}/tests or /test`);
+  return dir;
 }
 
 // Run the venue's tests. Returns { passed, json, raw }.
