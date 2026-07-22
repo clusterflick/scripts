@@ -63,6 +63,24 @@ async function transform(
 
     if (isPrivateHire(movie.name)) return moviesAtCinema;
 
+    // The per-showing `displayMetaData.classes` is sometimes missing badges the
+    // venue does record at the movie level (e.g. a subtitled restoration whose
+    // showings aren't individually tagged). The movie-level `displayMetaData`
+    // carries `every-showings-*` classes for badges that apply to ALL showings,
+    // so pull those out and fold them into every showing's tags. We only use
+    // `every-showings-*` (not `some-showings-*`) because we can't attribute a
+    // "some" badge to specific showings.
+    let everyShowingTags = [];
+    try {
+      const movieMetaData = JSON.parse(movie.displayMetaData ?? "{}");
+      everyShowingTags = (movieMetaData.classes ?? "")
+        .split(" ")
+        .filter((className) => className.startsWith("every-showings-"))
+        .map((className) => className.replace("every-showings-", ""));
+    } catch {
+      // Movie-level metadata missing or unparseable - fall back to showing tags.
+    }
+
     const transformedMovie = {
       showingId: generateShowingId(attributes, movie.id),
       title: movie.name,
@@ -84,11 +102,12 @@ async function transform(
       }),
       performances: showings.map((showing) => {
         const metaData = JSON.parse(showing.displayMetaData);
-        const tags = metaData.classes.split(" ").map((tag) => tag.trim());
-
-        const notesList = [
-          `${showing.seatsRemaining} of ${showing.seatsRemaining + showing.ticketsSold} seats remaining`,
+        const tags = [
+          ...metaData.classes.split(" ").map((tag) => tag.trim()),
+          ...everyShowingTags,
         ];
+
+        const notesList = [];
         if (
           tags.includes("no-trailers-or-adverts") ||
           tags.includes("ad-free")
@@ -131,6 +150,7 @@ async function transform(
               tags.includes("hard-of-hearing") ||
               tags.includes("hoh") ||
               tags.includes("cc") ||
+              tags.includes("captions") ||
               tags.includes("oc"),
             subtitled:
               tags.includes("subbed") ||

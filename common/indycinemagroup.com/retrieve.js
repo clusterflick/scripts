@@ -37,6 +37,7 @@ query ($limit: Int, $orderBy: String, $type: String) {
       dcmEdiMovieName
       siteId
       titleClassId
+      displayMetaData
 
       showings {
         id

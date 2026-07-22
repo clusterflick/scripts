@@ -16,6 +16,14 @@ const matchIdentifiedMovies = require("./match-identified-movies");
 const identifyMultipleMovies = require("./identify-multiple-movies");
 const identifyShorts = require("./identify-shorts");
 
+// A bot challenge (Cloudflare et al.) returns an error status with a
+// JS-challenge body. It means the venue site is up but blocking our plain fetch
+// — NOT that the listing was removed. Retrieve gets past this with Playwright;
+// recovery uses plain fetch and can't, so we detect it and keep the listing
+// rather than mistaking the block for a removal.
+const BOT_CHALLENGE_TEXT =
+  /Checking if your connection|Just a moment|Attention Required|cf-browser-verification|cf_chl|Enable JavaScript and cookies to continue/i;
+
 // A movie carried forward from a previous release may predate the required
 // per-performance `accessibility` / `format` objects. Backfill empty objects
 // where missing so the delisted-but-still-valid movie satisfies the schema.
@@ -163,6 +171,20 @@ async function transform(
         // If something goes wrong checking the URL, assume it's been removed
         continue;
       }
+
+      // A bot challenge blocking our fetch is not evidence the listing was
+      // removed. Treat it as inconclusive and keep the previously-known-good
+      // event rather than dropping a still-valid one. (A proper fix would verify
+      // via Playwright like the retrieve step does.)
+      const isBotChallenge =
+        (response.status === 403 || response.status === 503) &&
+        BOT_CHALLENGE_TEXT.test(content);
+      if (isBotChallenge) {
+        console.log(" - Kept (bot challenge, unverifiable):", movie.title);
+        matchedData.push(withRequiredPerformanceDefaults(movie));
+        continue;
+      }
+
       if (!response.ok || response.url.includes("/not-found")) continue;
 
       // Parse the HTML and extract visible text (excluding scripts and

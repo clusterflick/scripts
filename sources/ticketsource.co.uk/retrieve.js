@@ -101,20 +101,32 @@ async function fetchMeilisearchEvents(page, body) {
 
 async function retrieveFilterEvents(page, buildSearchBodyForFilter) {
   const movieListPages = [];
-  const firstBody = buildSearchBodyForFilter({ offset: 0 });
-  const firstPage = await fetchMeilisearchEvents(page, firstBody);
-  movieListPages.push(firstPage);
 
-  const { estimatedTotalHits: totalHits } = firstPage;
-  if (totalHits === undefined) {
-    throw new Error("Missing estimatedTotalHits in Meilisearch response");
-  }
-  let currentOffset = HITS_PER_PAGE;
-  while (currentOffset < totalHits) {
+  // Page until a request returns fewer than a full page of hits. We deliberately
+  // do NOT use Meilisearch's `estimatedTotalHits` as the termination condition:
+  // it under-reports (it can come back exactly equal to the page size even when
+  // more results exist), which silently drops the furthest-future events because
+  // results are sorted by ascending timestamp.
+  let currentOffset = 0;
+  while (true) {
     const pageBody = buildSearchBodyForFilter({ offset: currentOffset });
     const pageResponse = await fetchMeilisearchEvents(page, pageBody);
+    if (!Array.isArray(pageResponse.hits)) {
+      throw new Error("Missing hits array in Meilisearch response");
+    }
     movieListPages.push(pageResponse);
+
+    if (pageResponse.hits.length < HITS_PER_PAGE) break;
     currentOffset += HITS_PER_PAGE;
+
+    // Meilisearch caps retrievable results at `maxTotalHits` (default 1000), past
+    // which a request returns an empty page and the loop stops anyway — this is
+    // just a guard against an unbounded loop if the API ever misbehaves.
+    if (currentOffset > 10_000) {
+      throw new Error(
+        `Pagination exceeded ${currentOffset} results for a single filter — aborting to avoid an unbounded loop`,
+      );
+    }
   }
 
   return movieListPages;
