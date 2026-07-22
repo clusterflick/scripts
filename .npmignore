@@ -3,24 +3,25 @@
 # recordings and snapshots under tests/ are ~1.2GB, which every CI job was
 # downloading and unpacking on every run for no reason. Excluding them takes the
 # installed package from ~1166MB to ~1MB.
-#
-# Note: npm uses this file *instead of* .gitignore when packing, so the output
-# directories below are repeated from .gitignore to keep them out of the tarball
-# when packing from a working tree that has them.
 tests/
 
-# output files
-transformed-data/
-retrieved-data/
-combined-data/
-matched-data/
-cached-data/
-cache-llm/
-cache/
-playwright-failures/
+# Generated output directories. LEADING SLASHES ARE REQUIRED: an unanchored
+# pattern like `cache/` matches at every level and would also drop the
+# `scripts/cache/` pipeline stage. These only ever exist at the package root, so
+# anchor them there. npm uses this file *instead of* .gitignore when packing, so
+# these are repeated from .gitignore to keep a local `npm pack` clean (git-dep
+# installs pack from a clean checkout and never see them anyway).
+/transformed-data/
+/retrieved-data/
+/combined-data/
+/matched-data/
+/cached-data/
+/cache-llm/
+/cache/
+/playwright-failures/
 
 # local tooling
-.claude/
-.env
+/.claude/
+/.env
 *.log
 *.tgz
