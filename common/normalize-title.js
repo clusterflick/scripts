@@ -922,6 +922,8 @@ function normalizeTitle(title, options) {
       "Traditional Polish cakes, hazelnut vodka + ",
       "Traditional Polish cakes, hazelnut vodka & ",
     ],
+    ["Metropolis at 100", "Metropolis"],
+    ["Halloween (1978) + ", "Halloween (1978) & "],
   ];
 
   corrections.forEach(([phrase, replacement]) => {

@@ -32,6 +32,7 @@ const knownRemovablePhrases = [
   "on 35mm",
   "in 16mm",
   "in 35mm",
+  "in Duo-Vision",
   "from 16mm",
   "from 35mm",
   "from VHS",
