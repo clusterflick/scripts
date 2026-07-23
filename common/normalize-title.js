@@ -924,6 +924,7 @@ function normalizeTitle(title, options) {
     ],
     ["Metropolis at 100", "Metropolis"],
     ["Halloween (1978) + ", "Halloween (1978) & "],
+    ["MORE PUNK THAN PUNK + ", "MORE PUNK THAN PUNK & "],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
