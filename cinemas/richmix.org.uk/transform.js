@@ -17,26 +17,29 @@ function parseComponentData(value) {
   return JSON.parse(value.replace(/&quot;/g, '"'));
 }
 
-// The ld+json Event blocks contain raw control characters (unescaped newlines
-// in descriptions) and trailing commas left by empty fields, so they can't be
-// parsed as-is. Sanitize before parsing and keep only the Event blocks (one
-// per showtime).
+// The ld+json Event blocks HTML-escape their string values, so the quotes
+// delimiting them arrive as &quot;. They also contain raw control characters
+// (unescaped newlines in descriptions) and trailing commas left by empty
+// fields, so they can't be parsed as-is. Sanitize before parsing.
+//
+// The page's other ld+json blocks (Organization, LocalBusiness) are malformed
+// and unparseable, so select the Event blocks (one per showtime) by their raw
+// text rather than parsing everything and filtering on @type — that way a
+// broken Event block throws instead of being silently skipped.
 function getScreeningEvents($) {
-  const events = [];
-  $('script[type="application/ld+json"]').each(function () {
-    const sanitized = $(this)
-      .html()
-      .replace(/[\n\r\t]/g, " ")
-      .replace(/,\s*([}\]])/g, "$1");
-    let parsed;
-    try {
-      parsed = JSON.parse(sanitized);
-    } catch {
-      return;
-    }
-    if (parsed["@type"] === "Event") events.push(parsed);
-  });
-  return events;
+  return $('script[type="application/ld+json"]')
+    .filter(function () {
+      return /"@type"\s*:\s*"Event"/.test($(this).html());
+    })
+    .map(function () {
+      const sanitized = $(this)
+        .html()
+        .replace(/&quot;/g, '"')
+        .replace(/[\n\r\t]/g, " ")
+        .replace(/,\s*([}\]])/g, "$1");
+      return JSON.parse(sanitized);
+    })
+    .get();
 }
 
 function getDetails($) {
