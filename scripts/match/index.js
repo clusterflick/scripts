@@ -6,6 +6,9 @@ const findMetacriticMatch = require("./find-metacritic-match");
 const findLetterboxdMatch = require("./find-letterboxd-match");
 const findImdbMatch = require("./find-imdb-match");
 const findMovieDbMatch = require("./find-moviedb-match");
+const {
+  withPlaywrightSession,
+} = require("../../common/get-page-with-playwright");
 
 async function match(source) {
   const dataPath = path.join(
@@ -37,52 +40,66 @@ async function match(source) {
   });
 
   let meta = { index: 0, withInfo: 0, matched: 0 };
-  for (const movie of moviesToMatch) {
-    meta.index++;
-    const outputTitle = movie.title.slice(0, 35);
-    const start = Date.now();
-    process.stdout.write(
-      `[${meta.index} of ${moviesToMatch.length}]\t- Matching data for ${outputTitle} ... ${"".padEnd(35 - outputTitle.length, " ")}`,
-    );
 
-    if (movie.isUnmatched) {
-      console.log(`\t🔘 No data to match`);
-      continue;
+  // Letterboxd is the only Playwright-backed source, and it fetches a page per
+  // movie - so the whole loop runs inside one session, sharing a single browser
+  // across every film. `getPage` is undefined for the other (fetch-based)
+  // sources. The browser launches lazily on the first cache miss, so a
+  // fully-cached run still launches nothing.
+  const matchMovies = async (getPage) => {
+    for (const movie of moviesToMatch) {
+      meta.index++;
+      const outputTitle = movie.title.slice(0, 35);
+      const start = Date.now();
+      process.stdout.write(
+        `[${meta.index} of ${moviesToMatch.length}]\t- Matching data for ${outputTitle} ... ${"".padEnd(35 - outputTitle.length, " ")}`,
+      );
+
+      if (movie.isUnmatched) {
+        console.log(`\t🔘 No data to match`);
+        continue;
+      }
+
+      meta.withInfo++;
+      let matchData;
+      if (source === "rottentomatoes") {
+        const movieInfo =
+          cache[movie.id] || (await getMovieInfoAndCacheResults(movie));
+        matchData = await findRottenTomatoesMatch(movieInfo);
+      } else if (source === "metacritic") {
+        const movieInfo =
+          cache[movie.id] || (await getMovieInfoAndCacheResults(movie));
+        matchData = await findMetacriticMatch(movieInfo);
+      } else if (source === "letterboxd") {
+        const movieInfo =
+          cache[movie.id] || (await getMovieInfoAndCacheResults(movie));
+        matchData = await findLetterboxdMatch(movieInfo, getPage);
+      } else if (source === "moviedb") {
+        const movieInfo =
+          cache[movie.id] || (await getMovieInfoAndCacheResults(movie));
+        matchData = await findMovieDbMatch(movieInfo);
+      } else if (source === "imdb") {
+        matchData = await findImdbMatch(movie);
+      } else {
+        console.log(`\t❌ Error`);
+        throw new Error(`Unknown source "${source}"`);
+      }
+
+      if (!matchData) {
+        console.log(`\t☑️  No match found`);
+        continue;
+      }
+
+      meta.matched++;
+      data[movie.id] = matchData;
+      console.log(`\t✅ Matched (${Math.round((Date.now() - start) / 1000)}s)`);
     }
+  };
 
-    meta.withInfo++;
-    let matchData;
-    if (source === "rottentomatoes") {
-      const movieInfo =
-        cache[movie.id] || (await getMovieInfoAndCacheResults(movie));
-      matchData = await findRottenTomatoesMatch(movieInfo);
-    } else if (source === "metacritic") {
-      const movieInfo =
-        cache[movie.id] || (await getMovieInfoAndCacheResults(movie));
-      matchData = await findMetacriticMatch(movieInfo);
-    } else if (source === "letterboxd") {
-      const movieInfo =
-        cache[movie.id] || (await getMovieInfoAndCacheResults(movie));
-      matchData = await findLetterboxdMatch(movieInfo);
-    } else if (source === "moviedb") {
-      const movieInfo =
-        cache[movie.id] || (await getMovieInfoAndCacheResults(movie));
-      matchData = await findMovieDbMatch(movieInfo);
-    } else if (source === "imdb") {
-      matchData = await findImdbMatch(movie);
-    } else {
-      console.log(`\t❌ Error`);
-      throw new Error(`Unknown source "${source}"`);
-    }
-
-    if (!matchData) {
-      console.log(`\t☑️  No match found`);
-      continue;
-    }
-
-    meta.matched++;
-    data[movie.id] = matchData;
-    console.log(`\t✅ Matched (${Math.round((Date.now() - start) / 1000)}s)`);
+  if (source === "letterboxd") {
+    await withPlaywrightSession(matchMovies);
+  } else {
+    await matchMovies();
   }
 
   console.log(

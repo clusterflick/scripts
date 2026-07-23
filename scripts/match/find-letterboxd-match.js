@@ -3,7 +3,7 @@ const { normaliseAndParseInt } = require("./common");
 const getPageWithPlaywright = require("../../common/get-page-with-playwright");
 const { basicNormalize } = require("../../common/utils");
 
-const getMovieRatings = async (match) => {
+const getMovieRatings = async (match, getPageWithPlaywright) => {
   const url = `https://letterboxd.com/tmdb/${match.id}`;
   const cacheKey = `letterboxd-listing-${match.id}`;
 
@@ -110,15 +110,19 @@ const parseScore = ({ url, ratings, stats }) => {
   };
 };
 
-const getScore = async (match) => {
-  const data = await getMovieRatings(match);
+const getScore = async (match, getPage) => {
+  const data = await getMovieRatings(match, getPage);
   if (data.isNotAvailable) return null;
   return { id: match.id, ...parseScore(data) };
 };
 
-async function findLetterboxdMatch(movie) {
+// `getPage` comes from a `withPlaywrightSession` wrapped around the whole match
+// run, so every movie shares one browser - reusing the Cloudflare clearance
+// cookie and the asset cache instead of launching Chromium per film. Defaults to
+// the single-page helper so a standalone call still works.
+async function findLetterboxdMatch(movie, getPage = getPageWithPlaywright) {
   try {
-    const score = await getScore(movie);
+    const score = await getScore(movie, getPage);
     return score;
   } catch (error) {
     if (error.message && error.message.includes("ERR_TOO_MANY_REDIRECTS")) {
