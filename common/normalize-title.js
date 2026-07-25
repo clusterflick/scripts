@@ -122,6 +122,7 @@ function normalizeTitle(title, options) {
     [" - Part 1 - ", " I: "],
     ["- Part ", "Part "],
     ["- FREE ENTRY", "FREE ENTRY"],
+    ["Tour-Live", "Tour - Live"],
     ["- Live From", "Live From"],
     ["- National Theatre", "National Theatre"],
     ["- Year of the Rabbit", "Year of the Rabbit"],
@@ -925,6 +926,8 @@ function normalizeTitle(title, options) {
     ["Metropolis at 100", "Metropolis"],
     ["Halloween (1978) + ", "Halloween (1978) & "],
     ["MORE PUNK THAN PUNK + ", "MORE PUNK THAN PUNK & "],
+    ["Sam Neill Tribute -", "Sam Neill Tribute: "],
+    ["Miss Marple -", "Miss Marple: "],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
@@ -947,7 +950,7 @@ function normalizeTitle(title, options) {
     return "doctor who wish world the reality war";
   }
 
-  const hasPresents = title.match(/\s+presents?:?\s+(.*?)$/i);
+  const hasPresents = title.match(/\s+presents?:?(?:\s|…)+(.*?)$/i);
   if (hasPresents) {
     title = hasPresents[1];
   }
