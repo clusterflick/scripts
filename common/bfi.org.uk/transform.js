@@ -71,13 +71,18 @@ function getKeywordAccessibility(keywords) {
   return accessibility;
 }
 
-// Tokenise the keywords the same way as a listing attribute id and keep the
-// recognised format tokens (getValidFormat drops "Digital", "Releases", etc.).
+// Read the recognised format tokens off each keyword (getValidFormat drops
+// "Digital", "Releases", "IMAX with Laser", etc.). A keyword is matched both by
+// its individual words ("IMAX" -> presentation) and as a whole phrase, with the
+// phrase spread last so a multi-word token like "IMAX 70mm" (a distinct 15/70
+// source) wins over the bare "70mm" its words would otherwise yield.
 function getKeywordFormat(keywords) {
-  return keywords
-    .join(" ")
-    .split(/[^a-z0-9]+/i)
-    .reduce((format, token) => ({ ...format, ...getValidFormat(token) }), {});
+  return keywords.reduce((format, keyword) => {
+    const wordFormat = keyword
+      .split(/[^a-z0-9]+/i)
+      .reduce((acc, word) => ({ ...acc, ...getValidFormat(word) }), {});
+    return { ...format, ...wordFormat, ...getValidFormat(keyword) };
+  }, {});
 }
 
 function getPerformancesFor($, url, show, venueFormat) {

@@ -106,12 +106,55 @@ describe("BFI transform", () => {
   });
 
   it("reads format from each performance's keywords", async () => {
-    const [seventyMm, digital] = await runTransform([
+    const [imax70mm, laser, digital] = await runTransform([
       { ...P1, keywords: "IMAX 70mm" },
-      { ...P2, keywords: "Digital,Releases" },
+      {
+        startDate: "Tuesday 14 July 2026 18:00",
+        screen: "NFT4",
+        availabilityNum: "5",
+        keywords: "IMAX with Laser",
+      },
+      { ...P2, keywords: "Digital 4K,Releases" },
     ]);
-    expect(seventyMm.format).toEqual({ presentation: "imax", source: "70mm" });
+    // "IMAX 70mm" is the distinct 15/70 source, alongside the imax presentation.
+    expect(imax70mm.format).toEqual({
+      presentation: "imax",
+      source: "imax-70mm",
+    });
+    // "IMAX with Laser" is a digital presentation - the laser/4K quality is not
+    // a source, so only the imax screen system is recorded.
+    expect(laser.format).toEqual({ presentation: "imax" });
+    // Digital (incl. "Digital 4K") is the baseline source and emits nothing.
     expect(digital.format).toEqual({});
+  });
+
+  it("tags every screening at the BFI IMAX venue with an imax presentation", async () => {
+    const imaxAttributes = { ...attributes, id: "bfi.org.uk-imax" };
+    const articleContext = {
+      searchNames: SEARCH_NAMES,
+      searchResults: [
+        { ...P1, keywords: "Digital 4K" },
+        { ...P2, keywords: "IMAX 70mm" },
+      ].map(makeRow),
+    };
+    const shows = await transform(
+      imaxAttributes,
+      {
+        moviePages: {
+          [showPath]: { title: "Test Film", html: filmPage, articleContext },
+        },
+      },
+      {},
+    );
+    const [digital, imax70mm] = shows[0].performances;
+    // A plain digital screening is still in the IMAX cinema - the venue-level
+    // presentation is correct; digital is simply the baseline (absent) source.
+    expect(digital.format).toEqual({ presentation: "imax" });
+    // An IMAX 70mm print keeps the venue presentation and adds the 15/70 source.
+    expect(imax70mm.format).toEqual({
+      presentation: "imax",
+      source: "imax-70mm",
+    });
   });
 
   it("de-duplicates performances at the same time in the same screen", async () => {

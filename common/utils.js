@@ -553,6 +553,11 @@ const createAccessibility = (title, accessibility, description = "") => {
 // createAccessibility, only notable values are emitted. "Production" formats
 // (how a film was *shot*, e.g. "shot on 35mm", "VistaVision cinematography")
 // are deliberately NOT treated as a screening format.
+//
+// "imax-70mm" is a distinct source, not a 70mm + imax combination: it's a 15/70
+// (horizontal) IMAX print, a different film geometry from a standard 5/70 70mm
+// print - the "imax" names the print format, not the venue, and it is orthogonal
+// to the presentation axis (which still records the screen system).
 // ---------------------------------------------------------------------------
 // Maps a normalised single token (spacing/punctuation stripped) to axis+value.
 // This is the source of truth for supported formats; the schema enums for
@@ -562,6 +567,7 @@ const createAccessibility = (title, accessibility, description = "") => {
 //   dimension    - 2D vs 3D (orthogonal to the above; combines with them)
 const formatTokens = {
   "70mm": { source: "70mm" },
+  imax70mm: { source: "imax-70mm" },
   "35mm": { source: "35mm" },
   "16mm": { source: "16mm" },
   vhs: { source: "vhs" },
@@ -600,6 +606,10 @@ const getValidFormatObject = ({ source, presentation, dimension } = {}) => {
 
 const titleFormatMatchers = [
   { regex: /\b70\s?mm\b/i, format: { source: "70mm" } },
+  // IMAX 70mm (15/70) is a distinct source - listed after bare 70mm so that on
+  // an "IMAX 70mm" title this later rule wins the source (matchers spread in
+  // order). The imax matcher below still adds presentation:imax for the screen.
+  { regex: /\bimax\s*70\s?mm\b/i, format: { source: "imax-70mm" } },
   { regex: /\b35\s?mm\b/i, format: { source: "35mm" } },
   { regex: /\b16\s?mm\b/i, format: { source: "16mm" } },
   { regex: /\bvhs\b/i, format: { source: "vhs" } },
@@ -629,6 +639,11 @@ const getTitleFormat = (title) =>
 // never described in prose).
 const descriptionFormatMatchers = [
   { regex: /\b70\s?mm\b/gi, format: { source: "70mm" } },
+  // IMAX 70mm (15/70) is a distinct source - listed after bare 70mm so it wins
+  // the source when prose says "IMAX 70mm" (e.g. the Science Museum's "IMAX 70mm
+  // screenings of ..."). Still gated by the exhibition-cue check below, which
+  // keeps the venue-boast "70mm IMAX cinema" (no cue) from matching.
+  { regex: /\bimax\s*70\s?mm\b/gi, format: { source: "imax-70mm" } },
   { regex: /\b35\s?mm\b/gi, format: { source: "35mm" } },
   { regex: /\b16\s?mm\b/gi, format: { source: "16mm" } },
   { regex: /\bnitrate\b/gi, format: { source: "nitrate" } },

@@ -10,6 +10,8 @@ describe("getValidFormat", () => {
     ["LaserDisc", { source: "laserdisc" }],
     ["laser disc", { source: "laserdisc" }],
     ["Nitrate", { source: "nitrate" }],
+    ["IMAX 70mm", { source: "imax-70mm" }],
+    ["imax-70mm", { source: "imax-70mm" }],
     ["IMAX", { presentation: "imax" }],
     ["4DX", { presentation: "4dx" }],
     ["4-dx", { presentation: "4dx" }],
@@ -64,9 +66,9 @@ describe("createFormat", () => {
       expect(createFormat("The Wild Robot")).toEqual({});
     });
 
-    test("captures both axes from one title (IMAX 70mm)", () => {
+    test("reads IMAX 70mm as the imax-70mm source plus an imax presentation", () => {
       expect(createFormat("The Odyssey - IMAX 70mm")).toEqual({
-        source: "70mm",
+        source: "imax-70mm",
         presentation: "imax",
       });
     });
@@ -140,12 +142,21 @@ describe("createFormat", () => {
       ["Our main film, which will be projected on 16mm film.", "16mm"],
       ["A 35mm presentation in association with the archive.", "35mm"],
       ["Screened on a rare 35mm print from the BFI archive.", "35mm"],
+      // "IMAX 70mm" wins over the bare 70mm it also contains.
+      ["Experience IMAX 70mm screenings of the restored epic.", "imax-70mm"],
     ])(
       "detects a source when there is an exhibition cue (%s)",
       (description, expected) => {
         expect(createFormat("A Film", {}, description).source).toBe(expected);
       },
     );
+
+    test("does not read the venue-boast '70mm IMAX cinema' as a source", () => {
+      // No exhibition cue beside the gauge - it describes the room, not a print.
+      expect(
+        createFormat("A Film", {}, "the Science Museum's 70mm IMAX cinema"),
+      ).toEqual({});
+    });
 
     test.each([
       // How it was made / its medium - never a screening format.
