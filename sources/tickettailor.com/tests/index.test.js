@@ -19,11 +19,11 @@ jest.mock("../../../common/utils", () => ({
 const isRecording = false;
 
 jest.mock("../../../common/cache");
-setupCacheMock(__dirname, "2026-07-12");
+setupCacheMock(__dirname, "2026-07-26");
 
 describe(`${attributes.name}`, () => {
   setupPolly(isRecording, __dirname);
-  jest.useFakeTimers().setSystemTime(new Date("2026-07-12"));
+  jest.useFakeTimers().setSystemTime(new Date("2026-07-26"));
 
   describe.each([
     {
@@ -37,7 +37,7 @@ describe(`${attributes.name}`, () => {
       name: "Good Shepherd Studios",
       alternativeNames: ["We Flock CIC"],
       address: "15A Davies Lane, Leytonstone, London, E11 3DR, UK",
-      expectedMatches: 3,
+      expectedMatches: 1,
     },
     {
       name: "Siobhan Davies Studios",

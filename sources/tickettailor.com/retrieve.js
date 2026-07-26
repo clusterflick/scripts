@@ -15,7 +15,7 @@ const VENUE_SLUGS = [
   "lost", // Lost Cinema
   "bellbottomsproductions", // Bellbottoms Productions
   "vauxhallone", // Vauxhall
-  "debutnights", // Debut Nights
+  "midweekcinema", // Midweek Cinema(prev Debut Nights)
   "colfilmslimited", // The London Colombian Film Festival
 ];
 
