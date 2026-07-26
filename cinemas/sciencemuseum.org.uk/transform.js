@@ -103,6 +103,23 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
       .filter((value) => !!value)
       .join("\n");
 
+    // The exhibition format ("IMAX 70mm screenings of ...") now lives only in the
+    // page's meta description, not the body copy - the body just carries the
+    // venue boast "70mm IMAX cinema", which the format matcher deliberately
+    // ignores (it describes the room, not the print). Feed the meta descriptions
+    // into format detection so a genuine "IMAX 70mm screenings" is picked up. Kept
+    // out of `overview` so this marketing copy doesn't pollute the accessibility
+    // text or the movie-matching hints.
+    const metaDescription = [
+      $('meta[name="description"]').attr("content"),
+      $('meta[property="og:description"]').attr("content"),
+    ]
+      .filter(Boolean)
+      .join("\n");
+    const formatDescription = [overview, metaDescription]
+      .filter(Boolean)
+      .join("\n");
+
     movies.push({
       showingId: generateShowingId(attributes, movie.productionSeasonId),
       title,
@@ -126,7 +143,7 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
               soldOut: performanceStatusMessage.toLowerCase() === "sold out",
             },
             accessibility: createAccessibility(title, {}, overview),
-            format: createFormat(title, format, overview),
+            format: createFormat(title, format, formatDescription),
           });
         },
       ),
