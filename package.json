@@ -16,6 +16,7 @@
     "./common/distance-in-km-between-coordinates": "./common/distance-in-km-between-coordinates.js",
     "./common/normalize-venue-name": "./common/normalize-venue-name.js",
     "./common/normalize-title": "./common/normalize-title.js",
+    "./scripts/diff": "./scripts/diff/index.js",
     "./cinemas": "./cinemas/index.js",
     "./sources": "./sources/index.js"
   },
@@ -28,12 +29,14 @@
     "combine": "TZ=Europe/London node index.js combine",
     "match": "TZ=Europe/London node index.js match",
     "cache": "TZ=Europe/London node index.js cache",
+    "diff": "TZ=Europe/London node index.js diff",
     "clear:cache": "rm -rf ./cache && rm -rf ./cache-llm",
     "clear:retrieved-data": "rm -rf ./retrieved-data",
     "clear:transformed-data": "rm -rf ./transformed-data",
     "clear:combined-data": "rm -rf ./combined-data",
     "clear:matched-data": "rm -rf ./matched-data",
-    "clear:all": "npm run clear:cache && npm run clear:retrieved-data && npm run clear:transformed-data && npm run clear:combined-data && npm run clear:matched-data",
+    "clear:diffed-data": "rm -rf ./diffed-data",
+    "clear:all": "npm run clear:cache && npm run clear:retrieved-data && npm run clear:transformed-data && npm run clear:combined-data && npm run clear:matched-data && npm run clear:diffed-data",
     "helper:update-test-titles": "npm run clear:transformed-data && ./helpers/get-latest-transformed-data.sh && node common/tests/utils/update-test-titles.js"
   },
   "author": "Alistair Brown <github@alistairjcbrown.com>",

@@ -39,11 +39,11 @@ npm run format         # Format with Prettier (JS, JSON, MD)
 ## Project Structure
 
 ```
-index.js                 # CLI entry point (retrieve|transform|combine|match|cache)
+index.js                 # CLI entry point (retrieve|transform|combine|match|cache|diff)
 cinemas/                 # 300+ cinema venue modules (each has attributes/retrieve/transform)
 sources/                 # 9 external ticketing platform modules
 common/                  # Shared utilities (utils.js, normalize-title.js, get-movie-data.js, etc.)
-scripts/                 # Pipeline stages: retrieve/, transform/, combine/, match/, cache/
+scripts/                 # Pipeline stages: retrieve/, transform/, combine/, match/, cache/, diff/
 helpers/                 # Dev helper scripts (data download, manual matching)
 docs/                    # Pipeline documentation (retrieve.md, transform.md)
 schema.json              # JSON Schema for output validation
@@ -59,6 +59,12 @@ retrieve  ->  transform  ->  combine  ->  match
 ```
 
 All pipeline commands run with `TZ=Europe/London`.
+
+`diff` sits off to the side of that chain: it compares two `transform` releases
+(`transformed-data/current` vs `transformed-data/previous`) and writes the
+change set published by `data-diffed`. `data-analysed`'s `compare:releases`
+report renders the same comparison, so behaviour changes belong in
+`scripts/diff/`, not in either consumer.
 
 ## Module Pattern
 

@@ -49,6 +49,39 @@ const setupDirectory = async (type) => {
     return;
   }
 
+  if (action.toLowerCase() === "diff") {
+    // Unlike the other stages, diff works on two releases rather than one, so
+    // it takes the tags of both instead of a location.
+    const [currentTag, previousTag] = [location, ...parameters];
+    if (!currentTag || !previousTag) {
+      throw new Error("No current and previous release tags provided");
+    }
+
+    const { compareReleases, buildPublishedDiff } = require("./scripts/diff");
+    const comparison = await compareReleases({
+      currentDir: path.join(process.cwd(), "transformed-data", "current"),
+      previousDir: path.join(process.cwd(), "transformed-data", "previous"),
+      currentTag,
+      previousTag,
+    });
+
+    const output = buildPublishedDiff(comparison);
+    if (!output) {
+      console.log("➡️  No changes between releases; nothing to write");
+      return;
+    }
+
+    await setupDirectory("diffed-data");
+    await writeJSON(
+      path.join(process.cwd(), "diffed-data", "diffed-data.json"),
+      output,
+    );
+    console.log(
+      `➡️  Diffed ${Object.keys(output.venues).length} changed venues of ${output.metadata.venueCount}`,
+    );
+    return;
+  }
+
   if (action.toLowerCase() === "cache") {
     const cacheMoviedb = require("./scripts/cache");
     const output = await cacheMoviedb();

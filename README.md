@@ -27,6 +27,7 @@ The typical data processing workflow is:
 retrieve → transform → combine → match
                 ↓
               cache (optional, speeds up combine)
+              diff  (compares two transform releases)
 ```
 
 1. **Retrieve** - Scrape raw data from cinema websites and external sources
@@ -34,6 +35,7 @@ retrieve → transform → combine → match
 3. **Combine** - Merge all cinemas into a unified dataset with enriched metadata
 4. **Match** - Add ratings and links from external review sites
 5. **Cache** _(optional)_ - Pre-cache TMDB data to speed up future combine runs
+6. **Diff** - Compare two transform releases and record what changed
 
 ## Available Scripts
 
@@ -206,6 +208,34 @@ npx clusterflick/scripts cache
 
 Once complete, cached data will be saved in `cached-data/moviedb-data.json`.
 
+### Diff
+
+This function compares two releases of transformed data and records what changed
+between them — venues added, removed and emptied; showings added, removed and
+modified; and movie matches gained, lost and changed. Only performances still to
+come are considered; a screening that has already happened dropping out of a
+release is expected, not a change.
+
+Before running this script, place the two releases being compared in
+`transformed-data/current` and `transformed-data/previous`.
+
+To run this script:
+
+```
+# Internally
+npm run diff -- <current-tag> <previous-tag>
+
+# Externally
+npx clusterflick/scripts diff <current-tag> <previous-tag>
+```
+
+Once complete, the change set will be saved in `diffed-data/diffed-data.json`.
+**Nothing is written when the two releases are identical**, so a caller can use
+the file's absence to skip publishing.
+
+The same comparison backs `data-analysed`'s `compare:releases` report, so
+behaviour changes belong here rather than in either consumer.
+
 ## Utility Scripts
 
 These scripts help manage local data directories:
@@ -217,6 +247,7 @@ These scripts help manage local data directories:
 | `npm run clear:transformed-data` | Remove all transformed data |
 | `npm run clear:combined-data`    | Remove combined data        |
 | `npm run clear:matched-data`     | Remove matched data         |
+| `npm run clear:diffed-data`      | Remove diffed data          |
 | `npm run clear:all`              | Remove all of the above     |
 
 ## Helper Scripts
