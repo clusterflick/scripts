@@ -21,13 +21,16 @@ flowchart TD
         G[data-matched]
         H[data-analysed]
         I[generate-spotlights]
+        J[data-cached]
+        K[data-diffed]
     end
 
     A --> B
     A --> C
     A --> D
     A --> E
-    C --> F --> G --> H
+    C --> J --> F --> G --> H
+    C --> K
     G --> I
 ```
 

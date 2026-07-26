@@ -24,7 +24,7 @@ const comparison = (venues) => ({
   metadata: {
     currentRelease: "20260726.031204",
     previousRelease: "20260725.031157",
-    diffedAt: "2026-07-26T03:20:11.482Z",
+    asOf: "2026-07-26T03:20:11.482Z",
     venueCount: Object.keys(venues).length,
   },
   summary: computeSummary(venues),

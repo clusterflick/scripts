@@ -1,6 +1,6 @@
 const { compareVenue } = require("../compare-venue");
 
-const NOW = new Date("2026-07-26T12:00:00Z").getTime();
+const AS_OF = new Date("2026-07-26T12:00:00Z").getTime();
 const HOUR = 60 * 60 * 1000;
 const DAY = 24 * HOUR;
 
@@ -10,7 +10,7 @@ const showing = (overrides = {}) => ({
   url: "https://venue.com/fight-club",
   category: "movie",
   overview: { categories: [], directors: [], actors: [] },
-  performances: [{ time: NOW + DAY }],
+  performances: [{ time: AS_OF + DAY }],
   ...overrides,
 });
 
@@ -19,11 +19,11 @@ describe("compareVenue", () => {
     const { showings, futurePerformances } = compareVenue(
       [
         showing({
-          performances: [{ time: NOW + DAY }, { time: NOW + 2 * DAY }],
+          performances: [{ time: AS_OF + DAY }, { time: AS_OF + 2 * DAY }],
         }),
       ],
       [],
-      NOW,
+      AS_OF,
     );
 
     expect(showings.added).toEqual([
@@ -33,8 +33,8 @@ describe("compareVenue", () => {
         url: "https://venue.com/fight-club",
         category: "movie",
         futurePerformanceCount: 2,
-        nextPerformance: NOW + DAY,
-        performances: [NOW + DAY, NOW + 2 * DAY],
+        nextPerformance: AS_OF + DAY,
+        performances: [AS_OF + DAY, AS_OF + 2 * DAY],
       },
     ]);
     expect(showings.removed).toHaveLength(0);
@@ -51,7 +51,7 @@ describe("compareVenue", () => {
     const { showings } = compareVenue(
       [showing({ seen: 1783011656809, themoviedb })],
       [],
-      NOW,
+      AS_OF,
     );
 
     // Only the fields a feed entry needs — not the full TMDB record
@@ -75,7 +75,7 @@ describe("compareVenue", () => {
         }),
       ],
       [],
-      NOW,
+      AS_OF,
     );
 
     expect(showings.added[0].themoviedbs).toEqual([
@@ -91,10 +91,10 @@ describe("compareVenue", () => {
         showing({ showingId: "venue.com-future" }),
         showing({
           showingId: "venue.com-past",
-          performances: [{ time: NOW - DAY }],
+          performances: [{ time: AS_OF - DAY }],
         }),
       ],
-      NOW,
+      AS_OF,
     );
 
     expect(showings.removed).toHaveLength(1);
@@ -110,13 +110,13 @@ describe("compareVenue", () => {
         showing({
           showingId: "venue.com-big",
           performances: [
-            { time: NOW + DAY },
-            { time: NOW + 2 * DAY },
-            { time: NOW + 3 * DAY },
+            { time: AS_OF + DAY },
+            { time: AS_OF + 2 * DAY },
+            { time: AS_OF + 3 * DAY },
           ],
         }),
       ],
-      NOW,
+      AS_OF,
     );
 
     expect(showings.removed.map((s) => s.showingId)).toEqual([
@@ -141,7 +141,7 @@ describe("compareVenue", () => {
           category: "movie",
         }),
       ],
-      NOW,
+      AS_OF,
     );
 
     expect(showings.modified).toHaveLength(1);
@@ -157,9 +157,9 @@ describe("compareVenue", () => {
 
   it("treats a small time shift as a reschedule rather than a swap", () => {
     const { showings, futurePerformances } = compareVenue(
-      [showing({ performances: [{ time: NOW + DAY + 30 * 60 * 1000 }] })],
-      [showing({ performances: [{ time: NOW + DAY }] })],
-      NOW,
+      [showing({ performances: [{ time: AS_OF + DAY + 30 * 60 * 1000 }] })],
+      [showing({ performances: [{ time: AS_OF + DAY }] })],
+      AS_OF,
     );
 
     expect(futurePerformances.rescheduled).toBe(1);
@@ -171,9 +171,9 @@ describe("compareVenue", () => {
 
   it("treats a shift beyond the tolerance as a removal and an addition", () => {
     const { showings, futurePerformances } = compareVenue(
-      [showing({ performances: [{ time: NOW + DAY + 3 * HOUR }] })],
-      [showing({ performances: [{ time: NOW + DAY }] })],
-      NOW,
+      [showing({ performances: [{ time: AS_OF + DAY + 3 * HOUR }] })],
+      [showing({ performances: [{ time: AS_OF + DAY }] })],
+      AS_OF,
     );
 
     expect(futurePerformances.rescheduled).toBe(0);
@@ -182,17 +182,21 @@ describe("compareVenue", () => {
     expect(showings.modified[0].performances).toEqual({
       previousCount: 1,
       currentCount: 1,
-      added: [NOW + DAY + 3 * HOUR],
-      removed: [NOW + DAY],
+      added: [AS_OF + DAY + 3 * HOUR],
+      removed: [AS_OF + DAY],
       rescheduled: 0,
     });
   });
 
   it("ignores performances that have already happened", () => {
     const { showings, futurePerformances } = compareVenue(
-      [showing({ performances: [{ time: NOW + DAY }] })],
-      [showing({ performances: [{ time: NOW - DAY }, { time: NOW + DAY }] })],
-      NOW,
+      [showing({ performances: [{ time: AS_OF + DAY }] })],
+      [
+        showing({
+          performances: [{ time: AS_OF - DAY }, { time: AS_OF + DAY }],
+        }),
+      ],
+      AS_OF,
     );
 
     expect(showings.modified).toHaveLength(0);
@@ -218,7 +222,7 @@ describe("compareVenue", () => {
         showing({ showingId: "venue.com-lost", themoviedb: tmdb(2) }),
         showing({ showingId: "venue.com-changed", themoviedb: tmdb(4) }),
       ],
-      NOW,
+      AS_OF,
     );
 
     expect(

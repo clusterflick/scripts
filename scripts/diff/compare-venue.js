@@ -8,8 +8,8 @@ const compareTmdbMatch = require("./compare-tmdb-match");
  * Only performances still to come are worth reporting — a screening that has
  * already happened dropping out of a release is expected, not a change.
  */
-function getFuturePerformances(showing, now) {
-  return (showing.performances || []).filter(({ time }) => time > now);
+function getFuturePerformances(showing, asOf) {
+  return (showing.performances || []).filter(({ time }) => time > asOf);
 }
 
 // Enough of a movie match to render a feed entry without joining against the
@@ -44,10 +44,11 @@ function describeShowing(showing) {
  *
  * @param {Array<object>} latestShowings - Showings in the current release
  * @param {Array<object>} previousShowings - Showings in the previous release
- * @param {number} now - Timestamp used to decide which performances are future
+ * @param {number} asOf - The instant the comparison is anchored to; performances
+ *   after it are still to come. Never the wall clock — see compareReleases.
  * @returns {object} The venue's showing, performance and TMDB changes
  */
-function compareVenue(latestShowings, previousShowings, now) {
+function compareVenue(latestShowings, previousShowings, asOf) {
   const latestById = new Map();
   for (const s of latestShowings) latestById.set(s.showingId, s);
 
@@ -67,7 +68,7 @@ function compareVenue(latestShowings, previousShowings, now) {
   for (const [showingId, prev] of previousById) {
     if (latestById.has(showingId)) continue;
 
-    const futurePerfs = getFuturePerformances(prev, now);
+    const futurePerfs = getFuturePerformances(prev, asOf);
     // Only report removals that had future performances
     if (futurePerfs.length > 0) {
       const sorted = [...futurePerfs].sort((a, b) => a.time - b.time);
@@ -84,7 +85,7 @@ function compareVenue(latestShowings, previousShowings, now) {
   for (const [showingId, curr] of latestById) {
     if (previousById.has(showingId)) continue;
 
-    const futurePerfs = getFuturePerformances(curr, now);
+    const futurePerfs = getFuturePerformances(curr, asOf);
     const sorted = [...futurePerfs].sort((a, b) => a.time - b.time);
     addedShowings.push({
       ...describeShowing(curr),
@@ -99,8 +100,8 @@ function compareVenue(latestShowings, previousShowings, now) {
     const prev = previousById.get(showingId);
     if (!prev) continue;
 
-    const currFuture = getFuturePerformances(curr, now);
-    const prevFuture = getFuturePerformances(prev, now);
+    const currFuture = getFuturePerformances(curr, asOf);
+    const prevFuture = getFuturePerformances(prev, asOf);
     const perfDiff = matchPerformances(currFuture, prevFuture);
 
     const metadata = {};
@@ -158,7 +159,7 @@ function compareVenue(latestShowings, previousShowings, now) {
   // Count totals for the previous release (for percentage calculations)
   let previousFutureTotal = 0;
   for (const prev of previousById.values()) {
-    previousFutureTotal += getFuturePerformances(prev, now).length;
+    previousFutureTotal += getFuturePerformances(prev, asOf).length;
   }
 
   return {

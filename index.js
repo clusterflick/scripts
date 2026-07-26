@@ -51,10 +51,26 @@ const setupDirectory = async (type) => {
 
   if (action.toLowerCase() === "diff") {
     // Unlike the other stages, diff works on two releases rather than one, so
-    // it takes the tags of both instead of a location.
-    const [currentTag, previousTag] = [location, ...parameters];
+    // it takes both tags instead of a location, plus the current release's
+    // publish time — the diff is anchored to that rather than to the wall
+    // clock so a retry reproduces the same result. See scripts/diff.
+    const [currentTag, previousTag, currentPublishedAt] = [
+      location,
+      ...parameters,
+    ];
     if (!currentTag || !previousTag) {
       throw new Error("No current and previous release tags provided");
+    }
+    if (!currentPublishedAt) {
+      throw new Error(
+        "No published_at provided for the current release; it anchors the diff so repeated runs agree",
+      );
+    }
+    const asOf = Date.parse(currentPublishedAt);
+    if (Number.isNaN(asOf)) {
+      throw new Error(
+        `Could not parse published_at for the current release: ${currentPublishedAt}`,
+      );
     }
 
     const { compareReleases, buildPublishedDiff } = require("./scripts/diff");
@@ -63,6 +79,7 @@ const setupDirectory = async (type) => {
       previousDir: path.join(process.cwd(), "transformed-data", "previous"),
       currentTag,
       previousTag,
+      asOf,
     });
 
     const output = buildPublishedDiff(comparison);

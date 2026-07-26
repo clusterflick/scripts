@@ -216,6 +216,14 @@ modified; and movie matches gained, lost and changed. Only performances still to
 come are considered; a screening that has already happened dropping out of a
 release is expected, not a change.
 
+"Still to come" is measured against the current release's publish time, **not
+the wall clock**, which is why that timestamp is a required argument. It keeps
+the diff a pure function of its inputs: a re-run after a failure, or a run
+repeated months later, reproduces the same result rather than quietly
+reclassifying everything that has happened since as past. Pass the
+`published_at` GitHub reports for the current release, in any format
+`Date.parse` accepts.
+
 Before running this script, place the two releases being compared in
 `transformed-data/current` and `transformed-data/previous`.
 
@@ -223,10 +231,10 @@ To run this script:
 
 ```
 # Internally
-npm run diff -- <current-tag> <previous-tag>
+npm run diff -- <current-tag> <previous-tag> <current-published-at>
 
 # Externally
-npx clusterflick/scripts diff <current-tag> <previous-tag>
+npx clusterflick/scripts diff <current-tag> <previous-tag> <current-published-at>
 ```
 
 Once complete, the change set will be saved in `diffed-data/diffed-data.json`.

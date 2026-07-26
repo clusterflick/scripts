@@ -61,6 +61,12 @@ function getVenueName(venueId) {
  * @param {string} options.previousDir - Directory of the previous release's venue files
  * @param {string} options.currentTag - Release tag of the current release
  * @param {string} options.previousTag - Release tag of the previous release
+ * @param {number} options.asOf - The instant the comparison is anchored to;
+ *   only performances after it are considered still to come. Pass the current
+ *   release's `published_at`, never the wall clock: the diff has to be a pure
+ *   function of its inputs so that a retry, or a run repeated months later,
+ *   reproduces the same result rather than quietly reclassifying everything
+ *   that has happened in between as past. Required for that reason.
  * @returns {Promise<{ metadata: object, summary: object, venues: object }>}
  */
 async function compareReleases({
@@ -68,8 +74,13 @@ async function compareReleases({
   previousDir,
   currentTag,
   previousTag,
+  asOf,
 }) {
-  const now = Date.now();
+  if (!Number.isFinite(asOf)) {
+    throw new Error(
+      `No asOf timestamp provided (got ${JSON.stringify(asOf)}). Pass the current release's published_at so the diff is reproducible.`,
+    );
+  }
 
   console.log(`Loading current release from ${currentDir}...`);
   const currentVenues = await loadVenueData(currentDir);
@@ -110,7 +121,7 @@ async function compareReleases({
     venues[venueId] = {
       ...base,
       venueEmpty: previousShowings.length > 0 && latestShowings.length === 0,
-      ...compareVenue(latestShowings, previousShowings, now),
+      ...compareVenue(latestShowings, previousShowings, asOf),
     };
   }
 
@@ -118,7 +129,9 @@ async function compareReleases({
     metadata: {
       currentRelease: currentTag,
       previousRelease: previousTag,
-      diffedAt: new Date(now).toISOString(),
+      // The instant the comparison describes, not when it ran — keeping the
+      // wall clock out of the output is what makes a retry byte-identical.
+      asOf: new Date(asOf).toISOString(),
       venueCount: allVenueIds.size,
     },
     summary: computeSummary(venues),
