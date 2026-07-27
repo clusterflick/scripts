@@ -928,6 +928,7 @@ function normalizeTitle(title, options) {
     ["MORE PUNK THAN PUNK + ", "MORE PUNK THAN PUNK & "],
     ["Sam Neill Tribute -", "Sam Neill Tribute: "],
     ["Miss Marple -", "Miss Marple: "],
+    ["BFI 'Rip it Up' -", "BFI 'Rip it Up': "],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
