@@ -546,6 +546,7 @@ const knownRemovablePhrases = [
   "Beyond:",
   "BFI Flipside Blu-ray launch:",
   "BFI IMAX exclusive fan preview ",
+  "BFI 'Rip it Up': ",
   "BHS:",
   "Big Night Out:",
   "Black Ballad Members' Perk:",
