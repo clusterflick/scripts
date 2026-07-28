@@ -63,6 +63,7 @@ const ignoredIds = [
   1389260, // Così fan tutte -- https://www.themoviedb.org/movie/1389260-cosi-fan-tutte
   858680, // World CUP -- https://www.themoviedb.org/movie/858680-world-cup
   1254413, // RiffTrax Live: Point Break -- https://www.themoviedb.org/movie/1254413-rifftrax-live-point-break
+  1308510, // Hard Days Night -- https://www.themoviedb.org/movie/1308510-hard-days-night
 ];
 
 /**
