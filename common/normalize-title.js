@@ -124,6 +124,7 @@ function normalizeTitle(title, options) {
     ["- FREE ENTRY", "FREE ENTRY"],
     ["Tour-Live", "Tour - Live"],
     ["- Live From", "Live From"],
+    ["- From", "Live From"],
     ["- National Theatre", "National Theatre"],
     ["- Year of the Rabbit", "Year of the Rabbit"],
     ["- Live Arena Tour", "Live Arena Tour"],
@@ -929,6 +930,8 @@ function normalizeTitle(title, options) {
     ["Sam Neill Tribute -", "Sam Neill Tribute: "],
     ["Miss Marple -", "Miss Marple: "],
     ["BFI 'Rip it Up' -", "BFI 'Rip it Up': "],
+    ["Fassbinder – ", "Fassbinder: "],
+    ["Jean Cocteau - ", "Jean Cocteau: "],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
