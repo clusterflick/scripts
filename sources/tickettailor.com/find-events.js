@@ -108,12 +108,22 @@ function parseEventsFromPage(html, slug) {
   return events;
 }
 
-// Some Ticket Tailor slugs aren't venues but festivals/organisers whose events
-// take place across several real venues. For those, note the provenance on each
-// performance so consumers can see the event is part of a wider programme —
-// plain venue slugs (whose events are already matched to that venue) need no note.
+// Some Ticket Tailor slugs aren't venues but festivals, film clubs or other
+// organisers who hire out real venues for their screenings. For those, note the
+// provenance on each performance so consumers can see who is putting the
+// screening on — plain venue slugs (whose events are already matched to that
+// venue) need no note. Names are as the organiser gives them on their own
+// Ticket Tailor page.
 const SLUG_NOTES = {
   colfilmslimited: "Part of the London Colombian Film Festival",
+  eastlondonexperimentalfilmclub:
+    "Presented by East London Experimental Film Club",
+  maghrebcine: "Presented by Maghreb Ciné",
+  midweekcinema: "Presented by Midweek Cinema",
+  offbeatfolkfilm: "Presented by OffBeat Folk Film",
+  sickgirlfilms: "Presented by Sick Girl Films",
+  sirenscreen: "Presented by Siren Screen",
+  wimbledonfilmclub: "Presented by Wimbledon Film Club",
 };
 
 function convertTicketTailorEvent(event) {

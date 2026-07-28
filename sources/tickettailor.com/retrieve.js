@@ -11,7 +11,6 @@ const VENUE_SLUGS = [
   "eastlondonexperimentalfilmclub", // East London Experimental Film Club
   "wimbledonfilmclub", // Wimbledon Film Club
   "yourcinema", // Your Cinema
-  "offbeatfolkfilm", // Offbeat Folk Film Club
   "lost", // Lost Cinema
   "bellbottomsproductions", // Bellbottoms Productions
   "vauxhallone", // Vauxhall
