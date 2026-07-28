@@ -1,5 +1,6 @@
 const crypto = require("node:crypto");
 const fs = require("node:fs").promises;
+const path = require("node:path");
 const cheerio = require("cheerio");
 const iconv = require("iconv-lite");
 const { decode } = require("html-entities");
@@ -12,9 +13,28 @@ const readJSON = async (filePath) => {
   return JSON.parse(data);
 };
 
+// Write via a temporary file and rename into place. Renaming is atomic, so a
+// reader never sees a half-written file - which matters because a timed-out
+// pipeline step can leave an orphaned process still writing to the same path
+// while the next attempt (or an artifact upload) is reading it.
+// The temp name is unique per call so concurrent writers can't corrupt each
+// other's temp file, and starts with a dot so artifact uploads configured with
+// `include-hidden-files: false` skip any temp left behind by a killed process.
 const writeJSON = async (filePath, value) => {
   const data = stringify(value, { space: 2 });
-  return await fs.writeFile(filePath, data);
+  const directory = path.dirname(filePath);
+  const tempPath = path.join(
+    directory,
+    `.${path.basename(filePath)}.${crypto.randomUUID()}.tmp`,
+  );
+
+  try {
+    await fs.writeFile(tempPath, data);
+    await fs.rename(tempPath, filePath);
+  } catch (e) {
+    await fs.rm(tempPath, { force: true });
+    throw e;
+  }
 };
 
 const basicNormalize = (value = "") =>

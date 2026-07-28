@@ -21,8 +21,16 @@ async function withPlaywrightSession(fn, sessionOptions = {}) {
       // Default to headless. Venues behind a Cloudflare challenge can opt into
       // headed mode (via `options.launch`) which has a much better chance of
       // passing the challenge - the headless fingerprint is the main giveaway.
+      // Playwright's own SIGTERM handler closes the browser but never exits the
+      // process, so a SIGTERM leaves this process alive with no browser - the
+      // resulting errors get caught as ordinary fetch failures and the retrieve
+      // carries on regardless. A pipeline step timing out then leaves the old
+      // attempt racing its replacement, both writing the same output file.
+      // Opting out restores Node's default (terminate on SIGTERM).
+      // SIGINT is untouched, so Ctrl-C still closes the browser gracefully.
       browser = await chromium.launch({
         headless: true,
+        handleSIGTERM: false,
         ...sessionOptions.launch,
         ...options.launch,
       });
