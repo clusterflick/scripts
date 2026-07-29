@@ -8,7 +8,12 @@ const {
   generateShowingId,
 } = require("../../common/utils");
 
-const getUrl = (data) => data.ticketing[0].urls[0];
+// Performances which are announced but not yet on sale come back with an empty
+// `ticketing` array, so fall back to the film page where they can be booked
+// once they open. A missing `ticketing` key is a structure change, not a
+// not-on-sale performance, so let that throw.
+const getUrl = (data, moviePageUrl) =>
+  data.ticketing[0]?.urls[0] ?? moviePageUrl;
 
 async function transform(
   attributes,
@@ -22,6 +27,7 @@ async function transform(
 
     if (!movieListPage[movie.id]) return moviesAtThreate;
 
+    const moviePageUrl = `${domain}${movie.path}`;
     const movieInfo = movieDetails.find(({ id }) => id === movie.id) || {};
     const overview = createOverview({
       duration: movieInfo.runtime ? movieInfo.runtime / 60 : undefined,
@@ -42,7 +48,8 @@ async function transform(
         const matchingIndex = all.findIndex(
           ({ startsAt, data }) =>
             startsAt === performance.startsAt &&
-            getUrl(data) === getUrl(performance.data),
+            getUrl(data, moviePageUrl) ===
+              getUrl(performance.data, moviePageUrl),
         );
         return index === matchingIndex;
       })
@@ -89,7 +96,7 @@ async function transform(
         return createPerformance({
           date: parseISO(performance.startsAt),
           notesList,
-          url: performance.data.ticketing[0].urls[0],
+          url: getUrl(performance.data, moviePageUrl),
           status: { soldOut: performance.occupancy.rate === 100 },
           accessibility: createAccessibility(
             movie.title,
@@ -103,7 +110,7 @@ async function transform(
     return moviesAtThreate.concat({
       showingId: generateShowingId(attributes, movie.id),
       title: movie.title,
-      url: `${domain}${movie.path}`,
+      url: moviePageUrl,
       overview,
       performances,
       matchingHints: { overview: movie.synopsis },
