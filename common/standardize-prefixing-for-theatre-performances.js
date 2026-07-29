@@ -31,7 +31,7 @@ const nationalTheatreIndicator = [
   /NT Encore[:|\s]/i,
   /National Theatre Live Presents/i,
   /National Theatre Presents/i,
-  /National Theatre Live/i,
+  /National Theatre Live-?/i,
   /National Theatre[:|\s|$]/i,
   /: National Theatre$/i,
   /^NT: /i,
