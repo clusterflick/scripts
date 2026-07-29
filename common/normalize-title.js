@@ -536,7 +536,7 @@ function normalizeTitle(title, options) {
       "mystery movie",
     ],
     [/^.* \+ mystery movie/i, "mystery movie"],
-    [/Surprise Film (\d{1,2}\.\d{1,2}\.\d{1,2})?/i, "mystery movie"],
+    [/Surprise Film( \d{1,2}\.\d{1,2}\.\d{1,2})?/i, "mystery movie"],
     [/(\w+ Film Festival: )?Surprise Screening/i, "mystery movie"],
     ["vhs film", "movie"],
     [/The Bill Reunion \d+/i, "The Bill Reunion"],
