@@ -25,6 +25,7 @@ function normalizeTitle(title, options) {
   // Specific corrections
   const corrections = [
     ["&amp;", "&"],
+    [/^Screening Documentary/i, ""],
     ["HANNAH MONTANA: THE MOVIE", "HANNAH MONTANA MOVIE"],
     [/:? The Movie$/i, ""],
     [/F1\s?®? The Movie/i, "F1"],
@@ -932,6 +933,7 @@ function normalizeTitle(title, options) {
     ["BFI 'Rip it Up' -", "BFI 'Rip it Up': "],
     ["Fassbinder – ", "Fassbinder: "],
     ["Jean Cocteau - ", "Jean Cocteau: "],
+    [" + Endeli", " & Endeli"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
