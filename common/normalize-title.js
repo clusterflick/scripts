@@ -934,6 +934,7 @@ function normalizeTitle(title, options) {
     ["Fassbinder – ", "Fassbinder: "],
     ["Jean Cocteau - ", "Jean Cocteau: "],
     [" + Endeli", " & Endeli"],
+    ["Earth Wind & Fire Film", "That's the Way of the World"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
