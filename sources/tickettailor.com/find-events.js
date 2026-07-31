@@ -14,15 +14,7 @@ const {
 } = require("../../common/utils");
 const attributes = require("./attributes");
 const { venueMatchesCinema } = require("../../common/source-utils");
-
-function extractEventIdFromUrl(url) {
-  // Event hrefs look like "/events/{slug}/{id}?date=..." - drop any query
-  // string or fragment so the same event doesn't produce different showing ids
-  // across dates, and ignore empty segments from a trailing slash.
-  const pathname = url.split(/[?#]/)[0];
-  const segments = pathname.split("/").filter(Boolean);
-  return segments.at(-1);
-}
+const { extractEventIdFromUrl } = require("./utils");
 
 // A full date-and-time chunk, e.g. "Mon 3 Aug 2026 19:00" or "Mon 20 Jul 2026 1:00 PM"
 const DATE_FORMATS = ["EEE d MMM yyyy h:mm a", "EEE d MMM yyyy HH:mm"];
@@ -108,6 +100,45 @@ function parseEventsFromPage(html, slug) {
   return events;
 }
 
+// Pull the promoter's own copy off an event page. It's rich text, so take the
+// block-level chunks and join them with blank lines rather than letting
+// cheerio run every paragraph together into one line.
+function parseEventDescription(html) {
+  const $ = cheerio.load(html);
+  const $description = $(".detail-content__description");
+  if ($description.length === 0) return "";
+
+  const parts = [];
+  $description.find("p, li, h1, h2, h3, h4, h5").each((index, element) => {
+    const text = $(element).text().replace(/\s+/g, " ").trim();
+    if (text) parts.push(text);
+  });
+
+  return parts.join("\n\n");
+}
+
+// Film clubs and collectives that hire a venue for the night say so in the
+// opening line of their listing ("X presents ...", "X and Y present ...") and
+// nowhere else on the page. Anchor to the very start of the description, and
+// only accept the words before "present(s)" when they read like an
+// organisation name - opening on a capital and closing on a capitalised word
+// ("Waltham Forest Cinema Project presents") - so ordinary prose ("The film
+// presents a bleak vision ...") doesn't get mistaken for an attribution.
+const PRESENTER_PATTERN = /^([^.!?\n]{3,80}?)\s+presents?\s/i;
+
+function getPresenterNote(description) {
+  const match = description.match(PRESENTER_PATTERN);
+  if (!match) return null;
+
+  const presenter = match[1].trim();
+  const words = presenter.split(/\s+/);
+  const looksLikeOrganisation =
+    /^[A-Z0-9]/.test(words[0]) && /^[A-Z0-9]/.test(words.at(-1));
+  if (!looksLikeOrganisation) return null;
+
+  return `Presented by ${presenter}`;
+}
+
 // Some Ticket Tailor slugs aren't venues but festivals, film clubs or other
 // organisers who hire out real venues for their screenings. For those, note the
 // provenance on each performance so consumers can see who is putting the
@@ -126,10 +157,13 @@ const SLUG_NOTES = {
   wimbledonfilmclub: "Presented by Wimbledon Film Club",
 };
 
-function convertTicketTailorEvent(event) {
+function convertTicketTailorEvent(event, description) {
   const { title, fullUrl, eventId, parsedDate, slug } = event;
 
-  const slugNote = SLUG_NOTES[slug];
+  // An organiser slug is the authoritative attribution, so only fall back to
+  // the description's "X presents" line for plain venue slugs - where the club
+  // putting the screening on is named nowhere else.
+  const note = SLUG_NOTES[slug] || getPresenterNote(description);
 
   return {
     showingId: generateShowingId(attributes, eventId),
@@ -145,12 +179,14 @@ function convertTicketTailorEvent(event) {
         date: parsedDate.start,
         url: fullUrl,
         status: {},
-        accessibility: createAccessibility(title, {}), // No overview
-        format: createFormat(title, {}),
-        notesList: slugNote ? [slugNote] : [],
+        accessibility: createAccessibility(title, {}, description),
+        format: createFormat(title, {}, description),
+        notesList: note ? [note] : [],
       }),
     ],
-    matchingHints: { overview: title },
+    // Fall back to the title when a promoter left the description empty - an
+    // empty overview makes the matching LLM discard the event outright.
+    matchingHints: { overview: description || title },
   };
 }
 
@@ -165,9 +201,11 @@ async function findEvents(cinema) {
   );
 
   let clubPages = {};
+  let eventPages = {};
   try {
     const data = await readJSON(dataSrc);
     clubPages = data.clubPages || {};
+    eventPages = data.eventPages || {};
   } catch {
     // Source data may not always be available or required
   }
@@ -195,7 +233,15 @@ async function findEvents(cinema) {
     });
   });
 
-  return matchingEvents.map((event) => convertTicketTailorEvent(event));
+  return matchingEvents.map((event) => {
+    const eventPage = eventPages[event.eventId];
+    if (!eventPage) {
+      throw new Error(
+        `No event page retrieved for ${event.fullUrl} - the retrieved data is incomplete`,
+      );
+    }
+    return convertTicketTailorEvent(event, parseEventDescription(eventPage));
+  });
 }
 
 module.exports = findEvents;

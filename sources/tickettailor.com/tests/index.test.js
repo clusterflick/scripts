@@ -21,6 +21,9 @@ const isRecording = false;
 jest.mock("../../../common/cache");
 setupCacheMock(__dirname, "2026-07-26");
 
+// Hide script output
+console.log = () => {};
+
 describe(`${attributes.name}`, () => {
   setupPolly(isRecording, __dirname);
   jest.useFakeTimers().setSystemTime(new Date("2026-07-26"));
@@ -67,13 +70,15 @@ describe(`${attributes.name}`, () => {
     it(
       "retrieve and find events",
       async () => {
-        const { clubPages } = await retrieve();
+        const { clubPages, eventPages } = await retrieve();
 
         // Make sure the input looks roughly correct
         expect(clubPages).toBeTruthy();
         expect(Object.keys(clubPages)).toHaveLength(14);
+        expect(eventPages).toBeTruthy();
+        expect(Object.keys(eventPages)).toHaveLength(13);
 
-        readJSON.mockImplementation(() => ({ clubPages }));
+        readJSON.mockImplementation(() => ({ clubPages, eventPages }));
 
         const cinema = { name, alternativeNames, address };
         const output = await findEvents(cinema);
