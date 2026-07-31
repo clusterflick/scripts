@@ -11,11 +11,13 @@ const {
 } = require("../../common/utils");
 const attributes = require("./attributes");
 
-// Parse runtime like "1H21M", "1H47M", or "2H" (minutes optional) to minutes
+// Runtimes appear as "1H21M", "2H" (hours only) or "90M" (minutes only)
+const RUNTIME_SOURCE = String.raw`\d+H\d+M|\d+H|\d+M`;
+
 const parseRuntimeMins = (runtime) => {
-  const match = runtime.match(/(\d+)H(?:(\d+)M)?/i);
-  if (!match) return null;
-  const hours = parseInt(match[1], 10);
+  const match = runtime.match(/^(?:(\d+)H)?(?:(\d+)M)?$/i);
+  if (!match || (!match[1] && !match[2])) return null;
+  const hours = match[1] ? parseInt(match[1], 10) : 0;
   const minutes = match[2] ? parseInt(match[2], 10) : 0;
   return hours * 60 + minutes;
 };
@@ -101,13 +103,15 @@ function transformFormat1(emailText) {
 }
 
 // Format 3: New regular schedule format using ===... (titles) and ---... (section boundaries)
-// "Title\n====\n\nDirector – Year – Runtime – Cert. N\n----\n\nDate – Time\n----\n\nDescription"
+// "Title\n====\n\nDirector – Year – Runtime – Cert. N[ – Country]\n----\n\nDate – Time\n----\n\nDescription"
 function transformFormat3(emailText) {
   const movies = [];
   const currentYear = new Date().getFullYear();
 
-  const metaPattern =
-    /^(.+?)\s+[–-]\s+(\d{4})\s+[–-]\s+(\d+H(?:\d+M)?)\s+[–-]\s+Cert\.\s*(\S+)/;
+  const metaPattern = new RegExp(
+    String.raw`^(.+?)\s+[–-]\s+(\d{4})\s+[–-]\s+(${RUNTIME_SOURCE})\s+[–-]\s+Cert\.\s*(\S+)`,
+    "i",
+  );
 
   const parts = emailText.split(/\n={10,}\n/);
 
