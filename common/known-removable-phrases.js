@@ -262,6 +262,7 @@ const knownRemovablePhrases = [
   "Film Screening and Q&A",
   "screening and Q&A with Byline Times",
   "Special Screening and Q&A",
+  "Pre-screening and Q&A",
   "Screening and Q&A",
   ": screening and discussion",
   "Screening, Director Q&A, and Meet and Greet",
@@ -571,6 +572,7 @@ const knownRemovablePhrases = [
   "brat Double Bill:",
   "Brazilian Summer Nights:",
   "BTS ARMY:",
+  "by Burnermunde",
   "by Ektoras Arkomanis",
   "by Elfi Mikesch",
   "by Folu Odimayo",
@@ -1227,6 +1229,8 @@ const knownRemovablePhrases = [
   "What's Up Daiquiris, bag switcheroos:",
 
   // Weirdly specific fixes
+  "愛殺",
+  "老虎出更",
   "Afronauts & ",
   "Cockroach & ",
   " D.C.",
