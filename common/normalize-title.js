@@ -759,8 +759,9 @@ function normalizeTitle(title, options) {
     [/Film Festival:? Opening Night/i, "Film Festival - Opening Night"],
     ["Washington, DC", "Washington, D.C."],
     [/Glastonbury:? The Movie:?\s/i, "Glastonbury The Movie in Flashback: "],
-    ["Andre Rieu - ", "Andre Rieu: "],
-    ["Andre Rieu: Summer 2026:", "Andre Rieu's 2026 Summer Concert:"],
+    ["Andre Rieu - ", "Andre Rieu's "],
+    ["Andre Rieu ", "Andre Rieu's "],
+    ["Andre Rieu's Summer 2026:", "Andre Rieu's 2026 Summer Concert:"],
     [" + UK Premiere: Replikka", " + Replikka"],
     [/ [+&] Iggy Pop [–\-�] Lust for life/i, " & Lust for life"],
     [
@@ -936,6 +937,9 @@ function normalizeTitle(title, options) {
     [" + Endeli", " & Endeli"],
     ["Earth Wind & Fire Film", "That's the Way of the World"],
     [" TFFF ", " "],
+    ["Harry Potter Philosopher", "Harry Potter and the Philosopher"],
+    ["Maybe Tomorrow + ", "Maybe Tomorrow & "],
+    [/^Documentary (screenings? )?/i, ""],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
