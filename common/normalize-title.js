@@ -940,6 +940,7 @@ function normalizeTitle(title, options) {
     ["Harry Potter Philosopher", "Harry Potter and the Philosopher"],
     ["Maybe Tomorrow + ", "Maybe Tomorrow & "],
     [/^Documentary (screenings? )?/i, ""],
+    ["Monkey's Shadow + Dance", "Monkey's Shadow & Dance"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
