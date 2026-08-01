@@ -49,7 +49,9 @@ function isExcludedEvent({ name, tags }) {
       basicNormalize("All Out of Bubblegum Film Club"),
     ) ||
     // Exclude Gaming events
-    basicNormalize(name).includes(basicNormalize("Global Game Jam"))
+    basicNormalize(name).includes(basicNormalize("Global Game Jam")) ||
+    // Exclude online workshops
+    basicNormalize(name).includes("online workshop")
   );
 }
 

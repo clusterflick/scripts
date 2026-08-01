@@ -941,6 +941,10 @@ function normalizeTitle(title, options) {
     ["Maybe Tomorrow + ", "Maybe Tomorrow & "],
     [/^Documentary (screenings? )?/i, ""],
     ["Monkey's Shadow + Dance", "Monkey's Shadow & Dance"],
+    [
+      "The Last Guest at the Holloway Motel",
+      "The Last Guest of the Holloway Motel",
+    ],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
