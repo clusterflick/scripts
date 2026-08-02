@@ -515,6 +515,7 @@ const knownRemovablePhrases = [
   "Annemarie Jacir:",
   "April Fool's Day:",
   "April Fools'",
+  "Aqua-cinema:",
   "Art of Action:",
   "Artist's Film Picks:",
   "ATOMIC ORIGINS:",
