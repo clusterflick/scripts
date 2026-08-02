@@ -980,7 +980,7 @@ const knownRemovablePhrases = [
   "Only 4 Days to Go:",
   "Only 3 Days to Go:",
   "Only 2 Days to Go:",
-  "Only 1 Days to Go:",
+  "Only 1 Day to Go:",
   "Open Captioned Previews",
   "Open City Documentary Festival Combined Programme:",
   "Open City Documentary Festival:",

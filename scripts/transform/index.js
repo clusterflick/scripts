@@ -5,6 +5,7 @@ const {
   basicNormalize,
   removeMatchingHints,
   isPrivateHire,
+  isOnline,
 } = require("../../common/utils");
 const { isSportShowing } = require("../../common/is-sport-showing");
 const { getCinema } = require("../../cinemas");
@@ -123,6 +124,7 @@ async function transform(
     for (const movie of previousReleaseData) {
       // Don't bring unbookable events back in
       if (isPrivateHire(movie.title)) continue;
+      if (isOnline(movie.title)) continue;
 
       // Don't bring sports showings back in
       if (isSportShowing(movie)) continue;

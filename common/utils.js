@@ -770,6 +770,9 @@ const isPrivateHire = (title = "") =>
   basicNormalize(title).includes("conferencing 6 hour") ||
   basicNormalize(title).includes("do not book");
 
+const isOnline = (title = "") =>
+  basicNormalize(title).includes("online workshop");
+
 // Backoff schedule (ms) for an overloaded model (502/503). Observed 503 "high
 // demand" failures cluster into bad windows of up to ~12 min rather than being
 // independent, so a higher attempt count alone doesn't help — total elapsed
@@ -912,6 +915,7 @@ module.exports = {
   getId,
   generateShowingId,
   isPrivateHire,
+  isOnline,
   runLlmFunction,
   getValidClassification,
   parseTitleAndClassification,
