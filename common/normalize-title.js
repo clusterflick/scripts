@@ -881,7 +881,14 @@ function normalizeTitle(title, options) {
       'Sapphic Cinema + BFI "Rip it Up" - ',
       'Sapphic Cinema & BFI "Rip it Up": ',
     ],
-    [/(?<!A\s)Shaun The Sheep( Movie)?:/i, "A Shaun The Sheep Movie:"],
+    [
+      /(?<!A\s)Shaun The Sheep( Movie)?: Farmageddon/i,
+      "A Shaun The Sheep Movie: Farmageddon",
+    ],
+    [
+      "Shaun the Sheep: The Beast of the Mossy Bottom",
+      "Shaun the Sheep: The Beast of Mossy Bottom",
+    ],
     [
       /The Pirates! In An Adventure$/i,
       "The Pirates! In An Adventure with Scientists!",
@@ -945,6 +952,9 @@ function normalizeTitle(title, options) {
       "The Last Guest at the Holloway Motel",
       "The Last Guest of the Holloway Motel",
     ],
+    ["Madness: Take It or Leave It", "Take It or Leave It"],
+    [/^Tonight: /i, ""],
+    ["Freud's Afternoon Session - ", "Freud's Afternoon Session: "],
   ];
 
   corrections.forEach(([phrase, replacement]) => {

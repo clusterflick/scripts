@@ -8,6 +8,7 @@ const {
   isOnline,
 } = require("../../common/utils");
 const { isSportShowing } = require("../../common/is-sport-showing");
+const { isNonFilmEvent } = require("../../common/is-non-film-event");
 const { getCinema } = require("../../cinemas");
 const findMatchesOnTheMovieDb = require("./find-matches-on-the-movie-db");
 const getSourcedEventsFor = require("./get-sourced-events-for");
@@ -128,6 +129,9 @@ async function transform(
 
       // Don't bring sports showings back in
       if (isSportShowing(movie)) continue;
+
+      // Don't bring non-film events back in
+      if (isNonFilmEvent(movie)) continue;
 
       // The movie data from the previous release contains future performances.
       // If there's no future performances, it's a past movie; continue

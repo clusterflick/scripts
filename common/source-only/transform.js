@@ -1,10 +1,5 @@
 const { isNotSportShowing } = require("../../common/is-sport-showing");
-const { basicNormalize } = require("../utils");
-
-const nonFilmEvents = [/Community Pilates/i, /Bearpit Karaoke/i];
-
-const isNotNonFilmEvent = ({ title }) =>
-  !nonFilmEvents.some((nonFilm) => basicNormalize(title).match(nonFilm));
+const { isNotNonFilmEvent } = require("../../common/is-non-film-event");
 
 async function transform(data, sourcedEvents) {
   // Return the sourced events for this venue
