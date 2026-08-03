@@ -60,7 +60,12 @@ async function transform({ movieListPage }, sourcedEvents) {
   });
 
   if (movies.length === 0) {
-    throw new Error("No movies found - the page structure may have changed");
+    // When the venue has nothing scheduled, Veezi drops both tab panels and
+    // renders an explicit empty state instead. Without that marker, no movies
+    // means our parsing of the by-film panel has broken.
+    if ($("p.empty").length === 0) {
+      throw new Error("No movies found - the page structure may have changed");
+    }
   }
 
   const listOfSourcedEvents = Object.values(sourcedEvents).flatMap(
