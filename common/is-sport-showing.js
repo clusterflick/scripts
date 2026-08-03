@@ -41,6 +41,7 @@ const sportShowings = [
   /^England v\/?s?\.? /i,
   /^France v\/?s?\.? /i,
   /^Spain v\/?s?\.? /i,
+  /Sports Day/i,
 ];
 
 const isSportShowing = ({ title }) =>

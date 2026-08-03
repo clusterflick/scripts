@@ -1,0 +1,56 @@
+const { isNonFilmEvent, isNotNonFilmEvent } = require("../is-non-film-event");
+
+describe("isNonFilmEvent", () => {
+  test.each([
+    ["Community Pilates"],
+    ["Bearpit Karaoke"],
+    ["Paint your own Carafe or  Shot Glasses"],
+    ["THE WEEKND FANPARK"],
+    ["Crick Bioimage Analysis Symposium 2026"],
+    ["Business Networking | Healthcare & Wellness Industry"],
+    ["Media, PR & Communications | London Business Networking Evening"],
+    ["Clinical, Care & Performance Networking Reception – London"],
+    ["Fashion Business, Startups Industry Leaders Networking Night"],
+    ["Visionary Collective Artists & Industry Pros Networking Night"],
+    ["Medtech Innovation: Shaping the Future of Digital Health in London"],
+    ["WHAT HAPPENS NEXT - Thursday Third Space & Games for Singles 21+"],
+    ["Free Salsa & Bachata Outdoor Party - SABOR"],
+    ["Aircraft Cabin Air Conference 2026"],
+    [
+      "one6G Summit 2026: Connected Intelligence for 6G (Sept. 10-11, London, UK)",
+    ],
+    ["BSNM Annual Meeting 2026"],
+  ])("flags '%s' as a non-film event", (title) => {
+    expect(isNonFilmEvent({ title })).toBe(true);
+  });
+
+  test.each([
+    ["Community Cinema at UCL East – Pride"],
+    ["Big Screen Karaoke"],
+    ["War Paint: Women at War"],
+    ["ENGLAND FANPARK: ENGLAND V SERBIA"],
+    ["Introduction to Film Analysis and Filmmaking"],
+    ["Risky Business"],
+    ["Unfinished Business"],
+    ["Women in Film & TV networking - LIFF 2025"],
+    ["CLASSIC MATINEE: PERFORMANCE"],
+    ["Mambar Pierrette - Fashion in Film Festival 2025"],
+    ["Official Selection: La Salsa Vive (Salsa Lives)"],
+    ["The Cabinet of Dr. Caligari (1920) + Live Organ"],
+    ["A.I. Artificial Intelligence"],
+    ["The 23rd Annual Animation Show of Shows: UK screening"],
+    ["The Blinking Buzzards – Quarterly Meeting"],
+  ])("does not flag '%s' as a non-film event", (title) => {
+    expect(isNonFilmEvent({ title })).toBe(false);
+  });
+});
+
+describe("isNotNonFilmEvent", () => {
+  test("returns true for film events", () => {
+    expect(isNotNonFilmEvent({ title: "The Wild Robot" })).toBe(true);
+  });
+
+  test("returns false for non-film events", () => {
+    expect(isNotNonFilmEvent({ title: "Bearpit Karaoke" })).toBe(false);
+  });
+});
