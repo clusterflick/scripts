@@ -34,15 +34,20 @@ function parseDuration(text) {
   return Number.isNaN(duration) ? undefined : duration;
 }
 
-// A schedule date reads like "Saturday 12/09/2026 17:00pm". The time is already
-// 24-hour, so the trailing am/pm is redundant noise we strip before parsing.
-// Undated screenings are explicitly marked "Screening Date TBC" and return
-// undefined so the caller can skip them. Anything else that fails to parse is a
-// format change we want to surface loudly rather than silently drop.
+// A schedule date reads like "Saturday 19/09/2026 - 18:00", and previously like
+// "Saturday 12/09/2026 17:00pm". The time is already 24-hour, so the trailing
+// am/pm is redundant noise, and the separator between date and time is
+// optional; both are stripped before parsing. Undated screenings are explicitly
+// marked "Screening Date TBC" and return undefined so the caller can skip them.
+// Anything else that fails to parse is a format change we want to surface
+// loudly rather than silently drop.
 function parseScheduleDate(text) {
   if (/\bTBC\b/i.test(text)) return undefined;
 
-  const cleaned = text.replace(/(am|pm)\s*$/i, "").trim();
+  const cleaned = text
+    .replace(/(am|pm)\s*$/i, "")
+    .replace(/\s+-\s+/, " ")
+    .trim();
   const date = parse(cleaned, "EEEE dd/MM/yyyy HH:mm", new Date(), {
     locale: enGB,
   });
