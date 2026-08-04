@@ -1,3 +1,4 @@
+const { isNotNonFilmEvent } = require("../../common/is-non-film-event");
 const { isNotSportShowing } = require("../../common/is-sport-showing");
 const {
   createPerformance,
@@ -82,7 +83,10 @@ async function transform({ eventsData }, sourcedEvents) {
   const listOfSourcedEvents = Object.values(sourcedEvents).flatMap(
     (events) => events,
   );
-  return movies.filter(isNotSportShowing).concat(listOfSourcedEvents);
+  return movies
+    .filter(isNotSportShowing)
+    .filter(isNotNonFilmEvent)
+    .concat(listOfSourcedEvents);
 }
 
 module.exports = transform;
