@@ -6,6 +6,9 @@ const { compareReleases } = require("..");
 const AS_OF = new Date("2026-07-26T12:00:00Z").getTime();
 const DAY = 24 * 60 * 60 * 1000;
 
+// Hide script output
+console.log = () => {};
+
 const showing = (overrides = {}) => ({
   showingId: "venue.com-1",
   title: "Fight Club",
