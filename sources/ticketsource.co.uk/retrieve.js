@@ -83,26 +83,40 @@ function buildSearchBodyForExhibitionOnScreen(
   return buildSearchBody(offset, filter, { q: "Exhibition On Screen" });
 }
 
-// Cloudflare answers a blocked request with `cf-mitigated: challenge` and an
-// interstitial that reloads itself once its check passes. Wait for that reload
-// rather than failing on the page we were handed; if it never comes, throw
-// (don't return) so the result isn't cached and the caller can back off and try
-// again with a fresh page.
-async function waitForChallengeToClear(page, response, url) {
-  const challengeLocator = page.getByText(BOT_CHALLENGE_TEXT).first();
+// A document we can actually use: served to us rather than withheld, and not
+// labelled by Cloudflare as a challenge.
+const isClearResponse = (response) =>
+  response?.status() === 200 && !isBotChallengeResponse(response);
 
-  // Trust the header over the page copy - Cloudflare rewords the interstitial,
-  // but it labels every challenged response the same way.
-  const isChallenged =
-    isBotChallengeResponse(response) || (await challengeLocator.count()) > 0;
-  if (!isChallenged) return;
+// Cloudflare answers a blocked request with `cf-mitigated: challenge` and an
+// interstitial that runs its check and reloads the page. Wait for that reload to
+// come back clean rather than failing on the interstitial we were handed.
+//
+// The signal has to be a good response arriving, not the interstitial going
+// away. The interstitial is briefly absent from the DOM during every reload it
+// makes - including the ones that land on another interstitial - so treating its
+// absence as success reports a cleared page that never cleared.
+async function waitForChallengeToClear(page, response, url) {
+  if (isClearResponse(response)) return;
 
   try {
-    await challengeLocator.waitFor({
-      state: "detached",
-      timeout: CHALLENGE_CLEAR_TIMEOUT_MS,
-    });
+    await page.waitForResponse(
+      (candidate) => {
+        const request = candidate.request();
+        return (
+          // Only the page's own navigations count. Cloudflare runs its check in
+          // a sub-frame whose requests come back perfectly clean while the main
+          // frame is still sitting on the interstitial.
+          request.isNavigationRequest() &&
+          request.frame() === page.mainFrame() &&
+          isClearResponse(candidate)
+        );
+      },
+      { timeout: CHALLENGE_CLEAR_TIMEOUT_MS },
+    );
   } catch {
+    // Throw (don't return) so the result isn't cached and the caller can back
+    // off and try again with a fresh page.
     throw new Error(`Bot challenge page detected at ${url}`);
   }
 }
@@ -111,9 +125,9 @@ async function fetchMeilisearchEvents(page, body) {
   const url = `${MEILISEARCH_CONFIG.baseUrl}/indexes/${MEILISEARCH_CONFIG.indexName}/search`;
   const apiKey = MEILISEARCH_CONFIG.apiKey;
 
-  // Runs in a page loaded from the search API's own origin, so this is a
-  // same-origin request: no CORS preflight to be challenged, and the page's
-  // Cloudflare clearance cookie is attached automatically.
+  // Cross-origin to the search host, which is behind its own Cloudflare rule.
+  // When that rule fires it answers without CORS headers, so the block reaches
+  // us as an opaque "Failed to fetch" rather than a status we can report on.
   return page.evaluate(
     async ({ url, body, apiKey }) => {
       const response = await fetch(url, {
@@ -167,14 +181,7 @@ async function retrieveFilterEvents(page, buildSearchBodyForFilter) {
 }
 
 async function retrieveEventsList(getPage, timestampFilter) {
-  // Load a page from the search API's own origin rather than the main site.
-  // `search.ticketsource.com` sits behind its own Cloudflare challenge and hands
-  // out its own clearance cookie, and it answers a cross-origin request with a
-  // challenge carrying no CORS headers — which reaches the page as an opaque
-  // "Failed to fetch" rather than anything we can act on. A clearance for the
-  // main site doesn't cover it, and a cross-origin fetch wouldn't send that
-  // cookie anyway.
-  const url = MEILISEARCH_CONFIG.baseUrl;
+  const url = `${attributes.domain}/whats-on?category=film`;
 
   return getPage(url, "ticketsource-events-list", async (page, response) => {
     await page.waitForLoadState("domcontentloaded");
