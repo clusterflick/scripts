@@ -47,8 +47,11 @@ async function withPlaywrightSession(fn, sessionOptions = {}) {
       const page = await ctx.newPage();
       await page.setViewportSize({ width: 1280, height: 720 });
       try {
-        await page.goto(url, options.goto);
-        const result = await callback(page);
+        // Hand the navigation response to the callback as well as the page -
+        // response headers carry signals the rendered page doesn't, such as
+        // Cloudflare's `cf-mitigated: challenge` on a blocked request.
+        const response = await page.goto(url, options.goto);
+        const result = await callback(page, response);
         // Don't return Error objects - throw them so they don't get cached
         // (Error objects serialize to {} and lose their error nature)
         if (result instanceof Error) {

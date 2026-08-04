@@ -9,6 +9,7 @@ const {
 } = require("../../common/utils");
 const { isSportShowing } = require("../../common/is-sport-showing");
 const { isNonFilmEvent } = require("../../common/is-non-film-event");
+const { BOT_CHALLENGE_TEXT } = require("../../common/bot-challenge");
 const { getCinema } = require("../../cinemas");
 const findMatchesOnTheMovieDb = require("./find-matches-on-the-movie-db");
 const getSourcedEventsFor = require("./get-sourced-events-for");
@@ -17,14 +18,6 @@ const categoriseEntries = require("./categorise-entries");
 const matchIdentifiedMovies = require("./match-identified-movies");
 const identifyMultipleMovies = require("./identify-multiple-movies");
 const identifyShorts = require("./identify-shorts");
-
-// A bot challenge (Cloudflare et al.) returns an error status with a
-// JS-challenge body. It means the venue site is up but blocking our plain fetch
-// — NOT that the listing was removed. Retrieve gets past this with Playwright;
-// recovery uses plain fetch and can't, so we detect it and keep the listing
-// rather than mistaking the block for a removal.
-const BOT_CHALLENGE_TEXT =
-  /Checking if your connection|Just a moment|Attention Required|cf-browser-verification|cf_chl|Enable JavaScript and cookies to continue/i;
 
 // A movie carried forward from a previous release may predate the required
 // per-performance `accessibility` / `format` objects. Backfill empty objects

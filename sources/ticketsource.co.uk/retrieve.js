@@ -1,19 +1,26 @@
 const { subMonths } = require("date-fns");
 const attributes = require("./attributes");
-const getPageWithPlaywright = require("../../common/get-page-with-playwright");
-const { withRetry } = require("../../common/utils");
+const {
+  withPlaywrightSession,
+} = require("../../common/get-page-with-playwright");
+const {
+  BOT_CHALLENGE_TEXT,
+  isBotChallengeResponse,
+} = require("../../common/bot-challenge");
+const { withRetry, withJitter } = require("../../common/utils");
 
-// TicketSource sits behind a "checking your connection" bot challenge that
-// triggers when event pages are requested too quickly back-to-back. Space the
-// requests out and, if we do get blocked, back off and try again rather than
-// failing the whole run on a single page.
-const REQUEST_DELAY_MS = 3_000;
+// TicketSource sits behind a Cloudflare bot challenge, on both the main site and
+// the search API. Space the requests out and, if we do get blocked, back off and
+// try again rather than failing the whole run on a single page. A fixed interval
+// is itself a detectable signature, so jitter each wait rather than knocking on
+// the door at a metronomic 100 times in a row.
+const REQUEST_DELAY_MS = 6_000;
 const RETRY_DELAY_MS = 60_000;
 
-// Visible text on TicketSource's Cloudflare bot-challenge page. Used to fail
-// fast rather than waiting the full timeout for content that will never load.
-const CHALLENGE_TEXT =
-  /Checking if your connection to the TicketSource website is secure/i;
+// Cloudflare's interstitial runs its check and reloads itself once it passes, so
+// being handed one isn't fatal. This is how long we give it to hand over to the
+// real page before treating the request as blocked.
+const CHALLENGE_CLEAR_TIMEOUT_MS = 30_000;
 
 // Meilisearch API configuration
 const MEILISEARCH_CONFIG = {
@@ -76,10 +83,37 @@ function buildSearchBodyForExhibitionOnScreen(
   return buildSearchBody(offset, filter, { q: "Exhibition On Screen" });
 }
 
+// Cloudflare answers a blocked request with `cf-mitigated: challenge` and an
+// interstitial that reloads itself once its check passes. Wait for that reload
+// rather than failing on the page we were handed; if it never comes, throw
+// (don't return) so the result isn't cached and the caller can back off and try
+// again with a fresh page.
+async function waitForChallengeToClear(page, response, url) {
+  const challengeLocator = page.getByText(BOT_CHALLENGE_TEXT).first();
+
+  // Trust the header over the page copy - Cloudflare rewords the interstitial,
+  // but it labels every challenged response the same way.
+  const isChallenged =
+    isBotChallengeResponse(response) || (await challengeLocator.count()) > 0;
+  if (!isChallenged) return;
+
+  try {
+    await challengeLocator.waitFor({
+      state: "detached",
+      timeout: CHALLENGE_CLEAR_TIMEOUT_MS,
+    });
+  } catch {
+    throw new Error(`Bot challenge page detected at ${url}`);
+  }
+}
+
 async function fetchMeilisearchEvents(page, body) {
   const url = `${MEILISEARCH_CONFIG.baseUrl}/indexes/${MEILISEARCH_CONFIG.indexName}/search`;
   const apiKey = MEILISEARCH_CONFIG.apiKey;
 
+  // Runs in a page loaded from the search API's own origin, so this is a
+  // same-origin request: no CORS preflight to be challenged, and the page's
+  // Cloudflare clearance cookie is attached automatically.
   return page.evaluate(
     async ({ url, body, apiKey }) => {
       const response = await fetch(url, {
@@ -132,93 +166,116 @@ async function retrieveFilterEvents(page, buildSearchBodyForFilter) {
   return movieListPages;
 }
 
+async function retrieveEventsList(getPage, timestampFilter) {
+  // Load a page from the search API's own origin rather than the main site.
+  // `search.ticketsource.com` sits behind its own Cloudflare challenge and hands
+  // out its own clearance cookie, and it answers a cross-origin request with a
+  // challenge carrying no CORS headers — which reaches the page as an opaque
+  // "Failed to fetch" rather than anything we can act on. A clearance for the
+  // main site doesn't cover it, and a cross-origin fetch wouldn't send that
+  // cookie anyway.
+  const url = MEILISEARCH_CONFIG.baseUrl;
+
+  return getPage(url, "ticketsource-events-list", async (page, response) => {
+    await page.waitForLoadState("domcontentloaded");
+    await waitForChallengeToClear(page, response, url);
+
+    return [].concat(
+      await retrieveFilterEvents(page, (opts) =>
+        buildSearchBodyForGeoFilter(timestampFilter, opts),
+      ),
+      await retrieveFilterEvents(page, (opts) =>
+        buildSearchBodyForLocationFilter(timestampFilter, opts),
+      ),
+      await retrieveFilterEvents(page, (opts) =>
+        buildSearchBodyForNtLive(timestampFilter, opts),
+      ),
+      await retrieveFilterEvents(page, (opts) =>
+        buildSearchBodyForExhibitionOnScreen(timestampFilter, opts),
+      ),
+    );
+  });
+}
+
+const getEventUrl = ({ locationSlug, venueSlug, eventSlug, eventHash }) =>
+  `${attributes.domain}/whats-on/${locationSlug}/${venueSlug}/${eventSlug}/${eventHash}`;
+
+function retrieveEventPage(getPage, hit) {
+  const url = getEventUrl(hit);
+  const cacheKey = `ticketsource-${hit.eventSlug}-${hit.eventHash}`;
+
+  return withRetry(
+    () =>
+      getPage(url, cacheKey, async (page, response) => {
+        await page.waitForLoadState();
+        // Go gently - space requests out so we're less likely to trip the
+        // bot challenge. This only runs on a real fetch (cache miss), so
+        // cached replays in tests aren't delayed.
+        await page.waitForTimeout(withJitter(REQUEST_DELAY_MS));
+
+        // Anchor on the event content itself rather than the site header -
+        // TicketSource serves promoter-branded pages with a stripped-down
+        // header, so navigation markup isn't a reliable signal.
+        const contentLocator = page.locator("#performanceInfo");
+
+        // Whichever resolves first - the bot challenge or the real page -
+        // settle as soon as one is present rather than waiting out the
+        // timeout on a challenge page that will never render the content.
+        await page
+          .getByText(BOT_CHALLENGE_TEXT)
+          .or(contentLocator)
+          .first()
+          .waitFor({ state: "attached" });
+
+        // A page showing its content is past any challenge, whatever we were
+        // handed on arrival — so only go looking for one when it isn't there.
+        if ((await contentLocator.count()) === 0) {
+          await waitForChallengeToClear(page, response, url);
+          await contentLocator.waitFor({ state: "attached" });
+        }
+
+        return await page.content();
+      }),
+    { retries: 2, delayMs: RETRY_DELAY_MS, label: `Retrieving ${url}` },
+  );
+}
+
 async function retrieve() {
   const timestampFilter = buildTimestampFilter();
 
-  const movieListPages = await getPageWithPlaywright(
-    `${attributes.domain}/whats-on?category=film`,
-    "ticketsource-events-list",
-    async (page) => {
-      await page.waitForLoadState("domcontentloaded");
+  // One browser for the whole run. The search API and the event pages are behind
+  // Cloudflare on separate hosts, and a shared context holds on to each host's
+  // clearance cookie for every request that follows instead of starting cold
+  // each time — which, over a hundred event pages, is itself a bot signature.
+  return withPlaywrightSession(async (getPage) => {
+    const movieListPages = await retrieveEventsList(getPage, timestampFilter);
 
-      return [].concat(
-        await retrieveFilterEvents(page, (opts) =>
-          buildSearchBodyForGeoFilter(timestampFilter, opts),
-        ),
-        await retrieveFilterEvents(page, (opts) =>
-          buildSearchBodyForLocationFilter(timestampFilter, opts),
-        ),
-        await retrieveFilterEvents(page, (opts) =>
-          buildSearchBodyForNtLive(timestampFilter, opts),
-        ),
-        await retrieveFilterEvents(page, (opts) =>
-          buildSearchBodyForExhibitionOnScreen(timestampFilter, opts),
-        ),
+    const allHits = movieListPages
+      .flatMap(({ hits }) => hits)
+      // Remove duplicates; as we're running more than one search, it's possible
+      // to get the same values back for both.
+      .reduce((acc, hit) => {
+        const missingValue = !acc.find(
+          (item) => item.performanceId === hit.performanceId,
+        );
+        if (missingValue) acc.push(hit);
+        return acc;
+      }, []);
+
+    const moviePages = {};
+    console.log(`    - Found ${allHits.length} event pages to retrieve`);
+    let pageNumber = 0;
+    for (const hit of allHits) {
+      pageNumber += 1;
+      console.log(
+        `    - [${Date.now()}] (${pageNumber}/${allHits.length}) Getting data for ${getEventUrl(hit)} ...`,
       );
-    },
-  );
 
-  const allHits = movieListPages
-    .flatMap(({ hits }) => hits)
-    // Remove duplicates; as we're running more than one search, it's possible
-    // to get the same values back for both.
-    .reduce((acc, hit) => {
-      const missingValue = !acc.find(
-        (item) => item.performanceId === hit.performanceId,
-      );
-      if (missingValue) acc.push(hit);
-      return acc;
-    }, []);
+      moviePages[hit.eventHash] = await retrieveEventPage(getPage, hit);
+    }
 
-  const moviePages = {};
-  console.log(`    - Found ${allHits.length} event pages to retrieve`);
-  let pageNumber = 0;
-  for (const hit of allHits) {
-    const { locationSlug, venueSlug, eventSlug, eventHash } = hit;
-    const url = `${attributes.domain}/whats-on/${locationSlug}/${venueSlug}/${eventSlug}/${eventHash}`;
-    const cacheKey = `ticketsource-${eventSlug}-${eventHash}`;
-
-    pageNumber += 1;
-    console.log(
-      `    - [${Date.now()}] (${pageNumber}/${allHits.length}) Getting data for ${url} ...`,
-    );
-
-    moviePages[eventHash] = await withRetry(
-      () =>
-        getPageWithPlaywright(url, cacheKey, async (page) => {
-          await page.waitForLoadState();
-          // Go gently - space requests out so we're less likely to trip the
-          // bot challenge. This only runs on a real fetch (cache miss), so
-          // cached replays in tests aren't delayed.
-          await page.waitForTimeout(REQUEST_DELAY_MS);
-
-          const challengeLocator = page.getByText(CHALLENGE_TEXT);
-          // Anchor on the event content itself rather than the site header -
-          // TicketSource serves promoter-branded pages with a stripped-down
-          // header, so navigation markup isn't a reliable signal.
-          const validContentLocator = page.locator("#performanceInfo");
-
-          // Whichever resolves first - the bot challenge or the real page -
-          // settle as soon as one is present rather than waiting out the
-          // timeout on a challenge page that will never render the content.
-          await challengeLocator
-            .or(validContentLocator)
-            .first()
-            .waitFor({ state: "attached" });
-
-          // Throw (don't return) so the result isn't cached and withRetry can
-          // back off and try again with a fresh browser session.
-          if (await challengeLocator.isVisible()) {
-            throw new Error(`Bot challenge page detected at ${url}`);
-          }
-
-          return await page.content();
-        }),
-      { retries: 2, delayMs: RETRY_DELAY_MS, label: `Retrieving ${url}` },
-    );
-  }
-
-  return { movieListPages, moviePages };
+    return { movieListPages, moviePages };
+  });
 }
 
 module.exports = retrieve;
