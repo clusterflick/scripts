@@ -263,6 +263,7 @@ const knownRemovablePhrases = [
   "Film Screening and Q&A",
   "screening and Q&A with Byline Times",
   "Special Screening and Q&A",
+  "Documentary pre-screening and Q&A",
   "Pre-screening and Q&A",
   "Screening and Q&A",
   ": screening and discussion",

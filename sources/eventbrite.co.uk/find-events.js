@@ -12,6 +12,7 @@ const { createOverview, createPerformance } = require("../../common/utils");
 const { parseDate } = require("./utils");
 const attributes = require("./attributes");
 const { venueMatchesCinema } = require("../../common/source-utils");
+const { isNotNonFilmEvent } = require("../../common/is-non-film-event");
 
 function getEventDescription(details) {
   if (!details) return "";
@@ -143,9 +144,9 @@ async function findEvents(cinema) {
     );
   });
 
-  return filteredEvents.map((event) =>
-    convertEventbriteEvent(event, moviePages[event.url]),
-  );
+  return filteredEvents
+    .map((event) => convertEventbriteEvent(event, moviePages[event.url]))
+    .filter(isNotNonFilmEvent);
 }
 
 module.exports = findEvents;
