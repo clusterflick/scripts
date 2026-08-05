@@ -1,4 +1,5 @@
 const cheerio = require("cheerio");
+const { parseISO } = require("date-fns");
 const {
   getText,
   generateShowingId,
@@ -9,7 +10,6 @@ const {
 } = require("../../common/utils");
 const { extractPeopleNames } = require("../../common/extract-people");
 const attributes = require("./attributes");
-const { parseSpektrixDate } = require("./utils");
 
 // Extract classification from description text (e.g. "Cert:- 15" or "Cert: 15")
 const extractClassification = (text) => {
@@ -35,42 +35,33 @@ const getMatchingDescription = ($description) => {
 async function transform({ moviePages }, sourcedEvents) {
   const movies = [];
 
-  for (const [
-    moviePageUrl,
-    { moviePage, spektrixPage, eventId },
-  ] of Object.entries(moviePages)) {
+  for (const [moviePageUrl, { moviePage, booking, eventId }] of Object.entries(
+    moviePages,
+  )) {
     const $movie = cheerio.load(moviePage);
-    const $spektrix = cheerio.load(spektrixPage);
 
     const title = getText($movie(".details .title-and-type h2"));
     if (!title) {
       throw new Error(`No title found for ${moviePageUrl}`);
     }
 
-    const $description = $spektrix(".DetailsContainer");
+    const $description = cheerio.load(booking.htmlDescription || "").root();
     const overview = getMatchingDescription($description);
 
-    // Extract showtimes from the Spektrix select options
-    const performances = [];
-    $spektrix(".EventDates select option").each(function () {
-      const dateText = getText($spektrix(this));
-      if (!dateText) return;
-
-      const status = {
-        soldOut: dateText.toLowerCase().endsWith("sold out"),
-      };
-
-      const date = parseSpektrixDate(dateText.replace(/ - SOLD OUT/i, ""));
-      performances.push(
+    // Extract showtimes from the Spektrix instances
+    const performances = booking.instances
+      .filter(({ cancelled }) => !cancelled)
+      .map(({ start, availability }) =>
         createPerformance({
-          date,
+          date: parseISO(start),
           url: moviePageUrl,
           accessibility: createAccessibility(title, {}, overview),
           format: createFormat(title, {}, overview),
-          status,
+          status: {
+            soldOut: availability.available === 0,
+          },
         }),
       );
-    });
 
     if (performances.length === 0) {
       // It's possible for an entry to be added which doesn't yet have any

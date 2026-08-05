@@ -1,6 +1,13 @@
 const cheerio = require("cheerio");
-const { fetchText, assertSelector } = require("../../common/utils");
+const { fetchText, fetchJson, assertSelector } = require("../../common/utils");
 const { url } = require("./attributes");
+
+// The venue's Spektrix-hosted ticketing site (tickets.dugdaleartscentre.co.uk)
+// sits behind a Cloudflare rule which blocks non-browser clients outright, so
+// event details and performance dates come from the Spektrix booking API
+// instead — it takes the same numeric EventId used by the ticketing site.
+const getBookingUrl = (eventId) =>
+  `https://app.spektrix-link.com/clients/millfieldartscentre/events/${eventId}.json`;
 
 async function retrieve() {
   const movieListPage = await fetchText(url);
@@ -27,16 +34,16 @@ async function retrieve() {
     if (!eventIdMatch) continue;
 
     const eventId = eventIdMatch[1];
-    const spektrixUrl = `https://tickets.dugdaleartscentre.co.uk/millfieldartscentre/website/EventDetails.aspx?EventId=${eventId}`;
-    const spektrixPage = await fetchText(spektrixUrl);
+    const bookingUrl = getBookingUrl(eventId);
+    const booking = await fetchJson(bookingUrl);
 
-    if (!spektrixPage.includes("EventDates")) {
-      throw new Error(`Performance dates not included in ${spektrixUrl}`);
+    if (!booking.instances) {
+      throw new Error(`Performance dates not included in ${bookingUrl}`);
     }
 
     moviePages[moviePageUrl] = {
       moviePage,
-      spektrixPage,
+      booking,
       eventId,
     };
   }
