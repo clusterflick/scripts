@@ -9,6 +9,7 @@ const {
   createFormat,
 } = require("../../common/utils");
 const { extractPeopleNames } = require("../../common/extract-people");
+const { getBookableInstances, isSoldOut } = require("../../common/spektrix");
 const attributes = require("./attributes");
 
 // Extract classification from description text (e.g. "Cert:- 15" or "Cert: 15")
@@ -49,19 +50,17 @@ async function transform({ moviePages }, sourcedEvents) {
     const overview = getMatchingDescription($description);
 
     // Extract showtimes from the Spektrix instances
-    const performances = booking.instances
-      .filter(({ cancelled }) => !cancelled)
-      .map(({ start, availability }) =>
-        createPerformance({
-          date: parseISO(start),
-          url: moviePageUrl,
-          accessibility: createAccessibility(title, {}, overview),
-          format: createFormat(title, {}, overview),
-          status: {
-            soldOut: availability.available === 0,
-          },
-        }),
-      );
+    const performances = getBookableInstances(booking).map((instance) =>
+      createPerformance({
+        date: parseISO(instance.start),
+        url: moviePageUrl,
+        accessibility: createAccessibility(title, {}, overview),
+        format: createFormat(title, {}, overview),
+        status: {
+          soldOut: isSoldOut(instance),
+        },
+      }),
+    );
 
     if (performances.length === 0) {
       // It's possible for an entry to be added which doesn't yet have any
@@ -75,6 +74,7 @@ async function transform({ moviePages }, sourcedEvents) {
       title,
       url: encodeURI(moviePageUrl),
       overview: createOverview({
+        duration: booking.duration,
         classification: extractClassification(overview),
         trailer: extractTrailer($description),
       }),
