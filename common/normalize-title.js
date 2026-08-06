@@ -536,6 +536,7 @@ function normalizeTitle(title, options) {
       /(Orange Box )?Secret Film Screenings?(:? Summer Series)?/i,
       "mystery movie",
     ],
+    [/Mystery [^\s]+ Movie/i, "mystery movie"],
     [/^.* \+ mystery movie/i, "mystery movie"],
     [/Surprise Film( \d{1,2}\.\d{1,2}\.\d{1,2})?/i, "mystery movie"],
     [/(\w+ Film Festival: )?Surprise Screening/i, "mystery movie"],
