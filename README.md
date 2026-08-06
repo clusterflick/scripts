@@ -268,14 +268,20 @@ development and debugging.
 These scripts download data from the clusterflick GitHub repositories, useful
 for local development without running the full pipeline:
 
-| Script                                                     | Description                                               |
-| ---------------------------------------------------------- | --------------------------------------------------------- |
-| `./helpers/get-latest-retrieved-data.sh`                   | Download latest retrieved data from all cinemas           |
-| `./helpers/get-latest-transformed-data.sh`                 | Download latest transformed data from all cinemas         |
-| `./helpers/get-latest-combined-data.sh`                    | Download latest combined dataset                          |
-| `./helpers/get-last-10-days-combined-data.sh [dir] [days]` | Download combined data from the last N days (default: 10) |
+| Script                                                        | Description                                               |
+| ------------------------------------------------------------- | --------------------------------------------------------- |
+| `./helpers/get-latest-retrieved-data.sh`                      | Download latest retrieved data from all cinemas           |
+| `./helpers/get-latest-retrieved-data-for.sh <venue-id> ...`   | Download latest retrieved data for specific cinemas       |
+| `./helpers/get-latest-transformed-data.sh`                    | Download latest transformed data from all cinemas         |
+| `./helpers/get-latest-transformed-data-for.sh <venue-id> ...` | Download latest transformed data for specific cinemas     |
+| `./helpers/get-latest-combined-data.sh`                       | Download latest combined dataset                          |
+| `./helpers/get-last-10-days-combined-data.sh [dir] [days]`    | Download combined data from the last N days (default: 10) |
 
-**Requirements:** `curl`, `wget`, and `jq` (for the 10-days script)
+The `-for` variants take one or more venue ids (e.g. `thelexicinema.co.uk`) and
+suggest close matches if an id isn't in the release. Use these to inspect what
+the pipeline actually produced for a venue without downloading all 300+.
+
+**Requirements:** `curl`, `wget`, and `jq` (for the 10-days and `-for` scripts)
 
 ### Debugging Tools
 

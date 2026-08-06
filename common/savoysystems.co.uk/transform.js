@@ -122,6 +122,28 @@ function getNotesList(performance) {
   return notes;
 }
 
+// These venues hand booking for some screenings over to the organiser running
+// them — the Lexi lists "Japanese Film Club: Kamikaze Girls" but sends bookings
+// to japanesefilm.club, which the japanesefilm.club source finds too. That gives
+// us the same screening twice.
+function removeAlreadyListedPerformances(movies, listOfSourcedEvents) {
+  const venueBookingUrls = new Set(
+    movies
+      .flatMap(({ performances }) => performances)
+      .map(({ bookingUrl }) => basicNormalize(bookingUrl))
+      // A performance without a booking URL identifies nothing, so it must not
+      // become a key that matches other performances lacking one too.
+      .filter((bookingUrl) => bookingUrl !== ""),
+  );
+
+  return listOfSourcedEvents.map((event) => ({
+    ...event,
+    performances: event.performances.filter(
+      ({ bookingUrl }) => !venueBookingUrls.has(basicNormalize(bookingUrl)),
+    ),
+  }));
+}
+
 function removeSuperfluousInformation(overview) {
   return (
     overview
@@ -189,7 +211,9 @@ async function transform(attributes, urlSlug, movieData, sourcedEvents) {
   const listOfSourcedEvents = Object.values(sourcedEvents).flatMap(
     (events) => events,
   );
-  return movies.concat(listOfSourcedEvents);
+  return movies.concat(
+    removeAlreadyListedPerformances(movies, listOfSourcedEvents),
+  );
 }
 
 module.exports = transform;
