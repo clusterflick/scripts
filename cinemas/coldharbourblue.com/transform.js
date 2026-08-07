@@ -1,8 +1,10 @@
+const cheerio = require("cheerio");
 const { parse, differenceInMinutes } = require("date-fns");
 const { enGB } = require("date-fns/locale/en-GB");
 const {
   sanitizeRichText,
   createPerformance,
+  removeAlreadyListedPerformances,
   createOverview,
   generateShowingId,
   createAccessibility,
@@ -29,16 +31,39 @@ function extractEventIdFromUrl(url) {
   return eventSlug;
 }
 
-async function transform(retrievedData, sourcedEvents) {
+const venueHostname = new URL(attributes.domain).hostname.replace(/^www\./, "");
+
+// Events ticketed off-site carry an "Event Info & Tickets" button in their
+// description, pointing at the platform selling them. Links back to the venue's
+// own site say nothing the event URL doesn't already, so they are ignored.
+function extractExternalBookingUrl(eventPageHtml) {
+  const $ = cheerio.load(eventPageHtml);
+  const href = $(
+    ".tribe-events-single-event-description a.tribe-events-button",
+  ).attr("href");
+  if (!href) return undefined;
+
+  const { hostname } = new URL(href);
+  if (hostname.replace(/^www\./, "") === venueHostname) return undefined;
+
+  return href;
+}
+
+async function transform({ monthPages, eventPages }, sourcedEvents) {
   // Map to track events by URL to avoid duplicates across months
   const eventsMap = new Map();
 
   // Process each API response (one per month)
-  for (const apiResponse of retrievedData) {
-    const events = extractJsonLdEvents(apiResponse.html);
+  for (const monthPage of monthPages) {
+    const events = extractJsonLdEvents(monthPage);
 
     for (const event of events) {
       if (eventsMap.has(event.url)) continue;
+
+      const eventPage = eventPages[event.url];
+      if (!eventPage) {
+        throw new Error(`No event page retrieved for ${event.url}`);
+      }
 
       const eventId = extractEventIdFromUrl(event.url);
       const title = decode(event.name).replaceAll("\\", "");
@@ -64,7 +89,7 @@ async function transform(retrievedData, sourcedEvents) {
         performances: [
           createPerformance({
             date: startDate,
-            url: event.url,
+            url: extractExternalBookingUrl(eventPage) || event.url,
             status: { soldOut },
             accessibility: createAccessibility(title, {}, event.description),
             format: createFormat(title, {}, event.description),
@@ -83,10 +108,13 @@ async function transform(retrievedData, sourcedEvents) {
     throw new Error("No movies found - the page structure may have changed");
   }
 
+  const listedMovies = movies.filter(isNotSportShowing);
   const listOfSourcedEvents = Object.values(sourcedEvents).flatMap(
     (events) => events,
   );
-  return movies.filter(isNotSportShowing).concat(listOfSourcedEvents);
+  return listedMovies.concat(
+    removeAlreadyListedPerformances(listedMovies, listOfSourcedEvents),
+  );
 }
 
 module.exports = transform;

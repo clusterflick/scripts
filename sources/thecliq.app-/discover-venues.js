@@ -82,7 +82,7 @@ async function discoverVenues() {
       });
     }
     venueMap.get(venueKey).events.push({
-      url: `https://share.thecliq.app/event/${event.slug}`,
+      url: `https://www.thecliq.app/event/${event.slug}`,
       venueName,
       coordinates,
       club: event.club.name,

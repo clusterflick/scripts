@@ -348,6 +348,30 @@ const createPerformance = ({
   format,
 });
 
+// Venues hand booking for some screenings over to the organiser running them —
+// the Lexi lists "Japanese Film Club: Kamikaze Girls" but sends bookings to
+// japanesefilm.club, and Coldharbour Blue sends its film club nights to
+// thecliq.app — and the source covering that organiser finds the same screening.
+// That gives us the same screening twice, so drop the sourced copy wherever the
+// venue already books through the same URL.
+const removeAlreadyListedPerformances = (movies, listOfSourcedEvents) => {
+  const venueBookingUrls = new Set(
+    movies
+      .flatMap(({ performances }) => performances)
+      .map(({ bookingUrl }) => basicNormalize(bookingUrl))
+      // A performance without a booking URL identifies nothing, so it must not
+      // become a key that matches other performances lacking one too.
+      .filter((bookingUrl) => bookingUrl !== ""),
+  );
+
+  return listOfSourcedEvents.map((event) => ({
+    ...event,
+    performances: event.performances.filter(
+      ({ bookingUrl }) => !venueBookingUrls.has(basicNormalize(bookingUrl)),
+    ),
+  }));
+};
+
 // Refine a list of performance notes against a venue's curated label lists.
 // Each note is either a bare label ("Requires 3D glasses") or a
 // "Label: description" pair. The label (text before the first ": ") is matched
@@ -940,6 +964,7 @@ module.exports = {
   getText,
   assertSelector,
   createPerformance,
+  removeAlreadyListedPerformances,
   stripNoteLabels,
   getPresenterNote,
   createOverview,

@@ -19,7 +19,10 @@ function convertEvent(event, club) {
   const startDate = new Date(event.start_time);
   const endDate = new Date(event.end_time);
 
-  const eventUrl = `https://share.thecliq.app/event/${event.slug}`;
+  // The canonical event URL — `share.thecliq.app` only redirects here, and
+  // venues that hand booking over to CLIQ link to this form, so using it lets
+  // those listings be recognised as the same screening.
+  const eventUrl = `https://www.thecliq.app/event/${event.slug}`;
 
   return {
     showingId: generateShowingId(attributes, event.event_id),

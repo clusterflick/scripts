@@ -4,6 +4,7 @@ const {
   extractNonce,
   fetchViewHtml,
 } = require("../../common/tribe-events/retrieve");
+const { extractJsonLdEvents } = require("../../common/tribe-events/transform");
 const { domain } = require("./attributes");
 
 function getMonthsToFetch() {
@@ -25,7 +26,7 @@ async function retrieve() {
   const { tvn1, tvn2 } = extractNonce(html);
 
   const months = getMonthsToFetch();
-  const apiResponses = [];
+  const monthPages = [];
   for (const [from, to] of months) {
     const params = new URLSearchParams({
       pu: `/events/month/${from}/`,
@@ -35,11 +36,23 @@ async function retrieve() {
       tvn2,
     });
 
-    const html = await fetchViewHtml(domain, params);
-    apiResponses.push({ html });
+    monthPages.push(await fetchViewHtml(domain, params));
   }
 
-  return apiResponses;
+  // Some events are ticketed off-site, and that booking link only appears on
+  // the event's own page, so each event page is fetched alongside the months.
+  const eventPageUrls = new Set(
+    monthPages.flatMap((monthPage) =>
+      extractJsonLdEvents(monthPage).map(({ url }) => url),
+    ),
+  );
+
+  const eventPages = {};
+  for (const eventPageUrl of eventPageUrls) {
+    eventPages[eventPageUrl] = await fetchText(eventPageUrl);
+  }
+
+  return { monthPages, eventPages };
 }
 
 module.exports = retrieve;
