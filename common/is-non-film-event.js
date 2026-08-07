@@ -11,6 +11,7 @@ const nonFilmEvents = [
   /Performance Networking/i,
   /Networking Night/i,
   /Networking Reception/i,
+  /Interior Design Networking/i,
   /Medtech Innovation/i,
   /Fashion Business/i,
   /Thursday Third Space/i,
