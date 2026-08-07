@@ -9,6 +9,7 @@ const {
   convertToList,
   generateShowingId,
   getValidFormat,
+  getPresenterNote,
 } = require("../../common/utils");
 
 const getEntry = (attributes, url, $el, movieAdditionalData) => {
@@ -60,6 +61,22 @@ function getFilmLevelAccessibility(moviePages) {
   }, {});
 }
 
+// A club credit sits on a paragraph of its own, usually last, after the blurb -
+// so unlike a listing that leads with it, every paragraph has to be offered.
+function getFilmLevelNotes(moviePages) {
+  return Object.keys(moviePages).reduce((mapping, url) => {
+    const $ = cheerio.load(moviePages[url]);
+
+    let note = null;
+    $(".film-synopsis p").each(function () {
+      note = getPresenterNote(getText($(this)));
+      if (note) return false;
+    });
+
+    return { ...mapping, [url]: note };
+  }, {});
+}
+
 // Fix for issue in one of the listings where the <i> tag wasn't closed
 // correctly. This tagsoup causes issues when parsing the markup.
 // We don't need these tags, so let's just remove them!
@@ -77,6 +94,7 @@ async function transform(
 
   const movieAdditionalData = getAdditionalDataFor(moviePages);
   const filmLevelAccessibility = getFilmLevelAccessibility(moviePages);
+  const filmLevelNotes = getFilmLevelNotes(moviePages);
   const movies = {};
 
   $listEntry.each(function () {
@@ -109,6 +127,7 @@ async function transform(
       const note = getText($link.find(".screening-type"));
       const formatFromNotes = getValidFormat(note);
       let notesList = Object.keys(formatFromNotes).length > 0 ? [] : [note];
+      if (filmLevelNotes[url]) notesList.push(filmLevelNotes[url]);
       if ($link.find(".sold-out").length > 0) {
         status.soldOut = true;
       } else if ($link.find(".last-few").length > 0) {

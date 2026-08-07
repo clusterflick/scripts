@@ -372,6 +372,43 @@ const stripNoteLabels = (notesList, { strip = [], drop = [] } = {}) => {
   }, []);
 };
 
+// Film clubs and collectives that hire a venue for the night credit themselves
+// on a line of their own — "Waltham Forest Cinema Project presents ...", or the
+// inverted "Presented by Distorted Frame, a film club which ..." — and nowhere
+// else on the page, so without this the attribution is lost. Each phrasing
+// bounds the name differently: "presents" closes it, while the inverted form
+// runs to the first comma or sentence break, before any gloss on who they are.
+// Try the inverted form first, as the more specific of the two.
+//
+// Both anchor to the start of the text they're given, and callers choose what
+// to offer: a credit buried mid-sentence is far likelier to be prose ("The film
+// presents a bleak vision ...") than an attribution.
+const PRESENTER_PATTERNS = [
+  /^presented by\s+([^.,;:!?\n]{3,80})/i,
+  /^([^.!?\n]{3,80}?)\s+presents?\s/i,
+];
+
+// Only accept a name that reads like an organisation — opening and closing on a
+// capitalised word ("Distorted Frame") — so ordinary prose isn't mistaken for a
+// credit. Biased towards missing a credit over inventing one.
+const looksLikeOrganisation = (name) => {
+  const words = name.split(/\s+/);
+  return /^[A-Z0-9]/.test(words[0]) && /^[A-Z0-9]/.test(words.at(-1));
+};
+
+const getPresenterNote = (text) => {
+  for (const pattern of PRESENTER_PATTERNS) {
+    const match = text.match(pattern);
+    if (!match) continue;
+
+    const presenter = match[1].trim();
+    if (!looksLikeOrganisation(presenter)) continue;
+
+    return `Presented by ${presenter}`;
+  }
+  return null;
+};
+
 const attemptEncodingFix = (value) => {
   try {
     return decodeURIComponent(escape(value));
@@ -904,6 +941,7 @@ module.exports = {
   assertSelector,
   createPerformance,
   stripNoteLabels,
+  getPresenterNote,
   createOverview,
   createAccessibility,
   createFormat,

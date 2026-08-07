@@ -11,6 +11,7 @@ const {
   createAccessibility,
   createFormat,
   readJSON,
+  getPresenterNote,
 } = require("../../common/utils");
 const attributes = require("./attributes");
 const { venueMatchesCinema } = require("../../common/source-utils");
@@ -117,28 +118,6 @@ function parseEventDescription(html) {
   return parts.join("\n\n");
 }
 
-// Film clubs and collectives that hire a venue for the night say so in the
-// opening line of their listing ("X presents ...", "X and Y present ...") and
-// nowhere else on the page. Anchor to the very start of the description, and
-// only accept the words before "present(s)" when they read like an
-// organisation name - opening on a capital and closing on a capitalised word
-// ("Waltham Forest Cinema Project presents") - so ordinary prose ("The film
-// presents a bleak vision ...") doesn't get mistaken for an attribution.
-const PRESENTER_PATTERN = /^([^.!?\n]{3,80}?)\s+presents?\s/i;
-
-function getPresenterNote(description) {
-  const match = description.match(PRESENTER_PATTERN);
-  if (!match) return null;
-
-  const presenter = match[1].trim();
-  const words = presenter.split(/\s+/);
-  const looksLikeOrganisation =
-    /^[A-Z0-9]/.test(words[0]) && /^[A-Z0-9]/.test(words.at(-1));
-  if (!looksLikeOrganisation) return null;
-
-  return `Presented by ${presenter}`;
-}
-
 // Some Ticket Tailor slugs aren't venues but festivals, film clubs or other
 // organisers who hire out real venues for their screenings. For those, note the
 // provenance on each performance so consumers can see who is putting the
@@ -161,8 +140,9 @@ function convertTicketTailorEvent(event, description) {
   const { title, fullUrl, eventId, parsedDate, slug } = event;
 
   // An organiser slug is the authoritative attribution, so only fall back to
-  // the description's "X presents" line for plain venue slugs - where the club
-  // putting the screening on is named nowhere else.
+  // the description's opening line for plain venue slugs - where the club
+  // putting the screening on is named nowhere else. Promoters pad the rest of
+  // the description with prose, so only that opening line is offered.
   const note = SLUG_NOTES[slug] || getPresenterNote(description);
 
   return {
