@@ -945,6 +945,7 @@ function normalizeTitle(title, options) {
     ["Jean Cocteau - ", "Jean Cocteau: "],
     [" + Endeli", " & Endeli"],
     ["Earth Wind & Fire Film", "That's the Way of the World"],
+    ["Canal Film Club X TFFF - ", "Canal Film Club X TFFF: "],
     [" TFFF ", " "],
     ["Harry Potter Philosopher", "Harry Potter and the Philosopher"],
     ["Maybe Tomorrow + ", "Maybe Tomorrow & "],

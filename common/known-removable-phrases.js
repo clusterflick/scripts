@@ -1181,6 +1181,7 @@ const knownRemovablePhrases = [
   "T A P E Collective:",
   "Taste Film presents",
   "Tatau to Tattoo:",
+  "Canal Film Club X TFFF:",
   "TFFF:",
   "- TFFF",
   "Tibet Film Festival London:",
