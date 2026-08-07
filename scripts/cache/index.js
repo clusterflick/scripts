@@ -1,5 +1,8 @@
 const path = require("node:path");
-const { getMovieInfoAndCacheResults } = require("../../common/get-movie-data");
+const {
+  getMovieInfoAndCacheResults,
+  getCollectionInfoAndCacheResults,
+} = require("../../common/get-movie-data");
 const { readJSON } = require("../../common/utils");
 const { getAllCinemaNames } = require("../../cinemas");
 
@@ -18,6 +21,27 @@ async function combine() {
   }
 
   const movieInfo = {};
+  const collectionInfo = {};
+
+  // A movie's TMDB details name the collection it belongs to, but not the rest
+  // of its membership - that needs a second lookup per collection.
+  const cacheCollectionFor = async (movie) => {
+    const collection = movie.belongs_to_collection;
+    if (!collection || collectionInfo[collection.id]) return;
+
+    try {
+      collectionInfo[collection.id] = await getCollectionInfoAndCacheResults({
+        id: collection.id,
+      });
+    } catch {
+      // Try again to get the data if it fails. The collection info will be
+      // cached from the previous run if it was successful.
+      collectionInfo[collection.id] = await getCollectionInfoAndCacheResults({
+        id: collection.id,
+      });
+    }
+  };
+
   for (const cinema in data) {
     console.log(`[🎞️  Cinema: ${cinema}]`);
     const { movies } = data[cinema];
@@ -56,6 +80,8 @@ async function combine() {
               await getMovieInfoAndCacheResults(tmdbEntry);
           }
 
+          await cacheCollectionFor(movieInfo[tmdbEntry.id]);
+
           console.log(
             `\t✅ Retrieved (${Math.round((Date.now() - start) / 1000)}s)`,
           );
@@ -69,8 +95,10 @@ async function combine() {
     console.log(" ");
   }
 
-  console.log(`➡️  Cached data for ${Object.keys(movieInfo).length} movies`);
-  return movieInfo;
+  console.log(
+    `➡️  Cached data for ${Object.keys(movieInfo).length} movies in ${Object.keys(collectionInfo).length} collections`,
+  );
+  return { movieInfo, collectionInfo };
 }
 
 module.exports = combine;

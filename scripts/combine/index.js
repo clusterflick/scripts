@@ -4,6 +4,7 @@ const { getAllCinemaNames, getCinemaAttributes } = require("../../cinemas");
 const {
   getMovieInfoAndCacheResults,
   getMovieGenresAndCacheResults,
+  getCollectionInfoAndCacheResults,
 } = require("../../common/get-movie-data");
 const {
   parseMinsToMs,
@@ -63,10 +64,136 @@ const getYoutubeTrailer = (movie) => {
 
 const getImdbId = ({ external_ids: externalIds = {} }) => externalIds.imdb_id;
 
-const buildMovieData = (movieInfo, { slugify, siteData }) => {
+/**
+ * Smallest collection worth a page, counted against *released* parts. The floor
+ * is low because MINIMUM_COLLECTION_FILMS_SHOWING does the real filtering: a
+ * two-film collection only qualifies when both films are screening, which is a
+ * stronger signal than any size rule. Below two there's no series to speak of.
+ */
+const MINIMUM_COLLECTION_PARTS = 2;
+
+/**
+ * Collections that clear the rules but aren't franchises - documentary strands
+ * and the like, where the "series" is a publishing label rather than a story,
+ * and the run isn't something anyone works through. Kept as a list rather than
+ * a size limit: what's wrong with these is what they are, not how big they are,
+ * and a size limit would take James Bond with them.
+ */
+const ignoredCollectionIds = [
+  1035073, // Exhibition on Screen -- https://www.themoviedb.org/collection/1035073
+];
+
+/**
+ * How many of a collection's films must actually be screening for it to be
+ * published. Almost every collection has exactly one film on at any moment, and
+ * a page built around a single bookable title amongst two dozen you can't see
+ * says nothing the film's own page doesn't. Two or more is a run worth a page.
+ */
+const MINIMUM_COLLECTION_FILMS_SHOWING = 2;
+
+const isReleasedPart = ({ release_date: releaseDate }) => !!releaseDate;
+
+const buildCollection = (collectionInfo, { name, slugify, siteData }) => {
+  const parts = (collectionInfo.parts ?? [])
+    .filter(isReleasedPart)
+    .sort((a, b) => a.release_date.localeCompare(b.release_date))
+    .map(
+      ({ id, title, release_date: releaseDate, poster_path: posterPath }) => ({
+        id: `${id}`,
+        title,
+        releaseDate,
+        posterPath,
+      }),
+    );
+
+  if (parts.length < MINIMUM_COLLECTION_PARTS) return undefined;
+
+  // Two collections can slugify identically ("Alien Collection" and "Aliens
+  // Collection" both give "alien"), and the slug is the page URL, so fall back
+  // to disambiguating with the TMDB id.
+  const baseSlug = slugify(name);
+  const isTaken = Object.values(siteData.collections).some(
+    (collection) => collection.slug === baseSlug,
+  );
+
+  return {
+    id: `${collectionInfo.id}`,
+    name,
+    slug: isTaken ? `${baseSlug}-${collectionInfo.id}` : baseSlug,
+    overview: collectionInfo.overview,
+    // TMDB doesn't always have artwork for a collection. Fall back to the
+    // earliest film's poster - the first instalment is what a series is
+    // recognised by - so consumers always have an image to show.
+    posterPath:
+      collectionInfo.poster_path ??
+      parts.find((part) => part.posterPath)?.posterPath,
+    backdropPath: collectionInfo.backdrop_path,
+    parts,
+  };
+};
+
+/**
+ * Registers the collection a movie belongs to in siteData and returns its id,
+ * or undefined when the movie has no collection or the collection is too small
+ * to be worth surfacing.
+ *
+ * Async, unlike its sibling getters here, because a movie's details carry only
+ * the collection's *name* - genres, cast and crew all arrive on the same
+ * request via append_to_response, but there is no such option for a
+ * collection's membership. Getting the films in it means a second call, served
+ * from the cached-data artifact when the cache stage has already made it and
+ * fetched live when it hasn't.
+ */
+const getCollectionId = async (
+  movieInfo,
+  { slugify, siteData, collectionCache, rejectedCollections },
+) => {
+  const belongsTo = movieInfo.belongs_to_collection;
+  if (!belongsTo) return undefined;
+  if (ignoredCollectionIds.includes(belongsTo.id)) return undefined;
+
+  const id = `${belongsTo.id}`;
+  if (siteData.collections[id]) return id;
+  // A collection already rejected for being too small shouldn't be looked up
+  // again for every other movie in it.
+  if (rejectedCollections.has(id)) return undefined;
+
+  let collectionInfo;
+  try {
+    collectionInfo =
+      collectionCache[id] ||
+      (await getCollectionInfoAndCacheResults({ id: belongsTo.id }));
+  } catch {
+    collectionInfo = await getCollectionInfoAndCacheResults({
+      id: belongsTo.id,
+    });
+  }
+
+  const collection = buildCollection(collectionInfo, {
+    // TheMovieDB suffixes these "<Franchise> Collection", occasionally
+    // parenthesised. The word is noise once they're presented as a set of their
+    // own. Whitespace or brackets are required before it so a name that merely
+    // ends in those letters ("Recollection") is left alone.
+    name: belongsTo.name.replace(/(\s+collection|\s*\(collection\))$/i, ""),
+    slugify,
+    siteData,
+  });
+
+  if (!collection) {
+    rejectedCollections.add(id);
+    return undefined;
+  }
+
+  siteData.collections[id] = collection;
+  return id;
+};
+
+const buildMovieData = async (movieInfo, context) => {
+  const { slugify, siteData } = context;
   const directors = getDirectors(movieInfo);
   const actors = getActors(movieInfo);
   const genres = getGenres(movieInfo);
+  const collectionId = await getCollectionId(movieInfo, context);
 
   // Register people and genres in siteData
   directors.forEach((crew) => (siteData.people[crew.id] = crew));
@@ -93,6 +220,7 @@ const buildMovieData = (movieInfo, { slugify, siteData }) => {
     directors: directors.map(({ id }) => id),
     actors: actors.map(({ id }) => id),
     genres: genres.map(({ id }) => id),
+    collectionId,
     imdbId: getImdbId(movieInfo),
     youtubeTrailer: getYoutubeTrailer(movieInfo),
     posterPath: movieInfo.poster_path,
@@ -111,6 +239,19 @@ async function combine() {
   } catch {
     console.log("⚠️ Unable to load cached data");
   }
+
+  const collectionCachePath = path.join(
+    process.cwd(),
+    "cached-data",
+    "moviedb-collections.json",
+  );
+  let collectionCache = {};
+  try {
+    collectionCache = await readJSON(collectionCachePath);
+  } catch {
+    console.log("⚠️ Unable to load cached collection data");
+  }
+
   const data = {};
   const cinemas = getAllCinemaNames();
   for (const cinema of cinemas) {
@@ -130,8 +271,13 @@ async function combine() {
     venues: {},
     people: {},
     genres: {},
+    collections: {},
     movies: {},
   };
+
+  // Collections too small to be worth a page, remembered so every other movie
+  // in them doesn't trigger the same lookup and rejection.
+  const rejectedCollections = new Set();
 
   // Use the same slugify library as the website
   const { default: slugify } = await import("@sindresorhus/slugify");
@@ -159,6 +305,13 @@ async function combine() {
   siteData.generatedAt = response.data.published_at;
 
   const movieGenres = await getMovieGenresAndCacheResults();
+
+  const buildContext = {
+    slugify,
+    siteData,
+    collectionCache,
+    rejectedCollections,
+  };
 
   for (const cinema in data) {
     console.log(`[🎞️  Cinema: ${cinema}]`);
@@ -239,7 +392,7 @@ async function combine() {
               (await getMovieInfoAndCacheResults(tmdbEntry));
 
             includedMovies.push(
-              buildMovieData(includedMovieInfo, { slugify, siteData }),
+              await buildMovieData(includedMovieInfo, buildContext),
             );
           } catch {
             // Skip this included movie if we can't fetch its data
@@ -252,7 +405,7 @@ async function combine() {
       if (!siteData.movies[movieId]) {
         if (movieInfo) {
           siteData.movies[movieId] = {
-            ...buildMovieData(movieInfo, { slugify, siteData }),
+            ...(await buildMovieData(movieInfo, buildContext)),
             includedMovies: [],
             showings: {},
             performances: [],
@@ -449,6 +602,61 @@ async function combine() {
     });
     siteData.movies[container.id] = container;
   });
+
+  // A collection only earns its place if you could actually work through some
+  // of it: a page listing one bookable film among twenty-five you can't see is
+  // a mirror of TheMovieDB, not a listing. Counted after the merge above, since
+  // a film can be registered and then merged away, and against the same clock
+  // the site uses so the two agree on what "showing" means.
+  const asOf = Date.parse(siteData.generatedAt);
+
+  // A film screening inside a double bill or marathon is screening - you can
+  // buy a ticket and watch it - so it counts. Tallied as a set of *film* ids
+  // rather than a count of listings, because one marathon can carry six films
+  // of a collection and would otherwise register as one.
+  const showingFilms = new Map();
+  const addShowingFilm = (collectionId, filmId) => {
+    if (!showingFilms.has(collectionId))
+      showingFilms.set(collectionId, new Set());
+    showingFilms.get(collectionId).add(filmId);
+  };
+
+  Object.values(siteData.movies).forEach((movie) => {
+    if (!movie.performances.some(({ time }) => time >= asOf)) return;
+    if (movie.collectionId) addShowingFilm(movie.collectionId, movie.id);
+    (movie.includedMovies ?? []).forEach((included) => {
+      if (included.collectionId) {
+        addShowingFilm(included.collectionId, included.id);
+      }
+    });
+  });
+
+  Object.keys(siteData.collections).forEach((collectionId) => {
+    const showing = showingFilms.get(collectionId)?.size ?? 0;
+    if (showing < MINIMUM_COLLECTION_FILMS_SHOWING) {
+      delete siteData.collections[collectionId];
+    }
+  });
+
+  // Leave no reference pointing at a collection that didn't survive, so every
+  // collectionId in the output resolves.
+  Object.values(siteData.movies).forEach((movie) => {
+    if (movie.collectionId && !siteData.collections[movie.collectionId]) {
+      delete movie.collectionId;
+    }
+    (movie.includedMovies ?? []).forEach((included) => {
+      if (
+        included.collectionId &&
+        !siteData.collections[included.collectionId]
+      ) {
+        delete included.collectionId;
+      }
+    });
+  });
+
+  console.log(
+    `➡️  Collected ${Object.keys(siteData.collections).length} collections`,
+  );
 
   return siteData;
 }

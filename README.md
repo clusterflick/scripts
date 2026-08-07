@@ -206,7 +206,14 @@ npm run cache
 npx clusterflick/scripts cache
 ```
 
-Once complete, cached data will be saved in `cached-data/moviedb-data.json`.
+Once complete, cached data will be saved in two files:
+
+- `cached-data/moviedb-data.json` - TMDB details keyed by movie id, read by both
+  the combine and match stages.
+- `cached-data/moviedb-collections.json` - TMDB collection details keyed by
+  collection id, for the collections a movie belongs to. A movie's details name
+  its collection but not the rest of the membership, so each one needs a second
+  lookup.
 
 ### Diff
 

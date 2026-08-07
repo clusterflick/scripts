@@ -101,11 +101,17 @@ const setupDirectory = async (type) => {
 
   if (action.toLowerCase() === "cache") {
     const cacheMoviedb = require("./scripts/cache");
-    const output = await cacheMoviedb();
+    const { movieInfo, collectionInfo } = await cacheMoviedb();
     await setupDirectory("cached-data");
+    // Two files rather than one object: moviedb-data.json is read by both the
+    // combine and match stages, so its shape has to stay as it is.
     await writeJSON(
       path.join(process.cwd(), "cached-data", "moviedb-data.json"),
-      output,
+      movieInfo,
+    );
+    await writeJSON(
+      path.join(process.cwd(), "cached-data", "moviedb-collections.json"),
+      collectionInfo,
     );
     return;
   }

@@ -281,8 +281,8 @@ awk '/^  retrieve_/{g=$1} /npm run retrieve --/{c[g]++} END{for(k in c) print c[
 ```
 
 The numbered retrieve and transform groups are **not** paired one-to-one — there
-are more `transform_external_events_*` groups than `retrieve_source_only_*`
-ones — so pick the smallest group on each side independently.
+are more `transform_external_events_*` groups than `retrieve_source_only_*` ones
+— so pick the smallest group on each side independently.
 
 **Playwright dependency:** Check whether the venue's retriever uses Playwright
 (browser automation). If it does, it must go in a group whose setup step passes

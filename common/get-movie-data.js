@@ -695,6 +695,11 @@ const getMovieGenresAndCacheResults = () =>
     apiRetryWrapper(() => moviedb.genreMovieList()),
   );
 
+const getCollectionInfoAndCacheResults = ({ id }) =>
+  dailyCache(`moviedb-collection-${id}`, async () =>
+    apiRetryWrapper(() => moviedb.collectionInfo({ id })),
+  );
+
 const searchMovieAndCacheResults = (cacheKey, payload) =>
   dailyCache(cacheKey, async () => {
     const firstPage = await apiRetryWrapper(() => moviedb.searchMovie(payload));
@@ -731,4 +736,5 @@ module.exports = {
   searchForBestMatch,
   getMovieInfoAndCacheResults,
   getMovieGenresAndCacheResults,
+  getCollectionInfoAndCacheResults,
 };
