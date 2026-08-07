@@ -108,7 +108,12 @@ async function transform(
       "cineworld.co.uk-wembley",
       "cineworld.co.uk-west-india-quay",
       "cineworld.co.uk-wood-green",
-      "theshowroom.org",
+      // - indycinemagroup venues -
+      // Film pages are client-rendered, so the URL check fails and removed
+      // listings can't be reliably detected
+      "actonecinema.co.uk",
+      "chiswickcinema.co.uk",
+      "regentstreetcinema.com",
     ];
     const previousReleaseData = optedOut.includes(location)
       ? []
