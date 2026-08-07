@@ -693,6 +693,7 @@ const knownRemovablePhrases = [
   "Cosy Crafts:",
   "Crafty Movie Night:",
   "Crafty Movie Night –",
+  "Deeper Into Movies:",
   "Drink-Along Movie Night",
   "DRINK & DINE:",
   "Drink and Dine:",
