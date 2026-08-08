@@ -65,6 +65,7 @@ const ignoredIds = [
   1254413, // RiffTrax Live: Point Break -- https://www.themoviedb.org/movie/1254413-rifftrax-live-point-break
   1308510, // Hard Days Night -- https://www.themoviedb.org/movie/1308510-hard-days-night
   1234194, // Test Screening -- https://www.themoviedb.org/movie/1234194-test-screening
+  442825, // Cinematography -- https://www.themoviedb.org/movie/442825-cinematografia
 ];
 
 /**
