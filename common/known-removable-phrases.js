@@ -1238,6 +1238,7 @@ const knownRemovablePhrases = [
   "Work in Progress:",
   "Women's Only Event:",
   "Women of Almodóvar:",
+  "Wrld Bldr:",
   "International Women's Day:",
   "International Dog Day:",
   "Scared To Dance -",
