@@ -431,6 +431,7 @@ function normalizeTitle(title, options) {
     ["Sapphic Cinema - ", "Sapphic Cinema: "],
     ["Pride Special - ", "Pride Special: "],
     ["Cinema Club - ", "Cinema Club: "],
+    ["Suicide Prevention Short Film Premiere", "Suicide Prevention"],
     ["Film Premiere - ", "Film Premiere: "],
     ["Karaoke, crafts + ", "Karaoke, crafts & "],
     ["FOLIES MEURTRIÈRES + ", "FOLIES MEURTRIÈRES & "],
