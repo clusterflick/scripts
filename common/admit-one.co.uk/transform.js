@@ -69,6 +69,29 @@ function getCast(synopsis) {
   );
 }
 
+// Venue-wide facilities rather than properties of an individual screening
+const facilityIconTypes = ["wheelchair"];
+
+// Performance icons appear in two markup variants - <i class="a1-event-*"> and
+// <img alt="... icon"> - sharing the same vocabulary between them.
+function getIconTypes($, $performance) {
+  return [
+    ...$performance
+      .find("i")
+      .map((i, icon) => {
+        const indicator = ($(icon).attr("class") || "")
+          .trim()
+          .match(/\ba1-event-(\w+)\b/);
+        return indicator ? indicator[1] : undefined;
+      })
+      .get(),
+    ...$performance
+      .find("img")
+      .map((i, icon) => $(icon).attr("alt")?.replace(" icon", "")?.trim())
+      .get(),
+  ].filter(Boolean);
+}
+
 function getCharacters(synopsis) {
   const names = extractPeopleNames(synopsis);
   if (!names) return;
@@ -150,45 +173,34 @@ async function transform(
 
         const [hours, minutes] = getText($bookingButton).split(":");
 
-        const notesList = [];
-        // TODO: Are these still part of the site?
-        $performance.find("i").each(function () {
-          const indicatorClass = $(this).attr("class").trim();
-          const indicator = indicatorClass.match(/\ba1-event-(\w+)\b/);
-          if (indicator) notesList.push(indicator[1]);
-        });
-
         const status = {
           soldOut: !$performance.attr("href"),
         };
+        const notesList = [];
         const accessibility = {};
         const format = {};
         let screen = undefined;
 
-        const $iconImages = $performance.find("img");
-        if ($iconImages.length > 0) {
-          const alts = $iconImages
-            .map((i, $iconImage) =>
-              $($iconImage).attr("alt")?.replace(" icon", "")?.trim(),
-            )
-            .get()
-            .filter(Boolean);
-          if (alts.length > 0) {
-            alts.forEach((iconType) => {
-              if (basicNormalize(iconType) === "subtitled") {
-                accessibility.subtitled = true;
-              } else if (basicNormalize(iconType) === "parent & baby") {
-                accessibility.babyFriendly = true;
-              } else if (basicNormalize(iconType) === "bar") {
-                screen = "Bar";
-              } else if (Object.keys(getValidFormat(iconType)).length > 0) {
-                Object.assign(format, getValidFormat(iconType));
-              } else {
-                notesList.push(iconType);
-              }
-            });
+        getIconTypes($, $performance).forEach((iconType) => {
+          const normalizedIconType = basicNormalize(iconType);
+          const validFormat = getValidFormat(iconType);
+          if (facilityIconTypes.includes(normalizedIconType)) {
+            return;
+          } else if (
+            normalizedIconType === "subtitled" ||
+            normalizedIconType === "subtitles"
+          ) {
+            accessibility.subtitled = true;
+          } else if (normalizedIconType === "parent & baby") {
+            accessibility.babyFriendly = true;
+          } else if (normalizedIconType === "bar") {
+            screen = "Bar";
+          } else if (Object.keys(validFormat).length > 0) {
+            Object.assign(format, validFormat);
+          } else {
+            notesList.push(iconType);
           }
-        }
+        });
 
         movies[id].performances = movies[id].performances.concat(
           createPerformance({

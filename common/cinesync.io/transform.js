@@ -15,6 +15,21 @@ const { enGB } = require("date-fns/locale/en-GB");
 
 const getNames = (array = []) => array.map(({ name }) => name).filter(Boolean);
 
+// Venues shorten this in their tags, e.g. "English Subs"
+const subtitlesPattern = /\bsub(s|title[sd]?)\b/;
+
+// Words an accessibility tag is built from that say nothing beyond the flags
+// themselves - a tag made up of only these ("Relaxed Screening (with
+// subtitles)") is fully described by its flags, whereas one with anything left
+// over ("English Subs") still has something to say as a note
+const accessibilityTagWords =
+  /\b(relaxed|hoh|hard of hearing|subs|subtitle[sd]?|with|only|screening|version)\b/g;
+
+const isFullyDescribedByAccessibility = (tagName) =>
+  basicNormalize(tagName)
+    .replace(accessibilityTagWords, "")
+    .replace(/\W/g, "") === "";
+
 /**
  * Parse duration from format like "2h 15m" to minutes
  */
@@ -123,24 +138,36 @@ async function transform(attributes, { movieListPage }, sourcedEvents) {
             basicNormalize(tag.name).includes("hard of hearing")
           ) {
             accessibility.hardOfHearing = true;
+            // The tag often names the subtitle track itself, e.g. "Hard of
+            // hearing subtitles". A bare HOH marker isn't taken to imply one,
+            // as captions for the D/deaf and a subtitle track are flagged
+            // separately elsewhere.
+            if (subtitlesPattern.test(basicNormalize(tag.name))) {
+              accessibility.subtitled = true;
+            }
             return; // this doesn't need added to the notes
           }
           if (basicNormalize(tag.name).includes("parent and baby")) {
             accessibility.babyFriendly = true;
             // E.g. "Parent and Baby Only Screening (with subtitles)"
-            if (basicNormalize(tag.name).includes("subtitles")) {
+            if (subtitlesPattern.test(basicNormalize(tag.name))) {
               accessibility.subtitled = true;
             }
             return; // this doesn't need added to the notes
           }
-          if (basicNormalize(tag.name).includes("relaxed")) {
-            accessibility.relaxed = true;
-            // Don't return as often this is part of a more specific tag
-            // May include subtitles too, e.g. "Relaxed Screening (with subtitles)"
-          }
-          if (basicNormalize(tag.name).includes("subtitles")) {
-            accessibility.subtitled = true;
-            // Don't return as often this is part of a more specific tag
+
+          // Don't return on either of these, as they're often part of a more
+          // specific tag that still has something left to say as a note
+          const isRelaxed = basicNormalize(tag.name).includes("relaxed");
+          if (isRelaxed) accessibility.relaxed = true;
+          const isSubtitled = subtitlesPattern.test(basicNormalize(tag.name));
+          if (isSubtitled) accessibility.subtitled = true;
+
+          if (
+            (isRelaxed || isSubtitled) &&
+            isFullyDescribedByAccessibility(tag.name)
+          ) {
+            return; // this doesn't need added to the notes
           }
 
           notesList.push(tag.name);

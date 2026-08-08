@@ -10,7 +10,17 @@ const {
   generateShowingId,
   getValidFormat,
   getPresenterNote,
+  basicNormalize,
 } = require("../../common/utils");
+
+// Screening-type labels that only restate the accessibility already carried by
+// the link's data-filters, so noting them would duplicate the flags
+const accessibilityScreeningTypes = [
+  "hoh subtitles",
+  "subtitled",
+  "parent & baby",
+  "relaxed screening",
+];
 
 const getEntry = (attributes, url, $el, movieAdditionalData) => {
   const id = url.match(/\/programme\/([^/]+)\//i)[1];
@@ -124,9 +134,25 @@ async function transform(
       });
 
       const status = { soldOut: false };
-      const note = getText($link.find(".screening-type"));
-      const formatFromNotes = getValidFormat(note);
-      let notesList = Object.keys(formatFromNotes).length > 0 ? [] : [note];
+      // A link can carry more than one label, and taking the text of the whole
+      // set would weld them together ("HOH subtitles£6 Monday!"), so read each
+      // label on its own.
+      const screeningTypes = $link
+        .find(".screening-type")
+        .map((i, screeningType) => getText($(screeningType)))
+        .get()
+        .filter(Boolean);
+
+      const formatFromNotes = screeningTypes.reduce(
+        (formatFromNotes, screeningType) =>
+          Object.assign(formatFromNotes, getValidFormat(screeningType)),
+        {},
+      );
+      let notesList = screeningTypes.filter(
+        (screeningType) =>
+          Object.keys(getValidFormat(screeningType)).length === 0 &&
+          !accessibilityScreeningTypes.includes(basicNormalize(screeningType)),
+      );
       if (filmLevelNotes[url]) notesList.push(filmLevelNotes[url]);
       if ($link.find(".sold-out").length > 0) {
         status.soldOut = true;

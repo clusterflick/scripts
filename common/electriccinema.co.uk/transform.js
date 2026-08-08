@@ -7,6 +7,11 @@ const {
 } = require("../utils");
 const { parseDate } = require("./utils");
 
+// Screening types that say nothing the accessibility flags don't already say.
+// The branded strands ("Electric Scream!", "Electric Kids Club") are kept, as
+// the name of the strand is worth more than the flag it happens to set.
+const accessibilityScreeningTypes = ["electric subtitled", "parent & baby"];
+
 async function transform(
   attributes,
   { films, screenings, screeningTypes },
@@ -56,7 +61,8 @@ async function transform(
         date: parseDate(`${screening.d}T${screening.t}`),
         screen: screening.sn,
         notesList:
-          screeningType !== "main feature"
+          screeningType !== "main feature" &&
+          !accessibilityScreeningTypes.includes(screeningType)
             ? [screeningTypes[screening.st]?.title]
             : [],
         url: screening.link ? `${domain}${screening.link}` : movieUrl,
