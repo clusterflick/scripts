@@ -962,6 +962,7 @@ function normalizeTitle(title, options) {
     ["Freud's Afternoon Session - ", "Freud's Afternoon Session: "],
     ["Live folk music, Czech drinks + ", "Live folk music, Czech drinks & "],
     ["Evil Resident: Afterlife", "Resident Evil: Afterlife"],
+    ["Khali Balak Min Nafsak", "Take Care of Yourself"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
