@@ -1359,6 +1359,7 @@ const knownRemovablePhrases = [
   "Extended Version",
   "ExtrABBAganza",
   "Emo Night With: The Thomas Nicholas Band",
+  "Emperor Nero and the Spectacle of Ancient Rome",
   "Free Event:",
   "free screening at subtitle cinema",
   "Subtitle Cinema:",
