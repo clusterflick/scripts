@@ -95,6 +95,58 @@ async function combine() {
     console.log(" ");
   }
 
+  // Movies that have stopped screening still have pages on the site, built
+  // from this cache by the departed stage. They are no longer in any venue's
+  // data, so the seen registry is the only record that they exist.
+  const registryPath = path.join(
+    process.cwd(),
+    "diffed-data",
+    "seen-registry.json",
+  );
+  let registry;
+  try {
+    registry = await readJSON(registryPath);
+  } catch (e) {
+    if (e.code !== "ENOENT") throw e;
+    console.log("⚠️ No seen registry found; caching showing movies only");
+  }
+
+  const departedIds = Object.keys(registry?.movies ?? {}).filter(
+    (id) => !movieInfo[id],
+  );
+
+  if (departedIds.length > 0) {
+    console.log(`[🎞️  Departed movies: ${departedIds.length}]`);
+
+    for (const id of departedIds) {
+      const start = Date.now();
+      process.stdout.write(
+        ` - Retriving data for ${"".padEnd(7 - id.length, " ")}[${id}] ... `,
+      );
+
+      try {
+        try {
+          movieInfo[id] = await getMovieInfoAndCacheResults({ id: Number(id) });
+        } catch {
+          process.stdout.write(`\\t🔄`);
+          movieInfo[id] = await getMovieInfoAndCacheResults({ id: Number(id) });
+        }
+        console.log(
+          `\t✅ Retrieved (${Math.round((Date.now() - start) / 1000)}s)`,
+        );
+      } catch {
+        // Unlike a showing movie, there is nothing downstream waiting on this
+        // one: its page simply won't be rebuilt this run. A movie pulled from
+        // TheMovieDB will fail here every run until it ages out of the
+        // registry, and failing the job over that would stop the pipeline for
+        // a film nobody can watch.
+        console.log(`\t❌ Error retriving, skipping`);
+      }
+    }
+
+    console.log(" ");
+  }
+
   console.log(
     `➡️  Cached data for ${Object.keys(movieInfo).length} movies in ${Object.keys(collectionInfo).length} collections`,
   );

@@ -7,62 +7,13 @@ const {
   getCollectionInfoAndCacheResults,
 } = require("../../common/get-movie-data");
 const {
-  parseMinsToMs,
   readJSON,
   basicNormalize,
   getId,
   sleep,
 } = require("../../common/utils");
 const standardizePrefixingForTheatrePerformances = require("../../common/standardize-prefixing-for-theatre-performances");
-
-const getClassification = (movie) => {
-  const results = movie.release_dates?.results ?? [];
-  const result = results.find(({ iso_3166_1: locale }) => locale === "GB");
-  if (!result) return undefined;
-
-  const { release_dates: releaseDates } = result;
-  const releaseDateWithClassification = releaseDates.find(
-    ({ certification }) => !!certification,
-  );
-
-  if (!releaseDateWithClassification) return undefined;
-  return releaseDateWithClassification.certification;
-};
-
-const getDirectors = (movie) => {
-  const crew = movie.credits?.crew ?? [];
-  return crew
-    .filter(({ job }) => basicNormalize(job) === "director")
-    .map(({ id, name }) => ({ id: `${id}`, name }));
-};
-
-const getActors = (movie) => {
-  const cast = movie.credits?.cast ?? [];
-  return Array.from(
-    cast
-      .sort((a, b) => a.order - b.order)
-      .reduce((actors, { id, name }) => {
-        if (actors.has(id)) return actors;
-        actors.set(id, { id: `${id}`, name });
-        return actors;
-      }, new Map())
-      .values(),
-  ).slice(0, 10);
-};
-
-const getGenres = ({ genres }) =>
-  genres.map(({ id, name }) => ({ id: `${id}`, name }));
-
-const getYoutubeTrailer = (movie) => {
-  const results = movie.videos?.results ?? [];
-  const trailer = results.find(
-    ({ type, site }) =>
-      basicNormalize(type) === "trailer" && basicNormalize(site) === "youtube",
-  );
-  return trailer ? trailer.key : undefined;
-};
-
-const getImdbId = ({ external_ids: externalIds = {} }) => externalIds.imdb_id;
+const { buildMovieData } = require("./build-movie-data");
 
 /**
  * Smallest collection worth a page, counted against *released* parts. The floor
@@ -188,45 +139,6 @@ const getCollectionId = async (
   return id;
 };
 
-const buildMovieData = async (movieInfo, context) => {
-  const { slugify, siteData } = context;
-  const directors = getDirectors(movieInfo);
-  const actors = getActors(movieInfo);
-  const genres = getGenres(movieInfo);
-  const collectionId = await getCollectionId(movieInfo, context);
-
-  // Register people and genres in siteData
-  directors.forEach((crew) => (siteData.people[crew.id] = crew));
-  actors.forEach((cast) => (siteData.people[cast.id] = cast));
-  genres.forEach((genre) => (siteData.genres[genre.id] = genre));
-
-  // Make sure the title can be slugified for use in URLs. If it can't
-  // be we may be trying to use a title in non-roman letters. If so, we
-  // can't use it in the URL and it will be harder to search for, so
-  // let's try swapping to the original title value.
-  const title = slugify(movieInfo.title)
-    ? movieInfo.title
-    : movieInfo.original_title;
-
-  return {
-    id: `${movieInfo.id}`,
-    title: title,
-    normalizedTitle: normalizeTitle(title).replace(/^the /i, "").trim(),
-    classification: getClassification(movieInfo),
-    overview: movieInfo.overview,
-    year: movieInfo.release_date?.split("-")[0],
-    releaseDate: movieInfo.release_date,
-    duration: parseMinsToMs(movieInfo.runtime),
-    directors: directors.map(({ id }) => id),
-    actors: actors.map(({ id }) => id),
-    genres: genres.map(({ id }) => id),
-    collectionId,
-    imdbId: getImdbId(movieInfo),
-    youtubeTrailer: getYoutubeTrailer(movieInfo),
-    posterPath: movieInfo.poster_path,
-  };
-};
-
 async function combine() {
   const cachePath = path.join(
     process.cwd(),
@@ -309,8 +221,13 @@ async function combine() {
   const buildContext = {
     slugify,
     siteData,
-    collectionCache,
-    rejectedCollections,
+    resolveCollectionId: (movieInfo) =>
+      getCollectionId(movieInfo, {
+        slugify,
+        siteData,
+        collectionCache,
+        rejectedCollections,
+      }),
   };
 
   for (const cinema in data) {

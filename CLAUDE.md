@@ -39,11 +39,12 @@ npm run format         # Format with Prettier (JS, JSON, MD)
 ## Project Structure
 
 ```
-index.js                 # CLI entry point (retrieve|transform|combine|match|cache|diff)
+index.js                 # CLI entry point (retrieve|transform|combine|match|cache|diff|registry|departed)
 cinemas/                 # 300+ cinema venue modules (each has attributes/retrieve/transform)
 sources/                 # 9 external ticketing platform modules
 common/                  # Shared utilities (utils.js, normalize-title.js, get-movie-data.js, etc.)
-scripts/                 # Pipeline stages: retrieve/, transform/, combine/, match/, cache/, diff/
+scripts/                 # Pipeline stages: retrieve/, transform/, combine/, match/, cache/, diff/,
+                         #   registry/, departed/
 helpers/                 # Dev helper scripts (data download, manual matching)
 docs/                    # Pipeline documentation (retrieve.md, transform.md)
 schema.json              # JSON Schema for output validation
@@ -60,11 +61,24 @@ retrieve  ->  transform  ->  combine  ->  match
 
 All pipeline commands run with `TZ=Europe/London`.
 
-`diff` sits off to the side of that chain: it compares two `transform` releases
-(`transformed-data/current` vs `transformed-data/previous`) and writes the
-change set published by `data-diffed`. `data-analysed`'s `compare:releases`
+`diff` runs between `transform` and `combine`, comparing two `transform`
+releases (`transformed-data/current` vs `transformed-data/previous`) to write
+the change set published by `data-diffed`. `data-analysed`'s `compare:releases`
 report renders the same comparison, so behaviour changes belong in
 `scripts/diff/`, not in either consumer.
+
+`registry` runs alongside it in the same job and publishes `seen-registry.json`:
+`lastSeen` for every TMDB id in the current release, carried forward for ids
+that have stopped appearing. It is a fold over one release plus its own previous
+output — it never reads the previous `transform` release, so it stays correct
+when the diff has nothing to report.
+
+`departed` runs after `combine` in the same job. Movies the registry knows about
+that `combine` did not produce have finished their run, and it writes them to
+`combined-data/departed-movies.json` so the website can keep rendering pages
+that would otherwise 404. It writes a separate artifact deliberately: nothing
+reading `combined-data.json` — the match stage, the client payload, the
+listings — should see films that aren't screening.
 
 ## Module Pattern
 

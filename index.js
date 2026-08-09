@@ -99,6 +99,49 @@ const setupDirectory = async (type) => {
     return;
   }
 
+  if (action.toLowerCase() === "registry") {
+    // The registry is a fold: this release's transformed data plus the last
+    // published registry. It deliberately does not look at the previous
+    // transformed release - see scripts/registry.
+    const [release] = [location];
+    if (!release) {
+      throw new Error("No release tag provided for the registry");
+    }
+
+    const {
+      buildRegistry,
+      getPresentMovies,
+      readPreviousRegistry,
+    } = require("./scripts/registry");
+
+    const present = await getPresentMovies(
+      path.join(process.cwd(), "transformed-data", "current"),
+    );
+    const previousRegistry = await readPreviousRegistry(
+      path.join(process.cwd(), "previous-registry", "seen-registry.json"),
+    );
+
+    await setupDirectory("diffed-data");
+    await writeJSON(
+      path.join(process.cwd(), "diffed-data", "seen-registry.json"),
+      buildRegistry({ present, previousRegistry, release }),
+    );
+    return;
+  }
+
+  if (action.toLowerCase() === "departed") {
+    const departed = require("./scripts/departed");
+    const output = await departed();
+    await setupDirectory("combined-data");
+    // Written beside combined-data.json rather than into it: nothing that
+    // reads the combined blob should see movies that are no longer showing.
+    await writeJSON(
+      path.join(process.cwd(), "combined-data", "departed-movies.json"),
+      output,
+    );
+    return;
+  }
+
   if (action.toLowerCase() === "cache") {
     const cacheMoviedb = require("./scripts/cache");
     const { movieInfo, collectionInfo } = await cacheMoviedb();

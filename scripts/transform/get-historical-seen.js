@@ -30,7 +30,9 @@ async function loadCombinedDataFiles() {
 
     const files = await fs.readdir(releasePath);
     for (const file of files) {
-      if (!file.endsWith(".json")) continue;
+      // A data-combined release carries more than one asset - the departed
+      // movies bundle among them - and only this one holds showings.
+      if (file !== "combined-data.json") continue;
 
       const filePath = path.join(releasePath, file);
       try {
