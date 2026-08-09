@@ -526,8 +526,14 @@ function normalizeTitle(title, options) {
     ["Romford Horror 2026 -", "Romford Horror 2026:"],
     ["Romford Horror Festival 2026 -", "Romford Horror 2026:"],
     ["Opening Night -", "Opening Night "],
+    [/Surprise Film( \d{1,2}\.\d{1,2}\.\d{1,2})?/i, "mystery movie"],
+    [/(\w+ Film Festival: )?Surprise Screening/i, "mystery movie"],
     [
-      /(free |monthly )?mystery ([\w+]+ )?([\w+]+ )?(night|film|movie|cinema|screening):?( Nov| \d)?/i,
+      /^(free |monthly )?(mystery|surprise) ([\w+]+ )?([\w+]+ )?(night|film|movie|cinema|screening|matinees?):?( Nov| \d)?/i,
+      "mystery movie",
+    ],
+    [
+      /(free |monthly )?(mystery|surprise) ((?!short )[\w+]+ )?((?!short )[\w+]+ )?(night|film|movie|cinema|screening|matinees?):?( Nov| \d)?/i,
       "mystery movie",
     ],
     [/(classic |MUBI )?secret scre(e|a)(n|m)ing( \d+)?/i, "mystery movie"],
@@ -539,8 +545,6 @@ function normalizeTitle(title, options) {
     ],
     [/Mystery [^\s]+ Movie/i, "mystery movie"],
     [/^.* \+ mystery movie/i, "mystery movie"],
-    [/Surprise Film( \d{1,2}\.\d{1,2}\.\d{1,2})?/i, "mystery movie"],
-    [/(\w+ Film Festival: )?Surprise Screening/i, "mystery movie"],
     ["vhs film", "movie"],
     [/The Bill Reunion \d+/i, "The Bill Reunion"],
     ["R.E.M. Buster", "R.E.M. X Buster"],
@@ -963,6 +967,8 @@ function normalizeTitle(title, options) {
     ["Live folk music, Czech drinks + ", "Live folk music, Czech drinks & "],
     ["Evil Resident: Afterlife", "Resident Evil: Afterlife"],
     ["Khali Balak Min Nafsak", "Take Care of Yourself"],
+    ["Transformers: 40th Anniversary Event", "The Transformers: The Movie"],
+    ["SUNDAY SABBATH - ", "SUNDAY SABBATH: "],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
