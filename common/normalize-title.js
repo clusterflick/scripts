@@ -28,9 +28,10 @@ function normalizeTitle(title, options) {
     [/^gb\s+/i, ""],
     [/^Screening Documentary/i, ""],
     ["HANNAH MONTANA: THE MOVIE", "HANNAH MONTANA MOVIE"],
-    [/:? The Movie$/i, ""],
-    [/F1\s?®? The Movie/i, "F1"],
+    [/F1\s?®?:? The Movie/i, "F1"],
     [/Batman\s?:? The Movie/i, "Batman"],
+    ["The Transformers: The Movie", "The Transformers The Movie ()"], // Retain "The Movie" suffix
+    [/:? The Movie$/i, ""],
     ["The Fishermen", "The Fisherman"], // NOTE: This can be removed in the future once this specific misname has been removed
     [" + Cat", " and Cat"],
     [" + Zog", " and Zog"],
