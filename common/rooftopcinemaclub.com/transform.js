@@ -9,6 +9,44 @@ const {
   generateShowingId,
 } = require("../utils");
 const { isNotSportShowing } = require("../is-sport-showing");
+const { getFilmSlug } = require("./utils");
+
+function parseDurationToMins(value) {
+  // Structured data durations are ISO 8601, e.g. "PT148M"
+  const match = /^PT(?:(\d+)H)?(?:(\d+)M)?$/.exec(value || "");
+  if (!match || (!match[1] && !match[2])) {
+    throw new Error(`Unable to parse film duration: "${value}"`);
+  }
+
+  return parseInt(match[1] || 0, 10) * 60 + parseInt(match[2] || 0, 10);
+}
+
+function getFilmDetails(html, filmSlug) {
+  if (!html) {
+    throw new Error(`Missing screening page for film "${filmSlug}"`);
+  }
+
+  const $ = cheerio.load(html);
+  const structuredData = $('script[type="application/ld+json"]')
+    .map((i, el) => JSON.parse(getText($(el))))
+    .get();
+  const film = structuredData.find(
+    ({ "@type": type }) => type === "ScreeningEvent",
+  )?.workFeatured;
+
+  if (!film) {
+    throw new Error(
+      `Missing structured data for film "${filmSlug}" — page structure may have changed`,
+    );
+  }
+
+  // Not every listing is a film with a release year — TV shows and multi-film
+  // events don't have one
+  return {
+    duration: parseDurationToMins(film.duration),
+    year: film.dateCreated,
+  };
+}
 
 function parseScreeningDate(dateText, timeText) {
   const dateOnly = parse(dateText, "EEE, MMM d", new Date());
@@ -31,7 +69,7 @@ function parseScreeningDate(dateText, timeText) {
 
 async function transform(
   attributes,
-  { screeningPages, soldOutDetails },
+  { screeningPages, soldOutDetails, filmPages },
   sourcedEvents,
 ) {
   const { domain, url } = attributes;
@@ -55,8 +93,7 @@ async function transform(
       }
 
       const url = `${domain}${href}`;
-      const slug = href.split("/").pop();
-      const filmSlug = slug.replace(/-\d+$/, "");
+      const filmSlug = getFilmSlug(href);
 
       let dateText;
       $card.find("span").each((j, span) => {
@@ -131,7 +168,9 @@ async function transform(
           showingId: generateShowingId(attributes, filmSlug),
           title,
           url: `${listingUrl}${encodeURIComponent(title)}`,
-          overview: createOverview({}),
+          overview: createOverview(
+            getFilmDetails(filmPages[filmSlug], filmSlug),
+          ),
           performances: [],
           matchingHints: { overview: overviewText },
         };

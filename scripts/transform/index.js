@@ -108,12 +108,17 @@ async function transform(
       "cineworld.co.uk-wembley",
       "cineworld.co.uk-west-india-quay",
       "cineworld.co.uk-wood-green",
-      // - indycinemagroup venues -
+      // - Indy Cinema Group venues -
       // Film pages are client-rendered, so the URL check fails and removed
       // listings can't be reliably detected
       "actonecinema.co.uk",
       "chiswickcinema.co.uk",
       "regentstreetcinema.com",
+      // - Rooftop Cinema Club -
+      // URL links to a main page, so the URL check fails and removed listings
+      // can't be reliably detected
+      "rooftopcinemaclub.com-peckham",
+      "rooftopcinemaclub.com-stratford",
     ];
     const previousReleaseData = optedOut.includes(location)
       ? []

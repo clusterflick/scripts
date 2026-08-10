@@ -1,9 +1,10 @@
 const cheerio = require("cheerio");
 const { fetchText, fetchJson } = require("../utils");
+const { getFilmSlug } = require("./utils");
 
 const NO_SCREENINGS_TEXT = "no upcoming screenings";
 
-async function retrieve({ url }) {
+async function retrieve({ domain, url }) {
   const screeningPages = [];
   let page = 1;
 
@@ -30,7 +31,23 @@ async function retrieve({ url }) {
     soldOutDetails[uuid] = await fetchJson(`${url}/screenings/details/${uuid}`);
   }
 
-  return { screeningPages, soldOutDetails };
+  // The listing page has no film details, so fetch a screening page per film
+  // for the year and duration.
+  const filmHrefs = {};
+  for (const html of screeningPages) {
+    const $ = cheerio.load(html);
+    $(".screening-card h3 a").each((i, el) => {
+      const href = $(el).attr("href");
+      if (href) filmHrefs[getFilmSlug(href)] ??= href;
+    });
+  }
+
+  const filmPages = {};
+  for (const [filmSlug, href] of Object.entries(filmHrefs)) {
+    filmPages[filmSlug] = (await fetchText(`${domain}${href}`)).trim();
+  }
+
+  return { screeningPages, soldOutDetails, filmPages };
 }
 
 module.exports = retrieve;
