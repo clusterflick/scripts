@@ -2,6 +2,7 @@ const path = require("node:path");
 const { readJSON } = require("../../common/utils");
 const { getMovieInfoAndCacheResults } = require("../../common/get-movie-data");
 const { buildMovieData } = require("../combine/build-movie-data");
+const { indexUnmatchedByTitle } = require("./find-still-listed");
 
 /**
  * Build the bundle of movies that have stopped screening.
@@ -76,8 +77,11 @@ async function departed() {
   // page, so the id would dangle.
   const buildContext = { slugify, siteData };
 
+  const stillListed = indexUnmatchedByTitle(combined.movies);
+
   const movies = {};
   let fetched = 0;
+  let recovered = 0;
 
   for (const id of departedIds) {
     let movieInfo = cache[id];
@@ -94,14 +98,24 @@ async function departed() {
       }
     }
 
-    movies[id] = {
+    const movie = {
       ...(await buildMovieData(movieInfo, buildContext)),
       ...registry.movies[id],
     };
+
+    // An unmatched listing under the same title almost certainly *is* this
+    // film, having lost its match rather than its screenings.
+    const listing = stillListed.get(movie.normalizedTitle);
+    if (listing) {
+      movie.stillListedAs = listing;
+      recovered++;
+    }
+
+    movies[id] = movie;
   }
 
   console.log(
-    `➡️  Built ${Object.keys(movies).length} departed movies (${fetched} fetched live)`,
+    `➡️  Built ${Object.keys(movies).length} departed movies (${fetched} fetched live, ${recovered} still listed unmatched)`,
   );
 
   return {
