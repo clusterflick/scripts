@@ -357,7 +357,7 @@ function normalizeTitle(title, options) {
     ["Pip and Posy's", "Pip and Posy"],
     ["10 + 10", "10 plus 10"],
     ["Super Connected Live", "Super Connected"],
-    [/wall[-•]e/i, "WALL·E"],
+    [/wall\s*[-•]\s*e/i, "WALL·E"],
     ["Die Hard 2: Die Harder", "Die Hard 2"],
     ["PRINCE - SIGN O'THE TIMES", "PRINCE: SIGN O THE TIMES"],
     [" 2.1 ", " 2 "],
@@ -544,6 +544,7 @@ function normalizeTitle(title, options) {
       /(Orange Box )?Secret Film Screenings?(:? Summer Series)?/i,
       "mystery movie",
     ],
+    [/A CELLULOID SURPRISE #\d+/i, "mystery movie"],
     [/Mystery [^\s]+ Movie/i, "mystery movie"],
     [/^.* \+ mystery movie/i, "mystery movie"],
     ["vhs film", "movie"],
@@ -970,8 +971,8 @@ function normalizeTitle(title, options) {
     ["Khali Balak Min Nafsak", "Take Care of Yourself"],
     ["Transformers: 40th Anniversary Event", "The Transformers: The Movie"],
     ["SUNDAY SABBATH - ", "SUNDAY SABBATH: "],
-    ["Horror for a Cause - ", "Horror for a Cause: "],
-    ["Save the Cinema Museum - ", "Save the Cinema Museum: "],
+    [/Horror for a Cause (-|–) /i, "Horror for a Cause: "],
+    [/Save the Cinema Museum (-|–) /i, "Save the Cinema Museum: "],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
