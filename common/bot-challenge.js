@@ -12,4 +12,13 @@ const BOT_CHALLENGE_TEXT =
 const isBotChallengeResponse = (response) =>
   response?.headers()["cf-mitigated"] === "challenge";
 
-module.exports = { BOT_CHALLENGE_TEXT, isBotChallengeResponse };
+// The same signal read off a `fetch` Response, whose headers are a `Headers`
+// instance rather than Playwright's `headers()` accessor.
+const isBotChallengeFetchResponse = (response) =>
+  response?.headers?.get("cf-mitigated") === "challenge";
+
+module.exports = {
+  BOT_CHALLENGE_TEXT,
+  isBotChallengeResponse,
+  isBotChallengeFetchResponse,
+};

@@ -9,6 +9,9 @@ const registry = (movies) => ({
   movies,
 });
 
+// Hide script output
+console.log = () => {};
+
 describe("parseTagDate", () => {
   it("reads the date out of a release tag", () => {
     expect(parseTagDate("20260808.180256")).toBe(Date.UTC(2026, 7, 8));
