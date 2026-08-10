@@ -35,7 +35,11 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
     const $ = cheerio.load(html);
 
     const title = getText($("main h1"));
-    if (!title) continue;
+    if (!title) {
+      throw new Error(
+        `No title found for ${moviePageUrl} - the page structure may have changed`,
+      );
+    }
 
     const snipcartButton = $(".snipcart-add-item");
     const eventId =
@@ -81,7 +85,17 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
       }
     });
 
-    if (performances.length === 0) continue;
+    if (performances.length === 0) {
+      // Announcements such as closure notices are listed as events with a date
+      // range but no timeslots, so an empty ".timeslots" is expected. A missing
+      // one means the date markup itself has changed.
+      if ($(".detail-date .timeslots").length === 0) {
+        throw new Error(
+          `No timeslots found for "${title}" (${moviePageUrl}) - the page structure may have changed`,
+        );
+      }
+      continue;
+    }
 
     movies.push({
       showingId: generateShowingId(attributes, eventId),
@@ -95,7 +109,7 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
     });
   }
 
-  if (movies.length === 0) {
+  if (Object.keys(moviePages).length === 0) {
     const $movieListPage = cheerio.load(movieListPage);
     if ($movieListPage(".nothing-on").length === 0) {
       throw new Error("No movies found - the page structure may have changed");

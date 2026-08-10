@@ -77,8 +77,8 @@ when the diff has nothing to report.
 that `combine` did not produce have finished their run, and it writes them to
 `combined-data/departed-movies.json` so the website can keep rendering pages
 that would otherwise 404. It writes a separate artifact deliberately: nothing
-reading `combined-data.json` — the match stage, the client payload, the
-listings — should see films that aren't screening.
+reading `combined-data.json` — the match stage, the client payload, the listings
+— should see films that aren't screening.
 
 ## Module Pattern
 
