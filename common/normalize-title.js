@@ -973,6 +973,7 @@ function normalizeTitle(title, options) {
     ["SUNDAY SABBATH - ", "SUNDAY SABBATH: "],
     [/Horror for a Cause (-|–) /i, "Horror for a Cause: "],
     [/Save the Cinema Museum (-|–) /i, "Save the Cinema Museum: "],
+    ["Nostalghia", "Nostalgia"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
