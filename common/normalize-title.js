@@ -970,6 +970,8 @@ function normalizeTitle(title, options) {
     ["Khali Balak Min Nafsak", "Take Care of Yourself"],
     ["Transformers: 40th Anniversary Event", "The Transformers: The Movie"],
     ["SUNDAY SABBATH - ", "SUNDAY SABBATH: "],
+    ["Horror for a Cause - ", "Horror for a Cause: "],
+    ["Save the Cinema Museum - ", "Save the Cinema Museum: "],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
