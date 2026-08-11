@@ -66,6 +66,7 @@ const ignoredIds = [
   1308510, // Hard Days Night -- https://www.themoviedb.org/movie/1308510-hard-days-night
   1234194, // Test Screening -- https://www.themoviedb.org/movie/1234194-test-screening
   442825, // Cinematography -- https://www.themoviedb.org/movie/442825-cinematografia
+  1627130, // Renoir in Love -- https://www.themoviedb.org/movie/-renoir-in-love
 ];
 
 /**
@@ -233,6 +234,31 @@ const matchesExpectedCastCrew = async (match, movie) => {
   return false;
 };
 
+const isDirecting = ({ known_for_department: department }) =>
+  !!department && basicNormalize(department) === "directing";
+
+// An exact name match outranks the department, which outranks popularity.
+const scorePerson = (searchedName) => (person) => {
+  const nameOptions = [
+    normalizeName(person.name),
+    normalizeName(person.name.split(" ").reverse().join(" ")),
+  ];
+  return (
+    (nameOptions.includes(normalizeName(searchedName)) ? 2 : 0) +
+    (isDirecting(person) ? 1 : 0)
+  );
+};
+
+// Rank rather than filter. Filtering down to just those known for directing
+// discards the right person whenever TheMovieDB files a director under another
+// department - producer-directors are commonly under "Production".
+const rankPeople = (searchedName, people) => {
+  const score = scorePerson(searchedName);
+  return [...people].sort(
+    (a, b) => score(b) - score(a) || b.popularity - a.popularity,
+  );
+};
+
 async function findMovieByDirector(normalizedTitle, movie) {
   const movieDirectors = [
     ...movie.overview.directors,
@@ -248,27 +274,7 @@ async function findMovieByDirector(normalizedTitle, movie) {
 
   if (peopleMatches.results.length === 0) return null;
 
-  // Start off with all results. If we've only 1 result, we'll pass through the
-  // filters below and get returned.
-  let directors = peopleMatches.results.sort(
-    (a, b) => b.popularity - a.popularity,
-  );
-
-  // If the name matches lots of people, let's filter them down by just those
-  // known for directing
-  if (peopleMatches.results.length > 1) {
-    directors = peopleMatches.results.filter(
-      ({ known_for_department: department }) =>
-        department && basicNormalize(department) === "directing",
-    );
-  }
-
-  // If we can't find a director, give the most popular result a chance
-  if (directors.length === 0) {
-    directors = [
-      peopleMatches.results.sort((a, b) => b.popularity - a.popularity)[0],
-    ];
-  }
+  const directors = rankPeople(directorsName, peopleMatches.results);
 
   // Limit queries to just 3 matches
   for (const director of directors.slice(0, 3)) {
@@ -734,6 +740,7 @@ const getPersonMovieCreditsAndCacheResults = (id) =>
   );
 
 module.exports = {
+  rankPeople,
   searchForBestMatch,
   getMovieInfoAndCacheResults,
   getMovieGenresAndCacheResults,
