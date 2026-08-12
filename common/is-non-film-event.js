@@ -11,6 +11,7 @@ const nonFilmEvents = [
   /Performance Networking/i,
   /Networking Night/i,
   /Networking Reception/i,
+  /Networking Event:/i,
   /Interior Design Networking/i,
   /Digital Creatives Networking/i,
   /Medtech Innovation/i,
@@ -20,6 +21,7 @@ const nonFilmEvents = [
   /Cabin Air Conference/i,
   /Connected Intelligence/i,
   /Annual Meeting/i,
+  /cancer research symposium/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
