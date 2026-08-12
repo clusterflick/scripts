@@ -975,6 +975,7 @@ function normalizeTitle(title, options) {
     [/Save the Cinema Museum (-|–) /i, "Save the Cinema Museum: "],
     ["Nostalghia", "Nostalgia"],
     ["RETURN TO THE TATLER + ", "RETURN TO THE TATLER: "],
+    ["SEYTAN + ", "SEYTAN & "],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
