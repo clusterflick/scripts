@@ -119,6 +119,8 @@ async function transform(
       // can't be reliably detected
       "rooftopcinemaclub.com-peckham",
       "rooftopcinemaclub.com-stratford",
+      // - TEMPORARY -
+      "coldharbourblue.com",
     ];
     const previousReleaseData = optedOut.includes(location)
       ? []
