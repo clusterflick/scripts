@@ -507,6 +507,8 @@ used in two ways:
 | dice.fm                 | Embedded JSON (`#__NEXT_DATA__`) + pages  | Also searches theatre category for films                               |
 | eventbrite.co.uk        | Embedded JSON (`__SERVER_DATA__`) + pages | Searches "screening" + "film-and-media"                                |
 | feverup.com             | HTML list + detail pages + sessions API   | Fetches calendar dates then session times per plan/place/date          |
+| freefilmfestivals.org   | HTML festival list + festival + events    | The Events Calendar pages; times and venue geo from schema.org JSON-LD |
+| japanesefilm.club       | HTML list + detail pages + venue pages    | Venue pages fetched for postcodes, as names collide UK-wide            |
 | outsavvy.com            | HTML list + detail pages                  | Cheerio scraping                                                       |
 | stowfilmlounge.com      | Single HTML page                          | Simple `fetchText`                                                     |
 | thecliq.app-            | GraphQL API                               | Queries clubs + events + batched event details                         |
