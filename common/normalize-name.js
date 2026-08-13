@@ -9,7 +9,7 @@ const normalizeName = (name) =>
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/[\s-]+/g, "")
     .replace(/ ([^)]+)$/g, "")
-    .replace(/[.,/#!$%^&*;:{}=\-_`'~()]/g, "")
+    .replace(/[.,/#!$%^&*;:{}=\-_`'‘’‚‛~()]/g, "")
     .trim();
 
 module.exports = normalizeName;
