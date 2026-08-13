@@ -348,6 +348,11 @@ const getScreen = (screen) => {
   return screenNumber;
 };
 
+// An unparseable date used to become `time: NaN`, which the past-performance
+// filter in `sortAndFilterMovies` then discarded exactly like a screening that
+// had genuinely already happened — silently dropping the showing before schema
+// validation could reject it. Throw here so a broken date parser fails at the
+// venue that produced it.
 const createPerformance = ({
   date,
   notesList = [],
@@ -356,19 +361,25 @@ const createPerformance = ({
   status = {},
   accessibility,
   format,
-}) => ({
-  time: date.getTime(),
-  notes: notesList
-    .map((value) => value?.trim())
-    .filter((value) => !!value)
-    .join("\n")
-    .trim(),
-  bookingUrl: typeof url === "function" ? url() : encodeURI(url),
-  screen: getScreen(screen),
-  status,
-  accessibility,
-  format,
-});
+}) => {
+  if (!(date instanceof Date) || Number.isNaN(date.getTime())) {
+    throw new Error(`createPerformance: invalid date (received ${date})`);
+  }
+
+  return {
+    time: date.getTime(),
+    notes: notesList
+      .map((value) => value?.trim())
+      .filter((value) => !!value)
+      .join("\n")
+      .trim(),
+    bookingUrl: typeof url === "function" ? url() : encodeURI(url),
+    screen: getScreen(screen),
+    status,
+    accessibility,
+    format,
+  };
+};
 
 // Venues hand booking for some screenings over to the organiser running them —
 // the Lexi lists "Japanese Film Club: Kamikaze Girls" but sends bookings to
