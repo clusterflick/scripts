@@ -2,35 +2,17 @@ const path = require("node:path");
 const {
   readJSON,
   basicNormalize,
-  sanitizeRichText,
   generateShowingId,
   createAccessibility,
   createFormat,
   convertNamesTextToList,
 } = require("../../common/utils");
 const { createOverview, createPerformance } = require("../../common/utils");
-const { parseDate } = require("./utils");
+const { parseDate, getEventDescription } = require("./utils");
 const attributes = require("./attributes");
 const { venueMatchesCinema } = require("../../common/source-utils");
 const { isNotNonFilmEvent } = require("../../common/is-non-film-event");
-
-function getEventDescription(details) {
-  if (!details) return "";
-
-  const context =
-    details.components?.eventDescription || details.props?.pageProps?.context;
-
-  // Bail if we can't traverse down to get the right context data
-  if (!context || context === details) return "";
-
-  return (
-    context.structuredContent?.modules
-      .filter(({ type }) => basicNormalize(type) === "text")
-      .map(({ text }) => sanitizeRichText(text))
-      .join("\n\n")
-      .replace(/\n\n+/gi, "\n\n") || ""
-  );
-}
+const { isLineUpEvent, expandLineUpEvent } = require("./expand-line-up-events");
 
 function isExcludedEvent({ name, tags }) {
   // Exclude events which are medical screenings
@@ -133,8 +115,9 @@ async function findEvents(cinema) {
         },
       },
     } = event;
-    // Split venue name before matching (e.g., "BFI Southbank, London" -> "BFI Southbank")
-    const [venueName] = name.split(/,| - /);
+    // Split venue name before matching (e.g., "BFI Southbank, London" -> "BFI
+    // Southbank", "The Beehive Pub | Tottenham" -> "The Beehive Pub")
+    const [venueName] = name.split(/,| - |\|/);
     // localized_address_display is like "265 Lavender Hill, London, SW11 1JB"
     return venueMatchesCinema(
       cinema,
@@ -145,7 +128,13 @@ async function findEvents(cinema) {
   });
 
   return filteredEvents
-    .map((event) => convertEventbriteEvent(event, moviePages[event.url]))
+    .flatMap((event) =>
+      // A handful of listings pack a whole season of screenings into one event,
+      // with the individual dates written out only in the body text.
+      isLineUpEvent(event)
+        ? expandLineUpEvent(event, moviePages[event.url])
+        : convertEventbriteEvent(event, moviePages[event.url]),
+    )
     .filter(isNotNonFilmEvent);
 }
 

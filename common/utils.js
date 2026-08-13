@@ -113,10 +113,32 @@ const convertToList = (value) => {
   return list.filter((item) => item !== "");
 };
 
+// Lists have already been split on their separators by the time this runs, so
+// an Oxford comma leaves the conjunction stranded at the front of the last
+// item: "Mo Chara, DJ Próvaí, and Michael Fassbender" splits to
+// [..., "and Michael Fassbender"], which the joiner never matches. Strip a
+// leading conjunction as well as splitting on the joined form. Matched with a
+// trailing space so names that merely start with the word ("Andrea Arnold")
+// are left alone.
 const splitConjoinedItemsInList = (list, joiner = " and ") => {
+  const conjunction = joiner.trim().toLowerCase();
+  const removeLeadingJoiner = (value) => {
+    // An item that is nothing but the conjunction is left-over punctuation
+    // rather than a value, so drop it.
+    if (value.toLowerCase() === conjunction) return "";
+    return value.toLowerCase().startsWith(`${conjunction} `)
+      ? value.slice(conjunction.length + 1).trim()
+      : value;
+  };
+
   return list.reduce(
     (updatedList, item) =>
-      updatedList.concat(item.split(joiner).map((value) => value.trim())),
+      updatedList.concat(
+        item
+          .split(joiner)
+          .map((value) => removeLeadingJoiner(value.trim()))
+          .filter((value) => value !== ""),
+      ),
     [],
   );
 };
