@@ -381,27 +381,76 @@ const createPerformance = ({
   };
 };
 
+// Compared with any leading "www." dropped, so a venue linking to
+// "www.japanesefilm.club" and a source linking to "japanesefilm.club" are
+// recognised as the same organiser. Returns undefined for anything that isn't
+// an absolute URL, which callers must treat as "identifies nothing".
+const getBookingHost = (bookingUrl = "") => {
+  try {
+    return new URL(bookingUrl).host.replace(/^www\./, "").toLowerCase();
+  } catch {
+    return undefined;
+  }
+};
+
 // Venues hand booking for some screenings over to the organiser running them —
 // the Lexi lists "Japanese Film Club: Kamikaze Girls" but sends bookings to
 // japanesefilm.club, and Coldharbour Blue sends its film club nights to
 // thecliq.app — and the source covering that organiser finds the same screening.
 // That gives us the same screening twice, so drop the sourced copy wherever the
-// venue already books through the same URL.
-const removeAlreadyListedPerformances = (movies, listOfSourcedEvents) => {
+// venue already books through the organiser.
+//
+// The two sides rarely agree on the link. For one screening of Shall We Dance?
+// the Phoenix linked japanesefilm.club's film page while japanesefilm.club
+// linked its own per-performance page; for Night Is Short, Walk On Girl the Rio
+// linked a japanesefilm.club seat-select URL. Only the Lexi happened to publish
+// the identical URL, so matching on the URL alone deduplicated one venue in
+// three. Time plus booking host identifies the screening however each side
+// spells the link.
+//
+// Bookings on the venue's own domain are excluded from that: they say nothing
+// about who is running the night, and a venue can genuinely have two of them at
+// the same time across screens (the Phoenix opens Con Air and As Good as It Gets
+// together). Those still have to match exactly to be dropped.
+const removeAlreadyListedPerformances = (
+  movies,
+  listOfSourcedEvents,
+  { venueDomain } = {},
+) => {
+  const venueHost = getBookingHost(venueDomain);
+  if (!venueHost) {
+    throw new Error(
+      `removeAlreadyListedPerformances: venueDomain must be an absolute URL (received ${venueDomain})`,
+    );
+  }
+
+  const venuePerformances = movies.flatMap(({ performances }) => performances);
+
   const venueBookingUrls = new Set(
-    movies
-      .flatMap(({ performances }) => performances)
+    venuePerformances
       .map(({ bookingUrl }) => basicNormalize(bookingUrl))
       // A performance without a booking URL identifies nothing, so it must not
       // become a key that matches other performances lacking one too.
       .filter((bookingUrl) => bookingUrl !== ""),
   );
 
+  const venueHandedOverSlots = new Set(
+    venuePerformances
+      .map(({ time, bookingUrl }) => ({
+        time,
+        host: getBookingHost(bookingUrl),
+      }))
+      .filter(({ host }) => host && host !== venueHost)
+      .map(({ time, host }) => `${time}|${host}`),
+  );
+
   return listOfSourcedEvents.map((event) => ({
     ...event,
-    performances: event.performances.filter(
-      ({ bookingUrl }) => !venueBookingUrls.has(basicNormalize(bookingUrl)),
-    ),
+    performances: event.performances.filter(({ time, bookingUrl }) => {
+      if (venueBookingUrls.has(basicNormalize(bookingUrl))) return false;
+      const host = getBookingHost(bookingUrl);
+      return !(host && venueHandedOverSlots.has(`${time}|${host}`));
+    }),
   }));
 };
 

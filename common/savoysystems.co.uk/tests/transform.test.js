@@ -74,6 +74,28 @@ describe("Savoy Systems transform", () => {
     expect(movies[1].performances).toEqual([]);
   });
 
+  // The two sides rarely publish the same link: the Phoenix sends bookings to
+  // the organiser's film page while the organiser links its own per-performance
+  // page, and the Rio sends them to an organiser seat-select URL.
+  it.each([
+    ["a film page", "https://japanesefilm.club/kamikaze-girls/"],
+    [
+      "a seat-select url",
+      "https://japanesefilm.club/seat-select/?scr_film=5831&scr_id=6a4bb4e4461de",
+    ],
+  ])(
+    "drops a sourced performance the venue sends to the same organiser via %s",
+    async (_, venueBookingUrl) => {
+      const movies = await runTransform(venueBookingUrl, [
+        sourcedEvent(CLUB_BOOKING_URL),
+      ]);
+
+      expect(movies).toHaveLength(2);
+      expect(movies[0].performances).toHaveLength(1);
+      expect(movies[1].performances).toEqual([]);
+    },
+  );
+
   it("keeps a sourced performance the venue books elsewhere", async () => {
     const movies = await runTransform(VENUE_BOOKING_URL, [
       sourcedEvent(CLUB_BOOKING_URL),
@@ -84,6 +106,21 @@ describe("Savoy Systems transform", () => {
     expect(movies[0].performances[0].bookingUrl).toEqual(VENUE_BOOKING_URL);
     expect(movies[1].performances).toHaveLength(1);
     expect(movies[1].performances[0].bookingUrl).toEqual(CLUB_BOOKING_URL);
+  });
+
+  // A venue can open two screens at the same minute, so its own ticketing
+  // domain says nothing about which screening a sourced event is. Only an
+  // identical url drops one of those.
+  it("keeps a sourced performance sharing a time with a booking on the venue's own domain", async () => {
+    const otherVenueBookingUrl =
+      "https://thelexicinema.co.uk/TheLexiCinema.dll/WhatsOn?f=10072999";
+    const movies = await runTransform(VENUE_BOOKING_URL, [
+      sourcedEvent(otherVenueBookingUrl),
+    ]);
+
+    expect(movies).toHaveLength(2);
+    expect(movies[1].performances).toHaveLength(1);
+    expect(movies[1].performances[0].bookingUrl).toEqual(otherVenueBookingUrl);
   });
 
   it("never treats a missing booking url as a match", async () => {

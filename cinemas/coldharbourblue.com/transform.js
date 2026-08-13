@@ -113,7 +113,9 @@ async function transform({ monthPages, eventPages }, sourcedEvents) {
     (events) => events,
   );
   return listedMovies.concat(
-    removeAlreadyListedPerformances(listedMovies, listOfSourcedEvents),
+    removeAlreadyListedPerformances(listedMovies, listOfSourcedEvents, {
+      venueDomain: attributes.domain,
+    }),
   );
 }
 

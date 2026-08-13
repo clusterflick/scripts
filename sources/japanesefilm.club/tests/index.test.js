@@ -23,6 +23,7 @@ describe(`${attributes.name}`, () => {
 
   describe.each([
     {
+      id: "phoenixcinema.co.uk",
       name: "Phoenix Cinema",
       alternativeNames: [
         "Phoenix Cinema London",
@@ -34,51 +35,55 @@ describe(`${attributes.name}`, () => {
       expectedMatches: 1,
     },
     {
+      id: "riocinema.org.uk",
       name: "Rio Cinema",
       alternativeNames: ["The Rio", "Rio Cinema Dalston"],
       address: "107 Kingsland High Street, London, E8 2PB, UK",
       geo: { lat: 51.54970097438604, lon: -0.07550473771574956 },
       expectedMatches: 1,
     },
-  ])("$name", ({ name, alternativeNames, address, geo, expectedMatches }) => {
-    it(
-      "retrieve and find events",
-      async () => {
-        const { movieListPage, moviePages, venuePages } = await retrieve();
+  ])(
+    "$name",
+    ({ id, name, alternativeNames, address, geo, expectedMatches }) => {
+      it(
+        "retrieve and find events",
+        async () => {
+          const { movieListPage, moviePages, venuePages } = await retrieve();
 
-        // Make sure the input looks roughly correct
-        expect(movieListPage).toBeTruthy();
-        expect(movieListPage).toContain("Now Showing");
-        expect(moviePages).toBeTruthy();
-        expect(Object.keys(moviePages)).toHaveLength(3);
-        expect(Object.keys(venuePages)).toHaveLength(5);
+          // Make sure the input looks roughly correct
+          expect(movieListPage).toBeTruthy();
+          expect(movieListPage).toContain("Now Showing");
+          expect(moviePages).toBeTruthy();
+          expect(Object.keys(moviePages)).toHaveLength(3);
+          expect(Object.keys(venuePages)).toHaveLength(5);
 
-        readJSON.mockImplementation(() => ({
-          movieListPage,
-          moviePages,
-          venuePages,
-        }));
+          readJSON.mockImplementation(() => ({
+            movieListPage,
+            moviePages,
+            venuePages,
+          }));
 
-        const cinema = { name, alternativeNames, address, geo };
-        const output = await findEvents(cinema);
-        expect(
-          output.every((movie) =>
-            Object.prototype.hasOwnProperty.call(movie, "matchingHints"),
-          ),
-        ).toBe(true);
+          const cinema = { id, name, alternativeNames, address, geo };
+          const output = await findEvents(cinema);
+          expect(
+            output.every((movie) =>
+              Object.prototype.hasOwnProperty.call(movie, "matchingHints"),
+            ),
+          ).toBe(true);
 
-        const data = JSON.parse(JSON.stringify(output))
-          .map(removeMatchingHints)
-          .map(addTestCategory);
+          const data = JSON.parse(JSON.stringify(output))
+            .map(removeMatchingHints)
+            .map(addTestCategory);
 
-        // Make sure the data looks roughly correct
-        expect(schemaValidate(data)).toBe(true);
-        expect(data).toHaveLength(expectedMatches);
-        expect(data).toMatchSnapshot();
-      },
-      isRecording ? 600_000 : undefined,
-    );
-  });
+          // Make sure the data looks roughly correct
+          expect(schemaValidate(data)).toBe(true);
+          expect(data).toHaveLength(expectedMatches);
+          expect(data).toMatchSnapshot();
+        },
+        isRecording ? 600_000 : undefined,
+      );
+    },
+  );
 
   it("returns no events for unrelated cinema", async () => {
     const { movieListPage, moviePages, venuePages } = await retrieve();

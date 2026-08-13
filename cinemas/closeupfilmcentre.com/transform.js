@@ -9,6 +9,7 @@ const {
   removeAlreadyListedPerformances,
 } = require("../../common/utils");
 const normalizeTitle = require("../../common/normalize-title");
+const attributes = require("./attributes");
 const ticketSourceAttributes = require("../../sources/ticketsource.co.uk/attributes");
 const { parseDate } = require("./utils");
 
@@ -243,9 +244,9 @@ async function transform({ moviePages }, sourcedEvents) {
   // still checked against the venue's, in case another source has covered a
   // screening the site does list under a different title.
   const transformed = movies.concat(
-    removeAlreadyListedPerformances(movies, unlistedEvents).filter(
-      ({ performances }) => performances.length > 0,
-    ),
+    removeAlreadyListedPerformances(movies, unlistedEvents, {
+      venueDomain: attributes.domain,
+    }).filter(({ performances }) => performances.length > 0),
   );
 
   // Nothing downstream enforces this: `combine` keys showings by id and would

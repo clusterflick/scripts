@@ -169,10 +169,21 @@ async function findEvents(cinema) {
 
     if (matchingPerformances.length === 0) continue;
 
+    // One film page covers a tour, listing the same film at several venues, so
+    // the slug alone is not unique: Shall We Dance? played the Phoenix and
+    // Regent Street, and both venues were handed the same showing id. `combine`
+    // keys showings by id, so the later venue overwrote the earlier one and
+    // carried off its performances. The cinema is what separates them, and
+    // without its id the collision would come straight back.
+    if (!cinema.id) {
+      throw new Error(
+        `Cannot build a showing id for ${url}: the cinema has no id`,
+      );
+    }
     const slug = url.replace(/\/$/, "").split("/").pop();
 
     events.push({
-      showingId: generateShowingId(attributes, slug),
+      showingId: generateShowingId(attributes, `${slug}-${cinema.id}`),
       title: movie.title,
       url: movie.url,
       overview: createOverview({
