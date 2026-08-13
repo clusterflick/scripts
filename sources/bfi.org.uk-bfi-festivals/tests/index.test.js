@@ -30,18 +30,20 @@ describe(attributes.name, () => {
 
   describe.each([
     {
+      id: "bfi.org.uk-southbank",
       name: "BFI Southbank",
       alternativeNames: [],
       geo: { lat: 51.50661723132389, lon: -0.11579438330226112 },
       expectedMatches: 72,
     },
     {
+      id: "curzon.com-mayfair",
       name: "Curzon Mayfair",
       alternativeNames: [],
       geo: { lat: 51.506734218879856, lon: -0.14792424440091292 },
       expectedMatches: 0,
     },
-  ])("$name", ({ name, alternativeNames, geo, expectedMatches }) => {
+  ])("$name", ({ id, name, alternativeNames, geo, expectedMatches }) => {
     it(
       "retrieve and find events",
       async () => {
@@ -54,7 +56,7 @@ describe(attributes.name, () => {
 
         readJSON.mockImplementation(() => ({ movieListPages, moviePages }));
 
-        const cinema = { name, alternativeNames, geo };
+        const cinema = { id, name, alternativeNames, geo };
         const output = await findEvents(cinema);
         expect(
           output.every((movie) =>

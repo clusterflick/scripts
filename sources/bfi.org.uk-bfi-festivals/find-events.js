@@ -225,11 +225,22 @@ async function findEvents(cinema) {
 
     if (performances.length === 0) continue;
 
+    // A festival article covers every screening of the film, which for a
+    // multi-venue festival spans more than one cinema, so the permalink alone is
+    // not unique. `combine` keys showings by id, so two venues sharing one would
+    // see the later overwrite the earlier and carry off its performances. Flare
+    // is BFI Southbank only, but the festival list this source is built around
+    // is the point at which that stops being true.
+    if (!cinema.id) {
+      throw new Error(
+        `Cannot build a showing id for ${articleUrl}: the cinema has no id`,
+      );
+    }
     const slug = new URL(articleUrl).searchParams.get(
       "BOparam::WScontent::loadArticle::permalink",
     );
     events.push({
-      showingId: generateShowingId(attributes, slug),
+      showingId: generateShowingId(attributes, `${slug}-${cinema.id}`),
       title,
       url: articleUrl,
       overview,
