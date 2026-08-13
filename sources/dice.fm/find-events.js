@@ -9,8 +9,33 @@ const {
 } = require("../../common/utils");
 const attributes = require("./attributes");
 const { venueMatchesCinema } = require("../../common/source-utils");
+const normalizeVenueName = require("../../common/normalize-venue-name");
 
-function convertDiceEvent(event) {
+// DICE labels events with the promoter behind them — "Presented by Midweek
+// Cinema." — which for a screening names the film club programming it. Venues
+// promoting their own nights repeat their own name there, which tells a reader
+// nothing, so only keep a presenter that isn't the venue itself.
+const getPresentedByNote = (event, cinema) => {
+  const presenter = (event.presented_by || "")
+    .replace(/^\s*presented by\s+/i, "")
+    .replace(/\.\s*$/, "")
+    .trim();
+  if (!presenter) return undefined;
+
+  const venueNames = [
+    event.venues?.[0]?.name,
+    cinema.name,
+    ...(cinema.alternativeNames || []),
+  ].filter(Boolean);
+  const isVenueItself = venueNames.some(
+    (name) => normalizeVenueName(name) === normalizeVenueName(presenter),
+  );
+  if (isVenueItself) return undefined;
+
+  return `Presented by ${presenter}`;
+};
+
+function convertDiceEvent(event, cinema) {
   const url = `https://dice.fm/event/${event.perm_name}`;
   const eventId = event.perm_name.match(/^([^-]+)/)?.[1];
 
@@ -28,6 +53,7 @@ function convertDiceEvent(event) {
     performances: [
       createPerformance({
         date: startDate,
+        notesList: [getPresentedByNote(event, cinema)],
         url,
         accessibility: createAccessibility(event.name, {}, overview),
         format: createFormat(event.name, {}, overview),
@@ -66,7 +92,7 @@ async function findEvents(cinema) {
       self.findIndex((e) => e.perm_name === event.perm_name) === index,
   );
 
-  return uniqueEvents.map((event) => convertDiceEvent(event));
+  return uniqueEvents.map((event) => convertDiceEvent(event, cinema));
 }
 
 module.exports = findEvents;
