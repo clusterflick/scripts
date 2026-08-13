@@ -19,6 +19,9 @@ const VENUE_SLUGS = [
   "vauxhallone", // Vauxhall
   "midweekcinema", // Midweek Cinema(prev Debut Nights)
   "colfilmslimited", // The London Colombian Film Festival
+  "csc2", // CSC
+  "na258", // People's Emergency Briefing
+  "ibraaz", // Ibraaz
 ];
 
 function retrieveVenuePage(getPage, slug) {
