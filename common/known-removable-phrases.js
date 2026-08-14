@@ -1437,6 +1437,7 @@ const knownRemovablePhrases = [
   "MINI MORNING MOVIE PREMIERE",
   "Movie Premiere",
   "Film Premiere",
+  " a premiere",
   "premiere",
   "IMAX Preview",
   "IMAX exclusive preview week",
