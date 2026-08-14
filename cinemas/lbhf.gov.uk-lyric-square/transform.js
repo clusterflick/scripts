@@ -17,9 +17,13 @@ function extractEventSlug(url) {
 async function transform({ movieListPages }, sourcedEvents) {
   // Events can recur across pages, so dedupe by URL.
   const eventsMap = new Map();
+  let listedEvents = 0;
 
   for (const html of movieListPages) {
-    for (const event of extractJsonLdEvents(html)) {
+    const events = extractJsonLdEvents(html);
+    listedEvents += events.length;
+
+    for (const event of events) {
       if (event.eventStatus === "https://schema.org/EventCancelled") continue;
       if (eventsMap.has(event.url)) continue;
 
@@ -59,8 +63,11 @@ async function transform({ movieListPages }, sourcedEvents) {
 
   const movies = Array.from(eventsMap.values());
 
-  if (movies.length === 0) {
-    throw new Error("No movies found — page structure may have changed");
+  // The films here are the BID's summer festival film nights, so outside the
+  // festival the calendar legitimately carries no films at all. Only a calendar
+  // with no events whatsoever means the page structure has changed.
+  if (listedEvents === 0) {
+    throw new Error("No events found — page structure may have changed");
   }
 
   const listOfSourcedEvents = Object.values(sourcedEvents).flatMap(

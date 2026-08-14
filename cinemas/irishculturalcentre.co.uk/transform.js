@@ -26,6 +26,12 @@ async function transform({ movieListPage }, sourcedEvents) {
     const dateText = getText(paragraphs.eq(0)).trim(); // e.g., "Wed 18 February 2026"
     const timeText = getText(paragraphs.eq(1)); // e.g., "Doors: 7.30pm; Starts: 8pm"
 
+    // Multi-session runs (courses, workshop series) give a date range instead
+    // of a date, e.g. "Mon 05 October 2026 - Mon 09 November 2026". The listing
+    // page carries no per-session dates, so there's nothing to build
+    // performances from - skip the entry rather than invent dates for it.
+    if (/\d{4}\s*[-–—]/.test(dateText)) return;
+
     // Extract the start time from "Starts: 8pm", "Doors: 7.30pm; Starts: 8pm",
     // "7pm Doors, 8pm Start", or a bare time range like "6.30pm-8.30pm"
     const startsMatch =
