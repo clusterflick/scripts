@@ -1,0 +1,24 @@
+module.exports = {
+  id: "instagram.com-buchanhall",
+  name: "Buchan Tenants and Residents Hall",
+  alternativeNames: [
+    "Buchan Road TRA Community Hall",
+    "Buchan Road Community Hall",
+    "Buchan Hall",
+    "Buchan Hall Nunhead",
+    "Buchan Tenants and Residents Association Hall",
+    "Buchan Tenants & Residents Association Hall",
+    "Buchan Community Hall",
+  ],
+  domain: "https://www.instagram.com/buchanhall",
+  socials: {
+    letterboxd: null,
+    twitter: null,
+    instagram: "buchanhall",
+  },
+  url: "https://www.instagram.com/buchanhall/",
+  address: "86 Buchan Road, London, SE15 3HQ, UK",
+  geo: { lat: 51.46567010353971, lon: -0.053315723946760804 },
+  structure: "solo",
+  type: "Community Centre",
+};
