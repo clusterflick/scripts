@@ -54,7 +54,7 @@ async function discoverVenues() {
   const results = [];
   for (const [, venue] of venueMap.entries()) {
     // Split venue name before matching (e.g., "BFI Southbank, London" -> "BFI Southbank")
-    const [venueName] = venue.name.split(/[,|]/i);
+    const [venueName] = venue.name.split(/[,|]/);
     const matchingCinema = findMatchingCinema(
       knownCinemas,
       venueName,

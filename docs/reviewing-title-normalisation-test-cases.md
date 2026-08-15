@@ -266,18 +266,18 @@ grep '"output"' common/tests/test-titles.json | grep 'film festival' | head -10
 ```
 
 **A strand name being a plausible title on its own does not make it an
-exception.** A dash-prefix strand like `"Reel Talk"` reads as a standalone
-title too, and does appear alone elsewhere in `test-titles.json` — that is
-**not** a reason to special-case it with a one-off correction instead of the
-standard dash→colon + removable-phrase pattern. Generalise it the normal way
+exception.** A dash-prefix strand like `"Reel Talk"` reads as a standalone title
+too, and does appear alone elsewhere in `test-titles.json` — that is **not** a
+reason to special-case it with a one-off correction instead of the standard
+dash→colon + removable-phrase pattern. Generalise it the normal way
 (`["Reel Talk - ", "Reel Talk: "]` + `"Reel Talk: "` in
 `known-removable-phrases.js`) and let it strip consistently everywhere the
 strand name appears with a colon or dash. A bare `"Reel Talk"` with nothing
-after it is unaffected, since there's no separator for the correction to
-fire on.
+after it is unaffected, since there's no separator for the correction to fire
+on.
 
-Generalising like this can flip the expected output of an **existing**
-locked-in test case that happens to share the same prefix — e.g.
+Generalising like this can flip the expected output of an **existing** locked-in
+test case that happens to share the same prefix — e.g.
 `"Reel Talk - sustaining a healthy career in TV"` previously expected
 `"reel talk"`; after generalising, the correct expectation is
 `"sustaining a healthy career in tv"`. That's not a regression to work around,

@@ -1,3 +1,4 @@
+const normalizeName = require("./normalize-name");
 const normalizeVenueName = require("./normalize-venue-name");
 const distanceInKmBetweenCoordinates = require("./distance-in-km-between-coordinates");
 
@@ -24,17 +25,80 @@ function sortVenuesByEventCount(venues) {
   return venues.sort((a, b) => b.events.length - a.events.length);
 }
 
+// A platform listing a venue by its street address rarely spells it the way we
+// do - "107 Kingsland High St" against the "107 Kingsland High Street" we hold
+// - so fold the words that differ. Kept to address comparison rather than
+// applied to names generally, so "Abbey Road Studios" stays as it is.
+const ADDRESS_WORDS = {
+  street: "st",
+  road: "rd",
+  avenue: "av",
+  ave: "av",
+  drive: "dr",
+  lane: "ln",
+  place: "pl",
+  square: "sq",
+  court: "ct",
+  crescent: "cres",
+  gardens: "gdns",
+  terrace: "ter",
+  one: "1",
+  two: "2",
+  three: "3",
+  four: "4",
+  five: "5",
+  six: "6",
+  seven: "7",
+  eight: "8",
+  nine: "9",
+  ten: "10",
+};
+
+function normalizeAddressLine(text) {
+  return normalizeName(
+    text
+      .toLowerCase()
+      .replace(/\./g, "")
+      .split(/\s+/)
+      .map((word) => ADDRESS_WORDS[word] || word)
+      .join(" "),
+  );
+}
+
 /**
- * Check whether a venue's name matches a cinema's name or any of its
- * alternative names
- * @param {Object} cinema - Cinema object with name and alternativeNames
+ * The first line of a cinema's address, when it identifies a building rather
+ * than a street. A bare street name ("Strand") names a road that a venue could
+ * sit anywhere along, so it isn't safe to recognise a venue by; requiring a
+ * building number also keeps neighbours apart, as 107 Kingsland High Street is
+ * the Rio and 117 is Dalston Superstore.
+ * @param {Object} cinema - Cinema object with an address
+ * @returns {string|null} Normalized address line, or null if it isn't specific enough
+ */
+function getAddressLineKey(cinema) {
+  const firstLine = (cinema.address || "").split(",")[0].trim();
+  if (!firstLine || !/\d/.test(firstLine)) return null;
+  return normalizeAddressLine(firstLine);
+}
+
+/**
+ * Check whether a venue's name matches a cinema's name, any of its alternative
+ * names, or the street address it sits at
+ * @param {Object} cinema - Cinema object with name, alternativeNames and address
  * @param {string} venueName - Name of the venue to match
  * @returns {boolean} True if any known name for the cinema matches
  */
 function cinemaNameMatches(cinema, venueName) {
   const names = (cinema.alternativeNames || []).concat(cinema.name);
-  return names.some(
-    (name) => normalizeVenueName(name) === normalizeVenueName(venueName),
+  const normalizedVenueName = normalizeVenueName(venueName);
+  if (names.some((name) => normalizeVenueName(name) === normalizedVenueName)) {
+    return true;
+  }
+
+  // Some platforms carry the street address in the venue name field instead
+  const addressLineKey = getAddressLineKey(cinema);
+  return (
+    addressLineKey !== null &&
+    addressLineKey === normalizeAddressLine(venueName)
   );
 }
 

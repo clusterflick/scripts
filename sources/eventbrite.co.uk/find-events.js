@@ -116,8 +116,12 @@ async function findEvents(cinema) {
       },
     } = event;
     // Split venue name before matching (e.g., "BFI Southbank, London" -> "BFI
-    // Southbank", "The Beehive Pub | Tottenham" -> "The Beehive Pub")
-    const [venueName] = name.split(/,| - |\|/);
+    // Southbank", "The Beehive Pub | Tottenham" -> "The Beehive Pub").
+    // Deliberately not splitting on a dash: it's as likely to precede the part
+    // that identifies the venue as to follow it, and "Vue Cinema London -
+    // Westfield Stratford" truncated to "Vue Cinema London" matches nothing.
+    // Must stay in step with discover-venues.js, which reports on the same names.
+    const [venueName] = name.split(/[,|]/);
     // localized_address_display is like "265 Lavender Hill, London, SW11 1JB"
     return venueMatchesCinema(
       cinema,

@@ -1,7 +1,11 @@
 module.exports = {
   id: "earthackney.co.uk",
   name: "EartH",
-  alternativeNames: ["EartH Theatre"],
+  alternativeNames: [
+    "EartH Theatre",
+    "EartH (Evolutionary Arts Hackney)",
+    "Evolutionary Arts Hackney",
+  ],
   domain: "https://earthackney.co.uk",
   socials: {
     letterboxd: null,

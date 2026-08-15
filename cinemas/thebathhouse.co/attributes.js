@@ -1,7 +1,7 @@
 module.exports = {
   id: "thebathhouse.co",
   name: "The Bath House",
-  alternativeNames: ["The Baths", "Hackney Bath House"],
+  alternativeNames: ["The Baths", "Hackney Bath House", "Eastway Baths"],
   domain: "https://thebathhouse.co",
   socials: {
     letterboxd: null,

@@ -23,6 +23,20 @@ const neighbour = {
 
 const knownCinemas = [ritzy, neighbour];
 
+// Two venues a few doors apart on one street, which is what stops an address
+// line being treated as though it identified the street rather than a building
+const rio = {
+  id: "riocinema.org.uk",
+  name: "Rio Cinema",
+  alternativeNames: ["The Rio"],
+  address: "107 Kingsland High Street, London, E8 2PB, UK",
+};
+const dalstonSuperstore = {
+  id: "dalstonsuperstore.com",
+  name: "Dalston Superstore",
+  address: "117 Kingsland High Street, London, E8 2PB, UK",
+};
+
 describe("cinemaNameMatches", () => {
   test("matches the cinema's own name and its alternative names", () => {
     expect(cinemaNameMatches(ritzy, "the ritzy picturehouse")).toBe(true);
@@ -31,6 +45,42 @@ describe("cinemaNameMatches", () => {
 
   test("rejects a name the cinema isn't known by", () => {
     expect(cinemaNameMatches(ritzy, "Brixton Storeys")).toBe(false);
+  });
+
+  test("matches a venue listed under the cinema's street address", () => {
+    expect(cinemaNameMatches(rio, "107 Kingsland High St")).toBe(true);
+    expect(cinemaNameMatches(rio, "107 Kingsland High Street")).toBe(true);
+  });
+
+  test("folds a spelled-out building number", () => {
+    const uclEast = {
+      id: "ucl.ac.uk-ucl-east-community-cinema",
+      name: "UCL East Community Cinema",
+      address: "1 Pool St, London, E20 2AF, UK",
+    };
+
+    expect(cinemaNameMatches(uclEast, "One Pool Street")).toBe(true);
+  });
+
+  test("keeps neighbours on the same street apart", () => {
+    expect(cinemaNameMatches(dalstonSuperstore, "107 Kingsland High St")).toBe(
+      false,
+    );
+    expect(cinemaNameMatches(rio, "117 Kingsland High St")).toBe(false);
+  });
+
+  test("ignores an address line that names a street rather than a building", () => {
+    const strand = {
+      id: "kcl.ac.uk-strand",
+      name: "Strand Building",
+      address: "Strand, London, WC2R 2LS, UK",
+    };
+
+    expect(cinemaNameMatches(strand, "Strand")).toBe(false);
+  });
+
+  test("matches a venue whose name carries a screen number", () => {
+    expect(cinemaNameMatches(ritzy, "The Ritzy - Screen 2")).toBe(true);
   });
 });
 
