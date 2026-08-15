@@ -5,6 +5,7 @@ const findRottenTomatoesMatch = require("./find-rotten-tomatoes-match");
 const findMetacriticMatch = require("./find-metacritic-match");
 const findLetterboxdMatch = require("./find-letterboxd-match");
 const findImdbMatch = require("./find-imdb-match");
+const findBechdelMatch = require("./find-bechdel-match");
 const findMovieDbMatch = require("./find-moviedb-match");
 const {
   withPlaywrightSession,
@@ -80,6 +81,8 @@ async function match(source) {
         matchData = await findMovieDbMatch(movieInfo);
       } else if (source === "imdb") {
         matchData = await findImdbMatch(movie);
+      } else if (source === "bechdel") {
+        matchData = await findBechdelMatch(movie);
       } else {
         console.log(`\t❌ Error`);
         throw new Error(`Unknown source "${source}"`);
