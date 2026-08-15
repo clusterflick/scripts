@@ -38,17 +38,30 @@ async function retrieve() {
 
     try {
       moviePages[href] = await fetchText(href);
+      continue;
     } catch (error) {
       if (error.status !== 404) throw error;
-
-      const fallbackUrl = buildFallbackUrl(text);
-      if (!fallbackUrl) throw error;
-
-      console.log(
-        `[kilntheatre.com] ${href} returned 404; retrying with ${fallbackUrl} (built from "${text}")`,
-      );
-      moviePages[fallbackUrl] = await fetchText(fallbackUrl);
     }
+
+    const fallbackUrl = buildFallbackUrl(text);
+    if (fallbackUrl && fallbackUrl !== href) {
+      try {
+        console.log(
+          `[kilntheatre.com] ${href} returned 404; retrying with ${fallbackUrl} (built from "${text}")`,
+        );
+        moviePages[fallbackUrl] = await fetchText(fallbackUrl);
+        continue;
+      } catch (error) {
+        if (error.status !== 404) throw error;
+      }
+    }
+
+    // The listing links to a film that has no published page — usually an
+    // unpublished event post. Nothing to retrieve, so skip it rather than
+    // failing the whole venue for one broken link.
+    console.log(
+      `[kilntheatre.com] Skipping "${text}" - ${href} returned 404 and no published page could be found`,
+    );
   }
 
   return { movieListPage, moviePages };
