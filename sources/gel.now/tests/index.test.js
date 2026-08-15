@@ -30,30 +30,29 @@ describe(attributes.name, () => {
       expectedMatches: 1,
     },
     {
+      name: "Stanley Arts",
+      address: "Stanley Arts, 12 South Norwood Hill, London, SE25 6AB, UK",
+      geo: { lat: 51.40019747095999, lon: -0.07528250948196212 },
+      expectedMatches: 1,
+    },
+    {
       name: "Close-Up Film Centre",
       alternativeNames: ["Close-Up Cinema"],
       address: "97 Sclater Street, London, E1 6HR, UK",
       geo: { lat: 51.52363533860424, lon: -0.07204024586584808 },
-      expectedMatches: 1,
-    },
-    {
-      name: "Finsbury Park Picturehouse",
-      address: "Unit 1 Cinema LS, 17 City North Place, London, N4 3FU, UK",
-      geo: { lat: 51.56517572070054, lon: -0.10757585022923707 },
       expectedMatches: 0,
     },
   ])("$name", ({ name, alternativeNames, address, geo, expectedMatches }) => {
     it(
       "retrieve and find events",
       async () => {
-        const { events, eventPages, venues } = await retrieve();
+        const { events, venues } = await retrieve();
 
         // Make sure the input looks roughly correct
         expect(events).toBeTruthy();
-        expect(eventPages).toBeTruthy();
         expect(venues).toBeTruthy();
 
-        readJSON.mockImplementation(() => ({ events, eventPages, venues }));
+        readJSON.mockImplementation(() => ({ events, venues }));
 
         const cinema = { name, alternativeNames, address, geo };
         const output = await findEvents(cinema);

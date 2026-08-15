@@ -1,5 +1,4 @@
 const path = require("node:path");
-const cheerio = require("cheerio");
 const {
   readJSON,
   generateShowingId,
@@ -11,14 +10,15 @@ const {
 const { venueMatchesCinema } = require("../../common/source-utils");
 const attributes = require("./attributes");
 
-// The event page always links to its venue ("/venues/241") even though the
-// events API doesn't expose that relationship - the venue's own address and
-// postcode live in the separate venues API instead, keyed by that id.
-function extractVenueId(html) {
-  const $ = cheerio.load(html);
-  const href = $('a[href^="/venues/"]').first().attr("href");
-  const match = href && href.match(/^\/venues\/(\d+)/);
-  return match ? match[1] : null;
+function eventMatchesCinema(event, cinema, venuesById) {
+  return (event.venues || []).some((venue) => {
+    const fullVenue = venuesById.get(`${venue.id}`) || venue;
+    const eventAddress = [fullVenue.address, fullVenue.city, fullVenue.postcode]
+      .filter(Boolean)
+      .join(", ");
+
+    return venueMatchesCinema(cinema, fullVenue.name, null, { eventAddress });
+  });
 }
 
 function buildEvent(event) {
@@ -53,32 +53,12 @@ async function findEvents(cinema) {
     return [];
   }
 
-  const { events = [], eventPages = {}, venues = [] } = data;
+  const { events = [], venues = [] } = data;
   const venuesById = new Map(venues.map((venue) => [`${venue.id}`, venue]));
 
-  const matchedEvents = [];
-  for (const event of events) {
-    const html = eventPages[event.id];
-    if (!html) continue;
-
-    const venueId = extractVenueId(html);
-    if (!venueId) continue;
-
-    const venue = venuesById.get(venueId);
-    if (!venue) continue;
-
-    const eventAddress = [venue.address, venue.city, venue.postcode]
-      .filter(Boolean)
-      .join(", ");
-
-    if (!venueMatchesCinema(cinema, venue.name, null, { eventAddress })) {
-      continue;
-    }
-
-    matchedEvents.push(buildEvent(event));
-  }
-
-  return matchedEvents;
+  return events
+    .filter((event) => eventMatchesCinema(event, cinema, venuesById))
+    .map(buildEvent);
 }
 
 module.exports = findEvents;
