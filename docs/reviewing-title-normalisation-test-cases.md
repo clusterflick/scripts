@@ -265,6 +265,27 @@ before deciding a prefix is "intentional":
 grep '"output"' common/tests/test-titles.json | grep 'film festival' | head -10
 ```
 
+**A strand name being a plausible title on its own does not make it an
+exception.** A dash-prefix strand like `"Reel Talk"` reads as a standalone
+title too, and does appear alone elsewhere in `test-titles.json` — that is
+**not** a reason to special-case it with a one-off correction instead of the
+standard dash→colon + removable-phrase pattern. Generalise it the normal way
+(`["Reel Talk - ", "Reel Talk: "]` + `"Reel Talk: "` in
+`known-removable-phrases.js`) and let it strip consistently everywhere the
+strand name appears with a colon or dash. A bare `"Reel Talk"` with nothing
+after it is unaffected, since there's no separator for the correction to
+fire on.
+
+Generalising like this can flip the expected output of an **existing**
+locked-in test case that happens to share the same prefix — e.g.
+`"Reel Talk - sustaining a healthy career in TV"` previously expected
+`"reel talk"`; after generalising, the correct expectation is
+`"sustaining a healthy career in tv"`. That's not a regression to work around,
+it's the fix reaching every affected case — update the old entry's `output` to
+match rather than reintroducing a one-off to preserve it. Run the full test
+suite after any generalisation and treat every newly-failing assertion as a
+candidate for updating, not a sign the generalisation was wrong.
+
 ## Adding a test case
 
 When you add or correct a rule, also add an entry to `test-titles.json`:
@@ -287,10 +308,11 @@ more historical examples — always search there first.
 
 ### Simple prefix removal
 
-| Input                                                    | Output                 | Fix                                                                                                                                            |
-| -------------------------------------------------------- | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| `Preschool Pics: Finding Nemo`                           | `finding nemo`         | Added `"Preschool Pics:"` to known-removable-phrases, following the same pattern as `"Babykino:"`                                              |
-| `Little Venice Film Festival 2026: Swiss Films in Focus` | `swiss films in focus` | Added `"Little Venice Film Festival 2026:"` — all festival colon-prefixes should be stripped; confirmed by searching existing festival entries |
+| Input                                                    | Output                 | Fix                                                                                                                                                                              |
+| -------------------------------------------------------- | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Preschool Pics: Finding Nemo`                           | `finding nemo`         | Added `"Preschool Pics:"` to known-removable-phrases, following the same pattern as `"Babykino:"`                                                                                |
+| `Little Venice Film Festival 2026: Swiss Films in Focus` | `swiss films in focus` | Added `"Little Venice Film Festival 2026:"` — all festival colon-prefixes should be stripped; confirmed by searching existing festival entries                                   |
+| `Fashion & Cinema: Sense and Sensibility`                | `sense sensibility`    | Added `"Fashion & Cinema:"` to known-removable-phrases — a distinct strand from `"Fashion in Film Festival:"` (already handled), but the same "colon-prefix strand name" pattern |
 
 ### Suffix removal
 
@@ -301,11 +323,12 @@ more historical examples — always search there first.
 
 ### Dash-prefix and plus-prefix problem
 
-| Input                                                    | Bad output                           | Good output        | Fix                                                                                                                                                                      |
-| -------------------------------------------------------- | ------------------------------------ | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `Community Cinema at UCL East - Monk in Pieces`          | `community cinema at ucl east`       | `monk in pieces`   | Correction `"Community Cinema at UCL East - " → "Community Cinema at UCL East: "` + phrase `"Community Cinema at UCL East:"`                                             |
-| `Goethe-Kino - Mascha Schilinski - The Sound of Falling` | `goethekino`                         | `sound of falling` | Correction `"Goethe-Kino - Mascha Schilinski - " → "Goethe-Kino & Mascha Schilinski: "` + phrase `"Goethe-Kino & Mascha Schilinski:"`                                    |
-| `Argentine season launch: Live music + Wild Tales`       | `argentine season launch live music` | `wild tales`       | Correction `"Argentine season launch: Live music + " → "Argentine season launch: Live music & "` + phrase `"Argentine season launch: Live music & "` (`+` → `&` pattern) |
+| Input                                                    | Bad output                           | Good output        | Fix                                                                                                                                                                                                                                                                                                                                                |
+| -------------------------------------------------------- | ------------------------------------ | ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Community Cinema at UCL East - Monk in Pieces`          | `community cinema at ucl east`       | `monk in pieces`   | Correction `"Community Cinema at UCL East - " → "Community Cinema at UCL East: "` + phrase `"Community Cinema at UCL East:"`                                                                                                                                                                                                                       |
+| `Goethe-Kino - Mascha Schilinski - The Sound of Falling` | `goethekino`                         | `sound of falling` | Correction `"Goethe-Kino - Mascha Schilinski - " → "Goethe-Kino & Mascha Schilinski: "` + phrase `"Goethe-Kino & Mascha Schilinski:"`                                                                                                                                                                                                              |
+| `Argentine season launch: Live music + Wild Tales`       | `argentine season launch live music` | `wild tales`       | Correction `"Argentine season launch: Live music + " → "Argentine season launch: Live music & "` + phrase `"Argentine season launch: Live music & "` (`+` → `&` pattern)                                                                                                                                                                           |
+| `Reel Talk - The Christophers`                           | `reel talk`                          | `the christophers` | Correction `"Reel Talk - " → "Reel Talk: "` + phrase `"Reel Talk: "` — standard pattern, same as the other rows. Also flips the expected output of the pre-existing `"Reel Talk - sustaining a healthy career in TV"` entry from `"reel talk"` to `"sustaining a healthy career in tv"`; update that entry too rather than leaving it inconsistent |
 
 ### Em-dash variant
 
