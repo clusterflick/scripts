@@ -61,6 +61,7 @@ function normalizeTitle(title, options) {
     // Remove prefix separators which will cause later processing to strip the wrong section
     [/Star Wars: Ep(?:isode)? ([IV]+) - /i, "Star Wars: Episode $1 "], // Remove the dash
     ["Rafadan Tayfa - Kapadokya", "Rafadan Tayfa: Kapadokya"],
+    ["Reel Talk - ", "Reel Talk: "],
     ["Average Rob -", "Average Rob:"],
     ["Roger Waters -", "Roger Waters:"],
     ["CBeebies Musical - ", "CBeebies Musical: "],
