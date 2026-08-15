@@ -531,7 +531,7 @@ function normalizeTitle(title, options) {
     [/Surprise Film( \d{1,2}\.\d{1,2}\.\d{1,2})?/i, "mystery movie"],
     [/(\w+ Film Festival: )?Surprise Screening/i, "mystery movie"],
     [
-      /^(free |monthly )?(mystery|surprise) ([\w+]+ )?([\w+]+ )?(night|film|movie|cinema|screening|matinees?):?( Nov| \d)?/i,
+      /^(free |monthly )?(mystery|surprise) ([\w+]+ )?([\w+]+ )?(night|film|movie|cinema|screening|matinees?|thriller):?( Nov| \d)?/i,
       "mystery movie",
     ],
     [
@@ -977,6 +977,7 @@ function normalizeTitle(title, options) {
     ["Nostalghia", "Nostalgia"],
     ["RETURN TO THE TATLER + ", "RETURN TO THE TATLER: "],
     ["SEYTAN + ", "SEYTAN & "],
+    ["Sons/", "Sons /"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
