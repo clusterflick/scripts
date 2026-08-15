@@ -864,6 +864,7 @@ const knownRemovablePhrases = [
   "Habeshaview Monthly Cinema:",
   "Holocaust Memorial Day:",
   "Hayley Mills:",
+  "Halloween Cinema:",
   "Halloween with Distorted Frame:",
   "Christmas with Distorted Frame:",
   "Violet Hour x Distorted Frame:",

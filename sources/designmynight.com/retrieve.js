@@ -5,25 +5,38 @@ const API_BASE_URL = "https://api-content.designmynight.com/search/occurrences";
 const AVAILABILITY_API_URL =
   "https://ticketing.designmynight.com/api/events/availability";
 
-const paramsForMoviesInLondon = {
+const paramsForLondon = {
   region_id: "59ef1720e445807f4c267a14",
   type: "event",
-  type_of_event: "59ef1737e445807f4c268548",
 };
 
+// The search matches an event against any one of its type_of_event tags, so a
+// screening tagged only "Pop-Up Cinema" - as the Rivoli Ballroom's Halloween
+// run is - never appears under "Film Screenings". These are the only two
+// cinema tags the search knows; it takes a tag's slug as well as its id, and
+// the slug is the only handle we have for Pop-Up Cinema.
+const movieEventTypes = ["film-screenings", "pop-up-cinema"];
+
 async function retrieve() {
-  let page = 1;
-  let lastPage = 1;
   let movieListPages = [];
 
-  while (page <= lastPage) {
-    const params = new URLSearchParams({ page, ...paramsForMoviesInLondon });
-    const url = `${API_BASE_URL}?${params}`;
-    const pageData = await fetchJson(url);
+  for (const typeOfEvent of movieEventTypes) {
+    let page = 1;
+    let lastPage = 1;
 
-    lastPage = pageData.meta.last_page;
-    movieListPages = movieListPages.concat(pageData.payload);
-    page++;
+    while (page <= lastPage) {
+      const params = new URLSearchParams({
+        page,
+        ...paramsForLondon,
+        type_of_event: typeOfEvent,
+      });
+      const url = `${API_BASE_URL}?${params}`;
+      const pageData = await fetchJson(url);
+
+      lastPage = pageData.meta.last_page;
+      movieListPages = movieListPages.concat(pageData.payload);
+      page++;
+    }
   }
 
   const eventIds = [

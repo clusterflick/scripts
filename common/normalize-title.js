@@ -978,6 +978,7 @@ function normalizeTitle(title, options) {
     ["RETURN TO THE TATLER + ", "RETURN TO THE TATLER: "],
     ["SEYTAN + ", "SEYTAN & "],
     ["Sons/", "Sons /"],
+    ["Halloween Cinema - ", "Halloween Cinema: "],
   ];
 
   corrections.forEach(([phrase, replacement]) => {

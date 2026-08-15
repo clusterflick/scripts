@@ -19,30 +19,32 @@ console.log = () => {};
 
 describe(`${attributes.name}`, () => {
   setupPolly(isRecording, __dirname);
-  jest.useFakeTimers().setSystemTime(new Date("2025-10-30"));
+  jest.useFakeTimers().setSystemTime(new Date("2026-08-15"));
 
   describe.each([
-    {
-      name: "Art'otel London Hoxton",
-      geo: { lat: 51.52617208235077, lon: -0.08333904348646137 },
-      expectedMatches: 11,
-    },
-    {
-      name: "The Heathcote And Star",
-      geo: { lat: 51.56601799398466, lon: 0.0021807985196629935 },
-      expectedMatches: 1,
-    },
+    // Tagged "Pop-Up Cinema" rather than "Film Screenings", so this venue is
+    // only found because retrieve searches both tags
     {
       name: "Rivoli Ballroom",
-      geo: { lat: 51.45534799455751, lon: -0.03712389962985756 },
-      expectedMatches: 7,
+      geo: { lat: 51.4552064642324, lon: -0.0371281587298912 },
+      expectedMatches: 1,
     },
+    // Listed as "The Soho Hotel", so it is only found via its alternative name
     {
-      name: "JOIA",
-      geo: { lat: 51.48079445146031, lon: -0.14519212515961233 },
-      expectedMatches: 9,
+      name: "Firmdale The Soho Hotel",
+      alternativeNames: ["Soho Hotel"],
+      geo: { lat: 51.51415539168877, lon: -0.13367249962787486 },
+      expectedMatches: 1,
     },
-  ])("$name", ({ name, geo, expectedMatches }) => {
+    // Every screening this venue lists is cancelled at source, so the
+    // availability API returns no occurrences for any of them
+    {
+      name: "The Fellowship Cinema",
+      alternativeNames: ["The Fellowship Inn", "The Fellowship Inn Cinema"],
+      geo: { lat: 51.433108588491734, lon: -0.019912945972504828 },
+      expectedMatches: 0,
+    },
+  ])("$name", ({ name, alternativeNames, geo, expectedMatches }) => {
     it(
       "retrieve and find events",
       async () => {
@@ -50,13 +52,13 @@ describe(`${attributes.name}`, () => {
 
         // Make sure the input looks roughly correct
         expect(movieListPages).toBeTruthy();
-        expect(Object.keys(movieListPages)).toHaveLength(83);
+        expect(Object.keys(movieListPages)).toHaveLength(51);
         expect(moviePages).toBeTruthy();
-        expect(Object.keys(moviePages)).toHaveLength(29);
+        expect(Object.keys(moviePages)).toHaveLength(2);
 
         readJSON.mockImplementation(() => ({ movieListPages, moviePages }));
 
-        const cinema = { name, geo };
+        const cinema = { name, alternativeNames, geo };
         const output = await findEvents(cinema);
         expect(
           output.every((movie) =>
