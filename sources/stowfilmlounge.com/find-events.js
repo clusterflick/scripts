@@ -75,6 +75,29 @@ function extractVenueName(h3Text) {
   return h3Text.replace(eventMatcher, "").trim();
 }
 
+const getHost = (url) => new URL(url).host.replace(/^www\./, "").toLowerCase();
+
+/**
+ * Build an event id from the booking url, ignoring any query string, fragment
+ * or trailing slash so the same event always produces the same showing id.
+ *
+ * Bookings on our own domain use a known "/buytickets/p/{slug}" shape, so the
+ * last path segment identifies the event on its own. Bookings handed to an
+ * external ticketing site can take any shape - a last segment of "tickets" or
+ * "book" would be shared by every event on that site - so use the host and the
+ * whole path for those.
+ */
+function extractEventId(bookingUrl) {
+  const segments = new URL(bookingUrl).pathname.split("/").filter(Boolean);
+  if (segments.length === 0) {
+    throw new Error(`Unable to get an event id from booking url ${bookingUrl}`);
+  }
+
+  const host = getHost(bookingUrl);
+  if (host === getHost(attributes.domain)) return segments.at(-1);
+  return [host, ...segments].join("-");
+}
+
 /**
  * Parse a single event section using Squarespace block structure
  */
@@ -131,8 +154,7 @@ function parseEventSection($, section) {
   const { title, ...overview } = parseFilmInfo(filmText);
   const eventDate = parseEventDate(dateText, timesText);
 
-  // Use the booking path slug as the event ID (e.g., "/buytickets/p/iswear" -> "iswear")
-  const eventId = bookingPath.split("/").pop();
+  const eventId = extractEventId(bookingUrl);
   const synopsis = descriptions.join("\n\n");
 
   return {
