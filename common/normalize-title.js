@@ -714,6 +714,7 @@ function normalizeTitle(title, options) {
     ["Big Mama Thornton - ", "Big Mama Thornton: "],
     ["SinoUK - ", "SinoUK: "],
     [/Romford Film Festival 2026\s*- /i, "Romford Film Festival 2026: "],
+    [/HKFF 2026-27\s*- /i, "HKFF 2026-27: "],
     ["Queer Rebel of English Pop", "Queer Rebel of British Pop"],
     ["Afronauts + ", "Afronauts & "],
     ["Fight Club: 4K Restoration", "Fight Club"],
@@ -745,6 +746,10 @@ function normalizeTitle(title, options) {
     [/ search 4 square$/i, "search for squarepants"],
     ["John & Yoko in NYC", "John & Yoko Live in NYC"],
     ["Man Marked for Death, Twenty Years Later", "Twenty Years Later"],
+    [
+      "An unremarkable man. A remarkable journey.",
+      "The Unlikely Pilgrimage of Harold Fry",
+    ],
     ["Scott Walker: 30th Century Man", "Scott Walker: 30 Century Man"],
     [/Raakaasaa?/i, "Rākāsā"],
     ["NAN GOLDIN - IN MY LIFE", "NAN GOLDIN: IN MY LIFE"],
@@ -752,8 +757,12 @@ function normalizeTitle(title, options) {
     ["Dacoit: A Love Story", "Dacoit"],
     ["Elvira Notari: Beyond the Silence", "Elvira Notari: Beyond Silence"],
     ["National Emergency Briefing Film", "People's Emergency Briefing"],
-    ["National Emergency Briefing", "People's Emergency Briefing"],
+    [
+      /National Emergency Briefing(?: organisation)?/i,
+      "People's Emergency Briefing",
+    ],
     ["People's Emergency Briefing Twickenham", "People's Emergency Briefing"],
+    ["The The People's Emergency Briefing", "The People's Emergency Briefing"],
     ["TESTMortal Kombat IITEST", "Mortal Kombat II"],
     [
       /^(?:Dog Friendly: )?(?:Parent and Baby: )?The Mandalorian/i,
