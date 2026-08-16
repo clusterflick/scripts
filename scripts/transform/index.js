@@ -119,8 +119,24 @@ async function transform(
       // can't be reliably detected
       "rooftopcinemaclub.com-peckham",
       "rooftopcinemaclub.com-stratford",
-      // - TEMPORARY -
-      "coldharbourblue.com",
+      // - TEMPORARY: gel.now film filter changeover -
+      // gel.now retrieve now asks for the film category only, so the gigs and
+      // club nights we used to take from these venues have gone from this run
+      // but are still in the previous release. Their event pages stay up after
+      // we stop listing them, so the URL check passes and recovery would put
+      // every one of them straight back. isNonFilmEvent doesn't catch them -
+      // it matches named event series, not whole categories.
+      // Remove these once one release has been published without them; by then
+      // the recovery baseline is clean and the entries do nothing.
+      "ibraaz.org",
+      "ivyhousenunhead.com",
+      "linktr.ee-thecarpetshoppeckham",
+      "maydayrooms.org",
+      "newcrossinn.com",
+      "pelicanhouse.org",
+      "spanners.club",
+      "stanleyarts.org",
+      "thehorsehospital.com",
     ];
     const previousReleaseData = optedOut.includes(location)
       ? []
