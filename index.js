@@ -110,21 +110,40 @@ const setupDirectory = async (type) => {
 
     const {
       buildRegistry,
-      getPresentMovies,
+      buildVenueRegistry,
+      getPresent,
       readPreviousRegistry,
     } = require("./scripts/registry");
 
-    const present = await getPresentMovies(
+    const present = await getPresent(
       path.join(process.cwd(), "transformed-data", "current"),
     );
     const previousRegistry = await readPreviousRegistry(
       path.join(process.cwd(), "previous-registry", "seen-registry.json"),
     );
+    const previousVenueRegistry = await readPreviousRegistry(
+      path.join(process.cwd(), "previous-registry", "venue-registry.json"),
+    );
 
     await setupDirectory("diffed-data");
     await writeJSON(
       path.join(process.cwd(), "diffed-data", "seen-registry.json"),
-      buildRegistry({ present, previousRegistry, release }),
+      buildRegistry({
+        present: present.movies,
+        previousRegistry,
+        release,
+      }),
+    );
+    // A separate artifact rather than another key: the two have different
+    // retention rules, and nothing that reads one should have to parse the
+    // other. Only the venue registry is safe for a backfill to rewrite.
+    await writeJSON(
+      path.join(process.cwd(), "diffed-data", "venue-registry.json"),
+      buildVenueRegistry({
+        present: present.venues,
+        previousRegistry: previousVenueRegistry,
+        release,
+      }),
     );
     return;
   }

@@ -73,6 +73,16 @@ that have stopped appearing. It is a fold over one release plus its own previous
 output — it never reads the previous `transform` release, so it stays correct
 when the diff has nothing to report.
 
+The same stage publishes `venue-registry.json` from the same pass over the
+release: `lastPerformance` for every venue that had one, so a venue with nothing
+on can still say when it last screened something. Two artifacts rather than two
+keys — nothing is ever pruned from the venue registry (the movie retention
+window is a work budget that does not apply), nothing reading one has to parse
+the other, and only this one is safe for a backfill to rewrite. A venue that has
+never had a performance gets no entry; its absence is the record. Nothing in
+this repo consumes it: the website merges it onto its venues at build time, the
+same way it merges the ratings out of `data-matched`.
+
 `departed` runs after `combine` in the same job. Movies the registry knows about
 that `combine` did not produce have finished their run, and it writes them to
 `combined-data/departed-movies.json` so the website can keep rendering pages
