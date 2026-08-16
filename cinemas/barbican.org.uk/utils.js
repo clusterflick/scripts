@@ -67,6 +67,40 @@ const convertDurationStringToMinutes = (duration) => {
   throw new Error(`Unrecognised duration format: "${duration}"`);
 };
 
+// The Barbican advertises accessibility provisions at event level - both in the
+// "These accessibility provisions are available for this event" panel and in the
+// ticketing product name - as a roll-up over every date the event has covered.
+// It does not shrink as dates pass, so an event whose only captioned screening
+// has already happened carries on advertising captions. Event-level provisions
+// can only be attributed to a performance when the event has exactly one.
+//
+// The byline is what makes that safe to establish, because it describes the
+// event rather than the dates still on sale. A run renders both ends of its
+// original range ("Fri 29 May — Thu 16 Jul 2026") even once a single date is
+// left, and a single day holding two showings renders the date on its own
+// ("Wed 23 Sep 2026"). Only a genuine one-off renders a time of day.
+const isOneOffEventByline = ($) => {
+  const $bylineTime = $(".event-byline__date time");
+  if ($bylineTime.length !== 1) return false;
+  return /,\s*\d{1,2}:\d{2}$/.test(getText($bylineTime));
+};
+
+// Names of the event's ticketing products, read from the analytics dataLayer.
+// They spell out provisions the listing markup leaves off, e.g. "Outdoor
+// Cinema: Weathering With You (12A) (AD & Captioned)". An event with no
+// products makes no claim - absence means no provisions to add, not an error.
+const getTicketProductNames = ($) => {
+  const dataLayer = $("script")
+    .map((i, el) => $(el).html())
+    .get()
+    .find((contents) => contents && contents.includes("var dataLayer"));
+  const match = dataLayer?.match(/var dataLayer\s*=\s*(\[[\s\S]*?\]);/);
+  if (!match) return [];
+  return JSON.parse(match[1]).flatMap(({ eventInfo = [] }) =>
+    eventInfo.map(({ name }) => name),
+  );
+};
+
 const getYear = (value) => value.match(/^(?:[^\s]+\s+)?(\d{4})\s+\w/i)?.[1];
 
 const getDirectorDuration = (value) => {
@@ -81,4 +115,6 @@ module.exports = {
   getYear,
   getDirectorDuration,
   sanitizeDatetime,
+  isOneOffEventByline,
+  getTicketProductNames,
 };

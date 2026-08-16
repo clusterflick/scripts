@@ -8,12 +8,15 @@ const {
   createFormat,
   basicNormalize,
   generateShowingId,
+  getTitleAccessibility,
 } = require("../../common/utils");
 const {
   convertDurationStringToMinutes,
   getYear,
   getDirectorDuration,
   sanitizeDatetime,
+  isOneOffEventByline,
+  getTicketProductNames,
 } = require("./utils");
 const attributes = require("./attributes");
 
@@ -124,6 +127,23 @@ function getListingTags(data) {
     );
 }
 
+// Provisions advertised for the event as a whole, usable only where they cannot
+// belong to any date but this one: a single performance, a single ticketing
+// product, and a byline marking a genuine one-off. Multi-date runs stay on their
+// per-performance markers, as the event-level roll-up keeps advertising
+// provisions belonging to dates that have already been and gone.
+function getOneOffEventAccessibility(listingPage, performanceCount) {
+  if (performanceCount !== 1) return {};
+
+  const $ = cheerio.load(listingPage);
+  if (!isOneOffEventByline($)) return {};
+
+  const productNames = getTicketProductNames($);
+  if (productNames.length !== 1) return {};
+
+  return getTitleAccessibility(productNames[0]);
+}
+
 function processPerformancePage(
   data,
   listingPage,
@@ -133,9 +153,14 @@ function processPerformancePage(
 ) {
   const $ = cheerio.load(data);
   const listingTags = getListingTags(listingPage);
+  const $instances = $(".instance-listing");
+  const eventAccessibility = getOneOffEventAccessibility(
+    listingPage,
+    $instances.length,
+  );
 
   const performances = [];
-  $(".instance-listing").each(function () {
+  $instances.each(function () {
     const $bookingButton = $(this).find(".instance-listing__button a");
 
     const status = {
@@ -145,20 +170,23 @@ function processPerformancePage(
     const tags = getText($(this).find(".instance-accessibility-tags"))
       .split(/\s+/)
       .map((tag) => tag.trim().toLowerCase());
+    const performanceAccessibility = {
+      audioDescription: tags.includes("ad"),
+      relaxed:
+        tags.includes("rel") ||
+        !!listingTags.find((tag) =>
+          basicNormalize(tag).includes("relaxed screening"),
+        ),
+      hardOfHearing: tags.includes("cap"),
+      babyFriendly: !!listingTags.find((tag) =>
+        basicNormalize(tag).includes("parent and baby"),
+      ),
+    };
     const accessibility = createAccessibility(
       title,
-      {
-        audioDescription: tags.includes("ad"),
-        relaxed:
-          tags.includes("rel") ||
-          !!listingTags.find((tag) =>
-            basicNormalize(tag).includes("relaxed screening"),
-          ),
-        hardOfHearing: tags.includes("cap"),
-        babyFriendly: !!listingTags.find((tag) =>
-          basicNormalize(tag).includes("parent and baby"),
-        ),
-      },
+      // getTitleAccessibility only sets provisions it matched, so the event-level
+      // values can add to the per-performance markers but never take away.
+      { ...performanceAccessibility, ...eventAccessibility },
       getDescription(listingPage),
     );
     const format = createFormat(title, {}, getDescription(listingPage));
