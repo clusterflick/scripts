@@ -22,6 +22,7 @@ const nonFilmEvents = [
   /Connected Intelligence/i,
   /Annual Meeting/i,
   /cancer research symposium/i,
+  /Thrift Event/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>

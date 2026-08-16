@@ -55,6 +55,7 @@ const knownRemovablePhrases = [
   "(SCX) ",
   "(Screen X) ",
   "(Screening) ",
+  "(Outdoors)",
   "(3D) ",
   "(3D):",
   "Live In 3D",
@@ -467,6 +468,10 @@ const knownRemovablePhrases = [
   "starring RMD",
   "– Dr Ghassan Abu-Sittah Speaks",
   "– The Play",
+  "Commentary Track Screening",
+  "Movie, Cabaret & Pizza",
+  "pre film mixer",
+  "with family sound workshop",
 
   // Prefixes
   "(4DX) ",
@@ -1268,6 +1273,8 @@ const knownRemovablePhrases = [
   "YouTube Ciné-Club:",
   "Yugesh Walia and the Birmingham Film Workshop:",
   "What's Up Daiquiris, bag switcheroos:",
+  "HKFF 2026-27:",
+  "A presentation hosted by Kingston Friends of the Earth on behalf of ",
 
   // Weirdly specific fixes
   "愛殺",
