@@ -462,7 +462,12 @@ the "There are currently N supported venues" count above the table:
 |
 ```
 
-Sort by the displayed venue name exactly as written, leading `The` included.
+Sort by the displayed venue name exactly as written, leading `The` included. The
+table is in `localeCompare` order — case-insensitive and accent-folded — which
+is what puts `Ciné-Real` before `Cineworld Bexleyheath` and `SCRT` between
+`Science Museum` and `SET Social`. A plain byte-order sort gets both of those
+wrong, so compare with `localeCompare` rather than `<`.
+
 Every row is padded to the same width, so pad the new one to match its
 neighbours — `npx prettier --check README.md` will catch it if you don't.
 
