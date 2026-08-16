@@ -30,9 +30,11 @@ describe(attributes.name, () => {
       expectedMatches: 1,
     },
     {
-      name: "Stanley Arts",
-      address: "Stanley Arts, 12 South Norwood Hill, London, SE25 6AB, UK",
-      geo: { lat: 51.40019747095999, lon: -0.07528250948196212 },
+      // Runs a busy music programme alongside its screenings, so this covers
+      // the film category filter holding: gigs at a matched venue stay out.
+      name: "The Horse Hospital",
+      address: "Colonnade, Bloomsbury, London, WC1N 1JD, UK",
+      geo: { lat: 51.52278577182352, lon: -0.12441771517528585 },
       expectedMatches: 1,
     },
     {

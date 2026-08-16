@@ -11,12 +11,19 @@ const VENUES_API_URL = `${API_DOMAIN}/api/venues`;
 // happening.
 const PAGE_SIZE = 100;
 
+// Most of what gel.now sells is gigs and club nights, and plenty of it happens
+// at venues we hold as cinemas, so matching on venue alone drags the whole
+// music programme in. This is the category the site's own "film" filter
+// applies; it matches any event carrying the tag, so a screening also tagged
+// gig or talk still comes through.
+const CATEGORY = "film";
+
 async function fetchAllListings() {
   const events = [];
   let offset = 0;
 
   while (true) {
-    const url = `${LISTINGS_API_URL}?limit=${PAGE_SIZE}&offset=${offset}&sort_by=date_asc`;
+    const url = `${LISTINGS_API_URL}?limit=${PAGE_SIZE}&offset=${offset}&sort_by=date_asc&category=${CATEGORY}`;
     const page = await fetchJson(url);
     events.push(...page.events);
 
