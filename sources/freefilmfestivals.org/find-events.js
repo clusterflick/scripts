@@ -111,12 +111,18 @@ function parseEvent(html, url, festival) {
   }
 
   const $venue = $(".tribe-events-meta-group-venue");
-  const venueName = getText($venue.find(".tribe-venue"));
-  if (!venueName) {
+  const venueText = getText($venue.find(".tribe-venue"));
+  if (!venueText) {
     throw new Error(
       `Unable to extract a venue name from ${url} — the page structure may have changed`,
     );
   }
+
+  // Some venues have been entered with their address, or the district they sit
+  // in, trailing the name ("The Mud Room, 25 Leigham Ct Rd, London SW16 2ND").
+  // Both are carried by the address field below, so keep only the part before
+  // the first comma rather than holding the whole string as a venue name.
+  const venueName = venueText.split(",")[0].trim();
 
   // Venue addresses run across several elements, one per line; collapse them
   // back into the single comma-separated string postcode matching expects.
