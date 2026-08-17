@@ -67,6 +67,7 @@ const ignoredIds = [
   1234194, // Test Screening -- https://www.themoviedb.org/movie/1234194-test-screening
   442825, // Cinematography -- https://www.themoviedb.org/movie/442825-cinematografia
   1627130, // Renoir in Love -- https://www.themoviedb.org/movie/-renoir-in-love
+  1361920, // Sinners -- https://www.themoviedb.org/movie/1361920-sinners
 ];
 
 /**
