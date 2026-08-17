@@ -1,0 +1,248 @@
+{
+  "a_b_testing": {
+    "field_under_test": "description",
+    "modified_at": "2026-08-13T12:22:00+00:00",
+    "variants": [
+      "<style type=\"text/css\">\n  @import url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css);\n\n  h2 {\n    margin: 1rem 0 2.5rem;\n  }\n  .text-subtle {\n    color: #000000;\n  }\n  .video-container {\n    margin-bottom: 2.5rem;\n  }\n  .grid img {\n    aspect-ratio: 500 / 333;\n  }\n  .grid img,\n  .video-container video {\n    width: 100%;\n    border-radius: 8px;\n  }\n\n  /* Grey Box Section (2 Columns Layout) */\n  .event-itinerary {\n    margin-bottom: 2.5rem;\n    background-color: #f2f3f3;\n    padding: 1.5rem;\n    border-radius: 0.5rem;\n  }\n  .event-header {\n    margin-bottom: 1.25rem;\n  }\n  .event-content {\n    display: grid;\n    grid-template-columns: repeat(2, 1fr);\n    gap: 1.5rem;\n  }\n  .event-text {\n    display: flex;\n    flex-direction: column;\n    gap: 1rem;\n  }\n  .event-text p {\n    margin: 0;\n  }\n  .event-dates {\n    display: flex;\n    flex-direction: column;\n    gap: 1rem;\n    padding: 0;\n    margin: 0;\n    list-style: none;\n  }\n  .event-dates li {\n    list-style: none;\n    color: #000000;\n    white-space: normal; \n    margin-bottom: 0;\n  }\n\n  .event-summary {\n    font-size: 18px;\n    font-weight: 700;\n    display: flex;\n    justify-content: space-between;\n    align-items: center;\n    width: 100%;\n  }\n  .grid {\n    display: grid;\n    grid-template-columns: 1fr;\n    gap: 2rem;\n    margin: 1.5rem 0 2.5rem;\n  }\n  .grid-item h4 {\n    margin: 1rem 0 0;\n  }\n  .grid-item p {\n    margin: 0;\n  }\n  .hospitality-card {\n    background: url(\"https://images.feverup.com/plan/photo/90b20bd6-19d9-11f0-b532-5ed0d27ab801.jpg\")\n    center/cover no-repeat;\n    border-radius: 0.5rem;\n    padding: 72px 16px 16px;\n    color: #fff;\n    position: relative;\n    text-align: center;\n  }\n  .hospitality-card__overlay {\n    background: rgba(6, 35, 44, 0.8);\n    padding: 1.5rem;\n    border-radius: 0.5rem;\n  }\n  .hospitality-card__features {\n    margin: 15px 0;\n    list-style: none;\n    padding: 0;\n    text-align: left;\n  }\n  .hospitality-card__features li {\n    margin-bottom: 0.75rem;\n  }\n  .hospitality-card__features li:before {\n    content: \"\\f00c\";\n    font-family: \"Font Awesome 5 Free\";\n    font-weight: 900;\n    margin-right: 0.5rem;\n  }\n  .hospitality-card__bottom {\n    display: flex;\n    gap: 1rem;\n    justify-content: center;\n    align-items: center;\n    flex-wrap: wrap;\n  }\n  .hospitality-card__price {\n    font-size: 1.25rem;\n  }\n  .hospitality-card__price strong {\n    font-size: 1.5rem;\n  }\n  .hospitality-card__button-cta {\n    background: linear-gradient(85deg, #bdff69 3.93%, #0cccdb 100%, #bdff69);\n    text-decoration: none !important;\n    font-weight: 800 !important;\n  }\n  .hospitality-card__title {\n    font-family: \"MD Nichrome Test Bold\", sans-serif;\n    font-size: 28px !important;\n    text-align: center;\n    text-transform: uppercase !important;\n  }\n\n  /* Info Cards Styles */\n  .tje-section-title {\n    margin: 2.5rem 0 1.25rem;\n  }\n  .tje-info-grid {\n    display: grid;\n    grid-template-columns: repeat(2, 1fr);\n    gap: 1rem;\n  }\n  .tje-info-card {\n    background: #ffffff;\n    border: 1px solid #e5e7eb;\n    border-radius: 0.5rem;\n    padding: 1.25rem;\n    display: flex;\n    gap: 1rem;\n    align-items: flex-start;\n  }\n  .card-icon {\n    font-size: 1.5rem;\n    line-height: 1;\n  }\n  .card-content {\n    display: flex;\n    flex-direction: column;\n  }\n  .card-label {\n    font-size: 0.75rem;\n    text-transform: uppercase;\n    color: #6b7280;\n    font-weight: 600;\n  }\n  .card-title {\n    font-size: 1rem;\n    font-weight: 700;\n    color: #111827;\n  }\n  .card-title a {\n    color: inherit;\n  }\n  .card-description {\n    font-size: 0.85rem;\n    color: #4b5563;\n    margin-top: 0.25rem;\n  }\n\n  /* Divider & Description Styles */\n  .section-divider {\n    border: 0;\n    border-top: 1px solid #e5e7eb;\n    margin: 2.5rem 0;\n  }\n  .event-description {\n    color: #000000;\n    line-height: 1.6;\n  }\n  .event-description p {\n    margin-bottom: 1rem;\n  }\n\n  /* Extra kept content (non-highlight, non-general-info) */\n  .event-extra {\n    color: #000000;\n    line-height: 1.6;\n    margin-bottom: 1.5rem;\n  }\n  .event-extra p {\n    margin-bottom: 1rem;\n  }\n\n  /* Mobile responsiveness options */\n  @media (max-width: 480px) {\n    .tje-info-grid,\n    .event-content {\n      grid-template-columns: 1fr;\n    }\n  }\n\n  @media (min-width: 600px) {\n    .grid {\n      grid-template-columns: 1fr 1fr;\n    }\n    .hospitality-card__overlay {\n      display: flex;\n      flex-wrap: wrap;\n    }\n    .hospitality-card__title {\n      font-size: 32px !important;\n      text-align: left;\n    }\n    .hospitality-card__overlay h3 {\n      flex: 1 0 100%;\n    }\n    .hospitality-card__features {\n      flex: 1 0 60%;\n    }\n    .hospitality-card__bottom {\n      flex: 1 0 40%;\n      align-content: center;\n    }\n  }\n</style>\n\n<div class=\"tab content1\">\n  <!-- Grey Box Container (Divided into 2 columns) -->\n  <div class=\"event-itinerary\">\n    <h2 class=\"event-header\">Highlights</h2>\n\n    <div class=\"event-content\">\n      <!-- Left Column: Highlights -->\n      <div class=\"event-text text-subtle\">\n        <p>🎉 The ultimate New Year's Eve boat party in London</p>\n        <p>🎆 Amazing views of one of the world's best firework displays</p>\n        <p>🏙️ Take in the London sights and skyline from the open deck with DJs</p>\n      </div>\n\n      <!-- Right Column: Quick facts -->\n      <ul class=\"event-dates\">\n          <li><strong>📍 Location: Crown Pier, Victoria Embankment, City of London, London EC4Y 9AY</strong></li>\n          <li><strong>📅 Date: Saturday 31 December</strong></li>\n      </ul>\n    </div>\n  </div>\n\n  <!-- Info Cards Section -->\n  <h2 class=\"tje-section-title\">General Info</h2>\n\n  <div class=\"tje-info-grid\">\n    <div class=\"tje-info-card\">\n      <span class=\"card-icon\">📅</span>\n      <div class=\"card-content\">\n        <span class=\"card-label\">Date</span>\n        <span class=\"card-title\">Saturday 31 December</span>\n      </div>\n    </div>\n\n    <div class=\"tje-info-card\">\n      <span class=\"card-icon\">🕒</span>\n      <div class=\"card-content\">\n        <span class=\"card-label\">Time</span>\n        <span class=\"card-title\">9 p.m. – 1 a.m.</span>\n      </div>\n    </div>\n\n    <div class=\"tje-info-card\">\n      <span class=\"card-icon\">👤</span>\n      <div class=\"card-content\">\n        <span class=\"card-label\">Age requirement</span>\n        <span class=\"card-title\">18+ with valid ID</span>\n      </div>\n    </div>\n\n    <div class=\"tje-info-card\">\n      <span class=\"card-icon\">♿</span>\n      <div class=\"card-content\">\n        <span class=\"card-label\">Accessibility</span>\n        <span class=\"card-title\">The venue is accessible</span>\n      </div>\n    </div>\n\n    <div class=\"tje-info-card\">\n      <span class=\"card-icon\">📍</span>\n      <div class=\"card-content\">\n        <span class=\"card-label\">Location</span>\n        <span class=\"card-title\">Crown Pier, Victoria Embankment, City of London, London EC4Y 9AY</span>\n      </div>\n    </div>\n\n    <div class=\"tje-info-card\">\n      <span class=\"card-icon\">👗</span>\n      <div class=\"card-content\">\n        <span class=\"card-label\">Dress code</span>\n        <span class=\"card-title\">Dress up</span>\n      </div>\n    </div>\n \n     <div class=\"tje-info-card\">\n      <span class=\"card-icon\">🎁</span>\n      <div class=\"card-content\">\n        <span class=\"card-label\">Gift card</span>\n        <span class=\"card-title\">Gift this experience to your loved ones! Click <a target=\"_blank\" href=\"https://feverup.com/m/63081\" rel=\"noopener noreferrer\">here</a> to check out our gift card.</span>\n      </div>\n    </div>\n  </div>\n\n  <!-- Horizontal Divider Line -->\n  <hr class=\"section-divider\">\n\n  <!-- Description Section -->\n  <div class=\"event-description\">\n    <p><strong>Description</strong></p>\n    <p>Start 2027 with a bang onboard this NYE Fireworks on the Thames with After-Party! Celebrate as the iconic London skyline glimmers in the backdrop, making way for one of the world's most spectacular firework displays. Dance the night away across two decks, with a lineup of London’s finest DJs keeping the energy high. Enjoy drinks from our pub-priced bar as you mingle with friends and make unforgettable memories. Don’t miss out on this magical night; secure your tickets now for NYE Fireworks on the Thames with After-Party in London!</p>\n  </div>\n</div>"
+    ],
+    "allow_unsafe_html": false
+  },
+  "access_rules": [],
+  "available_locales": [
+    "de-DE",
+    "es-ES",
+    "fr-FR",
+    "it-IT"
+  ],
+  "base_locale": "en-GB",
+  "category": "nightlife",
+  "categories": [
+    "Alcoholic Beverages",
+    "Beer",
+    "Distilled Beverages",
+    "Dj Party",
+    "Drinks",
+    "Entertainment",
+    "Family Focused",
+    "Fireworks Display",
+    "Gin",
+    "Musical Event",
+    "New Year",
+    "Nightlife & Concerts",
+    "Seasonal",
+    "Seasonal Category",
+    "Social/Music Events",
+    "Tasting & Drinks",
+    "Vodka",
+    "Wine"
+  ],
+  "city_available_locales": [
+    "de-DE",
+    "fr-FR",
+    "it-IT",
+    "es-ES",
+    "en-GB"
+  ],
+  "city_code": "LON",
+  "city_country_iso_code": "UK",
+  "city_slug": "london",
+  "city_slug_lang": "en",
+  "city_standard_id": 1006886,
+  "custom_label": null,
+  "custom_labels": [],
+  "default_level_display": "disabled",
+  "default_session": {
+    "id": 492282421,
+    "attend_text": "Join in!",
+    "available_tickets": 14,
+    "has_available_tickets": true,
+    "currency": "GBP",
+    "ends_at_iso": "2027-01-01T01:00:00+00:00",
+    "expiration_iso": "2026-12-31T20:45:00+00:00",
+    "label": "General Admission for £150.00",
+    "last_tickets": false,
+    "max_num_tickets": 14,
+    "min_num_tickets": 1,
+    "place_id": 8447,
+    "price": 150,
+    "starts_at_iso": "2026-12-31T21:00:00+00:00",
+    "surcharge_per_ticket": 0,
+    "surcharge_per_transaction": 0,
+    "timezone": "Europe/London"
+  },
+  "session_recommendation": {
+    "recommended_by": "cheapest",
+    "is_fallback": null,
+    "fallback_reason": null,
+    "computed_at": null
+  },
+  "description": "🎁 Gift this experience to your loved ones! Click <a target=\"_blank\" href=\"https://feverup.com/m/63081\" rel=\"noopener noreferrer\">here</a> to check out our gift card.<br>⭐ NYE Fireworks on the Thames with After-Party in London is the ultimate way to ring in the New Year! Get your tickets now for this unforgettable boat party!<br><strong>Highlights</strong><br> 🎉 The ultimate New Year's Eve boat party in London<br> 🎆 Amazing views of one of the world's best firework displays<br> 🏙️ Take in the London sights and skyline from the open deck with DJs<br> 🍺 Drinks available all night from the pub priced bar<br><strong>General Info</strong><br> 📅 Date: Saturday 31 December<br> 🕒 Time: 9 p.m. – 1 a.m.<br> 👤 Age requirement: 18+ with valid ID<br> ♿ Accessibility: Yes<br> 📍 Location: Crown Pier, Victoria Embankment, City of London, London EC4Y 9AY<br> 👗 Dress code: Dress up<br><strong>Description</strong><br> Start 2027 with a bang onboard this NYE Fireworks on the Thames with After-Party! Celebrate as the iconic London skyline glimmers in the backdrop, making way for one of the world's most spectacular firework displays. Dance the night away across two decks, with a lineup of London’s finest DJs keeping the energy high. Enjoy drinks from our pub-priced bar as you mingle with friends and make unforgettable memories. Don’t miss out on this magical night; secure your tickets now for NYE Fireworks on the Thames with After-Party in London!<br>",
+  "enable_image_test_experiment": false,
+  "first_active_session_date": "2026-12-31T21:00:00+00:00",
+  "first_session_date": "2026-12-31T21:00:00+00:00",
+  "gallery": [
+    "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/83ff633c-5467-11ed-8ac2-8a1ecbcac9d2.jpg",
+    "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/3059661e-5468-11ed-b813-763b86925330.jpg",
+    "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/307b0602-5468-11ed-b813-763b86925330.jpg"
+  ],
+  "media_gallery": [
+    {
+      "media_type": "photo",
+      "url": "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/83ff633c-5467-11ed-8ac2-8a1ecbcac9d2.jpg",
+      "playback_rate": null,
+      "poster": null,
+      "g_auto_enabled": true,
+      "category": {
+        "role": "cover_image"
+      }
+    },
+    {
+      "media_type": "photo",
+      "url": "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/3059661e-5468-11ed-b813-763b86925330.jpg",
+      "playback_rate": null,
+      "poster": null,
+      "g_auto_enabled": true,
+      "category": {
+        "role": "default"
+      }
+    },
+    {
+      "media_type": "photo",
+      "url": "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/307b0602-5468-11ed-b813-763b86925330.jpg",
+      "playback_rate": null,
+      "poster": null,
+      "g_auto_enabled": true,
+      "category": {
+        "role": "default"
+      }
+    }
+  ],
+  "has_add_ons": false,
+  "has_seasons": false,
+  "id": 120439,
+  "is_3ds_required": false,
+  "is_calendar_selector": false,
+  "is_multiple_sessions": false,
+  "is_timeless": false,
+  "is_urgent": false,
+  "last_active_session_date": "2026-12-31T21:00:00+00:00",
+  "last_session_date": "2026-12-31T21:00:00+00:00",
+  "logo_url": null,
+  "meta": {
+    "description": "Celebrate New Year's Eve with a boat party at Crown Pier. Enjoy stunning views and DJs. Get your tickets now!",
+    "disallow_indexing": false,
+    "json_ld_overrides": [
+      {
+        "type": "Product"
+      },
+      {
+        "type": "Event"
+      }
+    ],
+    "title": "NYE Fireworks on the Thames Tickets London"
+  },
+  "name": "NYE Fireworks on the Thames with After-Party",
+  "partner_id": 11401,
+  "presentation_settings": {
+    "enable_redeem_vouchers_web": false,
+    "has_affiliate_link": false,
+    "hide_coupon_loyalty": false,
+    "hide_help": false,
+    "hide_similar_plans": false,
+    "hide_recommender_items": false,
+    "is_streaming": false,
+    "show_bsa_toggle": false,
+    "show_important_information": false,
+    "show_place_preview": true,
+    "banners": [],
+    "reviews_from_plan_id": null,
+    "show_reviews_from_main_plan_info": false,
+    "hide_rating": false,
+    "show_loyalty_points_disclaimer": true,
+    "display_calendar_price": false,
+    "display_best_price_indicator": false,
+    "hide_place_selector": false,
+    "show_multimedia_gallery": false,
+    "show_optimized_seating_map": false,
+    "ticket_selector": null,
+    "session_type_presentation_position": null,
+    "show_sessions_grouped_on_ticket_selector": false,
+    "is_real_time": false,
+    "is_onebox_real_time": false,
+    "show_time_slot_best_price": false
+  },
+  "price_info": {
+    "type": "single",
+    "currency": "GBP",
+    "amount": 150,
+    "strikethrough": null
+  },
+  "rating": {
+    "is_hidden": true,
+    "num_ratings": 4,
+    "average": 2.25
+  },
+  "redirect_to": null,
+  "link_out_info": null,
+  "selector_settings": {
+    "type": "single",
+    "view_configuration": "vertical"
+  },
+  "session_selector_type": "date-time",
+  "places": [
+    {
+      "id": 8447,
+      "address": "Crown Pier Directions, Victoria Embankment, EC4Y 0HJ",
+      "has_place_page": true,
+      "is_hidden": false,
+      "latitude": 51.510888,
+      "locale": "en",
+      "longitude": -0.107323,
+      "metro_stations": [
+        {
+          "id": 2128,
+          "images": [
+            "https://applications-media.feverup.com/image/upload/f_auto/fever2/metrostations/android-xxhdpi/london_metro_District.png",
+            "https://applications-media.feverup.com/image/upload/f_auto/fever2/metrostations/android-xxhdpi/london_metro_Circle.png"
+          ],
+          "name": "Blackfriars"
+        },
+        {
+          "id": 2327,
+          "images": [
+            "https://applications-media.feverup.com/image/upload/f_auto/fever2/metrostations/android-xxhdpi/london_metro_District.png",
+            "https://applications-media.feverup.com/image/upload/f_auto/fever2/metrostations/android-xxhdpi/london_metro_Circle.png"
+          ],
+          "name": "Temple"
+        }
+      ],
+      "name": "Crown Pier",
+      "signed_map_url": "https://applications-media.feverup.com/image/upload/f_auto/fever2/place/maps/8447__51.510888_-0.107323.png",
+      "slug": "crown-pier",
+      "display_settings": {
+        "display_calendar_price": false
+      }
+    }
+  ],
+  "should_display_featured_review_answers": false,
+  "slug": null,
+  "translation_languages": [
+    "de",
+    "es",
+    "fr",
+    "it"
+  ],
+  "type": "standard",
+  "youtube_id": null,
+  "queue": null,
+  "timeless_validity_message": null,
+  "has_shop_products": false,
+  "is_purchaseable_as_guest": true,
+  "displayed_min_price_session_type_id": null,
+  "season_pass_plan_id": null,
+  "plan_metadata": null,
+  "cancellation_policy": {
+    "hours_before_session": 48,
+    "minutes_before_session": 0
+  }
+}

@@ -1,0 +1,283 @@
+{
+  "a_b_testing": {
+    "field_under_test": "description",
+    "modified_at": "2026-08-13T15:43:40+00:00",
+    "variants": [
+      "<html lang=\"en\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>Escape The Power Cut (London)</title>\n<style>\n  :root{\n    --bg:#ffffff;\n    --ink:#1f2937;\n    --muted:#6b7280;\n    --card-bg:#f2f2f2;\n    --accent:#0179CA;\n  }\n  *{box-sizing:border-box;}\n  html{-webkit-text-size-adjust:100%;}\n  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif;line-height:1.6;font-size:16px;}\n  .page{width:100%;padding:1.5rem 0;}\n  .wrap{width:100%;}\n\n  /* --- Hero stat block, mirroring Ncerrados' own site pattern --- */\n  .hero-stats{\n    display:grid;\n    grid-template-columns:repeat(3,1fr);\n    gap:.5rem;\n    margin:0 0 1.3rem;\n  }\n  .hero-stat{\n    text-align:center;\n    padding:.9rem .5rem;\n    background:var(--card-bg);\n    border-radius:.6rem;\n  }\n  .hero-stat .fv-hs-label{\n    display:block;\n    font-size:.68rem;\n    font-weight:700;\n    letter-spacing:.06em;\n    text-transform:uppercase;\n    color:var(--muted);\n    margin-bottom:.4rem;\n  }\n  .hero-stat .value{\n    display:block;\n    font-size:1.15rem;\n    font-weight:800;\n    color:var(--ink);\n  }\n  .diff-dots{display:flex;justify-content:center;gap:.28rem;margin-top:.15rem;}\n  .diff-dots .dot{width:.55rem;height:.55rem;border-radius:50%;background:#dbe0e6;}\n  .diff-dots .dot.filled{background:var(--accent);}\n\n  .highlights-title{font-size:1.1rem;font-weight:700;color:var(--ink);margin:0 0 .75rem;}\n  /* Highlights: always a single vertical column, mobile and desktop alike */\n  .highlights-grid{display:flex;flex-direction:column;gap:.75rem;margin:0 0 1.3rem;}\n  .highlight-card{\n    background:var(--card-bg);border-left:4px solid var(--accent);border-radius:.4rem;\n    padding:.85rem 1rem;color:var(--ink);font-size:1rem;\n    display:flex;align-items:center;min-height:auto;\n  }\n\n  .block{margin:0 0 1.3rem;}\n  .block h3{font-size:1.05rem;font-weight:700;color:var(--ink);margin:0 0 .6rem;}\n  .block p{margin:0;color:var(--ink);}\n  .block a{color:var(--accent);font-weight:600;text-decoration:underline;}\n  .block ul{margin:.4rem 0 0;padding-left:1.2rem;}\n  .block ol{margin:.4rem 0 0;padding-left:1.2rem;}\n  .block li{margin-bottom:.3rem;}\n\n  /* Warning box: same copy colour as the rest of the page, only the background signals \"caution\" */\n  .tje-warning{\n    background:#FDF0E0;border-radius:.625rem;padding:.875rem 1rem;\n    font-size:.9rem;color:var(--ink);display:flex;gap:.625rem;\n    align-items:flex-start;line-height:1.55;margin:0 0 1.3rem;\n  }\n\n  /* --- Responsive adjustments --- */\n  @media (max-width:26rem){\n    body{font-size:15px;}\n    .page{padding:1.1rem 0;}\n    .hero-stats{gap:.4rem;}\n    .hero-stat{padding:.7rem .35rem;}\n    .hero-stat .value{font-size:1rem;}\n    .hero-stat .fv-hs-label{font-size:.62rem;}\n    .diff-dots .dot{width:.48rem;height:.48rem;}\n    .highlight-card{padding:.75rem .9rem;font-size:.95rem;}\n  }\n  @media (min-width:60rem){\n    .hero-stat{padding:1.1rem .5rem;}\n    .hero-stat .value{font-size:1.3rem;}\n  }\n</style>\n</head>\n<body>\n<div class=\"page\">\n  <div class=\"wrap\">\n\n    <div class=\"hero-stats\">\n      <div class=\"hero-stat\">\n        <span class=\"fv-hs-label\">Difficulty</span>\n        <div class=\"diff-dots\">\n          <span class=\"dot filled\"></span>\n          <span class=\"dot filled\"></span>\n          <span class=\"dot filled\"></span>\n          <span class=\"dot\"></span>\n          <span class=\"dot\"></span>\n        </div>\n      </div>\n      <div class=\"hero-stat\">\n        <span class=\"fv-hs-label\">Players</span>\n        <span class=\"value\">Up to 6</span>\n      </div>\n      <div class=\"hero-stat\">\n        <span class=\"fv-hs-label\">Minutes</span>\n        <span class=\"value\">90</span>\n      </div>\n    </div>\n\n    <div class=\"highlights-title\">What you'll enjoy</div>\n    <div class=\"highlights-grid\">\n      <div class=\"highlight-card\">⚡ Step into an escape room adventure at Battersea Power Station</div>\n      <div class=\"highlight-card\">🚨 Explore an authentic environment with the Control Room's original control desks</div>\n      <div class=\"highlight-card\">🧩 Race against time and solve pulse-pounding puzzles and cryptic clues</div>\n      <div class=\"highlight-card\">🤝 Unveil mysteries and prove your problem-solving prowess as you collaborate with your teammates</div>\n    </div>\n\n    <div class=\"block\">\n      <h3>Info</h3>\n      <p>\n        📅 Dates and times: select your dates/times directly in the ticket selector<br>📍 Location: Upper Ground Turbine Hall B, 270 The Power Station, London<br>👤 Age requirement: 18+ with valid ID<br>🎫 Ticket includes two cocktails (non-alcoholic options available)<br>❗ Maximum 6 people per group — groups of 6+ will be split into separate groups<br>❓ This experience takes place within a cocktail bar setting, so please anticipate background music and/or ambient noise<br>🎁 Gift this experience to your loved ones! Click <a href=\"https://feverup.com/m/63081\" rel=\"noopener noreferrer\">here</a> to check out our gift card.\n      </p>\n    </div>\n\n    <div class=\"tje-warning\"><span>🚩</span><span>Please note this particular experience unfortunately does not have wheelchair access.</span></div>\n\n    <div class=\"block\">\n      <h3>Description</h3>\n      <p>Nestled amongst the historic dials of Control Room B in Battersea Power Station, embark on a thrilling escape room-style adventure where excitement awaits at every turn. With the clock ticking, step behind the Control Room's original control desks and channel your inner engineer, as you solve mind-bending puzzles, decipher cryptic clues and unveil the mysteries that lie in wait. Your teamwork and problem-solving skills will be put to the test, as you race against time. Will you Escape The Power Cut? Get your tickets now!</p>\n    </div>\n\n  </div>\n</div>\n</body>\n</html>"
+    ],
+    "allow_unsafe_html": false
+  },
+  "access_rules": [],
+  "available_locales": [
+    "de-DE",
+    "es-ES",
+    "fr-FR",
+    "it-IT"
+  ],
+  "base_locale": "en-GB",
+  "category": "theater",
+  "categories": [
+    "Activities",
+    "Escape Room",
+    "Gaming",
+    "Sports & Activities"
+  ],
+  "city_available_locales": [
+    "de-DE",
+    "fr-FR",
+    "it-IT",
+    "es-ES",
+    "en-GB"
+  ],
+  "city_code": "LON",
+  "city_country_iso_code": "UK",
+  "city_slug": "london",
+  "city_slug_lang": "en",
+  "city_standard_id": 1006886,
+  "custom_label": null,
+  "custom_labels": [],
+  "default_level_display": "disabled",
+  "default_session": {
+    "id": 312553212,
+    "attend_text": "Join in!",
+    "available_tickets": 6,
+    "has_available_tickets": true,
+    "currency": "GBP",
+    "ends_at_iso": "2026-08-22T13:30:00+01:00",
+    "expiration_iso": "2026-08-20T12:00:00+01:00",
+    "label": "Ticket for 1 for £55.00",
+    "last_tickets": false,
+    "max_num_tickets": 6,
+    "min_num_tickets": 2,
+    "place_id": 33522,
+    "price": 55,
+    "starts_at_iso": "2026-08-22T12:00:00+01:00",
+    "surcharge_per_ticket": 0,
+    "surcharge_per_transaction": 0,
+    "timezone": "Europe/London"
+  },
+  "session_recommendation": {
+    "recommended_by": "proximity",
+    "is_fallback": null,
+    "fallback_reason": null,
+    "computed_at": null
+  },
+  "description": "🎁 Gift this experience to your loved ones! Click <a href=\"https://feverup.com/m/63081\" rel=\"noopener noreferrer\" target=\"_blank\">here</a> to check out our gift card.<br>\r\n<strong>Tickets for Escape The Power Cut in London&nbsp;</strong><br>\r\n🎫 Ticket for 1, including two cocktails (non-alcoholic options available)<br>\r\n<em>Maximum 6 people per group. Groups of 6+ will be split into separate groups.</em><br>\r\n<strong>Highlights</strong><br>\r\n⚡ Step into an escape room adventure at Battersea Power Station&nbsp;<br>\r\n🚨 Explore an authentic environment with the Control Room's original control desks&nbsp;<br>\r\n🧩 Race against time and solve pulse-pounding puzzles and cryptic clues<br>\r\n🤝 Unveil mysteries and prove your problem-solving prowess as you collaborate with your teammates<br>\r\n<strong>General Info</strong><br>\r\n📅 Dates and times: select your dates/times directly in the ticket selector<br>\r\n📍 Location:&nbsp;Upper Ground Turbine Hall B, 270 The Power Station, London<br>\r\n👤 Age requirement: 18+ with valid ID<br>\r\n❓ Please be advised that this particular experience takes place within a cocktail bar setting. As a result, please anticipate the presence of background music and/or ambient noise.<br>\r\n<span>♿ </span>Please note that this particular experience unfortunately does not have wheelchair access.<br>\r\n<strong>Description</strong><br>\r\nNestled amongst the historic dials of Control Room B in Battersea Power Station, embark on a thrilling escape room-style adventure where excitement awaits at every turn. With the clock ticking, step behind the Control Room's original control desks and channel your inner engineer, as you solve mind-bending puzzles, decipher cryptic clues and unveil the mysteries that lie in wait. Your teamwork and problem-solving skills will be put to the test, as you race against time. Will you <em>Escape The Power Cut?</em> Get your tickets now!",
+  "enable_image_test_experiment": false,
+  "first_active_session_date": "2026-08-22T12:00:00+01:00",
+  "first_session_date": "2026-08-22T12:00:00+01:00",
+  "gallery": [
+    "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/e183337a-2c62-11ee-9a66-1a8a1375ccc1.jpg",
+    "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/e151b336-2c62-11ee-9a66-1a8a1375ccc1.jpg",
+    "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/2775c48c-6646-11f0-921c-52d2b03d4d75",
+    "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/e16a9914-2c62-11ee-9a66-1a8a1375ccc1.jpg",
+    "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/27ac278e-6646-11f0-921c-52d2b03d4d75",
+    "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/e17ad068-2c62-11ee-9a66-1a8a1375ccc1.jpg",
+    "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/e196f5c2-2c62-11ee-9a66-1a8a1375ccc1.jpg",
+    "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/27c11036-6646-11f0-921c-52d2b03d4d75"
+  ],
+  "media_gallery": [
+    {
+      "media_type": "photo",
+      "url": "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/e183337a-2c62-11ee-9a66-1a8a1375ccc1.jpg",
+      "playback_rate": null,
+      "poster": null,
+      "g_auto_enabled": true,
+      "category": {
+        "role": "cover_image"
+      }
+    },
+    {
+      "media_type": "photo",
+      "url": "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/e151b336-2c62-11ee-9a66-1a8a1375ccc1.jpg",
+      "playback_rate": null,
+      "poster": null,
+      "g_auto_enabled": true,
+      "category": {
+        "role": "default"
+      }
+    },
+    {
+      "media_type": "photo",
+      "url": "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/2775c48c-6646-11f0-921c-52d2b03d4d75",
+      "playback_rate": null,
+      "poster": null,
+      "g_auto_enabled": true,
+      "category": {
+        "role": "default"
+      }
+    },
+    {
+      "media_type": "photo",
+      "url": "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/e16a9914-2c62-11ee-9a66-1a8a1375ccc1.jpg",
+      "playback_rate": null,
+      "poster": null,
+      "g_auto_enabled": true,
+      "category": {
+        "role": "default"
+      }
+    },
+    {
+      "media_type": "photo",
+      "url": "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/27ac278e-6646-11f0-921c-52d2b03d4d75",
+      "playback_rate": null,
+      "poster": null,
+      "g_auto_enabled": true,
+      "category": {
+        "role": "default"
+      }
+    },
+    {
+      "media_type": "photo",
+      "url": "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/e17ad068-2c62-11ee-9a66-1a8a1375ccc1.jpg",
+      "playback_rate": null,
+      "poster": null,
+      "g_auto_enabled": true,
+      "category": {
+        "role": "default"
+      }
+    },
+    {
+      "media_type": "photo",
+      "url": "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/e196f5c2-2c62-11ee-9a66-1a8a1375ccc1.jpg",
+      "playback_rate": null,
+      "poster": null,
+      "g_auto_enabled": true,
+      "category": {
+        "role": "default"
+      }
+    },
+    {
+      "media_type": "photo",
+      "url": "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/27c11036-6646-11f0-921c-52d2b03d4d75",
+      "playback_rate": null,
+      "poster": null,
+      "g_auto_enabled": true,
+      "category": {
+        "role": "default"
+      }
+    }
+  ],
+  "has_add_ons": false,
+  "has_seasons": false,
+  "id": 136964,
+  "is_3ds_required": false,
+  "is_calendar_selector": true,
+  "is_multiple_sessions": true,
+  "is_timeless": false,
+  "is_urgent": false,
+  "last_active_session_date": "2026-11-15T16:00:00+00:00",
+  "last_session_date": "2026-11-15T16:00:00+00:00",
+  "logo_url": null,
+  "meta": {
+    "description": "⚡ Step into an escape room adventure at Battersea Power Station. Get your tickets now!",
+    "disallow_indexing": false,
+    "json_ld_overrides": [
+      {
+        "type": "Product"
+      }
+    ],
+    "title": "Escape The Power Cut - London Tickets"
+  },
+  "name": "Escape The Power Cut",
+  "partner_id": 11461,
+  "presentation_settings": {
+    "enable_redeem_vouchers_web": false,
+    "has_affiliate_link": false,
+    "hide_coupon_loyalty": false,
+    "hide_help": false,
+    "hide_similar_plans": false,
+    "hide_recommender_items": false,
+    "is_streaming": false,
+    "show_bsa_toggle": false,
+    "show_important_information": false,
+    "show_place_preview": false,
+    "banners": [
+      {
+        "type": "info",
+        "message": "No booking fees",
+        "position": "top_selector"
+      }
+    ],
+    "reviews_from_plan_id": null,
+    "show_reviews_from_main_plan_info": false,
+    "hide_rating": false,
+    "show_loyalty_points_disclaimer": true,
+    "display_calendar_price": false,
+    "display_best_price_indicator": false,
+    "hide_place_selector": false,
+    "show_multimedia_gallery": false,
+    "show_optimized_seating_map": false,
+    "ticket_selector": null,
+    "session_type_presentation_position": null,
+    "show_sessions_grouped_on_ticket_selector": false,
+    "is_real_time": false,
+    "is_onebox_real_time": false,
+    "show_time_slot_best_price": false,
+    "mobile_webview": {
+      "url": "https://feverup.com/m/136964/en",
+      "ios_max_version": null,
+      "android_max_version": null
+    }
+  },
+  "price_info": {
+    "type": "single",
+    "currency": "GBP",
+    "amount": 55,
+    "strikethrough": null
+  },
+  "rating": {
+    "is_hidden": true,
+    "num_ratings": 0,
+    "average": 0
+  },
+  "redirect_to": null,
+  "link_out_info": null,
+  "selector_settings": {
+    "type": "single",
+    "view_configuration": "vertical"
+  },
+  "session_selector_type": "date-time",
+  "places": [
+    {
+      "id": 33522,
+      "address": "Upper Ground Turbine Hall B, 270 The Power Station, Circus Road South SW11 8BZ, SW11 8BZ",
+      "has_place_page": false,
+      "is_hidden": false,
+      "latitude": 51.48152391375027,
+      "locale": "en",
+      "longitude": -0.14463211212322133,
+      "metro_stations": [],
+      "name": "Upper Ground Turbine Hall B",
+      "signed_map_url": "https://applications-media.feverup.com/image/upload/f_auto/fever2/place/maps/33522__51.48152391375027_-0.14463211212322133.png",
+      "slug": null,
+      "display_settings": {
+        "display_calendar_price": false
+      }
+    }
+  ],
+  "should_display_featured_review_answers": false,
+  "slug": null,
+  "translation_languages": [
+    "de",
+    "es",
+    "fr",
+    "it"
+  ],
+  "type": "standard",
+  "youtube_id": null,
+  "queue": null,
+  "timeless_validity_message": null,
+  "has_shop_products": false,
+  "is_purchaseable_as_guest": true,
+  "displayed_min_price_session_type_id": null,
+  "season_pass_plan_id": null,
+  "plan_metadata": null,
+  "cancellation_policy": {
+    "hours_before_session": 48,
+    "minutes_before_session": 0
+  },
+  "exchange_policy": {
+    "allowed_times": 5
+  }
+}

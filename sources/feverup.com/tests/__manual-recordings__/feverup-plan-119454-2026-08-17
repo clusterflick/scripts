@@ -1,0 +1,247 @@
+{
+  "a_b_testing": {
+    "field_under_test": "description",
+    "modified_at": "2026-07-30T16:17:02+00:00",
+    "variants": [
+      "<html lang=\"en\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<style>\n  :root{\n    --bg:#ffffff;\n    --ink:#1f2937;\n    --muted:#4b5563;\n    --pill-bg:#f2f2f2;\n    --card-bg:#f2f2f2;\n    --accent:#0179CA;\n    --accent-strong:#5b21b6;\n    --rule:#e5e7eb;\n    --module-bg:#faf8ff;\n    --warn-bg:#FDF0E0;\n  }\n  *{box-sizing:border-box;}\n  body{\n    margin:0;background:var(--bg);color:var(--ink);\n    font-family:-apple-system,BlinkMacSystemFont,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif;\n    line-height:1.6;font-size:16px;\n  }\n  .page{width:100%;margin:0;padding:0 0 1.5rem;}\n\n  /* Pills */\n  .pills-row{\n    display:flex;gap:.5rem;overflow-x:auto;scroll-snap-type:x mandatory;\n    -webkit-overflow-scrolling:touch;padding:.15rem .1rem .5rem;margin:0 -0.1rem .9rem;\n    background-repeat:no-repeat;\n    background-image:\n      linear-gradient(to right, var(--bg) 40%, rgba(255,255,255,0) 100%),\n      linear-gradient(to left, var(--bg) 40%, rgba(255,255,255,0) 100%),\n      linear-gradient(to right, rgba(17,24,39,.10), rgba(17,24,39,0)),\n      linear-gradient(to left, rgba(17,24,39,.10), rgba(17,24,39,0));\n    background-position:left center, right center, left center, right center;\n    background-size:28px 100%, 28px 100%, 14px 100%, 14px 100%;\n    background-attachment:local, local, scroll, scroll;\n  }\n  @media (min-width:40rem){ .pills-row{flex-wrap:wrap;overflow-x:visible;scroll-snap-type:none;background-image:none;} }\n  .pill{\n    scroll-snap-align:start;flex:0 0 auto;background:var(--pill-bg);color:var(--ink);\n    font-weight:400;font-size:1rem;padding:.45rem .95rem;border-radius:999px;white-space:nowrap;\n  }\n\n  /* Tagline */\n  p.tagline{\n    font-style:italic;color:var(--ink);font-size:1.05rem;margin:0 0 1.1rem;max-width:65ch;\n  }\n\n  .highlights-title{\n    font-size:1.1rem;font-weight:700;color:var(--ink);margin:0 0 .75rem;\n  }\n  .highlights-grid{\n    display:grid;grid-template-columns:1fr;gap:.75rem;margin:0 0 1.3rem;\n  }\n  /* Even count of highlights -> paired 2-column grid on larger viewports.\n     Odd count -> stays single column so every card is the same width. */\n  @media (min-width:40rem){\n    .highlights-grid.pair{grid-template-columns:1fr 1fr;}\n  }\n  .highlight-card{\n    background:var(--card-bg);\n    border-left:4px solid var(--accent);\n    border-radius:.4rem;padding:.9rem 1.1rem;\n    color:var(--ink);font-size:1rem;\n    display:flex;align-items:center;\n  }\n  /* On wider viewports, single-column (odd-count) cards shouldn't stretch\n     edge-to-edge into an oversized box — cap their width, still left-aligned. */\n  @media (min-width:64rem){\n    .highlights-grid:not(.pair) .highlight-card{ max-width:42rem; }\n  }\n\n  /* Info / Description blocks */\n  .block{margin:0 0 1.2rem;}\n  .block h3{\n    font-size:1.1rem;letter-spacing:.05em;\n    color:var(--muted);margin:0 0 .5rem;\n  }\n  .block p{margin:0;color:var(--ink);max-width:65ch;}\n  .block p em{color:var(--ink);}\n  .block ul{margin:0;padding-left:1.2rem;color:var(--ink);}\n  .block ul li{margin:0 0 .3rem;}\n\n  .module{\n    background:var(--module-bg);\n    border:1px solid #e9e2fb;\n    border-radius:.5rem;\n    padding:.9rem 1.1rem;\n    margin:0 0 1.2rem;\n    font-size:.95rem;\n  }\n  .module h3{\n    font-size:.78rem;text-transform:uppercase;letter-spacing:.05em;\n    color:var(--accent-strong);margin:0 0 .4rem;\n  }\n  .module p{margin:0 0 .3rem;}\n  .module p:last-child{margin-bottom:0;}\n  .module a{color:var(--accent-strong);}\n  .module ul{margin:0;padding-left:1.2rem;}\n  .module ul li{margin:0 0 .25rem;}\n\n  .warning-box{\n    background:var(--warn-bg);\n    border-radius:.5rem;\n    padding:.9rem 1.1rem;\n    margin:0 0 1.2rem;\n    font-size:.95rem;\n    color:var(--ink);\n  }\n  .warning-box h3{\n    font-size:.78rem;text-transform:uppercase;letter-spacing:.05em;\n    color:#8a5a00;margin:0 0 .4rem;\n  }\n  .warning-box p{margin:0;}\n</style>\n</head>\n<body>\n<div class=\"page\">\n<section class=\"show\" id=\"soho-comedy-factory\">\n<div class=\"pills-row\">\n      <span class=\"pill\">🎭 Type: stand-up comedy</span>\n      <span class=\"pill\">⏳ Duration: 2 hours</span>\n      <span class=\"pill\">📍 Location: The Coach House</span>\n    </div>\n    <h3 class=\"highlights-title\">Highlights</h3>\n    <div class=\"highlights-grid\">\n      <div class=\"highlight-card\">Enjoy a night of live comedy with an always amazing lineup of comedians</div>\n      <div class=\"highlight-card\">Venue right in the heart of Central London's Soho</div>\n      <div class=\"highlight-card\">Previous comedians have featured in Taskmaster, Live at the Apollo, 8 out of 10 Cats, and more!</div>\n    </div>\n\n    <div class=\"module\">\n      <h3>Gift this experience to your loved ones!</h3>\n      <p>Click <a href=\"https://feverup.com/m/63081\" rel=\"noopener noreferrer\" target=\"_blank\">here</a> to check out our gift card.</p>\n    </div>\n\n    <div class=\"block\">\n      <h3>General Info</h3>\n      <p>📅 Date and time: Choose in ticket selector<br>\n      ⚠️ Please note, if you arrive after the start time you may risk losing your seat<br>\n      👤 Age requirement: 18+ with valid ID<br>\n      ❓ Please note: seating is unreserved and it is recommended that you arrive early if you would like to purchase a drink from the bar</p>\n    </div>\n\n    <div class=\"block\">\n      <h3>Description</h3>\n      <p>Soho Comedy Factory runs every night of the week. Named by Radio Times as one of London's best comedy clubs, we present the best of UK comedy, as well as the stars of tomorrow.</p>\n    </div>\n\n  </section>\n</div>\n</body>\n</html>"
+    ],
+    "allow_unsafe_html": false
+  },
+  "access_rules": [],
+  "available_locales": [
+    "de-DE",
+    "es-ES",
+    "fr-FR",
+    "it-IT"
+  ],
+  "base_locale": "en-GB",
+  "category": "nightlife",
+  "categories": [
+    "Comedy",
+    "Entertainment",
+    "Improv",
+    "Stand-up"
+  ],
+  "city_available_locales": [
+    "de-DE",
+    "fr-FR",
+    "it-IT",
+    "es-ES",
+    "en-GB"
+  ],
+  "city_code": "LON",
+  "city_country_iso_code": "UK",
+  "city_slug": "london",
+  "city_slug_lang": "en",
+  "city_standard_id": 1006886,
+  "custom_label": null,
+  "custom_labels": [],
+  "default_level_display": "disabled",
+  "default_session": {
+    "id": 419201810,
+    "attend_text": "Join in!",
+    "available_tickets": 14,
+    "has_available_tickets": true,
+    "currency": "GBP",
+    "ends_at_iso": "2026-08-17T21:30:00+01:00",
+    "expiration_iso": "2026-08-17T19:00:00+01:00",
+    "label": "General Admission for £10.00",
+    "last_tickets": false,
+    "max_num_tickets": 14,
+    "min_num_tickets": 1,
+    "place_id": 36211,
+    "price": 10,
+    "starts_at_iso": "2026-08-17T19:30:00+01:00",
+    "surcharge_per_ticket": 0,
+    "surcharge_per_transaction": 0,
+    "timezone": "Europe/London"
+  },
+  "session_recommendation": {
+    "recommended_by": "cheapest",
+    "is_fallback": null,
+    "fallback_reason": null,
+    "computed_at": null
+  },
+  "description": "🎁 Gift this experience to your loved ones! Click <a target=\"_blank\" href=\"https://feverup.com/m/63081\" rel=\"noopener noreferrer\">here</a> to check out our gift card.<br>\n<br>\n<strong>Description</strong><br>\nSoho Comedy Factory runs every night of the week. Named by Radio Times as one of London's best comedy clubs, we present the best of UK comedy, as well as the stars of tomorrow.&nbsp;<br>\n<br>\n<strong>Highlights</strong><br>\n😂 Enjoy a night of live comedy with an always amazing lineup of comedians<br>\n💓 Venue right in the heart of Central London's Soho<br>\n✨ Previous comedians have featured in Taskmaster, Live at the Apollo, 8 out of 10 Cats, and more!<br>\n<br>\n<strong>General Info</strong><br>\n📅&nbsp;Date and time: Choose in ticket selector&nbsp;<br>\n⏳ Duration: 2 hours<br>\n⚠️ Please note, if you arrive after the start time you may risk losing your seat<br>\n📍 Location: The Coach House, 7 Oxendon St, London SW1Y 4EE, United Kingdom<br>\n👤 Age requirement: 18+ with valid ID<br>\n❓ Please note: seating is unreserved and it is recommended that you arrive early if you would like to purchase a drink from the bar",
+  "enable_image_test_experiment": true,
+  "first_active_session_date": "2026-08-17T19:30:00+01:00",
+  "first_session_date": "2026-08-17T19:30:00+01:00",
+  "gallery": [
+    "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/15293304-2a1d-11f1-93ae-4a7da6585ed9.png",
+    "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/255fd6e0-2a10-11f1-8ab2-c24e3708472a.png",
+    "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/d9882164-5043-11f1-a3ed-3e3519651b21.png",
+    "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/dcb6a55e-5043-11f1-b915-1e90d403b6c1.png",
+    "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/c9e552da-2a10-11f1-822b-fe03a3213f8d.png"
+  ],
+  "media_gallery": [
+    {
+      "media_type": "photo",
+      "url": "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/15293304-2a1d-11f1-93ae-4a7da6585ed9.png",
+      "playback_rate": null,
+      "poster": null,
+      "g_auto_enabled": true,
+      "category": {
+        "role": "cover_image"
+      }
+    },
+    {
+      "media_type": "photo",
+      "url": "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/255fd6e0-2a10-11f1-8ab2-c24e3708472a.png",
+      "playback_rate": null,
+      "poster": null,
+      "g_auto_enabled": true,
+      "category": {
+        "role": "default"
+      }
+    },
+    {
+      "media_type": "photo",
+      "url": "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/d9882164-5043-11f1-a3ed-3e3519651b21.png",
+      "playback_rate": null,
+      "poster": null,
+      "g_auto_enabled": true,
+      "category": {
+        "role": "default"
+      }
+    },
+    {
+      "media_type": "photo",
+      "url": "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/dcb6a55e-5043-11f1-b915-1e90d403b6c1.png",
+      "playback_rate": null,
+      "poster": null,
+      "g_auto_enabled": true,
+      "category": {
+        "role": "default"
+      }
+    },
+    {
+      "media_type": "photo",
+      "url": "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/c9e552da-2a10-11f1-822b-fe03a3213f8d.png",
+      "playback_rate": null,
+      "poster": null,
+      "g_auto_enabled": true,
+      "category": {
+        "role": "default"
+      }
+    }
+  ],
+  "has_add_ons": false,
+  "has_seasons": false,
+  "id": 119454,
+  "is_3ds_required": false,
+  "is_calendar_selector": true,
+  "is_multiple_sessions": true,
+  "is_timeless": false,
+  "is_urgent": false,
+  "last_active_session_date": "2026-09-30T19:30:00+01:00",
+  "last_session_date": "2026-09-30T19:30:00+01:00",
+  "logo_url": null,
+  "meta": {
+    "description": "",
+    "disallow_indexing": false,
+    "json_ld_overrides": [
+      {
+        "type": "Product"
+      },
+      {
+        "type": "Event"
+      }
+    ],
+    "title": "Soho Comedy Factory Tickets"
+  },
+  "name": "Soho Comedy Factory",
+  "partner_id": 11255,
+  "presentation_settings": {
+    "enable_redeem_vouchers_web": false,
+    "has_affiliate_link": false,
+    "hide_coupon_loyalty": false,
+    "hide_help": false,
+    "hide_similar_plans": false,
+    "hide_recommender_items": false,
+    "is_streaming": false,
+    "show_bsa_toggle": false,
+    "show_important_information": false,
+    "show_place_preview": true,
+    "banners": [],
+    "reviews_from_plan_id": null,
+    "show_reviews_from_main_plan_info": false,
+    "hide_rating": false,
+    "show_loyalty_points_disclaimer": true,
+    "display_calendar_price": false,
+    "display_best_price_indicator": false,
+    "hide_place_selector": false,
+    "show_multimedia_gallery": true,
+    "show_optimized_seating_map": false,
+    "ticket_selector": null,
+    "session_type_presentation_position": null,
+    "show_sessions_grouped_on_ticket_selector": false,
+    "is_real_time": false,
+    "is_onebox_real_time": false,
+    "show_time_slot_best_price": false,
+    "mobile_webview": {
+      "url": "https://feverup.com/m/119454/en",
+      "ios_max_version": null,
+      "android_max_version": null
+    }
+  },
+  "price_info": {
+    "type": "single",
+    "currency": "GBP",
+    "amount": 10,
+    "strikethrough": null
+  },
+  "rating": {
+    "is_hidden": false,
+    "num_ratings": 510,
+    "average": 4.76
+  },
+  "redirect_to": null,
+  "link_out_info": null,
+  "selector_settings": {
+    "type": "single",
+    "view_configuration": "vertical"
+  },
+  "session_selector_type": "date-time",
+  "places": [
+    {
+      "id": 36211,
+      "address": "7 Oxendon Street, Piccadilly, London, SW1Y 4EE",
+      "has_place_page": true,
+      "is_hidden": false,
+      "latitude": 51.509739,
+      "locale": "en",
+      "longitude": -0.1320046,
+      "metro_stations": [],
+      "name": "The Coach House",
+      "signed_map_url": "https://applications-media.feverup.com/image/upload/f_auto/fever2/place/maps/36211__51.509739_-0.1320046.png",
+      "slug": "the-coach-house",
+      "display_settings": {
+        "display_calendar_price": false
+      }
+    }
+  ],
+  "should_display_featured_review_answers": true,
+  "slug": null,
+  "translation_languages": [
+    "de",
+    "es",
+    "fr",
+    "it"
+  ],
+  "type": "standard",
+  "youtube_id": null,
+  "queue": null,
+  "timeless_validity_message": null,
+  "has_shop_products": false,
+  "is_purchaseable_as_guest": true,
+  "displayed_min_price_session_type_id": null,
+  "season_pass_plan_id": null,
+  "plan_metadata": null,
+  "cancellation_policy": {
+    "hours_before_session": 48,
+    "minutes_before_session": 0
+  },
+  "exchange_policy": {
+    "allowed_times": 5
+  }
+}

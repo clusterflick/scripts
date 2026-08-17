@@ -10,30 +10,11 @@ const {
 } = require("../../common/utils");
 const attributes = require("./attributes");
 const { venueMatchesCinema } = require("../../common/source-utils");
-const {
-  extractTransferState,
-  extractPlanDetail,
-  extractSessionTimes,
-} = require("./utils");
+const { isNotNonFilmEvent } = require("../../common/is-non-film-event");
+const { extractSessionTimes } = require("./utils");
 
-/**
- * Get session times from the transfer state's LevelTicketSelectorLoader
- * entries (only covers the pre-rendered default date).
- */
-function getTransferStateSessions(transferState) {
-  const ticketTransferState =
-    transferState["ticket-selector-config"]?.transferState;
-  if (!ticketTransferState) return [];
-
-  const loaderEntries = Object.entries(ticketTransferState)
-    .filter(([key]) =>
-      key.startsWith(
-        "LevelTicketSelectorLoader.getPlanSessionsForPlaceAndDate:",
-      ),
-    )
-    .map(([, value]) => value);
-
-  return extractSessionTimes(loaderEntries);
+function getPlanUrl(planId) {
+  return `${attributes.domain}/m/${planId}`;
 }
 
 function convertFeverEvent(url, planDetail, sessions) {
@@ -70,21 +51,18 @@ function convertFeverEvent(url, planDetail, sessions) {
 async function findEvents(cinema) {
   const dataSrc = path.join(process.cwd(), "retrieved-data", "feverup.com");
 
-  let moviePages = {};
+  let planDetails = {};
   let sessionPages = {};
   try {
     const data = await readJSON(dataSrc);
-    moviePages = data.moviePages || {};
+    planDetails = data.planDetails || {};
     sessionPages = data.sessionPages || {};
   } catch {
     // Source data may not always be available or required
   }
 
   const results = [];
-  for (const [url, html] of Object.entries(moviePages)) {
-    const transferState = extractTransferState(html, url);
-    const planDetail = extractPlanDetail(transferState, url);
-
+  for (const [planId, planDetail] of Object.entries(planDetails)) {
     const places = planDetail.places || [];
     const matchesVenue = places.some(({ name, latitude, longitude, address }) =>
       venueMatchesCinema(
@@ -96,19 +74,21 @@ async function findEvents(cinema) {
     );
     if (!matchesVenue) continue;
 
-    // Prefer session data fetched via API (covers all dates), fall back to
-    // the transfer state embedded in the HTML (only the default date)
-    const apiSessionData = sessionPages[url];
-    const sessions = apiSessionData
-      ? extractSessionTimes(Object.values(apiSessionData))
-      : getTransferStateSessions(transferState);
-
+    // Sessions are only retrieved for plans at a venue we hold, so a plan
+    // without any is one whose dates have passed rather than an unknown venue.
+    const sessions = extractSessionTimes(
+      Object.values(sessionPages[planId] || {}),
+    );
     if (sessions.length === 0) continue;
 
-    results.push(convertFeverEvent(url, planDetail, sessions));
+    results.push(convertFeverEvent(getPlanUrl(planId), planDetail, sessions));
   }
 
-  return results;
+  // Discovery reads the city's whole catalogue rather than a film category, so
+  // a venue we hold for its cinema also offers up its exhibitions and classes -
+  // an immersive exhibit running continuous entry slots contributes hundreds of
+  // performances on its own. Drop the ones we know aren't films.
+  return results.filter(isNotNonFilmEvent);
 }
 
 module.exports = findEvents;

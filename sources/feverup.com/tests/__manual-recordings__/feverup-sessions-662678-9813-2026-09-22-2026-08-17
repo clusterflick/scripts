@@ -1,0 +1,4356 @@
+{
+  "level": {
+    "type": "time",
+    "items": [
+      {
+        "default_label": "10:00 am",
+        "value": {
+          "from": "2026-09-22T10:00:00+01:00",
+          "timezone": "Europe/London"
+        },
+        "level": {
+          "type": "session",
+          "items": [
+            {
+              "default_label": "Adult (18+)",
+              "value": {
+                "id": 480844897,
+                "label": "Adult (18+)",
+                "label_without_format": "Adult (18+)",
+                "item_type": "30289000",
+                "details": "<strong>Ticket for 1 person, including:</strong><ul><li>Entry to the experience</li></ul>",
+                "starts_at_iso": "2026-09-22T10:00:00+01:00",
+                "ends_at_iso": "2026-09-22T11:00:00+01:00",
+                "expiration_iso": "2026-09-22T09:55:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 23,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 1,
+                "max_num_tickets": 23,
+                "price": 18,
+                "currency": "GBP",
+                "surcharge_per_ticket": 1.08,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 1,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-1f62512e-5298-4ae3-ab04-7736df3ccbe6",
+                      "min": 0,
+                      "max": 23,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 23 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-5d22abff-ca2a-4976-a9bb-7c96154bf58c",
+                      "min": 0,
+                      "max": 23,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 23 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            },
+            {
+              "default_label": "Reduced (Child 10-17, Student, Senior 60+)",
+              "value": {
+                "id": 480844907,
+                "label": "Reduced (Child 10-17, Student, Senior 60+)",
+                "label_without_format": "Reduced (Child 10-17, Student, Senior 60+)",
+                "item_type": "30289001",
+                "details": "<strong>Ticket for 1 person, including:</strong><ul><li>Entry to the experience</li></ul>*<em>Valid ID required</em>",
+                "starts_at_iso": "2026-09-22T10:00:00+01:00",
+                "ends_at_iso": "2026-09-22T11:00:00+01:00",
+                "expiration_iso": "2026-09-22T09:55:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 23,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 1,
+                "max_num_tickets": 23,
+                "price": 15,
+                "currency": "GBP",
+                "surcharge_per_ticket": 0.9,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 2,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-1f62512e-5298-4ae3-ab04-7736df3ccbe6",
+                      "min": 0,
+                      "max": 23,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 23 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-5d22abff-ca2a-4976-a9bb-7c96154bf58c",
+                      "min": 0,
+                      "max": 23,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 23 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            },
+            {
+              "default_label": "Group Bundle (min. 4 tickets)",
+              "value": {
+                "id": 480844916,
+                "label": "Group Bundle (min. 4 tickets)",
+                "label_without_format": "Group Bundle (min. 4 tickets)",
+                "item_type": "30289002",
+                "details": "<strong>Tickets for 4+ people, including:</strong><ul><li>Entry to the experience</li></ul>",
+                "starts_at_iso": "2026-09-22T10:00:00+01:00",
+                "ends_at_iso": "2026-09-22T11:00:00+01:00",
+                "expiration_iso": "2026-09-22T09:55:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 23,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 4,
+                "max_num_tickets": 23,
+                "price": 16,
+                "currency": "GBP",
+                "surcharge_per_ticket": 0.96,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 3,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-1f62512e-5298-4ae3-ab04-7736df3ccbe6",
+                      "min": 0,
+                      "max": 23,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 23 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-5d22abff-ca2a-4976-a9bb-7c96154bf58c",
+                      "min": 0,
+                      "max": 23,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 23 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            }
+          ],
+          "session_selector_group_hash": "2d2ec8d12f4640c2ffa267304d8f8749"
+        }
+      },
+      {
+        "default_label": "10:20 am",
+        "value": {
+          "from": "2026-09-22T10:20:00+01:00",
+          "timezone": "Europe/London"
+        },
+        "level": {
+          "type": "session",
+          "items": [
+            {
+              "default_label": "Adult (18+)",
+              "value": {
+                "id": 480844944,
+                "label": "Adult (18+)",
+                "label_without_format": "Adult (18+)",
+                "item_type": "30289000",
+                "details": "<strong>Ticket for 1 person, including:</strong><ul><li>Entry to the experience</li></ul>",
+                "starts_at_iso": "2026-09-22T10:20:00+01:00",
+                "ends_at_iso": "2026-09-22T11:20:00+01:00",
+                "expiration_iso": "2026-09-22T10:15:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 24,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 1,
+                "max_num_tickets": 24,
+                "price": 18,
+                "currency": "GBP",
+                "surcharge_per_ticket": 1.08,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 1,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-e11eb5ce-31bd-4b43-9bf9-db0cf9ae8bbb",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-b9fc9c00-f11d-46b9-9408-350c7a2af305",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            },
+            {
+              "default_label": "Reduced (Child 10-17, Student, Senior 60+)",
+              "value": {
+                "id": 480844953,
+                "label": "Reduced (Child 10-17, Student, Senior 60+)",
+                "label_without_format": "Reduced (Child 10-17, Student, Senior 60+)",
+                "item_type": "30289001",
+                "details": "<strong>Ticket for 1 person, including:</strong><ul><li>Entry to the experience</li></ul>*<em>Valid ID required</em>",
+                "starts_at_iso": "2026-09-22T10:20:00+01:00",
+                "ends_at_iso": "2026-09-22T11:20:00+01:00",
+                "expiration_iso": "2026-09-22T10:15:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 24,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 1,
+                "max_num_tickets": 24,
+                "price": 15,
+                "currency": "GBP",
+                "surcharge_per_ticket": 0.9,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 2,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-e11eb5ce-31bd-4b43-9bf9-db0cf9ae8bbb",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-b9fc9c00-f11d-46b9-9408-350c7a2af305",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            },
+            {
+              "default_label": "Group Bundle (min. 4 tickets)",
+              "value": {
+                "id": 480844961,
+                "label": "Group Bundle (min. 4 tickets)",
+                "label_without_format": "Group Bundle (min. 4 tickets)",
+                "item_type": "30289002",
+                "details": "<strong>Tickets for 4+ people, including:</strong><ul><li>Entry to the experience</li></ul>",
+                "starts_at_iso": "2026-09-22T10:20:00+01:00",
+                "ends_at_iso": "2026-09-22T11:20:00+01:00",
+                "expiration_iso": "2026-09-22T10:15:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 24,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 4,
+                "max_num_tickets": 24,
+                "price": 16,
+                "currency": "GBP",
+                "surcharge_per_ticket": 0.96,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 3,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-e11eb5ce-31bd-4b43-9bf9-db0cf9ae8bbb",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-b9fc9c00-f11d-46b9-9408-350c7a2af305",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            }
+          ],
+          "session_selector_group_hash": "05ca22a5931c49f927b28dbebff125be"
+        }
+      },
+      {
+        "default_label": "10:40 am",
+        "value": {
+          "from": "2026-09-22T10:40:00+01:00",
+          "timezone": "Europe/London"
+        },
+        "level": {
+          "type": "session",
+          "items": [
+            {
+              "default_label": "Adult (18+)",
+              "value": {
+                "id": 480844986,
+                "label": "Adult (18+)",
+                "label_without_format": "Adult (18+)",
+                "item_type": "30289000",
+                "details": "<strong>Ticket for 1 person, including:</strong><ul><li>Entry to the experience</li></ul>",
+                "starts_at_iso": "2026-09-22T10:40:00+01:00",
+                "ends_at_iso": "2026-09-22T11:40:00+01:00",
+                "expiration_iso": "2026-09-22T10:35:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 24,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 1,
+                "max_num_tickets": 24,
+                "price": 18,
+                "currency": "GBP",
+                "surcharge_per_ticket": 1.08,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 1,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-1ec3ad63-9655-4810-92f5-33daa84ce712",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-e130be03-3b64-4384-a185-890c616dfcba",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            },
+            {
+              "default_label": "Reduced (Child 10-17, Student, Senior 60+)",
+              "value": {
+                "id": 480844993,
+                "label": "Reduced (Child 10-17, Student, Senior 60+)",
+                "label_without_format": "Reduced (Child 10-17, Student, Senior 60+)",
+                "item_type": "30289001",
+                "details": "<strong>Ticket for 1 person, including:</strong><ul><li>Entry to the experience</li></ul>*<em>Valid ID required</em>",
+                "starts_at_iso": "2026-09-22T10:40:00+01:00",
+                "ends_at_iso": "2026-09-22T11:40:00+01:00",
+                "expiration_iso": "2026-09-22T10:35:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 24,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 1,
+                "max_num_tickets": 24,
+                "price": 15,
+                "currency": "GBP",
+                "surcharge_per_ticket": 0.9,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 2,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-1ec3ad63-9655-4810-92f5-33daa84ce712",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-e130be03-3b64-4384-a185-890c616dfcba",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            },
+            {
+              "default_label": "Group Bundle (min. 4 tickets)",
+              "value": {
+                "id": 480845001,
+                "label": "Group Bundle (min. 4 tickets)",
+                "label_without_format": "Group Bundle (min. 4 tickets)",
+                "item_type": "30289002",
+                "details": "<strong>Tickets for 4+ people, including:</strong><ul><li>Entry to the experience</li></ul>",
+                "starts_at_iso": "2026-09-22T10:40:00+01:00",
+                "ends_at_iso": "2026-09-22T11:40:00+01:00",
+                "expiration_iso": "2026-09-22T10:35:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 24,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 4,
+                "max_num_tickets": 24,
+                "price": 16,
+                "currency": "GBP",
+                "surcharge_per_ticket": 0.96,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 3,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-1ec3ad63-9655-4810-92f5-33daa84ce712",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-e130be03-3b64-4384-a185-890c616dfcba",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            }
+          ],
+          "session_selector_group_hash": "4c79d6b52add2e23dd76122ce28deaa5"
+        }
+      },
+      {
+        "default_label": "11:00 am",
+        "value": {
+          "from": "2026-09-22T11:00:00+01:00",
+          "timezone": "Europe/London"
+        },
+        "level": {
+          "type": "session",
+          "items": [
+            {
+              "default_label": "Adult (18+)",
+              "value": {
+                "id": 480845030,
+                "label": "Adult (18+)",
+                "label_without_format": "Adult (18+)",
+                "item_type": "30289000",
+                "details": "<strong>Ticket for 1 person, including:</strong><ul><li>Entry to the experience</li></ul>",
+                "starts_at_iso": "2026-09-22T11:00:00+01:00",
+                "ends_at_iso": "2026-09-22T12:00:00+01:00",
+                "expiration_iso": "2026-09-22T10:55:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 23,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 1,
+                "max_num_tickets": 23,
+                "price": 18,
+                "currency": "GBP",
+                "surcharge_per_ticket": 1.08,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 1,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-672907e9-8903-4ef5-a381-e28a56c03bf4",
+                      "min": 0,
+                      "max": 23,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 23 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-319f04fd-98d4-43e2-8df3-8a3f6a009ade",
+                      "min": 0,
+                      "max": 23,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 23 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            },
+            {
+              "default_label": "Reduced (Child 10-17, Student, Senior 60+)",
+              "value": {
+                "id": 480845041,
+                "label": "Reduced (Child 10-17, Student, Senior 60+)",
+                "label_without_format": "Reduced (Child 10-17, Student, Senior 60+)",
+                "item_type": "30289001",
+                "details": "<strong>Ticket for 1 person, including:</strong><ul><li>Entry to the experience</li></ul>*<em>Valid ID required</em>",
+                "starts_at_iso": "2026-09-22T11:00:00+01:00",
+                "ends_at_iso": "2026-09-22T12:00:00+01:00",
+                "expiration_iso": "2026-09-22T10:55:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 23,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 1,
+                "max_num_tickets": 23,
+                "price": 15,
+                "currency": "GBP",
+                "surcharge_per_ticket": 0.9,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 2,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-672907e9-8903-4ef5-a381-e28a56c03bf4",
+                      "min": 0,
+                      "max": 23,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 23 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-319f04fd-98d4-43e2-8df3-8a3f6a009ade",
+                      "min": 0,
+                      "max": 23,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 23 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            },
+            {
+              "default_label": "Group Bundle (min. 4 tickets)",
+              "value": {
+                "id": 480845046,
+                "label": "Group Bundle (min. 4 tickets)",
+                "label_without_format": "Group Bundle (min. 4 tickets)",
+                "item_type": "30289002",
+                "details": "<strong>Tickets for 4+ people, including:</strong><ul><li>Entry to the experience</li></ul>",
+                "starts_at_iso": "2026-09-22T11:00:00+01:00",
+                "ends_at_iso": "2026-09-22T12:00:00+01:00",
+                "expiration_iso": "2026-09-22T10:55:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 23,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 4,
+                "max_num_tickets": 23,
+                "price": 16,
+                "currency": "GBP",
+                "surcharge_per_ticket": 0.96,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 3,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-672907e9-8903-4ef5-a381-e28a56c03bf4",
+                      "min": 0,
+                      "max": 23,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 23 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-319f04fd-98d4-43e2-8df3-8a3f6a009ade",
+                      "min": 0,
+                      "max": 23,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 23 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            }
+          ],
+          "session_selector_group_hash": "79f5ae2c8278d80fbae6fd0c67eb3fee"
+        }
+      },
+      {
+        "default_label": "11:20 am",
+        "value": {
+          "from": "2026-09-22T11:20:00+01:00",
+          "timezone": "Europe/London"
+        },
+        "level": {
+          "type": "session",
+          "items": [
+            {
+              "default_label": "Adult (18+)",
+              "value": {
+                "id": 480845075,
+                "label": "Adult (18+)",
+                "label_without_format": "Adult (18+)",
+                "item_type": "30289000",
+                "details": "<strong>Ticket for 1 person, including:</strong><ul><li>Entry to the experience</li></ul>",
+                "starts_at_iso": "2026-09-22T11:20:00+01:00",
+                "ends_at_iso": "2026-09-22T12:20:00+01:00",
+                "expiration_iso": "2026-09-22T11:15:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 24,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 1,
+                "max_num_tickets": 24,
+                "price": 18,
+                "currency": "GBP",
+                "surcharge_per_ticket": 1.08,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 1,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-5a5cb92a-382d-4bd5-9e10-d47f8c5163fb",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-93cca417-ab3e-4363-b4fa-b55aa3232a47",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            },
+            {
+              "default_label": "Reduced (Child 10-17, Student, Senior 60+)",
+              "value": {
+                "id": 480845083,
+                "label": "Reduced (Child 10-17, Student, Senior 60+)",
+                "label_without_format": "Reduced (Child 10-17, Student, Senior 60+)",
+                "item_type": "30289001",
+                "details": "<strong>Ticket for 1 person, including:</strong><ul><li>Entry to the experience</li></ul>*<em>Valid ID required</em>",
+                "starts_at_iso": "2026-09-22T11:20:00+01:00",
+                "ends_at_iso": "2026-09-22T12:20:00+01:00",
+                "expiration_iso": "2026-09-22T11:15:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 24,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 1,
+                "max_num_tickets": 24,
+                "price": 15,
+                "currency": "GBP",
+                "surcharge_per_ticket": 0.9,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 2,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-5a5cb92a-382d-4bd5-9e10-d47f8c5163fb",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-93cca417-ab3e-4363-b4fa-b55aa3232a47",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            },
+            {
+              "default_label": "Group Bundle (min. 4 tickets)",
+              "value": {
+                "id": 480845087,
+                "label": "Group Bundle (min. 4 tickets)",
+                "label_without_format": "Group Bundle (min. 4 tickets)",
+                "item_type": "30289002",
+                "details": "<strong>Tickets for 4+ people, including:</strong><ul><li>Entry to the experience</li></ul>",
+                "starts_at_iso": "2026-09-22T11:20:00+01:00",
+                "ends_at_iso": "2026-09-22T12:20:00+01:00",
+                "expiration_iso": "2026-09-22T11:15:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 24,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 4,
+                "max_num_tickets": 24,
+                "price": 16,
+                "currency": "GBP",
+                "surcharge_per_ticket": 0.96,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 3,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-5a5cb92a-382d-4bd5-9e10-d47f8c5163fb",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-93cca417-ab3e-4363-b4fa-b55aa3232a47",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            }
+          ],
+          "session_selector_group_hash": "3d48c638d2688674563dbcc0b92b5bab"
+        }
+      },
+      {
+        "default_label": "11:40 am",
+        "value": {
+          "from": "2026-09-22T11:40:00+01:00",
+          "timezone": "Europe/London"
+        },
+        "level": {
+          "type": "session",
+          "items": [
+            {
+              "default_label": "Adult (18+)",
+              "value": {
+                "id": 480845877,
+                "label": "Adult (18+)",
+                "label_without_format": "Adult (18+)",
+                "item_type": "30289000",
+                "details": "<strong>Ticket for 1 person, including:</strong><ul><li>Entry to the experience</li></ul>",
+                "starts_at_iso": "2026-09-22T11:40:00+01:00",
+                "ends_at_iso": "2026-09-22T12:40:00+01:00",
+                "expiration_iso": "2026-09-22T11:35:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 24,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 1,
+                "max_num_tickets": 24,
+                "price": 18,
+                "currency": "GBP",
+                "surcharge_per_ticket": 1.08,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 1,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-88aa489f-3bd7-4a2d-9925-74afe680a99c",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-e01b9a26-3898-4310-a2a9-8c7e642744d1",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            },
+            {
+              "default_label": "Reduced (Child 10-17, Student, Senior 60+)",
+              "value": {
+                "id": 480845893,
+                "label": "Reduced (Child 10-17, Student, Senior 60+)",
+                "label_without_format": "Reduced (Child 10-17, Student, Senior 60+)",
+                "item_type": "30289001",
+                "details": "<strong>Ticket for 1 person, including:</strong><ul><li>Entry to the experience</li></ul>*<em>Valid ID required</em>",
+                "starts_at_iso": "2026-09-22T11:40:00+01:00",
+                "ends_at_iso": "2026-09-22T12:40:00+01:00",
+                "expiration_iso": "2026-09-22T11:35:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 24,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 1,
+                "max_num_tickets": 24,
+                "price": 15,
+                "currency": "GBP",
+                "surcharge_per_ticket": 0.9,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 2,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-88aa489f-3bd7-4a2d-9925-74afe680a99c",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-e01b9a26-3898-4310-a2a9-8c7e642744d1",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            },
+            {
+              "default_label": "Group Bundle (min. 4 tickets)",
+              "value": {
+                "id": 480845908,
+                "label": "Group Bundle (min. 4 tickets)",
+                "label_without_format": "Group Bundle (min. 4 tickets)",
+                "item_type": "30289002",
+                "details": "<strong>Tickets for 4+ people, including:</strong><ul><li>Entry to the experience</li></ul>",
+                "starts_at_iso": "2026-09-22T11:40:00+01:00",
+                "ends_at_iso": "2026-09-22T12:40:00+01:00",
+                "expiration_iso": "2026-09-22T11:35:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 24,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 4,
+                "max_num_tickets": 24,
+                "price": 16,
+                "currency": "GBP",
+                "surcharge_per_ticket": 0.96,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 3,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-88aa489f-3bd7-4a2d-9925-74afe680a99c",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-e01b9a26-3898-4310-a2a9-8c7e642744d1",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            }
+          ],
+          "session_selector_group_hash": "02be0abf3922f69329bf70ccf914b261"
+        }
+      },
+      {
+        "default_label": "12:00 pm",
+        "value": {
+          "from": "2026-09-22T12:00:00+01:00",
+          "timezone": "Europe/London"
+        },
+        "level": {
+          "type": "session",
+          "items": [
+            {
+              "default_label": "Adult (18+)",
+              "value": {
+                "id": 480845954,
+                "label": "Adult (18+)",
+                "label_without_format": "Adult (18+)",
+                "item_type": "30289000",
+                "details": "<strong>Ticket for 1 person, including:</strong><ul><li>Entry to the experience</li></ul>",
+                "starts_at_iso": "2026-09-22T12:00:00+01:00",
+                "ends_at_iso": "2026-09-22T13:00:00+01:00",
+                "expiration_iso": "2026-09-22T11:55:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 23,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 1,
+                "max_num_tickets": 23,
+                "price": 18,
+                "currency": "GBP",
+                "surcharge_per_ticket": 1.08,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 1,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-9e62687c-0352-4047-a28a-66d9913b48f1",
+                      "min": 0,
+                      "max": 23,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 23 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-d5480e62-7c22-4cde-90e4-e8209ed3c463",
+                      "min": 0,
+                      "max": 23,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 23 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            },
+            {
+              "default_label": "Reduced (Child 10-17, Student, Senior 60+)",
+              "value": {
+                "id": 480845966,
+                "label": "Reduced (Child 10-17, Student, Senior 60+)",
+                "label_without_format": "Reduced (Child 10-17, Student, Senior 60+)",
+                "item_type": "30289001",
+                "details": "<strong>Ticket for 1 person, including:</strong><ul><li>Entry to the experience</li></ul>*<em>Valid ID required</em>",
+                "starts_at_iso": "2026-09-22T12:00:00+01:00",
+                "ends_at_iso": "2026-09-22T13:00:00+01:00",
+                "expiration_iso": "2026-09-22T11:55:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 23,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 1,
+                "max_num_tickets": 23,
+                "price": 15,
+                "currency": "GBP",
+                "surcharge_per_ticket": 0.9,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 2,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-9e62687c-0352-4047-a28a-66d9913b48f1",
+                      "min": 0,
+                      "max": 23,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 23 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-d5480e62-7c22-4cde-90e4-e8209ed3c463",
+                      "min": 0,
+                      "max": 23,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 23 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            },
+            {
+              "default_label": "Group Bundle (min. 4 tickets)",
+              "value": {
+                "id": 480845981,
+                "label": "Group Bundle (min. 4 tickets)",
+                "label_without_format": "Group Bundle (min. 4 tickets)",
+                "item_type": "30289002",
+                "details": "<strong>Tickets for 4+ people, including:</strong><ul><li>Entry to the experience</li></ul>",
+                "starts_at_iso": "2026-09-22T12:00:00+01:00",
+                "ends_at_iso": "2026-09-22T13:00:00+01:00",
+                "expiration_iso": "2026-09-22T11:55:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 23,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 4,
+                "max_num_tickets": 23,
+                "price": 16,
+                "currency": "GBP",
+                "surcharge_per_ticket": 0.96,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 3,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-9e62687c-0352-4047-a28a-66d9913b48f1",
+                      "min": 0,
+                      "max": 23,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 23 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-d5480e62-7c22-4cde-90e4-e8209ed3c463",
+                      "min": 0,
+                      "max": 23,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 23 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            }
+          ],
+          "session_selector_group_hash": "a5a1e78456da8d4deaef3feb78557749"
+        }
+      },
+      {
+        "default_label": "12:20 pm",
+        "value": {
+          "from": "2026-09-22T12:20:00+01:00",
+          "timezone": "Europe/London"
+        },
+        "level": {
+          "type": "session",
+          "items": [
+            {
+              "default_label": "Adult (18+)",
+              "value": {
+                "id": 480846023,
+                "label": "Adult (18+)",
+                "label_without_format": "Adult (18+)",
+                "item_type": "30289000",
+                "details": "<strong>Ticket for 1 person, including:</strong><ul><li>Entry to the experience</li></ul>",
+                "starts_at_iso": "2026-09-22T12:20:00+01:00",
+                "ends_at_iso": "2026-09-22T13:20:00+01:00",
+                "expiration_iso": "2026-09-22T12:15:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 24,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 1,
+                "max_num_tickets": 24,
+                "price": 18,
+                "currency": "GBP",
+                "surcharge_per_ticket": 1.08,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 1,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-17a145c8-c7dc-4df6-a498-c4bcb482c072",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-98ae6999-8a54-4b38-ba24-ea4ca32bed3f",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            },
+            {
+              "default_label": "Reduced (Child 10-17, Student, Senior 60+)",
+              "value": {
+                "id": 480846036,
+                "label": "Reduced (Child 10-17, Student, Senior 60+)",
+                "label_without_format": "Reduced (Child 10-17, Student, Senior 60+)",
+                "item_type": "30289001",
+                "details": "<strong>Ticket for 1 person, including:</strong><ul><li>Entry to the experience</li></ul>*<em>Valid ID required</em>",
+                "starts_at_iso": "2026-09-22T12:20:00+01:00",
+                "ends_at_iso": "2026-09-22T13:20:00+01:00",
+                "expiration_iso": "2026-09-22T12:15:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 24,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 1,
+                "max_num_tickets": 24,
+                "price": 15,
+                "currency": "GBP",
+                "surcharge_per_ticket": 0.9,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 2,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-17a145c8-c7dc-4df6-a498-c4bcb482c072",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-98ae6999-8a54-4b38-ba24-ea4ca32bed3f",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            },
+            {
+              "default_label": "Group Bundle (min. 4 tickets)",
+              "value": {
+                "id": 480846046,
+                "label": "Group Bundle (min. 4 tickets)",
+                "label_without_format": "Group Bundle (min. 4 tickets)",
+                "item_type": "30289002",
+                "details": "<strong>Tickets for 4+ people, including:</strong><ul><li>Entry to the experience</li></ul>",
+                "starts_at_iso": "2026-09-22T12:20:00+01:00",
+                "ends_at_iso": "2026-09-22T13:20:00+01:00",
+                "expiration_iso": "2026-09-22T12:15:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 24,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 4,
+                "max_num_tickets": 24,
+                "price": 16,
+                "currency": "GBP",
+                "surcharge_per_ticket": 0.96,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 3,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-17a145c8-c7dc-4df6-a498-c4bcb482c072",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-98ae6999-8a54-4b38-ba24-ea4ca32bed3f",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            }
+          ],
+          "session_selector_group_hash": "8dd572d0c06d4cfcac7314bd6e714847"
+        }
+      },
+      {
+        "default_label": "12:40 pm",
+        "value": {
+          "from": "2026-09-22T12:40:00+01:00",
+          "timezone": "Europe/London"
+        },
+        "level": {
+          "type": "session",
+          "items": [
+            {
+              "default_label": "Adult (18+)",
+              "value": {
+                "id": 480846081,
+                "label": "Adult (18+)",
+                "label_without_format": "Adult (18+)",
+                "item_type": "30289000",
+                "details": "<strong>Ticket for 1 person, including:</strong><ul><li>Entry to the experience</li></ul>",
+                "starts_at_iso": "2026-09-22T12:40:00+01:00",
+                "ends_at_iso": "2026-09-22T13:40:00+01:00",
+                "expiration_iso": "2026-09-22T12:35:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 24,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 1,
+                "max_num_tickets": 24,
+                "price": 18,
+                "currency": "GBP",
+                "surcharge_per_ticket": 1.08,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 1,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-3583bf76-ba3f-49d7-889b-8b88672b878c",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-a44526a3-0efa-4065-8089-c022878c8486",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            },
+            {
+              "default_label": "Reduced (Child 10-17, Student, Senior 60+)",
+              "value": {
+                "id": 480846095,
+                "label": "Reduced (Child 10-17, Student, Senior 60+)",
+                "label_without_format": "Reduced (Child 10-17, Student, Senior 60+)",
+                "item_type": "30289001",
+                "details": "<strong>Ticket for 1 person, including:</strong><ul><li>Entry to the experience</li></ul>*<em>Valid ID required</em>",
+                "starts_at_iso": "2026-09-22T12:40:00+01:00",
+                "ends_at_iso": "2026-09-22T13:40:00+01:00",
+                "expiration_iso": "2026-09-22T12:35:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 24,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 1,
+                "max_num_tickets": 24,
+                "price": 15,
+                "currency": "GBP",
+                "surcharge_per_ticket": 0.9,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 2,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-3583bf76-ba3f-49d7-889b-8b88672b878c",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-a44526a3-0efa-4065-8089-c022878c8486",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            },
+            {
+              "default_label": "Group Bundle (min. 4 tickets)",
+              "value": {
+                "id": 480846106,
+                "label": "Group Bundle (min. 4 tickets)",
+                "label_without_format": "Group Bundle (min. 4 tickets)",
+                "item_type": "30289002",
+                "details": "<strong>Tickets for 4+ people, including:</strong><ul><li>Entry to the experience</li></ul>",
+                "starts_at_iso": "2026-09-22T12:40:00+01:00",
+                "ends_at_iso": "2026-09-22T13:40:00+01:00",
+                "expiration_iso": "2026-09-22T12:35:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 24,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 4,
+                "max_num_tickets": 24,
+                "price": 16,
+                "currency": "GBP",
+                "surcharge_per_ticket": 0.96,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 3,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-3583bf76-ba3f-49d7-889b-8b88672b878c",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-a44526a3-0efa-4065-8089-c022878c8486",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            }
+          ],
+          "session_selector_group_hash": "dc289b648fcb5698f8448d5418c7289f"
+        }
+      },
+      {
+        "default_label": "1:00 pm",
+        "value": {
+          "from": "2026-09-22T13:00:00+01:00",
+          "timezone": "Europe/London"
+        },
+        "level": {
+          "type": "session",
+          "items": [
+            {
+              "default_label": "Adult (18+)",
+              "value": {
+                "id": 480846150,
+                "label": "Adult (18+)",
+                "label_without_format": "Adult (18+)",
+                "item_type": "30289000",
+                "details": "<strong>Ticket for 1 person, including:</strong><ul><li>Entry to the experience</li></ul>",
+                "starts_at_iso": "2026-09-22T13:00:00+01:00",
+                "ends_at_iso": "2026-09-22T14:00:00+01:00",
+                "expiration_iso": "2026-09-22T12:55:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 23,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 1,
+                "max_num_tickets": 23,
+                "price": 18,
+                "currency": "GBP",
+                "surcharge_per_ticket": 1.08,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 1,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-e4eb71e0-552e-48d2-aeb9-4924ff136486",
+                      "min": 0,
+                      "max": 23,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 23 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-bb914e27-b55b-453d-88ff-4e70bf71f994",
+                      "min": 0,
+                      "max": 23,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 23 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            },
+            {
+              "default_label": "Reduced (Child 10-17, Student, Senior 60+)",
+              "value": {
+                "id": 480846161,
+                "label": "Reduced (Child 10-17, Student, Senior 60+)",
+                "label_without_format": "Reduced (Child 10-17, Student, Senior 60+)",
+                "item_type": "30289001",
+                "details": "<strong>Ticket for 1 person, including:</strong><ul><li>Entry to the experience</li></ul>*<em>Valid ID required</em>",
+                "starts_at_iso": "2026-09-22T13:00:00+01:00",
+                "ends_at_iso": "2026-09-22T14:00:00+01:00",
+                "expiration_iso": "2026-09-22T12:55:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 23,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 1,
+                "max_num_tickets": 23,
+                "price": 15,
+                "currency": "GBP",
+                "surcharge_per_ticket": 0.9,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 2,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-e4eb71e0-552e-48d2-aeb9-4924ff136486",
+                      "min": 0,
+                      "max": 23,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 23 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-bb914e27-b55b-453d-88ff-4e70bf71f994",
+                      "min": 0,
+                      "max": 23,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 23 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            },
+            {
+              "default_label": "Group Bundle (min. 4 tickets)",
+              "value": {
+                "id": 480846175,
+                "label": "Group Bundle (min. 4 tickets)",
+                "label_without_format": "Group Bundle (min. 4 tickets)",
+                "item_type": "30289002",
+                "details": "<strong>Tickets for 4+ people, including:</strong><ul><li>Entry to the experience</li></ul>",
+                "starts_at_iso": "2026-09-22T13:00:00+01:00",
+                "ends_at_iso": "2026-09-22T14:00:00+01:00",
+                "expiration_iso": "2026-09-22T12:55:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 23,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 4,
+                "max_num_tickets": 23,
+                "price": 16,
+                "currency": "GBP",
+                "surcharge_per_ticket": 0.96,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 3,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-e4eb71e0-552e-48d2-aeb9-4924ff136486",
+                      "min": 0,
+                      "max": 23,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 23 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-bb914e27-b55b-453d-88ff-4e70bf71f994",
+                      "min": 0,
+                      "max": 23,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 23 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            }
+          ],
+          "session_selector_group_hash": "8654e66785d5cf177e07d0c07b48e01c"
+        }
+      },
+      {
+        "default_label": "1:20 pm",
+        "value": {
+          "from": "2026-09-22T13:20:00+01:00",
+          "timezone": "Europe/London"
+        },
+        "level": {
+          "type": "session",
+          "items": [
+            {
+              "default_label": "Adult (18+)",
+              "value": {
+                "id": 480846216,
+                "label": "Adult (18+)",
+                "label_without_format": "Adult (18+)",
+                "item_type": "30289000",
+                "details": "<strong>Ticket for 1 person, including:</strong><ul><li>Entry to the experience</li></ul>",
+                "starts_at_iso": "2026-09-22T13:20:00+01:00",
+                "ends_at_iso": "2026-09-22T14:20:00+01:00",
+                "expiration_iso": "2026-09-22T13:15:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 24,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 1,
+                "max_num_tickets": 24,
+                "price": 18,
+                "currency": "GBP",
+                "surcharge_per_ticket": 1.08,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 1,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-465f16e7-7e1c-4bc3-b072-a7bbb03c82d0",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-b7474c81-1d76-440e-99e0-1ccb62e0943b",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            },
+            {
+              "default_label": "Reduced (Child 10-17, Student, Senior 60+)",
+              "value": {
+                "id": 480846231,
+                "label": "Reduced (Child 10-17, Student, Senior 60+)",
+                "label_without_format": "Reduced (Child 10-17, Student, Senior 60+)",
+                "item_type": "30289001",
+                "details": "<strong>Ticket for 1 person, including:</strong><ul><li>Entry to the experience</li></ul>*<em>Valid ID required</em>",
+                "starts_at_iso": "2026-09-22T13:20:00+01:00",
+                "ends_at_iso": "2026-09-22T14:20:00+01:00",
+                "expiration_iso": "2026-09-22T13:15:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 24,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 1,
+                "max_num_tickets": 24,
+                "price": 15,
+                "currency": "GBP",
+                "surcharge_per_ticket": 0.9,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 2,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-465f16e7-7e1c-4bc3-b072-a7bbb03c82d0",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-b7474c81-1d76-440e-99e0-1ccb62e0943b",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            },
+            {
+              "default_label": "Group Bundle (min. 4 tickets)",
+              "value": {
+                "id": 480846244,
+                "label": "Group Bundle (min. 4 tickets)",
+                "label_without_format": "Group Bundle (min. 4 tickets)",
+                "item_type": "30289002",
+                "details": "<strong>Tickets for 4+ people, including:</strong><ul><li>Entry to the experience</li></ul>",
+                "starts_at_iso": "2026-09-22T13:20:00+01:00",
+                "ends_at_iso": "2026-09-22T14:20:00+01:00",
+                "expiration_iso": "2026-09-22T13:15:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 24,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 4,
+                "max_num_tickets": 24,
+                "price": 16,
+                "currency": "GBP",
+                "surcharge_per_ticket": 0.96,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 3,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-465f16e7-7e1c-4bc3-b072-a7bbb03c82d0",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-b7474c81-1d76-440e-99e0-1ccb62e0943b",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            }
+          ],
+          "session_selector_group_hash": "81ffd6e4d78215819aff7c40a1b6ff77"
+        }
+      },
+      {
+        "default_label": "1:40 pm",
+        "value": {
+          "from": "2026-09-22T13:40:00+01:00",
+          "timezone": "Europe/London"
+        },
+        "level": {
+          "type": "session",
+          "items": [
+            {
+              "default_label": "Adult (18+)",
+              "value": {
+                "id": 480846286,
+                "label": "Adult (18+)",
+                "label_without_format": "Adult (18+)",
+                "item_type": "30289000",
+                "details": "<strong>Ticket for 1 person, including:</strong><ul><li>Entry to the experience</li></ul>",
+                "starts_at_iso": "2026-09-22T13:40:00+01:00",
+                "ends_at_iso": "2026-09-22T14:40:00+01:00",
+                "expiration_iso": "2026-09-22T13:35:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 24,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 1,
+                "max_num_tickets": 24,
+                "price": 18,
+                "currency": "GBP",
+                "surcharge_per_ticket": 1.08,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 1,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-e3e4bc6f-2941-497e-a361-f1c47fdef5d1",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-f49b7bfc-bcff-4346-8513-936c5aac1ae1",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            },
+            {
+              "default_label": "Reduced (Child 10-17, Student, Senior 60+)",
+              "value": {
+                "id": 480846298,
+                "label": "Reduced (Child 10-17, Student, Senior 60+)",
+                "label_without_format": "Reduced (Child 10-17, Student, Senior 60+)",
+                "item_type": "30289001",
+                "details": "<strong>Ticket for 1 person, including:</strong><ul><li>Entry to the experience</li></ul>*<em>Valid ID required</em>",
+                "starts_at_iso": "2026-09-22T13:40:00+01:00",
+                "ends_at_iso": "2026-09-22T14:40:00+01:00",
+                "expiration_iso": "2026-09-22T13:35:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 24,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 1,
+                "max_num_tickets": 24,
+                "price": 15,
+                "currency": "GBP",
+                "surcharge_per_ticket": 0.9,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 2,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-e3e4bc6f-2941-497e-a361-f1c47fdef5d1",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-f49b7bfc-bcff-4346-8513-936c5aac1ae1",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            },
+            {
+              "default_label": "Group Bundle (min. 4 tickets)",
+              "value": {
+                "id": 480846311,
+                "label": "Group Bundle (min. 4 tickets)",
+                "label_without_format": "Group Bundle (min. 4 tickets)",
+                "item_type": "30289002",
+                "details": "<strong>Tickets for 4+ people, including:</strong><ul><li>Entry to the experience</li></ul>",
+                "starts_at_iso": "2026-09-22T13:40:00+01:00",
+                "ends_at_iso": "2026-09-22T14:40:00+01:00",
+                "expiration_iso": "2026-09-22T13:35:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 24,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 4,
+                "max_num_tickets": 24,
+                "price": 16,
+                "currency": "GBP",
+                "surcharge_per_ticket": 0.96,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 3,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-e3e4bc6f-2941-497e-a361-f1c47fdef5d1",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-f49b7bfc-bcff-4346-8513-936c5aac1ae1",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            }
+          ],
+          "session_selector_group_hash": "f9c0fcd509a4e390dc27901442334cc7"
+        }
+      },
+      {
+        "default_label": "2:00 pm",
+        "value": {
+          "from": "2026-09-22T14:00:00+01:00",
+          "timezone": "Europe/London"
+        },
+        "level": {
+          "type": "session",
+          "items": [
+            {
+              "default_label": "Adult (18+)",
+              "value": {
+                "id": 480846353,
+                "label": "Adult (18+)",
+                "label_without_format": "Adult (18+)",
+                "item_type": "30289000",
+                "details": "<strong>Ticket for 1 person, including:</strong><ul><li>Entry to the experience</li></ul>",
+                "starts_at_iso": "2026-09-22T14:00:00+01:00",
+                "ends_at_iso": "2026-09-22T15:00:00+01:00",
+                "expiration_iso": "2026-09-22T13:55:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 21,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 1,
+                "max_num_tickets": 21,
+                "price": 18,
+                "currency": "GBP",
+                "surcharge_per_ticket": 1.08,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 1,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-583570ec-5dc1-47ea-9854-f569a3bd3549",
+                      "min": 0,
+                      "max": 21,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 21 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-d61a624f-b756-49ad-9ac1-a46ecae60145",
+                      "min": 0,
+                      "max": 21,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 21 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            },
+            {
+              "default_label": "Reduced (Child 10-17, Student, Senior 60+)",
+              "value": {
+                "id": 480846363,
+                "label": "Reduced (Child 10-17, Student, Senior 60+)",
+                "label_without_format": "Reduced (Child 10-17, Student, Senior 60+)",
+                "item_type": "30289001",
+                "details": "<strong>Ticket for 1 person, including:</strong><ul><li>Entry to the experience</li></ul>*<em>Valid ID required</em>",
+                "starts_at_iso": "2026-09-22T14:00:00+01:00",
+                "ends_at_iso": "2026-09-22T15:00:00+01:00",
+                "expiration_iso": "2026-09-22T13:55:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 21,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 1,
+                "max_num_tickets": 21,
+                "price": 15,
+                "currency": "GBP",
+                "surcharge_per_ticket": 0.9,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 2,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-583570ec-5dc1-47ea-9854-f569a3bd3549",
+                      "min": 0,
+                      "max": 21,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 21 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-d61a624f-b756-49ad-9ac1-a46ecae60145",
+                      "min": 0,
+                      "max": 21,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 21 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            },
+            {
+              "default_label": "Group Bundle (min. 4 tickets)",
+              "value": {
+                "id": 480846376,
+                "label": "Group Bundle (min. 4 tickets)",
+                "label_without_format": "Group Bundle (min. 4 tickets)",
+                "item_type": "30289002",
+                "details": "<strong>Tickets for 4+ people, including:</strong><ul><li>Entry to the experience</li></ul>",
+                "starts_at_iso": "2026-09-22T14:00:00+01:00",
+                "ends_at_iso": "2026-09-22T15:00:00+01:00",
+                "expiration_iso": "2026-09-22T13:55:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 21,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 4,
+                "max_num_tickets": 21,
+                "price": 16,
+                "currency": "GBP",
+                "surcharge_per_ticket": 0.96,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 3,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-583570ec-5dc1-47ea-9854-f569a3bd3549",
+                      "min": 0,
+                      "max": 21,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 21 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-d61a624f-b756-49ad-9ac1-a46ecae60145",
+                      "min": 0,
+                      "max": 21,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 21 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            }
+          ],
+          "session_selector_group_hash": "4f9aa649a7844793e39ebcee48e683b8"
+        }
+      },
+      {
+        "default_label": "2:20 pm",
+        "value": {
+          "from": "2026-09-22T14:20:00+01:00",
+          "timezone": "Europe/London"
+        },
+        "level": {
+          "type": "session",
+          "items": [
+            {
+              "default_label": "Adult (18+)",
+              "value": {
+                "id": 480846414,
+                "label": "Adult (18+)",
+                "label_without_format": "Adult (18+)",
+                "item_type": "30289000",
+                "details": "<strong>Ticket for 1 person, including:</strong><ul><li>Entry to the experience</li></ul>",
+                "starts_at_iso": "2026-09-22T14:20:00+01:00",
+                "ends_at_iso": "2026-09-22T15:20:00+01:00",
+                "expiration_iso": "2026-09-22T14:15:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 24,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 1,
+                "max_num_tickets": 24,
+                "price": 18,
+                "currency": "GBP",
+                "surcharge_per_ticket": 1.08,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 1,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-465fd620-1eae-436c-aa5f-edfdf365b8ea",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-7881cf42-27bb-4eae-aaae-4da98c4d77e0",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            },
+            {
+              "default_label": "Reduced (Child 10-17, Student, Senior 60+)",
+              "value": {
+                "id": 480846428,
+                "label": "Reduced (Child 10-17, Student, Senior 60+)",
+                "label_without_format": "Reduced (Child 10-17, Student, Senior 60+)",
+                "item_type": "30289001",
+                "details": "<strong>Ticket for 1 person, including:</strong><ul><li>Entry to the experience</li></ul>*<em>Valid ID required</em>",
+                "starts_at_iso": "2026-09-22T14:20:00+01:00",
+                "ends_at_iso": "2026-09-22T15:20:00+01:00",
+                "expiration_iso": "2026-09-22T14:15:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 24,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 1,
+                "max_num_tickets": 24,
+                "price": 15,
+                "currency": "GBP",
+                "surcharge_per_ticket": 0.9,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 2,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-465fd620-1eae-436c-aa5f-edfdf365b8ea",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-7881cf42-27bb-4eae-aaae-4da98c4d77e0",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            },
+            {
+              "default_label": "Group Bundle (min. 4 tickets)",
+              "value": {
+                "id": 480846439,
+                "label": "Group Bundle (min. 4 tickets)",
+                "label_without_format": "Group Bundle (min. 4 tickets)",
+                "item_type": "30289002",
+                "details": "<strong>Tickets for 4+ people, including:</strong><ul><li>Entry to the experience</li></ul>",
+                "starts_at_iso": "2026-09-22T14:20:00+01:00",
+                "ends_at_iso": "2026-09-22T15:20:00+01:00",
+                "expiration_iso": "2026-09-22T14:15:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 24,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 4,
+                "max_num_tickets": 24,
+                "price": 16,
+                "currency": "GBP",
+                "surcharge_per_ticket": 0.96,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 3,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-465fd620-1eae-436c-aa5f-edfdf365b8ea",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-7881cf42-27bb-4eae-aaae-4da98c4d77e0",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            }
+          ],
+          "session_selector_group_hash": "2f691ffcdfa346b5f57cc94862363dd5"
+        }
+      },
+      {
+        "default_label": "2:40 pm",
+        "value": {
+          "from": "2026-09-22T14:40:00+01:00",
+          "timezone": "Europe/London"
+        },
+        "level": {
+          "type": "session",
+          "items": [
+            {
+              "default_label": "Adult (18+)",
+              "value": {
+                "id": 480846475,
+                "label": "Adult (18+)",
+                "label_without_format": "Adult (18+)",
+                "item_type": "30289000",
+                "details": "<strong>Ticket for 1 person, including:</strong><ul><li>Entry to the experience</li></ul>",
+                "starts_at_iso": "2026-09-22T14:40:00+01:00",
+                "ends_at_iso": "2026-09-22T15:40:00+01:00",
+                "expiration_iso": "2026-09-22T14:35:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 19,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 1,
+                "max_num_tickets": 19,
+                "price": 18,
+                "currency": "GBP",
+                "surcharge_per_ticket": 1.08,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 1,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-39ebc510-fc1d-4272-ba31-b5b51ae89e89",
+                      "min": 0,
+                      "max": 19,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 19 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-8ee88323-2bb2-4788-961f-16d87a44f08c",
+                      "min": 0,
+                      "max": 19,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 19 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            },
+            {
+              "default_label": "Reduced (Child 10-17, Student, Senior 60+)",
+              "value": {
+                "id": 480846488,
+                "label": "Reduced (Child 10-17, Student, Senior 60+)",
+                "label_without_format": "Reduced (Child 10-17, Student, Senior 60+)",
+                "item_type": "30289001",
+                "details": "<strong>Ticket for 1 person, including:</strong><ul><li>Entry to the experience</li></ul>*<em>Valid ID required</em>",
+                "starts_at_iso": "2026-09-22T14:40:00+01:00",
+                "ends_at_iso": "2026-09-22T15:40:00+01:00",
+                "expiration_iso": "2026-09-22T14:35:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 19,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 1,
+                "max_num_tickets": 19,
+                "price": 15,
+                "currency": "GBP",
+                "surcharge_per_ticket": 0.9,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 2,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-39ebc510-fc1d-4272-ba31-b5b51ae89e89",
+                      "min": 0,
+                      "max": 19,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 19 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-8ee88323-2bb2-4788-961f-16d87a44f08c",
+                      "min": 0,
+                      "max": 19,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 19 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            },
+            {
+              "default_label": "Group Bundle (min. 4 tickets)",
+              "value": {
+                "id": 480846499,
+                "label": "Group Bundle (min. 4 tickets)",
+                "label_without_format": "Group Bundle (min. 4 tickets)",
+                "item_type": "30289002",
+                "details": "<strong>Tickets for 4+ people, including:</strong><ul><li>Entry to the experience</li></ul>",
+                "starts_at_iso": "2026-09-22T14:40:00+01:00",
+                "ends_at_iso": "2026-09-22T15:40:00+01:00",
+                "expiration_iso": "2026-09-22T14:35:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 19,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 4,
+                "max_num_tickets": 19,
+                "price": 16,
+                "currency": "GBP",
+                "surcharge_per_ticket": 0.96,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 3,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-39ebc510-fc1d-4272-ba31-b5b51ae89e89",
+                      "min": 0,
+                      "max": 19,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 19 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-8ee88323-2bb2-4788-961f-16d87a44f08c",
+                      "min": 0,
+                      "max": 19,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 19 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            }
+          ],
+          "session_selector_group_hash": "f11fc85cbef0ed3fb8e952af42b63ac5"
+        }
+      },
+      {
+        "default_label": "3:00 pm",
+        "value": {
+          "from": "2026-09-22T15:00:00+01:00",
+          "timezone": "Europe/London"
+        },
+        "level": {
+          "type": "session",
+          "items": [
+            {
+              "default_label": "Adult (18+)",
+              "value": {
+                "id": 480849380,
+                "label": "Adult (18+)",
+                "label_without_format": "Adult (18+)",
+                "item_type": "30289000",
+                "details": "<strong>Ticket for 1 person, including:</strong><ul><li>Entry to the experience</li></ul>",
+                "starts_at_iso": "2026-09-22T15:00:00+01:00",
+                "ends_at_iso": "2026-09-22T16:00:00+01:00",
+                "expiration_iso": "2026-09-22T14:55:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 22,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 1,
+                "max_num_tickets": 22,
+                "price": 21,
+                "currency": "GBP",
+                "surcharge_per_ticket": 1.26,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 1,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-531fda47-3a2d-4816-ac0c-de5c64097107",
+                      "min": 0,
+                      "max": 22,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 22 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-e801fd4d-3dcd-41ca-8f76-56e9f760384e",
+                      "min": 0,
+                      "max": 22,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 22 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            },
+            {
+              "default_label": "Reduced (Child 10-17, Student, Senior 60+)",
+              "value": {
+                "id": 480849401,
+                "label": "Reduced (Child 10-17, Student, Senior 60+)",
+                "label_without_format": "Reduced (Child 10-17, Student, Senior 60+)",
+                "item_type": "30289001",
+                "details": "<strong>Ticket for 1 person, including:</strong><ul><li>Entry to the experience</li></ul>*<em>Valid ID required</em>",
+                "starts_at_iso": "2026-09-22T15:00:00+01:00",
+                "ends_at_iso": "2026-09-22T16:00:00+01:00",
+                "expiration_iso": "2026-09-22T14:55:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 22,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 1,
+                "max_num_tickets": 22,
+                "price": 18,
+                "currency": "GBP",
+                "surcharge_per_ticket": 1.08,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 2,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-531fda47-3a2d-4816-ac0c-de5c64097107",
+                      "min": 0,
+                      "max": 22,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 22 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-e801fd4d-3dcd-41ca-8f76-56e9f760384e",
+                      "min": 0,
+                      "max": 22,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 22 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            },
+            {
+              "default_label": "Group Bundle (min. 4 tickets)",
+              "value": {
+                "id": 480849420,
+                "label": "Group Bundle (min. 4 tickets)",
+                "label_without_format": "Group Bundle (min. 4 tickets)",
+                "item_type": "30289002",
+                "details": "<strong>Tickets for 4+ people, including:</strong><ul><li>Entry to the experience</li></ul>",
+                "starts_at_iso": "2026-09-22T15:00:00+01:00",
+                "ends_at_iso": "2026-09-22T16:00:00+01:00",
+                "expiration_iso": "2026-09-22T14:55:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 22,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 4,
+                "max_num_tickets": 22,
+                "price": 19,
+                "currency": "GBP",
+                "surcharge_per_ticket": 1.14,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 3,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-531fda47-3a2d-4816-ac0c-de5c64097107",
+                      "min": 0,
+                      "max": 22,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 22 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-e801fd4d-3dcd-41ca-8f76-56e9f760384e",
+                      "min": 0,
+                      "max": 22,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 22 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            }
+          ],
+          "session_selector_group_hash": "77f8f98ea3c1e56f35ee893a7cc2cbbf"
+        }
+      },
+      {
+        "default_label": "3:20 pm",
+        "value": {
+          "from": "2026-09-22T15:20:00+01:00",
+          "timezone": "Europe/London"
+        },
+        "level": {
+          "type": "session",
+          "items": [
+            {
+              "default_label": "Adult (18+)",
+              "value": {
+                "id": 480849483,
+                "label": "Adult (18+)",
+                "label_without_format": "Adult (18+)",
+                "item_type": "30289000",
+                "details": "<strong>Ticket for 1 person, including:</strong><ul><li>Entry to the experience</li></ul>",
+                "starts_at_iso": "2026-09-22T15:20:00+01:00",
+                "ends_at_iso": "2026-09-22T16:20:00+01:00",
+                "expiration_iso": "2026-09-22T15:15:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 24,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 1,
+                "max_num_tickets": 24,
+                "price": 21,
+                "currency": "GBP",
+                "surcharge_per_ticket": 1.26,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 1,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-6bb22afe-dd56-4860-8268-12e9b5442c11",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-7a3fd7e4-c78f-48fe-8146-2510b0df29c0",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            },
+            {
+              "default_label": "Reduced (Child 10-17, Student, Senior 60+)",
+              "value": {
+                "id": 480849503,
+                "label": "Reduced (Child 10-17, Student, Senior 60+)",
+                "label_without_format": "Reduced (Child 10-17, Student, Senior 60+)",
+                "item_type": "30289001",
+                "details": "<strong>Ticket for 1 person, including:</strong><ul><li>Entry to the experience</li></ul>*<em>Valid ID required</em>",
+                "starts_at_iso": "2026-09-22T15:20:00+01:00",
+                "ends_at_iso": "2026-09-22T16:20:00+01:00",
+                "expiration_iso": "2026-09-22T15:15:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 24,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 1,
+                "max_num_tickets": 24,
+                "price": 18,
+                "currency": "GBP",
+                "surcharge_per_ticket": 1.08,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 2,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-6bb22afe-dd56-4860-8268-12e9b5442c11",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-7a3fd7e4-c78f-48fe-8146-2510b0df29c0",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            },
+            {
+              "default_label": "Group Bundle (min. 4 tickets)",
+              "value": {
+                "id": 480849521,
+                "label": "Group Bundle (min. 4 tickets)",
+                "label_without_format": "Group Bundle (min. 4 tickets)",
+                "item_type": "30289002",
+                "details": "<strong>Tickets for 4+ people, including:</strong><ul><li>Entry to the experience</li></ul>",
+                "starts_at_iso": "2026-09-22T15:20:00+01:00",
+                "ends_at_iso": "2026-09-22T16:20:00+01:00",
+                "expiration_iso": "2026-09-22T15:15:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 24,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 4,
+                "max_num_tickets": 24,
+                "price": 19,
+                "currency": "GBP",
+                "surcharge_per_ticket": 1.14,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 3,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-6bb22afe-dd56-4860-8268-12e9b5442c11",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-7a3fd7e4-c78f-48fe-8146-2510b0df29c0",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            }
+          ],
+          "session_selector_group_hash": "cbde7d52662d0997683bdef864b51c93"
+        }
+      },
+      {
+        "default_label": "3:40 pm",
+        "value": {
+          "from": "2026-09-22T15:40:00+01:00",
+          "timezone": "Europe/London"
+        },
+        "level": {
+          "type": "session",
+          "items": [
+            {
+              "default_label": "Adult (18+)",
+              "value": {
+                "id": 480849588,
+                "label": "Adult (18+)",
+                "label_without_format": "Adult (18+)",
+                "item_type": "30289000",
+                "details": "<strong>Ticket for 1 person, including:</strong><ul><li>Entry to the experience</li></ul>",
+                "starts_at_iso": "2026-09-22T15:40:00+01:00",
+                "ends_at_iso": "2026-09-22T16:40:00+01:00",
+                "expiration_iso": "2026-09-22T15:35:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 24,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 1,
+                "max_num_tickets": 24,
+                "price": 21,
+                "currency": "GBP",
+                "surcharge_per_ticket": 1.26,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 1,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-6eeb22b7-cf58-42aa-bd28-f0c09e6df9b8",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-f461ce98-2d43-4f02-ab88-87c6849d5885",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            },
+            {
+              "default_label": "Reduced (Child 10-17, Student, Senior 60+)",
+              "value": {
+                "id": 480849607,
+                "label": "Reduced (Child 10-17, Student, Senior 60+)",
+                "label_without_format": "Reduced (Child 10-17, Student, Senior 60+)",
+                "item_type": "30289001",
+                "details": "<strong>Ticket for 1 person, including:</strong><ul><li>Entry to the experience</li></ul>*<em>Valid ID required</em>",
+                "starts_at_iso": "2026-09-22T15:40:00+01:00",
+                "ends_at_iso": "2026-09-22T16:40:00+01:00",
+                "expiration_iso": "2026-09-22T15:35:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 24,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 1,
+                "max_num_tickets": 24,
+                "price": 18,
+                "currency": "GBP",
+                "surcharge_per_ticket": 1.08,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 2,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-6eeb22b7-cf58-42aa-bd28-f0c09e6df9b8",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-f461ce98-2d43-4f02-ab88-87c6849d5885",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            },
+            {
+              "default_label": "Group Bundle (min. 4 tickets)",
+              "value": {
+                "id": 480849626,
+                "label": "Group Bundle (min. 4 tickets)",
+                "label_without_format": "Group Bundle (min. 4 tickets)",
+                "item_type": "30289002",
+                "details": "<strong>Tickets for 4+ people, including:</strong><ul><li>Entry to the experience</li></ul>",
+                "starts_at_iso": "2026-09-22T15:40:00+01:00",
+                "ends_at_iso": "2026-09-22T16:40:00+01:00",
+                "expiration_iso": "2026-09-22T15:35:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 24,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 4,
+                "max_num_tickets": 24,
+                "price": 19,
+                "currency": "GBP",
+                "surcharge_per_ticket": 1.14,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 3,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-6eeb22b7-cf58-42aa-bd28-f0c09e6df9b8",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-f461ce98-2d43-4f02-ab88-87c6849d5885",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            }
+          ],
+          "session_selector_group_hash": "73d9cd13d7e64805475c2cb1b7eb2176"
+        }
+      },
+      {
+        "default_label": "4:00 pm",
+        "value": {
+          "from": "2026-09-22T16:00:00+01:00",
+          "timezone": "Europe/London"
+        },
+        "level": {
+          "type": "session",
+          "items": [
+            {
+              "default_label": "Adult (18+)",
+              "value": {
+                "id": 480849682,
+                "label": "Adult (18+)",
+                "label_without_format": "Adult (18+)",
+                "item_type": "30289000",
+                "details": "<strong>Ticket for 1 person, including:</strong><ul><li>Entry to the experience</li></ul>",
+                "starts_at_iso": "2026-09-22T16:00:00+01:00",
+                "ends_at_iso": "2026-09-22T17:00:00+01:00",
+                "expiration_iso": "2026-09-22T15:55:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 24,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 1,
+                "max_num_tickets": 24,
+                "price": 21,
+                "currency": "GBP",
+                "surcharge_per_ticket": 1.26,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 1,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-af4d3764-647d-4767-a651-769a9b21095f",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-81167a02-1efc-42c4-a176-6f7c7caf94ff",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            },
+            {
+              "default_label": "Reduced (Child 10-17, Student, Senior 60+)",
+              "value": {
+                "id": 480849702,
+                "label": "Reduced (Child 10-17, Student, Senior 60+)",
+                "label_without_format": "Reduced (Child 10-17, Student, Senior 60+)",
+                "item_type": "30289001",
+                "details": "<strong>Ticket for 1 person, including:</strong><ul><li>Entry to the experience</li></ul>*<em>Valid ID required</em>",
+                "starts_at_iso": "2026-09-22T16:00:00+01:00",
+                "ends_at_iso": "2026-09-22T17:00:00+01:00",
+                "expiration_iso": "2026-09-22T15:55:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 24,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 1,
+                "max_num_tickets": 24,
+                "price": 18,
+                "currency": "GBP",
+                "surcharge_per_ticket": 1.08,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 2,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-af4d3764-647d-4767-a651-769a9b21095f",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-81167a02-1efc-42c4-a176-6f7c7caf94ff",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            },
+            {
+              "default_label": "Group Bundle (min. 4 tickets)",
+              "value": {
+                "id": 480849718,
+                "label": "Group Bundle (min. 4 tickets)",
+                "label_without_format": "Group Bundle (min. 4 tickets)",
+                "item_type": "30289002",
+                "details": "<strong>Tickets for 4+ people, including:</strong><ul><li>Entry to the experience</li></ul>",
+                "starts_at_iso": "2026-09-22T16:00:00+01:00",
+                "ends_at_iso": "2026-09-22T17:00:00+01:00",
+                "expiration_iso": "2026-09-22T15:55:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 24,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 4,
+                "max_num_tickets": 24,
+                "price": 19,
+                "currency": "GBP",
+                "surcharge_per_ticket": 1.14,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 3,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-af4d3764-647d-4767-a651-769a9b21095f",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-81167a02-1efc-42c4-a176-6f7c7caf94ff",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            }
+          ],
+          "session_selector_group_hash": "f886cc5d09430e69b8e7847505b2aa20"
+        }
+      },
+      {
+        "default_label": "4:20 pm",
+        "value": {
+          "from": "2026-09-22T16:20:00+01:00",
+          "timezone": "Europe/London"
+        },
+        "level": {
+          "type": "session",
+          "items": [
+            {
+              "default_label": "Adult (18+)",
+              "value": {
+                "id": 480849777,
+                "label": "Adult (18+)",
+                "label_without_format": "Adult (18+)",
+                "item_type": "30289000",
+                "details": "<strong>Ticket for 1 person, including:</strong><ul><li>Entry to the experience</li></ul>",
+                "starts_at_iso": "2026-09-22T16:20:00+01:00",
+                "ends_at_iso": "2026-09-22T17:20:00+01:00",
+                "expiration_iso": "2026-09-22T16:15:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 24,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 1,
+                "max_num_tickets": 24,
+                "price": 21,
+                "currency": "GBP",
+                "surcharge_per_ticket": 1.26,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 1,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-e645d0c1-b655-43eb-8a39-b67fc002934f",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-3333534f-725c-48e3-929d-fa249fbcf4e2",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            },
+            {
+              "default_label": "Reduced (Child 10-17, Student, Senior 60+)",
+              "value": {
+                "id": 480849795,
+                "label": "Reduced (Child 10-17, Student, Senior 60+)",
+                "label_without_format": "Reduced (Child 10-17, Student, Senior 60+)",
+                "item_type": "30289001",
+                "details": "<strong>Ticket for 1 person, including:</strong><ul><li>Entry to the experience</li></ul>*<em>Valid ID required</em>",
+                "starts_at_iso": "2026-09-22T16:20:00+01:00",
+                "ends_at_iso": "2026-09-22T17:20:00+01:00",
+                "expiration_iso": "2026-09-22T16:15:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 24,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 1,
+                "max_num_tickets": 24,
+                "price": 18,
+                "currency": "GBP",
+                "surcharge_per_ticket": 1.08,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 2,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-e645d0c1-b655-43eb-8a39-b67fc002934f",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-3333534f-725c-48e3-929d-fa249fbcf4e2",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            },
+            {
+              "default_label": "Group Bundle (min. 4 tickets)",
+              "value": {
+                "id": 480849811,
+                "label": "Group Bundle (min. 4 tickets)",
+                "label_without_format": "Group Bundle (min. 4 tickets)",
+                "item_type": "30289002",
+                "details": "<strong>Tickets for 4+ people, including:</strong><ul><li>Entry to the experience</li></ul>",
+                "starts_at_iso": "2026-09-22T16:20:00+01:00",
+                "ends_at_iso": "2026-09-22T17:20:00+01:00",
+                "expiration_iso": "2026-09-22T16:15:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 24,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 4,
+                "max_num_tickets": 24,
+                "price": 19,
+                "currency": "GBP",
+                "surcharge_per_ticket": 1.14,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 3,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-e645d0c1-b655-43eb-8a39-b67fc002934f",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-3333534f-725c-48e3-929d-fa249fbcf4e2",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            }
+          ],
+          "session_selector_group_hash": "0d24a700e28d8c6e909327aa6e227f4e"
+        }
+      },
+      {
+        "default_label": "4:40 pm",
+        "value": {
+          "from": "2026-09-22T16:40:00+01:00",
+          "timezone": "Europe/London"
+        },
+        "level": {
+          "type": "session",
+          "items": [
+            {
+              "default_label": "Adult (18+)",
+              "value": {
+                "id": 480849874,
+                "label": "Adult (18+)",
+                "label_without_format": "Adult (18+)",
+                "item_type": "30289000",
+                "details": "<strong>Ticket for 1 person, including:</strong><ul><li>Entry to the experience</li></ul>",
+                "starts_at_iso": "2026-09-22T16:40:00+01:00",
+                "ends_at_iso": "2026-09-22T17:40:00+01:00",
+                "expiration_iso": "2026-09-22T16:35:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 24,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 1,
+                "max_num_tickets": 24,
+                "price": 21,
+                "currency": "GBP",
+                "surcharge_per_ticket": 1.26,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 1,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-d7dd774e-8b84-40b0-81f3-a0ea96712878",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-b6926f5e-a2d2-40fe-9ac8-69d34f2b3af2",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            },
+            {
+              "default_label": "Reduced (Child 10-17, Student, Senior 60+)",
+              "value": {
+                "id": 480849893,
+                "label": "Reduced (Child 10-17, Student, Senior 60+)",
+                "label_without_format": "Reduced (Child 10-17, Student, Senior 60+)",
+                "item_type": "30289001",
+                "details": "<strong>Ticket for 1 person, including:</strong><ul><li>Entry to the experience</li></ul>*<em>Valid ID required</em>",
+                "starts_at_iso": "2026-09-22T16:40:00+01:00",
+                "ends_at_iso": "2026-09-22T17:40:00+01:00",
+                "expiration_iso": "2026-09-22T16:35:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 24,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 1,
+                "max_num_tickets": 24,
+                "price": 18,
+                "currency": "GBP",
+                "surcharge_per_ticket": 1.08,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 2,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-d7dd774e-8b84-40b0-81f3-a0ea96712878",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-b6926f5e-a2d2-40fe-9ac8-69d34f2b3af2",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            },
+            {
+              "default_label": "Group Bundle (min. 4 tickets)",
+              "value": {
+                "id": 480849911,
+                "label": "Group Bundle (min. 4 tickets)",
+                "label_without_format": "Group Bundle (min. 4 tickets)",
+                "item_type": "30289002",
+                "details": "<strong>Tickets for 4+ people, including:</strong><ul><li>Entry to the experience</li></ul>",
+                "starts_at_iso": "2026-09-22T16:40:00+01:00",
+                "ends_at_iso": "2026-09-22T17:40:00+01:00",
+                "expiration_iso": "2026-09-22T16:35:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 24,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 4,
+                "max_num_tickets": 24,
+                "price": 19,
+                "currency": "GBP",
+                "surcharge_per_ticket": 1.14,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 3,
+                "is_pack": false,
+                "session_type_group": 155321,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-d7dd774e-8b84-40b0-81f3-a0ea96712878",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-b6926f5e-a2d2-40fe-9ac8-69d34f2b3af2",
+                      "min": 0,
+                      "max": 24,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 24 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            }
+          ],
+          "session_selector_group_hash": "a48648787a3305dd71a8046ebceaa14c"
+        }
+      }
+    ]
+  },
+  "add_ons": {
+    "2d2ec8d12f4640c2ffa267304d8f8749": [
+      {
+        "id": 0,
+        "label": "AI Portrait",
+        "description": "Relive your unforgettable space adventure with your own AI-generated individual portrait! Step into the role of an interstellar explorer and experience the thrill, wonder, and mystery of deep space like never before.",
+        "category": "session_as_add_on",
+        "pricing_type": "fixed_amount",
+        "price": 10,
+        "currency": "GBP",
+        "purchasable_state": "enabled",
+        "item_type": "30289003",
+        "cart_item_id": 480844926,
+        "session_selector_group_hash": "2d2ec8d12f4640c2ffa267304d8f8749",
+        "view_configuration": {
+          "type": "stepper",
+          "allowed_range": {
+            "step": 1,
+            "min": 1,
+            "max": 200
+          }
+        },
+        "rule": null,
+        "is_selected_by_default": false,
+        "surcharge_per_ticket": 0,
+        "requires_price_breakdown": true,
+        "strikethrough_price": 12,
+        "strikethrough_percentage": "17%",
+        "display_step": "ticket_selector",
+        "image_url": null,
+        "shown_by_session_types_rule": null
+      }
+    ],
+    "05ca22a5931c49f927b28dbebff125be": [
+      {
+        "id": 0,
+        "label": "AI Portrait",
+        "description": "Relive your unforgettable space adventure with your own AI-generated individual portrait! Step into the role of an interstellar explorer and experience the thrill, wonder, and mystery of deep space like never before.",
+        "category": "session_as_add_on",
+        "pricing_type": "fixed_amount",
+        "price": 10,
+        "currency": "GBP",
+        "purchasable_state": "enabled",
+        "item_type": "30289003",
+        "cart_item_id": 480844969,
+        "session_selector_group_hash": "05ca22a5931c49f927b28dbebff125be",
+        "view_configuration": {
+          "type": "stepper",
+          "allowed_range": {
+            "step": 1,
+            "min": 1,
+            "max": 200
+          }
+        },
+        "rule": null,
+        "is_selected_by_default": false,
+        "surcharge_per_ticket": 0,
+        "requires_price_breakdown": true,
+        "strikethrough_price": 12,
+        "strikethrough_percentage": "17%",
+        "display_step": "ticket_selector",
+        "image_url": null,
+        "shown_by_session_types_rule": null
+      }
+    ],
+    "4c79d6b52add2e23dd76122ce28deaa5": [
+      {
+        "id": 0,
+        "label": "AI Portrait",
+        "description": "Relive your unforgettable space adventure with your own AI-generated individual portrait! Step into the role of an interstellar explorer and experience the thrill, wonder, and mystery of deep space like never before.",
+        "category": "session_as_add_on",
+        "pricing_type": "fixed_amount",
+        "price": 10,
+        "currency": "GBP",
+        "purchasable_state": "enabled",
+        "item_type": "30289003",
+        "cart_item_id": 480845012,
+        "session_selector_group_hash": "4c79d6b52add2e23dd76122ce28deaa5",
+        "view_configuration": {
+          "type": "stepper",
+          "allowed_range": {
+            "step": 1,
+            "min": 1,
+            "max": 200
+          }
+        },
+        "rule": null,
+        "is_selected_by_default": false,
+        "surcharge_per_ticket": 0,
+        "requires_price_breakdown": true,
+        "strikethrough_price": 12,
+        "strikethrough_percentage": "17%",
+        "display_step": "ticket_selector",
+        "image_url": null,
+        "shown_by_session_types_rule": null
+      }
+    ],
+    "79f5ae2c8278d80fbae6fd0c67eb3fee": [
+      {
+        "id": 0,
+        "label": "AI Portrait",
+        "description": "Relive your unforgettable space adventure with your own AI-generated individual portrait! Step into the role of an interstellar explorer and experience the thrill, wonder, and mystery of deep space like never before.",
+        "category": "session_as_add_on",
+        "pricing_type": "fixed_amount",
+        "price": 10,
+        "currency": "GBP",
+        "purchasable_state": "enabled",
+        "item_type": "30289003",
+        "cart_item_id": 480845055,
+        "session_selector_group_hash": "79f5ae2c8278d80fbae6fd0c67eb3fee",
+        "view_configuration": {
+          "type": "stepper",
+          "allowed_range": {
+            "step": 1,
+            "min": 1,
+            "max": 200
+          }
+        },
+        "rule": null,
+        "is_selected_by_default": false,
+        "surcharge_per_ticket": 0,
+        "requires_price_breakdown": true,
+        "strikethrough_price": 12,
+        "strikethrough_percentage": "17%",
+        "display_step": "ticket_selector",
+        "image_url": null,
+        "shown_by_session_types_rule": null
+      }
+    ],
+    "3d48c638d2688674563dbcc0b92b5bab": [
+      {
+        "id": 0,
+        "label": "AI Portrait",
+        "description": "Relive your unforgettable space adventure with your own AI-generated individual portrait! Step into the role of an interstellar explorer and experience the thrill, wonder, and mystery of deep space like never before.",
+        "category": "session_as_add_on",
+        "pricing_type": "fixed_amount",
+        "price": 10,
+        "currency": "GBP",
+        "purchasable_state": "enabled",
+        "item_type": "30289003",
+        "cart_item_id": 480845098,
+        "session_selector_group_hash": "3d48c638d2688674563dbcc0b92b5bab",
+        "view_configuration": {
+          "type": "stepper",
+          "allowed_range": {
+            "step": 1,
+            "min": 1,
+            "max": 200
+          }
+        },
+        "rule": null,
+        "is_selected_by_default": false,
+        "surcharge_per_ticket": 0,
+        "requires_price_breakdown": true,
+        "strikethrough_price": 12,
+        "strikethrough_percentage": "17%",
+        "display_step": "ticket_selector",
+        "image_url": null,
+        "shown_by_session_types_rule": null
+      }
+    ],
+    "02be0abf3922f69329bf70ccf914b261": [
+      {
+        "id": 0,
+        "label": "AI Portrait",
+        "description": "Relive your unforgettable space adventure with your own AI-generated individual portrait! Step into the role of an interstellar explorer and experience the thrill, wonder, and mystery of deep space like never before.",
+        "category": "session_as_add_on",
+        "pricing_type": "fixed_amount",
+        "price": 10,
+        "currency": "GBP",
+        "purchasable_state": "enabled",
+        "item_type": "30289003",
+        "cart_item_id": 480845924,
+        "session_selector_group_hash": "02be0abf3922f69329bf70ccf914b261",
+        "view_configuration": {
+          "type": "stepper",
+          "allowed_range": {
+            "step": 1,
+            "min": 1,
+            "max": 200
+          }
+        },
+        "rule": null,
+        "is_selected_by_default": false,
+        "surcharge_per_ticket": 0,
+        "requires_price_breakdown": true,
+        "strikethrough_price": 12,
+        "strikethrough_percentage": "17%",
+        "display_step": "ticket_selector",
+        "image_url": null,
+        "shown_by_session_types_rule": null
+      }
+    ],
+    "a5a1e78456da8d4deaef3feb78557749": [
+      {
+        "id": 0,
+        "label": "AI Portrait",
+        "description": "Relive your unforgettable space adventure with your own AI-generated individual portrait! Step into the role of an interstellar explorer and experience the thrill, wonder, and mystery of deep space like never before.",
+        "category": "session_as_add_on",
+        "pricing_type": "fixed_amount",
+        "price": 10,
+        "currency": "GBP",
+        "purchasable_state": "enabled",
+        "item_type": "30289003",
+        "cart_item_id": 480845994,
+        "session_selector_group_hash": "a5a1e78456da8d4deaef3feb78557749",
+        "view_configuration": {
+          "type": "stepper",
+          "allowed_range": {
+            "step": 1,
+            "min": 1,
+            "max": 200
+          }
+        },
+        "rule": null,
+        "is_selected_by_default": false,
+        "surcharge_per_ticket": 0,
+        "requires_price_breakdown": true,
+        "strikethrough_price": 12,
+        "strikethrough_percentage": "17%",
+        "display_step": "ticket_selector",
+        "image_url": null,
+        "shown_by_session_types_rule": null
+      }
+    ],
+    "8dd572d0c06d4cfcac7314bd6e714847": [
+      {
+        "id": 0,
+        "label": "AI Portrait",
+        "description": "Relive your unforgettable space adventure with your own AI-generated individual portrait! Step into the role of an interstellar explorer and experience the thrill, wonder, and mystery of deep space like never before.",
+        "category": "session_as_add_on",
+        "pricing_type": "fixed_amount",
+        "price": 10,
+        "currency": "GBP",
+        "purchasable_state": "enabled",
+        "item_type": "30289003",
+        "cart_item_id": 480846057,
+        "session_selector_group_hash": "8dd572d0c06d4cfcac7314bd6e714847",
+        "view_configuration": {
+          "type": "stepper",
+          "allowed_range": {
+            "step": 1,
+            "min": 1,
+            "max": 200
+          }
+        },
+        "rule": null,
+        "is_selected_by_default": false,
+        "surcharge_per_ticket": 0,
+        "requires_price_breakdown": true,
+        "strikethrough_price": 12,
+        "strikethrough_percentage": "17%",
+        "display_step": "ticket_selector",
+        "image_url": null,
+        "shown_by_session_types_rule": null
+      }
+    ],
+    "dc289b648fcb5698f8448d5418c7289f": [
+      {
+        "id": 0,
+        "label": "AI Portrait",
+        "description": "Relive your unforgettable space adventure with your own AI-generated individual portrait! Step into the role of an interstellar explorer and experience the thrill, wonder, and mystery of deep space like never before.",
+        "category": "session_as_add_on",
+        "pricing_type": "fixed_amount",
+        "price": 10,
+        "currency": "GBP",
+        "purchasable_state": "enabled",
+        "item_type": "30289003",
+        "cart_item_id": 480846122,
+        "session_selector_group_hash": "dc289b648fcb5698f8448d5418c7289f",
+        "view_configuration": {
+          "type": "stepper",
+          "allowed_range": {
+            "step": 1,
+            "min": 1,
+            "max": 200
+          }
+        },
+        "rule": null,
+        "is_selected_by_default": false,
+        "surcharge_per_ticket": 0,
+        "requires_price_breakdown": true,
+        "strikethrough_price": 12,
+        "strikethrough_percentage": "17%",
+        "display_step": "ticket_selector",
+        "image_url": null,
+        "shown_by_session_types_rule": null
+      }
+    ],
+    "8654e66785d5cf177e07d0c07b48e01c": [
+      {
+        "id": 0,
+        "label": "AI Portrait",
+        "description": "Relive your unforgettable space adventure with your own AI-generated individual portrait! Step into the role of an interstellar explorer and experience the thrill, wonder, and mystery of deep space like never before.",
+        "category": "session_as_add_on",
+        "pricing_type": "fixed_amount",
+        "price": 10,
+        "currency": "GBP",
+        "purchasable_state": "enabled",
+        "item_type": "30289003",
+        "cart_item_id": 480846190,
+        "session_selector_group_hash": "8654e66785d5cf177e07d0c07b48e01c",
+        "view_configuration": {
+          "type": "stepper",
+          "allowed_range": {
+            "step": 1,
+            "min": 1,
+            "max": 200
+          }
+        },
+        "rule": null,
+        "is_selected_by_default": false,
+        "surcharge_per_ticket": 0,
+        "requires_price_breakdown": true,
+        "strikethrough_price": 12,
+        "strikethrough_percentage": "17%",
+        "display_step": "ticket_selector",
+        "image_url": null,
+        "shown_by_session_types_rule": null
+      }
+    ],
+    "81ffd6e4d78215819aff7c40a1b6ff77": [
+      {
+        "id": 0,
+        "label": "AI Portrait",
+        "description": "Relive your unforgettable space adventure with your own AI-generated individual portrait! Step into the role of an interstellar explorer and experience the thrill, wonder, and mystery of deep space like never before.",
+        "category": "session_as_add_on",
+        "pricing_type": "fixed_amount",
+        "price": 10,
+        "currency": "GBP",
+        "purchasable_state": "enabled",
+        "item_type": "30289003",
+        "cart_item_id": 480846261,
+        "session_selector_group_hash": "81ffd6e4d78215819aff7c40a1b6ff77",
+        "view_configuration": {
+          "type": "stepper",
+          "allowed_range": {
+            "step": 1,
+            "min": 1,
+            "max": 200
+          }
+        },
+        "rule": null,
+        "is_selected_by_default": false,
+        "surcharge_per_ticket": 0,
+        "requires_price_breakdown": true,
+        "strikethrough_price": 12,
+        "strikethrough_percentage": "17%",
+        "display_step": "ticket_selector",
+        "image_url": null,
+        "shown_by_session_types_rule": null
+      }
+    ],
+    "f9c0fcd509a4e390dc27901442334cc7": [
+      {
+        "id": 0,
+        "label": "AI Portrait",
+        "description": "Relive your unforgettable space adventure with your own AI-generated individual portrait! Step into the role of an interstellar explorer and experience the thrill, wonder, and mystery of deep space like never before.",
+        "category": "session_as_add_on",
+        "pricing_type": "fixed_amount",
+        "price": 10,
+        "currency": "GBP",
+        "purchasable_state": "enabled",
+        "item_type": "30289003",
+        "cart_item_id": 480846325,
+        "session_selector_group_hash": "f9c0fcd509a4e390dc27901442334cc7",
+        "view_configuration": {
+          "type": "stepper",
+          "allowed_range": {
+            "step": 1,
+            "min": 1,
+            "max": 200
+          }
+        },
+        "rule": null,
+        "is_selected_by_default": false,
+        "surcharge_per_ticket": 0,
+        "requires_price_breakdown": true,
+        "strikethrough_price": 12,
+        "strikethrough_percentage": "17%",
+        "display_step": "ticket_selector",
+        "image_url": null,
+        "shown_by_session_types_rule": null
+      }
+    ],
+    "4f9aa649a7844793e39ebcee48e683b8": [
+      {
+        "id": 0,
+        "label": "AI Portrait",
+        "description": "Relive your unforgettable space adventure with your own AI-generated individual portrait! Step into the role of an interstellar explorer and experience the thrill, wonder, and mystery of deep space like never before.",
+        "category": "session_as_add_on",
+        "pricing_type": "fixed_amount",
+        "price": 10,
+        "currency": "GBP",
+        "purchasable_state": "enabled",
+        "item_type": "30289003",
+        "cart_item_id": 480846386,
+        "session_selector_group_hash": "4f9aa649a7844793e39ebcee48e683b8",
+        "view_configuration": {
+          "type": "stepper",
+          "allowed_range": {
+            "step": 1,
+            "min": 1,
+            "max": 200
+          }
+        },
+        "rule": null,
+        "is_selected_by_default": false,
+        "surcharge_per_ticket": 0,
+        "requires_price_breakdown": true,
+        "strikethrough_price": 12,
+        "strikethrough_percentage": "17%",
+        "display_step": "ticket_selector",
+        "image_url": null,
+        "shown_by_session_types_rule": null
+      }
+    ],
+    "2f691ffcdfa346b5f57cc94862363dd5": [
+      {
+        "id": 0,
+        "label": "AI Portrait",
+        "description": "Relive your unforgettable space adventure with your own AI-generated individual portrait! Step into the role of an interstellar explorer and experience the thrill, wonder, and mystery of deep space like never before.",
+        "category": "session_as_add_on",
+        "pricing_type": "fixed_amount",
+        "price": 10,
+        "currency": "GBP",
+        "purchasable_state": "enabled",
+        "item_type": "30289003",
+        "cart_item_id": 480846450,
+        "session_selector_group_hash": "2f691ffcdfa346b5f57cc94862363dd5",
+        "view_configuration": {
+          "type": "stepper",
+          "allowed_range": {
+            "step": 1,
+            "min": 1,
+            "max": 200
+          }
+        },
+        "rule": null,
+        "is_selected_by_default": false,
+        "surcharge_per_ticket": 0,
+        "requires_price_breakdown": true,
+        "strikethrough_price": 12,
+        "strikethrough_percentage": "17%",
+        "display_step": "ticket_selector",
+        "image_url": null,
+        "shown_by_session_types_rule": null
+      }
+    ],
+    "f11fc85cbef0ed3fb8e952af42b63ac5": [
+      {
+        "id": 0,
+        "label": "AI Portrait",
+        "description": "Relive your unforgettable space adventure with your own AI-generated individual portrait! Step into the role of an interstellar explorer and experience the thrill, wonder, and mystery of deep space like never before.",
+        "category": "session_as_add_on",
+        "pricing_type": "fixed_amount",
+        "price": 10,
+        "currency": "GBP",
+        "purchasable_state": "enabled",
+        "item_type": "30289003",
+        "cart_item_id": 480846511,
+        "session_selector_group_hash": "f11fc85cbef0ed3fb8e952af42b63ac5",
+        "view_configuration": {
+          "type": "stepper",
+          "allowed_range": {
+            "step": 1,
+            "min": 1,
+            "max": 200
+          }
+        },
+        "rule": null,
+        "is_selected_by_default": false,
+        "surcharge_per_ticket": 0,
+        "requires_price_breakdown": true,
+        "strikethrough_price": 12,
+        "strikethrough_percentage": "17%",
+        "display_step": "ticket_selector",
+        "image_url": null,
+        "shown_by_session_types_rule": null
+      }
+    ],
+    "77f8f98ea3c1e56f35ee893a7cc2cbbf": [
+      {
+        "id": 0,
+        "label": "AI Portrait",
+        "description": "Relive your unforgettable space adventure with your own AI-generated individual portrait! Step into the role of an interstellar explorer and experience the thrill, wonder, and mystery of deep space like never before.",
+        "category": "session_as_add_on",
+        "pricing_type": "fixed_amount",
+        "price": 10,
+        "currency": "GBP",
+        "purchasable_state": "enabled",
+        "item_type": "30289003",
+        "cart_item_id": 480849444,
+        "session_selector_group_hash": "77f8f98ea3c1e56f35ee893a7cc2cbbf",
+        "view_configuration": {
+          "type": "stepper",
+          "allowed_range": {
+            "step": 1,
+            "min": 1,
+            "max": 200
+          }
+        },
+        "rule": null,
+        "is_selected_by_default": false,
+        "surcharge_per_ticket": 0,
+        "requires_price_breakdown": true,
+        "strikethrough_price": 12,
+        "strikethrough_percentage": "17%",
+        "display_step": "ticket_selector",
+        "image_url": null,
+        "shown_by_session_types_rule": null
+      }
+    ],
+    "cbde7d52662d0997683bdef864b51c93": [
+      {
+        "id": 0,
+        "label": "AI Portrait",
+        "description": "Relive your unforgettable space adventure with your own AI-generated individual portrait! Step into the role of an interstellar explorer and experience the thrill, wonder, and mystery of deep space like never before.",
+        "category": "session_as_add_on",
+        "pricing_type": "fixed_amount",
+        "price": 10,
+        "currency": "GBP",
+        "purchasable_state": "enabled",
+        "item_type": "30289003",
+        "cart_item_id": 480849543,
+        "session_selector_group_hash": "cbde7d52662d0997683bdef864b51c93",
+        "view_configuration": {
+          "type": "stepper",
+          "allowed_range": {
+            "step": 1,
+            "min": 1,
+            "max": 200
+          }
+        },
+        "rule": null,
+        "is_selected_by_default": false,
+        "surcharge_per_ticket": 0,
+        "requires_price_breakdown": true,
+        "strikethrough_price": 12,
+        "strikethrough_percentage": "17%",
+        "display_step": "ticket_selector",
+        "image_url": null,
+        "shown_by_session_types_rule": null
+      }
+    ],
+    "73d9cd13d7e64805475c2cb1b7eb2176": [
+      {
+        "id": 0,
+        "label": "AI Portrait",
+        "description": "Relive your unforgettable space adventure with your own AI-generated individual portrait! Step into the role of an interstellar explorer and experience the thrill, wonder, and mystery of deep space like never before.",
+        "category": "session_as_add_on",
+        "pricing_type": "fixed_amount",
+        "price": 10,
+        "currency": "GBP",
+        "purchasable_state": "enabled",
+        "item_type": "30289003",
+        "cart_item_id": 480849645,
+        "session_selector_group_hash": "73d9cd13d7e64805475c2cb1b7eb2176",
+        "view_configuration": {
+          "type": "stepper",
+          "allowed_range": {
+            "step": 1,
+            "min": 1,
+            "max": 200
+          }
+        },
+        "rule": null,
+        "is_selected_by_default": false,
+        "surcharge_per_ticket": 0,
+        "requires_price_breakdown": true,
+        "strikethrough_price": 12,
+        "strikethrough_percentage": "17%",
+        "display_step": "ticket_selector",
+        "image_url": null,
+        "shown_by_session_types_rule": null
+      }
+    ],
+    "f886cc5d09430e69b8e7847505b2aa20": [
+      {
+        "id": 0,
+        "label": "AI Portrait",
+        "description": "Relive your unforgettable space adventure with your own AI-generated individual portrait! Step into the role of an interstellar explorer and experience the thrill, wonder, and mystery of deep space like never before.",
+        "category": "session_as_add_on",
+        "pricing_type": "fixed_amount",
+        "price": 10,
+        "currency": "GBP",
+        "purchasable_state": "enabled",
+        "item_type": "30289003",
+        "cart_item_id": 480849739,
+        "session_selector_group_hash": "f886cc5d09430e69b8e7847505b2aa20",
+        "view_configuration": {
+          "type": "stepper",
+          "allowed_range": {
+            "step": 1,
+            "min": 1,
+            "max": 200
+          }
+        },
+        "rule": null,
+        "is_selected_by_default": false,
+        "surcharge_per_ticket": 0,
+        "requires_price_breakdown": true,
+        "strikethrough_price": 12,
+        "strikethrough_percentage": "17%",
+        "display_step": "ticket_selector",
+        "image_url": null,
+        "shown_by_session_types_rule": null
+      }
+    ],
+    "0d24a700e28d8c6e909327aa6e227f4e": [
+      {
+        "id": 0,
+        "label": "AI Portrait",
+        "description": "Relive your unforgettable space adventure with your own AI-generated individual portrait! Step into the role of an interstellar explorer and experience the thrill, wonder, and mystery of deep space like never before.",
+        "category": "session_as_add_on",
+        "pricing_type": "fixed_amount",
+        "price": 10,
+        "currency": "GBP",
+        "purchasable_state": "enabled",
+        "item_type": "30289003",
+        "cart_item_id": 480849833,
+        "session_selector_group_hash": "0d24a700e28d8c6e909327aa6e227f4e",
+        "view_configuration": {
+          "type": "stepper",
+          "allowed_range": {
+            "step": 1,
+            "min": 1,
+            "max": 200
+          }
+        },
+        "rule": null,
+        "is_selected_by_default": false,
+        "surcharge_per_ticket": 0,
+        "requires_price_breakdown": true,
+        "strikethrough_price": 12,
+        "strikethrough_percentage": "17%",
+        "display_step": "ticket_selector",
+        "image_url": null,
+        "shown_by_session_types_rule": null
+      }
+    ],
+    "a48648787a3305dd71a8046ebceaa14c": [
+      {
+        "id": 0,
+        "label": "AI Portrait",
+        "description": "Relive your unforgettable space adventure with your own AI-generated individual portrait! Step into the role of an interstellar explorer and experience the thrill, wonder, and mystery of deep space like never before.",
+        "category": "session_as_add_on",
+        "pricing_type": "fixed_amount",
+        "price": 10,
+        "currency": "GBP",
+        "purchasable_state": "enabled",
+        "item_type": "30289003",
+        "cart_item_id": 480849934,
+        "session_selector_group_hash": "a48648787a3305dd71a8046ebceaa14c",
+        "view_configuration": {
+          "type": "stepper",
+          "allowed_range": {
+            "step": 1,
+            "min": 1,
+            "max": 200
+          }
+        },
+        "rule": null,
+        "is_selected_by_default": false,
+        "surcharge_per_ticket": 0,
+        "requires_price_breakdown": true,
+        "strikethrough_price": 12,
+        "strikethrough_percentage": "17%",
+        "display_step": "ticket_selector",
+        "image_url": null,
+        "shown_by_session_types_rule": null
+      }
+    ]
+  }
+}

@@ -1,0 +1,251 @@
+{
+  "a_b_testing": null,
+  "access_rules": [],
+  "available_locales": [
+    "de-DE",
+    "es-ES",
+    "fr-FR",
+    "it-IT"
+  ],
+  "base_locale": "en-GB",
+  "category": null,
+  "categories": [
+    "Entertainment",
+    "Microtheater",
+    "Theatre Performance"
+  ],
+  "city_available_locales": [
+    "de-DE",
+    "fr-FR",
+    "it-IT",
+    "es-ES",
+    "en-GB"
+  ],
+  "city_code": "LON",
+  "city_country_iso_code": "UK",
+  "city_slug": "london",
+  "city_slug_lang": "en",
+  "city_standard_id": 1006886,
+  "custom_label": null,
+  "custom_labels": [],
+  "default_level_display": "disabled",
+  "default_session": {
+    "id": 457703678,
+    "attend_text": "Join in!",
+    "available_tickets": 30,
+    "has_available_tickets": true,
+    "currency": "GBP",
+    "ends_at_iso": "2026-11-19T19:00:00+00:00",
+    "expiration_iso": "2026-11-19T17:00:00+00:00",
+    "label": "Zone C",
+    "last_tickets": false,
+    "max_num_tickets": 30,
+    "min_num_tickets": 1,
+    "place_id": 10707,
+    "price": 37,
+    "starts_at_iso": "2026-11-19T18:00:00+00:00",
+    "surcharge_per_ticket": 1.85,
+    "surcharge_per_transaction": 0,
+    "timezone": "Europe/London"
+  },
+  "session_recommendation": {
+    "recommended_by": "proximity",
+    "is_fallback": null,
+    "fallback_reason": null,
+    "computed_at": null
+  },
+  "description": "<style type=\"text/css\">* { box-sizing: border-box; }\r\nimg { max-width: 100%; }\r\n\r\n.tje-wrap { max-width: 100%; overflow-x: hidden; }\r\n\r\n.tje-section-title {\r\n  font-size: 1rem;\r\n  font-weight: 700;\r\n  letter-spacing: -0.01em;\r\n  color: #0f0f0f;\r\n  margin: 0 0 0.875rem 0;\r\n  position: relative;\r\n  padding-bottom: 0.5rem;\r\n}\r\n\r\n.tje-section-title::after {\r\n  content: \"\";\r\n  display: block;\r\n  position: absolute;\r\n  bottom: 0;\r\n  left: 0;\r\n  width: 3rem;\r\n  height: 4px;\r\n  background: #C8222A;\r\n  border-radius: 3px;\r\n}\r\n\r\n.tje-label-small {\r\n  font-size: 0.65rem;\r\n  font-weight: 700;\r\n  letter-spacing: 0.14em;\r\n  text-transform: uppercase;\r\n  color: #8a8a8a;\r\n  margin: 0 0 0.625rem 0;\r\n  display: block;\r\n}\r\n\r\n.tje-intro {\r\n  font-size: 1rem;\r\n  line-height: 1.7;\r\n  color: #444;\r\n  margin: 0 0 1.5rem 0;\r\n}\r\n\r\n.tje-hero-quote {\r\n  position: relative;\r\n  padding: 0.75rem 0 0.75rem 1.25rem;\r\n  margin: 1.5rem 0 1.75rem 0;\r\n  border-left: 4px solid #C8222A;\r\n}\r\n\r\n.tje-hero-quote p {\r\n  margin: 0;\r\n  font-family: Georgia, 'Times New Roman', serif;\r\n  font-size: 1.35rem;\r\n  line-height: 1.3;\r\n  font-weight: 500;\r\n  font-style: italic;\r\n  color: #0f0f0f;\r\n  letter-spacing: -0.01em;\r\n}\r\n\r\n.tje-hero-quote .quote-accent {\r\n  color: #C8222A;\r\n  font-style: italic;\r\n  font-weight: 700;\r\n}\r\n\r\n/* Show the line break only on mobile */\r\n.tje-mobile-break {\r\n  display: none;\r\n}\r\n\r\n@media (max-width: 48rem) {\r\n  .tje-mobile-break {\r\n    display: inline;\r\n  }\r\n}\r\n\r\n.tje-divider {\r\n  border: none;\r\n  border-top: 1px solid #ece9e3;\r\n  margin: 1.75rem 0;\r\n  height: 0;\r\n}\r\n\r\n.tje-badges {\r\n  display: flex;\r\n  flex-wrap: wrap;\r\n  gap: 0.4rem 1.1rem;\r\n  margin-bottom: 1.5rem;\r\n}\r\n\r\n.tje-badge {\r\n  font-size: 0.7rem;\r\n  font-weight: 600;\r\n  color: #032230;\r\n  padding: 0.35rem 0 0.1rem 0;\r\n  border-top: 2px solid #B01C23;\r\n  white-space: nowrap;\r\n  display: inline-flex;\r\n  align-items: center;\r\n  gap: 0.3rem;\r\n}\r\n\r\n.tje-badge-sep { display: none; }\r\n\r\n.tje-badge-dark {}\r\n\r\n.tje-highlights {\r\n  list-style: none;\r\n  padding: 0;\r\n  margin: 0 0 0.5rem 0;\r\n  display: grid;\r\n  grid-template-columns: 1fr 1fr;\r\n  gap: 0.75rem;\r\n}\r\n\r\n@media (max-width: 48rem) {\r\n  .tje-highlights { grid-template-columns: 1fr; }\r\n}\r\n\r\n.tje-highlights li {\r\n  font-size: 0.95rem;\r\n  line-height: 1.55;\r\n  color: #222;\r\n  padding: 1rem 1.25rem;\r\n  background: #f5f5f5;\r\n  border-radius: 0.5rem;\r\n  border-left: 3px solid #C8222A;\r\n}\r\n\r\n.tje-case-card {\r\n  border: none;\r\n  border-radius: 0.875rem;\r\n  padding: 1.25rem 1.5rem 1.5rem;\r\n  margin-bottom: 0.75rem;\r\n  background: linear-gradient(160deg, #090e12 0%, #2a1408 25%, #3d1d08 50%, #5c2e0a 75%, #84490d 100%);\r\n  color: #fff;\r\n}\r\n\r\n.tje-case-card .card-poster {\r\n  margin: 0 0 1.3rem -0.9rem;\r\n  text-align: left;\r\n  font-family: \"Arial Black\", -apple-system, BlinkMacSystemFont, \"Helvetica Neue\", sans-serif;\r\n  font-weight: 900;\r\n  font-size: 3.7rem;\r\n  line-height: 0.82;\r\n  text-transform: uppercase;\r\n  letter-spacing: -1px;\r\n  word-spacing: -0.25em;\r\n  transform: scaleX(0.95);\r\n}\r\n\r\n.tje-case-card .card-description {\r\n  font-size: 0.92rem;\r\n  color: #cbd5e0;\r\n  line-height: 1.65;\r\n  margin: 0;\r\n}\r\n\r\n.tje-warning {\r\n  margin-top: 1rem;\r\n  background: #FDF0E0;\r\n  border: none;\r\n  border-radius: 0.625rem;\r\n  padding: 0.875rem 1rem;\r\n  font-size: 0.82rem;\r\n  color: #5C3D14;\r\n  display: flex;\r\n  gap: 0.625rem;\r\n  align-items: flex-start;\r\n  line-height: 1.55;\r\n}\r\n\r\n.tje-steps {\r\n  display: flex;\r\n  flex-direction: row;\r\n  gap: 0.625rem;\r\n  flex-wrap: nowrap;\r\n  position: relative;\r\n  align-items: stretch;\r\n  margin-top: 0.5rem;\r\n}\r\n\r\n.tje-step {\r\n  flex: 1;\r\n  min-width: 0;\r\n  background: #f5f5f5;\r\n  border-radius: 0.875rem;\r\n  padding: 2.5rem 0.875rem 1rem;\r\n  text-align: center;\r\n  border: none;\r\n  position: relative;\r\n  z-index: 1;\r\n  margin: 1.125rem 0 0 0;\r\n}\r\n\r\n/* Desktop: dashed connectors between circles (not extending past first/last) */\r\n.tje-step:not(:last-child)::after {\r\n  content: \"\";\r\n  position: absolute;\r\n  top: -1px;\r\n  left: 50%;\r\n  right: calc(-50% - 0.625rem);\r\n  height: 2px;\r\n  background: repeating-linear-gradient(to right, #C8222A 0, #C8222A 6px, transparent 6px, transparent 12px);\r\n  z-index: 0;\r\n}\r\n\r\n.tje-step-num {\r\n  display: inline-flex;\r\n  align-items: center;\r\n  justify-content: center;\r\n  width: 2.25rem;\r\n  height: 2.25rem;\r\n  background: #C8222A;\r\n  color: #fff;\r\n  border-radius: 50%;\r\n  font-size: 0.92rem;\r\n  font-weight: 800;\r\n  border: 4px solid #fff;\r\n  box-shadow: 0 0 0 1px rgba(200, 34, 42, 0.25);\r\n  position: absolute;\r\n  top: -1.125rem;\r\n  left: 50%;\r\n  transform: translateX(-50%);\r\n  z-index: 2;\r\n}\r\n\r\n.tje-step .card-title {\r\n  font-weight: 700;\r\n  font-size: 0.9rem;\r\n  margin: 0 0 0.375rem 0;\r\n  color: #0f0f0f;\r\n  display: block;\r\n}\r\n\r\n.tje-step .card-description {\r\n  font-size: 0.78rem;\r\n  color: #666;\r\n  margin: 0;\r\n  line-height: 1.5;\r\n  display: block;\r\n}\r\n\r\n/* Mobile: stacked vertical with vertical dashed line */\r\n@media (max-width: 48rem) {\r\n  .tje-steps {\r\n    flex-direction: column;\r\n    padding-left: 2.5rem;\r\n    gap: 0.75rem;\r\n  }\r\n\r\n  /* Hide desktop horizontal connectors on mobile */\r\n  .tje-step:not(:last-child)::after {\r\n    display: none;\r\n  }\r\n\r\n  /* Mobile vertical line */\r\n  .tje-steps::before {\r\n    content: \"\";\r\n    position: absolute;\r\n    top: 1rem;\r\n    bottom: 1rem;\r\n    left: 1.125rem;\r\n    width: 2px;\r\n    background: repeating-linear-gradient(to bottom, #C8222A 0, #C8222A 6px, transparent 6px, transparent 12px);\r\n    z-index: 0;\r\n  }\r\n\r\n  .tje-step {\r\n    margin: 0;\r\n    padding: 1rem 1.25rem;\r\n    text-align: left;\r\n  }\r\n\r\n  .tje-step-num {\r\n    top: 50%;\r\n    left: -2.5rem;\r\n    transform: translateY(-50%);\r\n  }\r\n}\r\n\r\n.tje-editorial {\r\n  background: #f5f5f5;\r\n  border-radius: 0.875rem;\r\n  padding: 1.25rem 1.5rem;\r\n  margin: 1.5rem 0;\r\n}\r\n\r\n.tje-editorial .tje-label-small {\r\n  color: #8a8a8a;\r\n  letter-spacing: 0.16em;\r\n}\r\n\r\n.tje-editorial .tje-section-title {\r\n  color: #0f0f0f;\r\n  margin: 0 0 1rem 0;\r\n  font-size: 1.1rem;\r\n  line-height: 1.3;\r\n  letter-spacing: -0.01em;\r\n}\r\n\r\n.tje-editorial .tje-section-title::after {\r\n  background: #C8222A;\r\n}\r\n\r\n.tje-editorial .content-text {\r\n  font-size: 0.9rem;\r\n  line-height: 1.75;\r\n  color: #444;\r\n  margin: 0 0 0.75rem 0;\r\n}\r\n\r\n.tje-editorial a {\r\n  color: #B01C23;\r\n  font-weight: 600;\r\n  text-decoration: underline;\r\n  text-underline-offset: 2px;\r\n}\r\n\r\n.tje-accent {\r\n  color: #C8222A;\r\n  font-weight: 700;\r\n}\r\n\r\n.tje-faq {\r\n  background: #f5f5f5;\r\n  color: #111;\r\n  border-radius: 0.875rem;\r\n  padding: 1.25rem 1.25rem 0.25rem;\r\n  margin: 1.5rem 0;\r\n}\r\n\r\n.tje-faq-header {\r\n  margin-bottom: 0.25rem;\r\n}\r\n\r\n.tje-faq .tje-section-title {\r\n  color: #0f0f0f;\r\n  margin: 0 0 0.625rem 0;\r\n  padding-bottom: 0;\r\n}\r\n\r\n.tje-faq .tje-section-title::after {\r\n  display: none;\r\n}\r\n\r\n.tje-faq-category {\r\n  border-bottom: 1px solid rgba(0, 0, 0, 0.12);\r\n}\r\n\r\n.tje-faq-category:last-child {\r\n  border-bottom: none;\r\n}\r\n\r\n.tje-faq-cat-summary {\r\n  list-style: none;\r\n  cursor: pointer;\r\n  display: flex;\r\n  justify-content: space-between;\r\n  align-items: center;\r\n  gap: 0.75rem;\r\n  padding: 0.8rem 0;\r\n  font-size: 0.92rem;\r\n  font-weight: 700;\r\n  color: #555;\r\n  transition: color 0.15s ease;\r\n}\r\n\r\n.tje-faq-cat-summary::-webkit-details-marker {\r\n  display: none;\r\n}\r\n\r\n.tje-faq-cat-summary::after {\r\n  content: \"\";\r\n  flex-shrink: 0;\r\n  width: 1.5rem;\r\n  height: 1.5rem;\r\n  border-radius: 50%;\r\n  background: #555 url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M6 9l6 6 6-6' stroke='%23ffffff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E\") no-repeat center;\r\n  background-size: 0.85rem 0.85rem;\r\n  transition: transform 0.2s ease, background-color 0.15s ease;\r\n}\r\n\r\n.tje-faq-category[open] .tje-faq-cat-summary::after {\r\n  transform: rotate(180deg);\r\n  background-color: #888;\r\n}\r\n\r\n.tje-faq-cat-summary:hover {\r\n  color: #B01C23;\r\n}\r\n\r\n.tje-faq-panel {\r\n  padding: 0 0 0.5rem 0;\r\n}\r\n\r\n.tje-faq-item {\r\n  border-bottom: 1px solid rgba(0, 0, 0, 0.06);\r\n}\r\n\r\n.tje-faq-item:last-child {\r\n  border-bottom: none;\r\n}\r\n\r\n.tje-faq-summary {\r\n  list-style: none;\r\n  cursor: pointer;\r\n  display: flex;\r\n  justify-content: space-between;\r\n  align-items: center;\r\n  gap: 0.75rem;\r\n  padding: 0.625rem 0;\r\n  font-size: 0.86rem;\r\n  font-weight: 600;\r\n  color: #222;\r\n  transition: color 0.15s ease;\r\n}\r\n\r\n.tje-faq-summary::-webkit-details-marker {\r\n  display: none;\r\n}\r\n\r\n.tje-faq-summary::after {\r\n  content: \"\";\r\n  flex-shrink: 0;\r\n  width: 1.4rem;\r\n  height: 1.4rem;\r\n  border-radius: 50%;\r\n  background: #aaa url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M6 9l6 6 6-6' stroke='%23ffffff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E\") no-repeat center;\r\n  background-size: 0.75rem 0.75rem;\r\n  transition: transform 0.2s ease, background-color 0.15s ease;\r\n}\r\n\r\n.tje-faq-item[open] .tje-faq-summary::after {\r\n  transform: rotate(180deg);\r\n  background-color: #c0c0c0;\r\n}\r\n\r\n.tje-faq-summary:hover {\r\n  color: #B01C23;\r\n}\r\n\r\n.tje-faq-content {\r\n  padding: 0.15rem 2rem 0.75rem 0;\r\n  font-size: 0.82rem;\r\n  line-height: 1.6;\r\n  color: #555;\r\n}\r\n\r\n.tje-faq-content p { margin: 0 0 0.5rem 0; }\r\n.tje-faq-content p:last-child { margin-bottom: 0; }\r\n.tje-faq-content ul { margin: 0.25rem 0 0.5rem 1rem; padding: 0; }\r\n.tje-faq-content li { margin-bottom: 0.2rem; }\r\n.tje-faq-content strong { color: #0f0f0f; }\r\n.tje-faq-content a {\r\n  color: #B01C23;\r\n  font-weight: 600;\r\n  text-decoration: underline;\r\n  text-underline-offset: 2px;\r\n}\r\n\r\n.tje-info-grid {\r\n  display: grid;\r\n  gap: 0.5rem;\r\n  grid-template-columns: repeat(2, 1fr);\r\n}\r\n\r\n.tje-info-card {\r\n  border: 1px solid #e0e0e0;\r\n  border-radius: 0.625rem;\r\n  padding: 0.625rem 0.75rem;\r\n  background: transparent;\r\n  display: flex;\r\n  align-items: center;\r\n  gap: 0.625rem;\r\n}\r\n\r\n.tje-info-card .card-icon {\r\n  display: inline-flex;\r\n  align-items: center;\r\n  justify-content: center;\r\n  width: 1.75rem;\r\n  height: 1.75rem;\r\n  flex-shrink: 0;\r\n  background: #f0f0f0;\r\n  border-radius: 50%;\r\n  font-size: 0.92rem;\r\n  line-height: 1;\r\n}\r\n\r\n.tje-info-card .card-content {\r\n  display: block;\r\n  min-width: 0;\r\n}\r\n\r\n.tje-info-card .card-label {\r\n  font-size: 0.78rem;\r\n  font-weight: 700;\r\n  color: #111;\r\n  display: inline;\r\n  margin: 0;\r\n  line-height: 1.4;\r\n}\r\n\r\n.tje-info-card .card-label::after {\r\n  content: \": \";\r\n}\r\n\r\n.tje-info-card .card-title {\r\n  font-size: 0.78rem;\r\n  font-weight: 400;\r\n  color: #444;\r\n  margin: 0;\r\n  display: inline;\r\n  line-height: 1.4;\r\n}\r\n\r\n.tje-info-card .card-description {\r\n  font-size: 0.68rem;\r\n  color: #777;\r\n  margin: 0.1rem 0 0 0;\r\n  line-height: 1.35;\r\n  display: block;\r\n}\r\n\r\n.tje-info-card a {\r\n  color: #B01C23;\r\n  font-weight: 600;\r\n  text-decoration: underline;\r\n  text-underline-offset: 2px;\r\n}\r\n\r\n.tje-map { max-width: 280px; margin: 0 auto; }\r\n\r\n.tje-map-frame {\r\n  display: flex;\r\n  flex-direction: column;\r\n  gap: 0.5rem;\r\n  padding: 0.25rem 0;\r\n}\r\n\r\n.tje-map-stage {\r\n  align-self: center;\r\n  width: 60%;\r\n  background: #E5E5E5;\r\n  color: #333;\r\n  text-align: center;\r\n  font-weight: 700;\r\n  font-size: 0.85rem;\r\n  letter-spacing: 0.15em;\r\n  padding: 0.625rem 0;\r\n  border-radius: 0.375rem;\r\n}\r\n\r\n.tje-map-zone {\r\n  position: relative;\r\n  border-radius: 0.375rem;\r\n  padding: 0.75rem 0.875rem;\r\n  text-align: center;\r\n  min-height: 3.75rem;  /* default — always overridden by inline style when skill generates */\r\n  display: flex;\r\n  align-items: center;\r\n  justify-content: center;\r\n}\r\n\r\n.tje-map-zone-a { background: #D67781; }\r\n.tje-map-zone-b { background: #6B95C9; }\r\n.tje-map-zone-c { background: #82B274; }\r\n\r\n.tje-map-zone-letter {\r\n  color: #fff;\r\n  font-weight: 700;\r\n  font-size: 1.75rem;\r\n  line-height: 1;\r\n}\r\n\r\n.tje-map-zone-tag {\r\n  position: absolute;\r\n  top: 0.4rem;\r\n  right: 0.55rem;\r\n  color: #fff;\r\n  font-size: 0.55rem;\r\n  font-weight: 600;\r\n  letter-spacing: 0.02em;\r\n  line-height: 1;\r\n}\r\n\r\n.tje-map-entrance {\r\n  text-align: center;\r\n  font-size: 0.65rem;\r\n  font-weight: 600;\r\n  letter-spacing: 0.1em;\r\n  color: #888;\r\n  margin-top: 0.25rem;\r\n}\r\n\r\n.tje-map-caption {\r\n  text-align: center;\r\n  font-size: 0.92rem;\r\n  font-weight: 700;\r\n  color: #0f0f0f;\r\n  margin: 0 0 0.625rem 0;\r\n  letter-spacing: -0.005em;\r\n}\r\n\r\n.tje-tags {\r\n  margin: 2rem 0 0.5rem 0;\r\n  font-size: 0.7rem;\r\n  font-weight: 600;\r\n  letter-spacing: 0.08em;\r\n  text-transform: uppercase;\r\n  color: #999;\r\n  text-align: center;\r\n}\r\n\r\n@media (max-width: 30rem) {\r\n  .tje-case-card .card-poster {\r\n    font-size: 2.3rem;\r\n  }\r\n}\r\n</style>\r\n<div class=\"tje-wrap\">\r\n<div class=\"tje-badges\"><span class=\"tje-badge tje-badge-dark\">⚖️ Watch drama</span> <span class=\"tje-badge-sep\">|</span> <span class=\"tje-badge tje-badge-dark\">🗳️ Cast a vote</span> <span class=\"tje-badge-sep\">|</span> <span class=\"tje-badge tje-badge-dark\">🕵️ Crack the case</span></div>\r\n\r\n<p class=\"tje-intro\">⭐ You've been called for jury duty. Step into a thrilling courtroom drama where the audience is the jury. Listen to testimonies, analyze evidence, and ultimately decide… guilty or not guilty?</p>\r\n\r\n<blockquote class=\"tje-hero-quote\">\r\n<p>It's not theatre you watch.&nbsp;<br class=\"tje-mobile-break\">\r\n<span class=\"quote-accent\">It's justice you deliver.</span></p>\r\n</blockquote>\r\n\r\n<div class=\"tje-case-card\">\r\n<div class=\"card-poster\">\r\n<h3>The 20<br>\r\nMillion<br>\r\nDollar Heist</h3>\r\n</div>\r\n\r\n<p class=\"card-description\">Superstar Lana Tonneti's $20M necklace has vanished - and her ex-driver is now standing trial for the theft. But the witnesses contradict each other, the timelines don't add up, and Lana herself may not be telling the whole story. Who's really the guilty party here?</p>\r\n</div>\r\n\r\n<div class=\"tje-warning\"><span>🚩</span><span>This experience includes loud music and themes of emotional manipulation, drug use, and betrayal. The performance contains moments of intense emotional conflict.</span></div>\r\n\r\n<div class=\"tje-divider\"></div>\r\n\r\n<h2 class=\"tje-section-title\">Highlights</h2>\r\n\r\n<ul class=\"tje-highlights\">\r\n\t<li>🤩 Enjoy a live theatre courtroom drama where you decide the final verdict</li>\r\n\t<li>🫵 Vote during key moments - your decisions shape hidden angles in the case, making every show different!</li>\r\n\t<li>🕵️‍♂️ Dissect witness testimonies, unpack evidence, and weigh every argument</li>\r\n\t<li>🎢 A high-stakes case full of twists - more turns than a rollercoaster, and a verdict only you can deliver</li>\r\n</ul>\r\n\r\n<main>\r\n<div class=\"tje-divider\"></div>\r\n\r\n<h2 class=\"tje-section-title\">How it works</h2>\r\n\r\n<div class=\"tje-steps\">\r\n<div class=\"tje-step\"><span class=\"tje-step-num\">1</span> <span class=\"card-title\">Take your seat</span> <span class=\"card-description\">Arrive 30 min early. Doors close at show time — late entry is not permitted.</span></div>\r\n\r\n<div class=\"tje-step\"><span class=\"tje-step-num\">2</span> <span class=\"card-title\">Hear the case</span> <span class=\"card-description\">Track every testimony, spot the contradictions, and vote at key moments to steer the trial.</span></div>\r\n\r\n<div class=\"tje-step\"><span class=\"tje-step-num\">3</span> <span class=\"card-title\">Deliver your verdict</span> <span class=\"card-description\">The jury speaks. Guilty or not guilty - the outcome rests entirely with you.</span></div>\r\n</div>\r\n\r\n<div class=\"tje-divider\"></div>\r\n\r\n<h2 class=\"tje-section-title\">Practical info</h2>\r\n\r\n<div class=\"tje-info-grid\">\r\n<div class=\"tje-info-card\"><span class=\"card-icon\">⏳</span>\r\n\r\n<div class=\"card-content\"><span class=\"card-label\">Duration</span><span class=\"card-title\">60 minutes</span> <span class=\"card-description\">Doors open 30 min before</span></div>\r\n</div>\r\n\r\n<div class=\"tje-info-card\"><span class=\"card-icon\">📍</span>\r\n\r\n<div class=\"card-content\"><span class=\"card-label\">Venue</span><span class=\"card-title\">Shaw Theatre</span> <span class=\"card-description\">100-110 Euston Rd, London NW1 2AJ</span></div>\r\n</div>\r\n\r\n<div class=\"tje-info-card\"><span class=\"card-icon\">👤</span>\r\n\r\n<div class=\"card-content\"><span class=\"card-label\">Age</span><span class=\"card-title\">12+</span> <span class=\"card-description\">Under 16s must be with an adult</span></div>\r\n</div>\r\n\r\n<div class=\"tje-info-card\"><span class=\"card-icon\">♿</span>\r\n\r\n<div class=\"card-content\"><span class=\"card-label\">Accessibility</span><span class=\"card-title\">Fully accessible</span> <span class=\"card-description\">Wheelchair zone available</span></div>\r\n</div>\r\n\r\n<div class=\"tje-info-card\"><span class=\"card-icon\">✨</span>\r\n\r\n<div class=\"card-content\"><span class=\"card-label\">Groups &amp; Private</span><span class=\"card-title\"><a href=\"https://thejuryexperience.com/groups/\" rel=\"noopener\" target=\"_blank\">Take the stand</a></span> <span class=\"card-description\">30+ people or private show</span></div>\r\n</div>\r\n\r\n<div class=\"tje-info-card\"><span class=\"card-icon\">🎁</span>\r\n\r\n<div class=\"card-content\"><span class=\"card-label\">Gift card</span><span class=\"card-title\"><a href=\"https://www.feverup.com/m/502019\" rel=\"noopener\" target=\"_blank\">Send gift</a></span> <span class=\"card-description\">Gift memories to someone special</span></div>\r\n</div>\r\n</div>\r\n\r\n<div class=\"tje-faq\">\r\n<div class=\"tje-faq-header\">\r\n<h2 class=\"tje-section-title\">Frequently Asked Questions</h2>\r\n</div>\r\n\r\n<details class=\"tje-faq-category\" name=\"faq-cat\"><summary class=\"tje-faq-cat-summary\">About the Experience</summary>\r\n\r\n<div class=\"tje-faq-panel\">\r\n<details class=\"tje-faq-item\"><summary class=\"tje-faq-summary\">What can I expect?</summary>\r\n\r\n<div class=\"tje-faq-content\">\r\n<p>In this interactive live theatre show, you take on the role of a juror. Analyse witness testimonies, examine the evidence, and cast your vote: guilty or not guilty?</p>\r\n</div>\r\n</details>\r\n\r\n<details class=\"tje-faq-item\"><summary class=\"tje-faq-summary\">How long does it last?</summary>\r\n\r\n<div class=\"tje-faq-content\">\r\n<p>Approximately 60 minutes. Doors open 30 minutes before showtime. Late entry is not permitted.</p>\r\n</div>\r\n</details>\r\n\r\n<details class=\"tje-faq-item\"><summary class=\"tje-faq-summary\">Are there strobe lights?</summary>\r\n\r\n<div class=\"tje-faq-content\">\r\n<p>This event may include strobe lighting.</p>\r\n</div>\r\n</details>\r\n</div>\r\n</details>\r\n\r\n<details class=\"tje-faq-category\" name=\"faq-cat\"><summary class=\"tje-faq-cat-summary\">About Your Tickets</summary>\r\n\r\n<div class=\"tje-faq-panel\">\r\n<details class=\"tje-faq-item\"><summary class=\"tje-faq-summary\">Where can I buy tickets?</summary>\r\n\r\n<div class=\"tje-faq-content\">\r\n<p>Exclusively via the Fever app or feverup.com. No tickets are sold at the venue.</p>\r\n</div>\r\n</details>\r\n\r\n<details class=\"tje-faq-item\"><summary class=\"tje-faq-summary\">Can I transfer my ticket or get a refund?</summary>\r\n\r\n<div class=\"tje-faq-content\">\r\n<p>Transfers are free via the Fever app. Date changes up to 48 hours before. Refunds are not available.</p>\r\n</div>\r\n</details>\r\n\r\n<details class=\"tje-faq-item\"><summary class=\"tje-faq-summary\">Is there an age requirement?</summary>\r\n\r\n<div class=\"tje-faq-content\">\r\n<p>From 12 years old. Under 16s must be accompanied by an adult.</p>\r\n</div>\r\n</details>\r\n\r\n<details class=\"tje-faq-item\"><summary class=\"tje-faq-summary\">Any other things to know?</summary>\r\n\r\n<div class=\"tje-faq-content\">\r\n<p>The Balcony zone offers elevated views of the stage from the upper tier.</p>\r\n</div>\r\n</details>\r\n</div>\r\n</details>\r\n\r\n<details class=\"tje-faq-category\" name=\"faq-cat\"><summary class=\"tje-faq-cat-summary\">About the Venue</summary>\r\n\r\n<div class=\"tje-faq-panel\">\r\n<details class=\"tje-faq-item\"><summary class=\"tje-faq-summary\">Where does the experience take place?</summary>\r\n\r\n<div class=\"tje-faq-content\">\r\n<p>Shaw Theatre — 100-110 Euston Rd, London NW1 2AJ.</p>\r\n</div>\r\n</details>\r\n\r\n<details class=\"tje-faq-item\"><summary class=\"tje-faq-summary\">When should I arrive?</summary>\r\n\r\n<div class=\"tje-faq-content\">\r\n<p>Doors open 30 minutes before showtime. Please arrive at least 15 minutes early. Late entry is not permitted.</p>\r\n</div>\r\n</details>\r\n\r\n<details class=\"tje-faq-item\"><summary class=\"tje-faq-summary\">How do I get there?</summary>\r\n\r\n<div class=\"tje-faq-content\">\r\n<p>King's Cross St Pancras (5-minute walk). Euston station (5-minute walk). Multiple bus routes on Euston Road.</p>\r\n</div>\r\n</details>\r\n\r\n<details class=\"tje-faq-item\"><summary class=\"tje-faq-summary\">Is the venue wheelchair accessible?</summary>\r\n\r\n<div class=\"tje-faq-content\">\r\n<p>Yes, the venue is wheelchair accessible. Please email hello@feverup.com in advance.</p>\r\n</div>\r\n</details>\r\n\r\n<details class=\"tje-faq-item\"><summary class=\"tje-faq-summary\">Is parking available?</summary>\r\n\r\n<div class=\"tje-faq-content\">\r\n<p>NCP Bloomsbury and Euston car parks nearby.</p>\r\n</div>\r\n</details>\r\n\r\n<details class=\"tje-faq-item\"><summary class=\"tje-faq-summary\">Are animals allowed?</summary>\r\n\r\n<div class=\"tje-faq-content\">\r\n<p>Pets are not permitted. Assistance animals are welcome.</p>\r\n</div>\r\n</details>\r\n</div>\r\n</details>\r\n</div>\r\n\r\n<h2 class=\"tje-section-title\" style=\"margin-top:1.75rem;\">Seating Plan</h2>\r\n\r\n<div class=\"tje-map\">\r\n<p class=\"tje-map-caption\">Shaw Theatre</p>\r\n\r\n<div class=\"tje-map-frame\">\r\n<div class=\"tje-map-stage\">STAGE</div>\r\n\r\n<div class=\"tje-map-zone\" style=\"min-height:4.7rem;background:#E8714A;\"><span class=\"tje-map-zone-letter\">A</span></div>\r\n\r\n<div class=\"tje-map-zone\" style=\"min-height:4.7rem;background:#4A7DB8;\"><span class=\"tje-map-zone-letter\">B</span></div>\r\n\r\n<div class=\"tje-map-zone\" style=\"min-height:4.7rem;background:#4AA87D;\"><span class=\"tje-map-zone-letter\">C</span></div>\r\n</div>\r\n</div>\r\n\r\n<p class=\"tje-tags\">Crime #1 · The 20 Million Dollar Heist</p>\r\n</main>\r\n</div>",
+  "enable_image_test_experiment": false,
+  "first_active_session_date": "2026-11-19T18:00:00+00:00",
+  "first_session_date": "2026-11-19T18:00:00+00:00",
+  "gallery": [
+    "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/8a1c2652-127c-11f1-92b2-b2434481c692.jpg",
+    "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/8a370634-127c-11f1-92b2-b2434481c692.jpg",
+    "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/8a43a51a-127c-11f1-92b2-b2434481c692.jpg",
+    "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/63bfbece-2857-11f1-a700-f6c2017544a8.jpg"
+  ],
+  "media_gallery": [
+    {
+      "media_type": "video",
+      "url": "https://applications-media.feverup.com/video/upload/f_auto,w_720,h_720/fever2/plan/video/8ee7bb9c-127c-11f1-ad38-ae62a4762099.mp4",
+      "playback_rate": 0.75,
+      "poster": null,
+      "g_auto_enabled": false,
+      "category": {
+        "role": "default"
+      }
+    },
+    {
+      "media_type": "photo",
+      "url": "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/8a1c2652-127c-11f1-92b2-b2434481c692.jpg",
+      "playback_rate": null,
+      "poster": null,
+      "g_auto_enabled": true,
+      "category": {
+        "role": "cover_image"
+      }
+    },
+    {
+      "media_type": "photo",
+      "url": "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/8a370634-127c-11f1-92b2-b2434481c692.jpg",
+      "playback_rate": null,
+      "poster": null,
+      "g_auto_enabled": true,
+      "category": {
+        "role": "default"
+      }
+    },
+    {
+      "media_type": "photo",
+      "url": "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/8a43a51a-127c-11f1-92b2-b2434481c692.jpg",
+      "playback_rate": null,
+      "poster": null,
+      "g_auto_enabled": true,
+      "category": {
+        "role": "default"
+      }
+    },
+    {
+      "media_type": "photo",
+      "url": "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/63bfbece-2857-11f1-a700-f6c2017544a8.jpg",
+      "playback_rate": null,
+      "poster": null,
+      "g_auto_enabled": true,
+      "category": {
+        "role": "default"
+      }
+    }
+  ],
+  "has_add_ons": true,
+  "has_seasons": false,
+  "id": 338406,
+  "is_3ds_required": false,
+  "is_calendar_selector": false,
+  "is_multiple_sessions": true,
+  "is_timeless": false,
+  "is_urgent": false,
+  "last_active_session_date": "2027-01-23T18:00:00+00:00",
+  "last_session_date": "2027-01-23T18:00:00+00:00",
+  "logo_url": null,
+  "meta": {
+    "description": "You’ve been called for jury duty in London. In this live theatre show, you decide the final verdict of a courtroom trial. Get your tickets!",
+    "disallow_indexing": false,
+    "json_ld_overrides": [
+      {
+        "type": "Product"
+      },
+      {
+        "type": "Event"
+      }
+    ],
+    "title": "The Jury Experience London - Tickets"
+  },
+  "name": "The Jury Experience - The 20 Million Dollar Heist",
+  "partner_id": 4953,
+  "presentation_settings": {
+    "enable_redeem_vouchers_web": false,
+    "has_affiliate_link": false,
+    "hide_coupon_loyalty": false,
+    "hide_help": false,
+    "hide_similar_plans": false,
+    "hide_recommender_items": false,
+    "is_streaming": false,
+    "show_bsa_toggle": false,
+    "show_important_information": false,
+    "show_place_preview": true,
+    "banners": [],
+    "reviews_from_plan_id": null,
+    "show_reviews_from_main_plan_info": false,
+    "hide_rating": false,
+    "show_loyalty_points_disclaimer": true,
+    "display_calendar_price": false,
+    "display_best_price_indicator": false,
+    "hide_place_selector": false,
+    "show_multimedia_gallery": true,
+    "show_optimized_seating_map": false,
+    "ticket_selector": null,
+    "session_type_presentation_position": null,
+    "show_sessions_grouped_on_ticket_selector": false,
+    "is_real_time": false,
+    "is_onebox_real_time": false,
+    "show_time_slot_best_price": false,
+    "mobile_webview": {
+      "url": "https://feverup.com/m/338406/en",
+      "ios_max_version": null,
+      "android_max_version": null
+    }
+  },
+  "price_info": {
+    "type": "from",
+    "currency": "GBP",
+    "amount": 38.85,
+    "strikethrough": null
+  },
+  "rating": {
+    "is_hidden": false,
+    "num_ratings": 630,
+    "average": 4.18
+  },
+  "redirect_to": null,
+  "link_out_info": null,
+  "selector_settings": {
+    "type": "single",
+    "view_configuration": "vertical"
+  },
+  "session_selector_type": "date-time",
+  "places": [
+    {
+      "id": 10707,
+      "address": "100-110 Euston Road, Kings Road, NW12AJ",
+      "has_place_page": true,
+      "is_hidden": false,
+      "latitude": 51.528861,
+      "locale": "en",
+      "longitude": -0.128087,
+      "metro_stations": [
+        {
+          "id": 2233,
+          "images": [
+            "https://applications-media.feverup.com/image/upload/f_auto/fever2/metrostations/android-xxhdpi/london_metro_Hammersmith.png",
+            "https://applications-media.feverup.com/image/upload/f_auto/fever2/metrostations/android-xxhdpi/london_metro_Circle.png",
+            "https://applications-media.feverup.com/image/upload/f_auto/fever2/metrostations/android-xxhdpi/london_metro_Northern.png",
+            "https://applications-media.feverup.com/image/upload/f_auto/fever2/metrostations/android-xxhdpi/london_metro_Metropolitan.png",
+            "https://applications-media.feverup.com/image/upload/f_auto/fever2/metrostations/android-xxhdpi/london_metro_Piccadilly.png",
+            "https://applications-media.feverup.com/image/upload/f_auto/fever2/metrostations/android-xxhdpi/london_metro_Victoria.png"
+          ],
+          "name": "King's Cross St. Pancras"
+        }
+      ],
+      "name": "Shaw Theatre",
+      "signed_map_url": "https://applications-media.feverup.com/image/upload/f_auto/fever2/place/maps/10707__51.528861_-0.128087.png",
+      "slug": "shaw-theatre",
+      "display_settings": {
+        "display_calendar_price": false
+      }
+    }
+  ],
+  "should_display_featured_review_answers": true,
+  "slug": null,
+  "translation_languages": [
+    "de",
+    "es",
+    "fr",
+    "it"
+  ],
+  "type": "standard",
+  "youtube_id": null,
+  "queue": null,
+  "timeless_validity_message": null,
+  "has_shop_products": false,
+  "is_purchaseable_as_guest": false,
+  "displayed_min_price_session_type_id": 26637642,
+  "season_pass_plan_id": null,
+  "plan_metadata": null,
+  "cancellation_policy": {
+    "hours_before_session": 24,
+    "minutes_before_session": 0
+  },
+  "exchange_policy": {
+    "allowed_times": 5
+  }
+}

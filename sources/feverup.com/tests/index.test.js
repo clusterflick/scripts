@@ -1,5 +1,9 @@
 /** @jest-environment setup-polly-jest/jest-environment-node */
-const { setupPolly, schemaValidate } = require("../../../common/test-utils");
+const {
+  setupPolly,
+  setupCacheMock,
+  schemaValidate,
+} = require("../../../common/test-utils");
 const {
   readJSON,
   removeMatchingHints,
@@ -14,12 +18,18 @@ jest.mock("../../../common/utils", () => ({
 
 const isRecording = false;
 
+// Reading the whole London catalogue is hundreds of requests, so retrieve()'s
+// fetches replay from the cache files a real run wrote rather than from HTTP
+// recordings of every one of them.
+jest.mock("../../../common/cache");
+setupCacheMock(__dirname, "2026-08-17");
+
 // Hide script output
 console.log = () => {};
 
 describe(attributes.name, () => {
   setupPolly(isRecording, __dirname);
-  jest.useFakeTimers().setSystemTime(new Date("2026-02-17"));
+  jest.useFakeTimers().setSystemTime(new Date("2026-08-17"));
 
   describe.each([
     {
@@ -27,36 +37,36 @@ describe(attributes.name, () => {
       alternativeNames: ["The Refinery City Point"],
       address: "1 Ropemaker Street, London, EC2Y 9HT, UK",
       geo: { lat: 51.519140879706114, lon: -0.09002136809499772 },
-      expectedMatches: 2,
+      expectedMatches: 3,
     },
     {
       name: "The Moniker",
       alternativeNames: [],
       address: "25 Fenchurch Avenue, London, EC3M 5AD, UK",
       geo: { lat: 51.51277895188951, lon: -0.08078508800736149 },
-      expectedMatches: 2,
+      expectedMatches: 3,
     },
     {
       name: "Parlour",
       alternativeNames: ["Parlour Kensal", "The Parlour"],
       address: "5 Regent Street, London, NW10 5LG, UK",
       geo: { lat: 51.52876791379925, lon: -0.2166160120141102 },
-      expectedMatches: 2,
+      expectedMatches: 4,
     },
   ])("$name", ({ name, alternativeNames, address, geo, expectedMatches }) => {
     it(
       "retrieve and find events",
       async () => {
-        const { movieListPage, moviePages, sessionPages } = await retrieve();
+        const { movieListPage, planDetails, sessionPages } = await retrieve();
 
         // Make sure the input looks roughly correct
         expect(movieListPage).toBeTruthy();
-        expect(moviePages).toBeTruthy();
-        expect(sessionPages).toBeTruthy();
+        expect(Object.keys(planDetails)).toHaveLength(256);
+        expect(Object.keys(sessionPages)).toHaveLength(21);
 
         readJSON.mockImplementation(() => ({
           movieListPage,
-          moviePages,
+          planDetails,
           sessionPages,
         }));
 

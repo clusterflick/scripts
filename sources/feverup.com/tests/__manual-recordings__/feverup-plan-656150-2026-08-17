@@ -1,0 +1,251 @@
+{
+  "a_b_testing": null,
+  "access_rules": [],
+  "available_locales": [
+    "de-DE",
+    "es-ES",
+    "fr-FR",
+    "it-IT"
+  ],
+  "base_locale": "en-GB",
+  "category": null,
+  "categories": [
+    "Bartending/Cocktail Course",
+    "Courses",
+    "Entertainment",
+    "Microtheater",
+    "Tasting Courses",
+    "Theatre Performance"
+  ],
+  "city_available_locales": [
+    "de-DE",
+    "fr-FR",
+    "it-IT",
+    "es-ES",
+    "en-GB"
+  ],
+  "city_code": "LON",
+  "city_country_iso_code": "UK",
+  "city_slug": "london",
+  "city_slug_lang": "en",
+  "city_standard_id": 1006886,
+  "custom_label": null,
+  "custom_labels": [],
+  "default_level_display": "disabled",
+  "default_session": {
+    "id": 468878737,
+    "attend_text": "Join in!",
+    "available_tickets": 30,
+    "has_available_tickets": true,
+    "currency": "GBP",
+    "ends_at_iso": "2026-09-04T19:25:00+01:00",
+    "expiration_iso": "2026-09-04T18:30:00+01:00",
+    "label": "General Admission",
+    "last_tickets": false,
+    "max_num_tickets": 30,
+    "min_num_tickets": 1,
+    "place_id": 132867,
+    "price": 25,
+    "starts_at_iso": "2026-09-04T18:30:00+01:00",
+    "surcharge_per_ticket": 0,
+    "surcharge_per_transaction": 0,
+    "timezone": "Europe/London"
+  },
+  "session_recommendation": {
+    "recommended_by": "proximity",
+    "is_fallback": null,
+    "fallback_reason": null,
+    "computed_at": null
+  },
+  "description": "<style type=\"text/css\">* { box-sizing: border-box; }\r\nimg { max-width: 100%; }\r\n\r\n.bqcd-wrap { max-width: 100%; overflow-x: hidden; color: #14212e; }\r\n\r\n.bqcd-section-title {\r\n  font-size: 1rem; font-weight: 700; letter-spacing: -0.01em;\r\n  color: #14212e; margin: 0 0 0.875rem 0;\r\n  position: relative; padding-bottom: 0.5rem;\r\n}\r\n.bqcd-section-title::after {\r\n  content: \"\"; display: block; position: absolute;\r\n  bottom: 0; left: 0; width: 3rem; height: 4px;\r\n  background: #2e5fa3; border-radius: 3px;\r\n}\r\n\r\n/* Meta bar — Fever-tab style, no pill badges */\r\n.bqcd-meta {\r\n  display: flex; flex-wrap: wrap; gap: 0 1.5rem;\r\n  margin: 0 0 1.25rem 0; padding-bottom: 0.75rem;\r\n  border-bottom: 1px solid #e6e9ee;\r\n}\r\n.bqcd-meta span {\r\n  font-size: 0.8rem; font-weight: 600; color: #14212e;\r\n  display: flex; align-items: center; gap: 0.3rem;\r\n}\r\n\r\n.bqcd-intro { font-size: 1rem; line-height: 1.7; color: #444; margin: 0 0 1.5rem 0; }\r\n.bqcd-topic { font-size: 0.98rem; line-height: 1.7; color: #333; margin: 0 0 1.5rem 0; }\r\n\r\n.bqcd-hero-quote {\r\n  position: relative; padding: 0.75rem 0 0.75rem 1.25rem;\r\n  margin: 1.5rem 0 1.75rem 0; border-left: 4px solid #2e5fa3;\r\n}\r\n.bqcd-hero-quote p {\r\n  margin: 0; font-family: Georgia, 'Times New Roman', serif;\r\n  font-size: 1.3rem; line-height: 1.35; font-weight: 500; font-style: italic;\r\n  color: #14212e; letter-spacing: -0.01em;\r\n}\r\n.bqcd-hero-quote .quote-accent { color: #2e5fa3; }\r\n\r\n.bqcd-speaker {\r\n  background: linear-gradient(150deg, #14212e 0%, #1d3346 60%, #22506b 100%);\r\n  color: #fff; border-radius: 1rem;\r\n  padding: 1.5rem 1.5rem 1.6rem 1.5rem; margin: 0 0 1.75rem 0;\r\n}\r\n.bqcd-speaker-kicker {\r\n  font-size: 0.65rem; font-weight: 700; letter-spacing: 0.16em;\r\n  text-transform: uppercase; color: #7aadee; margin: 0 0 0.6rem 0; display: block;\r\n}\r\n.bqcd-speaker-name {\r\n  font-size: 1.5rem; font-weight: 800; line-height: 1.15;\r\n  letter-spacing: -0.01em; margin: 0 0 0.3rem 0; color: #fff;\r\n}\r\n.bqcd-speaker-credentials { font-size: 0.9rem; font-weight: 600; color: #aecbf0; margin: 0 0 0.85rem 0; }\r\n.bqcd-speaker-bio { font-size: 0.95rem; line-height: 1.65; color: #e4ecf3; margin: 0; }\r\n.bqcd-speaker-closer { font-size: 0.9rem; font-weight: 600; color: #aecbf0; margin: 0.85rem 0 0 0; }\r\n\r\n.bqcd-divider { height: 1px; background: #e6e9ee; margin: 1.75rem 0; }\r\n\r\n.bqcd-highlight-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }\r\n.bqcd-highlight-card {\r\n  background: #f7f9fb; border-radius: 0.75rem; padding: 0.9rem 0.95rem;\r\n  display: flex; flex-direction: column; gap: 0.4rem;\r\n}\r\n.bqcd-highlight-icon { font-size: 1.25rem; line-height: 1; }\r\n.bqcd-highlight-text { font-size: 0.9rem; line-height: 1.45; color: #333; }\r\n\r\n.bqcd-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.6rem; }\r\n.bqcd-step {\r\n  display: flex; flex-direction: column;\r\n  background: #f7f9fb; border-radius: 0.75rem; padding: 0.9rem 0.85rem;\r\n}\r\n.bqcd-step-num {\r\n  width: 1.5rem; height: 1.5rem; border-radius: 999px;\r\n  background: #2e5fa3; color: #fff; font-size: 0.8rem; font-weight: 800;\r\n  display: inline-flex; align-items: center; justify-content: center; margin-bottom: 0.5rem;\r\n}\r\n.bqcd-step .card-title { font-size: 0.95rem; font-weight: 700; color: #14212e; }\r\n.bqcd-step .card-description { font-size: 0.88rem; line-height: 1.5; color: #555; margin-top: 0.15rem; }\r\n\r\n.bqcd-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }\r\n.bqcd-info-card {\r\n  display: flex; gap: 0.75rem; align-items: flex-start;\r\n  background: #f7f9fb; border-radius: 0.75rem; padding: 0.85rem 1rem;\r\n}\r\n.bqcd-info-card .card-icon { font-size: 1.15rem; line-height: 1.4; }\r\n.bqcd-info-card .card-content { display: flex; flex-direction: column; }\r\n.bqcd-info-card .card-label {\r\n  font-size: 0.62rem; font-weight: 700; letter-spacing: 0.12em;\r\n  text-transform: uppercase; color: #8a8a8a;\r\n}\r\n.bqcd-info-card .card-title { font-size: 0.95rem; font-weight: 700; color: #14212e; }\r\n.bqcd-info-card .card-title a { color: #2e5fa3; text-decoration: none; }\r\n.bqcd-info-card .card-description { font-size: 0.85rem; line-height: 1.5; color: #555; margin-top: 0.1rem; }\r\n\r\n.bqcd-faq { margin-top: 0.5rem; }\r\n.bqcd-faq-hint { font-size: 0.8rem; color: #8a8a8a; margin: 0 0 0.75rem 0; }\r\n.bqcd-faq-category { border-top: 1px solid #e6e9ee; }\r\n.bqcd-faq-cat-summary {\r\n  font-size: 0.95rem; font-weight: 700; color: #14212e;\r\n  padding: 0.85rem 0; cursor: pointer; list-style: none;\r\n  display: flex; justify-content: space-between; align-items: center; gap: 0.75rem;\r\n}\r\n.bqcd-faq-cat-summary::-webkit-details-marker { display: none; }\r\n.bqcd-faq-cat-summary::after { content: \"▾\"; color: #2e5fa3; font-size: 0.9rem; transition: transform .2s ease; }\r\ndetails[open] > .bqcd-faq-cat-summary::after { transform: rotate(180deg); }\r\n.bqcd-faq-panel { padding-bottom: 0.5rem; }\r\n.bqcd-faq-item { border-top: 1px solid #f0f2f5; }\r\n.bqcd-faq-summary {\r\n  font-size: 0.9rem; font-weight: 600; color: #333;\r\n  padding: 0.6rem 0; cursor: pointer; list-style: none;\r\n  display: flex; justify-content: space-between; align-items: center; gap: 0.75rem;\r\n}\r\n.bqcd-faq-summary::-webkit-details-marker { display: none; }\r\n.bqcd-faq-summary::after { content: \"+\"; color: #2e5fa3; font-weight: 700; font-size: 1.1rem; line-height: 1; }\r\ndetails[open] > .bqcd-faq-summary::after { content: \"–\"; }\r\n.bqcd-faq-content { font-size: 0.88rem; line-height: 1.6; color: #555; padding-bottom: 0.6rem; }\r\n.bqcd-faq-content p { margin: 0 0 0.5rem 0; }\r\n\r\n.bqcd-map { margin: 0.5rem auto 0 auto; max-width: 380px; text-align: center; }\r\n.bqcd-map-caption { font-size: 0.85rem; font-weight: 700; color: #14212e; margin: 0 0 0.6rem 0; }\r\n.bqcd-map-frame {\r\n  border: 1px solid #e6e9ee; border-radius: 0.75rem; overflow: hidden; display: flex; flex-direction: column;\r\n}\r\n.bqcd-map-stage {\r\n  background: #14212e; color: #fff; text-align: center;\r\n  font-size: 0.72rem; font-weight: 800; letter-spacing: 0.16em; padding: 0.5rem; text-transform: uppercase;\r\n}\r\n.bqcd-map-zone { display: flex; align-items: center; justify-content: center; color: #fff; font-size: 0.85rem; font-weight: 700; }\r\n\r\n.bqcd-tags { font-size: 0.8rem; color: #8a8a8a; margin: 1.75rem 0 0 0; }\r\n</style>\r\n<div class=\"bqcd-wrap\">\r\n<div class=\"bqcd-meta\"><span>🧠 Real science, no slides</span> <span>🍸 Bar setting</span> <span>🎙️ Live expert + open Q&amp;A</span></div>\r\n\r\n<p class=\"bqcd-intro\">⭐ Most nights out at a bar end in the same conversations. This one ends in understanding the science behind what psilocybin actually does to your brain, explained by someone who's read the clinical trials, all while your drink stays cold. A fun science night at the bar.</p>\r\n\r\n<p class=\"bqcd-topic\">This edition covers one of the most discussed topics in modern medicine: what current clinical research shows about psilocybin as a potential treatment for depression, and MDMA and its documented benefits for PTSD — no slides, no jargon, no judgment.</p>\r\n\r\n<blockquote class=\"bqcd-hero-quote\">\r\n<p>A fun science night at the bar!</p>\r\n</blockquote>\r\n\r\n<h2 class=\"bqcd-section-title\">What to expect</h2>\r\n\r\n<div class=\"bqcd-highlight-grid\">\r\n<div class=\"bqcd-highlight-card\"><span class=\"bqcd-highlight-icon\">🧠</span><span class=\"bqcd-highlight-text\">Expert-led science talks on the neuroscience of psilocybin and MDMA</span></div>\r\n\r\n<div class=\"bqcd-highlight-card\"><span class=\"bqcd-highlight-icon\">🔬</span><span class=\"bqcd-highlight-text\">Grounded in current peer-reviewed clinical research and published trial data - no moralizing</span></div>\r\n\r\n<div class=\"bqcd-highlight-card\"><span class=\"bqcd-highlight-icon\">🙋</span><span class=\"bqcd-highlight-text\">A fully open Q&amp;A with a cold drink in hand - no question off-limits, and the opposite of a lecture hall</span></div>\r\n\r\n<div class=\"bqcd-highlight-card\"><span class=\"bqcd-highlight-icon\">🔄</span><span class=\"bqcd-highlight-text\">Different angles: clinical use, neuroscience, law &amp; policy, microdosing, and more</span></div>\r\n</div>\r\n\r\n<main>\r\n<div class=\"bqcd-divider\"></div>\r\n\r\n<h2 class=\"bqcd-section-title\">How the night works</h2>\r\n\r\n<div class=\"bqcd-steps\">\r\n<div class=\"bqcd-step\"><span class=\"bqcd-step-num\">1</span> <span class=\"card-title\">Grab a drink</span> <span class=\"card-description\">Show up, order something cold, and settle in - no lecture-hall seating, no dress code.</span></div>\r\n\r\n<div class=\"bqcd-step\"><span class=\"bqcd-step-num\">2</span> <span class=\"card-title\">Settle in for the talk</span> <span class=\"card-description\">A 45-minute, plain-English talk from an expert who actually knows the research - no jargon, no judgment.</span></div>\r\n\r\n<div class=\"bqcd-step\"><span class=\"bqcd-step-num\">3</span> <span class=\"card-title\">Ask anything</span> <span class=\"card-description\">Ten minutes of fully open Q&amp;A where no question is off-limits.</span></div>\r\n</div>\r\n\r\n<div class=\"bqcd-divider\"></div>\r\n\r\n<h2 class=\"bqcd-section-title\">Good to know</h2>\r\n\r\n<div class=\"bqcd-info-grid\">\r\n<div class=\"bqcd-info-card\"><span class=\"card-icon\">⏳</span>\r\n\r\n<div class=\"card-content\"><span class=\"card-label\">Format</span><span class=\"card-title\">45-min talk + 10-min open Q&amp;A</span> <span class=\"card-description\">Talk followed by open Q&amp;A</span></div>\r\n</div>\r\n\r\n<div class=\"bqcd-info-card\"><span class=\"card-icon\">📍</span>\r\n\r\n<div class=\"card-content\"><span class=\"card-label\">Location</span><span class=\"card-title\">21Soho</span> <span class=\"card-description\">3-5 Sutton Row, London, W1D 4NR</span></div>\r\n</div>\r\n\r\n<div class=\"bqcd-info-card\"><span class=\"card-icon\">👤</span>\r\n\r\n<div class=\"card-content\"><span class=\"card-label\">Age</span><span class=\"card-title\">18+</span> <span class=\"card-description\">Valid ID may be required at the door</span></div>\r\n</div>\r\n\r\n<div class=\"bqcd-info-card\"><span class=\"card-icon\">♿</span>\r\n\r\n<div class=\"card-content\"><span class=\"card-label\">Accessibility</span><span class=\"card-title\">Wheelchair accessible</span> <span class=\"card-description\">The venue is step-free and wheelchair accessible.</span></div>\r\n</div>\r\n</div>\r\n\r\n<div class=\"bqcd-divider\"></div>\r\n\r\n<div class=\"bqcd-faq\">\r\n<div class=\"bqcd-faq-header\">\r\n<h2 class=\"bqcd-section-title\">FAQs</h2>\r\n</div>\r\n\r\n<p class=\"bqcd-faq-hint\">👇 Tap a category, then a question, to reveal the answer.</p>\r\n\r\n<details class=\"bqcd-faq-category\" name=\"faq-cat\" open=\"\"><summary class=\"bqcd-faq-cat-summary\">About the night</summary>\r\n\r\n<div class=\"bqcd-faq-panel\">\r\n<details class=\"bqcd-faq-item\" open=\"\"><summary class=\"bqcd-faq-summary\">What is Big Questions, Cool Drinks, and what can I expect?</summary>\r\n\r\n<div class=\"bqcd-faq-content\">\r\n<p>It's an expert-led science talk series hosted in a relaxed bar setting. A communicator with real research credentials explores topics like the neuroscience of psilocybin, MDMA, and ketamine using published clinical trial data. You enjoy drinks during a 45-minute talk followed by a 10-minute open Q&amp;A - no slides, no jargon, no judgment. Each edition explores a different angle, from neuroscience and clinical use to policy and microdosing.<br>\r\n<br>\r\n<em>This presentation is strictly for educational and scientific discussion. It does not constitute medical or legal advice, nor does it promote, encourage, or condone the possession, purchase, or use of illegal substances.</em></p>\r\n</div>\r\n</details>\r\n\r\n<details class=\"bqcd-faq-item\"><summary class=\"bqcd-faq-summary\">How long does the experience last?</summary>\r\n\r\n<div class=\"bqcd-faq-content\">\r\n<p>The experience lasts approximately 55 minutes.</p>\r\n</div>\r\n</details>\r\n\r\n<details class=\"bqcd-faq-item\"><summary class=\"bqcd-faq-summary\">Can I purchase drinks on-site?</summary>\r\n\r\n<div class=\"bqcd-faq-content\">\r\n<p>Yes - there's an on-site bar where you can buy beverages during the experience.</p>\r\n</div>\r\n</details>\r\n\r\n<details class=\"bqcd-faq-item\"><summary class=\"bqcd-faq-summary\">Is food included in the ticket price?</summary>\r\n\r\n<div class=\"bqcd-faq-content\">\r\n<p>No, food is not included in the ticket price.</p>\r\n</div>\r\n</details>\r\n\r\n<details class=\"bqcd-faq-item\"><summary class=\"bqcd-faq-summary\">Will there be strobe lights?</summary>\r\n\r\n<div class=\"bqcd-faq-content\">\r\n<p>No, there will not be any strobe lights.</p>\r\n</div>\r\n</details>\r\n\r\n<details class=\"bqcd-faq-item\"><summary class=\"bqcd-faq-summary\">What language is the show in?</summary>\r\n\r\n<div class=\"bqcd-faq-content\">\r\n<p>The show is presented in English.</p>\r\n</div>\r\n</details>\r\n\r\n<details class=\"bqcd-faq-item\"><summary class=\"bqcd-faq-summary\">Are the seats numbered?</summary>\r\n\r\n<div class=\"bqcd-faq-content\">\r\n<p>No, seats are not numbered. Seating is on a first-come, first-served basis.</p>\r\n</div>\r\n</details>\r\n\r\n<details class=\"bqcd-faq-item\"><summary class=\"bqcd-faq-summary\">Can I take photos or record the experience?</summary>\r\n\r\n<div class=\"bqcd-faq-content\">\r\n<p>Yes, guests are welcome to take photos and/or record the experience.</p>\r\n</div>\r\n</details>\r\n</div>\r\n</details>\r\n\r\n<details class=\"bqcd-faq-category\" name=\"faq-cat\"><summary class=\"bqcd-faq-cat-summary\">Tickets</summary>\r\n\r\n<div class=\"bqcd-faq-panel\">\r\n<details class=\"bqcd-faq-item\"><summary class=\"bqcd-faq-summary\">Do I need to print my ticket?</summary>\r\n\r\n<div class=\"bqcd-faq-content\">\r\n<p>No - just show your Fever ticket(s) in the app or email on arrival.</p>\r\n</div>\r\n</details>\r\n\r\n<details class=\"bqcd-faq-item\"><summary class=\"bqcd-faq-summary\">Are refunds allowed?</summary>\r\n\r\n<div class=\"bqcd-faq-content\">\r\n<p>No refunds are allowed. Exchanges to other dates and/or times are permitted up to 48 hours before the original start time, subject to availability. Contact support to change your ticket.</p>\r\n</div>\r\n</details>\r\n\r\n<details class=\"bqcd-faq-item\"><summary class=\"bqcd-faq-summary\">Where can I get tickets?</summary>\r\n\r\n<div class=\"bqcd-faq-content\">\r\n<p>On the Fever app (Google Play and Apple Store) or on the Fever website.</p>\r\n</div>\r\n</details>\r\n\r\n<details class=\"bqcd-faq-item\"><summary class=\"bqcd-faq-summary\">Can I make a group booking?</summary>\r\n\r\n<div class=\"bqcd-faq-content\">\r\n<p>Yes - select a group ticket on the event page. For private or large group sessions, use the private-events booking link.</p>\r\n</div>\r\n</details>\r\n\r\n<details class=\"bqcd-faq-item\"><summary class=\"bqcd-faq-summary\">Can I purchase a ticket at the venue?</summary>\r\n\r\n<div class=\"bqcd-faq-content\">\r\n<p>No. All tickets must be purchased through the app or website before arriving.</p>\r\n</div>\r\n</details>\r\n\r\n<details class=\"bqcd-faq-item\"><summary class=\"bqcd-faq-summary\">Can I transfer my tickets to another person?</summary>\r\n\r\n<div class=\"bqcd-faq-content\">\r\n<p>Yes, you can transfer tickets to anyone for free using \"Transfer Tickets\" on your ticket in the Fever app. Contact support if you need help, and include your order number.</p>\r\n</div>\r\n</details>\r\n\r\n<details class=\"bqcd-faq-item\"><summary class=\"bqcd-faq-summary\">I can't find my ticket. What should I do?</summary>\r\n\r\n<div class=\"bqcd-faq-content\">\r\n<p>Your QR-code ticket is in the Fever app under the Tickets section. Log in with the same account used to buy the tickets. If you still can't find it, contact support.</p>\r\n</div>\r\n</details>\r\n\r\n<details class=\"bqcd-faq-item\"><summary class=\"bqcd-faq-summary\">How do I book a ticket for my carer?</summary>\r\n\r\n<div class=\"bqcd-faq-content\">\r\n<p>Carers are admitted free on showing appropriate documentation at the entrance (e.g. middle/higher-rate DLA, PIP, evidence of being severely sight-impaired, or a CredAbility Access Card + 1 category). The guest requiring assistance must have a valid ticket.</p>\r\n</div>\r\n</details>\r\n</div>\r\n</details>\r\n\r\n<details class=\"bqcd-faq-category\" name=\"faq-cat\"><summary class=\"bqcd-faq-cat-summary\">Getting there &amp; access</summary>\r\n\r\n<div class=\"bqcd-faq-panel\">\r\n<details class=\"bqcd-faq-item\"><summary class=\"bqcd-faq-summary\">Is the venue wheelchair accessible?</summary>\r\n\r\n<div class=\"bqcd-faq-content\">\r\n<p>Yes, the venue is wheelchair accessible.</p>\r\n</div>\r\n</details>\r\n\r\n<details class=\"bqcd-faq-item\"><summary class=\"bqcd-faq-summary\">Is there an age requirement for the event?</summary>\r\n\r\n<div class=\"bqcd-faq-content\">\r\n<p>Yes, this event is 18+.</p>\r\n</div>\r\n</details>\r\n\r\n<details class=\"bqcd-faq-item\"><summary class=\"bqcd-faq-summary\">When should I arrive?</summary>\r\n\r\n<div class=\"bqcd-faq-content\">\r\n<p>Doors open 30 minutes before the start time of the experience.</p>\r\n</div>\r\n</details>\r\n\r\n<details class=\"bqcd-faq-item\"><summary class=\"bqcd-faq-summary\">What happens if I arrive late?</summary>\r\n\r\n<div class=\"bqcd-faq-content\">\r\n<p>No late entry is permitted, as it would disrupt the show for other attendees.</p>\r\n</div>\r\n</details>\r\n\r\n<details class=\"bqcd-faq-item\"><summary class=\"bqcd-faq-summary\">Will restrooms be available on-site?</summary>\r\n\r\n<div class=\"bqcd-faq-content\">\r\n<p>Yes, there are toilets on-site, cleaned and disinfected regularly.</p>\r\n</div>\r\n</details>\r\n\r\n<details class=\"bqcd-faq-item\"><summary class=\"bqcd-faq-summary\">Where is the experience located?</summary>\r\n\r\n<div class=\"bqcd-faq-content\">\r\n<p>At 21Soho, 3-5 Sutton Row, London W1D 4NR, United Kingdom.</p>\r\n</div>\r\n</details>\r\n\r\n<details class=\"bqcd-faq-item\"><summary class=\"bqcd-faq-summary\">Is the venue indoor or outdoor?</summary>\r\n\r\n<div class=\"bqcd-faq-content\">\r\n<p>This experience takes place at an indoor venue.</p>\r\n</div>\r\n</details>\r\n\r\n<details class=\"bqcd-faq-item\"><summary class=\"bqcd-faq-summary\">Is there parking available on-site?</summary>\r\n\r\n<div class=\"bqcd-faq-content\">\r\n<p>No, there is no parking available on-site.</p>\r\n</div>\r\n</details>\r\n\r\n<details class=\"bqcd-faq-item\"><summary class=\"bqcd-faq-summary\">Are service animals allowed?</summary>\r\n\r\n<div class=\"bqcd-faq-content\">\r\n<p>Yes, service animals are welcome. No other pets or animals are allowed.</p>\r\n</div>\r\n</details>\r\n\r\n<details class=\"bqcd-faq-item\"><summary class=\"bqcd-faq-summary\">Can I bring my own food and drink?</summary>\r\n\r\n<div class=\"bqcd-faq-content\">\r\n<p>No - food or beverages purchased elsewhere are not permitted at the venue.</p>\r\n</div>\r\n</details>\r\n\r\n<details class=\"bqcd-faq-item\"><summary class=\"bqcd-faq-summary\">Can I smoke or vape during the experience?</summary>\r\n\r\n<div class=\"bqcd-faq-content\">\r\n<p>No smoking or vaping is allowed inside the venue.</p>\r\n</div>\r\n</details>\r\n\r\n<details class=\"bqcd-faq-item\"><summary class=\"bqcd-faq-summary\">Is there air conditioning?</summary>\r\n\r\n<div class=\"bqcd-faq-content\">\r\n<p>Yes, the venue has air conditioning.</p>\r\n</div>\r\n</details>\r\n\r\n<details class=\"bqcd-faq-item\"><summary class=\"bqcd-faq-summary\">What if I leave belongings behind?</summary>\r\n\r\n<div class=\"bqcd-faq-content\">\r\n<p>Phone the venue or drop by to check whether your item has been found.</p>\r\n</div>\r\n</details>\r\n</div>\r\n</details>\r\n</div>\r\n\r\n<p class=\"bqcd-tags\">Science Night · Big Questions, Cool Drinks: A Psychedelics Science Night</p>\r\n</main>\r\n</div>",
+  "enable_image_test_experiment": false,
+  "first_active_session_date": "2026-09-04T18:30:00+01:00",
+  "first_session_date": "2026-09-04T18:30:00+01:00",
+  "gallery": [
+    "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/1e446140-5aa9-11f1-b0cc-0eb42cf19a10.jpg",
+    "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/1e3a47c8-5aa9-11f1-b0cc-0eb42cf19a10.jpg",
+    "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/1e301ca8-5aa9-11f1-b0cc-0eb42cf19a10.jpg",
+    "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/1e26afd8-5aa9-11f1-b0cc-0eb42cf19a10.jpg",
+    "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/1e070cd2-5aa9-11f1-b0cc-0eb42cf19a10.jpg"
+  ],
+  "media_gallery": [
+    {
+      "media_type": "video",
+      "url": "https://applications-media.feverup.com/video/upload/f_auto,w_720,h_720/fever2/plan/video/46baef68-5aa9-11f1-99c2-62f6d88048d9.mp4",
+      "playback_rate": 0.75,
+      "poster": null,
+      "g_auto_enabled": false,
+      "category": {
+        "role": "default"
+      }
+    },
+    {
+      "media_type": "photo",
+      "url": "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/1e446140-5aa9-11f1-b0cc-0eb42cf19a10.jpg",
+      "playback_rate": null,
+      "poster": null,
+      "g_auto_enabled": true,
+      "category": {
+        "role": "cover_image"
+      }
+    },
+    {
+      "media_type": "photo",
+      "url": "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/1e3a47c8-5aa9-11f1-b0cc-0eb42cf19a10.jpg",
+      "playback_rate": null,
+      "poster": null,
+      "g_auto_enabled": true,
+      "category": {
+        "role": "default"
+      }
+    },
+    {
+      "media_type": "photo",
+      "url": "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/1e301ca8-5aa9-11f1-b0cc-0eb42cf19a10.jpg",
+      "playback_rate": null,
+      "poster": null,
+      "g_auto_enabled": true,
+      "category": {
+        "role": "default"
+      }
+    },
+    {
+      "media_type": "photo",
+      "url": "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/1e26afd8-5aa9-11f1-b0cc-0eb42cf19a10.jpg",
+      "playback_rate": null,
+      "poster": null,
+      "g_auto_enabled": true,
+      "category": {
+        "role": "default"
+      }
+    },
+    {
+      "media_type": "photo",
+      "url": "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/1e070cd2-5aa9-11f1-b0cc-0eb42cf19a10.jpg",
+      "playback_rate": null,
+      "poster": null,
+      "g_auto_enabled": true,
+      "category": {
+        "role": "default"
+      }
+    }
+  ],
+  "has_add_ons": false,
+  "has_seasons": false,
+  "id": 656150,
+  "is_3ds_required": false,
+  "is_calendar_selector": false,
+  "is_multiple_sessions": true,
+  "is_timeless": false,
+  "is_urgent": false,
+  "last_active_session_date": "2026-09-04T21:00:00+01:00",
+  "last_session_date": "2026-09-04T21:00:00+01:00",
+  "logo_url": null,
+  "meta": {
+    "description": "Discover the neuroscience of psilocybin and MDMA with expert talks and cold drinks at 21Soho. Get your tickets now!",
+    "disallow_indexing": false,
+    "json_ld_overrides": [],
+    "title": "Big Questions, Cool Drinks: A Psychedelics Science Night in London - Tickets"
+  },
+  "name": "Big Questions, Cool Drinks: A Psychedelics Science Night",
+  "partner_id": 4953,
+  "presentation_settings": {
+    "enable_redeem_vouchers_web": false,
+    "has_affiliate_link": false,
+    "hide_coupon_loyalty": false,
+    "hide_help": false,
+    "hide_similar_plans": false,
+    "hide_recommender_items": false,
+    "is_streaming": false,
+    "show_bsa_toggle": false,
+    "show_important_information": false,
+    "show_place_preview": true,
+    "banners": [
+      {
+        "type": "info",
+        "message": "No booking fees",
+        "position": "top_selector"
+      }
+    ],
+    "reviews_from_plan_id": null,
+    "show_reviews_from_main_plan_info": false,
+    "hide_rating": false,
+    "show_loyalty_points_disclaimer": true,
+    "display_calendar_price": false,
+    "display_best_price_indicator": false,
+    "hide_place_selector": false,
+    "show_multimedia_gallery": true,
+    "show_optimized_seating_map": false,
+    "ticket_selector": null,
+    "session_type_presentation_position": null,
+    "show_sessions_grouped_on_ticket_selector": false,
+    "is_real_time": false,
+    "is_onebox_real_time": false,
+    "show_time_slot_best_price": false,
+    "mobile_webview": {
+      "url": "https://feverup.com/m/656150/en",
+      "ios_max_version": null,
+      "android_max_version": null
+    }
+  },
+  "price_info": {
+    "type": "single",
+    "currency": "GBP",
+    "amount": 25,
+    "strikethrough": null
+  },
+  "rating": {
+    "is_hidden": true,
+    "num_ratings": 0,
+    "average": 0
+  },
+  "redirect_to": null,
+  "link_out_info": null,
+  "selector_settings": {
+    "type": "single",
+    "view_configuration": "vertical"
+  },
+  "session_selector_type": "date-time",
+  "places": [
+    {
+      "id": 132867,
+      "address": "Manor House, 3-5 Sutton Row, London, W1D 4NR",
+      "has_place_page": true,
+      "is_hidden": false,
+      "latitude": 51.5156599,
+      "locale": "en",
+      "longitude": -0.1311785,
+      "metro_stations": [],
+      "name": "21Soho",
+      "signed_map_url": "https://applications-media.feverup.com/image/upload/f_auto/fever2/place/maps/132867__51.5156599_-0.1311785.png",
+      "slug": "21soho",
+      "display_settings": {
+        "display_calendar_price": false
+      }
+    }
+  ],
+  "should_display_featured_review_answers": false,
+  "slug": "big-questions-cool-drinks-a-psychedelics-science-night-656150",
+  "translation_languages": [
+    "de",
+    "es",
+    "fr",
+    "it"
+  ],
+  "type": "standard",
+  "youtube_id": null,
+  "queue": null,
+  "timeless_validity_message": null,
+  "has_shop_products": false,
+  "is_purchaseable_as_guest": true,
+  "displayed_min_price_session_type_id": null,
+  "season_pass_plan_id": null,
+  "plan_metadata": null,
+  "cancellation_policy": {
+    "hours_before_session": 48,
+    "minutes_before_session": 0
+  },
+  "exchange_policy": {
+    "allowed_times": 5
+  }
+}

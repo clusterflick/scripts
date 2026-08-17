@@ -6,20 +6,19 @@ const {
   findMatchingCinema,
 } = require("../../common/source-utils");
 const { getAllCinemaAttributes } = require("../../cinemas");
-const { extractTransferState, extractPlanDetail } = require("./utils");
+const attributes = require("./attributes");
 
 async function discoverVenues() {
   const dataSrc = path.join(process.cwd(), "retrieved-data", "feverup.com");
   const data = await readJSON(dataSrc);
-  const moviePages = data.moviePages || {};
+  const planDetails = data.planDetails || {};
 
   // Group events by venue. A single plan (movie) can run at multiple places,
   // so each place becomes its own venue entry.
   const venueMap = new Map();
 
-  for (const [url, html] of Object.entries(moviePages)) {
-    const transferState = extractTransferState(html, url);
-    const planDetail = extractPlanDetail(transferState, url);
+  for (const [planId, planDetail] of Object.entries(planDetails)) {
+    const url = `${attributes.domain}/m/${planId}`;
     const places = planDetail.places || [];
 
     for (const place of places) {

@@ -1,0 +1,1257 @@
+{
+  "level": {
+    "type": "time",
+    "items": [
+      {
+        "default_label": "1:00 pm",
+        "value": {
+          "from": "2026-09-29T13:00:00+01:00",
+          "timezone": "Europe/London"
+        },
+        "level": {
+          "type": "session",
+          "items": [
+            {
+              "default_label": "Classic",
+              "value": {
+                "id": 512201046,
+                "label": "Classic",
+                "label_without_format": "Classic",
+                "item_type": "30363511",
+                "details": "<span style=\"background-color:transparent;color:rgb(3, 20, 25)\">Ticket for 1 person</span><br />",
+                "starts_at_iso": "2026-09-29T13:00:00+01:00",
+                "ends_at_iso": "2026-09-29T16:00:00+01:00",
+                "expiration_iso": "2026-09-27T13:00:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 18,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 1,
+                "max_num_tickets": 18,
+                "price": 99.95,
+                "currency": "GBP",
+                "surcharge_per_ticket": 4,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 1,
+                "is_pack": false,
+                "session_type_group": 160342,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-04a37ca4-a241-4483-8d5b-b7f6b0c34aff",
+                      "min": 0,
+                      "max": 18,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 18 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-cf00febc-91c0-4ce1-bece-6de139686520",
+                      "min": 0,
+                      "max": 18,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 18 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            },
+            {
+              "default_label": "Vegetarian",
+              "value": {
+                "id": 512201056,
+                "label": "Vegetarian",
+                "label_without_format": "Vegetarian",
+                "item_type": "30363621",
+                "details": "<span style=\"background-color:transparent;color:rgb(3, 20, 25)\">Ticket for 1 person</span><br />",
+                "starts_at_iso": "2026-09-29T13:00:00+01:00",
+                "ends_at_iso": "2026-09-29T16:00:00+01:00",
+                "expiration_iso": "2026-09-27T13:00:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 18,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 1,
+                "max_num_tickets": 18,
+                "price": 99.95,
+                "currency": "GBP",
+                "surcharge_per_ticket": 4,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 2,
+                "is_pack": false,
+                "session_type_group": 160342,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-04a37ca4-a241-4483-8d5b-b7f6b0c34aff",
+                      "min": 0,
+                      "max": 18,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 18 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-cf00febc-91c0-4ce1-bece-6de139686520",
+                      "min": 0,
+                      "max": 18,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 18 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            },
+            {
+              "default_label": "Vegan",
+              "value": {
+                "id": 512201055,
+                "label": "Vegan",
+                "label_without_format": "Vegan",
+                "item_type": "30363586",
+                "details": "<span style=\"background-color:transparent;color:rgb(3, 20, 25)\">Ticket for 1 person</span><br />",
+                "starts_at_iso": "2026-09-29T13:00:00+01:00",
+                "ends_at_iso": "2026-09-29T16:00:00+01:00",
+                "expiration_iso": "2026-09-27T13:00:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 18,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 1,
+                "max_num_tickets": 18,
+                "price": 99.95,
+                "currency": "GBP",
+                "surcharge_per_ticket": 4,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 3,
+                "is_pack": false,
+                "session_type_group": 160342,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-04a37ca4-a241-4483-8d5b-b7f6b0c34aff",
+                      "min": 0,
+                      "max": 18,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 18 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-cf00febc-91c0-4ce1-bece-6de139686520",
+                      "min": 0,
+                      "max": 18,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 18 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            }
+          ],
+          "session_selector_group_hash": "7987d83b99fb600e417e7c0f5e3701e6"
+        }
+      },
+      {
+        "default_label": "6:30 pm",
+        "value": {
+          "from": "2026-09-29T18:30:00+01:00",
+          "timezone": "Europe/London"
+        },
+        "level": {
+          "type": "session",
+          "items": [
+            {
+              "default_label": "Classic",
+              "value": {
+                "id": 499503907,
+                "label": "Classic",
+                "label_without_format": "Classic",
+                "item_type": "30363511",
+                "details": "<span style=\"background-color:transparent;color:rgb(3, 20, 25)\">Ticket for 1 person</span><br />",
+                "starts_at_iso": "2026-09-29T18:30:00+01:00",
+                "ends_at_iso": "2026-09-29T21:30:00+01:00",
+                "expiration_iso": "2026-09-27T18:30:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 1,
+                "has_available_tickets": true,
+                "last_tickets": true,
+                "min_num_tickets": 1,
+                "max_num_tickets": 1,
+                "price": 99.95,
+                "currency": "GBP",
+                "surcharge_per_ticket": 4,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 1,
+                "is_pack": false,
+                "session_type_group": 160342,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-3137f30e-a3f6-439b-9a60-70f5bcd2b2cd",
+                      "min": 0,
+                      "max": 1,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 1 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-76108f4d-929d-4cb6-b2bd-2b44c6b2ff33",
+                      "min": 0,
+                      "max": 1,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 1 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            },
+            {
+              "default_label": "Vegetarian",
+              "value": {
+                "id": 499503909,
+                "label": "Vegetarian",
+                "label_without_format": "Vegetarian",
+                "item_type": "30363621",
+                "details": "<span style=\"background-color:transparent;color:rgb(3, 20, 25)\">Ticket for 1 person</span><br />",
+                "starts_at_iso": "2026-09-29T18:30:00+01:00",
+                "ends_at_iso": "2026-09-29T21:30:00+01:00",
+                "expiration_iso": "2026-09-27T18:30:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 1,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 1,
+                "max_num_tickets": 1,
+                "price": 99.95,
+                "currency": "GBP",
+                "surcharge_per_ticket": 4,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 2,
+                "is_pack": false,
+                "session_type_group": 160342,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-3137f30e-a3f6-439b-9a60-70f5bcd2b2cd",
+                      "min": 0,
+                      "max": 1,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 1 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-76108f4d-929d-4cb6-b2bd-2b44c6b2ff33",
+                      "min": 0,
+                      "max": 1,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 1 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            },
+            {
+              "default_label": "Vegan",
+              "value": {
+                "id": 499503908,
+                "label": "Vegan",
+                "label_without_format": "Vegan",
+                "item_type": "30363586",
+                "details": "<span style=\"background-color:transparent;color:rgb(3, 20, 25)\">Ticket for 1 person</span><br />",
+                "starts_at_iso": "2026-09-29T18:30:00+01:00",
+                "ends_at_iso": "2026-09-29T21:30:00+01:00",
+                "expiration_iso": "2026-09-27T18:30:00+01:00",
+                "timezone": "Europe/London",
+                "available_tickets": 1,
+                "has_available_tickets": true,
+                "last_tickets": false,
+                "min_num_tickets": 1,
+                "max_num_tickets": 1,
+                "price": 99.95,
+                "currency": "GBP",
+                "surcharge_per_ticket": 4,
+                "surcharge_per_transaction": 0,
+                "requires_price_breakdown": true,
+                "attend_text": "Join in!",
+                "seating_pool_id": null,
+                "seating_category": null,
+                "rule": null,
+                "sorting": 3,
+                "is_pack": false,
+                "session_type_group": 160342,
+                "ticket_selector_step_quantity": 1,
+                "sessions_group": [],
+                "shared_availability_rule": {
+                  "item_types_sharing_availability_all_of": [
+                    {
+                      "type": "stg_ts-3137f30e-a3f6-439b-9a60-70f5bcd2b2cd",
+                      "min": 0,
+                      "max": 1,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 1 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    },
+                    {
+                      "type": "ts-76108f4d-929d-4cb6-b2bd-2b44c6b2ff33",
+                      "min": 0,
+                      "max": 1,
+                      "quantity_multiplier": 1,
+                      "message_on_failure": "Only 1 tickets available for this time. Please adjust your selection to proceed.",
+                      "message_on_failure_min": null
+                    }
+                  ]
+                }
+              },
+              "level": null
+            }
+          ],
+          "session_selector_group_hash": "b60a972c418e29f7940fa65efae6c9c0"
+        }
+      }
+    ]
+  },
+  "add_ons": {
+    "7987d83b99fb600e417e7c0f5e3701e6": [
+      {
+        "id": 0,
+        "label": "Premium Seating",
+        "description": "Secure the best seats in the house for a small extra fee: <br /><em>£10 per person</em><br />",
+        "category": "session_as_add_on",
+        "pricing_type": "fixed_amount_per_matching_session_types",
+        "price": 10,
+        "currency": "GBP",
+        "purchasable_state": "enabled",
+        "item_type": "30363668",
+        "cart_item_id": 512201047,
+        "session_selector_group_hash": "7987d83b99fb600e417e7c0f5e3701e6",
+        "view_configuration": {
+          "type": "toggle"
+        },
+        "rule": {
+          "needed_item_types_any_of": [
+            {
+              "type": "30363511",
+              "min": 1,
+              "max": 14
+            },
+            {
+              "type": "30363586",
+              "min": 1,
+              "max": 14
+            },
+            {
+              "type": "30363621",
+              "min": 1,
+              "max": 14
+            },
+            {
+              "type": "30412361",
+              "min": 1,
+              "max": 20
+            }
+          ],
+          "message_on_failure": "To reserve the add-on, you must also select at least one entry ticket to the experience.",
+          "is_increased_by_selected_quantity": false
+        },
+        "is_selected_by_default": false,
+        "surcharge_per_ticket": 0.2,
+        "requires_price_breakdown": true,
+        "strikethrough_price": null,
+        "strikethrough_percentage": null,
+        "display_step": "plan_view_cta_sheet",
+        "image_url": null,
+        "shown_by_session_types_rule": null,
+        "item_quantity_matching_rule": {
+          "message_on_failure": "To reserve the add-on, you must also select at least one entry ticket to the experience.",
+          "types": [
+            "30363511",
+            "30363586",
+            "30363621",
+            "30412361"
+          ],
+          "selection_strategy": "bounds",
+          "selection_upper_bound_factor": "1.00",
+          "should_display_price_label_per_ticket": false
+        }
+      },
+      {
+        "id": 0,
+        "label": "Pick 'n' Mix for one",
+        "description": "<span style=\"color:rgb(55, 65, 81)\"> A pre-filled pot of classic cinema-style sweets</span><br />",
+        "category": "session_as_add_on",
+        "pricing_type": "fixed_amount",
+        "price": 6,
+        "currency": "GBP",
+        "purchasable_state": "enabled",
+        "item_type": "30363724",
+        "cart_item_id": 512201048,
+        "session_selector_group_hash": "7987d83b99fb600e417e7c0f5e3701e6",
+        "view_configuration": {
+          "type": "stepper",
+          "allowed_range": {
+            "step": 1,
+            "min": 1,
+            "max": 20
+          }
+        },
+        "rule": {
+          "needed_item_types_any_of": [
+            {
+              "type": "30363511",
+              "min": 1,
+              "max": 30
+            },
+            {
+              "type": "30363586",
+              "min": 1,
+              "max": 30
+            },
+            {
+              "type": "30363621",
+              "min": 1,
+              "max": 30
+            },
+            {
+              "type": "30412361",
+              "min": 1,
+              "max": 20
+            }
+          ],
+          "message_on_failure": "To reserve the add-on, you must also select at least one entry ticket to the experience.",
+          "is_increased_by_selected_quantity": false
+        },
+        "is_selected_by_default": false,
+        "surcharge_per_ticket": 0.12,
+        "requires_price_breakdown": true,
+        "strikethrough_price": null,
+        "strikethrough_percentage": null,
+        "display_step": "plan_view_cta_sheet",
+        "image_url": null,
+        "shown_by_session_types_rule": null
+      },
+      {
+        "id": 0,
+        "label": "Pick 'n' Mix to share",
+        "description": "A larger pre-filled pot of cinema-style sweets - perfect for sharing between two<br />",
+        "category": "session_as_add_on",
+        "pricing_type": "fixed_amount",
+        "price": 9,
+        "currency": "GBP",
+        "purchasable_state": "enabled",
+        "item_type": "30363784",
+        "cart_item_id": 512201049,
+        "session_selector_group_hash": "7987d83b99fb600e417e7c0f5e3701e6",
+        "view_configuration": {
+          "type": "stepper",
+          "allowed_range": {
+            "step": 1,
+            "min": 1,
+            "max": 20
+          }
+        },
+        "rule": {
+          "needed_item_types_any_of": [
+            {
+              "type": "30363511",
+              "min": 1,
+              "max": 30
+            },
+            {
+              "type": "30363586",
+              "min": 1,
+              "max": 30
+            },
+            {
+              "type": "30363621",
+              "min": 1,
+              "max": 30
+            },
+            {
+              "type": "30412361",
+              "min": 1,
+              "max": 20
+            }
+          ],
+          "message_on_failure": "To reserve the add-on, you must also select at least one entry ticket to the experience.",
+          "is_increased_by_selected_quantity": false
+        },
+        "is_selected_by_default": false,
+        "surcharge_per_ticket": 0.18,
+        "requires_price_breakdown": true,
+        "strikethrough_price": null,
+        "strikethrough_percentage": null,
+        "display_step": "plan_view_cta_sheet",
+        "image_url": null,
+        "shown_by_session_types_rule": null
+      },
+      {
+        "id": 0,
+        "label": "Aperitif 1 Flying Fools",
+        "description": "Refreshment Fiery tequila &amp; pomegranate cocktail<br />",
+        "category": "session_as_add_on",
+        "pricing_type": "fixed_amount",
+        "price": 12,
+        "currency": "GBP",
+        "purchasable_state": "enabled",
+        "item_type": "30376579",
+        "cart_item_id": 512201051,
+        "session_selector_group_hash": "7987d83b99fb600e417e7c0f5e3701e6",
+        "view_configuration": {
+          "type": "stepper",
+          "allowed_range": {
+            "step": 1,
+            "min": 1,
+            "max": 20
+          }
+        },
+        "rule": {
+          "needed_item_types_any_of": [
+            {
+              "type": "30363511",
+              "min": 1,
+              "max": 14
+            },
+            {
+              "type": "30363586",
+              "min": 1,
+              "max": 14
+            },
+            {
+              "type": "30363621",
+              "min": 1,
+              "max": 14
+            },
+            {
+              "type": "30412361",
+              "min": 1,
+              "max": 20
+            }
+          ],
+          "message_on_failure": "To reserve the add-on, you must also select at least one entry ticket to the experience.",
+          "is_increased_by_selected_quantity": false
+        },
+        "is_selected_by_default": false,
+        "surcharge_per_ticket": 0.24,
+        "requires_price_breakdown": true,
+        "strikethrough_price": null,
+        "strikethrough_percentage": null,
+        "display_step": "plan_view_cta_sheet",
+        "image_url": null,
+        "shown_by_session_types_rule": null
+      },
+      {
+        "id": 0,
+        "label": "Aperitif 1 Alcohol Free",
+        "description": "",
+        "category": "session_as_add_on",
+        "pricing_type": "fixed_amount",
+        "price": 6.5,
+        "currency": "GBP",
+        "purchasable_state": "enabled",
+        "item_type": "30376657",
+        "cart_item_id": 512201053,
+        "session_selector_group_hash": "7987d83b99fb600e417e7c0f5e3701e6",
+        "view_configuration": {
+          "type": "stepper",
+          "allowed_range": {
+            "step": 1,
+            "min": 1,
+            "max": 20
+          }
+        },
+        "rule": {
+          "needed_item_types_any_of": [
+            {
+              "type": "30363511",
+              "min": 1,
+              "max": 14
+            },
+            {
+              "type": "30363586",
+              "min": 1,
+              "max": 14
+            },
+            {
+              "type": "30363621",
+              "min": 1,
+              "max": 14
+            },
+            {
+              "type": "30412361",
+              "min": 1,
+              "max": 20
+            }
+          ],
+          "message_on_failure": "To reserve the add-on, you must also select at least one entry ticket to the experience.",
+          "is_increased_by_selected_quantity": false
+        },
+        "is_selected_by_default": false,
+        "surcharge_per_ticket": 0.13,
+        "requires_price_breakdown": true,
+        "strikethrough_price": null,
+        "strikethrough_percentage": null,
+        "display_step": "plan_view_cta_sheet",
+        "image_url": null,
+        "shown_by_session_types_rule": null
+      },
+      {
+        "id": 0,
+        "label": "Aperitif 2 Right On Time",
+        "description": "Smoking rosemary &amp; fig cocktail<br />",
+        "category": "session_as_add_on",
+        "pricing_type": "fixed_amount",
+        "price": 12,
+        "currency": "GBP",
+        "purchasable_state": "enabled",
+        "item_type": "30376995",
+        "cart_item_id": 512201052,
+        "session_selector_group_hash": "7987d83b99fb600e417e7c0f5e3701e6",
+        "view_configuration": {
+          "type": "stepper",
+          "allowed_range": {
+            "step": 1,
+            "min": 1,
+            "max": 20
+          }
+        },
+        "rule": {
+          "needed_item_types_any_of": [
+            {
+              "type": "30363511",
+              "min": 1,
+              "max": 30
+            },
+            {
+              "type": "30363586",
+              "min": 1,
+              "max": 30
+            },
+            {
+              "type": "30363621",
+              "min": 1,
+              "max": 30
+            },
+            {
+              "type": "30412361",
+              "min": 1,
+              "max": 20
+            }
+          ],
+          "message_on_failure": "To reserve the add-on, you must also select at least one entry ticket to the experience.",
+          "is_increased_by_selected_quantity": false
+        },
+        "is_selected_by_default": false,
+        "surcharge_per_ticket": 0.24,
+        "requires_price_breakdown": true,
+        "strikethrough_price": null,
+        "strikethrough_percentage": null,
+        "display_step": "plan_view_cta_sheet",
+        "image_url": null,
+        "shown_by_session_types_rule": null
+      },
+      {
+        "id": 0,
+        "label": "Aperitif 2 Alcohol Free",
+        "description": "",
+        "category": "session_as_add_on",
+        "pricing_type": "fixed_amount",
+        "price": 6.5,
+        "currency": "GBP",
+        "purchasable_state": "enabled",
+        "item_type": "30376996",
+        "cart_item_id": 512201054,
+        "session_selector_group_hash": "7987d83b99fb600e417e7c0f5e3701e6",
+        "view_configuration": {
+          "type": "stepper",
+          "allowed_range": {
+            "step": 1,
+            "min": 1,
+            "max": 20
+          }
+        },
+        "rule": {
+          "needed_item_types_any_of": [
+            {
+              "type": "30363511",
+              "min": 1,
+              "max": 14
+            },
+            {
+              "type": "30363586",
+              "min": 1,
+              "max": 14
+            },
+            {
+              "type": "30363621",
+              "min": 1,
+              "max": 14
+            },
+            {
+              "type": "30412361",
+              "min": 1,
+              "max": 20
+            }
+          ],
+          "message_on_failure": "To reserve the add-on, you must also select at least one entry ticket to the experience.",
+          "is_increased_by_selected_quantity": false
+        },
+        "is_selected_by_default": false,
+        "surcharge_per_ticket": 0.13,
+        "requires_price_breakdown": true,
+        "strikethrough_price": null,
+        "strikethrough_percentage": null,
+        "display_step": "plan_view_cta_sheet",
+        "image_url": null,
+        "shown_by_session_types_rule": null
+      },
+      {
+        "id": 0,
+        "label": "Wine Pairing",
+        "description": "3 glasses of wine paired with the menu<br />",
+        "category": "session_as_add_on",
+        "pricing_type": "fixed_amount",
+        "price": 25,
+        "currency": "GBP",
+        "purchasable_state": "enabled",
+        "item_type": "30363899",
+        "cart_item_id": 512201050,
+        "session_selector_group_hash": "7987d83b99fb600e417e7c0f5e3701e6",
+        "view_configuration": {
+          "type": "stepper",
+          "allowed_range": {
+            "step": 1,
+            "min": 1,
+            "max": 20
+          }
+        },
+        "rule": {
+          "needed_item_types_any_of": [
+            {
+              "type": "30363511",
+              "min": 1,
+              "max": 30
+            },
+            {
+              "type": "30363586",
+              "min": 1,
+              "max": 30
+            },
+            {
+              "type": "30363621",
+              "min": 1,
+              "max": 30
+            },
+            {
+              "type": "30412361",
+              "min": 1,
+              "max": 20
+            }
+          ],
+          "message_on_failure": "To reserve the add-on, you must also select at least one entry ticket to the experience.",
+          "is_increased_by_selected_quantity": false
+        },
+        "is_selected_by_default": false,
+        "surcharge_per_ticket": 0.5,
+        "requires_price_breakdown": true,
+        "strikethrough_price": null,
+        "strikethrough_percentage": null,
+        "display_step": "plan_view_cta_sheet",
+        "image_url": null,
+        "shown_by_session_types_rule": null
+      }
+    ],
+    "b60a972c418e29f7940fa65efae6c9c0": [
+      {
+        "id": 0,
+        "label": "Premium Seating",
+        "description": "Secure the best seats in the house for a small extra fee: <br /><em>£10 per person</em><br />",
+        "category": "session_as_add_on",
+        "pricing_type": "fixed_amount_per_matching_session_types",
+        "price": 10,
+        "currency": "GBP",
+        "purchasable_state": "enabled",
+        "item_type": "30363668",
+        "cart_item_id": 499503910,
+        "session_selector_group_hash": "b60a972c418e29f7940fa65efae6c9c0",
+        "view_configuration": {
+          "type": "toggle"
+        },
+        "rule": {
+          "needed_item_types_any_of": [
+            {
+              "type": "30363511",
+              "min": 1,
+              "max": 14
+            },
+            {
+              "type": "30363586",
+              "min": 1,
+              "max": 14
+            },
+            {
+              "type": "30363621",
+              "min": 1,
+              "max": 14
+            },
+            {
+              "type": "30412361",
+              "min": 1,
+              "max": 20
+            }
+          ],
+          "message_on_failure": "To reserve the add-on, you must also select at least one entry ticket to the experience.",
+          "is_increased_by_selected_quantity": false
+        },
+        "is_selected_by_default": false,
+        "surcharge_per_ticket": 0.2,
+        "requires_price_breakdown": true,
+        "strikethrough_price": null,
+        "strikethrough_percentage": null,
+        "display_step": "plan_view_cta_sheet",
+        "image_url": null,
+        "shown_by_session_types_rule": null,
+        "item_quantity_matching_rule": {
+          "message_on_failure": "To reserve the add-on, you must also select at least one entry ticket to the experience.",
+          "types": [
+            "30363511",
+            "30363586",
+            "30363621",
+            "30412361"
+          ],
+          "selection_strategy": "bounds",
+          "selection_upper_bound_factor": "1.00",
+          "should_display_price_label_per_ticket": false
+        }
+      },
+      {
+        "id": 0,
+        "label": "Pick 'n' Mix for one",
+        "description": "<span style=\"color:rgb(55, 65, 81)\"> A pre-filled pot of classic cinema-style sweets</span><br />",
+        "category": "session_as_add_on",
+        "pricing_type": "fixed_amount",
+        "price": 6,
+        "currency": "GBP",
+        "purchasable_state": "enabled",
+        "item_type": "30363724",
+        "cart_item_id": 499503911,
+        "session_selector_group_hash": "b60a972c418e29f7940fa65efae6c9c0",
+        "view_configuration": {
+          "type": "stepper",
+          "allowed_range": {
+            "step": 1,
+            "min": 1,
+            "max": 20
+          }
+        },
+        "rule": {
+          "needed_item_types_any_of": [
+            {
+              "type": "30363511",
+              "min": 1,
+              "max": 30
+            },
+            {
+              "type": "30363586",
+              "min": 1,
+              "max": 30
+            },
+            {
+              "type": "30363621",
+              "min": 1,
+              "max": 30
+            },
+            {
+              "type": "30412361",
+              "min": 1,
+              "max": 20
+            }
+          ],
+          "message_on_failure": "To reserve the add-on, you must also select at least one entry ticket to the experience.",
+          "is_increased_by_selected_quantity": false
+        },
+        "is_selected_by_default": false,
+        "surcharge_per_ticket": 0.12,
+        "requires_price_breakdown": true,
+        "strikethrough_price": null,
+        "strikethrough_percentage": null,
+        "display_step": "plan_view_cta_sheet",
+        "image_url": null,
+        "shown_by_session_types_rule": null
+      },
+      {
+        "id": 0,
+        "label": "Pick 'n' Mix to share",
+        "description": "A larger pre-filled pot of cinema-style sweets - perfect for sharing between two<br />",
+        "category": "session_as_add_on",
+        "pricing_type": "fixed_amount",
+        "price": 9,
+        "currency": "GBP",
+        "purchasable_state": "enabled",
+        "item_type": "30363784",
+        "cart_item_id": 499503912,
+        "session_selector_group_hash": "b60a972c418e29f7940fa65efae6c9c0",
+        "view_configuration": {
+          "type": "stepper",
+          "allowed_range": {
+            "step": 1,
+            "min": 1,
+            "max": 20
+          }
+        },
+        "rule": {
+          "needed_item_types_any_of": [
+            {
+              "type": "30363511",
+              "min": 1,
+              "max": 30
+            },
+            {
+              "type": "30363586",
+              "min": 1,
+              "max": 30
+            },
+            {
+              "type": "30363621",
+              "min": 1,
+              "max": 30
+            },
+            {
+              "type": "30412361",
+              "min": 1,
+              "max": 20
+            }
+          ],
+          "message_on_failure": "To reserve the add-on, you must also select at least one entry ticket to the experience.",
+          "is_increased_by_selected_quantity": false
+        },
+        "is_selected_by_default": false,
+        "surcharge_per_ticket": 0.18,
+        "requires_price_breakdown": true,
+        "strikethrough_price": null,
+        "strikethrough_percentage": null,
+        "display_step": "plan_view_cta_sheet",
+        "image_url": null,
+        "shown_by_session_types_rule": null
+      },
+      {
+        "id": 0,
+        "label": "Aperitif 1 Flying Fools",
+        "description": "Refreshment Fiery tequila &amp; pomegranate cocktail<br />",
+        "category": "session_as_add_on",
+        "pricing_type": "fixed_amount",
+        "price": 12,
+        "currency": "GBP",
+        "purchasable_state": "enabled",
+        "item_type": "30376579",
+        "cart_item_id": 499503914,
+        "session_selector_group_hash": "b60a972c418e29f7940fa65efae6c9c0",
+        "view_configuration": {
+          "type": "stepper",
+          "allowed_range": {
+            "step": 1,
+            "min": 1,
+            "max": 20
+          }
+        },
+        "rule": {
+          "needed_item_types_any_of": [
+            {
+              "type": "30363511",
+              "min": 1,
+              "max": 14
+            },
+            {
+              "type": "30363586",
+              "min": 1,
+              "max": 14
+            },
+            {
+              "type": "30363621",
+              "min": 1,
+              "max": 14
+            },
+            {
+              "type": "30412361",
+              "min": 1,
+              "max": 20
+            }
+          ],
+          "message_on_failure": "To reserve the add-on, you must also select at least one entry ticket to the experience.",
+          "is_increased_by_selected_quantity": false
+        },
+        "is_selected_by_default": false,
+        "surcharge_per_ticket": 0.24,
+        "requires_price_breakdown": true,
+        "strikethrough_price": null,
+        "strikethrough_percentage": null,
+        "display_step": "plan_view_cta_sheet",
+        "image_url": null,
+        "shown_by_session_types_rule": null
+      },
+      {
+        "id": 0,
+        "label": "Aperitif 1 Alcohol Free",
+        "description": "",
+        "category": "session_as_add_on",
+        "pricing_type": "fixed_amount",
+        "price": 6.5,
+        "currency": "GBP",
+        "purchasable_state": "enabled",
+        "item_type": "30376657",
+        "cart_item_id": 499503915,
+        "session_selector_group_hash": "b60a972c418e29f7940fa65efae6c9c0",
+        "view_configuration": {
+          "type": "stepper",
+          "allowed_range": {
+            "step": 1,
+            "min": 1,
+            "max": 20
+          }
+        },
+        "rule": {
+          "needed_item_types_any_of": [
+            {
+              "type": "30363511",
+              "min": 1,
+              "max": 14
+            },
+            {
+              "type": "30363586",
+              "min": 1,
+              "max": 14
+            },
+            {
+              "type": "30363621",
+              "min": 1,
+              "max": 14
+            },
+            {
+              "type": "30412361",
+              "min": 1,
+              "max": 20
+            }
+          ],
+          "message_on_failure": "To reserve the add-on, you must also select at least one entry ticket to the experience.",
+          "is_increased_by_selected_quantity": false
+        },
+        "is_selected_by_default": false,
+        "surcharge_per_ticket": 0.13,
+        "requires_price_breakdown": true,
+        "strikethrough_price": null,
+        "strikethrough_percentage": null,
+        "display_step": "plan_view_cta_sheet",
+        "image_url": null,
+        "shown_by_session_types_rule": null
+      },
+      {
+        "id": 0,
+        "label": "Aperitif 2 Right On Time",
+        "description": "Smoking rosemary &amp; fig cocktail<br />",
+        "category": "session_as_add_on",
+        "pricing_type": "fixed_amount",
+        "price": 12,
+        "currency": "GBP",
+        "purchasable_state": "enabled",
+        "item_type": "30376995",
+        "cart_item_id": 499503916,
+        "session_selector_group_hash": "b60a972c418e29f7940fa65efae6c9c0",
+        "view_configuration": {
+          "type": "stepper",
+          "allowed_range": {
+            "step": 1,
+            "min": 1,
+            "max": 20
+          }
+        },
+        "rule": {
+          "needed_item_types_any_of": [
+            {
+              "type": "30363511",
+              "min": 1,
+              "max": 30
+            },
+            {
+              "type": "30363586",
+              "min": 1,
+              "max": 30
+            },
+            {
+              "type": "30363621",
+              "min": 1,
+              "max": 30
+            },
+            {
+              "type": "30412361",
+              "min": 1,
+              "max": 20
+            }
+          ],
+          "message_on_failure": "To reserve the add-on, you must also select at least one entry ticket to the experience.",
+          "is_increased_by_selected_quantity": false
+        },
+        "is_selected_by_default": false,
+        "surcharge_per_ticket": 0.24,
+        "requires_price_breakdown": true,
+        "strikethrough_price": null,
+        "strikethrough_percentage": null,
+        "display_step": "plan_view_cta_sheet",
+        "image_url": null,
+        "shown_by_session_types_rule": null
+      },
+      {
+        "id": 0,
+        "label": "Aperitif 2 Alcohol Free",
+        "description": "",
+        "category": "session_as_add_on",
+        "pricing_type": "fixed_amount",
+        "price": 6.5,
+        "currency": "GBP",
+        "purchasable_state": "enabled",
+        "item_type": "30376996",
+        "cart_item_id": 499503917,
+        "session_selector_group_hash": "b60a972c418e29f7940fa65efae6c9c0",
+        "view_configuration": {
+          "type": "stepper",
+          "allowed_range": {
+            "step": 1,
+            "min": 1,
+            "max": 20
+          }
+        },
+        "rule": {
+          "needed_item_types_any_of": [
+            {
+              "type": "30363511",
+              "min": 1,
+              "max": 14
+            },
+            {
+              "type": "30363586",
+              "min": 1,
+              "max": 14
+            },
+            {
+              "type": "30363621",
+              "min": 1,
+              "max": 14
+            },
+            {
+              "type": "30412361",
+              "min": 1,
+              "max": 20
+            }
+          ],
+          "message_on_failure": "To reserve the add-on, you must also select at least one entry ticket to the experience.",
+          "is_increased_by_selected_quantity": false
+        },
+        "is_selected_by_default": false,
+        "surcharge_per_ticket": 0.13,
+        "requires_price_breakdown": true,
+        "strikethrough_price": null,
+        "strikethrough_percentage": null,
+        "display_step": "plan_view_cta_sheet",
+        "image_url": null,
+        "shown_by_session_types_rule": null
+      },
+      {
+        "id": 0,
+        "label": "Wine Pairing",
+        "description": "3 glasses of wine paired with the menu<br />",
+        "category": "session_as_add_on",
+        "pricing_type": "fixed_amount",
+        "price": 25,
+        "currency": "GBP",
+        "purchasable_state": "enabled",
+        "item_type": "30363899",
+        "cart_item_id": 499503913,
+        "session_selector_group_hash": "b60a972c418e29f7940fa65efae6c9c0",
+        "view_configuration": {
+          "type": "stepper",
+          "allowed_range": {
+            "step": 1,
+            "min": 1,
+            "max": 20
+          }
+        },
+        "rule": {
+          "needed_item_types_any_of": [
+            {
+              "type": "30363511",
+              "min": 1,
+              "max": 30
+            },
+            {
+              "type": "30363586",
+              "min": 1,
+              "max": 30
+            },
+            {
+              "type": "30363621",
+              "min": 1,
+              "max": 30
+            },
+            {
+              "type": "30412361",
+              "min": 1,
+              "max": 20
+            }
+          ],
+          "message_on_failure": "To reserve the add-on, you must also select at least one entry ticket to the experience.",
+          "is_increased_by_selected_quantity": false
+        },
+        "is_selected_by_default": false,
+        "surcharge_per_ticket": 0.5,
+        "requires_price_breakdown": true,
+        "strikethrough_price": null,
+        "strikethrough_percentage": null,
+        "display_step": "plan_view_cta_sheet",
+        "image_url": null,
+        "shown_by_session_types_rule": null
+      }
+    ]
+  }
+}

@@ -20,6 +20,8 @@ describe("isNonFilmEvent", () => {
       "one6G Summit 2026: Connected Intelligence for 6G (Sept. 10-11, London, UK)",
     ],
     ["BSNM Annual Meeting 2026"],
+    ["Smithsonian Starstruck: An Immersive Experience"],
+    ["Neon Naked Life Drawing"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });

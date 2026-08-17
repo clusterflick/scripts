@@ -23,6 +23,8 @@ const nonFilmEvents = [
   /Annual Meeting/i,
   /cancer research symposium/i,
   /Thrift Event/i,
+  /Smithsonian Starstruck/i,
+  /Neon Naked Life Drawing/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>

@@ -1,0 +1,252 @@
+{
+  "a_b_testing": {
+    "field_under_test": "description",
+    "modified_at": "2026-07-30T16:17:02+00:00",
+    "variants": [
+      "<html lang=\"en\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<style>\n  :root{\n    --bg:#ffffff;\n    --ink:#1f2937;\n    --muted:#4b5563;\n    --pill-bg:#f2f2f2;\n    --card-bg:#f2f2f2;\n    --accent:#0179CA;\n    --accent-strong:#5b21b6;\n    --rule:#e5e7eb;\n    --module-bg:#faf8ff;\n    --warn-bg:#FDF0E0;\n  }\n  *{box-sizing:border-box;}\n  body{\n    margin:0;background:var(--bg);color:var(--ink);\n    font-family:-apple-system,BlinkMacSystemFont,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif;\n    line-height:1.6;font-size:16px;\n  }\n  .page{width:100%;margin:0;padding:0 0 1.5rem;}\n\n  /* Pills */\n  .pills-row{\n    display:flex;gap:.5rem;overflow-x:auto;scroll-snap-type:x mandatory;\n    -webkit-overflow-scrolling:touch;padding:.15rem .1rem .5rem;margin:0 -0.1rem .9rem;\n    background-repeat:no-repeat;\n    background-image:\n      linear-gradient(to right, var(--bg) 40%, rgba(255,255,255,0) 100%),\n      linear-gradient(to left, var(--bg) 40%, rgba(255,255,255,0) 100%),\n      linear-gradient(to right, rgba(17,24,39,.10), rgba(17,24,39,0)),\n      linear-gradient(to left, rgba(17,24,39,.10), rgba(17,24,39,0));\n    background-position:left center, right center, left center, right center;\n    background-size:28px 100%, 28px 100%, 14px 100%, 14px 100%;\n    background-attachment:local, local, scroll, scroll;\n  }\n  @media (min-width:40rem){ .pills-row{flex-wrap:wrap;overflow-x:visible;scroll-snap-type:none;background-image:none;} }\n  .pill{\n    scroll-snap-align:start;flex:0 0 auto;background:var(--pill-bg);color:var(--ink);\n    font-weight:400;font-size:1rem;padding:.45rem .95rem;border-radius:999px;white-space:nowrap;\n  }\n\n  /* Tagline */\n  p.tagline{\n    font-style:italic;color:var(--ink);font-size:1.05rem;margin:0 0 1.1rem;max-width:65ch;\n  }\n\n  .highlights-title{\n    font-size:1.1rem;font-weight:700;color:var(--ink);margin:0 0 .75rem;\n  }\n  .highlights-grid{\n    display:grid;grid-template-columns:1fr;gap:.75rem;margin:0 0 1.3rem;\n  }\n  /* Even count of highlights -> paired 2-column grid on larger viewports.\n     Odd count -> stays single column so every card is the same width. */\n  @media (min-width:40rem){\n    .highlights-grid.pair{grid-template-columns:1fr 1fr;}\n  }\n  .highlight-card{\n    background:var(--card-bg);\n    border-left:4px solid var(--accent);\n    border-radius:.4rem;padding:.9rem 1.1rem;\n    color:var(--ink);font-size:1rem;\n    display:flex;align-items:center;\n  }\n  /* On wider viewports, single-column (odd-count) cards shouldn't stretch\n     edge-to-edge into an oversized box — cap their width, still left-aligned. */\n  @media (min-width:64rem){\n    .highlights-grid:not(.pair) .highlight-card{ max-width:42rem; }\n  }\n\n  /* Info / Description blocks */\n  .block{margin:0 0 1.2rem;}\n  .block h3{\n    font-size:1.1rem;letter-spacing:.05em;\n    color:var(--muted);margin:0 0 .5rem;\n  }\n  .block p{margin:0;color:var(--ink);max-width:65ch;}\n  .block p em{color:var(--ink);}\n  .block ul{margin:0;padding-left:1.2rem;color:var(--ink);}\n  .block ul li{margin:0 0 .3rem;}\n\n  .module{\n    background:var(--module-bg);\n    border:1px solid #e9e2fb;\n    border-radius:.5rem;\n    padding:.9rem 1.1rem;\n    margin:0 0 1.2rem;\n    font-size:.95rem;\n  }\n  .module h3{\n    font-size:.78rem;text-transform:uppercase;letter-spacing:.05em;\n    color:var(--accent-strong);margin:0 0 .4rem;\n  }\n  .module p{margin:0 0 .3rem;}\n  .module p:last-child{margin-bottom:0;}\n  .module a{color:var(--accent-strong);}\n  .module ul{margin:0;padding-left:1.2rem;}\n  .module ul li{margin:0 0 .25rem;}\n\n  .warning-box{\n    background:var(--warn-bg);\n    border-radius:.5rem;\n    padding:.9rem 1.1rem;\n    margin:0 0 1.2rem;\n    font-size:.95rem;\n    color:var(--ink);\n  }\n  .warning-box h3{\n    font-size:.78rem;text-transform:uppercase;letter-spacing:.05em;\n    color:#8a5a00;margin:0 0 .4rem;\n  }\n  .warning-box p{margin:0;}\n</style>\n</head>\n<body>\n<div class=\"page\">\n<section class=\"show\" id=\"comedy-on-the-thames\">\n<div class=\"pills-row\">\n      <span class=\"pill\">🎭 Type: stand-up comedy</span>\n      <span class=\"pill\">⏳  Duration: 2h 30min</span>\n      <span class=\"pill\">📍 Location: Tattershall Castle</span>\n    </div>\n    <h3 class=\"highlights-title\">Highlights</h3>\n    <div class=\"highlights-grid\">\n      <div class=\"highlight-card\">Weekends: The best comedians from television and the circuit followed by a nightclub until 2 a.m.</div>\n      <div class=\"highlight-card\">Weeknights: New material nights with big names testing new jokes alongside the rising stars of tomorrow</div>\n      <div class=\"highlight-card\">The Tattershall Castle is right on the Thames!</div>\n    </div>\n\n    <div class=\"module\">\n      <h3>Gift this experience to your loved ones!</h3>\n      <p>Click <a href=\"https://feverup.com/m/63081\" rel=\"noopener noreferrer\" target=\"_blank\">here</a> to check out our gift card.</p>\n    </div>\n\n    <div class=\"block\">\n      <h3>General Info</h3>\n      🔞 This event is strictly 18+<br>\n      ⛔ All ticket sales are final and cannot be refunded, exchanged, or otherwise modified. Click here to check out the T&amp;Cs.<br>\n      ❓ Please note: Friday &amp; Saturday shows include entry to the POPworld Nightclub after the show running until 2 a.m.. On Sundays the nightclub will not be open.</p>\n    </div>\n\n    <div class=\"block\">\n      <h3>Description</h3>\n      <p>All aboard the Tattershall Castle on the beautifully blue Thames for a laugh-out-loud evening of hilarious live comedy and beautiful riverside views! Their shows are a non-stop barrage of laughs featuring the capital's finest comedic talent, including regular TV names and cream of the UK circuit. Succumb to the pier pressure and book your tickets now for a comedy trip on the Tattershall Castle!</p>\n    </div>\n\n  </section>\n</div>\n</body>\n</html>"
+    ],
+    "allow_unsafe_html": false
+  },
+  "access_rules": [],
+  "available_locales": [
+    "de-DE",
+    "es-ES",
+    "fr-FR",
+    "it-IT"
+  ],
+  "base_locale": "en-GB",
+  "category": "theater",
+  "categories": [
+    "Comedy",
+    "Entertainment",
+    "Seasonal",
+    "Seasonal Category",
+    "Stand-up",
+    "Valentines Day"
+  ],
+  "city_available_locales": [
+    "de-DE",
+    "fr-FR",
+    "it-IT",
+    "es-ES",
+    "en-GB"
+  ],
+  "city_code": "LON",
+  "city_country_iso_code": "UK",
+  "city_slug": "london",
+  "city_slug_lang": "en",
+  "city_standard_id": 1006886,
+  "custom_label": {
+    "text": "Trending",
+    "background_color": "#6f41d7",
+    "text_color": "#ffffff"
+  },
+  "custom_labels": [
+    {
+      "text": "Trending",
+      "background_color": "#6f41d7",
+      "text_color": "#ffffff",
+      "id": 155,
+      "type": null
+    }
+  ],
+  "default_level_display": "disabled",
+  "default_session": {
+    "id": 338988318,
+    "attend_text": "Join in!",
+    "available_tickets": 14,
+    "has_available_tickets": true,
+    "currency": "GBP",
+    "ends_at_iso": "2026-08-21T22:00:59+01:00",
+    "expiration_iso": "2026-08-21T18:00:59+01:00",
+    "label": "Seated Ticket for 1 at 8:00 pm for £23.00",
+    "last_tickets": false,
+    "max_num_tickets": 14,
+    "min_num_tickets": 1,
+    "place_id": 6553,
+    "price": 23,
+    "starts_at_iso": "2026-08-21T20:00:00+01:00",
+    "surcharge_per_ticket": 0,
+    "surcharge_per_transaction": 0,
+    "timezone": "Europe/London"
+  },
+  "session_recommendation": {
+    "recommended_by": "proximity",
+    "is_fallback": null,
+    "fallback_reason": null,
+    "computed_at": null
+  },
+  "description": "🎁 Gift this experience to your loved ones! Click <a target=\"_blank\" href=\"https://feverup.com/m/63081\" rel=\"noopener noreferrer\">here</a> to check out our gift card.<br>\n<br>\n<strong>Highlights</strong><br>\n🎤 Weekends: The best comedians from television and the circuit followed by a nightclub until 2 a.m.<br>\n😂 Weeknights: New material nights with big names testing new jokes alongside the rising stars of tomorrow<br>\n🌊 The Tattershall Castle is right on the Thames!<br>\n<br>\n<strong>What's included?</strong><br>\n✔️ Admission to Comedy on the Thames<br>\n📱 Smartphone tickets<br>\n⚡ Instant access to your tickets<br>\n<br>\n<strong>Additional Information</strong><br>\n🔞 This event is strictly 18+<br>\n⏳ Duration: 2 hours 30 minutes<br>\n⛔ All ticket sales are final and cannot be refunded, exchanged, or otherwise modified. Click here to check out&nbsp;<a target=\"_blank\" href=\"https://docs.google.com/document/d/e/2PACX-1vSVRJ1Z5-8gFm17oKLfc1rcA_HQk0tfJdZ8J4EOwBjPOBrfX-AvXaaGoq7vPNos-r2V4U4PxCfXUyar/pub\" rel=\"noopener noreferrer\">the T&amp;Cs</a>.<br>\n<span>❓ Please note: Friday &amp; Saturday shows include entry to the POPworld Nightclub after the show running until 2 a.m.. On Sundays the nightclub will not be open.</span><br>\n<br>\n<strong>Information</strong><br>\nAll aboard the Tattershall Castle on the beautifully blue Thames for a laugh-out-loud evening of hilarious live comedy and beautiful riverside views! Their shows are a non-stop barrage of laughs featuring the capital’s finest comedic talent, including regular TV names and cream of the UK circuit. Succumb to the pier pressure and book your tickets now for a comedy trip on the Tattershall Castle!<br>\n<br>\n<strong>Why choose Fever?</strong><br>\n✔️ Millions of users book every month.<br>\n✔️ The best prices and availability at all times.<br>\n✔️ Thousands of unique experiences.<br>\n✔️ Verified user reviews.<br>\n✔️ 24/7 customer service.",
+  "enable_image_test_experiment": false,
+  "first_active_session_date": "2026-08-21T20:00:00+01:00",
+  "first_session_date": "2026-08-21T20:00:00+01:00",
+  "gallery": [
+    "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/cf610b2e-a20a-11e7-8c4d-067dfd978c4d.png",
+    "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/3d07c284-8c5c-11e9-89d7-06551cb39bc6.jpg"
+  ],
+  "media_gallery": [
+    {
+      "media_type": "photo",
+      "url": "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/cf610b2e-a20a-11e7-8c4d-067dfd978c4d.png",
+      "playback_rate": null,
+      "poster": null,
+      "g_auto_enabled": true,
+      "category": {
+        "role": "cover_image"
+      }
+    },
+    {
+      "media_type": "photo",
+      "url": "https://applications-media.feverup.com/image/upload/f_auto,w_720,h_720/fever2/plan/photo/3d07c284-8c5c-11e9-89d7-06551cb39bc6.jpg",
+      "playback_rate": null,
+      "poster": null,
+      "g_auto_enabled": true,
+      "category": {
+        "role": "default"
+      }
+    }
+  ],
+  "has_add_ons": false,
+  "has_seasons": false,
+  "id": 45585,
+  "is_3ds_required": false,
+  "is_calendar_selector": true,
+  "is_multiple_sessions": true,
+  "is_timeless": false,
+  "is_urgent": true,
+  "last_active_session_date": "2027-02-05T20:00:00+00:00",
+  "last_session_date": "2027-02-05T20:00:00+00:00",
+  "logo_url": null,
+  "meta": {
+    "description": "Laugh-out-loud comedy shows on the Tattershall Castle, with top TV comedians, new material nights, and stunning Thames views. Get your tickets!",
+    "disallow_indexing": false,
+    "json_ld_overrides": [
+      {
+        "type": "Product"
+      },
+      {
+        "type": "Event"
+      }
+    ],
+    "title": "Comedy on the Thames London Tickets"
+  },
+  "name": "Comedy on the Thames",
+  "partner_id": 2843,
+  "presentation_settings": {
+    "enable_redeem_vouchers_web": false,
+    "has_affiliate_link": false,
+    "hide_coupon_loyalty": false,
+    "hide_help": false,
+    "hide_similar_plans": false,
+    "hide_recommender_items": false,
+    "is_streaming": false,
+    "show_bsa_toggle": false,
+    "show_important_information": true,
+    "show_place_preview": false,
+    "banners": [
+      {
+        "type": "urgency",
+        "message": "Tickets selling fast",
+        "position": "bottom_selector"
+      }
+    ],
+    "reviews_from_plan_id": null,
+    "show_reviews_from_main_plan_info": false,
+    "hide_rating": false,
+    "show_loyalty_points_disclaimer": true,
+    "display_calendar_price": false,
+    "display_best_price_indicator": false,
+    "hide_place_selector": false,
+    "show_multimedia_gallery": false,
+    "show_optimized_seating_map": false,
+    "ticket_selector": null,
+    "session_type_presentation_position": null,
+    "show_sessions_grouped_on_ticket_selector": false,
+    "is_real_time": false,
+    "is_onebox_real_time": false,
+    "show_time_slot_best_price": false,
+    "mobile_webview": {
+      "url": "https://feverup.com/m/45585/en",
+      "ios_max_version": null,
+      "android_max_version": null
+    }
+  },
+  "price_info": {
+    "type": "single",
+    "currency": "GBP",
+    "amount": 23,
+    "strikethrough": null
+  },
+  "rating": {
+    "is_hidden": false,
+    "num_ratings": 2313,
+    "average": 4.64
+  },
+  "redirect_to": null,
+  "link_out_info": null,
+  "selector_settings": {
+    "type": "multi",
+    "view_configuration": "detailed"
+  },
+  "session_selector_type": "date-time",
+  "places": [
+    {
+      "id": 6553,
+      "address": "Victoria Embankment, London, SW1A 2HR",
+      "has_place_page": true,
+      "is_hidden": false,
+      "latitude": 51.5044418,
+      "locale": "en",
+      "longitude": -0.1225705,
+      "metro_stations": [
+        {
+          "id": 2150,
+          "images": [
+            "https://applications-media.feverup.com/image/upload/f_auto/fever2/metrostations/android-xxhdpi/london_metro_Bakerloo.png",
+            "https://applications-media.feverup.com/image/upload/f_auto/fever2/metrostations/android-xxhdpi/london_metro_Northern.png"
+          ],
+          "name": "Charing Cross"
+        },
+        {
+          "id": 2361,
+          "images": [
+            "https://applications-media.feverup.com/image/upload/f_auto/fever2/metrostations/android-xxhdpi/london_metro_Jubilee.png",
+            "https://applications-media.feverup.com/image/upload/f_auto/fever2/metrostations/android-xxhdpi/london_metro_District.png",
+            "https://applications-media.feverup.com/image/upload/f_auto/fever2/metrostations/android-xxhdpi/london_metro_Circle.png"
+          ],
+          "name": "Westminster"
+        }
+      ],
+      "name": "Tattershall Castle",
+      "signed_map_url": "https://applications-media.feverup.com/image/upload/f_auto/fever2/place/maps/6553__51.5044418_-0.1225705.png",
+      "slug": "tattershall-castle",
+      "display_settings": {
+        "display_calendar_price": false
+      }
+    }
+  ],
+  "should_display_featured_review_answers": true,
+  "slug": null,
+  "translation_languages": [
+    "de",
+    "es",
+    "fr",
+    "it"
+  ],
+  "type": "standard",
+  "youtube_id": null,
+  "queue": null,
+  "timeless_validity_message": null,
+  "has_shop_products": false,
+  "is_purchaseable_as_guest": true,
+  "displayed_min_price_session_type_id": null,
+  "season_pass_plan_id": null,
+  "plan_metadata": null,
+  "cancellation_policy": {
+    "hours_before_session": 48,
+    "minutes_before_session": 0
+  },
+  "exchange_policy": {
+    "allowed_times": 5
+  }
+}
