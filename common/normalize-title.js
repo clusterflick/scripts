@@ -988,6 +988,12 @@ function normalizeTitle(title, options) {
     ["SEYTAN + ", "SEYTAN & "],
     ["Sons/", "Sons /"],
     ["Halloween Cinema - ", "Halloween Cinema: "],
+    [" – Join us for", " - Join us for"],
+    ["Sinners (2024)", "Sinners (2025)"],
+    [
+      /Bring Your Own Baby Comedy (Finsbury Park|Greenwich|Clapham)/i,
+      "Bring Your Own Baby Comedy Club",
+    ],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
