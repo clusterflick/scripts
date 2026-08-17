@@ -12,7 +12,7 @@ flowchart TD
         A["1. scripts/cinemas/‹venue-id›/\n(attributes, retrieve, transform)"]
         B["2. data-retrieved\n(workflow step)"]
         C["3. data-transformed\n(workflow step)"]
-        D["4. data-calendar\n(lock file + README)"]
+        D["4. data-calendar\n(README)"]
         E["5. clusterflick.com\n(lock file + blurb/changelog/images/map)"]
     end
 
@@ -33,17 +33,20 @@ flowchart TD
     G --> I
 ```
 
-| Repository         | What to Change                                    | Why                                                                          |
-| ------------------ | ------------------------------------------------- | ---------------------------------------------------------------------------- |
-| `scripts`          | Create venue directory (2–4 files)                | Core venue definition, retrieval, and transformation logic                   |
-| `data-retrieved`   | Add step to workflow YAML                         | Include the venue in the daily retrieval run                                 |
-| `data-transformed` | Add step to workflow YAML                         | Include the venue in the daily transformation run                            |
-| `data-calendar`    | `npm update scripts` + add row to README          | Lock file pins a specific `scripts` commit; README lists all venue calendars |
-| `clusterflick.com` | `npm update scripts` + blurb/changelog/images/map | Lock file pins a specific `scripts` commit; venue page auto-generates        |
+| Repository         | What to Change                                    | Why                                                                   |
+| ------------------ | ------------------------------------------------- | --------------------------------------------------------------------- |
+| `scripts`          | Create venue directory (2–4 files)                | Core venue definition, retrieval, and transformation logic            |
+| `data-retrieved`   | Add step to workflow YAML                         | Include the venue in the daily retrieval run                          |
+| `data-transformed` | Add step to workflow YAML                         | Include the venue in the daily transformation run                     |
+| `data-calendar`    | Add row to README                                 | README lists all venue calendars                                      |
+| `clusterflick.com` | `npm update scripts` + blurb/changelog/images/map | Lock file pins a specific `scripts` commit; venue page auto-generates |
 
 `data-retrieved` and `data-transformed` have no lock file — they always pull the
-latest `scripts` on install. `data-calendar` and `clusterflick.com` both have a
-`package-lock.json`, so the dependency must be explicitly updated.
+latest `scripts` on install. `clusterflick.com` has a `package-lock.json`, so
+the dependency must be explicitly updated. `data-calendar` does not depend on
+`scripts` at all: it builds its feeds from the `data-combined` release, which
+already carries each venue's name, address and coordinates, so a new venue
+appears in its own feed as soon as it reaches a combined release.
 
 ---
 
@@ -448,9 +451,11 @@ array.
 
 ## Step 4: Update `data-calendar`
 
-**Two changes needed** — one now, one after `scripts` is merged.
+**One change needed**, and nothing to do post-merge: the feeds are built from
+the `data-combined` release, so the venue's attributes reach them without
+`data-calendar` being touched.
 
-### Add to the README _(do now)_
+### Add to the README
 
 `data-calendar/README.md` contains a table of all supported venues with links to
 their calendar files. Add a row in alphabetical order by venue name and update
@@ -470,18 +475,6 @@ wrong, so compare with `localeCompare` rather than `<`.
 
 Every row is padded to the same width, so pad the new one to match its
 neighbours — `npx prettier --check README.md` will catch it if you don't.
-
-### Update the Lock File _(post-merge)_
-
-`data-calendar` has a `package-lock.json` that pins the `scripts` dependency to
-a specific commit. After the `scripts` changes are merged, update the lock:
-
-```bash
-cd data-calendar
-npm update scripts
-```
-
-This ensures the calendar generation picks up the new venue's attributes.
 
 ---
 
@@ -599,15 +592,14 @@ Requires a `GOOGLE_MAPS_API_KEY` in `.env`.
 
 ## Post-Merge Steps
 
-Steps 4 and 5 include lock file updates (`npm update scripts`) and image
-generation that can only run after the `scripts` changes are merged. These steps
-are easy to forget because they happen later in a separate session.
+Step 5 includes a lock file update (`npm update scripts`) and image generation
+that can only run after the `scripts` changes are merged. These steps are easy
+to forget because they happen later in a separate session.
 
 **If you are an LLM completing the earlier steps**, report the following as
 remaining next steps for the user:
 
-1. After `scripts` is merged, run `npm update scripts` in both `data-calendar`
-   and `clusterflick.com`
+1. After `scripts` is merged, run `npm update scripts` in `clusterflick.com`
 2. Run `node scripts/fetch-venue-images.js` in `clusterflick.com`
 3. Run `node scripts/fetch-venue-maps.js` in `clusterflick.com` (requires
    `GOOGLE_MAPS_API_KEY`)
