@@ -510,8 +510,7 @@ function normalizeTitle(title, options) {
     ["A Minecraft Movie Premiere", "A Minecraft Movie"],
     ["Evgenij Onegin", "Eugene Onegin"],
     ["NOVELLE VAGUE", "NOUVELLE VAGUE"],
-    [/^Bowie:? The Final Act/i, "David Bowie: The Final Act"],
-    [/: Bowie:? The Final Act/i, ": David Bowie: The Final Act"],
+    [/^David Bowie:? The Final Act/i, "Bowie: The Final Act"],
     [/JEFF BUCKLEY - IT'S NEVER OVER/i, "It's Never Over, Jeff Buckley"],
     ["Berliner Philharmoniker Live:", "Berliner Philharmoniker:"],
     ["NYE Concert", "New Years Eve Concert"],
@@ -529,6 +528,7 @@ function normalizeTitle(title, options) {
     ["Romford Horror Festival 2026 -", "Romford Horror 2026:"],
     ["Opening Night -", "Opening Night "],
     [/Surprise Film( \d{1,2}\.\d{1,2}\.\d{1,2})?/i, "mystery movie"],
+    [/^Secret Film Screenings presents:?\s+.*$/i, "mystery movie"],
     [/(\w+ Film Festival: )?Surprise Screening/i, "mystery movie"],
     [
       /^(free |monthly )?(mystery|surprise) ([\w+]+ )?([\w+]+ )?(night|film|movie|cinema|screening|matinees?|thriller):?( Nov| \d)?/i,
@@ -994,6 +994,7 @@ function normalizeTitle(title, options) {
       /Bring Your Own Baby Comedy (Finsbury Park|Greenwich|Clapham)/i,
       "Bring Your Own Baby Comedy Club",
     ],
+    ["Small World of Don Camillo", "Little World of Don Camillo"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
