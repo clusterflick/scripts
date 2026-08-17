@@ -381,13 +381,20 @@ const createPerformance = ({
   };
 };
 
+// Eventbrite serves one event from either of its country domains, so the
+// Cinema Museum links "eventbrite.co.uk/e/<id>" for a screening the source
+// reaches at "eventbrite.com/checkout-external?eid=<id>". Same organiser, same
+// event, so fold the pair to one host rather than reading them as two sellers.
+const EVENTBRITE_HOST = /^eventbrite\.(?:com|co\.uk)$/;
+
 // Compared with any leading "www." dropped, so a venue linking to
 // "www.japanesefilm.club" and a source linking to "japanesefilm.club" are
 // recognised as the same organiser. Returns undefined for anything that isn't
 // an absolute URL, which callers must treat as "identifies nothing".
 const getBookingHost = (bookingUrl = "") => {
   try {
-    return new URL(bookingUrl).host.replace(/^www\./, "").toLowerCase();
+    const host = new URL(bookingUrl).host.replace(/^www\./, "").toLowerCase();
+    return EVENTBRITE_HOST.test(host) ? "eventbrite.com" : host;
   } catch {
     return undefined;
   }
@@ -1046,6 +1053,7 @@ module.exports = {
   getText,
   assertSelector,
   createPerformance,
+  getBookingHost,
   removeAlreadyListedPerformances,
   stripNoteLabels,
   getPresenterNote,

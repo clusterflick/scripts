@@ -123,6 +123,20 @@ describe("Savoy Systems transform", () => {
     expect(movies[1].performances[0].bookingUrl).toEqual(otherVenueBookingUrl);
   });
 
+  // gel.now relays the Rio's own listing, linking back to "?f=<film id>"
+  // instead of publishing a page of its own. That id names the listing we
+  // already read the film's performances from, so the relay adds nothing -
+  // unlike the different film id above, which is a second screen.
+  it("drops a sourced performance relaying the venue's own listing by film id", async () => {
+    const movies = await runTransform(VENUE_BOOKING_URL, [
+      sourcedEvent(VENUE_BOOKING_URL),
+    ]);
+
+    expect(movies).toHaveLength(2);
+    expect(movies[0].performances).toHaveLength(1);
+    expect(movies[1].performances).toEqual([]);
+  });
+
   it("never treats a missing booking url as a match", async () => {
     const movies = await runTransform("", [sourcedEvent("")]);
 

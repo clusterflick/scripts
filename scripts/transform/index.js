@@ -18,6 +18,7 @@ const categoriseEntries = require("./categorise-entries");
 const matchIdentifiedMovies = require("./match-identified-movies");
 const identifyMultipleMovies = require("./identify-multiple-movies");
 const identifyShorts = require("./identify-shorts");
+const isAlreadyListed = require("./is-already-listed");
 
 // A movie carried forward from a previous release may predate the required
 // per-performance `accessibility` / `format` objects. Backfill empty objects
@@ -185,6 +186,11 @@ async function transform(
         );
       });
       if (performancesMatch) continue;
+
+      // The movie was in the previous data as a sourced copy of a screening the
+      // venue lists itself, and this run has since deduplicated it away.
+      // If we already hold it, don't fetch the dropped copy back in.
+      if (isAlreadyListed(futurePerformances, matchedData)) continue;
 
       // The movie listing page is still up advertising the movie.
       // If we can't get the page or the page has a "not found" URL, then it's

@@ -134,10 +134,12 @@ function removeSuperfluousInformation(overview) {
 async function transform(attributes, urlSlug, movieData, sourcedEvents) {
   const { movieListPage, moviePages } = movieData;
 
-  const movies = movieListPage.Events.reduce((events, movie) => {
-    // Remove private hire entries
-    if (isPrivateHire(movie.Title)) return events;
+  // Remove private hire entries
+  const listedEvents = movieListPage.Events.filter(
+    ({ Title }) => !isPrivateHire(Title),
+  );
 
+  const movies = listedEvents.reduce((events, movie) => {
     const title = sanitizeRichText(movie.Title);
 
     // Get description from the movie page's ld+json if available
@@ -190,11 +192,40 @@ async function transform(attributes, urlSlug, movieData, sourcedEvents) {
   const listOfSourcedEvents = Object.values(sourcedEvents).flatMap(
     (events) => events,
   );
-  return movies.concat(
-    removeAlreadyListedPerformances(movies, listOfSourcedEvents, {
-      venueDomain: attributes.domain,
-    }),
-  );
+
+  // A source covering a night here can link back to the venue's own Savoy
+  // listing rather than to its own page - gel.now sends Doc'n Roll's HAKEEM to
+  // the Rio's "?f=2652932". That's the film id the venue's showingId is built
+  // from, so it names the very listing we already have.
+  // removeAlreadyListedPerformances can't see it: the link sits on the venue's
+  // own host, which it excludes because two screens can open at once there. A
+  // film id has no such ambiguity - it names one listing, whichever screen it
+  // plays on - so it needs no matching time to be sure. The listing it points
+  // at is where we read that film's performances from, and it can only be
+  // relaying one of them.
+  const venueFilmIds = new Set(listedEvents.map(({ ID }) => `${ID}`));
+  const relaysVenueListing = ({ bookingUrl }) => {
+    let filmId;
+    try {
+      filmId = new URL(bookingUrl).searchParams.get("f");
+    } catch {
+      return false;
+    }
+    return !!filmId && venueFilmIds.has(filmId);
+  };
+
+  const unlistedEvents = removeAlreadyListedPerformances(
+    movies,
+    listOfSourcedEvents,
+    { venueDomain: attributes.domain },
+  ).map((event) => ({
+    ...event,
+    performances: event.performances.filter(
+      (performance) => !relaysVenueListing(performance),
+    ),
+  }));
+
+  return movies.concat(unlistedEvents);
 }
 
 module.exports = transform;

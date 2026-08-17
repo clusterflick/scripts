@@ -95,6 +95,22 @@ describe("removeAlreadyListedPerformances", () => {
     ).toEqual([sourced]);
   });
 
+  // The Cinema Museum links its Eventbrite listing on the .co.uk domain while
+  // the Eventbrite source reaches the same event on .com.
+  test("matches an Eventbrite event across its country domains", () => {
+    expect(
+      removeAlreadyListedPerformances(
+        [venueMovie("https://www.eventbrite.co.uk/e/1991055325075")],
+        [
+          sourcedEvent(
+            "https://www.eventbrite.com/checkout-external?eid=1991055325075",
+          ),
+        ],
+        { venueDomain },
+      ),
+    ).toEqual([{ title: "Point Break", performances: [] }]);
+  });
+
   test("throws when no venue domain is given", () => {
     expect(() =>
       removeAlreadyListedPerformances(

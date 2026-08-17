@@ -6,6 +6,7 @@ const {
   createOverview,
   createAccessibility,
   createFormat,
+  removeAlreadyListedPerformances,
 } = require("../../common/utils");
 const attributes = require("./attributes");
 
@@ -61,7 +62,15 @@ async function transform({ moviePages }, sourcedEvents) {
   const listOfSourcedEvents = Object.values(sourcedEvents).flatMap(
     (events) => events,
   );
-  return movies.concat(listOfSourcedEvents);
+
+  // The Horse Hospital hands booking for its gigs and screenings to DICE and
+  // links out to the event there, so the DICE source finds the same night again
+  // under the promoter's own name for it.
+  return movies.concat(
+    removeAlreadyListedPerformances(movies, listOfSourcedEvents, {
+      venueDomain: attributes.domain,
+    }),
+  );
 }
 
 module.exports = transform;

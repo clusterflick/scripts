@@ -10,6 +10,7 @@ const {
   basicNormalize,
   createAccessibility,
   createFormat,
+  removeAlreadyListedPerformances,
 } = require("../../common/utils");
 const attributes = require("./attributes");
 
@@ -115,10 +116,20 @@ async function transform({ moviePages }, sourcedEvents) {
     throw new Error("No movies found - the page structure may have changed");
   }
 
+  const listedMovies = Object.values(movies);
   const listOfSourcedEvents = Object.values(sourcedEvents).flatMap(
     (events) => events,
   );
-  return Object.values(movies).concat(listOfSourcedEvents);
+
+  // The museum sells every night through Eventbrite or Outsavvy and links
+  // straight out to them, so the sources covering those platforms find the same
+  // screenings the site already lists - each side spelling the link its own way
+  // ("/e/<slug>-tickets-<id>" against "/checkout-external?eid=<id>").
+  return listedMovies.concat(
+    removeAlreadyListedPerformances(listedMovies, listOfSourcedEvents, {
+      venueDomain: attributes.domain,
+    }),
+  );
 }
 
 module.exports = transform;

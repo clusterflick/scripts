@@ -115,7 +115,8 @@ it with Cheerio to extract links, then fetches each detail page individually.
 
 **Platforms:** Tate (2 venues), Olympic Studios (3 venues), The Castle Cinema (2
 venues), Admit One (2 venues) **Standalone:** ~33 cinemas use this pattern with
-venue-specific selectors **Sources:** OutSavvy, Wimbledon Film Club
+venue-specific selectors **Sources:** OutSavvy, Wimbledon Film Club,
+WeGotTickets
 
 ```js
 // cinemas/ica.art/retrieve.js
@@ -516,6 +517,7 @@ used in two ways:
 | ticketsource.co.uk      | Algolia search API + Playwright details   | Multiple search filters (geo, location, NT Live, Exhibition On Screen) |
 | tickettailor.com        | Playwright per-venue-slug pages           | Hardcoded venue slugs list                                             |
 | tufnellparkfilmclub.com | Single HTML page                          | Squarespace event list, Cheerio scraping                               |
+| wegottickets.com        | Session-backed search + detail pages      | POST search held against a PHP session cookie; film and pop-up genres  |
 
 ---
 
