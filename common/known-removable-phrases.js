@@ -82,6 +82,8 @@ const knownRemovablePhrases = [
   "at the Close Up Cinema",
   "at the PCC",
   "at Picturehouse Central",
+  "at 235 Shaftesbury Avenue",
+  "at Cadogan Hall",
   "and Johannas Traum",
   ": 4K World Premiere with Immersive Reception",
   "(Live Immersive Virtual Experiment) Immersive Screening",
