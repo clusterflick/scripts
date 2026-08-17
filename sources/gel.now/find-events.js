@@ -21,6 +21,18 @@ function eventMatchesCinema(event, cinema, venuesById) {
   });
 }
 
+// Start times arrive as "2026-08-25T18:30:00Z", but the digits are the London
+// wall-clock time the event is advertised at, not UTC - the descriptions say
+// "18:30" and "3pm" for events stamped 18:30Z and 15:00Z. Taking the "Z" at
+// face value puts every event an hour late through BST (and is right by
+// accident through GMT). Drop the marker and parse as a local datetime, which
+// is correct because the pipeline runs with TZ=Europe/London.
+const parseStartTime = (startTime) => {
+  if (!startTime) return undefined;
+  const date = new Date(startTime.trim().replace(/Z$/, ""));
+  return Number.isNaN(date.getTime()) ? undefined : date;
+};
+
 function buildEvent(event) {
   const url = `${attributes.domain}/events/${event.id}`;
   const bookingUrl = event.external_url || url;
@@ -32,7 +44,7 @@ function buildEvent(event) {
     overview: createOverview({}),
     performances: [
       createPerformance({
-        date: new Date(event.start_time),
+        date: parseStartTime(event.start_time),
         url: bookingUrl,
         notesList: [],
         accessibility: createAccessibility(event.name, {}, event.description),
