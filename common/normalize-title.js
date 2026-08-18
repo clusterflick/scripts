@@ -995,6 +995,7 @@ function normalizeTitle(title, options) {
       "Bring Your Own Baby Comedy Club",
     ],
     ["Small World of Don Camillo", "Little World of Don Camillo"],
+    ["OASIS: Don't Look Back in Anger", "Don't Look Back in Anger"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
