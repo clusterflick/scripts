@@ -71,10 +71,18 @@ function parseMovie(url, moviePage) {
     const rawBookingUrl = $cells.eq(3).find("a").attr("href");
     const hash = getBookingHash(rawBookingUrl);
     if (hash) bookingHashes.add(hash);
+    // Every row of a film links to the same URL, so an event hash names the
+    // film's TicketSource listing rather than this date - a page that lists the
+    // performances again instead of booking one. The venue's own page is the
+    // better listing to send people to, and where TicketSource does know the
+    // screening the merge below replaces this with its booking link.
+    const bookingUrl = hash?.startsWith("e-")
+      ? url
+      : toStoredBookingDomain(rawBookingUrl) || url;
     performances.push(
       createPerformance({
         date,
-        url: toStoredBookingDomain(rawBookingUrl) || url,
+        url: bookingUrl,
         accessibility: createAccessibility(title, {}, description),
         format: createFormat(title, {}, description),
       }),
@@ -233,6 +241,18 @@ async function transform({ moviePages }, sourcedEvents) {
       unlistedEvents.push(event);
       continue;
     }
+    // The venue's page can only ever link a film's listing, so where the same
+    // screening appears on TicketSource, take the link that books this date.
+    const sourcedByTime = new Map(
+      event.performances.map((performance) => [performance.time, performance]),
+    );
+    movie.performances = movie.performances.map((performance) => {
+      const sourced = sourcedByTime.get(performance.time);
+      return sourced
+        ? { ...performance, bookingUrl: sourced.bookingUrl }
+        : performance;
+    });
+
     const listedTimes = new Set(movie.performances.map(({ time }) => time));
     movie.performances = movie.performances.concat(
       event.performances.filter(({ time }) => !listedTimes.has(time)),
