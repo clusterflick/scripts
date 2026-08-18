@@ -107,6 +107,7 @@ function buildUsageReport(usageByVenue) {
   const byCallSite = {};
   const byVenue = {};
   const modelsWithoutPricing = new Set();
+  let largestPrompt = null;
 
   for (const [venueId, records] of Object.entries(usageByVenue)) {
     if (records.length === 0) continue;
@@ -116,6 +117,16 @@ function buildUsageReport(usageByVenue) {
       const contribution = resolveRecordContribution(record);
       if (contribution.unpriced)
         modelsWithoutPricing.add(contribution.unpriced);
+      if (
+        !largestPrompt ||
+        contribution.promptChars > largestPrompt.promptChars
+      ) {
+        largestPrompt = {
+          venueId,
+          cacheKeyPrefix: record.cacheKeyPrefix,
+          promptChars: contribution.promptChars,
+        };
+      }
 
       addContributionToBucket(totals, contribution);
       byCallSite[record.cacheKeyPrefix] ??= emptyBucket();
@@ -135,6 +146,10 @@ function buildUsageReport(usageByVenue) {
       ...(modelsWithoutPricing.size > 0 && {
         modelsWithoutPricing: [...modelsWithoutPricing].sort(),
       }),
+      // The single largest prompt seen anywhere, win or lose the cache - a
+      // pointer at one listing rather than an average, for when a call
+      // site's high avgPromptChars turns out to be one pathological entry.
+      ...(largestPrompt && { largestPrompt }),
     },
     totals: withDerivedStats(totals),
     byCallSite: Object.fromEntries(
@@ -173,6 +188,31 @@ function formatRanked(bucketsByKey) {
     .join("\n");
 }
 
+// Cost says where the money goes; hit rate says where the data is unstable -
+// a venue whose listing content changes slightly every day (an embedded
+// timestamp, drifting synopsis text) never gets a cache hit no matter how
+// cheap each call is, and that's a normalizer/data problem, not a spend one.
+// Restricted to venues with enough calls that "0% hit rate" is a pattern
+// rather than a single one-off listing.
+function worstByCacheHitRate(bucketsByKey, { minCalls = 5, limit = 5 } = {}) {
+  return Object.entries(bucketsByKey)
+    .filter(([, bucket]) => bucket.calls >= minCalls && bucket.cacheMisses > 0)
+    .sort(([, a], [, b]) => a.cacheHitRate - b.cacheHitRate)
+    .slice(0, limit);
+}
+
+function formatWorstHitRate(bucketsByKey) {
+  const ranked = worstByCacheHitRate(bucketsByKey);
+  if (ranked.length === 0) return "  (none)";
+
+  return ranked
+    .map(
+      ([key, bucket]) =>
+        `  - ${key}: ${formatPercent(bucket.cacheHitRate)} cache hit rate (${bucket.cacheMisses}/${bucket.calls} calls uncached, ${formatUsd(bucket.estimatedCostUsd)})`,
+    )
+    .join("\n");
+}
+
 /**
  * A short, human-readable digest of a report from buildUsageReport - the
  * headline numbers plus the call sites and venues driving the cost, so
@@ -196,8 +236,20 @@ function buildUsageSummary(report) {
     );
   }
 
+  if (metadata.largestPrompt) {
+    const { promptChars, cacheKeyPrefix, venueId } = metadata.largestPrompt;
+    lines.push(
+      `Largest single prompt: ${promptChars} chars (${cacheKeyPrefix} @ ${venueId})`,
+    );
+  }
+
   lines.push("", "Top call sites by cost:", formatRanked(report.byCallSite));
   lines.push("", "Top venues by cost:", formatRanked(report.byVenue));
+  lines.push(
+    "",
+    "Worst cache hit rate by venue (5+ calls):",
+    formatWorstHitRate(report.byVenue),
+  );
 
   return lines.join("\n");
 }

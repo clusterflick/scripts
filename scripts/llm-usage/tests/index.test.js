@@ -182,6 +182,23 @@ describe("buildUsageReport", () => {
       10,
     );
   });
+
+  it("records which venue and call site produced the single largest prompt", () => {
+    const report = buildUsageReport({
+      "small-cinema": [miss("ask-llm", 100, 20, 200)],
+      "big-cinema": [miss("ask-llm-with-results", 100, 20, 9000)],
+    });
+
+    expect(report.metadata.largestPrompt).toEqual({
+      venueId: "big-cinema",
+      cacheKeyPrefix: "ask-llm-with-results",
+      promptChars: 9000,
+    });
+  });
+
+  it("has no largestPrompt for an empty run", () => {
+    expect(buildUsageReport({}).metadata.largestPrompt).toBeUndefined();
+  });
 });
 
 describe("buildUsageSummary", () => {
@@ -219,5 +236,43 @@ describe("buildUsageSummary", () => {
     );
 
     expect(summary).toContain("(none)");
+  });
+
+  it("calls out the venue and call site behind the single largest prompt", () => {
+    const summary = buildUsageSummary(
+      buildUsageReport({
+        "big-cinema": [miss("ask-llm-with-results", 100, 20, 9000)],
+      }),
+    );
+
+    expect(summary).toContain(
+      "Largest single prompt: 9000 chars (ask-llm-with-results @ big-cinema)",
+    );
+  });
+
+  it("omits the largest-prompt line for an empty run", () => {
+    const summary = buildUsageSummary(buildUsageReport({}));
+
+    expect(summary).not.toContain("Largest single prompt");
+  });
+
+  it("ranks venues by worst cache hit rate, excluding low-volume venues from the noise", () => {
+    const manyMisses = Array.from({ length: 10 }, () => miss("ask-llm"));
+    const oneOffMiss = [miss("ask-llm")];
+
+    const report = buildUsageReport({
+      // 0% hit rate but only 1 call - a one-off, not a pattern.
+      "one-off-cinema": oneOffMiss,
+      // 0% hit rate across 10 calls - genuinely thrashing the cache.
+      "thrashing-cinema": manyMisses,
+    });
+
+    const summary = buildUsageSummary(report);
+    const section = summary.indexOf("Worst cache hit rate by venue");
+
+    expect(summary.indexOf("thrashing-cinema", section)).toBeGreaterThan(
+      section,
+    );
+    expect(summary.indexOf("one-off-cinema", section)).toBe(-1);
   });
 });
