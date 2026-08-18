@@ -46,13 +46,14 @@ describe("llm-client-gemini", () => {
         provider: "gemini",
         model: "gemini-2.5-flash-lite",
         cacheHit: false,
+        promptChars: "prompt".length,
         promptTokens: 42,
         candidatesTokens: 7,
       },
     ]);
   });
 
-  it("records a cache hit with no token usage, and makes no API call", async () => {
+  it("records a cache hit with no token usage, but still the prompt size, and makes no API call", async () => {
     dailyLlmCache.mockImplementation(() => Promise.resolve({ cached: true }));
 
     const result = await callLlm({
@@ -70,6 +71,7 @@ describe("llm-client-gemini", () => {
         provider: "gemini",
         model: "gemini-2.5-flash-lite",
         cacheHit: true,
+        promptChars: "prompt".length,
       },
     ]);
   });

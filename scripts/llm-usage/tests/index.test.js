@@ -2,22 +2,33 @@ const fs = require("node:fs").promises;
 const os = require("node:os");
 const path = require("node:path");
 const { writeJSON } = require("../../../common/utils");
-const { loadUsageData, buildUsageReport } = require("../index");
+const {
+  loadUsageData,
+  buildUsageReport,
+  buildUsageSummary,
+} = require("../index");
 
-const hit = (cacheKeyPrefix) => ({
+const hit = (cacheKeyPrefix, promptChars = 50) => ({
   cacheKeyPrefix,
   provider: "gemini",
   model: "gemini-2.5-flash-lite",
   cacheHit: true,
+  promptChars,
 });
 
-const miss = (cacheKeyPrefix, promptTokens = 100, candidatesTokens = 20) => ({
+const miss = (
+  cacheKeyPrefix,
+  promptTokens = 100,
+  candidatesTokens = 20,
+  promptChars = 50,
+) => ({
   cacheKeyPrefix,
   provider: "gemini",
   model: "gemini-2.5-flash-lite",
   cacheHit: false,
   promptTokens,
   candidatesTokens,
+  promptChars,
 });
 
 describe("loadUsageData", () => {
@@ -56,7 +67,10 @@ describe("buildUsageReport", () => {
       promptTokens: 0,
       candidatesTokens: 0,
       estimatedCostUsd: 0,
+      promptChars: 0,
+      maxPromptChars: 0,
       cacheHitRate: 0,
+      avgPromptChars: 0,
     });
     expect(report.byCallSite).toEqual({});
     expect(report.byVenue).toEqual({});
@@ -141,5 +155,124 @@ describe("buildUsageReport", () => {
       report.byVenue["cinema-a"].estimatedCostUsd,
       10,
     );
+  });
+
+  it("tracks prompt size on cache hits too, since the size was known before the cache was consulted", () => {
+    const report = buildUsageReport({
+      "cinema-a": [hit("ask-llm", 300)],
+    });
+
+    expect(report.totals.promptChars).toBe(300);
+    expect(report.totals.avgPromptChars).toBe(300);
+    expect(report.totals.maxPromptChars).toBe(300);
+  });
+
+  it("tracks the largest single prompt seen, not just the average", () => {
+    const report = buildUsageReport({
+      "cinema-a": [
+        miss("ask-llm", 100, 20, 50),
+        miss("ask-llm", 100, 20, 5000),
+        miss("ask-llm", 100, 20, 100),
+      ],
+    });
+
+    expect(report.byCallSite["ask-llm"].maxPromptChars).toBe(5000);
+    expect(report.byCallSite["ask-llm"].avgPromptChars).toBeCloseTo(
+      (50 + 5000 + 100) / 3,
+      10,
+    );
+  });
+
+  it("records which venue and call site produced the single largest prompt", () => {
+    const report = buildUsageReport({
+      "small-cinema": [miss("ask-llm", 100, 20, 200)],
+      "big-cinema": [miss("ask-llm-with-results", 100, 20, 9000)],
+    });
+
+    expect(report.metadata.largestPrompt).toEqual({
+      venueId: "big-cinema",
+      cacheKeyPrefix: "ask-llm-with-results",
+      promptChars: 9000,
+    });
+  });
+
+  it("has no largestPrompt for an empty run", () => {
+    expect(buildUsageReport({}).metadata.largestPrompt).toBeUndefined();
+  });
+});
+
+describe("buildUsageSummary", () => {
+  it("summarizes an empty run without listing any call sites or venues", () => {
+    const summary = buildUsageSummary(buildUsageReport({}));
+
+    expect(summary).toContain("0 calls across 0/0 venues");
+    expect(summary).toContain("(none)");
+  });
+
+  it("ranks call sites and venues by cost, most expensive first", () => {
+    const report = buildUsageReport({
+      "cheap-cinema": [miss("ask-llm", 100, 20, 50)],
+      "expensive-cinema": [
+        miss("ask-llm-with-results", 1_000_000, 1_000_000, 9000),
+      ],
+    });
+
+    const summary = buildUsageSummary(report);
+    const callSiteSection = summary.indexOf("Top call sites by cost:");
+    const venueSection = summary.indexOf("Top venues by cost:");
+
+    expect(summary.indexOf("ask-llm-with-results")).toBeLessThan(
+      summary.indexOf("ask-llm:"),
+    );
+    expect(summary.indexOf("expensive-cinema", venueSection)).toBeGreaterThan(
+      venueSection,
+    );
+    expect(callSiteSection).toBeGreaterThan(-1);
+  });
+
+  it("flags call sites/venues that cost nothing (all cache hits) as having no ranked entries", () => {
+    const summary = buildUsageSummary(
+      buildUsageReport({ "quiet-cinema": [hit("ask-llm")] }),
+    );
+
+    expect(summary).toContain("(none)");
+  });
+
+  it("calls out the venue and call site behind the single largest prompt", () => {
+    const summary = buildUsageSummary(
+      buildUsageReport({
+        "big-cinema": [miss("ask-llm-with-results", 100, 20, 9000)],
+      }),
+    );
+
+    expect(summary).toContain(
+      "Largest single prompt: 9000 chars (ask-llm-with-results @ big-cinema)",
+    );
+  });
+
+  it("omits the largest-prompt line for an empty run", () => {
+    const summary = buildUsageSummary(buildUsageReport({}));
+
+    expect(summary).not.toContain("Largest single prompt");
+  });
+
+  it("ranks venues by worst cache hit rate, excluding low-volume venues from the noise", () => {
+    const manyMisses = Array.from({ length: 10 }, () => miss("ask-llm"));
+    const oneOffMiss = [miss("ask-llm")];
+
+    const report = buildUsageReport({
+      // 0% hit rate but only 1 call - a one-off, not a pattern.
+      "one-off-cinema": oneOffMiss,
+      // 0% hit rate across 10 calls - genuinely thrashing the cache.
+      "thrashing-cinema": manyMisses,
+    });
+
+    const summary = buildUsageSummary(report);
+    const section = summary.indexOf("Worst cache hit rate by venue");
+
+    expect(summary.indexOf("thrashing-cinema", section)).toBeGreaterThan(
+      section,
+    );
+    expect(summary.indexOf("one-off-cinema", section)).toBe(-1);
   });
 });
