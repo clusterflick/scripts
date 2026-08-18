@@ -2,6 +2,7 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
 const { dailyLlmCache } = require("./cache");
 const { getId } = require("./utils");
 const { parseLlmJson } = require("./parse-llm-json");
+const { recordLlmUsage } = require("./llm-usage-log");
 require("dotenv").config();
 
 let genAI = null;
@@ -38,7 +39,11 @@ async function callLlm({
   // file, and so switching models never replays another model's cached answers.
   const cacheKey = `${cacheKeyPrefix}-gemini-${MODEL}-${getId(`${systemInstruction}\n${prompt}`)}`;
 
-  return dailyLlmCache(cacheKey, async () => {
+  // Only set when the cache misses and an API call actually happens; a cache
+  // hit costs nothing and has no usage to report.
+  let usage;
+
+  const response = await dailyLlmCache(cacheKey, async () => {
     console.log(` - ${logMessage}`);
 
     const model = getGenAI().getGenerativeModel({
@@ -57,8 +62,22 @@ async function callLlm({
       history: [],
     });
     const result = await chatSession.sendMessage(prompt);
+    usage = result.response.usageMetadata;
     return parseLlmJson(result.response.text());
   });
+
+  recordLlmUsage({
+    cacheKeyPrefix,
+    provider: "gemini",
+    model: MODEL,
+    cacheHit: usage === undefined,
+    ...(usage && {
+      promptTokens: usage.promptTokenCount,
+      candidatesTokens: usage.candidatesTokenCount,
+    }),
+  });
+
+  return response;
 }
 
 module.exports = { callLlm };

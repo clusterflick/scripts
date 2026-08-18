@@ -2,6 +2,7 @@ const OpenAI = require("openai");
 const { dailyLlmCache } = require("./cache");
 const { getId } = require("./utils");
 const { parseLlmJson } = require("./parse-llm-json");
+const { recordLlmUsage } = require("./llm-usage-log");
 require("dotenv").config();
 
 // Swap this in code to A/B different tiers, e.g. "gpt-4.1-nano" for price parity
@@ -43,7 +44,11 @@ async function callLlm({
   // replays another provider's cached answers — essential for a fair A/B.
   const cacheKey = `${cacheKeyPrefix}-openai-${MODEL}-${getId(`${systemInstruction}\n${prompt}`)}`;
 
-  return dailyLlmCache(cacheKey, async () => {
+  // Only set when the cache misses and an API call actually happens; a cache
+  // hit costs nothing and has no usage to report.
+  let usage;
+
+  const response = await dailyLlmCache(cacheKey, async () => {
     console.log(` - ${logMessage}`);
 
     // JSON mode requires the word "json" somewhere in the messages; append an
@@ -61,8 +66,22 @@ async function callLlm({
       ],
     });
 
+    usage = completion.usage;
     return parseLlmJson(completion.choices[0].message.content);
   });
+
+  recordLlmUsage({
+    cacheKeyPrefix,
+    provider: "openai",
+    model: MODEL,
+    cacheHit: usage === undefined,
+    ...(usage && {
+      promptTokens: usage.prompt_tokens,
+      candidatesTokens: usage.completion_tokens,
+    }),
+  });
+
+  return response;
 }
 
 module.exports = { callLlm };
