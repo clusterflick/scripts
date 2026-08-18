@@ -4,6 +4,7 @@ const fs = require("node:fs").promises;
 const path = require("node:path");
 const { readJSON, writeJSON, sanitizePathSegment } = require("./common/utils");
 const { getVersion } = require("./common/get-version");
+const { getLlmUsageLog, clearLlmUsageLog } = require("./common/llm-usage-log");
 
 const setupDirectory = async (type) => {
   const directoryPath = path.join(process.cwd(), type);
@@ -148,6 +149,36 @@ const setupDirectory = async (type) => {
     return;
   }
 
+  if (action.toLowerCase() === "llm-usage-report") {
+    // Takes a directory holding every venue's llm-usage-data file for one
+    // day's run (downloaded from each venue's artifact) and aggregates them
+    // into a single report - see scripts/llm-usage. A snapshot of one day,
+    // not a fold across days: trends over time are a job for whatever
+    // downloads and compares multiple days' reports, not this repo.
+    const [inputDirectory] = [location];
+    if (!inputDirectory) {
+      throw new Error(
+        "No input directory provided; pass the directory holding every venue's llm-usage-data file",
+      );
+    }
+
+    const { loadUsageData, buildUsageReport } = require("./scripts/llm-usage");
+    const usageByVenue = await loadUsageData(inputDirectory);
+    const report = buildUsageReport(usageByVenue);
+
+    await setupDirectory("llm-usage-report");
+    await writeJSON(
+      path.join(process.cwd(), "llm-usage-report", "llm-usage-report.json"),
+      report,
+    );
+    console.log(
+      `➡️  ${report.totals.calls} LLM calls across ${report.metadata.venuesWithLlmUsage}/${report.metadata.venueCount} venues, ` +
+        `${Math.round(report.totals.cacheHitRate * 100)}% cache hit rate, ` +
+        `$${report.totals.estimatedCostUsd.toFixed(4)} estimated`,
+    );
+    return;
+  }
+
   if (action.toLowerCase() === "departed") {
     const departed = require("./scripts/departed");
     const output = await departed();
@@ -203,6 +234,7 @@ const setupDirectory = async (type) => {
     const releaseList = await getReleaseList();
     const yesterdaysRelease = await getYesterdaysRelease(location, releaseList);
     const seenMap = await getHistoricalData();
+    clearLlmUsageLog();
     const output = await transform(
       location,
       input,
@@ -214,6 +246,11 @@ const setupDirectory = async (type) => {
       getPath("transformed-data"),
       output.sort((a, b) => a.title.localeCompare(b.title)),
     );
+    // A separate artifact rather than a field on the transformed output:
+    // nothing that reads cinema listings should carry LLM diagnostics. See
+    // scripts/llm-usage, which aggregates these across every venue's run.
+    await setupDirectory("llm-usage-data");
+    await writeJSON(getPath("llm-usage-data"), getLlmUsageLog());
     return;
   }
 
