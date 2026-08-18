@@ -81,13 +81,34 @@ function getAddressLineKey(cinema) {
 }
 
 /**
+ * A name that belongs to a neighbouring venue rather than this one. Compared
+ * before normalisation, because the whole point is to keep a name apart from
+ * one it would otherwise normalise onto: "Birkbeck Cinema" and "Birkbeck" both
+ * reduce to "birkbeck" once normalizeVenueName has dropped the word "cinema",
+ * so only the raw text still tells them apart.
+ * @param {Object} cinema - Cinema object with an optional excludedNames
+ * @param {string} venueName - Name of the venue to match
+ * @returns {boolean} True if this name is explicitly not this cinema's
+ */
+function isExcludedName(cinema, venueName) {
+  const collapse = (text) => text.trim().toLowerCase().replace(/\s+/g, " ");
+  const collapsedVenueName = collapse(venueName);
+  return (cinema.excludedNames || []).some(
+    (name) => collapse(name) === collapsedVenueName,
+  );
+}
+
+/**
  * Check whether a venue's name matches a cinema's name, any of its alternative
  * names, or the street address it sits at
- * @param {Object} cinema - Cinema object with name, alternativeNames and address
+ * @param {Object} cinema - Cinema object with name, alternativeNames, excludedNames and address
  * @param {string} venueName - Name of the venue to match
  * @returns {boolean} True if any known name for the cinema matches
  */
 function cinemaNameMatches(cinema, venueName) {
+  // A name claimed by a sibling venue isn't ours by any route, address included
+  if (isExcludedName(cinema, venueName)) return false;
+
   const names = (cinema.alternativeNames || []).concat(cinema.name);
   const normalizedVenueName = normalizeVenueName(venueName);
   if (names.some((name) => normalizeVenueName(name) === normalizedVenueName)) {

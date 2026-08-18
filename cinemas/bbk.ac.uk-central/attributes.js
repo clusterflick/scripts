@@ -9,6 +9,10 @@ module.exports = {
     " Birkbeck Clore Management Centre",
     "Birkbeck Main Building",
   ],
+  // Normalising drops the word "cinema", so "Birkbeck Cinema" would otherwise
+  // reduce to the "Birkbeck" alias above and match here too. It names
+  // bbk.ac.uk-cinema, 300m away - too close for the distance check to separate.
+  excludedNames: ["Birkbeck Cinema"],
   domain: "https://www.bbk.ac.uk",
   socials: {
     letterboxd: null,

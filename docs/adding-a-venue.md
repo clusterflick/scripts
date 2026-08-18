@@ -88,19 +88,20 @@ it produces showings the pipeline can't match to TMDB, and it violates the
 
 Venue metadata used throughout the pipeline.
 
-| Field              | Required | Description                                                    |
-| ------------------ | -------- | -------------------------------------------------------------- |
-| `id`               | Yes      | Unique identifier matching the directory name                  |
-| `name`             | Yes      | Human-readable display name                                    |
-| `domain`           | Yes      | Base website URL                                               |
-| `url`              | Yes      | Direct link to the venue's cinema/screenings page              |
-| `address`          | Yes      | Full address (comma-separated)                                 |
-| `geo`              | Yes      | `{ lat, lon }` coordinates                                     |
-| `structure`        | Yes      | `"solo"` or `"group"`                                          |
-| `type`             | Yes      | Venue type (e.g. `"Cinema"`, `"Museum"`, `"Community Centre"`) |
-| `socials`          | Yes      | `{ letterboxd, twitter, instagram }` (values can be `null`)    |
-| `groupName`        | If group | Parent chain name (e.g. `"Odeon"`, `"Everyman"`)               |
-| `alternativeNames` | No       | Array of alternative names for matching                        |
+| Field              | Required | Description                                                      |
+| ------------------ | -------- | ---------------------------------------------------------------- |
+| `id`               | Yes      | Unique identifier matching the directory name                    |
+| `name`             | Yes      | Human-readable display name                                      |
+| `domain`           | Yes      | Base website URL                                                 |
+| `url`              | Yes      | Direct link to the venue's cinema/screenings page                |
+| `address`          | Yes      | Full address (comma-separated)                                   |
+| `geo`              | Yes      | `{ lat, lon }` coordinates                                       |
+| `structure`        | Yes      | `"solo"` or `"group"`                                            |
+| `type`             | Yes      | Venue type (e.g. `"Cinema"`, `"Museum"`, `"Community Centre"`)   |
+| `socials`          | Yes      | `{ letterboxd, twitter, instagram }` (values can be `null`)      |
+| `groupName`        | If group | Parent chain name (e.g. `"Odeon"`, `"Everyman"`)                 |
+| `alternativeNames` | No       | Array of alternative names for matching                          |
+| `excludedNames`    | No       | Array of names that belong to a neighbouring venue, not this one |
 
 Additional venue-specific fields (e.g. `cinemaId`, `siteId`) can be added as
 needed by the retrieval and transformation logic.
@@ -114,6 +115,21 @@ punctuation — including `&` — and removes all whitespace. So `The Foo & Bar`
 `Foo & Bar` and `Foo&Bar` all collapse to `foobar`, but `Foo and Bar` does not.
 Add the spelled-out variant to `alternativeNames` whenever a venue's name
 contains an ampersand, and check how the ticketing platforms actually spell it.
+
+**Use `excludedNames` when two venues you hold would both answer to the same
+name.** Normalisation also drops the word `cinema`, so `Birkbeck Cinema` and
+`Birkbeck` both reduce to `birkbeck`; with the two Birkbeck venues only 300m
+apart, the distance check can't separate them either, and a sourced event
+matched both — landing in the listings twice. `excludedNames` is compared
+against the source's name _before_ normalisation, which is the only place the
+two are still distinguishable, and it rejects the name by every route including
+the address line. `bbk.ac.uk-cinema` excludes `Birkbeck` and `bbk.ac.uk-central`
+excludes `Birkbeck Cinema`, so each name resolves to exactly one venue.
+
+Because the comparison is on raw text, it only covers the spellings you list. A
+form nobody anticipated can still match both venues — `combine` asserts that no
+showing id is claimed twice and throws if one is, so a new collision fails the
+run rather than quietly publishing a listing at the wrong venue.
 
 **Solo venue example:**
 

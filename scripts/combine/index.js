@@ -13,6 +13,7 @@ const {
   sleep,
 } = require("../../common/utils");
 const standardizePrefixingForTheatrePerformances = require("../../common/standardize-prefixing-for-theatre-performances");
+const assertUniqueShowingIds = require("./assert-unique-showing-ids");
 const { buildMovieData } = require("./build-movie-data");
 
 /**
@@ -178,6 +179,8 @@ async function combine() {
       console.log(e);
     }
   }
+
+  assertUniqueShowingIds(data);
 
   const siteData = {
     venues: {},

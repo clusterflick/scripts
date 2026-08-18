@@ -2,11 +2,14 @@ module.exports = {
   id: "bbk.ac.uk-cinema",
   name: "Birkbeck Cinema",
   alternativeNames: [
-    "Birkbeck",
     "Gordon Square",
     "Birkbeck 43 Gordon Square",
     "Birkbeck Institute for the Moving Image",
   ],
+  // A bare "Birkbeck" belongs to bbk.ac.uk-central: the two sit 300m apart, so
+  // the distance check can't separate them, and this venue's own name reduces
+  // to "birkbeck" once normalised. "Birkbeck Cinema" still matches here.
+  excludedNames: ["Birkbeck"],
   domain: "https://www.bbk.ac.uk",
   socials: {
     letterboxd: null,

@@ -82,6 +82,48 @@ describe("cinemaNameMatches", () => {
   test("matches a venue whose name carries a screen number", () => {
     expect(cinemaNameMatches(ritzy, "The Ritzy - Screen 2")).toBe(true);
   });
+
+  // Birkbeck Central and Birkbeck Cinema sit 300m apart, so the distance check
+  // can't separate them, and normalising drops the word "cinema" - leaving both
+  // venues answering to "birkbeck" until excludedNames tells them apart.
+  describe("excludedNames", () => {
+    const birkbeckCinema = {
+      id: "bbk.ac.uk-cinema",
+      name: "Birkbeck Cinema",
+      alternativeNames: ["Gordon Square"],
+      excludedNames: ["Birkbeck"],
+      address: "University of London, 43 Gordon Square, London, WC1H 0PY, UK",
+    };
+
+    test("rejects a name claimed by a neighbouring venue", () => {
+      expect(cinemaNameMatches(birkbeckCinema, "Birkbeck")).toBe(false);
+    });
+
+    test("compares before normalisation, so a longer name still matches", () => {
+      expect(cinemaNameMatches(birkbeckCinema, "Birkbeck Cinema")).toBe(true);
+    });
+
+    test("ignores case and surrounding whitespace", () => {
+      expect(cinemaNameMatches(birkbeckCinema, "  birkbeck ")).toBe(false);
+    });
+
+    test("leaves the cinema's other names alone", () => {
+      expect(cinemaNameMatches(birkbeckCinema, "Gordon Square")).toBe(true);
+    });
+
+    test("excludes the name by every route, including the address line", () => {
+      const rioWithExclusion = {
+        id: "riocinema.org.uk",
+        name: "Rio Cinema",
+        excludedNames: ["107 Kingsland High Street"],
+        address: "107 Kingsland High Street, London, E8 2PB, UK",
+      };
+
+      expect(
+        cinemaNameMatches(rioWithExclusion, "107 Kingsland High Street"),
+      ).toBe(false);
+    });
+  });
 });
 
 describe("findMatchingCinema", () => {
