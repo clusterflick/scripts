@@ -162,20 +162,27 @@ const setupDirectory = async (type) => {
       );
     }
 
-    const { loadUsageData, buildUsageReport } = require("./scripts/llm-usage");
+    const {
+      loadUsageData,
+      buildUsageReport,
+      buildUsageSummary,
+    } = require("./scripts/llm-usage");
     const usageByVenue = await loadUsageData(inputDirectory);
     const report = buildUsageReport(usageByVenue);
+    const summary = buildUsageSummary(report);
 
     await setupDirectory("llm-usage-report");
     await writeJSON(
       path.join(process.cwd(), "llm-usage-report", "llm-usage-report.json"),
       report,
     );
-    console.log(
-      `➡️  ${report.totals.calls} LLM calls across ${report.metadata.venuesWithLlmUsage}/${report.metadata.venueCount} venues, ` +
-        `${Math.round(report.totals.cacheHitRate * 100)}% cache hit rate, ` +
-        `$${report.totals.estimatedCostUsd.toFixed(4)} estimated`,
+    // Plain text rather than writeJSON: this is read by humans (printed here,
+    // and available for a workflow to fold into a step summary), not parsed.
+    await fs.writeFile(
+      path.join(process.cwd(), "llm-usage-report", "summary.txt"),
+      summary,
     );
+    console.log(summary);
     return;
   }
 

@@ -71,6 +71,10 @@ async function callLlm({
     provider: "gemini",
     model: MODEL,
     cacheHit: usage === undefined,
+    // Known before the cache is even consulted, so recorded on hits too - a
+    // large prompt still costs nothing on a hit, but the same listing will
+    // cost real tokens the day the cache expires.
+    promptChars: prompt.length,
     ...(usage && {
       promptTokens: usage.promptTokenCount,
       candidatesTokens: usage.candidatesTokenCount,
