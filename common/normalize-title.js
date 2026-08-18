@@ -996,6 +996,14 @@ function normalizeTitle(title, options) {
     ],
     ["Small World of Don Camillo", "Little World of Don Camillo"],
     ["OASIS: Don't Look Back in Anger", "Don't Look Back in Anger"],
+    ["Ghost Strata + ", "Ghost Strata & "],
+    [
+      /Extreme Private Eros:? Love Song$/i,
+      "Extreme Private Eros: Love Song 1974",
+    ],
+    ["Pulp: What Do You Do for an ", "Pulp: What Do You Do for an encore "],
+    ["Rocky Horror 30 october", "The Rocky Horror Picture Show"],
+    ["Bloody Marys + ", ""],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
