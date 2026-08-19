@@ -1004,6 +1004,8 @@ function normalizeTitle(title, options) {
     ["Pulp: What Do You Do for an ", "Pulp: What Do You Do for an encore "],
     ["Rocky Horror 30 october", "The Rocky Horror Picture Show"],
     ["Bloody Marys + ", ""],
+    [/^(.*): The Hunger Games Season/i, "The Hunger Games: $1"],
+    ["The Hunger Games: The Hunger Games", "The Hunger Games"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
