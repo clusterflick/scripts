@@ -33,6 +33,8 @@ function normalizeTitle(title, options) {
     ["The Transformers: The Movie", "The Transformers The Movie ()"], // Retain "The Movie" suffix
     [/:? The Movie$/i, ""],
     ["The Fishermen", "The Fisherman"], // NOTE: This can be removed in the future once this specific misname has been removed
+    ["Music with Tara Franks + ", "Music with Tara Franks & "],
+    ["Storytelling + ", "Storytelling & "],
     [" + Cat", " and Cat"],
     [" + Zog", " and Zog"],
     ["Zog + ", "Zog & "],
@@ -1006,6 +1008,11 @@ function normalizeTitle(title, options) {
     ["Bloody Marys + ", ""],
     [/^(.*): The Hunger Games Season/i, "The Hunger Games: $1"],
     ["The Hunger Games: The Hunger Games", "The Hunger Games"],
+    [
+      "Clapham International Film Festival - ",
+      "Clapham International Film Festival: ",
+    ],
+    ["PsychCinema - ", "PsychCinema: "],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
