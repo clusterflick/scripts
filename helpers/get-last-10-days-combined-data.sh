@@ -28,8 +28,19 @@ if ! command -v jq &> /dev/null; then
     exit 1
 fi
 
+# Unauthenticated API calls share a per-IP rate limit that CI runners and
+# repeated local runs exhaust quickly, so send a token whenever one is available
+GH_API_TOKEN="${PAT:-${GH_TOKEN:-${GITHUB_TOKEN:-}}}"
+if [ -z "$GH_API_TOKEN" ] && command -v gh &> /dev/null; then
+    GH_API_TOKEN=$(gh auth token 2>/dev/null || true)
+fi
+CURL_HEADERS=(-sS -L -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28")
+if [ -n "$GH_API_TOKEN" ]; then
+    CURL_HEADERS+=(-H "Authorization: token $GH_API_TOKEN")
+fi
+
 # Fetch releases from GitHub API (fetch more to ensure we have enough days)
-all_releases_json=$(curl -s "${API_URL}?per_page=100")
+all_releases_json=$(curl "${CURL_HEADERS[@]}" "${API_URL}?per_page=100")
 
 # Check if we got a valid response
 if echo "${all_releases_json}" | jq -e '.message' &> /dev/null; then
