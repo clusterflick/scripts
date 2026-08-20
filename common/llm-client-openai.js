@@ -5,11 +5,16 @@ const { parseLlmJson } = require("./parse-llm-json");
 const { recordLlmUsage } = require("./llm-usage-log");
 require("dotenv").config();
 
-// Swap this in code to A/B different tiers, e.g. "gpt-4.1-nano" for price parity
-// with Gemini Flash-Lite, "gpt-4.1-mini" for a capability step up. The cache key
+// "gpt-4.1-nano" for price parity with Gemini Flash-Lite. The cache key
 // includes the model name, so switching here never reuses another model's
 // cached answers.
 const MODEL = "gpt-4.1-nano";
+
+// A capability step up over the default - see CAPABLE_MODEL in
+// llm-client-gemini.js for what it's for. Callers request it with
+// `preferCapableModel` rather than a raw model name, since that name is
+// provider-specific.
+const CAPABLE_MODEL = "gpt-4.1-mini";
 
 let client = null;
 
@@ -39,10 +44,13 @@ async function callLlm({
   maxOutputTokens,
   // eslint-disable-next-line no-unused-vars
   responseSchema,
+  preferCapableModel = false,
 }) {
+  const model = preferCapableModel ? CAPABLE_MODEL : MODEL;
+
   // Namespace by provider + model so switching providers (or models) never
   // replays another provider's cached answers — essential for a fair A/B.
-  const cacheKey = `${cacheKeyPrefix}-openai-${MODEL}-${getId(`${systemInstruction}\n${prompt}`)}`;
+  const cacheKey = `${cacheKeyPrefix}-openai-${model}-${getId(`${systemInstruction}\n${prompt}`)}`;
 
   // Only set when the cache misses and an API call actually happens; a cache
   // hit costs nothing and has no usage to report.
@@ -56,7 +64,7 @@ async function callLlm({
     const jsonSystemInstruction = `${systemInstruction}\n\nRespond with a single valid JSON object and nothing else.`;
 
     const completion = await getClient().chat.completions.create({
-      model: MODEL,
+      model,
       temperature: 0,
       max_completion_tokens: maxOutputTokens || 2048,
       response_format: { type: "json_object" },
@@ -73,7 +81,7 @@ async function callLlm({
   recordLlmUsage({
     cacheKeyPrefix,
     provider: "openai",
-    model: MODEL,
+    model,
     cacheHit: usage === undefined,
     // Known before the cache is even consulted, so recorded on hits too - a
     // large prompt still costs nothing on a hit, but the same listing will

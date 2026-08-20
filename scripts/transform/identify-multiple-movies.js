@@ -83,6 +83,11 @@ async function identifyMultipleMovies(movie) {
     cacheKeyPrefix: "identify-multiple-movies",
     logMessage: `Identifying films in "${movie.title}"`,
     responseSchema,
+    // Naming every film in a marathon/franchise event (e.g. "the first 8
+    // chapters" of a series, with no per-film synopsis) is a knowledge-recall
+    // task the default model undercounts on - worth the step up in cost here,
+    // not across every categorisation/matching call in the pipeline.
+    preferCapableModel: true,
   });
 
   // Ensure we have a valid response structure

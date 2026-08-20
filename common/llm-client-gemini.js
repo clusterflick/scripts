@@ -23,6 +23,13 @@ const generationConfig = {
 
 const MODEL = "gemini-2.5-flash-lite";
 
+// A capability step up over the default, for tasks like naming every film in
+// a marathon/franchise event ("the first 8 chapters", no per-film synopsis) -
+// world knowledge Flash-Lite unreliably recalls. Callers request it with
+// `preferCapableModel` rather than a raw model name, since that name is
+// Gemini-specific and callLlm also has an OpenAI implementation.
+const CAPABLE_MODEL = "gemini-2.5-flash";
+
 /**
  * Call Gemini with caching and standard configuration. See ./llm-client.js for
  * the provider-agnostic contract this implements.
@@ -34,10 +41,13 @@ async function callLlm({
   logMessage,
   maxOutputTokens,
   responseSchema,
+  preferCapableModel = false,
 }) {
+  const model = preferCapableModel ? CAPABLE_MODEL : MODEL;
+
   // Namespace by provider + model so it's clear which model produced each cache
   // file, and so switching models never replays another model's cached answers.
-  const cacheKey = `${cacheKeyPrefix}-gemini-${MODEL}-${getId(`${systemInstruction}\n${prompt}`)}`;
+  const cacheKey = `${cacheKeyPrefix}-gemini-${model}-${getId(`${systemInstruction}\n${prompt}`)}`;
 
   // Only set when the cache misses and an API call actually happens; a cache
   // hit costs nothing and has no usage to report.
@@ -46,8 +56,8 @@ async function callLlm({
   const response = await dailyLlmCache(cacheKey, async () => {
     console.log(` - ${logMessage}`);
 
-    const model = getGenAI().getGenerativeModel({
-      model: MODEL,
+    const generativeModel = getGenAI().getGenerativeModel({
+      model,
       systemInstruction,
     });
 
@@ -57,7 +67,7 @@ async function callLlm({
       config.responseMimeType = "application/json";
       config.responseSchema = responseSchema;
     }
-    const chatSession = model.startChat({
+    const chatSession = generativeModel.startChat({
       generationConfig: config,
       history: [],
     });
@@ -69,7 +79,7 @@ async function callLlm({
   recordLlmUsage({
     cacheKeyPrefix,
     provider: "gemini",
-    model: MODEL,
+    model,
     cacheHit: usage === undefined,
     // Known before the cache is even consulted, so recorded on hits too - a
     // large prompt still costs nothing on a hit, but the same listing will
