@@ -6,7 +6,9 @@ const {
   basicNormalize,
   compareAsSimilar,
   runLlmFunction,
-  sleep,
+  withRetry,
+  RETRYABLE_STATUSES,
+  parseRetryAfter,
 } = require("./utils");
 const { dailyCache } = require("./cache");
 const askLlm = require("./ask-llm");
@@ -136,15 +138,24 @@ const applyNameCorrections = (name) =>
   name.replace(/Scott McGhee/i, "Scott McGehee");
 
 const apiRetryWrapper = async (callback) => {
-  try {
-    return await callback();
-  } catch (e) {
-    console.log(
-      `Error contacting themoviedb; trying again in 60 seconds - ${e.message}`,
-    );
-    await sleep(60_000);
-    return await callback();
-  }
+  return withRetry(
+    async () => {
+      try {
+        return await callback();
+      } catch (e) {
+        const status = e.response?.status;
+        // A non-retryable 4xx (400/401/404/...) is a genuine failure, not a
+        // rate limit — fail immediately rather than burning the retry budget.
+        if (status && !RETRYABLE_STATUSES.has(status)) {
+          e.retryable = false;
+          throw e;
+        }
+        e.retryAfterMs = parseRetryAfter(e.response?.headers?.["retry-after"]);
+        throw e;
+      }
+    },
+    { retries: 3, delayMs: 60_000, label: "themoviedb" },
+  );
 };
 
 const moviedb = new MovieDb(process.env.MOVIEDB_API_KEY);

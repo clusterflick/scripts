@@ -215,6 +215,9 @@ const withRetry = async (
       return await fn();
     } catch (error) {
       lastError = error;
+      // A caller can mark an error non-retryable (e.g. a 404 rather than a
+      // rate limit) to fail fast instead of burning the retry budget.
+      if (error.retryable === false) throw error;
       if (attempt < retries) {
         // Honour a server-provided Retry-After (e.g. on a 429) when present,
         // otherwise fall back to the configured fixed delay.
@@ -1046,6 +1049,8 @@ module.exports = {
   sleep,
   withJitter,
   withRetry,
+  RETRYABLE_STATUSES,
+  parseRetryAfter,
   fetchWithRetry,
   fetchText,
   fetchWin1252Text,
