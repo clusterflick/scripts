@@ -50,6 +50,17 @@ const getYoutubeTrailer = (movie) => {
 
 const getImdbId = ({ external_ids: externalIds = {} }) => externalIds.imdb_id;
 
+// Compared against the final `title` (not `movieInfo.title`) because a
+// non-slugifiable title already falls back to `original_title` below - in
+// that case they're the same string and there's nothing left to surface.
+const getOriginalTitle = (movieInfo, title) => {
+  const { original_title: originalTitle, original_language: originalLanguage } =
+    movieInfo;
+  if (originalLanguage === "en") return undefined;
+  if (!originalTitle || originalTitle === title) return undefined;
+  return originalTitle;
+};
+
 /**
  * Map a TheMovieDB movie record onto the shape the website consumes.
  *
@@ -100,6 +111,7 @@ const buildMovieData = async (movieInfo, context) => {
     id: `${movieInfo.id}`,
     title: title,
     normalizedTitle: normalizeTitle(title).replace(/^the /i, "").trim(),
+    originalTitle: getOriginalTitle(movieInfo, title),
     classification: getClassification(movieInfo),
     overview: movieInfo.overview,
     year: movieInfo.release_date?.split("-")[0],
