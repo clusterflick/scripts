@@ -179,4 +179,21 @@ describe("Savoy Systems transform", () => {
     ]);
     expect(movies[0].overview.actors).toEqual(["Cihan Ünal", "Jeff Goldblum"]);
   });
+
+  // A single film can still credit co-directors the usual way; that must
+  // keep working alongside the "+" double-bill boundary above.
+  it("still splits a single film's 'and'-joined co-directors", async () => {
+    const coDirectedEvent = {
+      ...venueEvent(VENUE_BOOKING_URL),
+      Director: "Hazel M and Mae M",
+    };
+    const movies = await transform(
+      attributes,
+      "TheLexiCinema.dll",
+      { movieListPage: { Events: [coDirectedEvent] }, moviePages: {} },
+      {},
+    );
+
+    expect(movies[0].overview.directors).toEqual(["Hazel M", "Mae M"]);
+  });
 });

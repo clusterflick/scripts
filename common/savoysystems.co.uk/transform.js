@@ -10,6 +10,7 @@ const {
   generateShowingId,
   isPrivateHire,
   getText,
+  convertNamesTextToList,
 } = require("../../common/utils");
 const { extractPeopleNames } = require("../../common/extract-people");
 const { parseDate } = require("./utils");
@@ -133,11 +134,14 @@ function removeSuperfluousInformation(overview) {
 
 // Double-bill listings (e.g. Rio Cinema's "Category H" strand) give Director
 // and Cast as two films' names joined with " + " - e.g. "Robin Hardy + Kōji
-// Shiraishi". createOverview's list-splitting doesn't treat "+" as a
-// separator, so left alone this collapses into one garbled name and the
-// per-film crew hint that multi-movie matching relies on is lost. Normalise
-// it to a comma, which is already a recognised separator.
-const splitPlusJoinedNames = (value) => value?.replace(/\s+\+\s+/g, ", ");
+// Shiraishi" - on top of the usual multi-person joins (",", "and", "&", ...)
+// createOverview already splits within each film's own credits. Left alone,
+// the "+" boundary between the two films' credits collapses into one garbled
+// name and the per-film crew hint that multi-movie matching relies on is
+// lost, so split on it first and let the existing name-list handling run
+// on each side.
+const namesJoinedByPlus = (value) =>
+  value ? value.split(" + ").flatMap(convertNamesTextToList) : value;
 
 async function transform(attributes, urlSlug, movieData, sourcedEvents) {
   const { movieListPage, moviePages } = movieData;
@@ -165,8 +169,8 @@ async function transform(attributes, urlSlug, movieData, sourcedEvents) {
       overview: createOverview({
         duration: movie.RunningTime,
         classification: movie.Rating.match(/bbfc\/lrg\/([^.]+)\./)?.[1],
-        directors: splitPlusJoinedNames(movie.Director),
-        actors: splitPlusJoinedNames(movie.Cast),
+        directors: namesJoinedByPlus(movie.Director),
+        actors: namesJoinedByPlus(movie.Cast),
       }),
       performances: movie.Performances.map((performance) =>
         createPerformance({
