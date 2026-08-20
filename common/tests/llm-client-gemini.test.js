@@ -6,14 +6,13 @@ const { dailyLlmCache } = require("../cache");
 const { getLlmUsageLog, clearLlmUsageLog } = require("../llm-usage-log");
 
 // llm-client-gemini caches its GoogleGenerativeAI client in a module-level
-// singleton, so the mock instance (and this sendMessage spy) has to be fixed
-// up front rather than reconfigured per test.
+// singleton, so the mock instance (and these spies) has to be fixed up front
+// rather than reconfigured per test.
 const sendMessage = jest.fn();
-GoogleGenerativeAI.mockImplementation(() => ({
-  getGenerativeModel: () => ({
-    startChat: () => ({ sendMessage }),
-  }),
+const getGenerativeModel = jest.fn(() => ({
+  startChat: () => ({ sendMessage }),
 }));
+GoogleGenerativeAI.mockImplementation(() => ({ getGenerativeModel }));
 
 const { callLlm } = require("../llm-client-gemini");
 
@@ -22,6 +21,7 @@ describe("llm-client-gemini", () => {
     clearLlmUsageLog();
     dailyLlmCache.mockReset();
     sendMessage.mockReset();
+    getGenerativeModel.mockClear();
   });
 
   it("records an uncached call's token usage against its cacheKeyPrefix", async () => {
@@ -40,11 +40,14 @@ describe("llm-client-gemini", () => {
       logMessage: "Asking",
     });
 
+    expect(getGenerativeModel).toHaveBeenCalledWith(
+      expect.objectContaining({ model: "gemini-2.5-flash-lite" }),
+    );
     expect(getLlmUsageLog()).toEqual([
       {
         cacheKeyPrefix: "ask-llm",
         provider: "gemini",
-        model: "gemini-2.5-flash",
+        model: "gemini-2.5-flash-lite",
         cacheHit: false,
         promptChars: "prompt".length,
         promptTokens: 42,
@@ -69,10 +72,35 @@ describe("llm-client-gemini", () => {
       {
         cacheKeyPrefix: "ask-llm",
         provider: "gemini",
-        model: "gemini-2.5-flash",
+        model: "gemini-2.5-flash-lite",
         cacheHit: true,
         promptChars: "prompt".length,
       },
+    ]);
+  });
+
+  it("uses the capable model and a distinct cache key when preferCapableModel is set", async () => {
+    dailyLlmCache.mockImplementation((key, retrieve) => retrieve());
+    sendMessage.mockResolvedValue({
+      response: {
+        text: () => "{}",
+        usageMetadata: { promptTokenCount: 1, candidatesTokenCount: 1 },
+      },
+    });
+
+    await callLlm({
+      systemInstruction: "system",
+      prompt: "prompt",
+      cacheKeyPrefix: "identify-multiple-movies",
+      logMessage: "Identifying",
+      preferCapableModel: true,
+    });
+
+    expect(getGenerativeModel).toHaveBeenCalledWith(
+      expect.objectContaining({ model: "gemini-2.5-flash" }),
+    );
+    expect(getLlmUsageLog()).toEqual([
+      expect.objectContaining({ model: "gemini-2.5-flash" }),
     ]);
   });
 });
