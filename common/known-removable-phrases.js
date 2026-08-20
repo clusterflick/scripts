@@ -1291,6 +1291,7 @@ const knownRemovablePhrases = [
   // Weirdly specific fixes
   "愛殺",
   "老虎出更",
+  "リンダ リンダ リンダ",
   "Alumni Awards",
   "Afronauts & ",
   "Cockroach & ",
