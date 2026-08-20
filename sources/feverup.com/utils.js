@@ -11,9 +11,11 @@ const STATE_ENTITIES = { "&a;": "&", "&q;": '"', "&l;": "<", "&g;": ">" };
  */
 function extractTransferState(html, url) {
   const $ = cheerio.load(html);
-  const scriptEl = $("script#serverApp-state");
+  // Fever has changed this id's casing before (serverApp-state ->
+  // serverapp-state), so match case-insensitively rather than pin to one.
+  const scriptEl = $('script[id="serverapp-state" i]');
   if (!scriptEl.length) {
-    throw new Error(`Missing script#serverApp-state in page: ${url}`);
+    throw new Error(`Missing script#serverapp-state in page: ${url}`);
   }
 
   return JSON.parse(
