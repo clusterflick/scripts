@@ -38,6 +38,9 @@ Rules:
 - If you cannot identify specific films with reasonable confidence, return an empty movies array
 - Do not guess films that aren't mentioned or clearly implied
 - For anniversary screenings of sequels/series, only include the specific films being shown
+- List each film only once. If you're unsure which specific version or edition is meant (e.g. a remake vs the original), pick the single most likely one rather than including several candidates for the same film
+- Keep titles in the language they're given in rather than substituting a similarly-themed but different film in English - only give a translated title when it's clearly just a rendering of the same work
+- If Directors are provided, use them to match each name to the film they directed - this is the strongest signal for telling films in a double bill or marathon apart
 
 Example input: "Back to the Future Triple Bill - Join us for all three time-travelling adventures!"
 Example response:
@@ -55,6 +58,9 @@ function convertToPrompt(movie) {
   if (movie.overview?.duration) {
     const durationMins = Math.round(movie.overview.duration / 60000);
     parts.push(`Total Duration: ${durationMins} minutes`);
+  }
+  if (movie.overview?.directors?.length > 0) {
+    parts.push(`Directors: ${movie.overview.directors.join(", ")}`);
   }
   if (movie.matchingHints?.overview) {
     parts.push(`\nDescription:\n${movie.matchingHints.overview}`);
