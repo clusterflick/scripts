@@ -20,9 +20,10 @@ describe("buildMovieData", () => {
   it("surfaces the original title for a foreign-language film", async () => {
     const movie = await buildMovieData(movieInfo(), context());
     expect(movie.originalTitle).toBe("Le Fabuleux Destin d'Amélie Poulain");
+    expect(movie.originalLanguage).toBe("fr");
   });
 
-  it("omits the original title when the original language is English", async () => {
+  it("omits the original title and language when the original language is English", async () => {
     const movie = await buildMovieData(
       movieInfo({
         title: "Dune: Part One",
@@ -32,9 +33,12 @@ describe("buildMovieData", () => {
       context(),
     );
     expect(movie.originalTitle).toBeUndefined();
+    expect(movie.originalLanguage).toBeUndefined();
   });
 
-  it("omits the original title when it matches the display title", async () => {
+  it("omits the original title but keeps the original language when it matches the display title", async () => {
+    // e.g. "Roma" - the original-language title happens to read the same in
+    // English, but the film is still worth flagging as non-English.
     const movie = await buildMovieData(
       movieInfo({
         title: "Amélie",
@@ -43,6 +47,7 @@ describe("buildMovieData", () => {
       context(),
     );
     expect(movie.originalTitle).toBeUndefined();
+    expect(movie.originalLanguage).toBe("fr");
   });
 
   it("omits the original title when the non-slugifiable title already fell back to it", async () => {
