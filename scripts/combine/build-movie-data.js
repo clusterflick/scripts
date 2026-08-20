@@ -61,6 +61,12 @@ const getOriginalTitle = (movieInfo, title) => {
   return originalTitle;
 };
 
+// Independent of getOriginalTitle: a film can share its original-language
+// title with the display title (e.g. "Roma") and still be worth flagging as
+// non-English.
+const getOriginalLanguage = ({ original_language: originalLanguage }) =>
+  originalLanguage && originalLanguage !== "en" ? originalLanguage : undefined;
+
 /**
  * Map a TheMovieDB movie record onto the shape the website consumes.
  *
@@ -112,6 +118,7 @@ const buildMovieData = async (movieInfo, context) => {
     title: title,
     normalizedTitle: normalizeTitle(title).replace(/^the /i, "").trim(),
     originalTitle: getOriginalTitle(movieInfo, title),
+    originalLanguage: getOriginalLanguage(movieInfo),
     classification: getClassification(movieInfo),
     overview: movieInfo.overview,
     year: movieInfo.release_date?.split("-")[0],
