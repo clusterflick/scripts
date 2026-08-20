@@ -21,7 +21,14 @@ const generationConfig = {
   maxOutputTokens: 8192,
 };
 
-const MODEL = "gemini-2.5-flash-lite";
+// Flash-Lite was undercounting films it should be able to name from world
+// knowledge alone - e.g. missing several entries of a franchise marathon
+// described only as "the first 8 chapters" plus a couple of cast names, with
+// no per-film synopsis to fall back on. Flash trades 3x the input cost and
+// ~6x the output cost for a real step up in that kind of knowledge-recall
+// task. The cache key includes the model name, so switching here never
+// replays Flash-Lite's cached answers.
+const MODEL = "gemini-2.5-flash";
 
 /**
  * Call Gemini with caching and standard configuration. See ./llm-client.js for

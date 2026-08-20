@@ -44,7 +44,7 @@ describe("llm-client-gemini", () => {
       {
         cacheKeyPrefix: "ask-llm",
         provider: "gemini",
-        model: "gemini-2.5-flash-lite",
+        model: "gemini-2.5-flash",
         cacheHit: false,
         promptChars: "prompt".length,
         promptTokens: 42,
@@ -69,7 +69,7 @@ describe("llm-client-gemini", () => {
       {
         cacheKeyPrefix: "ask-llm",
         provider: "gemini",
-        model: "gemini-2.5-flash-lite",
+        model: "gemini-2.5-flash",
         cacheHit: true,
         promptChars: "prompt".length,
       },
