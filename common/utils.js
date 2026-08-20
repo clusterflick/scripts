@@ -120,27 +120,37 @@ const convertToList = (value) => {
 // leading conjunction as well as splitting on the joined form. Matched with a
 // trailing space so names that merely start with the word ("Andrea Arnold")
 // are left alone.
-const splitConjoinedItemsInList = (list, joiner = " and ") => {
-  const conjunction = joiner.trim().toLowerCase();
-  const removeLeadingJoiner = (value) => {
-    // An item that is nothing but the conjunction is left-over punctuation
-    // rather than a value, so drop it.
-    if (value.toLowerCase() === conjunction) return "";
-    return value.toLowerCase().startsWith(`${conjunction} `)
-      ? value.slice(conjunction.length + 1).trim()
-      : value;
-  };
+//
+// "+" is the second default alongside "and" because some sources join two
+// whole films' worth of names this way rather than sending separate films -
+// e.g. Savoy Systems' double-bill listings give Director/Cast as "Robin
+// Hardy + Kōji Shiraishi". A single joiner can still be passed to override
+// both defaults, as the tests do with " with ".
+const splitConjoinedItemsInList = (list, joiners = [" and ", " + "]) => {
+  const joinerList = Array.isArray(joiners) ? joiners : [joiners];
 
-  return list.reduce(
-    (updatedList, item) =>
-      updatedList.concat(
-        item
-          .split(joiner)
-          .map((value) => removeLeadingJoiner(value.trim()))
-          .filter((value) => value !== ""),
-      ),
-    [],
-  );
+  return joinerList.reduce((currentList, joiner) => {
+    const conjunction = joiner.trim().toLowerCase();
+    const removeLeadingJoiner = (value) => {
+      // An item that is nothing but the conjunction is left-over punctuation
+      // rather than a value, so drop it.
+      if (value.toLowerCase() === conjunction) return "";
+      return value.toLowerCase().startsWith(`${conjunction} `)
+        ? value.slice(conjunction.length + 1).trim()
+        : value;
+    };
+
+    return currentList.reduce(
+      (updatedList, item) =>
+        updatedList.concat(
+          item
+            .split(joiner)
+            .map((value) => removeLeadingJoiner(value.trim()))
+            .filter((value) => value !== ""),
+        ),
+      [],
+    );
+  }, list);
 };
 
 const classifications = ["U", "PG", "12", "12A", "15", "18"];

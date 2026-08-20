@@ -33,7 +33,7 @@ describe("splitConjoinedItemsInList", () => {
     ]);
   });
 
-  it("honours a custom joiner", () => {
+  it("honours a custom joiner, overriding the defaults entirely", () => {
     expect(splitConjoinedItemsInList(["Drama with Comedy"], " with ")).toEqual([
       "Drama",
       "Comedy",
@@ -41,6 +41,34 @@ describe("splitConjoinedItemsInList", () => {
     expect(splitConjoinedItemsInList(["with Comedy"], " with ")).toEqual([
       "Comedy",
     ]);
+    // "and" isn't tried once a custom joiner is given
+    expect(splitConjoinedItemsInList(["Drama and Comedy"], " with ")).toEqual([
+      "Drama and Comedy",
+    ]);
+  });
+
+  // Some sources join two whole films' worth of names with "+" rather than
+  // sending separate films - e.g. Savoy Systems' double-bill listings give
+  // Director/Cast as "Robin Hardy + Kōji Shiraishi".
+  it("also splits items joined by '+' by default", () => {
+    expect(splitConjoinedItemsInList(["Robin Hardy + Kōji Shiraishi"])).toEqual(
+      ["Robin Hardy", "Kōji Shiraishi"],
+    );
+  });
+
+  it("splits on every default joiner in the same list", () => {
+    expect(
+      splitConjoinedItemsInList(["Ant and Dec + Holly Willoughby"]),
+    ).toEqual(["Ant", "Dec", "Holly Willoughby"]);
+  });
+
+  it("honours a list of custom joiners", () => {
+    expect(
+      splitConjoinedItemsInList(
+        ["Drama with Comedy vs Horror"],
+        [" with ", " vs "],
+      ),
+    ).toEqual(["Drama", "Comedy", "Horror"]);
   });
 });
 
@@ -57,6 +85,13 @@ describe("convertNamesTextToList", () => {
     expect(
       convertNamesTextToList("Móglaí Bap, Mo Chara and Michael Fassbender"),
     ).toEqual(["Móglaí Bap", "Mo Chara", "Michael Fassbender"]);
+  });
+
+  it("reads two films' names joined by '+'", () => {
+    expect(convertNamesTextToList("Robin Hardy + Kōji Shiraishi")).toEqual([
+      "Robin Hardy",
+      "Kōji Shiraishi",
+    ]);
   });
 });
 
