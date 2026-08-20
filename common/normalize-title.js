@@ -1013,6 +1013,7 @@ function normalizeTitle(title, options) {
       "Clapham International Film Festival: ",
     ],
     ["PsychCinema - ", "PsychCinema: "],
+    ["E.J'S WARRIORS", "EJ's Warriors The Documentary"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
