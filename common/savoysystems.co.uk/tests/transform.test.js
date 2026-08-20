@@ -156,4 +156,27 @@ describe("Savoy Systems transform", () => {
     expect(movies[0].performances).toHaveLength(1);
     expect(movies[0].performances[0].bookingUrl).toEqual(CLUB_BOOKING_URL);
   });
+
+  // Rio Cinema's "Category H" double-bill listings join each film's Director
+  // and Cast with " + " rather than sending them as two separate films.
+  it("splits a double bill's '+'-joined Director and Cast into separate names", async () => {
+    const doubleBillEvent = {
+      ...venueEvent(VENUE_BOOKING_URL),
+      Title: "Category H: SEYTAN + THE FLY",
+      Director: "Metin Erksan + David Cronenberg",
+      Cast: "Cihan Ünal + Jeff Goldblum",
+    };
+    const movies = await transform(
+      attributes,
+      "TheLexiCinema.dll",
+      { movieListPage: { Events: [doubleBillEvent] }, moviePages: {} },
+      {},
+    );
+
+    expect(movies[0].overview.directors).toEqual([
+      "Metin Erksan",
+      "David Cronenberg",
+    ]);
+    expect(movies[0].overview.actors).toEqual(["Cihan Ünal", "Jeff Goldblum"]);
+  });
 });
