@@ -789,6 +789,7 @@ const knownRemovablePhrases = [
   "The Old Ways:",
   "The 1986 Apology Tour",
   "The Apology Tour",
+  "The Archive of Grigoris Antoniou",
   "SCS: The Old Ways",
   "FILM CLUB FRIDAYS:",
   "Fellini's",

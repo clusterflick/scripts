@@ -1042,6 +1042,12 @@ function normalizeTitle(title, options) {
       "Hunger Games: Ballad of Songbirds&Snakes (2026)",
       "Hunger Games: Ballad of Songbirds & Snakes (2023)",
     ],
+    // The film's a mystery, but here's a hint ...
+    ["FREE Kids Movie Club: A Whole New World", "aladdin"],
+    ["FREE Kids Movie Club: Carnival Weekend", "princess and the frog"],
+    ["FREE Kids Movie Club: Into the Jungle", "jungle book"],
+    ["FREE Kids Movie Club: Off to Neverland", "peter pan"],
+    ["FREE Kids Movie Club: The Italian Riviera", "luca"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
