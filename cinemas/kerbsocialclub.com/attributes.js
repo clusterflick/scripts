@@ -1,11 +1,12 @@
 module.exports = {
   id: "kerbsocialclub.com",
   name: "KERB Social Club",
+  alternativeNames: ["KERB Sports Bar"],
   domain: "https://kerbsocialclub.com",
   socials: {
     letterboxd: null,
     twitter: null,
-    instagram: "kerbsocialclub",
+    instagram: "kerbsportsbar",
   },
   url: "https://kerbsocialclub.com/",
   address: "Old Spitalfields Market, 4 Horner Square, London, E1 6EW, UK",
