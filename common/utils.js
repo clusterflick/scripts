@@ -215,9 +215,31 @@ const sanitizeRichText = (value = "") =>
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+// Apply +/- 20% jitter so the ~10 concurrent venue jobs hitting the same shared
+// capacity pool don't retry in lockstep and synchronise their load spikes.
+const withJitter = (ms, ratio = 0.2) => {
+  const delta = ms * ratio;
+  return Math.round(ms - delta + Math.random() * 2 * delta);
+};
+
+// Undici rejects every network-level failure as a bare "fetch failed" TypeError
+// and hides the actual reason (ECONNRESET, ETIMEDOUT, ENOTFOUND, ...) on
+// `cause`. Without this, every connection problem logs as the same
+// uninformative string and a host shedding our traffic is indistinguishable
+// from a broken runner.
+const describeError = (error) => {
+  const detail = error.cause?.code ?? error.cause?.message;
+  return detail ? `${error.message}: ${detail}` : error.message;
+};
+
 const withRetry = async (
   fn,
-  { retries = 1, delayMs = 30_000, label = "Operation" } = {},
+  {
+    retries = 1,
+    delayMs = 30_000,
+    backoffFactor = 1,
+    label = "Operation",
+  } = {},
 ) => {
   let lastError;
   for (let attempt = 0; attempt <= retries; attempt++) {
@@ -227,14 +249,19 @@ const withRetry = async (
       lastError = error;
       if (attempt < retries) {
         // Honour a server-provided Retry-After (e.g. on a 429) when present,
-        // otherwise fall back to the configured fixed delay.
-        const wait = error.retryAfterMs ?? delayMs;
+        // otherwise back off from the configured delay. `backoffFactor` of 1
+        // keeps the historic fixed-delay behaviour; a higher factor widens the
+        // gap each attempt so a short retry budget can still span a longer dip.
+        // Jittered either way, so a fixed cadence can't keep landing in the
+        // same throttle window and concurrent jobs don't retry in lockstep.
+        const backoff = delayMs * backoffFactor ** attempt;
+        const wait = error.retryAfterMs ?? withJitter(backoff);
         console.log(
-          ` ! - ${label} failed (${error.message}), retrying in ${Math.round(wait / 1000)}s...`,
+          ` ! - ${label} failed (${describeError(error)}), retrying in ${Math.round(wait / 1000)}s...`,
         );
         await sleep(wait);
       } else {
-        console.log(` ! - ${label} failed (${error.message})`);
+        console.log(` ! - ${label} failed (${describeError(error)})`);
       }
     }
   }
@@ -271,15 +298,21 @@ const fetchError = (url, response) => {
 const fetchWithRetry = async (
   url,
   options = {},
-  { retries = 1, delayMs = 30_000 } = {},
+  { retries = 1, delayMs = 30_000, backoffFactor = 1, retryStatuses = [] } = {},
 ) => {
+  // Some hosts express throttling with a status that is normally permanent, so
+  // let a caller widen the retryable set for the specific endpoint that does it
+  // rather than making it retryable everywhere.
+  const retryable = retryStatuses.length
+    ? new Set([...RETRYABLE_STATUSES, ...retryStatuses])
+    : RETRYABLE_STATUSES;
   return withRetry(
     async () => {
       const response = await fetch(url, options);
       // A 429/503 is a *successful* fetch with a non-ok response, so it never
       // throws on its own — surface it as an error here so withRetry backs off
       // and retries instead of passing the failure straight through.
-      if (RETRYABLE_STATUSES.has(response.status)) {
+      if (retryable.has(response.status)) {
         const error = fetchError(url, response);
         error.retryAfterMs = parseRetryAfter(
           response.headers.get("retry-after"),
@@ -288,7 +321,9 @@ const fetchWithRetry = async (
       }
       return response;
     },
-    { retries, delayMs, label: "Fetch" },
+    // The URL is in the label so a retry line says which request is failing;
+    // without it a long crawl logs an untraceable wall of identical warnings.
+    { retries, delayMs, backoffFactor, label: `Fetch ${url}` },
   );
 };
 
@@ -945,13 +980,6 @@ const MODEL_OVERLOAD_BACKOFF_MS = [
   20_000, 30_000, 30_000, 45_000, 45_000, 60_000, 75_000, 90_000, 105_000,
   120_000, 120_000, 120_000, 120_000, 120_000,
 ];
-
-// Apply +/- 20% jitter so the ~10 concurrent venue jobs hitting the same shared
-// capacity pool don't retry in lockstep and synchronise their load spikes.
-const withJitter = (ms, ratio = 0.2) => {
-  const delta = ms * ratio;
-  return Math.round(ms - delta + Math.random() * 2 * delta);
-};
 
 async function runLlmFunction(llmFunction, options = { run: 0 }) {
   try {
