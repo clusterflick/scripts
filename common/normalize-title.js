@@ -1020,6 +1020,28 @@ function normalizeTitle(title, options) {
     ],
     ["PsychCinema - ", "PsychCinema: "],
     ["E.J'S WARRIORS", "EJ's Warriors The Documentary"],
+    [
+      "National Theatre Live: Misanthrope",
+      "National Theatre Live: The Misanthrope",
+    ],
+    // ODEON are idiots -- correct their years
+    ["THE HUNGER GAMES (2026)", "THE HUNGER GAMES (2012)"],
+    [
+      "The Hunger Games: Catching Fire (2026)",
+      "The Hunger Games: Catching Fire (2013)",
+    ],
+    [
+      "The Hunger Games: Mockingjay 1 (2026)",
+      "The Hunger Games: Mockingjay 1 (2014)",
+    ],
+    [
+      "The Hunger Games: Mockingjay 2 (2026)",
+      "The Hunger Games: Mockingjay 2 (2015)",
+    ],
+    [
+      "Hunger Games: Ballad of Songbirds&Snakes (2026)",
+      "Hunger Games: Ballad of Songbirds & Snakes (2023)",
+    ],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
