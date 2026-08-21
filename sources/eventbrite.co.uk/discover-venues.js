@@ -36,7 +36,11 @@ async function discoverVenues() {
     const {
       primary_venue: {
         name,
-        address: { longitude: lon, latitude: lat },
+        address: {
+          longitude: lon,
+          latitude: lat,
+          localized_address_display: address,
+        },
       },
     } = event;
 
@@ -44,7 +48,12 @@ async function discoverVenues() {
     // Round coordinates to prevent slight variations from creating duplicate venues
     const venueKey = `${basicNormalize(name)}_${lat}_${lon}`;
     if (!venueMap.has(venueKey)) {
-      venueMap.set(venueKey, { name, coordinates: { lat, lon }, events: [] });
+      venueMap.set(venueKey, {
+        name,
+        address,
+        coordinates: { lat, lon },
+        events: [],
+      });
     }
     venueMap.get(venueKey).events.push(event);
   }
@@ -55,10 +64,15 @@ async function discoverVenues() {
   for (const [, venue] of venueMap.entries()) {
     // Split venue name before matching (e.g., "BFI Southbank, London" -> "BFI Southbank")
     const [venueName] = venue.name.split(/[,|]/);
+    // Passing the address keeps discovery in step with find-events.js, which
+    // matches on the same postcode fallback. Without it a venue whose pin sits
+    // just outside the distance limit is reported as one we don't know about,
+    // even while its events are being retrieved perfectly well.
     const matchingCinema = findMatchingCinema(
       knownCinemas,
       venueName,
       venue.coordinates,
+      { eventAddress: venue.address },
     );
 
     // Check if venue is in London

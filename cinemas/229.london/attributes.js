@@ -1,7 +1,10 @@
 module.exports = {
   id: "229.london",
   name: "229",
-  alternativeNames: ["International Students House"],
+  alternativeNames: [
+    "International Students House",
+    "International Student House",
+  ],
   domain: "https://229.london",
   socials: {
     letterboxd: null,

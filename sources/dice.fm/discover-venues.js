@@ -28,6 +28,7 @@ async function discoverVenues() {
     if (!venueMap.has(venueKey)) {
       venueMap.set(venueKey, {
         name: venue.name,
+        address: venue.address,
         coordinates,
         events: [],
       });
@@ -43,10 +44,15 @@ async function discoverVenues() {
 
   const results = [];
   for (const [, venue] of venueMap.entries()) {
+    // Passing the address keeps discovery in step with find-events.js, which
+    // matches on the same postcode fallback. Without it a venue whose pin sits
+    // just outside the distance limit is reported as one we don't know about,
+    // even while its events are being retrieved perfectly well.
     const matchingCinema = findMatchingCinema(
       knownCinemas,
       venue.name,
       venue.coordinates,
+      { eventAddress: venue.address },
     );
 
     const inLondon = await isInLondon(

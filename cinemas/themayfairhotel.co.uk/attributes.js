@@ -1,7 +1,13 @@
 module.exports = {
   id: "themayfairhotel.co.uk",
   name: "May Fair Theatre",
-  alternativeNames: ["The May Fair Hotel"],
+  alternativeNames: ["The May Fair Hotel", "The May Fair"],
+  // Eventbrite splits "The May Fair, A Radisson Collection Hotel" at the
+  // comma, so the hotel arrives as "The May Fair" - which normalises to
+  // "mayfair", the same as the district. Listings pinned to the district
+  // geocode 77m away, inside the distance check, so only the raw name
+  // keeps them out.
+  excludedNames: ["Mayfair"],
   domain: "https://www.themayfairhotel.co.uk",
   socials: {
     letterboxd: null,
