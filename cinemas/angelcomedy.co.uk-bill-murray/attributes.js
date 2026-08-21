@@ -1,7 +1,11 @@
 module.exports = {
   id: "angelcomedy.co.uk-bill-murray",
   name: "The Bill Murray",
-  alternativeNames: ["The Bill Murray Comedy Club", "Angel Comedy Club"],
+  alternativeNames: [
+    "The Bill Murray Comedy Club",
+    "Angel Comedy Club",
+    "Angel Comedy",
+  ],
   domain: "https://www.angelcomedy.co.uk",
   socials: {
     letterboxd: null,
