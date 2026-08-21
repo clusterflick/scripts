@@ -93,7 +93,7 @@ describe("eventbrite deferred retry", () => {
     // It must be the deferred sweep that recovered it, not a longer inline
     // budget — the inline retries are deliberately short precisely because the
     // sweep is what does the work.
-    expect(logs).toContain(" - Retrying 1 unreachable events...");
+    expect(logs).toContain(" - Retrying 1 unreachable event...");
   });
 
   it("drops a removed event without deferring it", async () => {

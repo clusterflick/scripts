@@ -81,6 +81,12 @@ const getSearchResultsFor = async (searchTerm) => {
     page += 1;
     lastPage = pageData.page_count;
     movieListPages.push(pageData);
+    // Report each page as it lands. These fetches are throttled seconds apart
+    // and there are ~90 of them across both searches, so without this the whole
+    // pagination phase is one long silence that looks identical to a hung run.
+    // (`lastPage` is only known once the first page is back, hence logging
+    // after the fetch rather than before it.)
+    console.log(`    - ${searchTerm}: page ${page - 1} of ${lastPage}`);
   }
   return movieListPages;
 };
@@ -147,10 +153,17 @@ async function retrieve() {
   // purely because that attempt came later. This sweep gives the run that
   // *succeeds* the same second chance, instead of only the ones that fail.
   if (unreachable.length > 0) {
-    console.log(` - Retrying ${unreachable.length} unreachable events...`);
+    console.log(
+      ` - Retrying ${unreachable.length} unreachable event${unreachable.length === 1 ? "" : "s"}...`,
+    );
     const stillUnreachable = [];
-    for (const event of unreachable) {
+    for (const [index, event] of unreachable.entries()) {
       try {
+        // Each of these can spend its full inline budget before failing, so
+        // name them one by one rather than going quiet again.
+        console.log(
+          `    - ${index + 1} of ${unreachable.length}: ${event.url}`,
+        );
         await fetchEventPage(event);
       } catch (e) {
         collectUnreachable(e, event, stillUnreachable);
