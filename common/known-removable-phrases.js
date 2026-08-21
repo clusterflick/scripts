@@ -426,6 +426,7 @@ const knownRemovablePhrases = [
   " Q&A with George Mackay",
   "*WORKSHOP SOLD OUT",
   "- sold out",
+  " x After the Credits",
   " x Flower Workshop",
   " x Free Vocafest Screening",
   " x FIST CLUB for IWD",
