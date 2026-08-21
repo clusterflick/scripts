@@ -364,6 +364,7 @@ const knownRemovablePhrases = [
   "with wine tasting",
   "with Molly Miles",
   "with Illustrated Lecture!",
+  "with Jay Glennie",
   "with In-Person Pre-Show",
   "with Live Acoustic Guitar & Introduction",
   "with Live Organ Improvisation",
