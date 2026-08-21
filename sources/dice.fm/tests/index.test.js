@@ -19,25 +19,24 @@ console.log = () => {};
 
 describe(attributes.name, () => {
   setupPolly(isRecording, __dirname);
-  jest.useFakeTimers().setSystemTime(new Date("2026-02-17"));
+  jest.useFakeTimers().setSystemTime(new Date("2026-08-21"));
 
   describe.each([
     {
+      name: "Art'otel London Hoxton",
+      geo: { lat: 51.526156790963746, lon: -0.08333842748307863 },
+      expectedMatches: 13,
+    },
+    {
       name: "The Haggerston",
       geo: { lat: 51.54248341521672, lon: -0.07580767288892457 },
-      expectedMatches: 16,
+      expectedMatches: 10,
     },
     {
-      name: "St Matthias Church",
-      alternativeNames: ["Saint Matthias Church"],
-      geo: { lat: 51.55251101625857, lon: -0.07912725093596235 },
-      expectedMatches: 1,
-    },
-    {
-      name: "Institute of Contemporary Arts",
-      alternativeNames: ["ICA Cinema", "ICA (Institute of Contemporary Arts)"],
-      geo: { lat: 51.50606885842036, lon: -0.1311647210085773 },
-      expectedMatches: 1,
+      name: "Strongroom Bar",
+      alternativeNames: ["Strongroom Venue"],
+      geo: { lat: 51.52596690314433, lon: -0.08017930429849301 },
+      expectedMatches: 6,
     },
   ])("$name", ({ name, alternativeNames, geo, expectedMatches }) => {
     it(
