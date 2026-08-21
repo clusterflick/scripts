@@ -476,6 +476,7 @@ const knownRemovablePhrases = [
   "Movie, Cabaret & Pizza",
   "pre film mixer",
   "with family sound workshop",
+  " on The Big Screen at The Griffin",
 
   // Prefixes
   "(4DX) ",
@@ -938,6 +939,7 @@ const knownRemovablePhrases = [
   "Livestream Premiere",
   "Lob-sters Tennis Anniversary Screening:",
   "Lost Reels",
+  "LOST IN MOVIES: ",
   "LOTR:",
   "LOTR ",
   "London Breeze:",
@@ -1171,6 +1173,7 @@ const knownRemovablePhrases = [
   "SHORTIES:",
   "Short film Premier Screening",
   "Sine Screen:",
+  "Outdoor Silent Cinema: ",
   "Silent Cinema:",
   "A Night of Silent Cinema with Live Organ",
   "Silent Cinema with Live Organ",
@@ -1268,6 +1271,7 @@ const knownRemovablePhrases = [
   "Wallace & Gromit in ",
   "Wallace & Gromit :",
   "Wanted: Undead or Alive –",
+  "Weeknight Tapes: ",
   "Weird Wednesday:",
   "Windrush Caribbean Film Festival 2025:",
   "Windrush Generations Fest:",

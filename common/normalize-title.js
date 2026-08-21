@@ -91,6 +91,12 @@ function normalizeTitle(title, options) {
     ],
     ["Westlife: 25th Anniversary Concert", "Westlife: Royal Albert Hall"],
     ["Modigliani - ", "Modigliani: "],
+    [
+      "Weeknight Tapes - The Cure - In Orange",
+      "Weeknight Tapes: The Cure In Orange",
+    ],
+    ["Weeknight Tapes - ", "Weeknight Tapes: "],
+    ["Outdoor Silent Cinema - ", "Outdoor Silent Cinema: "],
     ["Film Africa 2025 -", "Film Africa 2025:"],
     ["Preview Screening - ", "Preview Screening: "],
     ["Cinema Film Screening - ", "Cinema Film Screening "],
