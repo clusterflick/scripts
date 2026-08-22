@@ -10,7 +10,7 @@ module.exports = {
   },
   url: "https://www.walthamforest.gov.uk/libraries-arts-parks-and-leisure/parks-and-open-spaces/our-other-parks",
   address: "Pretoria Avenue, Walthamstow, London, E17 6JY, UK",
-  geo: { lat: 51.5853851, lon: -0.0360371 },
+  geo: { lat: 51.58572840554498, lon: -0.037695239552583304 },
   structure: "solo",
   type: "Park",
 };

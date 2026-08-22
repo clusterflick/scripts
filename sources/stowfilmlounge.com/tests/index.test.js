@@ -18,6 +18,10 @@ const langthorneParkCinema = {
   name: "Langthorne Park",
 };
 
+const stoneydownParkCinema = {
+  name: "Stoneydown Park",
+};
+
 const stMarysChurchCinema = {
   name: "St Mary's Church Walthamstow",
   alternativeNames: ["St Mary's Church"],
@@ -55,6 +59,25 @@ describe(`${attributes.name}`, () => {
       // Make sure the data looks roughly correct
       expect(langthorneParkData).toHaveLength(2);
       expect(langthorneParkData).toMatchSnapshot("Langthorne Park events");
+
+      // Stoneydown Park's screening is free, with the venue's own "just turn
+      // up" label in place of a ticket link
+      const stoneydownParkOutput = await findEvents(stoneydownParkCinema);
+      const stoneydownParkData = JSON.parse(
+        JSON.stringify(stoneydownParkOutput),
+      )
+        .map(removeMatchingHints)
+        .map(addTestCategory);
+
+      // Make sure the data looks roughly correct
+      expect(stoneydownParkData).toHaveLength(1);
+      expect(stoneydownParkData[0].performances[0].notes).toBe(
+        "FREE EVENT - JUST TURN UP",
+      );
+      expect(stoneydownParkData[0].performances[0].bookingUrl).toBe(
+        attributes.url,
+      );
+      expect(stoneydownParkData).toMatchSnapshot("Stoneydown Park events");
 
       const output = await findEvents(stMarysChurchCinema);
       const data = JSON.parse(JSON.stringify(output))
