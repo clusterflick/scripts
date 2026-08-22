@@ -999,7 +999,7 @@ function normalizeTitle(title, options) {
     [" – Join us for", " - Join us for"],
     ["Sinners (2024)", "Sinners (2025)"],
     [
-      /Bring Your Own Baby Comedy (Finsbury Park|Greenwich|Clapham)/i,
+      /Bring Your Own Baby Comedy (Finsbury Park|Greenwich|Clapham|East Dulwich)/i,
       "Bring Your Own Baby Comedy Club",
     ],
     ["Small World of Don Camillo", "Little World of Don Camillo"],
@@ -1024,6 +1024,7 @@ function normalizeTitle(title, options) {
       "National Theatre Live: Misanthrope",
       "National Theatre Live: The Misanthrope",
     ],
+    ["We Will Find Happiness", "We'll Find Happiness"],
     // ODEON are idiots -- correct their years
     ["THE HUNGER GAMES (2026)", "THE HUNGER GAMES (2012)"],
     [
@@ -1048,6 +1049,7 @@ function normalizeTitle(title, options) {
     ["FREE Kids Movie Club: Into the Jungle", "jungle book"],
     ["FREE Kids Movie Club: Off to Neverland", "peter pan"],
     ["FREE Kids Movie Club: The Italian Riviera", "luca"],
+    ["FREE Kids Movie Club: The Family Madrigal", "encanto"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
