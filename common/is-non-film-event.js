@@ -27,6 +27,7 @@ const nonFilmEvents = [
   /Neon Naked Life Drawing/i,
   /Homelessness Research/i,
   /Office Management Show/i,
+  /Raver Tots Wembley/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
