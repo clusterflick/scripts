@@ -179,6 +179,21 @@ function parseEventSection($, section) {
 }
 
 /**
+ * An event section is a leaf section headed by a "STOW FILM LOUNGE @ VENUE"
+ * heading. Matching on the section's html alone isn't enough - the page wraps
+ * the event sections in an outer section, which contains their markup and so
+ * matches too, but holds the blocks of every event rather than one event's.
+ */
+function isEventSection(section) {
+  if (section.find("section").length > 0) return false;
+
+  const headingText = getText(
+    section.find(".sqs-html-content").eq(0).find("h3"),
+  );
+  return eventMatcher.test(headingText);
+}
+
+/**
  * Find events matching a specific cinema
  */
 async function findEvents(cinema) {
@@ -200,10 +215,9 @@ async function findEvents(cinema) {
 
   $("section").each((i, el) => {
     const $section = $(el);
-    const html = $section.html();
 
-    // Skip sections that don't contain events
-    if (!html.match(eventMatcher)) return;
+    // Skip sections that aren't a single event
+    if (!isEventSection($section)) return;
 
     try {
       const { venueName, event } = parseEventSection($, $section);

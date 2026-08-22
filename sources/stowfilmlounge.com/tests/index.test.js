@@ -14,21 +14,18 @@ jest.mock("../../../common/utils", () => ({
   readJSON: jest.fn(),
 }));
 
-const townHallCinema = {
-  name: "Waltham Forest Town Hall",
+const langthorneParkCinema = {
+  name: "Langthorne Park",
 };
 
-const signatureBreweryCinema = {
-  name: "Signature Brewery",
-  alternativeNames: [
-    "Signature Brew Taproom",
-    "Signature Brew Blackhorse Road",
-  ],
+const stMarysChurchCinema = {
+  name: "St Mary's Church Walthamstow",
+  alternativeNames: ["St Mary's Church"],
 };
 
 describe(`${attributes.name}`, () => {
   setupPolly(isRecording, __dirname);
-  jest.useFakeTimers().setSystemTime(new Date("2026-01-10"));
+  jest.useFakeTimers().setSystemTime(new Date("2026-08-22"));
 
   it(
     "retrieve and find events",
@@ -41,31 +38,33 @@ describe(`${attributes.name}`, () => {
 
       readJSON.mockImplementation(() => ({ movieListPage }));
 
-      const townHallOutput = await findEvents(townHallCinema);
+      const langthorneParkOutput = await findEvents(langthorneParkCinema);
 
       expect(
-        townHallOutput.every((movie) =>
+        langthorneParkOutput.every((movie) =>
           Object.prototype.hasOwnProperty.call(movie, "matchingHints"),
         ),
       ).toBe(true);
 
-      const townHallData = JSON.parse(JSON.stringify(townHallOutput))
+      const langthorneParkData = JSON.parse(
+        JSON.stringify(langthorneParkOutput),
+      )
         .map(removeMatchingHints)
         .map(addTestCategory);
 
       // Make sure the data looks roughly correct
-      expect(townHallData).toHaveLength(3);
-      expect(townHallData).toMatchSnapshot("Waltham Forest Town Hall events");
+      expect(langthorneParkData).toHaveLength(2);
+      expect(langthorneParkData).toMatchSnapshot("Langthorne Park events");
 
-      const output = await findEvents(signatureBreweryCinema);
+      const output = await findEvents(stMarysChurchCinema);
       const data = JSON.parse(JSON.stringify(output))
         .map(removeMatchingHints)
         .map(addTestCategory);
 
       // Make sure the data looks roughly correct
       expect(schemaValidate(data)).toBe(true);
-      expect(data).toHaveLength(2);
-      expect(data).toMatchSnapshot("Signature Brewery events");
+      expect(data).toHaveLength(1);
+      expect(data).toMatchSnapshot("St Mary's Church events");
     },
     isRecording ? 600_000 : undefined,
   );
