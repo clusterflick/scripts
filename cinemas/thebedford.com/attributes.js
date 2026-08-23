@@ -16,5 +16,6 @@ module.exports = {
   address: "77 Bedford Hill, London, SW12 9HD, UK",
   geo: { lat: 51.44291585259206, lon: -0.14947377474434165 },
   structure: "solo",
-  type: "Bar",
+  type: "Pub & Bar",
+  programming: "host",
 };

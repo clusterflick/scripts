@@ -11,5 +11,6 @@ module.exports = {
   address: "Commercial Street, London, E1 6LY, UK",
   geo: { lat: 51.51923191153779, lon: -0.0738876488263155 },
   structure: "solo",
-  type: "Community Centre",
+  type: "Place of Worship",
+  programming: "host",
 };

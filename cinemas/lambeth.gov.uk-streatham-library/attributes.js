@@ -16,5 +16,6 @@ module.exports = {
   address: "63 Streatham High Road, London, SW16 1PN, UK",
   geo: { lat: 51.43157167065663, lon: -0.12894912035094447 },
   structure: "solo",
-  type: "Community Centre",
+  type: "Library & Archive",
+  programming: "host",
 };

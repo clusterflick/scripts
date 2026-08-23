@@ -12,5 +12,6 @@ module.exports = {
   address: "5 Regent Street, London, NW10 5LG, UK",
   geo: { lat: 51.52876791379925, lon: -0.2166160120141102 },
   structure: "solo",
-  type: "Bar",
+  type: "Café & Restaurant",
+  programming: "host",
 };

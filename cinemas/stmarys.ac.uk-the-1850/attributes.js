@@ -12,5 +12,6 @@ module.exports = {
   address: "St Mary's University, Waldegrave Road, Twickenham, TW1 4SX, UK",
   geo: { lat: 51.43581326781994, lon: -0.3350892009438885 },
   structure: "solo",
-  type: "University",
+  type: "University & College",
+  programming: "host",
 };

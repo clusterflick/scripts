@@ -15,5 +15,6 @@ module.exports = {
   address: "157-163 Gray's Inn Road, London, WC1X 8UE, UK",
   geo: { lat: 51.52505985009156, lon: -0.11677957288954527 },
   structure: "solo",
-  type: "Cultural Institute",
+  type: "Cultural Centre",
+  programming: "host",
 };

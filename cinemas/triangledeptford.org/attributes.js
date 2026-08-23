@@ -11,5 +11,6 @@ module.exports = {
   address: "34 Watson's Street, London, SE8 4AU, UK",
   geo: { lat: 51.47662694583633, lon: -0.027908713492130054 },
   structure: "solo",
-  type: "Community Centre",
+  type: "Cultural Centre",
+  programming: "host",
 };

@@ -12,5 +12,6 @@ module.exports = {
   address: "Hillside Road, London, SW2 3HJ, UK",
   geo: { lat: 51.43783663468574, lon: -0.11544089501955217 },
   structure: "solo",
-  type: "Park",
+  type: "Park & Outdoor Space",
+  programming: "host",
 };

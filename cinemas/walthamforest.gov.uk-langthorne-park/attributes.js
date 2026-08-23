@@ -11,5 +11,6 @@ module.exports = {
   address: "Birch Grove, Leytonstone, London, E11 4YG, UK",
   geo: { lat: 51.55609695534073, lon: 0.004134740603737162 },
   structure: "solo",
-  type: "Park",
+  type: "Park & Outdoor Space",
+  programming: "host",
 };

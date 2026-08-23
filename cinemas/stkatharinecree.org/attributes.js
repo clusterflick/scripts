@@ -12,5 +12,6 @@ module.exports = {
   address: "86 Leadenhall Street, London, EC3A 3BP, UK",
   geo: { lat: 51.51353502286807, lon: -0.07911484129861235 },
   structure: "solo",
-  type: "Community Centre",
+  type: "Place of Worship",
+  programming: "host",
 };

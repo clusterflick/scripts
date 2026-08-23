@@ -96,7 +96,7 @@ Every cinema/source module exports the same interface:
 
 ```javascript
 module.exports = {
-  attributes, // { id, name, domain, url, address, geo, structure, type }
+  attributes, // { id, name, domain, url, address, geo, structure, type, programming }
   retrieve, // async () => raw data from venue website
   transform, // async (retrievedData) => normalized listings
 };

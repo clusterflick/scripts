@@ -11,5 +11,6 @@ module.exports = {
   address: "65 Cranbrook Road, London, SE8 4EJ, UK",
   geo: { lat: 51.47108461569823, lon: -0.022075945907327966 },
   structure: "solo",
-  type: "Bar",
+  type: "Pub & Bar",
+  programming: "host",
 };

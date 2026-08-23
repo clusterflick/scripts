@@ -12,5 +12,6 @@ module.exports = {
   address: "4-7 Great Pulteney Street, London, W1F 9NA, UK",
   geo: { lat: 51.512162724784766, lon: -0.1356309041704464 },
   structure: "solo",
-  type: "Unknown",
+  type: "Other",
+  programming: "host",
 };

@@ -11,5 +11,6 @@ module.exports = {
   address: "Unit 1 Carriage Way, Deptford Market Yard, London, SE8 4BX, UK",
   geo: { lat: 51.47821688471757, lon: -0.027009886383494913 },
   structure: "solo",
-  type: "Unknown",
+  type: "Arts Centre",
+  programming: "host",
 };

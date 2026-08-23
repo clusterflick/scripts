@@ -11,5 +11,6 @@ module.exports = {
   address: "Hounslow, TW5 0LG, UK",
   geo: { lat: 51.48682076541366, lon: -0.3778876499276712 },
   structure: "solo",
-  type: "Park",
+  type: "Park & Outdoor Space",
+  programming: "host",
 };

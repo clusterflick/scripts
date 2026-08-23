@@ -15,5 +15,6 @@ module.exports = {
   address: "229 Great Portland Street, London, W1W 5PN, UK",
   geo: { lat: 51.52380018095376, lon: -0.14442287288963185 },
   structure: "solo",
-  type: "Bar",
+  type: "Music Venue",
+  programming: "host",
 };

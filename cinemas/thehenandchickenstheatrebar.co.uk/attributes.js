@@ -11,5 +11,6 @@ module.exports = {
   address: "109 St Paul's Road, London, N1 2NA, UK",
   geo: { lat: 51.54620937421457, lon: -0.10196631564320549 },
   structure: "solo",
-  type: "Bar",
+  type: "Theatre",
+  programming: "host",
 };

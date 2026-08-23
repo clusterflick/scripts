@@ -13,5 +13,6 @@ module.exports = {
   geo: { lat: 51.524698458307576, lon: -0.07188685705345867 },
   structure: "group",
   groupName: "The Common Press",
-  type: "Community Cinema",
+  type: "Shop",
+  programming: "host",
 };

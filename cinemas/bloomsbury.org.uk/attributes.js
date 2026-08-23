@@ -12,5 +12,6 @@ module.exports = {
   address: "235 Shaftesbury Avenue, London, WC2H 8EP, UK",
   geo: { lat: 51.51660374833877, lon: -0.12683130544795276 },
   structure: "solo",
-  type: "Community Centre",
+  type: "Place of Worship",
+  programming: "host",
 };

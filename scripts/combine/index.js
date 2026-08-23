@@ -247,6 +247,7 @@ async function combine() {
         structure,
         groupName,
         type,
+        programming,
       },
       movies,
     } = data[cinema];
@@ -261,6 +262,7 @@ async function combine() {
       structure,
       groupName,
       type,
+      programming,
     };
 
     for (const {

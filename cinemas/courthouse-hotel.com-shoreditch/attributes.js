@@ -13,4 +13,5 @@ module.exports = {
   structure: "group",
   groupName: "Courthouse Hotel",
   type: "Hotel",
+  programming: "host",
 };

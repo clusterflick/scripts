@@ -12,5 +12,6 @@ module.exports = {
   address: "92 Brandon Street, London, SE17 1AL, UK",
   geo: { lat: 51.490274144790185, lon: -0.09282911960383698 },
   structure: "solo",
-  type: "Bar",
+  type: "Café & Restaurant",
+  programming: "host",
 };

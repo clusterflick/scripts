@@ -11,5 +11,6 @@ module.exports = {
   address: "Albert Road, London, SE25 4QL, UK",
   geo: { lat: 51.393702643783016, lon: -0.060634630566386 },
   structure: "solo",
-  type: "Unknown",
+  type: "Other",
+  programming: "host",
 };

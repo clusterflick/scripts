@@ -11,5 +11,6 @@ module.exports = {
   address: "151 Whiston Road, London, E2 8GU, UK",
   geo: { lat: 51.535327100078234, lon: -0.07068951349213004 },
   structure: "solo",
-  type: "Community Centre",
+  type: "Arts Centre",
+  programming: "host",
 };

@@ -11,5 +11,6 @@ module.exports = {
   address: "Arnott Close, London, SE28 8BG, UK",
   geo: { lat: 51.504310920778316, lon: 0.11724837196346174 },
   structure: "solo",
-  type: "Bar",
+  type: "Café & Restaurant",
+  programming: "host",
 };

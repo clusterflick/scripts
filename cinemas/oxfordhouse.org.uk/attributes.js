@@ -11,5 +11,6 @@ module.exports = {
   address: "Derbyshire Street, London, E2 6HG, UK",
   geo: { lat: 51.52641308675776, lon: -0.06129255925617675 },
   structure: "solo",
-  type: "Community Centre",
+  type: "Arts Centre",
+  programming: "host",
 };

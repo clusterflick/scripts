@@ -12,5 +12,6 @@ module.exports = {
   address: "101-111 Kensington High Street, London, W8 5SA, UK",
   geo: { lat: 51.50147316730659, lon: -0.1917281182320948 },
   structure: "solo",
-  type: "Cultural Institute",
+  type: "Cultural Centre",
+  programming: "host",
 };

@@ -12,5 +12,6 @@ module.exports = {
   address: "344 Grove Green Road, London, E11 4EA, UK",
   geo: { lat: 51.56599131726399, lon: 0.0022344424557753594 },
   structure: "solo",
-  type: "Bar",
+  type: "Pub & Bar",
+  programming: "host",
 };

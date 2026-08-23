@@ -11,5 +11,6 @@ module.exports = {
   address: "Arch 164, 115 Rye Lane, London, SE15 4ST, UK",
   geo: { lat: 51.47058140173017, lon: -0.06836108629280474 },
   structure: "solo",
-  type: "Bar",
+  type: "Pub & Bar",
+  programming: "host",
 };

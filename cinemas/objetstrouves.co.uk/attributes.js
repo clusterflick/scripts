@@ -12,5 +12,6 @@ module.exports = {
   address: "92 Brick Lane, London, E1 6RL, UK",
   geo: { lat: 51.519619343655215, lon: -0.07162644411904255 },
   structure: "solo",
-  type: "Community Cinema",
+  type: "Gallery",
+  programming: "host",
 };

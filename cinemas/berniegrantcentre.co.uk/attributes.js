@@ -11,5 +11,6 @@ module.exports = {
   address: "Town Hall Approach Road, Tottenham Green, London, N15 4RX, UK",
   geo: { lat: 51.58748164209268, lon: -0.07287487523966552 },
   structure: "solo",
-  type: "Concert Hall/Theatre",
+  type: "Arts Centre",
+  programming: "venue",
 };

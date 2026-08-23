@@ -11,5 +11,6 @@ module.exports = {
   address: "Clock Tower View, Market Estate, London, N7 9HF, UK",
   geo: { lat: 51.54718427573834, lon: -0.12362902384419502 },
   structure: "solo",
-  type: "Community Cinema",
+  type: "Park & Outdoor Space",
+  programming: "host",
 };

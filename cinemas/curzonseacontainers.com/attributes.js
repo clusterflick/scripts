@@ -13,4 +13,5 @@ module.exports = {
   structure: "group",
   groupName: "Curzon",
   type: "Cinema",
+  programming: "cinema",
 };

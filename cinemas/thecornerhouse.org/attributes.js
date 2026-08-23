@@ -12,5 +12,6 @@ module.exports = {
   address: "116 Douglas Road, Surbiton, KT6 7SB, UK",
   geo: { lat: 51.38090068318188, lon: -0.2941411881517448 },
   structure: "solo",
-  type: "Community Cinema",
+  type: "Arts Centre",
+  programming: "host",
 };

@@ -15,5 +15,6 @@ module.exports = {
   address: "Guildhall Yard, London, EC2V 5AA, UK",
   geo: { lat: 51.515374328307246, lon: -0.09249330021593258 },
   structure: "solo",
-  type: "Community Centre",
+  type: "Place of Worship",
+  programming: "host",
 };

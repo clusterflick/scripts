@@ -11,5 +11,6 @@ module.exports = {
   address: "65 Peckham Road, London, SE5 8UH, UK",
   geo: { lat: 51.47415114417211, lon: -0.07968100169289133 },
   structure: "solo",
-  type: "Museum",
+  type: "Gallery",
+  programming: "host",
 };

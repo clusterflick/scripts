@@ -11,5 +11,6 @@ module.exports = {
   address: "91 Kilburn Square, London, NW6 6PS, UK",
   geo: { lat: 51.53867412862321, lon: -0.19566687295430385 },
   structure: "solo",
-  type: "Community Cinema",
+  type: "Arts Centre",
+  programming: "host",
 };

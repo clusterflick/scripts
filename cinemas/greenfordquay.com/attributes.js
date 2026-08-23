@@ -12,5 +12,6 @@ module.exports = {
   address: "Tillermans Court, Grenan Square, Greenford, UB6 0FP, UK",
   geo: { lat: 51.55168168912422, lon: -0.34352685461518445 },
   structure: "solo",
-  type: "Community Centre",
+  type: "Other",
+  programming: "host",
 };

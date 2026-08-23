@@ -12,5 +12,6 @@ module.exports = {
   address: "15-19 Devereux Court, Temple, London, WC2R 3JJ, UK",
   geo: { lat: 51.51301024136949, lon: -0.11276714590580107 },
   structure: "solo",
-  type: "Cultural Institute",
+  type: "Cultural Centre",
+  programming: "host",
 };

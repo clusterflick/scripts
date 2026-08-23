@@ -12,5 +12,6 @@ module.exports = {
   address: "265 Camden High Street, London, NW1 7BU, UK",
   geo: { lat: 51.540655505277726, lon: -0.14427567498689034 },
   structure: "solo",
-  type: "Concert Hall/Theatre",
+  type: "Theatre",
+  programming: "host",
 };

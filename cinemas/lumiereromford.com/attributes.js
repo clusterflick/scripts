@@ -17,6 +17,7 @@ module.exports = {
   geo: { lat: 51.57963148608159, lon: 0.18566149819018146 },
   structure: "solo",
   type: "Cinema",
+  programming: "cinema",
   apiKey: "qWZhtogUoLqN0WQimlxrRJE36YUURmbfli8X7IwM8SVlnwPj3ssUuOkmfTdgvcBA",
   apiDomain: "https://lumiereromford.api.cinesync.io",
   locationId: "4",

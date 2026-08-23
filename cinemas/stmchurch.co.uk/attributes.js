@@ -12,5 +12,6 @@ module.exports = {
   address: "Wordsworth Road, Stoke Newington, London, N16 8DD, UK",
   geo: { lat: 51.55251101625857, lon: -0.07912725093596235 },
   structure: "solo",
-  type: "Community Cinema",
+  type: "Place of Worship",
+  programming: "host",
 };

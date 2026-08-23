@@ -12,5 +12,6 @@ module.exports = {
   address: "238-246 King Street, London, W6 0RF, UK",
   geo: { lat: 51.493520689201674, lon: -0.2373690593986368 },
   structure: "solo",
-  type: "Cultural Institute",
+  type: "Cultural Centre",
+  programming: "venue",
 };

@@ -13,5 +13,6 @@ module.exports = {
   structure: "group",
   groupName: "Everyman",
   type: "Cinema",
+  programming: "cinema",
   cinemaId: "X077O",
 };

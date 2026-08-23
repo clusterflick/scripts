@@ -12,5 +12,6 @@ module.exports = {
   address: "75 London Road, Twickenham, TW1 1BE, UK",
   geo: { lat: 51.45004001959767, lon: -0.3313163212241062 },
   structure: "solo",
-  type: "Community Cinema",
+  type: "Arts Centre",
+  programming: "host",
 };

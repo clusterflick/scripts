@@ -13,5 +13,6 @@ module.exports = {
   geo: { lat: 51.41056670685016, lon: -0.2208974881506212 },
   structure: "group",
   groupName: "The Salvation Army",
-  type: "Community Centre",
+  type: "Place of Worship",
+  programming: "host",
 };

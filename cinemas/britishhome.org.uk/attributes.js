@@ -11,5 +11,6 @@ module.exports = {
   address: "Crown Lane, Norwood, London, SW16 3JB, UK",
   geo: { lat: 51.42354327154334, lon: -0.10761552883595667 },
   structure: "solo",
-  type: "Community Centre",
+  type: "Other",
+  programming: "host",
 };

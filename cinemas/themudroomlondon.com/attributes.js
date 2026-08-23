@@ -12,5 +12,6 @@ module.exports = {
   address: "25 Leigham Court Road, London, SW16 2ND, UK",
   geo: { lat: 51.437658635558996, lon: -0.12620585771417303 },
   structure: "solo",
-  type: "Unknown",
+  type: "Shop",
+  programming: "host",
 };

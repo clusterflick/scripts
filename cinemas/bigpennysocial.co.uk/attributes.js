@@ -11,5 +11,6 @@ module.exports = {
   address: "1 Priestley Way, London, E17 6AL, UK",
   geo: { lat: 51.59102170988931, lon: -0.041318101723084824 },
   structure: "solo",
-  type: "Bar",
+  type: "Pub & Bar",
+  programming: "host",
 };

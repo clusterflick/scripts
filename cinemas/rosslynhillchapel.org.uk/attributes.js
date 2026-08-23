@@ -12,5 +12,6 @@ module.exports = {
   address: "3 Pilgrim's Place, London, NW3 1NG, UK",
   geo: { lat: 51.5555217301701, lon: -0.17301300767080788 },
   structure: "solo",
-  type: "Community Centre",
+  type: "Place of Worship",
+  programming: "host",
 };

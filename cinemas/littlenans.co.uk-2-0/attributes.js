@@ -12,5 +12,6 @@ module.exports = {
   address: "23-24 Resolution Way, London, SE8 4NT, UK",
   geo: { lat: 51.478511088692244, lon: -0.02376583468909933 },
   structure: "solo",
-  type: "Bar",
+  type: "Pub & Bar",
+  programming: "host",
 };

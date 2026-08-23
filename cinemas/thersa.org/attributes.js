@@ -16,5 +16,6 @@ module.exports = {
   address: "8 John Adam Street, London, WC2N 6EZ, UK",
   geo: { lat: 51.50962968075151, lon: -0.12279051381784958 },
   structure: "solo",
-  type: "Concert Hall/Theatre",
+  type: "Cultural Centre",
+  programming: "host",
 };

@@ -12,5 +12,6 @@ module.exports = {
   address: "63 Penfold Street, London, NW8 8PQ, UK",
   geo: { lat: 51.52570188553431, lon: -0.17261733935585413 },
   structure: "solo",
-  type: "Unknown",
+  type: "Gallery",
+  programming: "host",
 };

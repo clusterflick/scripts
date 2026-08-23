@@ -12,5 +12,6 @@ module.exports = {
   address: "63 Redchurch Street, London, E2 7DJ, UK",
   geo: { lat: 51.524542061875394, lon: -0.07441933697362116 },
   structure: "solo",
-  type: "Unknown",
+  type: "Creative Space",
+  programming: "host",
 };

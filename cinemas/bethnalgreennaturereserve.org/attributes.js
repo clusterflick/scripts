@@ -11,5 +11,6 @@ module.exports = {
   address: "Middleton Street, London, E2 9RR, UK",
   geo: { lat: 51.529426932152845, lon: -0.05844127834172325 },
   structure: "solo",
-  type: "Park",
+  type: "Park & Outdoor Space",
+  programming: "host",
 };

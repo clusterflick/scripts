@@ -12,5 +12,6 @@ module.exports = {
   address: "86 Highgate Road, London, NW5 1PB, UK",
   geo: { lat: 51.55481925850424, lon: -0.14440595173848939 },
   structure: "solo",
-  type: "Bar",
+  type: "Pub & Bar",
+  programming: "host",
 };

@@ -12,5 +12,6 @@ module.exports = {
   address: "16 Hornsey Road, London, N7 7BP, UK",
   geo: { lat: 51.55337073479285, lon: -0.11116850214802476 },
   structure: "solo",
-  type: "Community Centre",
+  type: "Cultural Centre",
+  programming: "host",
 };

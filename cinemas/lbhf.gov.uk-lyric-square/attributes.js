@@ -11,5 +11,6 @@ module.exports = {
   address: "London, W6 0QL, UK",
   geo: { lat: 51.49314258027859, lon: -0.22573601609580948 },
   structure: "solo",
-  type: "Park",
+  type: "Park & Outdoor Space",
+  programming: "host",
 };

@@ -16,5 +16,6 @@ module.exports = {
   address: "245 Eversholt Street, London, NW1 1BA, UK",
   geo: { lat: 51.53376444589664, lon: -0.13786423047287563 },
   structure: "solo",
-  type: "Bar",
+  type: "Café & Restaurant",
+  programming: "host",
 };

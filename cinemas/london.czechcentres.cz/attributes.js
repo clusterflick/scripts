@@ -16,5 +16,6 @@ module.exports = {
   address: "30 Kensington Palace Gardens, London, W8 4QY, UK",
   geo: { lat: 51.50937215348203, lon: -0.19390184579204625 },
   structure: "solo",
-  type: "Cultural Institute",
+  type: "Cultural Centre",
+  programming: "host",
 };

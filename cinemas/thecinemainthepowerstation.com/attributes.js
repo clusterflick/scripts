@@ -17,4 +17,5 @@ module.exports = {
   structure: "group",
   groupName: "Olympic Studios",
   type: "Cinema",
+  programming: "cinema",
 };

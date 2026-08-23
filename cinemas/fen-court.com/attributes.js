@@ -12,5 +12,6 @@ module.exports = {
   address: "120 Fenchurch Street, London, EC3M 5BA, UK",
   geo: { lat: 51.51217709932984, lon: -0.08094667654922118 },
   structure: "solo",
-  type: "Unknown",
+  type: "Park & Outdoor Space",
+  programming: "host",
 };

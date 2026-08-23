@@ -17,5 +17,6 @@ module.exports = {
   address: "All Saints Church, Carnegie Street, London, N1 9QW, UK",
   geo: { lat: 51.53545360821759, lon: -0.11661864069975249 },
   structure: "solo",
-  type: "Community Cinema",
+  type: "Place of Worship",
+  programming: "host",
 };

@@ -13,5 +13,6 @@ module.exports = {
   geo: { lat: 51.54337202031746, lon: 0.002661555620746208 },
   structure: "group",
   groupName: "University of East London",
-  type: "University",
+  type: "University & College",
+  programming: "host",
 };

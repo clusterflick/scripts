@@ -11,5 +11,6 @@ module.exports = {
   address: "Stanley Arts, 12 South Norwood Hill, London, SE25 6AB, UK",
   geo: { lat: 51.40019747095999, lon: -0.07528250948196212 },
   structure: "solo",
-  type: "Community Cinema",
+  type: "Arts Centre",
+  programming: "host",
 };

@@ -97,7 +97,8 @@ Venue metadata used throughout the pipeline.
 | `address`          | Yes      | Full address (comma-separated)                                   |
 | `geo`              | Yes      | `{ lat, lon }` coordinates                                       |
 | `structure`        | Yes      | `"solo"` or `"group"`                                            |
-| `type`             | Yes      | Venue type (e.g. `"Cinema"`, `"Museum"`, `"Community Centre"`)   |
+| `type`             | Yes      | What the place is — one of `VENUE_TYPES` (see below)             |
+| `programming`      | Yes      | How film gets on there — `"cinema"`, `"venue"` or `"host"`       |
 | `socials`          | Yes      | `{ letterboxd, twitter, instagram }` (values can be `null`)      |
 | `groupName`        | If group | Parent chain name (e.g. `"Odeon"`, `"Everyman"`)                 |
 | `alternativeNames` | No       | Array of alternative names for matching                          |
@@ -105,6 +106,31 @@ Venue metadata used throughout the pipeline.
 
 Additional venue-specific fields (e.g. `cinemaId`, `siteId`) can be added as
 needed by the retrieval and transformation logic.
+
+**`type` and `programming` are separate on purpose.** Both vocabularies are
+closed and live in `common/venue-types.js`;
+`common/tests/venue-attributes.test.js` fails the build on an unknown or missing
+value.
+
+`type` describes the place — a pub is a `"Pub & Bar"` whether or not it screens
+anything. `programming` describes how film gets on there, and is the field the
+website's "Cinemas" and "Small screenings" venue presets read:
+
+| Value    | Means                                                                                                                  |
+| -------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `cinema` | The venue _is_ a cinema: permanent screen(s), published schedule, films are its main business                          |
+| `venue`  | A substantial programmed venue — theatre, concert hall, arts centre, gallery — where film is part of a wider programme |
+| `host`   | Everywhere else, including community cinema, pop-ups and pub film clubs                                                |
+
+**Default to `"host"`** unless you wrote a retriever against the venue's own
+film programme. `host` is not a judgement about quality — the small-screenings
+preset exists to surface exactly these places, so a volunteer-run community
+cinema belongs there, not in `cinema`.
+
+Keeping the two apart is what lets a venue be retyped for accuracy without
+silently moving between presets. Adventure Cinema at Kew Gardens is the worked
+example: `type: "Park & Outdoor Space"` because that is what the place is,
+`programming: "cinema"` because Adventure Cinema programmes it as one.
 
 **`name` and `alternativeNames` decide whether sources find the venue.** Sources
 match an event's venue to a cinema with `findMatchingCinema`

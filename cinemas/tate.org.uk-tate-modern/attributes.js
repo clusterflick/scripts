@@ -11,5 +11,6 @@ module.exports = {
   geo: { lat: 51.50763244978742, lon: -0.0993447050522748 },
   structure: "group",
   groupName: "Tate",
-  type: "Museum",
+  type: "Gallery",
+  programming: "venue",
 };

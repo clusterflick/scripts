@@ -11,5 +11,6 @@ module.exports = {
   address: "13 Mitcham Lane, London, SW16 6LQ, UK",
   geo: { lat: 51.42814951395327, lon: -0.13239531913108463 },
   structure: "solo",
-  type: "Bar",
+  type: "Pub & Bar",
+  programming: "host",
 };

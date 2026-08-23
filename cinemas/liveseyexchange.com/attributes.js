@@ -12,5 +12,6 @@ module.exports = {
   address: "567 Old Kent Road, London, SE1 5EW, UK",
   geo: { lat: 51.48439356209062, lon: -0.06661132273130481 },
   structure: "solo",
-  type: "Community Centre",
+  type: "Creative Space",
+  programming: "host",
 };

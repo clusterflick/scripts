@@ -12,5 +12,6 @@ module.exports = {
   address: "Sea Containers House, 18 Upper Ground, London, SE1 9GL, UK",
   geo: { lat: 51.50840851893087, lon: -0.10621979287653573 },
   structure: "solo",
-  type: "Unknown",
+  type: "Other",
+  programming: "host",
 };

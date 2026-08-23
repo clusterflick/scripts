@@ -12,5 +12,6 @@ module.exports = {
   geo: { lat: 51.43184356010534, lon: -0.13910932843370935 },
   structure: "group",
   groupName: "Places Leisure",
-  type: "Unknown",
+  type: "Other",
+  programming: "host",
 };

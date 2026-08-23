@@ -11,5 +11,6 @@ module.exports = {
   address: "83 Smeed Road Algha, London, E3 2NR, UK",
   geo: { lat: 51.538250722591954, lon: -0.023427750221945126 },
   structure: "solo",
-  type: "Community Cinema",
+  type: "Creative Space",
+  programming: "host",
 };

@@ -12,5 +12,6 @@ module.exports = {
   address: "London, SE1 7RJ, UK",
   geo: { lat: 51.50019404134163, lon: -0.11399133510325309 },
   structure: "solo",
-  type: "Unknown",
+  type: "Food Hall & Market",
+  programming: "host",
 };

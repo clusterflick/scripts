@@ -12,5 +12,6 @@ module.exports = {
   address: "170 Lennard Road, Beckenham, BR3 1QP, UK",
   geo: { lat: 51.432542800306216, lon: -0.040604284811300705 },
   structure: "solo",
-  type: "University",
+  type: "University & College",
+  programming: "host",
 };

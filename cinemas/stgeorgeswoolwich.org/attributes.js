@@ -15,5 +15,6 @@ module.exports = {
   address: "5 Mill Lane, London, SE18 6BW, UK",
   geo: { lat: 51.48543367285144, lon: 0.06337034254424265 },
   structure: "solo",
-  type: "Community Centre",
+  type: "Place of Worship",
+  programming: "host",
 };

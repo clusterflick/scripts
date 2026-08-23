@@ -11,5 +11,6 @@ module.exports = {
   address: "Stevenage Road, Fulham, London, SW6 6HH, UK",
   geo: { lat: 51.474795605655885, lon: -0.22229341886216553 },
   structure: "solo",
-  type: "Bar",
+  type: "Pub & Bar",
+  programming: "host",
 };

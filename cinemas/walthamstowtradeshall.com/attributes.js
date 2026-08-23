@@ -11,5 +11,6 @@ module.exports = {
   address: "61-63 Tower Hamlets Road, London, E17 4RQ, UK",
   geo: { lat: 51.58911291945138, lon: -0.019044582675920116 },
   structure: "solo",
-  type: "Community Cinema",
+  type: "Cultural Centre",
+  programming: "host",
 };

@@ -12,5 +12,6 @@ module.exports = {
   address: "100 Coombe Lane, West Wimbledon, London, SW20 0AY, UK",
   geo: { lat: 51.40981309004372, lon: -0.23382384363651662 },
   structure: "solo",
-  type: "Bar",
+  type: "Pub & Bar",
+  programming: "host",
 };

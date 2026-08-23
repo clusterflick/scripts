@@ -12,4 +12,5 @@ module.exports = {
   geo: { lat: 51.3667951440443, lon: -0.19095831713875505 },
   structure: "solo",
   type: "Community Centre",
+  programming: "host",
 };

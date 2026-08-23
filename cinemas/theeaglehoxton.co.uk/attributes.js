@@ -12,5 +12,6 @@ module.exports = {
   address: "2 Shepherdess Walk, London, N1 7LB, UK",
   geo: { lat: 51.528596342666795, lon: -0.09164934222069651 },
   structure: "solo",
-  type: "Bar",
+  type: "Pub & Bar",
+  programming: "host",
 };

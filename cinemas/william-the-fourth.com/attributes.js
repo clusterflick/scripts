@@ -12,5 +12,6 @@ module.exports = {
   address: "816 High Road, London, E10 6AE, UK",
   geo: { lat: 51.5748186303442, lon: -0.011417959466036298 },
   structure: "solo",
-  type: "Bar",
+  type: "Pub & Bar",
+  programming: "host",
 };

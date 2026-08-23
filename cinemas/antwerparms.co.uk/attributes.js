@@ -11,5 +11,6 @@ module.exports = {
   address: "168-170 Church Road, London, N17 8AS, UK",
   geo: { lat: 51.60202150561865, lon: -0.07487715939459255 },
   structure: "solo",
-  type: "Bar",
+  type: "Pub & Bar",
+  programming: "host",
 };
