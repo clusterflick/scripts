@@ -1,7 +1,7 @@
-const { rankPeople } = require("../get-movie-data");
-
 // Hide script output
 console.log = () => {};
+
+const { rankPeople } = require("../get-movie-data");
 
 // Real /search/person payloads from TheMovieDB, trimmed to the fields the
 // ranking reads.

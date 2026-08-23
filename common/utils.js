@@ -634,7 +634,7 @@ const babyFriendlyMatchers = [
   /Baby\s*([&+]|and)\s*1/i,
   /Carers? ([&+]|and) Bab(?:y|ies)/i,
   /\bC&B:/i,
-  /Kids(Movie )? Club:/i,
+  /Kids ((Movie|Film) )?Club/i,
   /Babykino:/i,
   /Family Film Club/i,
 ];

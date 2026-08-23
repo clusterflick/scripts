@@ -16,6 +16,9 @@ GoogleGenerativeAI.mockImplementation(() => ({ getGenerativeModel }));
 
 const { callLlm } = require("../llm-client-gemini");
 
+// Hide script output
+console.log = () => {};
+
 describe("llm-client-gemini", () => {
   beforeEach(() => {
     clearLlmUsageLog();

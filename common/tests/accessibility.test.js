@@ -25,6 +25,8 @@ describe("createAccessibility", () => {
       ["Parents + Baby: The Wild Robot", { babyFriendly: true }],
       ["Baby & 1: The Wild Robot", { babyFriendly: true }],
       ["Kids Club: The Wild Robot", { babyFriendly: true }],
+      ["FREE Kids Movie Club: The Wild Robot", { babyFriendly: true }],
+      ["Leytonstone Library Kids Film Club", { babyFriendly: true }],
       ["Babykino: The Wild Robot", { babyFriendly: true }],
     ])("detects babyFriendly from title '%s'", (title, expected) => {
       expect(createAccessibility(title, {})).toEqual(expected);
