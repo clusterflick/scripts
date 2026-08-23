@@ -22,6 +22,8 @@ describe("isNonFilmEvent", () => {
     ["BSNM Annual Meeting 2026"],
     ["Smithsonian Starstruck: An Immersive Experience"],
     ["Neon Naked Life Drawing"],
+    ["Advanced Photography Workshop + Photoshoot | London"],
+    ["AdTech Networking Social for CEOs & Entrepreneurs Meetup"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });
