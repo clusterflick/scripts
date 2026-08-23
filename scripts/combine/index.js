@@ -13,6 +13,7 @@ const {
   sleep,
 } = require("../../common/utils");
 const standardizePrefixingForTheatrePerformances = require("../../common/standardize-prefixing-for-theatre-performances");
+const stripSerialBlockSuffix = require("../../common/strip-serial-block-suffix");
 const assertUniqueShowingIds = require("./assert-unique-showing-ids");
 const { buildMovieData } = require("./build-movie-data");
 
@@ -459,8 +460,8 @@ async function combine() {
     );
     const container = { ...(matched || shortestName) };
     const originalTitle = container.title;
-    container.title = standardizePrefixingForTheatrePerformances(
-      container.title,
+    container.title = stripSerialBlockSuffix(
+      standardizePrefixingForTheatrePerformances(container.title),
     );
 
     // If we've just updated the container title, add the old title into the

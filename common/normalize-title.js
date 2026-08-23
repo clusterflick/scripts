@@ -1246,8 +1246,7 @@ function normalizeTitle(title, options) {
     title = title.replace(/\((\d{4})\)$/, " ($1)"); // Add a space before it
   }
 
-  const hasEpisodeList = title.trim().match(/\(episodes[^(]*\)$/i);
-  if (!hasYear && !hasEpisodeList) {
+  if (!hasYear) {
     title = title.replace(/\([^(]*\)$/, "").trim();
     title = title.replace(/\([^(]*\)$/, "").trim(); // Do it twice in case there's more paraenthesis
   }

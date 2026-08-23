@@ -185,6 +185,13 @@ Do not add near-identical variants of an existing phrase as separate strings in
 `known-removable-phrases.js` — raise a PR to convert the family to a regex
 pattern in `normalize-title.js` instead.
 
+Both files feed the _grouping key_, not the displayed title: `combine` stores
+`normalizedTitle` to decide which listings are the same film, and keeps each
+venue's own title for display. When the fix is to how a title _reads_ rather
+than what it matches, it belongs on the display side —
+`common/strip-serial-block-suffix.js` is the example, rewriting a merged film's
+title while each showing keeps the specific one the venue gave it.
+
 ## Common Categories
 
 Listings are categorized as: `movie`, `multiple-movies`, `tv`, `quiz`, `comedy`,
