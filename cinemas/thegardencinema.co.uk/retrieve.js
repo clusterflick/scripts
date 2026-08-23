@@ -14,7 +14,10 @@ async function retrieve() {
   $(
     ".films-list__by-title__film-title a, .films-list__by-date__film__title a",
   ).each(function () {
-    moviePageUrls.add($(this).attr("href"));
+    const href = $(this).attr("href");
+    // The cinema can list a screening before the film itself is published,
+    // which renders as an entry with no title and an empty link
+    if (href) moviePageUrls.add(href);
   });
 
   const moviePages = [];
