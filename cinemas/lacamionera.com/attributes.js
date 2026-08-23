@@ -11,5 +11,6 @@ module.exports = {
   address: "243 Well Street, London, E9 6RG, UK",
   geo: { lat: 51.54466012456348, lon: -0.04695974405287458 },
   structure: "solo",
-  type: "Bar",
+  type: "Pub & Bar",
+  programming: "host",
 };

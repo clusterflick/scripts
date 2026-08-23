@@ -12,5 +12,6 @@ module.exports = {
   address: "39 London Road, Enfield, EN2 6DS, UK",
   geo: { lat: 51.650528746414246, lon: -0.08052040777261618 },
   structure: "solo",
-  type: "Community Cinema",
+  type: "Arts Centre",
+  programming: "host",
 };

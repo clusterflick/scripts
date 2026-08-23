@@ -12,5 +12,6 @@ module.exports = {
   address: "77 Compton Road, London, N21 3JR, UK",
   geo: { lat: 51.632197318177, lon: -0.10175967731415747 },
   structure: "solo",
-  type: "Community Cinema",
+  type: "Place of Worship",
+  programming: "host",
 };

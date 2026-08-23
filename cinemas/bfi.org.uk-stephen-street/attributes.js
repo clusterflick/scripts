@@ -13,4 +13,5 @@ module.exports = {
   structure: "group",
   groupName: "BFI",
   type: "Screening Room",
+  programming: "host",
 };

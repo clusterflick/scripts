@@ -11,5 +11,6 @@ module.exports = {
   address: "39a Newington Green, London, N16 9PR, UK",
   geo: { lat: 51.55217153776038, lon: -0.08491191519282906 },
   structure: "solo",
-  type: "Community Cinema",
+  type: "Place of Worship",
+  programming: "host",
 };

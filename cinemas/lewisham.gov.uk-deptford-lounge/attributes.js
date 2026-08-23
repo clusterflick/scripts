@@ -12,5 +12,6 @@ module.exports = {
   address: "9 Giffin Street, London, SE8 4RH, UK",
   geo: { lat: 51.477799812604985, lon: -0.024278149990852753 },
   structure: "solo",
-  type: "Community Cinema",
+  type: "Library & Archive",
+  programming: "host",
 };

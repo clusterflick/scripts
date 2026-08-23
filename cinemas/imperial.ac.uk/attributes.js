@@ -12,5 +12,6 @@ module.exports = {
   address: "Exhibition Road, South Kensington, London, SW7 2AZ, UK",
   geo: { lat: 51.4989089991204, lon: -0.17480912913977006 },
   structure: "solo",
-  type: "University",
+  type: "University & College",
+  programming: "host",
 };

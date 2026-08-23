@@ -12,5 +12,6 @@ module.exports = {
   address: "120 Peckham Hill Street, London, SE15 5JT, UK",
   geo: { lat: 51.474884985828496, lon: -0.06962277116404336 },
   structure: "solo",
-  type: "University",
+  type: "University & College",
+  programming: "host",
 };

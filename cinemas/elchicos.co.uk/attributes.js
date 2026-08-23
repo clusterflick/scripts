@@ -17,5 +17,6 @@ module.exports = {
   address: "62 Streatham High Road, Streatham Hill, London, SW16 1DA, UK",
   geo: { lat: 51.436566358641855, lon: -0.12810347465910357 },
   structure: "solo",
-  type: "Bar",
+  type: "Café & Restaurant",
+  programming: "host",
 };

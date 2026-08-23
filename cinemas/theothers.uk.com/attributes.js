@@ -11,5 +11,6 @@ module.exports = {
   address: "6 Manor Road, Stoke Newington, London, N16 5SA, UK",
   geo: { lat: 51.5660833501981, lon: -0.07475723624158336 },
   structure: "solo",
-  type: "Bar",
+  type: "Arts Centre",
+  programming: "host",
 };

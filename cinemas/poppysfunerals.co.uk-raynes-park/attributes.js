@@ -13,5 +13,6 @@ module.exports = {
   geo: { lat: 51.40960055073852, lon: -0.23100480096854528 },
   structure: "group",
   groupName: "Poppy's",
-  type: "Unknown",
+  type: "Other",
+  programming: "host",
 };

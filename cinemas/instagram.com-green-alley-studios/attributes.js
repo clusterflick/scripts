@@ -11,5 +11,6 @@ module.exports = {
   address: "351a Cambridge Heath Road, London, E2 9RA, UK",
   geo: { lat: 51.53010508028858, lon: -0.056076634454950966 },
   structure: "solo",
-  type: "Unknown",
+  type: "Creative Space",
+  programming: "host",
 };

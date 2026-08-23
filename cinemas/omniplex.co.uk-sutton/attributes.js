@@ -13,5 +13,6 @@ module.exports = {
   structure: "group",
   groupName: "Omniplex",
   type: "Cinema",
+  programming: "cinema",
   cinemaId: "sutton",
 };

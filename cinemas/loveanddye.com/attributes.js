@@ -12,5 +12,6 @@ module.exports = {
   address: "187 Worple Road, Raynes Park, London, SW20 8RE, UK",
   geo: { lat: 51.410884328381755, lon: -0.22797803781286813 },
   structure: "solo",
-  type: "Unknown",
+  type: "Shop",
+  programming: "host",
 };

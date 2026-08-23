@@ -12,5 +12,6 @@ module.exports = {
   address: "75 Woodlands Road, Isleworth, TW7 6JX, UK",
   geo: { lat: 51.47225105247657, lon: -0.34411754921586857 },
   structure: "solo",
-  type: "Park",
+  type: "Park & Outdoor Space",
+  programming: "host",
 };

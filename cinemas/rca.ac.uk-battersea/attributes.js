@@ -18,5 +18,6 @@ module.exports = {
   geo: { lat: 51.47940787791871, lon: -0.17054309047419525 },
   structure: "group",
   groupName: "Royal College of Art",
-  type: "University",
+  type: "University & College",
+  programming: "host",
 };

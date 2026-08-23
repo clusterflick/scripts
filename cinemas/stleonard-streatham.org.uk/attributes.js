@@ -15,5 +15,6 @@ module.exports = {
   address: "8 Tooting Bec Gardens, London, SW16 1RB, UK",
   geo: { lat: 51.42996192104747, lon: -0.13234086974086895 },
   structure: "solo",
-  type: "Community Centre",
+  type: "Place of Worship",
+  programming: "host",
 };

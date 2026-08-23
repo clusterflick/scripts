@@ -11,5 +11,6 @@ module.exports = {
   address: "4 Murrain Road, London, N4 2BN, UK",
   geo: { lat: 51.56251027855201, lon: -0.09229452831987614 },
   structure: "solo",
-  type: "Concert Hall/Theatre",
+  type: "Theatre",
+  programming: "host",
 };

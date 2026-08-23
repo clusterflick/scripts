@@ -11,5 +11,6 @@ module.exports = {
   address: "Wanstead Methodist Church, Hermon Hill, London, E11 2AR, UK",
   geo: { lat: 51.580985719941935, lon: 0.024580002736702015 },
   structure: "solo",
-  type: "Community Centre",
+  type: "Theatre",
+  programming: "host",
 };

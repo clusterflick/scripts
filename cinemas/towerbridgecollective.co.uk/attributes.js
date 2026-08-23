@@ -11,5 +11,6 @@ module.exports = {
   address: "1 Shad Thames, Horselydown Lane, London, SE1 2LJ, UK",
   geo: { lat: 51.50419145860798, lon: -0.07577253056226439 },
   structure: "solo",
-  type: "Community Centre",
+  type: "Food Hall & Market",
+  programming: "host",
 };

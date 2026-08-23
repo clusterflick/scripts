@@ -13,5 +13,6 @@ module.exports = {
   structure: "group",
   groupName: "BFI",
   type: "Cinema",
+  programming: "cinema",
   articleId: "49C49C83-6BA0-420C-A784-9B485E36E2E0",
 };

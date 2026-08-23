@@ -11,5 +11,6 @@ module.exports = {
   address: "Valette Street, London, E9 6NU, UK",
   geo: { lat: 51.54594286378474, lon: -0.05453522870906021 },
   structure: "solo",
-  type: "Bar",
+  type: "Music Venue",
+  programming: "host",
 };

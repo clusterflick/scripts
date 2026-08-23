@@ -11,5 +11,6 @@ module.exports = {
   address: "45 Queen Caroline Street, London, W6 9QH, UK",
   geo: { lat: 51.491011513823956, lon: -0.22460827691143148 },
   structure: "solo",
-  type: "Concert Hall/Theatre",
+  type: "Music Venue",
+  programming: "venue",
 };

@@ -11,5 +11,6 @@ module.exports = {
   address: "51 Poland Street, London, W1F 7LZ, UK",
   geo: { lat: 51.51439355277812, lon: -0.1370034727177752 },
   structure: "solo",
-  type: "Unknown",
+  type: "Shop",
+  programming: "host",
 };

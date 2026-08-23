@@ -13,6 +13,7 @@ module.exports = {
   geo: { lat: 51.58662792886061, lon: -0.33241401036976587 },
   structure: "solo",
   type: "Cinema",
+  programming: "cinema",
   apiKey: "qWZhtogUoLqN0WQimlxrRJE36YUURmbfli8X7IwM8SVlnwPj3ssUuOkmfTdgvcBA",
   apiDomain: "https://metrocinema.api.cinesync.io",
   locationId: "4",

@@ -12,5 +12,6 @@ module.exports = {
   address: "11A Station Way, London, SE15 4RX, UK",
   geo: { lat: 51.47008360147543, lon: -0.06942280588407418 },
   structure: "solo",
-  type: "Bar",
+  type: "Café & Restaurant",
+  programming: "host",
 };

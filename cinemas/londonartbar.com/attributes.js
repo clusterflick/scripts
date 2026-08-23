@@ -12,5 +12,6 @@ module.exports = {
   address: "300 High Holborn, London, WC1V 7JH, UK",
   geo: { lat: 51.51797456903927, lon: -0.11475871736256633 },
   structure: "solo",
-  type: "Bar",
+  type: "Pub & Bar",
+  programming: "host",
 };

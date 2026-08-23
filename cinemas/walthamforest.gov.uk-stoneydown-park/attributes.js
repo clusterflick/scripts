@@ -12,5 +12,6 @@ module.exports = {
   address: "Pretoria Avenue, Walthamstow, London, E17 6JY, UK",
   geo: { lat: 51.58572840554498, lon: -0.037695239552583304 },
   structure: "solo",
-  type: "Park",
+  type: "Park & Outdoor Space",
+  programming: "host",
 };

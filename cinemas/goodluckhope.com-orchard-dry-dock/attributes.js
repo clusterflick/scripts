@@ -11,5 +11,6 @@ module.exports = {
   address: "Orchard Place, London, E14 0JZ, UK",
   geo: { lat: 51.508537968881505, lon: 0.0072014136176514155 },
   structure: "solo",
-  type: "Park",
+  type: "Park & Outdoor Space",
+  programming: "host",
 };

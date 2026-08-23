@@ -12,5 +12,6 @@ module.exports = {
   address: "120-124 Curtain Road, Shoreditch, London, EC2A 3SQ, UK",
   geo: { lat: 51.52596690314433, lon: -0.08017930429849301 },
   structure: "solo",
-  type: "Bar",
+  type: "Pub & Bar",
+  programming: "host",
 };

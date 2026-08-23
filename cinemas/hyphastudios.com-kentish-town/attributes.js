@@ -12,5 +12,6 @@ module.exports = {
   address: "2 Prince of Wales Road, London, NW5 3LQ, UK",
   geo: { lat: 51.546643126391835, lon: -0.142178867877304 },
   structure: "solo",
-  type: "Community Cinema",
+  type: "Creative Space",
+  programming: "host",
 };

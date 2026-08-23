@@ -17,5 +17,6 @@ module.exports = {
   address: "35 Britannia Row, London, N1 8QH, UK",
   geo: { lat: 51.537434919728085, lon: -0.09696115730516496 },
   structure: "solo",
-  type: "Unknown",
+  type: "Arts Centre",
+  programming: "host",
 };

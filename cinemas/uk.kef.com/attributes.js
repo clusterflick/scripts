@@ -12,5 +12,6 @@ module.exports = {
   address: "42-48 Great Portland Street, London, W1W 7NB, UK",
   geo: { lat: 51.517320486295986, lon: -0.14130926037700353 },
   structure: "solo",
-  type: "Unknown",
+  type: "Shop",
+  programming: "host",
 };

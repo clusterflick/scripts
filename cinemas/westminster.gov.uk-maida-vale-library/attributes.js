@@ -11,5 +11,6 @@ module.exports = {
   address: "Sutherland Avenue, London, W9 2QT, UK",
   geo: { lat: 51.524810969834675, lon: -0.19034050557798127 },
   structure: "solo",
-  type: "Community Centre",
+  type: "Library & Archive",
+  programming: "host",
 };

@@ -11,5 +11,6 @@ module.exports = {
   address: "4 Nunhead Green, London, SE15 3QF, UK",
   geo: { lat: 51.4649885238207, lon: -0.058807730475531755 },
   structure: "solo",
-  type: "Bar",
+  type: "Pub & Bar",
+  programming: "host",
 };

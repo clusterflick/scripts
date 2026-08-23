@@ -16,5 +16,6 @@ module.exports = {
   address: "11-17 Stoke Newington Road, London, N16 8BH, UK",
   geo: { lat: 51.55112061375932, lon: -0.07545107288863316 },
   structure: "solo",
-  type: "Concert Hall/Theatre",
+  type: "Music Venue",
+  programming: "venue",
 };

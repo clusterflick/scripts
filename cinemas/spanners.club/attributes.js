@@ -11,5 +11,6 @@ module.exports = {
   address: "Arch 504 Ridgway Road, London, SW9 7EX, UK",
   geo: { lat: 51.467656886460155, lon: -0.10398770073115404 },
   structure: "solo",
-  type: "Unknown",
+  type: "Arts Centre",
+  programming: "host",
 };

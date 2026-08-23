@@ -13,5 +13,6 @@ module.exports = {
   geo: { lat: 51.519140879706114, lon: -0.09002136809499772 },
   structure: "group",
   groupName: "Drake & Morgan",
-  type: "Bar",
+  type: "Pub & Bar",
+  programming: "host",
 };

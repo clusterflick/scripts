@@ -13,4 +13,5 @@ module.exports = {
   geo: { lat: 51.37237059612897, lon: -0.09900800151301496 },
   structure: "solo",
   type: "Cinema",
+  programming: "cinema",
 };

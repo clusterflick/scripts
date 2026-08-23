@@ -11,5 +11,6 @@ module.exports = {
   address: "85 St George's Road, London, SE1 6ER, UK",
   geo: { lat: 51.49611474000333, lon: -0.10528732909567683 },
   structure: "solo",
-  type: "Community Cinema",
+  type: "Arts Centre",
+  programming: "host",
 };

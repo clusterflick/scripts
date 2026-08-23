@@ -12,5 +12,6 @@ module.exports = {
   address: "25-27 Curtain Road, London, EC2A 3LT, UK",
   geo: { lat: 51.5232767023496, lon: -0.08066968949530354 },
   structure: "solo",
-  type: "Unknown",
+  type: "Creative Space",
+  programming: "host",
 };

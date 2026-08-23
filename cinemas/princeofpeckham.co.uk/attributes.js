@@ -12,5 +12,6 @@ module.exports = {
   address: "1 Clayton Road, Peckham, London, SE15 5JA, UK",
   geo: { lat: 51.47368972954541, lon: -0.06533081779099761 },
   structure: "solo",
-  type: "Bar",
+  type: "Pub & Bar",
+  programming: "host",
 };

@@ -14,4 +14,5 @@ module.exports = {
   structure: "group",
   groupName: "Castle Cinema",
   type: "Cinema",
+  programming: "cinema",
 };

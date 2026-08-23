@@ -12,5 +12,6 @@ module.exports = {
     "Sojourner Truth Community Centre, 161 Sumner Road, London, SE15 6JL, UK",
   geo: { lat: 51.4779081654821, lon: -0.07327389439045094 },
   structure: "solo",
-  type: "Community Cinema",
+  type: "Library & Archive",
+  programming: "host",
 };

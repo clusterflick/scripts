@@ -12,5 +12,6 @@ module.exports = {
   address: "Glenesk Road, London, SE9 1AN, UK",
   geo: { lat: 51.45624090469132, lon: 0.0688586953120013 },
   structure: "solo",
-  type: "Park",
+  type: "Park & Outdoor Space",
+  programming: "host",
 };

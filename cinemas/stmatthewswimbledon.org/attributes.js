@@ -15,5 +15,6 @@ module.exports = {
   address: "Durham Road, London, SW20 0DE, UK",
   geo: { lat: 51.412093415949855, lon: -0.23373675857624834 },
   structure: "solo",
-  type: "Community Centre",
+  type: "Place of Worship",
+  programming: "host",
 };

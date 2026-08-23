@@ -12,5 +12,6 @@ module.exports = {
   address: "8 South Audley Street, Mayfair, London, W1K 1HF, UK",
   geo: { lat: 51.50770521145523, lon: -0.15079546996050938 },
   structure: "solo",
-  type: "Cultural Institute",
+  type: "Cultural Centre",
+  programming: "host",
 };

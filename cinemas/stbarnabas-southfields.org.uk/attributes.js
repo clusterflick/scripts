@@ -12,5 +12,6 @@ module.exports = {
   address: "146 Lavenham Road, London, SW18 5EP, UK",
   geo: { lat: 51.442709163895266, lon: -0.19789082166397787 },
   structure: "solo",
-  type: "Community Centre",
+  type: "Place of Worship",
+  programming: "host",
 };

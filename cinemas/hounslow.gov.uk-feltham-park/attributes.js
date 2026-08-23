@@ -11,5 +11,6 @@ module.exports = {
   address: "Hounslow Road, Feltham, TW14 9DN, UK",
   geo: { lat: 51.451578794537006, lon: -0.4069979463001513 },
   structure: "solo",
-  type: "Park",
+  type: "Park & Outdoor Space",
+  programming: "host",
 };

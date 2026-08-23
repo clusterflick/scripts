@@ -11,5 +11,6 @@ module.exports = {
   address: "Arch 22 Atlantic Road, London, SW9 8HX, UK",
   geo: { lat: 51.462917242630716, lon: -0.11353839603110867 },
   structure: "solo",
-  type: "Bar",
+  type: "Café & Restaurant",
+  programming: "host",
 };

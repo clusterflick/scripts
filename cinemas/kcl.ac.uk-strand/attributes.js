@@ -16,5 +16,6 @@ module.exports = {
   address: "Strand, London, WC2R 2LS, UK",
   geo: { lat: 51.511513151343316, lon: -0.11618256569895533 },
   structure: "solo",
-  type: "University",
+  type: "University & College",
+  programming: "host",
 };

@@ -21,5 +21,6 @@ module.exports = {
   geo: { lat: 51.52466462157211, lon: -0.13033861877673095 },
   structure: "group",
   groupName: "Birkbeck",
-  type: "University",
+  type: "University & College",
+  programming: "venue",
 };

@@ -13,5 +13,6 @@ module.exports = {
   geo: { lat: 51.411287482198915, lon: -0.2091117881505796 },
   structure: "group",
   groupName: "Greene King",
-  type: "Bar",
+  type: "Pub & Bar",
+  programming: "host",
 };

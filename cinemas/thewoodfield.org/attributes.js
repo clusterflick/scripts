@@ -12,5 +12,6 @@ module.exports = {
   address: "16A Abbotswood Road, Tooting Common, London, SW16 1AP, UK",
   geo: { lat: 51.4379269791229, lon: -0.1385254728928368 },
   structure: "solo",
-  type: "Community Centre",
+  type: "Arts Centre",
+  programming: "host",
 };

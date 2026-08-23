@@ -12,5 +12,6 @@ module.exports = {
   address: "17-19 Cockspur Street, London, SW1Y 5BL, UK",
   geo: { lat: 51.50748440080554, lon: -0.13049333526688586 },
   structure: "solo",
-  type: "Cultural Institute",
+  type: "Cultural Centre",
+  programming: "host",
 };

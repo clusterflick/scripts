@@ -11,5 +11,6 @@ module.exports = {
   address: "Forest Road, Walthamstow, London, E17 4JF, UK",
   geo: { lat: 51.591184192808434, lon: -0.01348054770070032 },
   structure: "solo",
-  type: "Community Cinema",
+  type: "Community Centre",
+  programming: "host",
 };

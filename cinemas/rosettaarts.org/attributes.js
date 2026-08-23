@@ -11,5 +11,6 @@ module.exports = {
   address: "1 Hamilton Road, London, E15 3AE, UK",
   geo: { lat: 51.525156322490176, lon: 0.007070036772891716 },
   structure: "solo",
-  type: "Community Centre",
+  type: "Arts Centre",
+  programming: "host",
 };

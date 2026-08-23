@@ -12,5 +12,6 @@ module.exports = {
   address: "14-16 Market Place, Kingston upon Thames, KT1 1JP, UK",
   geo: { lat: 51.410537027223945, lon: -0.30599167280460676 },
   structure: "solo",
-  type: "Community Centre",
+  type: "Place of Worship",
+  programming: "host",
 };

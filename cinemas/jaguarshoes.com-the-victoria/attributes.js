@@ -12,5 +12,6 @@ module.exports = {
   address: "451 Queensbridge Road, London, E8 3AS, UK",
   geo: { lat: 51.54585148689085, lon: -0.06992591521689916 },
   structure: "solo",
-  type: "Bar",
+  type: "Music Venue",
+  programming: "host",
 };

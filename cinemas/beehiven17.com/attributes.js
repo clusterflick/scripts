@@ -12,5 +12,6 @@ module.exports = {
   address: "Stoneleigh Road, London, N17 9JW, UK",
   geo: { lat: 51.59220452179296, lon: -0.06927038778835765 },
   structure: "solo",
-  type: "Bar",
+  type: "Pub & Bar",
+  programming: "host",
 };

@@ -16,5 +16,6 @@ module.exports = {
   address: "110 Streatham Hill, London, SW2 4RD, UK",
   geo: { lat: 51.44057463565883, lon: -0.12578434211144826 },
   structure: "solo",
-  type: "Community Centre",
+  type: "Place of Worship",
+  programming: "host",
 };

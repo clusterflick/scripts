@@ -11,5 +11,6 @@ module.exports = {
   address: "Colonnade, Bloomsbury, London, WC1N 1JD, UK",
   geo: { lat: 51.52278577182352, lon: -0.12441771517528585 },
   structure: "solo",
-  type: "Community Cinema",
+  type: "Arts Centre",
+  programming: "host",
 };

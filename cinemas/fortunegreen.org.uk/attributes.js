@@ -12,5 +12,6 @@ module.exports = {
   address: "Fortune Green Road, London, NW6 1DS, UK",
   geo: { lat: 51.55464935979889, lon: -0.19733310163558415 },
   structure: "solo",
-  type: "Park",
+  type: "Park & Outdoor Space",
+  programming: "host",
 };

@@ -11,5 +11,6 @@ module.exports = {
   address: "7 Uxbridge Road, London, W12 8LJ, UK",
   geo: { lat: 51.505409967555536, lon: -0.22598281521840932 },
   structure: "solo",
-  type: "Concert Hall/Theatre",
+  type: "Theatre",
+  programming: "host",
 };

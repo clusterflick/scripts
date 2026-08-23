@@ -12,5 +12,6 @@ module.exports = {
   address: "London Fields West Side, London, E8 3EU, UK",
   geo: { lat: 51.54305669956234, lon: -0.06246687544865455 },
   structure: "solo",
-  type: "Community Cinema",
+  type: "Arts Centre",
+  programming: "host",
 };

@@ -12,5 +12,6 @@ module.exports = {
   address: "Higham Road, London, N17 6NU, UK",
   geo: { lat: 51.59369727897117, lon: -0.08719754405104398 },
   structure: "solo",
-  type: "Bar",
+  type: "Community Centre",
+  programming: "host",
 };

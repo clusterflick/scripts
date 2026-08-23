@@ -12,5 +12,6 @@ module.exports = {
   address: "30 Heathway Mall, Dagenham, RM10 8RE, UK",
   geo: { lat: 51.54108620411774, lon: 0.1489938051120187 },
   structure: "solo",
-  type: "Unknown",
+  type: "Community Centre",
+  programming: "host",
 };

@@ -13,4 +13,5 @@ module.exports = {
   geo: { lat: 51.5117636637143, lon: -0.1383526632281602 },
   structure: "solo",
   type: "Hotel",
+  programming: "host",
 };

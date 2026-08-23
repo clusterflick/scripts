@@ -12,5 +12,6 @@ module.exports = {
   address: "Streatham Common South, London, SW16 3HR, UK",
   geo: { lat: 51.42128404936088, lon: -0.1179176615160687 },
   structure: "solo",
-  type: "Park",
+  type: "Park & Outdoor Space",
+  programming: "host",
 };

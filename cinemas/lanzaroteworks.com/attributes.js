@@ -11,5 +11,6 @@ module.exports = {
   address: "230 Dalston Lane, London, E8 1LA, UK",
   geo: { lat: 51.548978263627994, lon: -0.061083575398188227 },
   structure: "solo",
-  type: "Community Cinema",
+  type: "Creative Space",
+  programming: "host",
 };

@@ -12,5 +12,6 @@ module.exports = {
   address: "1A Amhurst Road, London, E8 1JB, UK",
   geo: { lat: 51.547310982396596, lon: -0.05535774405279897 },
   structure: "solo",
-  type: "Bar",
+  type: "Music Venue",
+  programming: "host",
 };

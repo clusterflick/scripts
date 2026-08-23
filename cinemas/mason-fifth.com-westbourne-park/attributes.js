@@ -11,5 +11,6 @@ module.exports = {
   address: "11a Woodfield Road, London, W9 2BA, UK",
   geo: { lat: 51.52257036848836, lon: -0.19969324848052622 },
   structure: "solo",
-  type: "Hotel",
+  type: "Creative Space",
+  programming: "host",
 };

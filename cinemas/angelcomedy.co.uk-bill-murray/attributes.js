@@ -16,5 +16,6 @@ module.exports = {
   address: "39 Queen's Head Street, London, N1 8NQ, UK",
   geo: { lat: 51.53645878242941, lon: -0.0988218194963136 },
   structure: "solo",
-  type: "Bar",
+  type: "Pub & Bar",
+  programming: "host",
 };

@@ -11,5 +11,6 @@ module.exports = {
   address: "323 New Cross Road, London, SE14 6AS, UK",
   geo: { lat: 51.47577850844152, lon: -0.037171153940276765 },
   structure: "solo",
-  type: "Bar",
+  type: "Music Venue",
+  programming: "host",
 };

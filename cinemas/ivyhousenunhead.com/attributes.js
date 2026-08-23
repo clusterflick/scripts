@@ -11,5 +11,6 @@ module.exports = {
   address: "40 Stuart Road, London, SE15 3BE, UK",
   geo: { lat: 51.458252131209605, lon: -0.052051494256446125 },
   structure: "solo",
-  type: "Bar",
+  type: "Pub & Bar",
+  programming: "host",
 };

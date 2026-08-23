@@ -12,5 +12,6 @@ module.exports = {
   address: "29 Russell Square, London, WC1B 5DP, UK",
   geo: { lat: 51.52171768549698, lon: -0.1280470305616774 },
   structure: "solo",
-  type: "Cultural Institute",
+  type: "Library & Archive",
+  programming: "host",
 };

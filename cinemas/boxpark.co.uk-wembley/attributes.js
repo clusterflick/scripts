@@ -12,5 +12,6 @@ module.exports = {
   geo: { lat: 51.56082156955897, lon: -0.2801619035227948 },
   structure: "group",
   groupName: "Boxpark",
-  type: "Bar",
+  type: "Food Hall & Market",
+  programming: "host",
 };

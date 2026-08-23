@@ -11,5 +11,6 @@ module.exports = {
   address: "2 Arundel Street, Temple, London, WC2R 3DA, UK",
   geo: { lat: 51.51201525970848, lon: -0.11418428638223004 },
   structure: "solo",
-  type: "Bar",
+  type: "Library & Archive",
+  programming: "host",
 };

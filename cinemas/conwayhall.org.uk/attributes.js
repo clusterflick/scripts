@@ -11,5 +11,6 @@ module.exports = {
   address: "25 Red Lion Square, London, WC1R 4RL, UK",
   geo: { lat: 51.51993495032309, lon: -0.11822809987402137 },
   structure: "solo",
-  type: "Concert Hall/Theatre",
+  type: "Music Venue",
+  programming: "host",
 };

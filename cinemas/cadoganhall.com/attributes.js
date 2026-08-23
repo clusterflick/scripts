@@ -11,5 +11,6 @@ module.exports = {
   address: "5 Sloane Terrace, London, SW1X 9DQ, UK",
   geo: { lat: 51.49392573928317, lon: -0.157242621385933 },
   structure: "solo",
-  type: "Concert Hall/Theatre",
+  type: "Music Venue",
+  programming: "venue",
 };

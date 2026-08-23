@@ -11,5 +11,6 @@ module.exports = {
   address: "Hanworth Road, Hampton, TW12 3HD, UK",
   geo: { lat: 51.428795219921945, lon: -0.3719557466790582 },
   structure: "solo",
-  type: "Concert Hall/Theatre",
+  type: "Theatre",
+  programming: "venue",
 };

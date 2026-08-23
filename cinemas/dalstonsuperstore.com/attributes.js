@@ -11,5 +11,6 @@ module.exports = {
   address: "117 Kingsland High Street, London, E8 2PB, UK",
   geo: { lat: 51.550117248611244, lon: -0.07535706692424611 },
   structure: "solo",
-  type: "Bar",
+  type: "Pub & Bar",
+  programming: "host",
 };

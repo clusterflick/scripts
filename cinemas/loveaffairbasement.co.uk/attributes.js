@@ -11,5 +11,6 @@ module.exports = {
   address: "324 Hackney Road, London, E2 7AX, UK",
   geo: { lat: 51.53108255835564, lon: -0.06674817269659018 },
   structure: "solo",
-  type: "Bar",
+  type: "Pub & Bar",
+  programming: "host",
 };
