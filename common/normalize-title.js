@@ -704,6 +704,19 @@ function normalizeTitle(title, options) {
     ],
     ["Di'Anno - ", "Di'Anno: "],
     ["Gigi & Olive -", "Gigi & Olive: "],
+    // Ognisko Polskie names every listing "<day> <month> | <title>", repeating
+    // the date the listing already carries. hasSeparator takes everything
+    // before the "|", so "10 Sep | Tovarisch" would reduce to "10 sep" and
+    // every one of the club's listings would collapse onto its own date.
+    // Removed here, before hasSeparator can fire. A regex rather than a
+    // string because each listing carries a different date; the month name is
+    // spelled out so a title opening with a number ("10 Things I Hate About
+    // You | ...") isn't caught by it.
+    [
+      /^\d{1,2}\s+(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\s*\|\s*/i,
+      "",
+    ],
+    ["Kinoklub - ", "Kinoklub: "],
     ["Community Cinema at UCL East - ", "Community Cinema at UCL East: "],
     ["Cinema Night London - ", "Cinema Night London: "],
     ["An Afternoon Of Cinema - ", "An Afternoon Of Cinema: "],

@@ -19,14 +19,14 @@ jest.mock("../../../common/utils", () => ({
 const isRecording = false;
 
 jest.mock("../../../common/cache");
-setupCacheMock(__dirname, "2026-08-14");
+setupCacheMock(__dirname, "2026-08-23");
 
 // Hide script output
 console.log = () => {};
 
 describe(`${attributes.name}`, () => {
   setupPolly(isRecording, __dirname);
-  jest.useFakeTimers().setSystemTime(new Date("2026-08-14"));
+  jest.useFakeTimers().setSystemTime(new Date("2026-08-23"));
 
   describe.each([
     {
@@ -74,9 +74,9 @@ describe(`${attributes.name}`, () => {
 
         // Make sure the input looks roughly correct
         expect(clubPages).toBeTruthy();
-        expect(Object.keys(clubPages)).toHaveLength(17);
+        expect(Object.keys(clubPages)).toHaveLength(19);
         expect(eventPages).toBeTruthy();
-        expect(Object.keys(eventPages)).toHaveLength(28);
+        expect(Object.keys(eventPages)).toHaveLength(46);
 
         readJSON.mockImplementation(() => ({ clubPages, eventPages }));
 

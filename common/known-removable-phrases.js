@@ -262,6 +262,8 @@ const knownRemovablePhrases = [
   " plus live music from naomi banks",
   " PLUS Sinners movie breakdown",
   "Bottomless Brunch Party!",
+  "Buster Keaton Cineclub",
+  "Kinoklub: ",
   "Interactive Film",
   "Intergalactic Experience",
   "Film Screening and Q&A",

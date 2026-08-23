@@ -84,6 +84,13 @@ Writing a retriever that emits untitled screenings is worse than not having one:
 it produces showings the pipeline can't match to TMDB, and it violates the
 "never invent data" rule to fill in the gaps.
 
+**Before concluding a venue must be source-only, work through "Finding the Data"
+in `retrieve.md`.** Most "the site has no dates/times" conclusions turn out to
+be a request that wasn't found — an iframe, or an API the page calls once you
+render it. If the trail genuinely runs out, raise it rather than downgrading the
+venue: which of the two shapes a venue gets is a decision to agree, not one to
+make silently.
+
 ### `attributes.js`
 
 Venue metadata used throughout the pipeline.

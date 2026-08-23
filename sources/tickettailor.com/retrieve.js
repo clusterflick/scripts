@@ -22,6 +22,8 @@ const VENUE_SLUGS = [
   "csc2", // CSC
   "na258", // People's Emergency Briefing
   "ibraaz", // Ibraaz
+  "londonnaturefilms", // London Nature Films
+  "mildmayclubandinstituteltd", // The Mildmay Club
 ];
 
 function retrieveVenuePage(getPage, slug) {

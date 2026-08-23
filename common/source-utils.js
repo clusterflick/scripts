@@ -2,8 +2,13 @@ const normalizeName = require("./normalize-name");
 const normalizeVenueName = require("./normalize-venue-name");
 const distanceInKmBetweenCoordinates = require("./distance-in-km-between-coordinates");
 
-// UK postcode regex - matches formats like "E11 3DR", "SE1 6ER", "SW1A 1AA"
-const UK_POSTCODE_REGEX = /\b([A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2})\b/i;
+// UK postcode regex - matches formats like "E11 3DR", "SE1 6ER", "SW1A 1AA".
+// Outward and inward codes are captured separately so a postcode written
+// without its space can be put back together unambiguously: the inward code is
+// always exactly digit-letter-letter, so "N169PR" can only split as
+// "N16"+"9PR" - "N1"+"69PR" isn't a possible postcode, since no inward code is
+// four characters.
+const UK_POSTCODE_REGEX = /\b([A-Z]{1,2}\d[A-Z\d]?)\s*(\d[A-Z]{2})\b/i;
 
 /**
  * Extract UK postcode from text (e.g., address string)
@@ -13,7 +18,13 @@ const UK_POSTCODE_REGEX = /\b([A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2})\b/i;
 function extractPostcode(text) {
   if (!text) return null;
   const match = text.match(UK_POSTCODE_REGEX);
-  return match ? match[1].toUpperCase().replace(/\s+/g, " ") : null;
+  if (!match) return null;
+
+  // Sources are inconsistent about the space - Ticket Tailor writes "N169PR"
+  // where a venue's address holds "N16 9PR" - and without normalising it the
+  // two never compare equal, so an exact name match still fails on location.
+  const [, outward, inward] = match;
+  return `${outward} ${inward}`.toUpperCase();
 }
 
 /**

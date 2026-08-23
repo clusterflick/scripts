@@ -76,6 +76,63 @@ implementations.
 
 ---
 
+## Finding the Data
+
+Before choosing an approach below, work out where the listings actually live.
+Follow the trail the site itself leaves; do not guess at URLs. Every step here
+is cheap, and each one narrows what the next has to look for.
+
+**1. Fetch the page and read what the server sent.**
+
+```bash
+curl -sSL -A "$UA" "https://example.com/whats-on" -o page.html
+```
+
+Look for JSON-LD (`application/ld+json`), an embedded state blob
+(`__NEXT_DATA__`, `self.__next_f`, `wix-warmup-data`,
+`type="application/json"`), and complete `<meta>` tags — Square Online, for one,
+puts a listing's full description in `<meta name="description">` even though the
+body is client-rendered. If the data is here, stop: no browser needed.
+
+**2. Look for iframes.** A venue frequently embeds its ticketing platform rather
+than hosting listings itself. `document.body.innerText` on the top frame does
+**not** include iframe content, so a page can look empty while its whole
+programme sits one frame down. Enumerate `page.frames()`, not just the document.
+
+**3. Render it and watch the network.** If the body is client-rendered, open it
+in Playwright and log every request and response, filtering out analytics. The
+endpoint the page calls is the endpoint to use — it needs no guessing, and it is
+usually reachable anonymously with a browser `User-Agent`.
+
+```js
+page.on("response", async (r) => {
+  const url = r.url();
+  if (/analytics|googletagmanager|facebook|frog\.wix/.test(url)) return;
+  console.log(r.status(), r.request().method(), url);
+});
+```
+
+Some widgets only fire their data request on interaction — clicking a date
+picker, opening "Check availability" — so drive the page, don't just load it.
+
+**4. Reuse the ids already in the HTML.** Client-rendered sites routinely ship
+the ids their own API needs: `site_id`, `user`, `merchantId`, a Spektrix
+`client-name`, an organisation slug. Grep the page for them before treating any
+id as unknowable.
+
+**5. Only then** consider `sitemap.xml`, a documented platform API, or the
+platform's own docs. A sitemap is useful for discovery but is often stale —
+Ognisko Polskie's lists 48 products where the live store shows 27.
+
+**If the trail runs out, ask.** A site that visibly renders its programme is
+very unlikely to be publishing incomplete data — far more often the request that
+carries it hasn't been found yet. Say what was tried and what is missing rather
+than concluding the venue can't be retrieved: that conclusion changes the
+deliverable (see "Source-Only or Own Retriever?" in `adding-a-venue.md`) and is
+the user's call, not an implementation detail.
+
+---
+
 ## Retrieval Approaches
 
 ### Direct JSON Fetch

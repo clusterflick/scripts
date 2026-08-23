@@ -9,24 +9,9 @@ const {
   generateShowingId,
   basicNormalize,
 } = require("../../common/utils");
+const { isFilmEvent } = require("../../common/is-film-event");
 const { parseDate, parseRunningTimeToMins } = require("./utils");
 const attributes = require("./attributes");
-
-// The Bush Theatre is primarily a theatre, so most listings are plays rather
-// than films. Only include events that are actually film screenings, detected
-// via keywords in the title and description.
-const FILM_KEYWORDS = [
-  "film club",
-  "film screening",
-  "screening",
-  "short films",
-  "cinema",
-];
-
-function isFilmEvent(title, description) {
-  const haystack = basicNormalize(`${title} ${description}`);
-  return FILM_KEYWORDS.some((keyword) => haystack.includes(keyword));
-}
 
 function getDetailValue($, label) {
   const $row = $(".event_about__details_row").filter(function () {
@@ -76,7 +61,8 @@ async function transform({ eventPages }, sourcedEvents) {
       $(".event_about__desc").html() || "",
     ).replace(/^About\s*/i, "");
 
-    if (!isFilmEvent(title, overview)) continue;
+    // The Bush is primarily a producing theatre, so most listings are plays
+    if (!isFilmEvent(`${title} ${overview}`)) continue;
 
     const shortlink = $("link[rel='shortlink']").attr("href");
     const id = new URLSearchParams(new URL(shortlink).search).get("p");

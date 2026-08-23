@@ -207,10 +207,23 @@ async function findEvents(cinema) {
   const matchingEvents = allEvents.filter((event) => {
     if (!event.locationText) return false;
 
-    const venueName = event.locationText.split(",")[0].trim();
-    return venueMatchesCinema(cinema, venueName, null, {
-      eventAddress: event.locationText,
-    });
+    // A promoter often books a room rather than the whole venue, and Ticket
+    // Tailor puts that first: "Main Hall, The Mildmay Club, N169PR" names the
+    // room, not the place. Try each comma-separated part and let the first
+    // that matches win. Stripping known room words instead would be unsafe -
+    // 39 of the venues we hold are themselves called "... Hall", "... Bar" or
+    // "... Studios", so "Cadogan Hall, SW1X 9DQ" would lose its own name.
+    // Testing every part can only add matches, never remove one, and each
+    // still has to agree with the venue on postcode.
+    return event.locationText
+      .split(",")
+      .map((part) => part.trim())
+      .filter(Boolean)
+      .some((venueName) =>
+        venueMatchesCinema(cinema, venueName, null, {
+          eventAddress: event.locationText,
+        }),
+      );
   });
 
   return matchingEvents.map((event) => {

@@ -43,6 +43,7 @@
     "clear:diffed-data": "rm -rf ./diffed-data",
     "clear:llm-usage-data": "rm -rf ./llm-usage-data && rm -rf ./llm-usage-report",
     "clear:all": "npm run clear:cache && npm run clear:retrieved-data && npm run clear:transformed-data && npm run clear:combined-data && npm run clear:matched-data && npm run clear:diffed-data && npm run clear:llm-usage-data",
+    "helper:discover-ma-to-venues": "node helpers/discover-venues-from-ma-to.js",
     "helper:update-test-titles": "npm run clear:transformed-data && ./helpers/get-latest-transformed-data.sh && node common/tests/utils/update-test-titles.js"
   },
   "author": "Alistair Brown <github@alistairjcbrown.com>",
