@@ -4,6 +4,7 @@ module.exports = {
   alternativeNames: [
     "UCL East Cinema",
     "UCL East - Marshgate",
+    "UCL East - One Pool Street",
     "UCL Community Cinema",
   ],
   domain:

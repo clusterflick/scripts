@@ -4,6 +4,8 @@ module.exports = {
   alternativeNames: [
     "Richard Hoggart Building",
     "Goldsmiths, University of London",
+    "Professor Stuart Hall Building",
+    "Professor Stuart Hall Building LG01 (Linton)",
   ],
   domain: "https://www.gold.ac.uk",
   socials: null,
