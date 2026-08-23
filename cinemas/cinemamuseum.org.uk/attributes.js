@@ -1,7 +1,6 @@
 module.exports = {
   id: "cinemamuseum.org.uk",
   name: "The Cinema Museum",
-  alternativeNames: ["Cinema Museum"],
   domain: "http://www.cinemamuseum.org.uk",
   socials: {
     letterboxd: null,

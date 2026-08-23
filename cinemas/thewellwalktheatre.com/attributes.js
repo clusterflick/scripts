@@ -6,7 +6,6 @@ module.exports = {
     "The Well Walk Theatre, Bookshop and Café",
     "The Well Walk Theatre, Café & Bookshop",
     "The Well Walk Theatre, Café and Bookshop",
-    "Well Walk Theatre",
   ],
   domain: "https://www.thewellwalktheatre.com",
   socials: {

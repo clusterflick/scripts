@@ -5,7 +5,6 @@ module.exports = {
     "Ognisko Polskie - Polish Hearth",
     "Polish Hearth Club",
     "The Polish Hearth",
-    "Polish Hearth",
   ],
   domain: "https://www.ogniskopolskie.org.uk",
   socials: {

@@ -1,7 +1,7 @@
 module.exports = {
   id: "nehrucentre.org.uk",
   name: "The Nehru Centre",
-  alternativeNames: ["Nehru Centre", "Nehru Centre London"],
+  alternativeNames: ["Nehru Centre London"],
   domain: "https://www.nehrucentre.org.uk",
   socials: {
     letterboxd: null,

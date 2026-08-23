@@ -1,7 +1,7 @@
 module.exports = {
   id: "thevinenw5.co.uk",
   name: "The Vine",
-  alternativeNames: ["Vine NW5", "Vine"],
+  alternativeNames: ["Vine NW5"],
   domain: "https://www.thevinenw5.co.uk",
   socials: {
     letterboxd: null,

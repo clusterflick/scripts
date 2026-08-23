@@ -24,6 +24,7 @@ describe("isNonFilmEvent", () => {
     ["Neon Naked Life Drawing"],
     ["Advanced Photography Workshop + Photoshoot | London"],
     ["AdTech Networking Social for CEOs & Entrepreneurs Meetup"],
+    ["Ocean Film Festival World Tour: 22 OCT - Early Dinner Reservation"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });
@@ -44,6 +45,8 @@ describe("isNonFilmEvent", () => {
     ["A.I. Artificial Intelligence"],
     ["The 23rd Annual Animation Show of Shows: UK screening"],
     ["The Blinking Buzzards – Quarterly Meeting"],
+    ["The Dinner"],
+    ["Dinner at Eight"],
   ])("does not flag '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(false);
   });
