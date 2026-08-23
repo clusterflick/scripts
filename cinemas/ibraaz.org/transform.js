@@ -110,10 +110,10 @@ async function transform({ moviePages }, sourcedEvents) {
     });
   }
 
-  if (movies.length === 0) {
-    throw new Error("No movies found - the page structure may have changed");
-  }
-
+  // An empty result is left to stand. Between seasons Ibraaz screens nothing,
+  // and retrieve has already refused a film listing that is neither a gallery
+  // of films nor the site's own empty-category message in its place.
+  //
   // Sourced events with no film page of their own are deliberately dropped:
   // Ibraaz sells talks, workshops and performances through the same Ticket
   // Tailor box office, and the site's film category is the only thing that
