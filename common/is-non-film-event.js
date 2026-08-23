@@ -28,6 +28,9 @@ const nonFilmEvents = [
   /Homelessness Research/i,
   /Office Management Show/i,
   /Raver Tots Wembley/i,
+  /Photography Workshop/i,
+  /Adtech Networking/i,
+  /Entrepreneurs Meetup/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
