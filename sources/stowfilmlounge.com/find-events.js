@@ -1,6 +1,6 @@
 const path = require("node:path");
 const cheerio = require("cheerio");
-const { parse, addYears, subDays } = require("date-fns");
+const { parse, format, addYears, subDays } = require("date-fns");
 const { enGB } = require("date-fns/locale/en-GB");
 const {
   createPerformance,
@@ -15,6 +15,12 @@ const { venueMatchesCinema } = require("../../common/source-utils");
 const attributes = require("./attributes");
 
 const eventMatcher = /STOW FILM LOUNGE @\s*/i;
+
+// A screening the venue puts on for free carries the same booking button as any
+// other, with no url on it and a label saying so - "FREE EVENT - JUST TURN UP".
+// Those are confirmed screenings and are kept; the page also says of the rest
+// that "tickets are available on the door unless the screening is sold out".
+const freeEntryMatcher = /free|just turn up|on the door|no booking/i;
 
 /**
  * Parse film info from text like "TITLE (Director, Year, Cert Rating, Duration)"
@@ -98,6 +104,25 @@ function extractEventId(bookingUrl) {
   return [host, ...segments].join("-");
 }
 
+const slugify = (text) =>
+  text
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+
+/**
+ * A free screening has no booking url to take an event id from, so build one
+ * from what identifies it on the page instead. The date is part of it: a venue
+ * showing the same film twice would otherwise give both screenings the same id,
+ * and telling two screenings apart matters more than holding an id steady
+ * across a screening being moved to another date.
+ */
+function buildFreeEventId(venueName, eventDate, title) {
+  return [slugify(venueName), format(eventDate, "yyyy-MM-dd"), slugify(title)]
+    .filter(Boolean)
+    .join("-");
+}
+
 /**
  * Parse a single event section using Squarespace block structure
  */
@@ -132,9 +157,15 @@ function parseEventSection($, section) {
   // Booking link is in the button container
   const $bookingLink = section.find(".sqs-block-button-container a").first();
   const bookingPath = $bookingLink.attr("href") || "";
+  const buttonLabel = getText($bookingLink);
+  const isFreeEntry = !bookingPath && freeEntryMatcher.test(buttonLabel);
 
-  // Bail if there's no ticket link (this may be a placeholder with "coming soon" text)
-  if (!bookingPath) {
+  // Bail if there's no ticket link and nothing saying the screening is free -
+  // this may be a placeholder for a screening that isn't open for booking yet
+  if (!bookingPath && !isFreeEntry) {
+    console.log(
+      `! No ticket link or free entry label for ${filmText} at ${venueName} - skipping`,
+    );
     return { venueName: "", event: {} };
   }
 
@@ -154,7 +185,9 @@ function parseEventSection($, section) {
   const { title, ...overview } = parseFilmInfo(filmText);
   const eventDate = parseEventDate(dateText, timesText);
 
-  const eventId = extractEventId(bookingUrl);
+  const eventId = bookingUrl
+    ? extractEventId(bookingUrl)
+    : buildFreeEventId(venueName, eventDate, title);
   const synopsis = descriptions.join("\n\n");
 
   return {
@@ -168,6 +201,7 @@ function parseEventSection($, section) {
         createPerformance({
           date: eventDate,
           url: bookingUrl || attributes.url,
+          notesList: isFreeEntry ? [buttonLabel] : [],
           status: {},
           accessibility: createAccessibility(title, {}, synopsis),
           format: createFormat(title, {}, synopsis),
