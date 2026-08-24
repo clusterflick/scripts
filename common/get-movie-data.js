@@ -125,6 +125,7 @@ const forcedMatches = {
   "walk the line": 69, // https://www.themoviedb.org/movie/
   wicked: 402431, // https://www.themoviedb.org/movie/402431-wicked
   "wizard of oz": 630, // https://www.themoviedb.org/movie/630-the-wizard-of-oz
+  antarctica: 830704, // https://www.themoviedb.org/movie/830704-antarctica
 };
 
 function getForcedMatch(normalizedTitle) {

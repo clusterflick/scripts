@@ -1041,6 +1041,7 @@ function normalizeTitle(title, options) {
     ["We Will Find Happiness", "We'll Find Happiness"],
     ["The Making of Inglourious Basterds", "Inglourious Basterds"],
     ["an unmaried woman", "an unmarried woman"],
+    ["AAHHH BELINDA", "AAAHH BELINDA"],
     [
       /Special Screening of Bitters$/i,
       "Special Screening of Bitter Sweet Ballad",
