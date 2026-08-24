@@ -15,14 +15,15 @@ describe("getDirectors", () => {
       "Directed by Indhu Rubasingham\n\nAward-winner Sandra Oh plays the role",
       ["Indhu Rubasingham"],
     ],
-    // Opening a sentence, so the credit ends at the comma rather than the line
+    // Opening a sentence, so the credit ends at the comma rather than the line,
+    // and the billing in front of the name is not part of it
     [
       "Directed by BAFTA nominees Iain Forsyth and Jane Pollard, Broken English is a portrait of Marianne Faithfull starring Tilda Swinton, George MacKay and Nick Cave.",
-      ["BAFTA nominees Iain Forsyth", "Jane Pollard"],
+      ["Iain Forsyth", "Jane Pollard"],
     ],
     [
       "Directed by filmmaker James Ewen, the 20-minute documentary follows the band",
-      ["filmmaker James Ewen"],
+      ["James Ewen"],
     ],
     // Followed by the rest of the billing, separated by slashes
     [

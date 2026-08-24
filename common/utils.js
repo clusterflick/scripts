@@ -60,12 +60,25 @@ const unhelpfulCrewNames = [
 const isHelpfulCrewName = (name) =>
   !unhelpfulCrewNames.some((pattern) => pattern.test(name.trim()));
 
+// Venues bill a director rather than just naming them. Two shapes turn up: a
+// role, sometimes with an adjective in front ("award-winning director X",
+// "renowned filmmaker X"), and an accolade ("BAFTA nominees X and Y", "Oscar
+// winner X"). The billing is never part of the name, so a crew name that keeps
+// it matches nobody. Each only strips when a name actually follows, leaving
+// prose such as "filmmaker behind Bend It Like Beckham" alone rather than
+// mangling it into something that looks like a real name.
+// Cased by hand rather than with the `i` flag, which would make the uppercase
+// lookahead match anything.
+const crewNameBilling = [
+  /^(?:[Tt]he\s+)?(?:[\w-]+\s+){0,2}(?:[Dd]irector|[Ff]ilm-?maker)s?\s+(?=\p{Lu})/u,
+  /^(?:[Tt]he\s+)?[\w-]+\s+(?:[Nn]ominee|[Ww]inner)s?\s+(?=\p{Lu})/u,
+];
+
 // Clean up crew names by removing common prefixes/suffixes
 const cleanCrewName = (name) =>
-  name
-    .trim()
+  crewNameBilling
+    .reduce((cleaned, billing) => cleaned.replace(billing, ""), name.trim())
     .replace(/\s+\.$/g, "") // Remove trailing " ."
-    .replace(/^award[- ]winning\s+(director|filmmaker)\s+/i, "") // "award-winning director X" -> "X"
     .trim();
 
 const sanitizePathSegment = (value = "") => {
