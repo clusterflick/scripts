@@ -219,6 +219,30 @@ const setupDirectory = async (type) => {
   const getPath = (type) => path.join(process.cwd(), type, location);
   if (!location) throw new Error("No location provided");
 
+  if (action.toLowerCase() === "health") {
+    // `location` is a chain group, not a venue: one listing call answers the
+    // whole estate, so the probe runs per group - see scripts/health.
+    const health = require("./scripts/health");
+    const rows = await health(location);
+    await setupDirectory("health-data");
+    await writeJSON(getPath("health-data"), rows);
+
+    // Written before the job is allowed to fail. A challenged or missing venue
+    // is exactly the evidence this stage exists to record, and throwing first
+    // would discard it. The job still goes red, and nothing silently passes.
+    const failures = rows.filter(({ reason }) =>
+      health.FAILURE_KINDS.has(reason?.kind),
+    );
+    if (failures.length > 0) {
+      throw new Error(
+        `Health check failed for ${failures.length} of ${rows.length} venues: ${failures
+          .map(({ venue, reason }) => `${venue} (${reason.kind})`)
+          .join(", ")}`,
+      );
+    }
+    return;
+  }
+
   if (action.toLowerCase() === "retrieve") {
     const retrieve = require("./scripts/retrieve");
     const output = await retrieve(location, ...parameters);

@@ -14,4 +14,5 @@ module.exports = {
   groupName: "Curzon",
   type: "Cinema",
   programming: "cinema",
+  cinemaId: "SOH1",
 };

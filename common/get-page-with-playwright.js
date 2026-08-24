@@ -69,8 +69,8 @@ async function withPlaywrightSession(fn, sessionOptions = {}) {
     return context;
   };
 
-  const getPage = (url, cacheKey, callback, options = {}) =>
-    dailyCache(cacheKey, async () => {
+  const getPage = (url, cacheKey, callback, options = {}) => {
+    const load = async () => {
       const ctx = await ensureContext(options);
       const page = await ctx.newPage();
       await page.setViewportSize({ width: 1280, height: 720 });
@@ -175,7 +175,16 @@ async function withPlaywrightSession(fn, sessionOptions = {}) {
           }
         }
       }
-    });
+    };
+
+    // The cache is keyed on the calendar day, which suits a retrieve - it runs
+    // once and a repeat within the day is a retry that should reuse what it
+    // already fetched. A caller whose whole point is a fresh answer (a health
+    // probe running hourly, or anything reading a short-lived token off the
+    // page) has to opt out, or it spends the day replaying the first response.
+    const disableCache = options.disableCache ?? sessionOptions.disableCache;
+    return disableCache ? load() : dailyCache(cacheKey, load);
+  };
 
   try {
     return await fn(getPage);

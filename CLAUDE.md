@@ -39,12 +39,12 @@ npm run format         # Format with Prettier (JS, JSON, MD)
 ## Project Structure
 
 ```
-index.js                 # CLI entry point (retrieve|transform|combine|match|cache|diff|registry|departed)
+index.js                 # CLI entry point (retrieve|transform|combine|match|cache|diff|registry|departed|health)
 cinemas/                 # 300+ cinema venue modules (each has attributes/retrieve/transform)
 sources/                 # 9 external ticketing platform modules
 common/                  # Shared utilities (utils.js, normalize-title.js, get-movie-data.js, etc.)
 scripts/                 # Pipeline stages: retrieve/, transform/, combine/, match/, cache/, diff/,
-                         #   registry/, departed/
+                         #   registry/, departed/, health/
 helpers/                 # Dev helper scripts (data download, manual matching)
 docs/                    # Pipeline documentation (retrieve.md, transform.md)
 schema.json              # JSON Schema for output validation
@@ -89,6 +89,30 @@ that `combine` did not produce have finished their run, and it writes them to
 that would otherwise 404. It writes a separate artifact deliberately: nothing
 reading `combined-data.json` — the match stage, the client payload, the listings
 — should see films that aren't screening.
+
+`health` sits outside the pipeline. It probes a chain's listing endpoint,
+asserts the response is healthy and writes one row per venue to
+`health-data/<group>` - it never opens a per-title page, so the whole Odeon
+estate costs 2 requests against a retrieve's 323, cheap enough to run hourly.
+Its unit is a chain group (the id prefix the venues share) rather than a venue,
+because one batched call can answer for all of them; a standalone venue can
+carry its own probe as an optional `health` export beside `retrieve` and
+`transform`.
+
+What a chain can count varies, and the row's `granularity` says which: Odeon,
+Curzon and Cineworld give a film x date matrix (`film-date`), while Picturehouse
+and Vue return individual showings (`performance`). `byDate` is the same axis
+either way - films per date, or performances per date - so a publish reads the
+same everywhere: new keys appearing, or existing keys growing. Each probe checks
+the chain's own site list before asking for listings - that is what separates a
+venue with nothing on from an id that has gone stale. These endpoints are
+quirkier than they look, and each probe documents its own traps at the top of
+`common/<chain>/health.js`: read it before changing a call or a parameter.
+
+Its rows are written before the job is allowed to fail. A bot challenge or a
+dark venue is an observation about the source and the evidence the log exists to
+keep, so it is recorded and the job stays green; a missing venue id or a failed
+probe is recorded too, and then the job goes red.
 
 ## Module Pattern
 
