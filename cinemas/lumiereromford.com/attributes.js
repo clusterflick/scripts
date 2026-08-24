@@ -5,6 +5,7 @@ module.exports = {
     "Lumiere Cinema",
     "Lumiere Romford",
     "Lumiere Romford Cinema",
+    "Lumiere Cinema, Romford",
   ],
   domain: "https://www.lumiereromford.com",
   socials: {

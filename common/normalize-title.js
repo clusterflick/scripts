@@ -1039,6 +1039,7 @@ function normalizeTitle(title, options) {
       "National Theatre Live: The Misanthrope",
     ],
     ["We Will Find Happiness", "We'll Find Happiness"],
+    ["The Making of Inglourious Basterds", "Inglourious Basterds"],
     // ODEON are idiots -- correct their years
     ["THE HUNGER GAMES (2026)", "THE HUNGER GAMES (2012)"],
     [
