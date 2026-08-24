@@ -31,13 +31,32 @@ const makeRow = ({ startDate, screen, availabilityNum, keywords = "" }) => {
   return row;
 };
 
+// A breadcrumb trail as BFI renders it: every crumb is an `<li>`, and all but
+// the last (the article's own title) links on to its parent article.
+const pageWithBreadcrumbs = (crumbs) => {
+  const items = crumbs
+    .map(({ text, href }, index) =>
+      index === crumbs.length - 1
+        ? `<li class="Breadcrumbs__item">${text}</li>`
+        : `<li class="Breadcrumbs__item"><a class="Breadcrumbs__link" href="${href}">${text}</a></li>`,
+    )
+    .join("");
+  return `<html><body>
+    <div class="main-article-body">
+      <div class="Breadcrumbs"><ul class="Breadcrumbs__list">${items}</ul></div>
+      <div class="Rich-text">A film.</div>
+    </div>
+    <ul class="Film-info__information"></ul>
+  </body></html>`;
+};
+
 // Retrieve now hands transform the whole `articleContext`; a `searchResults` of
 // `undefined` models an article with no performances.
-const runTransform = async (rows) => {
+const runTransform = async (rows, html = filmPage) => {
   const articleContext = { searchNames: SEARCH_NAMES };
   if (rows) articleContext.searchResults = rows.map(makeRow);
   const moviePages = {
-    [showPath]: { title: "Test Film", html: filmPage, articleContext },
+    [showPath]: { title: "Test Film", html, articleContext },
   };
   const shows = await transform(attributes, { moviePages }, {});
   return shows[0].performances;
@@ -165,5 +184,45 @@ describe("BFI transform", () => {
   it("emits no performances for an article with no searchResults", async () => {
     const performances = await runTransform(null);
     expect(performances).toHaveLength(0);
+  });
+
+  it("notes the season a film sits under in the breadcrumbs", async () => {
+    const performances = await runTransform(
+      [P1, P2],
+      pageWithBreadcrumbs([
+        { text: "Home", href: "/" },
+        { text: "Seasons", href: "article/seasons" },
+        { text: "S.O.U.L. Fest x ABFF London", href: "article/soul-fest" },
+        { text: "Opening Night: Black Is Beautiful" },
+      ]),
+    );
+    expect(performances.map(({ notes }) => notes)).toEqual([
+      "Part of S.O.U.L. Fest x ABFF London",
+      "Part of S.O.U.L. Fest x ABFF London",
+    ]);
+  });
+
+  it("adds no note for a film filed under a programme bucket", async () => {
+    const [performance] = await runTransform(
+      [P1],
+      pageWithBreadcrumbs([
+        { text: "Home", href: "/" },
+        { text: "Big screen classics", href: "article/big-screen-classics" },
+        { text: "Key Largo" },
+      ]),
+    );
+    expect(performance.notes).toBe("");
+  });
+
+  it("adds no note when the article is a season rather than a film in one", async () => {
+    const [performance] = await runTransform(
+      [P1],
+      pageWithBreadcrumbs([
+        { text: "Home", href: "/" },
+        { text: "Seasons", href: "article/seasons" },
+        { text: "Marilyn Monroe: Self-Made Star" },
+      ]),
+    );
+    expect(performance.notes).toBe("");
   });
 });

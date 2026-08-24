@@ -45,6 +45,29 @@ function getOverviewFor($) {
   return createOverview(overview);
 }
 
+// Season films nest one level under a "Seasons" breadcrumb
+// (Home / Seasons / <season> / <title>), while the flat programme buckets
+// (Big screen classics, New releases, Member exclusives, ...) sit directly
+// under Home. Only the former names something worth telling the audience, so
+// anchor on the "Seasons" crumb and take the segment after it rather than
+// reading whatever happens to sit above the film.
+const SEASONS_BREADCRUMB_HREF = "article/seasons";
+
+function getSeasonFor($) {
+  const items = $(".Breadcrumbs__item").toArray();
+  const seasonsIndex = items.findIndex(
+    (el) => $(el).find("a").attr("href") === SEASONS_BREADCRUMB_HREF,
+  );
+  if (seasonsIndex === -1) return undefined;
+
+  // The final crumb is the article's own title, so a "Seasons" crumb directly
+  // above it means this page is a season rather than a film within one.
+  const seasonIndex = seasonsIndex + 1;
+  if (seasonIndex >= items.length - 1) return undefined;
+
+  return getText($(items[seasonIndex])) || undefined;
+}
+
 // Each performance's searchResults row carries a comma-separated `keywords`
 // field - the venue's own per-performance markers (e.g. "Audio description,
 // Closed captions,Digital", "IMAX 70mm"). Accessibility and format are read
@@ -85,7 +108,7 @@ function getKeywordFormat(keywords) {
   }, {});
 }
 
-function getPerformancesFor($, url, show, venueFormat) {
+function getPerformancesFor($, url, show, venueFormat, season) {
   const { title, articleContext } = show;
 
   // Performances arrive as raw `searchResults` rows - positional arrays whose
@@ -132,7 +155,7 @@ function getPerformancesFor($, url, show, venueFormat) {
     return createPerformance({
       url,
       screen,
-      notesList: [],
+      notesList: season ? [`Part of ${season}`] : [],
       date: parseDate(startDate),
       status: { soldOut },
       accessibility: createAccessibility(title, {
@@ -168,6 +191,8 @@ async function transform(attributes, { moviePages }, sourcedEvents) {
     if (!articleId) throw new Error(`Unable to get articleId on ${showPath}`);
 
     const $articleBody = $(".main-article-body");
+    // Read before the breadcrumbs are stripped out of the article body below.
+    const season = getSeasonFor($);
     $articleBody.find(".Breadcrumbs,.Booking").remove();
     const overview = $articleBody
       .children()
@@ -176,7 +201,7 @@ async function transform(attributes, { moviePages }, sourcedEvents) {
       .join("\n");
 
     const showingId = generateShowingId(attributes, articleId);
-    const performances = getPerformancesFor($, url, show, venueFormat);
+    const performances = getPerformancesFor($, url, show, venueFormat, season);
 
     // Sometimes the same show can be on different URLs with the same ID.
     // Detect this by finding existing showings and adding performances instead
