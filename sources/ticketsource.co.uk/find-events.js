@@ -13,13 +13,9 @@ const {
 } = require("../../common/utils");
 const { createOverview, createPerformance } = require("../../common/utils");
 const { extractPeopleNames } = require("../../common/extract-people");
+const getDirectors = require("./get-directors");
 const attributes = require("./attributes");
 const { venueMatchesCinema } = require("../../common/source-utils");
-
-function getDirector(synopsis) {
-  const match = synopsis.match(/^directed by\s+(.+)$/im);
-  return match ? match[1].trim() : undefined;
-}
 
 function createPerformanceFromHit(
   { dateTimeString, venueSlug, timeHash, hint },
@@ -84,7 +80,7 @@ function convertTicketSourceEvent(hits, moviePages) {
     matchingHints: {
       overview,
       cast: extractPeopleNames(eventText, { stripAttributions: true }),
-      crew: eventText ? [getDirector(eventText)].filter(Boolean) : undefined,
+      crew: eventText ? getDirectors(eventText) : undefined,
     },
   };
 }

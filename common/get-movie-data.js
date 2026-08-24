@@ -261,11 +261,18 @@ const rankPeople = (searchedName, people) => {
   );
 };
 
+// Director names are scraped, so a value long enough to be prose is a failed
+// extraction rather than a person. Searching TheMovieDB for it cannot match
+// anything, and it builds a cache key too long for the filesystem - so drop it
+// and let the movie fall through to the other matching strategies.
+const maxDirectorNameLength = 100;
+const isNameShaped = (name) => name.length <= maxDirectorNameLength;
+
 async function findMovieByDirector(normalizedTitle, movie) {
   const movieDirectors = [
     ...movie.overview.directors,
     ...(movie.matchingHints?.crew || []),
-  ];
+  ].filter(isNameShaped);
   if (movieDirectors.length === 0) return;
 
   const directorsName = applyNameCorrections(movieDirectors[0]);

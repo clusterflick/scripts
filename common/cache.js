@@ -40,6 +40,22 @@ const setupCacheDirectory = async (getPath = getCachePath) => {
   }
 };
 
+// Filesystems cap a single name at 255 bytes. Cache keys are built from
+// scraped values, so a key past that limit means a caller passed unbounded text
+// where an identifier was expected. Refuse it rather than truncating: two long
+// keys would truncate to the same file and silently serve each other's data.
+const maxCacheFilenameBytes = 255;
+
+function assertStorableCacheKey(key, getPath) {
+  const bytes = Buffer.byteLength(path.basename(getPath(key)));
+  if (bytes <= maxCacheFilenameBytes) return;
+
+  throw new Error(
+    `Cache key is ${bytes} bytes, over the ${maxCacheFilenameBytes} byte filename limit. ` +
+      `This usually means unbounded scraped text was used as a key. Key begins: "${key.slice(0, 80)}"`,
+  );
+}
+
 function checkCache(filename, getPath) {
   return fs.existsSync(getPath(filename));
 }
@@ -66,6 +82,8 @@ function writeCache(filename, value, getPath) {
 }
 
 async function cache(key, retrieve, getPath = getCachePath) {
+  assertStorableCacheKey(key, getPath);
+
   let data;
   if (checkCache(key, getPath)) {
     data = readCache(key, getPath);

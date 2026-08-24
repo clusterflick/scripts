@@ -1111,6 +1111,8 @@ module.exports = {
   getValidClassification,
   parseTitleAndClassification,
   convertNamesTextToList,
+  cleanCrewName,
+  isHelpfulCrewName,
   getDescriptionAccessibility,
   getTitleAccessibility,
 };
