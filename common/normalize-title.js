@@ -1040,6 +1040,11 @@ function normalizeTitle(title, options) {
     ],
     ["We Will Find Happiness", "We'll Find Happiness"],
     ["The Making of Inglourious Basterds", "Inglourious Basterds"],
+    ["an unmaried woman", "an unmarried woman"],
+    [
+      /Special Screening of Bitters$/i,
+      "Special Screening of Bitter Sweet Ballad",
+    ],
     // ODEON are idiots -- correct their years
     ["THE HUNGER GAMES (2026)", "THE HUNGER GAMES (2012)"],
     [
