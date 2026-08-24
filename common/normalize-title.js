@@ -1050,6 +1050,7 @@ function normalizeTitle(title, options) {
       "The Conversation: An Afternoon with Walter Murch",
       "An Afternoon with Walter Murch",
     ],
+    ["The Playhouse Buster Keaton", "The Play house Buster Keaton"],
     // ODEON are idiots -- correct their years
     ["THE HUNGER GAMES (2026)", "THE HUNGER GAMES (2012)"],
     [
