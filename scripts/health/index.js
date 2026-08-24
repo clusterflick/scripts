@@ -18,11 +18,12 @@ const groupProbes = {
   "picturehouses.com": require("../../common/picturehouses.com/health"),
 };
 
-// A challenged or dark venue is an observation about the source; the job stays
+// A challenge, or a venue with nothing on, is an observation about the source;
+// the job stays
 // green and the row records what was seen. These two mean something is wrong on
 // our side - an id we track has gone, or the probe couldn't complete - and the
 // job goes red once the rows are safely written. See index.js.
-const FAILURE_KINDS = new Set(["venue-missing", "probe-error"]);
+const FAILURE_KINDS = new Set(["unknown-venue-id", "probe-error"]);
 
 // A location is either a chain group or a single venue. A venue that isn't part
 // of a batched chain carries its own probe as an optional `health` export

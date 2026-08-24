@@ -5,6 +5,7 @@ const {
   probeText,
   probeError,
   startObservation,
+  withChallengeRetry,
 } = require("../../common/health-probe");
 const { parseDate } = require("./utils");
 const attributes = require("./attributes");
@@ -68,7 +69,10 @@ async function health(venues) {
   let byDate;
   let films;
   try {
-    const html = await probeText(`${attributes.domain}/whats-on/`);
+    const html = await withChallengeRetry(
+      () => probeText(`${attributes.domain}/whats-on/`),
+      venue.id,
+    );
     countRequest();
     ({ films, byDate } = tally(html));
   } catch (error) {
@@ -78,7 +82,9 @@ async function health(venues) {
 
   const dates = Object.keys(byDate).sort();
   if (dates.length === 0) {
-    return finalise([{ venue: venue.id, reason: { kind: "venue-dark" } }]);
+    return finalise([
+      { venue: venue.id, reason: { kind: "no-listings-found" } },
+    ]);
   }
 
   return finalise([

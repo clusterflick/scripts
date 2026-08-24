@@ -3,6 +3,7 @@ const {
   probeDocument,
   probeError,
   startObservation,
+  withChallengeRetry,
 } = require("../health-probe");
 
 // Three requests for the whole estate, no browser.
@@ -96,10 +97,17 @@ async function health(venues) {
   let knownCinemaIds;
   let tallies;
   try {
-    knownCinemaIds = await getKnownCinemaIds();
+    knownCinemaIds = await withChallengeRetry(
+      getKnownCinemaIds,
+      "the chain cinema list",
+    );
     countRequest();
     countRequest();
-    tallies = tallyByVenue(await getShowTimes(venues[0].cinemaId), venues);
+    const movies = await withChallengeRetry(
+      () => getShowTimes(venues[0].cinemaId),
+      "the chain listing",
+    );
+    tallies = tallyByVenue(movies, venues);
     countRequest();
   } catch (error) {
     // One call answers for every venue, so they share its failure.
@@ -110,13 +118,13 @@ async function health(venues) {
   return finalise(
     venues.map(({ id, cinemaId }) => {
       if (!knownCinemaIds.has(cinemaId)) {
-        return { venue: id, reason: { kind: "venue-missing", cinemaId } };
+        return { venue: id, reason: { kind: "unknown-venue-id", cinemaId } };
       }
 
       const { films, byDate } = tallies.get(cinemaId);
       const dates = Object.keys(byDate).sort();
       if (dates.length === 0) {
-        return { venue: id, reason: { kind: "venue-dark" } };
+        return { venue: id, reason: { kind: "no-listings-found" } };
       }
 
       return {

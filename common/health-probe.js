@@ -1,4 +1,4 @@
-const { fetchWithRetry } = require("./utils");
+const { fetchWithRetry, sleep, withJitter } = require("./utils");
 const {
   BOT_CHALLENGE_TEXT,
   isBotChallengeFetchResponse,
@@ -16,7 +16,8 @@ const {
 // worth less than a prompt failure.
 const PROBE_RETRY = { retries: 1, delayMs: 5_000 };
 
-// Why a venue has no counts. A challenge or a dark venue is an observation
+// Why a venue has no counts. A challenge, or a venue with nothing on, is an
+// observation
 // about the source and worth keeping; only the failure kinds mean something is
 // wrong with us. Which kinds fail the job is the caller's call - see
 // scripts/health.
@@ -126,6 +127,33 @@ const probeText = async (url, options) => {
   throw classifyFailure(url, response, body);
 };
 
+// A challenge is usually transient - Cloudflare hands out a clearance and the
+// next attempt goes through - so it is worth waiting once before recording it.
+// Only challenges are retried: an unknown id or a broken parse will fail again
+// identically, and retrying those just delays the cycle for nothing.
+//
+// Wrap the whole unit that shares a request, not the request alone. For the
+// browser probes that means the call that opens the session, so the retry gets a
+// fresh browser - a challenged context stays challenged, and reusing it would
+// spend the delay to be refused again.
+const CHALLENGE_RETRY_MS = 60_000;
+
+const withChallengeRetry = async (fn, label, retries = 1) => {
+  for (let attempt = 0; ; attempt += 1) {
+    try {
+      return await fn();
+    } catch (error) {
+      if (error.reason?.kind !== "bot-challenge" || attempt >= retries)
+        throw error;
+      const wait = withJitter(CHALLENGE_RETRY_MS);
+      console.log(
+        ` ! - ${label} was challenged, retrying in ${Math.round(wait / 1000)}s ...`,
+      );
+      await sleep(wait);
+    }
+  }
+};
+
 // Collects one cycle's rows. Nothing is stamped until `finalise`, so every row
 // carries the cycle's final totals rather than the running values at the moment
 // it was built - `durationMs` and `requests` describe the observation, not the
@@ -162,5 +190,6 @@ module.exports = {
   probeText,
   probeDocument,
   classifyPage,
+  withChallengeRetry,
   startObservation,
 };

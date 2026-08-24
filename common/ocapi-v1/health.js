@@ -1,4 +1,9 @@
-const { probeError, probeJson, startObservation } = require("../health-probe");
+const {
+  probeError,
+  probeJson,
+  startObservation,
+  withChallengeRetry,
+} = require("../health-probe");
 
 // Shared by every chain on this API the way `retrieve.js` here is: the chain
 // module supplies a `getApi` that bootstraps the bearer token off its own site,
@@ -21,10 +26,10 @@ const authHeaders = (authToken) => ({
 
 // The chain's own list of what it operates, fetched before the listing call.
 // A site with nothing on simply doesn't appear in `film-screening-dates`, so
-// that response alone can't tell a dark venue from an id that has stopped
-// existing. And an unrecognised `siteIds` 400s the *whole* request rather than
+// that response alone can't tell a venue with nothing on from an id that has
+// stopped existing. And an unrecognised `siteIds` 400s the *whole* request rather than
 // omitting one site, so without this a single stale id would blind the probe
-// for the entire estate instead of costing one venue-missing row.
+// for the entire estate instead of costing one unknown-venue-id row.
 const getSiteIds = async ({ url, apiUrl, authToken }) => {
   const { sites } = await probeJson(
     `${url || apiUrl}/ocapi/v1/sites`,
@@ -86,28 +91,32 @@ async function health(venues, getApi) {
     );
   }
 
-  let tracked = [];
   let missing = [];
   let tallies;
   try {
-    const api = await getApi();
-    const knownSiteIds = await getSiteIds(api);
-    countRequest();
-
-    tracked = venues.filter(({ cinemaId }) => knownSiteIds.has(cinemaId));
-    missing = venues.filter(({ cinemaId }) => !knownSiteIds.has(cinemaId));
-
-    // Skip the listing call rather than send an empty `siteIds`, which is a
-    // different question with a different answer.
-    if (tracked.length) {
-      tallies = tallyByVenue(
-        await getFilmScreeningDates(api, tracked),
-        tracked,
-      );
+    // Retried as one unit: the token, the site list and the listing all come off
+    // one browser session, so a challenge to any of them wants a fresh one.
+    ({ missing, tallies } = await withChallengeRetry(async () => {
+      const api = await getApi();
+      const knownSiteIds = await getSiteIds(api);
       countRequest();
-    } else {
-      tallies = new Map();
-    }
+
+      const known = venues.filter(({ cinemaId }) => knownSiteIds.has(cinemaId));
+      const unknown = venues.filter(
+        ({ cinemaId }) => !knownSiteIds.has(cinemaId),
+      );
+
+      // Skip the listing call rather than send an empty `siteIds`, which is a
+      // different question with a different answer.
+      if (!known.length) return { missing: unknown, tallies: new Map() };
+
+      const filmScreeningDates = await getFilmScreeningDates(api, known);
+      countRequest();
+      return {
+        missing: unknown,
+        tallies: tallyByVenue(filmScreeningDates, known),
+      };
+    }, "the chain listing"));
   } catch (error) {
     // Every venue shares the failure because they shared the call.
     const reason = reasonFor(error);
@@ -119,13 +128,13 @@ async function health(venues, getApi) {
   return finalise(
     venues.map(({ id, cinemaId }) => {
       if (missingIds.has(id)) {
-        return { venue: id, reason: { kind: "venue-missing", cinemaId } };
+        return { venue: id, reason: { kind: "unknown-venue-id", cinemaId } };
       }
 
       const { films, byDate } = tallies.get(cinemaId);
       const dates = Object.keys(byDate).sort();
       if (dates.length === 0) {
-        return { venue: id, reason: { kind: "venue-dark" } };
+        return { venue: id, reason: { kind: "no-listings-found" } };
       }
 
       return {

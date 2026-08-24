@@ -109,10 +109,16 @@ venue with nothing on from an id that has gone stale. These endpoints are
 quirkier than they look, and each probe documents its own traps at the top of
 `common/<chain>/health.js`: read it before changing a call or a parameter.
 
+A bot challenge is retried once after about a minute before it is recorded,
+because a challenge that clears was never worth a row - the point is complete
+data, not a note explaining a hole in it. Only challenges are retried; a missing
+venue or a broken parse fails the same way twice. For the browser probes the
+retry recreates the session, since a challenged context stays challenged.
+
 Its rows are written before the job is allowed to fail. A bot challenge or a
-dark venue is an observation about the source and the evidence the log exists to
-keep, so it is recorded and the job stays green; a missing venue id or a failed
-probe is recorded too, and then the job goes red.
+venue with nothing on is an observation about the source and the evidence the
+log exists to keep, so it is recorded and the job stays green; an unknown venue
+id or a failed probe is recorded too, and then the job goes red.
 
 ## Module Pattern
 

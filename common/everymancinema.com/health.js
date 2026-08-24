@@ -1,5 +1,10 @@
 const { startOfDay, endOfDay, addYears, format } = require("date-fns");
-const { probeJson, probeError, startObservation } = require("../health-probe");
+const {
+  probeJson,
+  probeError,
+  startObservation,
+  withChallengeRetry,
+} = require("../health-probe");
 
 // Two requests for the estate, no browser and no chain check.
 //
@@ -7,7 +12,7 @@ const { probeJson, probeError, startObservation } = require("../health-probe");
 // of them, an object keyed by id, and comma-separated ids are all a 500; only
 // repeated params work, the same convention Odeon's `siteIds` uses.
 //
-// Everyman is the one chain that distinguishes a dark venue from an unknown one
+// Everyman is the one chain that tells an empty venue from an unknown id
 // by itself, so nothing has to be cross-checked against a site list: a venue
 // with nothing on comes back present with an empty schedule, while an id the
 // chain doesn't know is left out of the response entirely.
@@ -103,7 +108,10 @@ async function health(allVenues) {
   for (const group of chunk(venues, MAX_THEATERS_PER_REQUEST)) {
     let schedules;
     try {
-      schedules = await getSchedules(group);
+      schedules = await withChallengeRetry(
+        () => getSchedules(group),
+        `theaters ${group.map(({ cinemaId }) => cinemaId).join(", ")}`,
+      );
       countRequest();
     } catch (error) {
       // Only this chunk's venues share the failure; the others are still
@@ -117,11 +125,12 @@ async function health(allVenues) {
     for (const { id, cinemaId } of group) {
       const schedule = schedules[cinemaId];
       if (!schedule) {
-        // Present-but-empty is how the chain reports a dark venue, so absence
+        // Present-but-empty is how the chain reports a venue with nothing on,
+        // so absence
         // from a chunk it was asked for means the id itself is unknown.
         results.push({
           venue: id,
-          reason: { kind: "venue-missing", cinemaId },
+          reason: { kind: "unknown-venue-id", cinemaId },
         });
         continue;
       }
@@ -129,7 +138,7 @@ async function health(allVenues) {
       const { films, byDate } = tally(schedule);
       const dates = Object.keys(byDate).sort();
       if (dates.length === 0) {
-        results.push({ venue: id, reason: { kind: "venue-dark" } });
+        results.push({ venue: id, reason: { kind: "no-listings-found" } });
         continue;
       }
 

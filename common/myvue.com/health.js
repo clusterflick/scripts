@@ -4,6 +4,7 @@ const {
   probeError,
   classifyPage,
   startObservation,
+  withChallengeRetry,
 } = require("../health-probe");
 
 // One browser page load plus a request per venue.
@@ -23,7 +24,7 @@ const filmsUrl = (cinemaId) =>
 // The chain's own cinema list, and the one call here that needs no browser.
 // It is load-bearing: an unrecognised cinemaId answers 200 with `responseCode: 0`
 // and an empty film list - identical to a venue with nothing on - so without
-// this a stale id would report as dark and look truthful.
+// this a stale id would report as no-listings-found and look truthful.
 const getKnownCinemaIds = async () => {
   const { result } = await probeJson(
     `${DOMAIN}/api/microservice/showings/cinemas`,
@@ -81,11 +82,14 @@ async function health(venues) {
 
   let knownCinemaIds;
   try {
-    knownCinemaIds = await getKnownCinemaIds();
+    knownCinemaIds = await withChallengeRetry(
+      getKnownCinemaIds,
+      "the chain cinema list",
+    );
     countRequest();
   } catch (error) {
     // The chain check is shared, so its failure is shared. Reporting every
-    // venue as dark would be worse than reporting that we couldn't look.
+    // venue as having no listings would be worse than saying we couldn't look.
     const reason = reasonFor(error);
     return finalise(venues.map(({ id }) => ({ venue: id, reason })));
   }
@@ -95,35 +99,42 @@ async function health(venues) {
   let tallies = new Map();
   if (tracked.length > 0) {
     try {
-      const results = await withPlaywrightSession((getPage) =>
-        getPage(
-          venues[0].url,
-          // Its own key, so the probe never shares - or poisons - the
-          // retrieve's cache entries (`myvue.com-<cinemaId>`).
-          "health--myvue.com",
-          async (page, response) => {
-            await page.waitForLoadState();
-            // The header is what tells us a real page rendered rather than an
-            // interstitial, so a failure to find it is classified, not thrown.
-            const header = page.locator(".header__box");
-            if (!(await header.count())) {
-              await header.waitFor().catch(() => {});
-            }
-            if (!(await header.count())) {
-              return classifyPage(
-                page,
-                response,
-                `No page shell on ${venues[0].url}`,
-              );
-            }
-            return tallyInPage(
-              page,
-              tracked.map(({ cinemaId }) => cinemaId),
-            );
-          },
-          // An hourly probe must not replay an earlier cycle's page.
-          { disableCache: true },
-        ),
+      // The retry wraps the whole session rather than the page load inside it:
+      // a challenged browser context stays challenged, so a fresh one is the
+      // only retry worth waiting for.
+      const results = await withChallengeRetry(
+        () =>
+          withPlaywrightSession((getPage) =>
+            getPage(
+              venues[0].url,
+              // Its own key, so the probe never shares - or poisons - the
+              // retrieve's cache entries (`myvue.com-<cinemaId>`).
+              "health--myvue.com",
+              async (page, response) => {
+                await page.waitForLoadState();
+                // The header is what tells us a real page rendered rather than an
+                // interstitial, so a failure to find it is classified, not thrown.
+                const header = page.locator(".header__box");
+                if (!(await header.count())) {
+                  await header.waitFor().catch(() => {});
+                }
+                if (!(await header.count())) {
+                  return classifyPage(
+                    page,
+                    response,
+                    `No page shell on ${venues[0].url}`,
+                  );
+                }
+                return tallyInPage(
+                  page,
+                  tracked.map(({ cinemaId }) => cinemaId),
+                );
+              },
+              // An hourly probe must not replay an earlier cycle's page.
+              { disableCache: true },
+            ),
+          ),
+        "the chain listing",
       );
       for (const result of results) {
         countRequest();
@@ -141,7 +152,7 @@ async function health(venues) {
   return finalise(
     venues.map(({ id, cinemaId }) => {
       if (!knownCinemaIds.has(cinemaId)) {
-        return { venue: id, reason: { kind: "venue-missing", cinemaId } };
+        return { venue: id, reason: { kind: "unknown-venue-id", cinemaId } };
       }
 
       const tally = tallies.get(cinemaId);
@@ -155,7 +166,7 @@ async function health(venues) {
       const byDate = tally?.byDate ?? {};
       const dates = Object.keys(byDate).sort();
       if (dates.length === 0) {
-        return { venue: id, reason: { kind: "venue-dark" } };
+        return { venue: id, reason: { kind: "no-listings-found" } };
       }
 
       return {

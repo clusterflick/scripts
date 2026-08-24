@@ -1,11 +1,12 @@
 const cheerio = require("cheerio");
 const { format, addYears, parse, isValid } = require("date-fns");
-const { withPlaywrightSession } = require("../get-page-with-playwright");
+const getPageWithPlaywright = require("../get-page-with-playwright");
 const { sleep, withJitter } = require("../utils");
 const {
   probeError,
   classifyPage,
   startObservation,
+  withChallengeRetry,
 } = require("../health-probe");
 
 // One page load a venue - two for the estate - against a retrieve that opens
@@ -25,7 +26,9 @@ const PAGE_SIZE = 500;
 
 // Two page loads in quick succession drew a Cloudflare challenge, so space them
 // the way the Southbank retrieve spaces its show pages. Jittered, because a
-// fixed interval is its own signature.
+// fixed interval is its own signature. Each venue also gets its own browser
+// session rather than sharing one: a context that has been challenged stays
+// challenged, and sharing it hands the second venue the first one's problem.
 const VENUE_DELAY_MS = 6000;
 
 // A hire space rather than a cinema - it has no listings of its own and no
@@ -121,69 +124,73 @@ async function health(allVenues) {
     );
   }
 
-  const results = await withPlaywrightSession(async (getPage) => {
-    const rows = [];
-    for (const [index, venue] of venues.entries()) {
-      if (index > 0) await sleep(withJitter(VENUE_DELAY_MS));
+  const results = [];
+  for (const [index, venue] of venues.entries()) {
+    if (index > 0) await sleep(withJitter(VENUE_DELAY_MS));
 
-      try {
-        const html = await getPage(
-          venue.url,
-          // Its own key, so the probe never shares - or poisons - the
-          // retrieve's calendar cache entry for the same venue.
-          `health--${venue.id}`,
-          async (page, response) => {
-            await page.waitForLoadState("domcontentloaded");
-            await page.goto(searchUrl(venue));
-            try {
-              await page.waitForLoadState("networkidle");
-            } catch {
-              // Timed out waiting for the network to settle; the wait below
-              // decides whether the results actually arrived.
-            }
-            const results = page.locator(".detailed-search-results");
-            await results.waitFor({ state: "attached" }).catch(() => {});
-            if ((await results.count()) === 0) {
-              // Covers both the challenge page and BFI's own 500, which the
-              // search returns often enough that the retrieve races for it.
-              return classifyPage(
-                page,
-                response,
-                `No search results on ${venue.url}`,
-              );
-            }
-            return page.content();
-          },
-          // An hourly probe must not replay an earlier cycle's results.
-          { disableCache: true },
-        );
-        countRequest();
+    try {
+      const html = await withChallengeRetry(
+        () =>
+          getPageWithPlaywright(
+            venue.url,
+            // Its own key, so the probe never shares - or poisons - the
+            // retrieve's calendar cache entry for the same venue.
+            `health--${venue.id}`,
+            async (page, response) => {
+              await page.waitForLoadState("domcontentloaded");
+              await page.goto(searchUrl(venue));
+              try {
+                await page.waitForLoadState("networkidle");
+              } catch {
+                // Timed out waiting for the network to settle; the wait below
+                // decides whether the results actually arrived.
+              }
+              const found = page.locator(".detailed-search-results");
+              await found.waitFor({ state: "attached" }).catch(() => {});
+              if ((await found.count()) === 0) {
+                // Covers both the challenge page and BFI's own 500, which the
+                // search returns often enough that the retrieve races for it.
+                return classifyPage(
+                  page,
+                  response,
+                  `No search results on ${venue.url}`,
+                );
+              }
+              return page.content();
+            },
+            // An hourly probe must not replay an earlier cycle's results.
+            { disableCache: true },
+          ),
+        venue.id,
+      );
+      countRequest();
 
-        const { films, byDate } = tally(html);
-        const dates = Object.keys(byDate).sort();
-        if (dates.length === 0) {
-          rows.push({ venue: venue.id, reason: { kind: "venue-dark" } });
-          continue;
-        }
-
-        rows.push({
+      const { films, byDate } = tally(html);
+      const dates = Object.keys(byDate).sort();
+      if (dates.length === 0) {
+        results.push({
           venue: venue.id,
-          counts: {
-            performances: dates.reduce((total, d) => total + byDate[d], 0),
-            films: films.size,
-            dates: dates.length,
-          },
-          // Sorted so consecutive cycles diff cleanly.
-          byDate: Object.fromEntries(dates.map((d) => [d, byDate[d]])),
+          reason: { kind: "no-listings-found" },
         });
-      } catch (error) {
-        // Each venue has its own page load, so a failure stays with that venue.
-        countRequest();
-        rows.push({ venue: venue.id, reason: reasonFor(error) });
+        continue;
       }
+
+      results.push({
+        venue: venue.id,
+        counts: {
+          performances: dates.reduce((total, d) => total + byDate[d], 0),
+          films: films.size,
+          dates: dates.length,
+        },
+        // Sorted so consecutive cycles diff cleanly.
+        byDate: Object.fromEntries(dates.map((d) => [d, byDate[d]])),
+      });
+    } catch (error) {
+      // Each venue has its own page load, so a failure stays with that venue.
+      countRequest();
+      results.push({ venue: venue.id, reason: reasonFor(error) });
     }
-    return rows;
-  });
+  }
 
   return finalise(results);
 }
