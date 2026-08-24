@@ -7,6 +7,7 @@ const nonFilmEvents = [
   /WEEKND FANPARK/i,
   /Bioimage Analysis/i,
   /Business Networking/i,
+  /Leaders Networking/i,
   /Healthcare & Wellness/i,
   /Performance Networking/i,
   /Networking Night/i,

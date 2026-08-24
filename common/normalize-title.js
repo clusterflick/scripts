@@ -1046,6 +1046,10 @@ function normalizeTitle(title, options) {
       /Special Screening of Bitters$/i,
       "Special Screening of Bitter Sweet Ballad",
     ],
+    [
+      "The Conversation: An Afternoon with Walter Murch",
+      "An Afternoon with Walter Murch",
+    ],
     // ODEON are idiots -- correct their years
     ["THE HUNGER GAMES (2026)", "THE HUNGER GAMES (2012)"],
     [
