@@ -216,6 +216,11 @@ async function transform(
         "no screenings currently scheduled",
         "cancelled event",
         "there are currently no performance scheduled for this event",
+        // The listing page outlives the screenings when a venue pulls a film
+        // back to "coming soon" ahead of a re-release. The page still names the
+        // film and still responds, but says when tickets will go on sale
+        // instead of selling any.
+        "tickets on sale from",
       ];
       if (removedPhrases.some((p) => visibleText.includes(basicNormalize(p)))) {
         continue;
