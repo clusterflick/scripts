@@ -741,6 +741,7 @@ function normalizeTitle(title, options) {
     ["Afronauts + ", "Afronauts & "],
     ["Fight Club: 4K Restoration", "Fight Club"],
     ["Cockroach + Hedwig", "Cockroach & Hedwig"],
+    ["CARNIVAL OF BLOOD + ", "CARNIVAL OF BLOOD & "],
     ["The Room + ", "The Room & "],
     ["The Mystery of Chess Boxing + ", "The Mystery of Chess Boxing & "],
     ["Hitman In The Hand Of Buddha + ", "Hitman In The Hand Of Buddha & "],

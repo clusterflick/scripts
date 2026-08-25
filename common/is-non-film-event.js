@@ -33,6 +33,7 @@ const nonFilmEvents = [
   /Adtech Networking/i,
   /Entrepreneurs Meetup/i,
   /Dinner Reservation/i,
+  /Conferencing \d+ Hour/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>

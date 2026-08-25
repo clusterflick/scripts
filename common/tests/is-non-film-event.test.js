@@ -25,6 +25,7 @@ describe("isNonFilmEvent", () => {
     ["Advanced Photography Workshop + Photoshoot | London"],
     ["AdTech Networking Social for CEOs & Entrepreneurs Meetup"],
     ["Ocean Film Festival World Tour: 22 OCT - Early Dinner Reservation"],
+    ["Conferencing 4 Hour"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });
