@@ -49,16 +49,14 @@ function getNotes($el) {
 function getPerformances($, $filmScreenings, title, overview) {
   const performances = [];
   const $screenings = $filmScreenings.find(".screening-panel");
-  let screeningDate;
   $screenings.each(function () {
-    let $screeningDate = $(this).find(".screening-panel__date-title");
-    if ($screeningDate.length === 1) {
-      // Consecutive screenings on the same date render the date-title as a
-      // non-breaking space rather than omitting it, so only overwrite the
-      // carried-forward date when there's actually new text to read.
-      const text = getText($screeningDate);
-      if (text) screeningDate = text;
-    }
+    // Screenings are grouped by date into a `screening-panel__day` wrapper,
+    // which holds the date title alongside that day's list of screenings.
+    const screeningDate = getText(
+      $(this)
+        .closest(".screening-panel__day")
+        .find(".screening-panel__date-title"),
+    );
     const $screeningTime = $(this).find(".screening-time");
     const screeningTime = getText($screeningTime);
     const date = parseDate(`${screeningDate} T ${screeningTime}`);
