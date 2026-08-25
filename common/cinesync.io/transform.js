@@ -57,7 +57,14 @@ async function transform(attributes, { movieListPage }, sourcedEvents) {
   const tags = new Set();
 
   for (const dayPage of movieListPage) {
-    if (!dayPage.data?.movies) continue;
+    // Only ever asked for days the venue said it had listings on, so a response
+    // without a movies array is a broken one rather than an empty day - an
+    // empty array falls through this loop on its own.
+    if (!dayPage.data?.movies) {
+      throw new Error(
+        "Day of listings came back without any movies data - the response shape may have changed",
+      );
+    }
 
     for (const movie of dayPage.data.movies) {
       const movieId = movie.movie_id;
