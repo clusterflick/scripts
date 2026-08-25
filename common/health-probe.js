@@ -4,6 +4,7 @@ const {
   isBotChallengeFetchResponse,
   isBotChallengeResponse,
 } = require("./bot-challenge");
+const { isMaintenancePage } = require("./maintenance-page");
 
 // Shared plumbing for the health probes under `scripts/health`. A probe asks a
 // chain's listing endpoint what is currently published and records the answer;
@@ -61,6 +62,12 @@ const classifyFailure = (url, response, body) => {
       status: response.status,
     });
   }
+  if (isMaintenancePage(body)) {
+    return new ProbeFailure({
+      kind: "source-maintenance",
+      status: response.status,
+    });
+  }
   return probeError(
     `${url} responded ${response.status} ${response.statusText} without a listing`,
   );
@@ -90,6 +97,13 @@ const classifyPage = async (page, response, message) => {
       via: "response-text",
       status,
     });
+  }
+  // Checked after the challenge signals and before the fallback: a holding page
+  // is the source being deliberately down, not us being blocked and not the
+  // probe breaking. Curzon served one for a whole cycle and every venue was
+  // recorded as `probe-error`, which reads as our fault and fails the job.
+  if (isMaintenancePage(content)) {
+    return new ProbeFailure({ kind: "source-maintenance", status });
   }
   return probeError(message);
 };
