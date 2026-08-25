@@ -975,7 +975,10 @@ const isPrivateHire = (title = "") =>
   basicNormalize(title) === "private screening" ||
   basicNormalize(title) === "cleaning screen placeholder" ||
   basicNormalize(title).includes("events placeholder") ||
-  basicNormalize(title).includes("conferencing 6 hour") ||
+  // Venue hire is listed as one bookable slot per duration - "Conferencing 2
+  // Hour", "Conferencing 4 Hour", "Conferencing 6 Hour" - so match the family
+  // rather than a single length
+  /conferencing \d+ hour/.test(basicNormalize(title)) ||
   basicNormalize(title).includes("do not book");
 
 const isOnline = (title = "") =>
