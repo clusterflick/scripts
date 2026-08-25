@@ -19,6 +19,7 @@ const matchIdentifiedMovies = require("./match-identified-movies");
 const identifyMultipleMovies = require("./identify-multiple-movies");
 const identifyShorts = require("./identify-shorts");
 const isAlreadyListed = require("./is-already-listed");
+const isNoLongerSourcedHere = require("./is-no-longer-sourced-here");
 
 // A movie carried forward from a previous release may predate the required
 // per-performance `accessibility` / `format` objects. Backfill empty objects
@@ -173,6 +174,16 @@ async function transform(
       // venue lists itself, and this run has since deduplicated it away.
       // If we already hold it, don't fetch the dropped copy back in.
       if (isAlreadyListed(futurePerformances, matchedData)) continue;
+
+      // The movie came from a source, and the source has this run's data but no
+      // longer places the event at this venue - the organiser moved it. The
+      // organiser's page is still up, so the URL check below would read the
+      // event still being on as this venue still running it, and two venues
+      // would claim the same showingId.
+      if (isNoLongerSourcedHere(movie, attributes, sourcedEvents)) {
+        console.log(" - Dropped (moved to another venue):", movie.title);
+        continue;
+      }
 
       // The movie listing page is still up advertising the movie.
       // If we can't get the page or the page has a "not found" URL, then it's
