@@ -122,44 +122,52 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
     const performances = Object.keys(movieData.performances).flatMap(
       (dayKey) => {
         const dayPerformances = movieData.performances[dayKey];
-        return dayPerformances.map(({ timestamp, tag_ids: tags }) => {
-          const accessibility = createAccessibility(
-            title,
-            {
-              audioDescription: tags.includes("80879"),
-              babyFriendly: tags.includes("80996"),
-              hardOfHearing: tags.includes("80832"),
-              relaxed: tags.includes("80881"),
-              subtitled:
-                tags.includes("80883") ||
-                basicNormalize(language).includes("with subtitles") ||
-                basicNormalize(language).includes("with english subtitles"),
-            },
-            synopsis,
-          );
-          const format = createFormat(title, {}, synopsis);
+        // A season announced before its dates go on sale is listed with a
+        // single stub performance under day key "0" - no timestamp and no
+        // booking link. There is nothing to publish, and the movie is dropped
+        // later for having no performances, so skip the stub rather than fail
+        // the run on its missing date. A timestamp that is present but
+        // unparseable still throws in `createPerformance`.
+        return dayPerformances
+          .filter(({ timestamp }) => !!timestamp)
+          .map(({ timestamp, tag_ids: tags }) => {
+            const accessibility = createAccessibility(
+              title,
+              {
+                audioDescription: tags.includes("80879"),
+                babyFriendly: tags.includes("80996"),
+                hardOfHearing: tags.includes("80832"),
+                relaxed: tags.includes("80881"),
+                subtitled:
+                  tags.includes("80883") ||
+                  basicNormalize(language).includes("with subtitles") ||
+                  basicNormalize(language).includes("with english subtitles"),
+              },
+              synopsis,
+            );
+            const format = createFormat(title, {}, synopsis);
 
-          const notesList = [];
-          if (tags.includes("224")) {
-            notesList.push("Double bill");
-          }
-          if (tags.includes("80787")) {
-            notesList.push("Silver Screen");
-          }
-          if (tags.includes("80811")) {
-            notesList.push("Q&A");
-          }
-          if (tags.includes("259")) {
-            notesList.push("British Sign Language");
-          }
-          return createPerformance({
-            date: new Date(parseInt(timestamp, 10) * 1000),
-            notesList,
-            url,
-            accessibility,
-            format,
+            const notesList = [];
+            if (tags.includes("224")) {
+              notesList.push("Double bill");
+            }
+            if (tags.includes("80787")) {
+              notesList.push("Silver Screen");
+            }
+            if (tags.includes("80811")) {
+              notesList.push("Q&A");
+            }
+            if (tags.includes("259")) {
+              notesList.push("British Sign Language");
+            }
+            return createPerformance({
+              date: new Date(parseInt(timestamp, 10) * 1000),
+              notesList,
+              url,
+              accessibility,
+              format,
+            });
           });
-        });
       },
     );
 
