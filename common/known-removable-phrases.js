@@ -75,6 +75,7 @@ const knownRemovablePhrases = [
   "at Goldsmiths College, University of London",
   "at the Horse Hospital",
   "at The Moniker",
+  "at The Divine",
   "at Odeon Luxe and Dine",
   "at Rio Cinema!",
   "at The Cinema Museum",
