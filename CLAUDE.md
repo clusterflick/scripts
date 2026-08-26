@@ -120,6 +120,31 @@ venue with nothing on is an observation about the source and the evidence the
 log exists to keep, so it is recorded and the job stays green; an unknown venue
 id or a failed probe is recorded too, and then the job goes red.
 
+`llm-usage-report` is the diagnostic side-channel, not a pipeline stage. Every
+`callLlm` records its cache hit and token usage to `common/llm-usage-log.js`,
+which is process-scoped - so one `transform <location>` invocation collects
+exactly one venue's calls, written to `llm-usage-data/<location>` beside the
+transformed output. A separate artifact for the same reason
+`departed-movies.json` is one: nothing that reads cinema listings should carry
+LLM diagnostics. `llm-usage-report <directory>` then folds a day's worth of
+those files into one report - totals, cache hit rate, and estimated cost by
+call site and by venue - plus a plain-text summary meant to be read rather
+than parsed.
+
+Cost is estimated from the listed prices in `common/llm-pricing.js`, each
+cited with the date it was checked. A model with no listed price is named in
+`metadata.modelsWithoutPricing` rather than costed at zero, so the report says
+it is undercounting instead of quietly doing it. Add the price when a new
+model starts being called.
+
+The report is a snapshot of one transform run and folds nothing across runs -
+and the pipeline goes several times a day, so a day's usage is a sum over its
+runs rather than any single report. The series lives in `data-analysed`, which
+collects each run's report into `llm-usage-log.jsonl` on a monthly release - so
+a question about a trend is answered there, and a question about which venue
+drove one run's number is answered by that run's report, for the fortnight its
+artifact survives. Nothing in this repo reads either back.
+
 ## Module Pattern
 
 Every cinema/source module exports the same interface:

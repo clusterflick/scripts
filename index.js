@@ -151,10 +151,11 @@ const setupDirectory = async (type) => {
 
   if (action.toLowerCase() === "llm-usage-report") {
     // Takes a directory holding every venue's llm-usage-data file for one
-    // day's run (downloaded from each venue's artifact) and aggregates them
-    // into a single report - see scripts/llm-usage. A snapshot of one day,
-    // not a fold across days: trends over time are a job for whatever
-    // downloads and compares multiple days' reports, not this repo.
+    // transform run (downloaded from each venue's artifact) and aggregates
+    // them into a single report - see scripts/llm-usage. A snapshot of one
+    // run, not a fold across runs: the pipeline goes several times a day, so
+    // even a day's usage is a sum over reports, and trends are a job for
+    // whatever collects them - data-analysed - not this repo.
     const [inputDirectory] = [location];
     if (!inputDirectory) {
       throw new Error(
