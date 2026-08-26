@@ -122,8 +122,8 @@ id or a failed probe is recorded too, and then the job goes red.
 
 `llm-usage-report` is the diagnostic side-channel, not a pipeline stage. Every
 `callLlm` records its cache hit and token usage to `common/llm-usage-log.js`,
-which is process-scoped - so one `transform <location>` run collects exactly
-one venue's calls, written to `llm-usage-data/<location>` beside the
+which is process-scoped - so one `transform <location>` invocation collects
+exactly one venue's calls, written to `llm-usage-data/<location>` beside the
 transformed output. A separate artifact for the same reason
 `departed-movies.json` is one: nothing that reads cinema listings should carry
 LLM diagnostics. `llm-usage-report <directory>` then folds a day's worth of
@@ -137,11 +137,13 @@ cited with the date it was checked. A model with no listed price is named in
 it is undercounting instead of quietly doing it. Add the price when a new
 model starts being called.
 
-The report is a snapshot of one day and folds nothing across days. The series
-lives in `data-analysed`, which collects each transform run's report into
-`llm-usage-log.jsonl` on a monthly release - so a question about a trend is
-answered there, and a question about which venue drove one day's number is
-answered by that day's report. Nothing in this repo reads either back.
+The report is a snapshot of one transform run and folds nothing across runs -
+and the pipeline goes several times a day, so a day's usage is a sum over its
+runs rather than any single report. The series lives in `data-analysed`, which
+collects each run's report into `llm-usage-log.jsonl` on a monthly release - so
+a question about a trend is answered there, and a question about which venue
+drove one run's number is answered by that run's report, for the fortnight its
+artifact survives. Nothing in this repo reads either back.
 
 ## Module Pattern
 
