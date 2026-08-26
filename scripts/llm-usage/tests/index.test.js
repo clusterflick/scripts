@@ -52,6 +52,15 @@ describe("loadUsageData", () => {
     expect(usageByVenue["cinema-a"]).toHaveLength(1);
     expect(usageByVenue["cinema-b"]).toEqual([]);
   });
+
+  it("throws when the directory holds no files at all", async () => {
+    // A venue that made no calls still writes an empty array, so an empty
+    // directory means the input artifacts never arrived - reporting zeroes for
+    // it would put a quiet-looking run into the usage series.
+    await expect(loadUsageData(directory)).rejects.toThrow(
+      /No usage data files/,
+    );
+  });
 });
 
 describe("buildUsageReport", () => {

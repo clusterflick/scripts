@@ -8,12 +8,28 @@ const { estimateCostUsd } = require("../../common/llm-pricing");
  * file name - the transform action writes one file per `transform <location>`
  * run, empty array or not, mirroring how transformed-data is laid out).
  *
+ * Throws when the directory holds no files at all: see below.
+ *
  * @param {string} directory
  * @returns {Promise<Object<string, Array<object>>>}
  */
 async function loadUsageData(directory) {
+  const files = (await fs.readdir(directory)).sort();
+
+  // Every transform job writes a file, empty array or not, so no files at all
+  // means the inputs never arrived rather than that nothing called the LLM -
+  // most likely a re-run after the per-venue artifacts expired. Left to itself
+  // this produces a report of zeroes, which used to be merely useless and is
+  // now worse: data-analysed folds each report into a series, where a zero row
+  // reads as a quiet run rather than as data that was lost.
+  if (files.length === 0) {
+    throw new Error(
+      `No usage data files in ${directory} - every transform job writes one, so an empty directory means the artifacts were never downloaded, not that no LLM calls were made`,
+    );
+  }
+
   const venues = {};
-  for (const file of (await fs.readdir(directory)).sort()) {
+  for (const file of files) {
     venues[file] = await readJSON(path.join(directory, file));
   }
   return venues;
