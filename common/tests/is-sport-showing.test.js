@@ -24,6 +24,10 @@ describe("isSportShowing", () => {
     ["ENGLAND V CROATIA: WORLD CUP 2026 (WEMBLEY)"],
     ["FIFA World Cup Live Screenings"],
     ["Wimbledon Live Screenings & Activities"],
+    ["Aston Villa vs Man City Live Screening"],
+    ["Bournemouth vs Liverpool Live Screening"],
+    ["Man United vs Man City Live Screening"],
+    ["Coventry v Brighton Live Screening"],
   ])("flags '%s' as a sport showing", (title) => {
     expect(isSportShowing({ title })).toBe(true);
   });
@@ -36,6 +40,8 @@ describe("isSportShowing", () => {
     ["Six Degrees of Separation"],
     ["Grand Prix (1966)"],
     ["Fanatic"],
+    ["Live Screening"],
+    ["Kramer vs. Kramer"],
   ])("does not flag '%s' as a sport showing", (title) => {
     expect(isSportShowing({ title })).toBe(false);
   });

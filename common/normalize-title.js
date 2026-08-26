@@ -96,6 +96,10 @@ function normalizeTitle(title, options) {
       "Weeknight Tapes: The Cure In Orange",
     ],
     ["Weeknight Tapes - ", "Weeknight Tapes: "],
+    [
+      "NCT 127 - 'NEO CITY : SEOUL - THE REDLINE",
+      "NCT 127: NEO CITY SEOUL THE REDLINE",
+    ],
     ["Outdoor Silent Cinema - ", "Outdoor Silent Cinema: "],
     ["Film Africa 2025 -", "Film Africa 2025:"],
     ["Preview Screening - ", "Preview Screening: "],
@@ -637,6 +641,7 @@ function normalizeTitle(title, options) {
       "HARD ROCK ZOMBIES + PRINCE OF DARKNESS",
       "Hard Rock Zombies & Prince of Darkness",
     ],
+    ["BRICK MANSIONS + ", "BRICK MANSIONS & "],
     [
       "Under the Silver Lake (2018) + Tropico (2013)",
       "Under the Silver Lake (2018) & Tropico (2013)",
