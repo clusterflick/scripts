@@ -175,12 +175,13 @@ async function transform(
       // If we already hold it, don't fetch the dropped copy back in.
       if (isAlreadyListed(futurePerformances, matchedData)) continue;
 
-      // The movie came from a source, and the source has this run's data but no
-      // longer places the event at this venue - the organiser moved it. The
-      // organiser's page is still up, so the URL check below would read the
-      // event still being on as this venue still running it, and two venues
-      // would claim the same showingId.
-      if (isNoLongerSourcedHere(movie, attributes, sourcedEvents)) {
+      // The source has this run's data and now places the event at a different
+      // venue - the organiser moved it. The organiser's page is still up, so the
+      // URL check below would read the event still being on as this venue still
+      // running it, and two venues would claim the same showingId. An event the
+      // source has simply stopped mentioning is not this case: it falls through
+      // to the URL check, which is what recovery is for.
+      if (await isNoLongerSourcedHere(movie, attributes, sourcedEvents)) {
         console.log(" - Dropped (moved to another venue):", movie.title);
         continue;
       }

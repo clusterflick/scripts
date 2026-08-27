@@ -127,15 +127,15 @@ exactly one venue's calls, written to `llm-usage-data/<location>` beside the
 transformed output. A separate artifact for the same reason
 `departed-movies.json` is one: nothing that reads cinema listings should carry
 LLM diagnostics. `llm-usage-report <directory>` then folds a day's worth of
-those files into one report - totals, cache hit rate, and estimated cost by
-call site and by venue - plus a plain-text summary meant to be read rather
-than parsed.
+those files into one report - totals, cache hit rate, and estimated cost by call
+site and by venue - plus a plain-text summary meant to be read rather than
+parsed.
 
-Cost is estimated from the listed prices in `common/llm-pricing.js`, each
-cited with the date it was checked. A model with no listed price is named in
+Cost is estimated from the listed prices in `common/llm-pricing.js`, each cited
+with the date it was checked. A model with no listed price is named in
 `metadata.modelsWithoutPricing` rather than costed at zero, so the report says
-it is undercounting instead of quietly doing it. Add the price when a new
-model starts being called.
+it is undercounting instead of quietly doing it. Add the price when a new model
+starts being called.
 
 The report is a snapshot of one transform run and folds nothing across runs -
 and the pipeline goes several times a day, so a day's usage is a sum over its
