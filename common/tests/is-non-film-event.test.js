@@ -26,6 +26,7 @@ describe("isNonFilmEvent", () => {
     ["AdTech Networking Social for CEOs & Entrepreneurs Meetup"],
     ["Ocean Film Festival World Tour: 22 OCT - Early Dinner Reservation"],
     ["Conferencing 4 Hour"],
+    ["JOHNNIE WALKER PRESENTS R&B THURSDAYS:  KASH/PHARXOH"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });
@@ -48,6 +49,7 @@ describe("isNonFilmEvent", () => {
     ["The Blinking Buzzards – Quarterly Meeting"],
     ["The Dinner"],
     ["Dinner at Eight"],
+    ["Pitchblack Playback: Mystery Album Club - Post-Modern R&B"],
   ])("does not flag '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(false);
   });
