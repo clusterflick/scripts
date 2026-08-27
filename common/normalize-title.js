@@ -1058,6 +1058,8 @@ function normalizeTitle(title, options) {
     ],
     ["The Playhouse Buster Keaton", "The Play house Buster Keaton"],
     ["Art is my Therapy - ", "Art is my Therapy: "],
+    [/^Fall 2$/i, "Fall 2: Deadpoint"],
+    [/^9\s*(?:[-–—]|to)\s*5$/i, "Nine to Five"],
     // ODEON are idiots -- correct their years
     ["THE HUNGER GAMES (2026)", "THE HUNGER GAMES (2012)"],
     [
