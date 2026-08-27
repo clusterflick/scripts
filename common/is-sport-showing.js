@@ -38,6 +38,10 @@ const sportShowings = [
   /Wimbledon Finals/i,
   /PLAYOFF FINAL/i,
   /BIG SCREEN FOOTBALL/i,
+  // Chains bill league fixtures as "<Home> vs <Away> Live Screening" without
+  // naming the competition, so the team pairing is the only thing marking it
+  // out as sport.
+  /\sv(?:\/?s)?\.?\s.+\sLive Screening$/i,
   /^England v\/?s?\.? /i,
   /^France v\/?s?\.? /i,
   /^Spain v\/?s?\.? /i,
