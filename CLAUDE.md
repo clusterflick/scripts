@@ -120,6 +120,16 @@ venue with nothing on is an observation about the source and the evidence the
 log exists to keep, so it is recorded and the job stays green; an unknown venue
 id or a failed probe is recorded too, and then the job goes red.
 
+The exception is a venue declared shut in `common/expected-closures.js`, which
+the probe reads for the same reason `transform` does. A chain drops a closed
+venue from its own site list as readily as it empties its listings, so for the
+length of the closure the check that catches a stale id catches the closure
+instead - a week of expected red in which a real breakage would look identical.
+Those two kinds are re-labelled `expected-closure` for a declared venue and the
+job stays green; the row keeps what was actually seen under `observed`. Nothing
+else is excused - a challenge or a broken probe says nothing about whether the
+doors are open.
+
 `llm-usage-report` is the diagnostic side-channel, not a pipeline stage. Every
 `callLlm` records its cache hit and token usage to `common/llm-usage-log.js`,
 which is process-scoped - so one `transform <location>` invocation collects

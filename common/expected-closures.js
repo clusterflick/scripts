@@ -5,6 +5,11 @@ const { format } = require("date-fns");
 // the run: an empty response from a closed cinema is the truth about the venue,
 // not evidence the scrape has broken.
 //
+// The health probe reads the same list, and needs it for more than empty
+// listings: a chain drops a shut venue from its own site list as readily as it
+// empties its listings, and a tracked id missing from that list is otherwise
+// the probe's hardest failure. See scripts/health/stand-down-for-closure.js.
+//
 // Everything here is temporary. An entry only applies inside its own window, so
 // the venue goes back to failing loudly the moment the closure is meant to be
 // over - a carve-out left behind by accident cannot quietly swallow a real
