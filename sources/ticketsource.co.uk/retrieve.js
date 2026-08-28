@@ -139,6 +139,40 @@ async function waitForChallengeToClear(page, response, url) {
   }
 }
 
+// The real listing page carries its own Meilisearch credentials in this tag, so
+// its presence means both "the challenge is behind us" and "this document is the
+// one that talks to the search API". The challenge pages never carry it.
+const APP_CONFIG_SELECTOR = "script#app-config";
+
+// Clearing a challenge is a navigation, and `waitForChallengeToClear` returns
+// the moment the clean *response* arrives — a beat before the new document
+// commits. Anything evaluated in that window dies with "Execution context was
+// destroyed". That isn't flakiness to be retried away: it reproduced 3/3 locally
+// and took out the first CI attempt. Waiting on an element of the *new* document
+// is what actually settles it, and `waitForSelector` is navigation-resilient, so
+// it re-arms if the page moves again underneath.
+const waitForPageToSettle = (page) =>
+  page.waitForSelector(APP_CONFIG_SELECTOR, { state: "attached" });
+
+// Cloudflare can re-check partway through the four filter searches, which is the
+// same navigation hazard arriving later in the run. Settle and repeat the call
+// rather than losing every page retrieved so far.
+const CONTEXT_LOST = /Execution context was destroyed|frame was detached/i;
+const EVALUATE_RETRIES = 2;
+
+async function evaluateOnSettledPage(page, pageFunction, argument) {
+  for (let attempt = 0; ; attempt += 1) {
+    try {
+      return await page.evaluate(pageFunction, argument);
+    } catch (error) {
+      if (attempt >= EVALUATE_RETRIES || !CONTEXT_LOST.test(error.message)) {
+        throw error;
+      }
+      await waitForPageToSettle(page);
+    }
+  }
+}
+
 async function fetchMeilisearchEvents(page, body) {
   const url = `${MEILISEARCH_CONFIG.baseUrl}/indexes/${MEILISEARCH_CONFIG.indexName}/search`;
   const apiKey = MEILISEARCH_CONFIG.apiKey;
@@ -146,7 +180,8 @@ async function fetchMeilisearchEvents(page, body) {
   // Cross-origin to the search host, which is behind its own Cloudflare rule.
   // When that rule fires it answers without CORS headers, so the block reaches
   // us as an opaque "Failed to fetch" rather than a status we can report on.
-  return page.evaluate(
+  return evaluateOnSettledPage(
+    page,
     async ({ url, body, apiKey }) => {
       const response = await fetch(url, {
         method: "POST",
@@ -204,6 +239,9 @@ async function retrieveEventsList(getPage, timestampFilter) {
   return getPage(url, "ticketsource-events-list", async (page, response) => {
     await page.waitForLoadState("domcontentloaded");
     await waitForChallengeToClear(page, response, url);
+    // Not redundant with the wait above: that one confirms a clean response was
+    // served, this one confirms the document it describes has actually arrived.
+    await waitForPageToSettle(page);
 
     return [].concat(
       await retrieveFilterEvents(page, (opts) =>
