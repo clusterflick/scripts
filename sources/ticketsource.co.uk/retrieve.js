@@ -26,7 +26,17 @@ const SESSION_OPTIONS = { launch: { geoip: false } };
 // Cloudflare's interstitial runs its check and reloads itself once it passes, so
 // being handed one isn't fatal. This is how long we give it to hand over to the
 // real page before treating the request as blocked.
-const CHALLENGE_CLEAR_TIMEOUT_MS = 30_000;
+//
+// Sized for the slowest combination we actually run, not the fastest. A Mac
+// solves this in ~3s, which is what the old 30s was quietly sized against — but
+// the fleet's Pi 4s are handed a harder challenge tier (Cloudflare's stock
+// "Just a moment..." rather than TicketSource's own branded page, which is what
+// a low-reputation IP gets) and solve it far more slowly. Measured 2026-08-28 on
+// `self-hosted-pi4-1`: attempt 1 ran out of clock at 30s, attempt 2 cleared the
+// same gate minutes later on the same commit. 90s matches the budget Close-Up
+// already gets on these same boxes via the context default, and it is only ever
+// spent while a challenge is genuinely in flight.
+const CHALLENGE_CLEAR_TIMEOUT_MS = 90_000;
 
 // Meilisearch API configuration
 const MEILISEARCH_CONFIG = {
