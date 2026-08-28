@@ -8,8 +8,15 @@ const { format } = require("date-fns");
 // Everything here is temporary. An entry only applies inside its own window, so
 // the venue goes back to failing loudly the moment the closure is meant to be
 // over - a carve-out left behind by accident cannot quietly swallow a real
-// breakage. `until` wants a few days of slack past the reopening date, because
-// listings tend to go back up later than the doors do. Delete lapsed entries.
+// breakage. Delete lapsed entries.
+//
+// The window is the announced closure and nothing more. A chain sells tickets
+// ahead of the date, so listings come back before the doors do: the venue
+// usually stops being empty part-way through its own window, and the entry
+// simply stops mattering. Padding the end is therefore the wrong way round -
+// all it buys is days in which a real breakage looks like the closure. Still
+// empty once the venue is meant to be open is worth a red job either way,
+// whether the works overran or the scrape broke.
 //
 // Every entry cites where the closure was announced. Listings simply being
 // empty is never the evidence - that is the failure this carves an exception
@@ -21,7 +28,7 @@ const expectedClosures = [
   {
     venue: "myvue.com-finchley-road",
     from: "2026-08-28",
-    until: "2026-09-08",
+    until: "2026-09-04",
     // "Vue will be temporarily closed from Friday 28th August - Friday 4th
     // September for refurbishment works."
     // https://www.o2centre.co.uk/en/play-listing/vue
