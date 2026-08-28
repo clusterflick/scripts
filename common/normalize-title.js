@@ -310,6 +310,7 @@ function normalizeTitle(title, options) {
     ["R.S.V.P - ", ""], // Fixes R.S.V.P - Ronde Saare Viah Picho
     ["Member Library Lates: Tom Cruise", "Member Library Lates – Tom Cruise"],
     [/^Short Films\s+-/i, "Short Films:"], // Fixes mismatch on movie called Short Films
+    [/^Short Film Screening and /i, "Short Film and "],
     [/^Final Destination.+Double Bill.*$/i, "Double Bill: Final Destination"],
     [
       /Final Destination\s*\+\s*Final Destination.+$/i,

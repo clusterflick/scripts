@@ -77,7 +77,12 @@ function transformFormat1(emailText) {
       url: movieUrl,
       overview: createOverview({
         year,
-        directors: [director.trim()],
+        // A co-directed film credits both names in one string ("Daniel Kwan
+        // and Daniel Scheinert"), so hand the raw text to createOverview and
+        // let it split the conjunction. Wrapping it in an array here would
+        // keep it conjoined, and it would then match neither director's
+        // credit on TheMovieDB.
+        directors: director.trim(),
         duration: parseRuntimeMins(runtime),
         classification: getValidClassification(cert),
       }),
@@ -128,13 +133,28 @@ function transformFormat3(emailText) {
     if (!metaMatch) continue;
 
     const [, director, year, runtime, cert] = metaMatch;
-    const dateLine = dashParts[1]?.trim();
-    if (!dateLine) continue;
 
-    const date = parseDateTime(dateLine, currentYear);
-    if (!date || isNaN(date.getTime())) continue;
+    // The date does not sit at a fixed offset: an entry can carry extra
+    // -----delimited sections between the meta line and the date, such as the
+    // "With introductory poetry reading by ..." credit on a guest-introduced
+    // screening. Scan forward for the first section that parses as a date
+    // rather than assuming it is the one straight after the meta line.
+    let dateIndex = -1;
+    let date;
+    for (let j = 1; j < dashParts.length; j++) {
+      const candidate = parseDateTime(dashParts[j].trim(), currentYear);
+      if (candidate && !isNaN(candidate.getTime())) {
+        dateIndex = j;
+        date = candidate;
+        break;
+      }
+    }
+    if (dateIndex === -1) continue;
 
-    const description = dashParts.slice(2).join("\n").trim();
+    const description = dashParts
+      .slice(dateIndex + 1)
+      .join("\n")
+      .trim();
 
     const slug = slugify(basicNormalize(title));
     const movieUrl = `${attributes.url}#${slug}`;
@@ -149,7 +169,12 @@ function transformFormat3(emailText) {
       url: movieUrl,
       overview: createOverview({
         year,
-        directors: [director.trim()],
+        // A co-directed film credits both names in one string ("Daniel Kwan
+        // and Daniel Scheinert"), so hand the raw text to createOverview and
+        // let it split the conjunction. Wrapping it in an array here would
+        // keep it conjoined, and it would then match neither director's
+        // credit on TheMovieDB.
+        directors: director.trim(),
         duration: parseRuntimeMins(runtime),
         classification: getValidClassification(cert),
       }),
