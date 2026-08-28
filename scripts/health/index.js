@@ -13,9 +13,11 @@ const groupProbes = {
   "bfi.org.uk": require("../../common/bfi.org.uk/health"),
   "cineworld.co.uk": require("../../common/cineworld.co.uk/health"),
   "curzon.com": require("../../common/curzon.com/health"),
+  "electriccinema.co.uk": require("../../common/electriccinema.co.uk/health"),
   "everymancinema.com": require("../../common/everymancinema.com/health"),
   "myvue.com": require("../../common/myvue.com/health"),
   "odeon.co.uk": require("../../common/odeon.co.uk/health"),
+  "omniplex.co.uk": require("../../common/omniplex.co.uk/health"),
   "picturehouses.com": require("../../common/picturehouses.com/health"),
 };
 
