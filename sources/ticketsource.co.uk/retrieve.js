@@ -1,10 +1,9 @@
 const { subMonths } = require("date-fns");
 const attributes = require("./attributes");
-const {
-  withPlaywrightSession,
-} = require("../../common/get-page-with-playwright");
+const { withCamoufoxSession } = require("../../common/get-page-with-camoufox");
 const {
   BOT_CHALLENGE_TEXT,
+  isBotBlockText,
   isBotChallengeResponse,
 } = require("../../common/bot-challenge");
 const { withRetry, withJitter } = require("../../common/utils");
@@ -14,8 +13,15 @@ const { withRetry, withJitter } = require("../../common/utils");
 // try again rather than failing the whole run on a single page. A fixed interval
 // is itself a detectable signature, so jitter each wait rather than knocking on
 // the door at a metronomic 100 times in a row.
+//
+// The delay is load-bearing, not superstition: measured 2026-08-28, event pages
+// requested back-to-back with no wait got a 429 on the sixth. A page itself only
+// costs ~1.5s, so nearly all of this venue's runtime is this delay by design.
 const REQUEST_DELAY_MS = 6_000;
 const RETRY_DELAY_MS = 60_000;
+
+// See the note in `retrieve()` — `geoip` is deliberately off for this venue.
+const SESSION_OPTIONS = { launch: { geoip: false } };
 
 // Cloudflare's interstitial runs its check and reloads itself once it passes, so
 // being handed one isn't fatal. This is how long we give it to hand over to the
@@ -117,6 +123,18 @@ async function waitForChallengeToClear(page, response, url) {
   } catch {
     // Throw (don't return) so the result isn't cached and the caller can back
     // off and try again with a fresh page.
+    //
+    // Separate the two refusals before reporting. A challenge we failed to
+    // solve is worth retrying; an outright block is not, and calling it a
+    // challenge sends the next person looking for a puzzle that was never
+    // offered. Both arrive as a timeout here, so the page body is the only
+    // thing that tells them apart.
+    if (isBotBlockText(await page.content().catch(() => null))) {
+      throw new Error(
+        `Blocked outright (not challenged) at ${url} — the request was refused, ` +
+          `not scored. Check the Camoufox launch options before assuming the site changed.`,
+      );
+    }
     throw new Error(`Bot challenge page detected at ${url}`);
   }
 }
@@ -254,7 +272,23 @@ async function retrieve() {
   // Cloudflare on separate hosts, and a shared context holds on to each host's
   // clearance cookie for every request that follows instead of starting cold
   // each time — which, over a hundred event pages, is itself a bot signature.
-  return withPlaywrightSession(async (getPage) => {
+  //
+  // Camoufox rather than the stealth-Chromium helper: as of 2026-08-28 the
+  // challenge here hardened to the point that stealth Chromium sits on the
+  // interstitial indefinitely (measured: 60s, never solved, six consecutive CI
+  // failures across two runners). Camoufox solves it in a few seconds.
+  //
+  // `geoip: false` is load-bearing and NOT a tidy-up — leave it alone. With
+  // Camoufox's default `geoip: true`, TicketSource skips the challenge entirely
+  // and hard-blocks the request ("Your web browser has been blocked..."), which
+  // is strictly worse than the stealth Chromium we're replacing. Measured on the
+  // same IP within the same minute, repeatedly, headless and headed:
+  //   geoip on  -> blocked outright, no `cf-mitigated` header, no puzzle offered
+  //   geoip off -> challenge served, solved, real page in ~5s
+  // `humanize` is innocent and stays on. This is venue-specific: Close-Up runs
+  // the same helper with geoip on and is fine, so the override lives here rather
+  // than changing the shared default.
+  return withCamoufoxSession(async (getPage) => {
     const movieListPages = await retrieveEventsList(getPage, timestampFilter);
 
     const allHits = movieListPages
@@ -282,7 +316,7 @@ async function retrieve() {
     }
 
     return { movieListPages, moviePages };
-  });
+  }, SESSION_OPTIONS);
 }
 
 module.exports = retrieve;
