@@ -35,6 +35,7 @@ function normalizeTitle(title, options) {
     ["The Fishermen", "The Fisherman"], // NOTE: This can be removed in the future once this specific misname has been removed
     ["Music with Tara Franks + ", "Music with Tara Franks & "],
     ["Storytelling + ", "Storytelling & "],
+    ["Back and Forth + ", "Back and Forth & "],
     [" + Cat", " and Cat"],
     [" + Zog", " and Zog"],
     ["Zog + ", "Zog & "],
@@ -159,6 +160,11 @@ function normalizeTitle(title, options) {
     // Fix spelling which causes missed match
     [/^seven$/i, "se7en"],
     ["The Return The Return", "The Return"],
+    // Documentary is released as "Knife: The Attempted Murder of Salman Rushdie"
+    [
+      /(?:Knife: )?The Attempted Murder of Salman Rushdie/i,
+      "Knife: The Attempted Murder of Salman Rushdie",
+    ],
     ["Wildnerness", "Wilderness"],
     [/\s+dub?$/i, ""], // Dubbed
     [/\s+sub?$/i, ""], // subbed
@@ -427,6 +433,7 @@ function normalizeTitle(title, options) {
     ["High School Musical Movie", "High School Musical"],
     ["Sex Dla Opornych", "Seks dla opornych"],
     ["TO CATCH A THEIF", "To Catch a Thief"],
+    ["Breakaway Day & Metamorph", "Double Bill"],
     [/\(Double(-|\s)?Bill\)/i, " Double Bill "],
     [/Double(-|\s)?Bill/i, "Double Bill"],
     [/-? Double Feature/i, " Double Bill "],
