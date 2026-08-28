@@ -90,6 +90,14 @@ specific data format. The transform function:
 
 The result is sorted and filtered to remove duplicates and invalid entries.
 
+A transform that finds no movies fails the run, because an empty listing page is
+usually a scrape that has broken rather than a cinema with nothing on. The one
+exception is a venue we know is shut: `common/expected-closures.js` names the
+venue and the window it is dark for, and inside that window the transform
+returns nothing and logs which closure it stood down for. Entries are temporary
+and only apply inside their own dates, so the venue fails loudly again as soon
+as the closure is meant to be over.
+
 ### 3. Match Against The Movie DB
 
 This is the most complex stage and is

@@ -10,6 +10,7 @@ const {
   generateShowingId,
 } = require("../../common/utils");
 const { isNotSportShowing } = require("../../common/is-sport-showing");
+const { getExpectedClosure } = require("../../common/expected-closures");
 
 // Vue appends a generic description to every tag. For these labels the
 // description just restates the label, so keep the label alone; "Event" is
@@ -130,7 +131,17 @@ async function transform(attributes, { result: movieData }, sourcedEvents) {
   }, []);
 
   if (movies.length === 0) {
-    throw new Error("No movies found - the page structure may have changed");
+    // A venue we know is shut has nothing to list, and the API says so with the
+    // same empty response a broken scrape would give. Stand down only for a
+    // declared closure, and say which one, so the empty output is explained in
+    // the log rather than silent.
+    const closure = getExpectedClosure(attributes.id);
+    if (!closure) {
+      throw new Error("No movies found - the page structure may have changed");
+    }
+    console.log(
+      `      - ⚠️  No listings for ${attributes.id} - closed until ${closure.until} for ${closure.reason}`,
+    );
   }
 
   const listOfSourcedEvents = Object.values(sourcedEvents).flatMap(
