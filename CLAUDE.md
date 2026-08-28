@@ -115,10 +115,17 @@ data, not a note explaining a hole in it. Only challenges are retried; a missing
 venue or a broken parse fails the same way twice. For the browser probes the
 retry recreates the session, since a challenged context stays challenged.
 
-Its rows are written before the job is allowed to fail. A bot challenge or a
-venue with nothing on is an observation about the source and the evidence the
-log exists to keep, so it is recorded and the job stays green; an unknown venue
-id or a failed probe is recorded too, and then the job goes red.
+Its rows are written before the job is allowed to fail. A bot challenge, a
+holding page, a source queueing its visitors, or a venue with nothing on is an
+observation about the source and the evidence the log exists to keep, so it is
+recorded and the job stays green; an unknown venue id or a failed probe is
+recorded too, and then the job goes red.
+
+A virtual waiting room is told from the host the navigation landed on, never
+from the queue vendor's markup - a protected site carries the connector on every
+page it lets through, so matching on that would file the source's own errors as
+a queue. See `common/queue-page.js`, which is the same trap as the Cloudflare
+beacon in `common/maintenance-page.js`.
 
 The exception is a venue declared shut in `common/expected-closures.js`, which
 the probe reads for the same reason `transform` does. A chain drops a closed
