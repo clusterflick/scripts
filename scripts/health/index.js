@@ -3,6 +3,7 @@ const {
   getAllCinemaNames,
   getCinema,
 } = require("../../cinemas");
+const standDownForClosure = require("./stand-down-for-closure");
 
 // Chain probes are group-wide rather than per venue: one listing call answers
 // the whole estate, so batching them is the point and a venue on its own is the
@@ -56,6 +57,13 @@ const resolve = (location) => {
   );
 };
 
+// A closure is worth spelling out in the log - which closure, and until when -
+// so a reader can tell a stand-down we declared from one we forgot to delete.
+const describeReason = (reason) =>
+  reason.kind === "expected-closure"
+    ? `${reason.kind} (${reason.observed}) - closed until ${reason.until} for ${reason.closedFor}`
+    : reason.kind;
+
 async function health(location) {
   const { probe, venues } = resolve(location);
   if (venues.length === 0) {
@@ -63,7 +71,10 @@ async function health(location) {
   }
 
   console.log(`[🩺 Location: ${location}] probing ${venues.length} venues`);
-  const rows = await probe(venues);
+  // Applied here rather than in each probe: any chain can delist a venue it has
+  // shut, so the carve-out belongs beside the decision about which kinds fail
+  // the job rather than repeated per chain. See stand-down-for-closure.js.
+  const rows = (await probe(venues)).map(standDownForClosure);
 
   // A probe may decline a venue the group contains - Everyman's pop-up is fed
   // from a hosted CSV, not the chain API. Say so rather than letting the row
@@ -80,7 +91,7 @@ async function health(location) {
     // individual performances count different things, and the log shouldn't
     // pretend otherwise.
     const outcome = reason
-      ? `${FAILURE_KINDS.has(reason.kind) ? "❌" : "⚠️ "} ${reason.kind}`
+      ? `${FAILURE_KINDS.has(reason.kind) ? "❌" : "⚠️ "} ${describeReason(reason)}`
       : `✅ ${Object.entries(counts)
           .map(
             ([name, count]) =>
