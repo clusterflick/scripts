@@ -593,6 +593,7 @@ const knownRemovablePhrases = [
   "Beyond Human Time:",
   "Beyond Kino:",
   "Beyond:",
+  "BFI At Yours:",
   "BFI Flipside Blu-ray launch:",
   "BFI IMAX exclusive fan preview ",
   "BFI 'Rip it Up': ",
