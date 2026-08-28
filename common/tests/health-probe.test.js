@@ -85,13 +85,20 @@ describe("classifyPage", () => {
     const failure = await classifyPage(
       pageServing(
         "<html><body>You are now in line</body></html>",
-        "https://bfi.queue-it.net/?c=bfi&e=onsale&t=https%3A%2F%2Fwhatson.bfi.org.uk%2FOnline%2Fdefault.asp",
+        // Where the probe actually landed on 2026-08-28, from the run that
+        // recorded the whole BFI estate as `probe-error`.
+        "https://audienceview.queue-it.net/?c=audienceview&e=bfi280826&cid=en-GB",
       ),
       responseWith(),
       "No search results on https://whatson.bfi.org.uk/Online/default.asp",
     );
 
-    expect(failure.reason).toEqual({ kind: "source-queue", status: 200 });
+    expect(failure.reason).toEqual({
+      kind: "source-queue",
+      status: 200,
+      queue: "audienceview.queue-it.net",
+      event: "bfi280826",
+    });
   });
 
   it("does not mistake an installed queue connector for being queued", async () => {

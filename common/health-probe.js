@@ -5,7 +5,7 @@ const {
   isBotChallengeResponse,
 } = require("./bot-challenge");
 const { isMaintenancePage } = require("./maintenance-page");
-const { isQueuePage } = require("./queue-page");
+const { isQueuePage, describeQueue } = require("./queue-page");
 
 // Shared plumbing for the health probes under `scripts/health`. A probe asks a
 // chain's listing endpoint what is currently published and records the answer;
@@ -52,7 +52,11 @@ const probeFetch = async (url, options = {}) => {
   // 200, so a probe reading text would otherwise take it for the listing and
   // fail later on the parse, blaming us for the source being busy.
   if (isQueuePage(response.url)) {
-    throw new ProbeFailure({ kind: "source-queue", status: response.status });
+    throw new ProbeFailure({
+      kind: "source-queue",
+      status: response.status,
+      ...describeQueue(response.url),
+    });
   }
 
   const body = await response.text();
@@ -103,7 +107,11 @@ const classifyPage = async (page, response, message) => {
   // response for the first navigation only, and the queue is wherever we ended
   // up.
   if (isQueuePage(page.url())) {
-    return new ProbeFailure({ kind: "source-queue", status });
+    return new ProbeFailure({
+      kind: "source-queue",
+      status,
+      ...describeQueue(page.url()),
+    });
   }
   const content = await page.content().catch(() => "");
   if (BOT_CHALLENGE_TEXT.test(content)) {

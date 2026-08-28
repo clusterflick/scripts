@@ -1,4 +1,4 @@
-const { isQueuePage } = require("../queue-page");
+const { isQueuePage, describeQueue } = require("../queue-page");
 const { probeText, probeJson } = require("../health-probe");
 
 const queued = (body) => ({
@@ -6,15 +6,19 @@ const queued = (body) => ({
   status: 200,
   statusText: "OK",
   // What `fetch` reports after following the 302 into the waiting room.
-  url: "https://bfi.queue-it.net/?c=bfi&e=onsale&t=https%3A%2F%2Fwhatson.bfi.org.uk",
+  url: "https://audienceview.queue-it.net/?c=audienceview&e=bfi280826&cid=en-GB",
   headers: new Headers(),
   text: async () => body,
 });
 
 describe("isQueuePage", () => {
   it("recognises a waiting room by the host it is served from", () => {
+    // The waiting room BFI's ticketing platform sent the probe to on
+    // 2026-08-28; the customer is AudienceView, not BFI.
     expect(
-      isQueuePage("https://bfi.queue-it.net/?c=bfi&e=onsale&t=https%3A%2F%2Fx"),
+      isQueuePage(
+        "https://audienceview.queue-it.net/?c=audienceview&e=bfi280826&cid=en-GB",
+      ),
     ).toBe(true);
   });
 
@@ -34,6 +38,22 @@ describe("isQueuePage", () => {
   });
 });
 
+describe("describeQueue", () => {
+  it("names the waiting room and what it is queueing for", () => {
+    expect(
+      describeQueue(
+        "https://audienceview.queue-it.net/?c=audienceview&e=bfi280826&cid=en-GB",
+      ),
+    ).toEqual({ queue: "audienceview.queue-it.net", event: "bfi280826" });
+  });
+
+  it("says nothing about an event when the queue names none", () => {
+    expect(describeQueue("https://audienceview.queue-it.net/")).toEqual({
+      queue: "audienceview.queue-it.net",
+    });
+  });
+});
+
 describe("a probe redirected into a waiting room", () => {
   afterEach(() => {
     global.fetch = undefined;
@@ -49,7 +69,14 @@ describe("a probe redirected into a waiting room", () => {
       );
 
     await expect(probeText("https://whatson.bfi.org.uk")).rejects.toMatchObject(
-      { reason: { kind: "source-queue", status: 200 } },
+      {
+        reason: {
+          kind: "source-queue",
+          status: 200,
+          queue: "audienceview.queue-it.net",
+          event: "bfi280826",
+        },
+      },
     );
   });
 

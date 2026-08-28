@@ -59,10 +59,17 @@ const resolve = (location) => {
 
 // A closure is worth spelling out in the log - which closure, and until when -
 // so a reader can tell a stand-down we declared from one we forgot to delete.
-const describeReason = (reason) =>
-  reason.kind === "expected-closure"
-    ? `${reason.kind} (${reason.observed}) - closed until ${reason.until} for ${reason.closedFor}`
-    : reason.kind;
+const describeReason = (reason) => {
+  if (reason.kind === "expected-closure") {
+    return `${reason.kind} (${reason.observed}) - closed until ${reason.until} for ${reason.closedFor}`;
+  }
+  // Which waiting room, and what it is queueing for - the difference between
+  // "BFI is busy" and "BFI's festival on-sale opened this morning".
+  if (reason.kind === "source-queue") {
+    return `${reason.kind} - held at ${reason.queue}${reason.event ? ` for ${reason.event}` : ""}`;
+  }
+  return reason.kind;
+};
 
 async function health(location) {
   const { probe, venues } = resolve(location);

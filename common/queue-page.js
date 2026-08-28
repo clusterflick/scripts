@@ -31,7 +31,20 @@ const isQueuePage = (url) => {
   }
 };
 
+// Which waiting room, and which of its events. The row otherwise says only
+// that we were queued, and the useful question when reading one back is what
+// the source was busy with - `?c=audienceview&e=bfi280826` names AudienceView's
+// waiting room and BFI's on-sale for 28/08/26. The target the queue will
+// eventually return us to (`t=`) is our own request echoed back, so it is left
+// out.
+const describeQueue = (url) => {
+  const { hostname, searchParams } = new URL(url);
+  const event = searchParams.get("e");
+  return { queue: hostname, ...(event ? { event } : {}) };
+};
+
 module.exports = {
   WAITING_ROOM_HOST,
   isQueuePage,
+  describeQueue,
 };
