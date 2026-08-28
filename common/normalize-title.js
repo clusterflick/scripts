@@ -270,6 +270,7 @@ function normalizeTitle(title, options) {
     ["½", " 1/2"],
     [/Mr\.? Hulot/i, "Monsieur Hulot"], // Fix for Monsieur Hulot's Holiday
     [/^Mishima$/i, "Mishima: A Life in Four Chapters"],
+    [/^Arrietty$/i, "The Secret World of Arrietty"],
     ["My Heart Is That Eternal Love", "My Heart Is That Eternal Rose"],
     [/^A Tale of Sorrow$/i, "A Tale of Sorrow and Sadness"],
     [/^Eftihia$/i, "My Name is Eftihia"],
