@@ -5,6 +5,7 @@ const {
   isBotChallengeResponse,
 } = require("./bot-challenge");
 const { isMaintenancePage } = require("./maintenance-page");
+const { isQueuePage } = require("./queue-page");
 
 // Shared plumbing for the health probes under `scripts/health`. A probe asks a
 // chain's listing endpoint what is currently published and records the answer;
@@ -17,11 +18,10 @@ const { isMaintenancePage } = require("./maintenance-page");
 // worth less than a prompt failure.
 const PROBE_RETRY = { retries: 1, delayMs: 5_000 };
 
-// Why a venue has no counts. A challenge, or a venue with nothing on, is an
-// observation
-// about the source and worth keeping; only the failure kinds mean something is
-// wrong with us. Which kinds fail the job is the caller's call - see
-// scripts/health.
+// Why a venue has no counts. A challenge, a holding page, a waiting room, or a
+// venue with nothing on, is an observation about the source and worth keeping;
+// only the failure kinds mean something is wrong with us. Which kinds fail the
+// job is the caller's call - see scripts/health.
 class ProbeFailure extends Error {
   constructor(reason) {
     super(reason.message ?? reason.kind);
@@ -45,6 +45,14 @@ const probeFetch = async (url, options = {}) => {
       via: "cf-mitigated",
       status: response.status,
     });
+  }
+
+  // Checked here rather than in `classifyFailure` because a waiting room is an
+  // ok response: `fetch` follows the 302 and hands back the queue page with a
+  // 200, so a probe reading text would otherwise take it for the listing and
+  // fail later on the parse, blaming us for the source being busy.
+  if (isQueuePage(response.url)) {
+    throw new ProbeFailure({ kind: "source-queue", status: response.status });
   }
 
   const body = await response.text();
@@ -90,6 +98,13 @@ const classifyPage = async (page, response, message) => {
       status,
     });
   }
+  // Read off the page rather than the response: a probe that navigates again
+  // inside the callback (BFI loads the venue, then its calendar search) holds a
+  // response for the first navigation only, and the queue is wherever we ended
+  // up.
+  if (isQueuePage(page.url())) {
+    return new ProbeFailure({ kind: "source-queue", status });
+  }
   const content = await page.content().catch(() => "");
   if (BOT_CHALLENGE_TEXT.test(content)) {
     return new ProbeFailure({
@@ -105,7 +120,11 @@ const classifyPage = async (page, response, message) => {
   if (isMaintenancePage(content)) {
     return new ProbeFailure({ kind: "source-maintenance", status });
   }
-  return probeError(message);
+  // Say where we ended up, not just what we asked for. A probe error is the
+  // kind that needs reading back from a log, and an off-site landing - a
+  // waiting room this doesn't yet recognise, an SSO wall - is invisible in a
+  // message naming the URL we requested.
+  return probeError(`${message} (landed on ${page.url()})`);
 };
 
 const probeJson = async (url, options) => {
@@ -144,7 +163,9 @@ const probeText = async (url, options) => {
 // A challenge is usually transient - Cloudflare hands out a clearance and the
 // next attempt goes through - so it is worth waiting once before recording it.
 // Only challenges are retried: an unknown id or a broken parse will fail again
-// identically, and retrying those just delays the cycle for nothing.
+// identically, and retrying those just delays the cycle for nothing. Nor a
+// waiting room - a queue is measured in the minutes-to-hours the source intends
+// it to be, so waiting a minute buys a second refusal and a later observation.
 //
 // Wrap the whole unit that shares a request, not the request alone. For the
 // browser probes that means the call that opens the session, so the retry gets a

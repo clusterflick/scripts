@@ -12,7 +12,10 @@ const curzonHoldingPage = fs.readFileSync(
   "utf8",
 );
 
-const pageServing = (content) => ({ content: async () => content });
+const pageServing = (content, url = "https://www.curzon.com") => ({
+  content: async () => content,
+  url: () => url,
+});
 
 const responseWith = (headers = {}, status = 200) => ({
   status: () => status,
@@ -76,6 +79,37 @@ describe("classifyPage", () => {
     });
   });
 
+  it("records a waiting room as the source being busy, not our probe breaking", async () => {
+    // Queue-it answers the navigation with a 302 to its own host, so a probe
+    // that only reads the page it asked for sees results that never arrived.
+    const failure = await classifyPage(
+      pageServing(
+        "<html><body>You are now in line</body></html>",
+        "https://bfi.queue-it.net/?c=bfi&e=onsale&t=https%3A%2F%2Fwhatson.bfi.org.uk%2FOnline%2Fdefault.asp",
+      ),
+      responseWith(),
+      "No search results on https://whatson.bfi.org.uk/Online/default.asp",
+    );
+
+    expect(failure.reason).toEqual({ kind: "source-queue", status: 200 });
+  });
+
+  it("does not mistake an installed queue connector for being queued", async () => {
+    // Every page a Queue-it-protected site lets through carries the connector's
+    // logging beacon - BFI's own 500s included - so its presence says the site
+    // uses Queue-it, not that we are waiting in it.
+    const failure = await classifyPage(
+      pageServing(
+        '<html><head><meta id="queue-it_log" data-proxyurl="https://logging.queue-it.net/logging/event" data-assemblyversion="4.5.1374.0"></head><body>Server error</body></html>',
+        "https://whatson.bfi.org.uk/Online/default.asp",
+      ),
+      responseWith(),
+      "No search results on https://whatson.bfi.org.uk/Online/default.asp",
+    );
+
+    expect(failure.reason.kind).toBe("probe-error");
+  });
+
   it("falls back to a probe error when the page is neither", async () => {
     const failure = await classifyPage(
       pageServing("<html><body>An ordinary page</body></html>"),
@@ -85,7 +119,25 @@ describe("classifyPage", () => {
 
     expect(failure.reason).toEqual({
       kind: "probe-error",
-      message: "No API token on https://www.curzon.com",
+      message:
+        "No API token on https://www.curzon.com (landed on https://www.curzon.com)",
     });
+  });
+
+  it("names where the navigation landed, not only what was asked for", async () => {
+    // The question a probe error leaves behind is what we were served instead,
+    // and a message naming only the requested URL cannot answer it.
+    const failure = await classifyPage(
+      pageServing(
+        "<html><body>Sign in to continue</body></html>",
+        "https://login.example.com/sso?next=%2Fonline",
+      ),
+      responseWith(),
+      "No search results on https://whatson.example.com/Online/default.asp",
+    );
+
+    expect(failure.reason.message).toContain(
+      "landed on https://login.example.com/sso?next=%2Fonline",
+    );
   });
 });
