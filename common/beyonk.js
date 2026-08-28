@@ -47,6 +47,11 @@ const readEmbeddedPayloads = (html) =>
     })
     .filter((payload) => payload && typeof payload === "object");
 
+// The error route Beyonk redirects a detail URL to when the experience has no
+// dates scheduled - see `retrieveExperienceDetail`.
+const NO_SCHEDULES_PAGE =
+  /\/form\/error\/no-schedules|reason:\s*"no-schedules"/;
+
 /**
  * Every experience an organisation is selling, in the order its shop lists
  * them. Groups appear alongside experiences and are left in for the caller to
@@ -71,14 +76,28 @@ async function retrieveExperiences(organisationId) {
 }
 
 /**
- * One experience's detail - title, description, location and ticket types
+ * One experience's detail - title, description, location and ticket types.
+ * An experience the shop still lists but has no dates on has no detail to
+ * read, and comes back undefined.
  * @param {string} organisationId - The Beyonk organisation id
  * @param {string} experienceId - The experience id
- * @returns {Promise<Object>} The experience detail
+ * @returns {Promise<Object|undefined>} The experience detail, or undefined
  */
 async function retrieveExperienceDetail(organisationId, experienceId) {
   const url = getExperienceDetailUrl(organisationId, experienceId);
   const html = await fetchText(url);
+
+  // Nothing scheduled is a normal state of a shop rather than a breakage - a
+  // run can be over, or not yet on sale, while its page stays listed - so it
+  // is told apart from a detail page we can no longer read rather than
+  // failing the whole venue. Beyonk says so by redirecting the detail URL to
+  // its own error route, which `fetch` follows, so what comes back is that
+  // error page under the URL we asked for. Read from the page rather than
+  // from the redirect: the route names itself in what it serves, both in the
+  // layout's echo of the landed URL and in the route data below it, and
+  // neither appears on a real detail page.
+  if (NO_SCHEDULES_PAGE.test(html)) return undefined;
+
   const detail = readEmbeddedPayloads(html).find(
     ({ id, pricing }) => id === experienceId && pricing,
   );

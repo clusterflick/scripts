@@ -34,6 +34,11 @@ async function retrieve() {
       item.id,
     );
 
+    // The shop keeps an experience listed with no dates on it - a run that is
+    // over, or one not yet on sale - and there is nothing to ask availability
+    // for until it has some
+    if (!detail) continue;
+
     // Availability is refused without a ticket quantity, so any of the
     // experience's own tickets makes the request valid
     const [ticket] = detail.pricing?.tickets || [];
