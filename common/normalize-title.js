@@ -584,6 +584,7 @@ function normalizeTitle(title, options) {
     ["THIS IS NOT AN EXIT - ", "THIS IS NOT AN EXIT: "],
     ["Andres Veiel - ", "Andres Veiel: "],
     ["Gothic Film Festival - ", "Gothic Film Festival: "],
+    ["ITALY THROUGH ITS CINEMA - ", "Italy Through its Cinema: "],
     ["Aussies in London - ", "Aussies in London: "],
     ["MOVIE CLUB - ", "Movie Club: "],
     ["HW4P Solidarity on Screen - ", "HW4P Solidarity on Screen: "],

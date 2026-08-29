@@ -640,6 +640,7 @@ const knownRemovablePhrases = [
   "Curzon Film 50:",
   "Mamoru Hosoda's",
   "Mondays for Members:",
+  "Member's Pick ",
   "Members' Exclusive:",
   "Members':",
   "Members:",
@@ -1390,6 +1391,7 @@ const knownRemovablePhrases = [
   "Živorad Mitrović's",
   "Vinko Möderndorfer's",
   '("Biye Fiye Niye")',
+  "Film Showing: Feat. Q&A w/ LGSM Organiser",
 
   // Common superfluous pieces
   "** SCREENING CANCELLED **",
