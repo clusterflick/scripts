@@ -53,6 +53,30 @@ describe("parseBookingWidgetDates", () => {
     expect(parseBookingWidgetDates("var somethingElse = []")).toEqual([]);
   });
 
+  // The widget titles itself from the time picked rather than the date's own
+  // DisplayDate, so that text isn't the event's start to read
+  it("returns nothing when a date offers times of its own", () => {
+    expect(
+      parseBookingWidgetDates(
+        widgetScript([
+          {
+            DisplayDate: "Saturday 19th September 2026  @ 8:00 PM",
+            Times: [
+              {
+                Time: "8:00 PM",
+                DisplayDate: "Saturday 19th September 2026  @ 8:00 PM",
+              },
+              {
+                Time: "8:30 PM",
+                DisplayDate: "Saturday 19th September 2026  @ 8:30 PM",
+              },
+            ],
+          },
+        ]),
+      ),
+    ).toEqual([]);
+  });
+
   // Half of a multi-date event's dates is a worse answer than none of them
   it("returns nothing when only some of the dates can be read", () => {
     expect(

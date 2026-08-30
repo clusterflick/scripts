@@ -42,6 +42,13 @@ function parseBookingWidgetDates(scriptText) {
     return [];
   }
 
+  // A date offering its own times hides its DisplayDate behind them - the
+  // widget builds a button per time and titles itself from the one picked - so
+  // reading the date's own text here would take a value OutSavvy doesn't treat
+  // as bookable. No event has published times this way yet, so rather than
+  // guess at how they read, leave them to fail by the URL that has them.
+  if (widgetDates.some(({ Times }) => (Times ?? []).length > 0)) return [];
+
   const dates = widgetDates.map(({ DisplayDate }) =>
     parse(
       String(DisplayDate).replace(/\s+/g, " ").trim(),
