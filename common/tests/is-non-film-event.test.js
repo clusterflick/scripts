@@ -13,6 +13,7 @@ describe("isNonFilmEvent", () => {
     ["Fashion Business, Startups Industry Leaders Networking Night"],
     ["Visionary Collective Artists & Industry Pros Networking Night"],
     ["Medtech Innovation: Shaping the Future of Digital Health in London"],
+    ["Medical Connections | Enterprise Leaders for NHS Service Providers"],
     ["WHAT HAPPENS NEXT - Thursday Third Space & Games for Singles 21+"],
     ["Free Salsa & Bachata Outdoor Party - SABOR"],
     ["Aircraft Cabin Air Conference 2026"],

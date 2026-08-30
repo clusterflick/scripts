@@ -33,6 +33,10 @@ function normalizeTitle(title, options) {
     ["The Transformers: The Movie", "The Transformers The Movie ()"], // Retain "The Movie" suffix
     [/:? The Movie$/i, ""],
     ["The Fishermen", "The Fisherman"], // NOTE: This can be removed in the future once this specific misname has been removed
+    // One venue bills the tour without the dash before the subtitle, so the
+    // suffix-stripping that leaves every other listing as "neo city seoul"
+    // never fires and the same show arrives under a second name.
+    ["NEO CITY : SEOUL THE REDLINE", "NEO CITY : SEOUL - THE REDLINE"],
     // FrightFest bills one of its two screenings with the wrong subtitle, so
     // the same film arrives under two names and only the other one matches.
     // NOTE: This can be removed once the misnamed screening has passed
