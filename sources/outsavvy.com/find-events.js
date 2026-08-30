@@ -8,7 +8,7 @@ const {
   createFormat,
 } = require("../../common/utils");
 const { createOverview, createPerformance } = require("../../common/utils");
-const { parseDate } = require("./utils");
+const { parseEventDates } = require("./utils");
 const attributes = require("./attributes");
 const { venueMatchesCinema } = require("../../common/source-utils");
 
@@ -33,7 +33,7 @@ function extractEventDetails(html) {
 
   const title = getText($(".event-item-name").first());
   const venueName = getText($(".event-item-venue span span").first());
-  const dateString = getText($("#MainContent_LabelDate2"));
+  const dateText = getText($("#MainContent_LabelDate2"));
   const description = $(".content-body .event-description span")
     .children()
     .map((i, el) => getText($(el)))
@@ -47,7 +47,8 @@ function extractEventDetails(html) {
   return {
     title,
     venueName,
-    date: parseDate(dateString),
+    dateText,
+    dates: parseEventDates(dateText, $("script").text()),
     description,
     coordinates: extractCoordinates($),
   };
@@ -57,19 +58,28 @@ function convertOutsavvyEvent(event) {
   // Extract event ID from URL (e.g., /event/31052/palestine-cinema-days-when-i-saw-you)
   const eventId = event.url.match(/\/event\/(\d+)\//)?.[1] || event.url;
 
+  // Conversion happens after the venue filter, so an event we can't date only
+  // fails the transform of the venue it is listed at rather than every venue
+  // the source is asked about.
+  if (event.dates.length === 0) {
+    throw new Error(
+      `No date could be read for ${event.url} (published as "${event.dateText}")`,
+    );
+  }
+
   return {
     showingId: generateShowingId(attributes, eventId),
     title: event.title,
     url: event.url,
     overview: createOverview({}),
-    performances: [
+    performances: event.dates.map((date) =>
       createPerformance({
-        date: event.date,
+        date,
         url: event.url,
         accessibility: createAccessibility(event.title, {}, event.description),
         format: createFormat(event.title, {}, event.description),
       }),
-    ],
+    ),
     matchingHints: { overview: event.description },
   };
 }
