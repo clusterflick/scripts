@@ -47,7 +47,6 @@ function extractEventDetails(html) {
   return {
     title,
     venueName,
-    dateText,
     dates: parseEventDates(dateText, $("script").text()),
     description,
     coordinates: extractCoordinates($),
@@ -62,9 +61,7 @@ function convertOutsavvyEvent(event) {
   // fails the transform of the venue it is listed at rather than every venue
   // the source is asked about.
   if (event.dates.length === 0) {
-    throw new Error(
-      `No date could be read for ${event.url} (published as "${event.dateText}")`,
-    );
+    throw new Error(`No date could be read for ${event.url}`);
   }
 
   return {
