@@ -15,7 +15,10 @@ async function retrieve() {
           .data("saved-event-id");
 
         movieIds.add(movieId);
-        movieTitles.set(movieId, getText($(this).find(".listing-title--event")));
+        movieTitles.set(
+          movieId,
+          getText($(this).find(".listing-title--event")),
+        );
       });
     },
   );

@@ -1,15 +1,16 @@
 const cheerio = require("cheerio");
 const { fetchText, assertSelector } = require("../utils");
+const { LISTING, LISTING_LINK } = require("./utils");
 
 async function retrieve(attributes) {
   const { url } = attributes;
 
   const movieListPage = await fetchText(url);
-  assertSelector(movieListPage, ".card-list");
+  assertSelector(movieListPage, LISTING);
   const $ = cheerio.load(movieListPage);
 
   const moviePageUrls = new Set();
-  $(".card-list .card a").each(function () {
+  $(LISTING_LINK).each(function () {
     moviePageUrls.add($(this).attr("href"));
   });
 

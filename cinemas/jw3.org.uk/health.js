@@ -108,9 +108,7 @@ async function health(venues) {
     countRequest();
     const instances = await withChallengeRetry(
       () =>
-        probeJson(
-          getInstancesUrl(spektrixClient, format(today, "yyyy-MM-dd")),
-        ),
+        probeJson(getInstancesUrl(spektrixClient, format(today, "yyyy-MM-dd"))),
       venue.id,
     );
     countRequest();

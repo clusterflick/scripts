@@ -45,8 +45,7 @@ async function health(venues) {
   const { apiKey, apiDomain, locationId } = venue;
   const apiUrl = apiUrlFor(apiDomain);
 
-  const ask = (body) =>
-    probeJson(apiUrl, signedPostOptions(apiKey, body));
+  const ask = (body) => probeJson(apiUrl, signedPostOptions(apiKey, body));
 
   let dates;
   let perPage;

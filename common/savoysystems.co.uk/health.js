@@ -79,10 +79,7 @@ async function health(venues) {
   let films;
   let byDate;
   try {
-    const html = await withChallengeRetry(
-      () => probeText(venue.url),
-      venue.id,
-    );
+    const html = await withChallengeRetry(() => probeText(venue.url), venue.id);
     countRequest();
     ({ films, byDate } = tally(extractEvents(html)));
   } catch (error) {
