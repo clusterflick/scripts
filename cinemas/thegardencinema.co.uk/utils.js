@@ -1,8 +1,14 @@
 const { parse, isBefore, startOfDay, addYears, subDays } = require("date-fns");
 const { enGB } = require("date-fns/locale/en-GB");
 
-const parseDate = (dateString) => {
-  const parsedDate = parse(dateString, "EEE dd MMM 'T' HH:mm", new Date(), {
+// The film pages date their screenings "Sun 30 Aug" and the what's-on page
+// dates the same screenings "Sunday 30 August", so the caller says which it is
+// holding. The year-boundary rule below applies to both and stays in one place.
+const FILM_PAGE_DATE = "EEE dd MMM 'T' HH:mm";
+const LISTING_PAGE_DATE = "EEEE d MMMM 'T' HH:mm";
+
+const parseDate = (dateString, format = FILM_PAGE_DATE) => {
+  const parsedDate = parse(dateString, format, new Date(), {
     locale: enGB,
   });
 
@@ -20,4 +26,6 @@ const parseDate = (dateString) => {
 
 module.exports = {
   parseDate,
+  FILM_PAGE_DATE,
+  LISTING_PAGE_DATE,
 };
