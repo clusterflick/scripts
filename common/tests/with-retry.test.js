@@ -74,6 +74,44 @@ describe("withRetry", () => {
     expect(waits[2]).toBeLessThanOrEqual(48);
   });
 
+  it("stops immediately on an error the caller says is permanent", async () => {
+    const fn = jest.fn().mockRejectedValue(new Error("gone"));
+
+    const { error } = await settleWithTimers(
+      withRetry(fn, {
+        retries: 3,
+        delayMs: 10_000,
+        shouldRetry: () => false,
+      }),
+    );
+
+    expect(error.message).toBe("gone");
+    // The point of shouldRetry: the remaining attempts would fail identically,
+    // so spending the budget only delays the real error.
+    expect(fn).toHaveBeenCalledTimes(1);
+    expect(logs.some((line) => line.includes("retrying in"))).toBe(false);
+  });
+
+  it("keeps retrying the errors the caller says are transient", async () => {
+    const fn = jest
+      .fn()
+      .mockRejectedValueOnce(
+        Object.assign(new Error("busy"), { transient: true }),
+      )
+      .mockResolvedValueOnce("done");
+
+    const { value } = await settleWithTimers(
+      withRetry(fn, {
+        retries: 3,
+        delayMs: 10_000,
+        shouldRetry: (error) => error.transient === true,
+      }),
+    );
+
+    expect(value).toBe("done");
+    expect(fn).toHaveBeenCalledTimes(2);
+  });
+
   it("keeps a fixed delay when no backoff factor is given", async () => {
     const fn = jest.fn().mockRejectedValue(new Error("nope"));
 

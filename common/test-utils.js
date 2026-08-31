@@ -29,6 +29,24 @@ const SENSITIVE_HEADERS = [
   "x-auth-token",
 ];
 
+// Credentials that arrive in a response body rather than a header. A site
+// embedding its own map key in the page it serves is that site's business, but
+// a recording republishes the key in this repo - and GitHub's push protection
+// blocks the push - so it is scrubbed on the way in. Nothing we parse reads
+// these: OutSavvy's coordinates come from the marker image URL, not the token.
+const SENSITIVE_BODY_PATTERNS = [
+  // Mapbox access tokens, public ("pk.") and secret ("sk.").
+  /\b[ps]k\.eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+/g,
+];
+
+function redactBody(text) {
+  if (typeof text !== "string") return text;
+  return SENSITIVE_BODY_PATTERNS.reduce(
+    (redacted, pattern) => redacted.replace(pattern, "[REDACTED]"),
+    text,
+  );
+}
+
 function redactHeaders(headers) {
   if (!headers) return headers;
   return headers.map((header) => {
@@ -70,6 +88,11 @@ function setupPollyWrapper(isRecording, dirname) {
     server.any().on("beforePersist", (req, recording) => {
       recording.request.headers = redactHeaders(recording.request.headers);
       recording.response.headers = redactHeaders(recording.response.headers);
+      if (recording.response.content) {
+        recording.response.content.text = redactBody(
+          recording.response.content.text,
+        );
+      }
     });
   });
 
@@ -116,6 +139,7 @@ const setupCacheMock = (dirname, suffix) => {
 };
 
 module.exports = {
+  redactBody,
   setupPolly: setupPollyWrapper,
   schemaValidate,
   setupCacheMock,

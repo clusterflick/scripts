@@ -417,6 +417,9 @@ function normalizeTitle(title, options) {
     ["Worlds25 - Finals in Cinema", "World Finals 2025"],
     ["Love + War", "Love+War"],
     ["Neighbour Totoro", "Neighbor Totoro"],
+    // One venue bills the film without the article, so it never groups with
+    // the listings using the full title.
+    ["Harry Potter & Chamber", "Harry Potter & The Chamber"],
     ["The Extra Terrestrial", "The Extra-Terrestrial"],
     [/^E\.T\.$/i, "E.T. the Extra-Terrestrial"],
     // Work around a weird issue with the moviedb API and a soft hyphen in the listing title
@@ -424,7 +427,9 @@ function normalizeTitle(title, options) {
     [" – Q&A with ", " + Q&A with "],
     ["Homosexual –", "Homosexual ("],
     ["Stendalì: Still They Toll + ", ""],
+    ["Mockingjay Pt ", "Mockingjay Part "], // Un-abbreviate for the rule below
     [/\s+Part\s+(\d+)(\s|:|$)/i, " $1$2"],
+    ["Nanny Rosa film", "Nanny Rosa"],
     ["Bāhubali", "Baahubali"],
     ["Khatarnaak", "Khatarnak"],
     [/Krishnavatar[\s$]/i, "Krishnavataram"],
@@ -1233,6 +1238,15 @@ function normalizeTitle(title, options) {
   const hasFundraiser = matchesStartingPrefix(title, "fundraiser");
   if (hasFundraiser) {
     title = hasFundraiser[1];
+  }
+
+  // e.g. "Tribute to Dolly Parton: Nine to Five" → "Nine to Five"
+  const hasTribute = matchesStartingPrefix(
+    title,
+    "(?:a\\s+)?tribute to\\s+[^:;]+",
+  );
+  if (hasTribute) {
+    title = hasTribute[1];
   }
 
   const hasSeparator = title.match(/^(.*?)\s+(?:\+|-|\/|\||•)\s*/);

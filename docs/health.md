@@ -49,8 +49,8 @@ or existing keys growing.
 
 |                                                 |  Venues |
 | ----------------------------------------------- | ------: |
-| Cinema modules                                  |     409 |
-| Source-only (no endpoint of their own to probe) |     250 |
+| Cinema modules                                  |     410 |
+| Source-only (no endpoint of their own to probe) |     251 |
 | **Eligible for a health check**                 | **159** |
 | **Covered**                                     | **132** |
 | Remaining                                       |      27 |

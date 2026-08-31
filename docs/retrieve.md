@@ -172,8 +172,8 @@ it with Cheerio to extract links, then fetches each detail page individually.
 
 **Platforms:** Tate (2 venues), Olympic Studios (3 venues), The Castle Cinema (2
 venues), Admit One (2 venues) **Standalone:** ~33 cinemas use this pattern with
-venue-specific selectors **Sources:** OutSavvy, Wimbledon Film Club,
-WeGotTickets
+venue-specific selectors **Sources:** OutSavvy (over several hashtag listings),
+Wimbledon Film Club, WeGotTickets
 
 ```js
 // cinemas/ica.art/retrieve.js
@@ -633,14 +633,14 @@ and `moviePages` is a dictionary keyed by URL or ID containing detail page data.
 
 Notable variants:
 
-| Return Shape                                                                | Used By                            |
-| --------------------------------------------------------------------------- | ---------------------------------- |
-| `{ movieListPage, moviePages }`                                             | Most cinemas and sources           |
-| `moviePages` (plain array)                                                  | OCAPI (Odeon, Curzon)              |
-| `site` (plain object)                                                       | Electric Cinema                    |
-| `{ movieDatesPage, movieListPage }`                                         | Cinesync                           |
-| `{ movieListPage, moviePages: { movieData, movieDetails, attributeData } }` | Everyman                           |
-| `{ movieListPages, moviePages }`                                            | Dice.fm, DesignMyNight, Eventbrite |
-| `{ clubPages }`                                                             | Ticket Tailor                      |
-| `{ venues: { [slug]: { movieListPage, moviePages } } }`                     | Ti.to                              |
-| `{}`                                                                        | Source-only venues                 |
+| Return Shape                                                                | Used By                                      |
+| --------------------------------------------------------------------------- | -------------------------------------------- |
+| `{ movieListPage, moviePages }`                                             | Most cinemas and sources                     |
+| `moviePages` (plain array)                                                  | OCAPI (Odeon, Curzon)                        |
+| `site` (plain object)                                                       | Electric Cinema                              |
+| `{ movieDatesPage, movieListPage }`                                         | Cinesync                                     |
+| `{ movieListPage, moviePages: { movieData, movieDetails, attributeData } }` | Everyman                                     |
+| `{ movieListPages, moviePages }`                                            | Dice.fm, DesignMyNight, Eventbrite, OutSavvy |
+| `{ clubPages }`                                                             | Ticket Tailor                                |
+| `{ venues: { [slug]: { movieListPage, moviePages } } }`                     | Ti.to                                        |
+| `{}`                                                                        | Source-only venues                           |
