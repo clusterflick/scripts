@@ -1,11 +1,5 @@
-const cheerio = require("cheerio");
-const {
-  probeText,
-  probeError,
-  startObservation,
-  withChallengeRetry,
-} = require("../health-probe");
-const { LISTING, LISTING_LINK } = require("./utils");
+const createListingTotalsHealth = require("../listing-totals-health");
+const { LISTING, LISTING_ENTRY, LISTING_LINK } = require("./utils");
 
 // Two galleries on one site, each with its own what's-on filtered to its own
 // film programme, so there is no call that answers for both: this is a per-venue
@@ -20,49 +14,10 @@ const { LISTING, LISTING_LINK } = require("./utils");
 // Aug 2026", "Daily, 12 Sep - 15 Nov 2026", "Ongoing". The transform reads the
 // event page instead, where the dates are unambiguous, and expands a run into a
 // performance per day. A byDate built from these cards would neither match what
-// we publish nor survive the next format on that list, so this reports a film
-// total and says so with its granularity.
-const GRANULARITY = "film-totals";
-
-async function health(venues) {
-  const { countRequest, reasonFor, finalise } = startObservation(GRANULARITY);
-  const [venue] = venues;
-
-  let films;
-  try {
-    const html = await withChallengeRetry(() => probeText(venue.url), venue.id);
-    countRequest();
-
-    const $ = cheerio.load(html);
-    // The same selector the retrieve asserts on. Its absence is the listing
-    // having changed shape; its presence with no cards is a gallery with no
-    // films on, which is ordinary here - Tate Modern was showing one film and
-    // Tate Britain five the day this was written.
-    if ($(LISTING).length === 0) {
-      throw probeError(
-        `No \`${LISTING}\` on the what's-on page - the listing may have changed shape`,
-      );
-    }
-
-    films = new Set(
-      $(LISTING_LINK)
-        .map(function () {
-          return $(this).attr("href");
-        })
-        .get(),
-    ).size;
-  } catch (error) {
-    countRequest();
-    return finalise([{ venue: venue.id, reason: reasonFor(error) }]);
-  }
-
-  if (films === 0) {
-    return finalise([
-      { venue: venue.id, reason: { kind: "no-listings-found" } },
-    ]);
-  }
-
-  return finalise([{ venue: venue.id, counts: { films } }]);
-}
-
-module.exports = health;
+// we publish nor survive the next format on that list.
+module.exports = createListingTotalsHealth({
+  pages: (venue) => [venue.url],
+  listing: LISTING,
+  entry: LISTING_ENTRY,
+  link: LISTING_LINK,
+});

@@ -1,6 +1,6 @@
 const cheerio = require("cheerio");
 const { fetchText, assertSelector } = require("../utils");
-const { LISTING, LISTING_LINK } = require("./utils");
+const { LISTING, LISTING_CARD_LINK } = require("./utils");
 
 async function retrieve(attributes) {
   const { url } = attributes;
@@ -10,7 +10,7 @@ async function retrieve(attributes) {
   const $ = cheerio.load(movieListPage);
 
   const moviePageUrls = new Set();
-  $(LISTING_LINK).each(function () {
+  $(LISTING_CARD_LINK).each(function () {
     moviePageUrls.add($(this).attr("href"));
   });
 

@@ -36,7 +36,7 @@ Four values, strongest first:
 | `performance`          |     74 |    ✅    |    ✅    |                      ✅                      |    ✅    |
 | `film-date`            |     41 |    ✅    |    ✅    |                      ❌                      |    ✅    |
 | `film-and-date-totals` |      3 |    ✅    |   ✅\*   |                      ❌                      |    ❌    |
-| `film-totals`          |      4 |    ✅    |    ❌    |                      ❌                      |    ❌    |
+| `film-totals`          |      9 |    ✅    |    ❌    |                      ❌                      |    ❌    |
 
 \* Metro Cinema yes; Lumiere Romford's date count is capped -- see
 [Known blind spots](#known-blind-spots).
@@ -52,8 +52,8 @@ or existing keys growing.
 | Cinema modules                                  |     409 |
 | Source-only (no endpoint of their own to probe) |     250 |
 | **Eligible for a health check**                 | **159** |
-| **Covered**                                     | **122** |
-| Remaining                                       |      37 |
+| **Covered**                                     | **127** |
+| Remaining                                       |      32 |
 
 `bfi.org.uk-stephen-street` sits under a chain prefix but is source-only, and
 the BFI probe excludes it by name; the BFI row count is 2, not 3.
@@ -111,11 +111,22 @@ fraction of the dates.
 
 ### `film-totals` -- films only, no date axis
 
-| Probe                                       | Venues                    | Cost                                 | Why no dates                                                                                                                                                                                                                                   |
-| ------------------------------------------- | ------------------------- | ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `cinemas/barbican.org.uk/health.js`         | the Barbican              | 5 requests, against a retrieve's 160 | Listing cards carry an id, a title and a blurb -- no date in any form. The site's day filter takes one date at a time, and there is no JSON API behind the listing.                                                                            |
-| `common/tate.org.uk/health.js`              | Tate Britain, Tate Modern | 1 request each                       | Cards carry the event's _start_, written nine ways across the programme ("15 Oct 2026", "Until 31 Aug 2026", "Daily, 12 Sep -- 15 Nov 2026", "Ongoing"). The transform reads the run off the event page and expands it to a performance a day. |
-| `cinemas/dugdaleartscentre.co.uk/health.js` | Dugdale Arts Centre       | 1 request                            | Cards carry a title, a type and a duration. Its Spektrix client is the council's -- 1104 events -- and the events call ignores `startFrom`, so the route JW3 uses would cost 2.5MB an hour to count five listings.                             |
+Every one of these was checked for a date axis before it was written this way;
+each probe says in its own comment what it found. All but the Barbican share
+`common/listing-totals-health.js`, which reads a venue's listing pages and
+counts the distinct entries linked from them -- the mechanics are identical, the
+reason for reaching for them is not.
+
+| Probe                                        | Venues               | Cost                                 | Why no dates                                                                                                                                                                                                      |
+| -------------------------------------------- | -------------------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `cinemas/barbican.org.uk/health.js`          | the Barbican         | 5 requests, against a retrieve's 160 | Listing cards carry an id, a title and a blurb -- no date in any form. The site's day filter takes one date at a time, and there is no JSON API behind the listing.                                               |
+| `common/tate.org.uk/health.js`               | Tate Britain, Modern | 1 request each, against 6            | Cards carry the event's _start_, written nine ways across the programme ("15 Oct 2026", "Until 31 Aug 2026", "Ongoing"). The transform reads the run off the event page and expands it to a performance a day.    |
+| `cinemas/peckhamplex.london/health.js`       | Peckhamplex          | 2 requests, against 35               | A working cinema whose listing carries none of its schedule: the film page's `film-by-times` panel is empty in the served HTML and filled by script, so reaching it would mean a browser per cycle.               |
+| `cinemas/institut-francais.org.uk/health.js` | Ciné Lumière         | 1 request, against 22                | Cards carry `card__dates`, but 56 of 59 read "From 29 Aug" -- a start with no end -- and the rest are date lists. Neither says which days a film plays.                                                           |
+| `cinemas/kilntheatre.com/health.js`          | Kiln Theatre         | 1 request, against 12                | Titles and links, with no date or time markup anywhere on the cinema listing.                                                                                                                                     |
+| `cinemas/arthousecrouchend.co.uk/health.js`  | ArtHouse Crouch End  | 2 requests, against 7                | Savoy-ticketed, but its Savoy backend serves a browser shell with no `var Events` blob, and its booking-now page has no date markup. Its streamed-theatre page does -- that half is where an upgrade would start. |
+| `cinemas/dugdaleartscentre.co.uk/health.js`  | Dugdale Arts Centre  | 1 request                            | Cards carry a title, a type and a duration. Its Spektrix client is the council's -- 1104 events -- and the events call ignores `startFrom`, so JW3's route would cost 2.5MB an hour to count five listings.       |
+| `cinemas/alexandrapalace.com/health.js`      | Alexandra Palace     | 1 request, against 18                | Counts `listings`, not films: this is the theatre's whole what's-on, and film is only told from squash and concerts by running `isFilmEvent` over an event's description, which lives on the event page.          |
 
 Prefer a probe that can count dates. Reach for this one only when the cheap
 endpoint genuinely has none, and say in the probe why.
@@ -123,7 +134,7 @@ endpoint genuinely has none, and say in the probe why.
 ## Known blind spots
 
 **Showings added to a film already listed on a date it already plays.**
-Invisible at 48 of the 122 covered venues -- every venue not on `performance`.
+Invisible at 53 of the 127 covered venues -- every venue not on `performance`.
 Seeing it costs a request per date, which is the trade the whole stage is built
 on. In publish terms it is a schedule tweak rather than a new listing: a new
 film or a new date, which are the signals that do land, cover the realistic
@@ -163,30 +174,30 @@ missing venue is exactly the evidence the log exists to keep.
 
 ## Venues without a probe
 
-37 eligible venues have none. All have their own `retrieve.js` -- there is no
+32 eligible venues have none. All have their own `retrieve.js` -- there is no
 untouched chain left, only single venues and small shared platforms:
 
-`acflondon.org`, `adventurecinema.co.uk-kew-gardens`, `alexandrapalace.com`,
-`arthousecrouchend.co.uk`, `backyardcinema.co.uk`, `bushtheatre.co.uk`,
-`cadoganhall.com`, `canarywharf.com-summer-screens`, `cinemamuseum.org.uk`,
-`closeupfilmcentre.com`, `davidleancinema.org.uk`, `eventimapollo.com`,
-`firmdalehotels.com-charlotte-street`, `firmdalehotels.com-covent-garden`,
-`firmdalehotels.com-soho`, `fulhampier.com`, `ibraaz.org`,
-`institut-francais.org.uk`, `irishculturalcentre.co.uk`, `kilntheatre.com`,
+`acflondon.org`, `adventurecinema.co.uk-kew-gardens`, `backyardcinema.co.uk`,
+`bushtheatre.co.uk`, `cadoganhall.com`, `canarywharf.com-summer-screens`,
+`cinemamuseum.org.uk`, `closeupfilmcentre.com`, `davidleancinema.org.uk`,
+`eventimapollo.com`, `firmdalehotels.com-charlotte-street`,
+`firmdalehotels.com-covent-garden`, `firmdalehotels.com-soho`,
+`fulhampier.com`, `ibraaz.org`, `irishculturalcentre.co.uk`,
 `lewisham.gov.uk-deptford-lounge`, `londonbridgecity.co.uk`,
 `museumofthehome.org.uk`, `not-nowhere.org`, `ogniskopolskie.org.uk`,
-`peckhamplex.london`, `rafmuseum.org.uk-london`, `richmix.org.uk`,
-`royalalberthall.com`, `royalparks.org.uk-hyde-park`, `sandsfilms.co.uk`,
-`sciencemuseum.org.uk`, `sydenhamarts.co.uk`, `thehammondtheatre.co.uk`,
-`thehorsehospital.com`, `thewellwalktheatre.com`, `whitechapelgallery.org`
+`rafmuseum.org.uk-london`, `richmix.org.uk`, `royalalberthall.com`,
+`royalparks.org.uk-hyde-park`, `sandsfilms.co.uk`, `sciencemuseum.org.uk`,
+`sydenhamarts.co.uk`, `thehammondtheatre.co.uk`, `thehorsehospital.com`,
+`thewellwalktheatre.com`, `whitechapelgallery.org`
 
-Every listing here was checked for a date axis while scoping the probes above,
-and none of the remaining ones has one that is both cheap and unambiguous -- so
-each would be another `film-totals` probe. Best next by requests saved:
-Peckhamplex (35 -> 2), Ciné Lumière (22 -> 1), Alexandra Palace (18 -> 1), Kiln
-Theatre (12 -> 1) and ArtHouse Crouch End (7 -> 2); Firmdale is three venues
-behind one shared probe, though its listing selector is generic enough that the
-probe would lean on the transform's text parsing.
+Every listing worth checking was checked while scoping the probes above, and
+none of the remaining ones has a date axis that is both cheap and unambiguous --
+so each would be another `film-totals` probe. Firmdale is the only shared
+platform left, three venues behind one probe, though its listing selector is
+generic enough (`.text-block`, fourteen on the page, the first being "Book a
+Room") that the probe would lean on the transform's text parsing. Eventim
+Apollo (17 requests) and London Bridge City (10) are the largest single savings
+left.
 
 Two need investigating before they can be scoped. Rich Mix answers 403 to both a
 plain fetch and the pipeline's own `fetchText` from a datacenter address, which

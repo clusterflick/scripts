@@ -5,7 +5,7 @@ const {
   retrieveEventBooking,
 } = require("../../common/spektrix");
 const { url } = require("./attributes");
-const { LISTING_LINK } = require("./utils");
+const { LISTING_EVENT_LINK } = require("./utils");
 
 // The venue's Spektrix-hosted ticketing site (tickets.dugdaleartscentre.co.uk)
 // sits behind a Cloudflare rule which blocks non-browser clients outright, so
@@ -19,7 +19,7 @@ async function retrieve() {
   const $ = cheerio.load(movieListPage);
 
   const moviePageUrls = new Set();
-  $(LISTING_LINK).each(function () {
+  $(LISTING_EVENT_LINK).each(function () {
     const href = $(this).attr("href");
     moviePageUrls.add(href);
   });

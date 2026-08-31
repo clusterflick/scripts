@@ -1,12 +1,6 @@
-const cheerio = require("cheerio");
-const {
-  probeText,
-  probeError,
-  startObservation,
-  withChallengeRetry,
-} = require("../../common/health-probe");
+const createListingTotalsHealth = require("../../common/listing-totals-health");
 const { url } = require("./attributes");
-const { LISTING_LINK } = require("./utils");
+const { LISTING, LISTING_ENTRY, LISTING_LINK } = require("./utils");
 
 // A single venue rather than a chain, so this hangs off the cinema module
 // alongside `retrieve` and `transform` rather than sitting under `common/`.
@@ -21,54 +15,17 @@ const { LISTING_LINK } = require("./utils");
 //
 // So this reads the venue's own film listing and stops: one request, and no
 // dates, because the cards carry a title, a type and a duration and nothing
-// else. It catches the listing breaking, the film filter changing under us and
-// the programme emptying; it cannot see a publish that adds dates to films
-// already listed.
-const GRANULARITY = "film-totals";
-
+// else.
+//
 // Listings rather than films: the grid carries series pages - "Talkies Community
 // Cinema", "Black Film Club" - alongside the films themselves, and the retrieve
 // only finds out which is which by opening each page and looking for a Spektrix
 // booking iframe. That is five more requests to sharpen a number this probe is
 // not reporting as films in the first place.
-const COUNT_NAME = "listings";
-
-async function health(venues) {
-  const { countRequest, reasonFor, finalise } = startObservation(GRANULARITY);
-  const [venue] = venues;
-
-  let listings;
-  try {
-    const html = await withChallengeRetry(() => probeText(url), venue.id);
-    countRequest();
-
-    const $ = cheerio.load(html);
-    if ($(".whats-on-grid").length === 0) {
-      throw probeError(
-        "No `.whats-on-grid` on the what's-on page - the listing may have changed shape",
-      );
-    }
-    listings = new Set(
-      $(LISTING_LINK)
-        .map(function () {
-          return $(this).attr("href");
-        })
-        .get(),
-    ).size;
-  } catch (error) {
-    countRequest();
-    return finalise([{ venue: venue.id, reason: reasonFor(error) }]);
-  }
-
-  // The grid is there and empty, which is a venue with nothing on rather than a
-  // listing that has broken - the selector check above is what tells them apart.
-  if (listings === 0) {
-    return finalise([
-      { venue: venue.id, reason: { kind: "no-listings-found" } },
-    ]);
-  }
-
-  return finalise([{ venue: venue.id, counts: { [COUNT_NAME]: listings } }]);
-}
-
-module.exports = health;
+module.exports = createListingTotalsHealth({
+  pages: () => [url],
+  listing: LISTING,
+  entry: LISTING_ENTRY,
+  link: LISTING_LINK,
+  countName: "listings",
+});
