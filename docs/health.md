@@ -33,10 +33,10 @@ Four values, strongest first:
 
 | Granularity            | Venues | New film | New date | More showings of a film already on that date | `byDate` |
 | ---------------------- | -----: | :------: | :------: | :------------------------------------------: | :------: |
-| `performance`          |     74 |    ✅    |    ✅    |                      ✅                      |    ✅    |
+| `performance`          |     75 |    ✅    |    ✅    |                      ✅                      |    ✅    |
 | `film-date`            |     41 |    ✅    |    ✅    |                      ❌                      |    ✅    |
 | `film-and-date-totals` |      3 |    ✅    |   ✅\*   |                      ❌                      |    ❌    |
-| `film-totals`          |      9 |    ✅    |    ❌    |                      ❌                      |    ❌    |
+| `film-totals`          |     13 |    ✅    |    ❌    |                      ❌                      |    ❌    |
 
 \* Metro Cinema yes; Lumiere Romford's date count is capped -- see
 [Known blind spots](#known-blind-spots).
@@ -52,8 +52,8 @@ or existing keys growing.
 | Cinema modules                                  |     409 |
 | Source-only (no endpoint of their own to probe) |     250 |
 | **Eligible for a health check**                 | **159** |
-| **Covered**                                     | **127** |
-| Remaining                                       |      32 |
+| **Covered**                                     | **132** |
+| Remaining                                       |      27 |
 
 `bfi.org.uk-stephen-street` sits under a chain prefix but is source-only, and
 the BFI probe excludes it by name; the BFI row count is 2, not 3.
@@ -86,6 +86,7 @@ Cost is what the probe spends, against what the same listing costs a retrieve.
 | `cinemas/riversidestudios.co.uk/health.js`  | Riverside Studios                            | 1 request, against a retrieve's 38                                                   |
 | `cinemas/wiltons.org.uk/health.js`          | Wilton's Music Hall                          | 2 requests -- the listing walk only                                                  |
 | `cinemas/curzonseacontainers.com/health.js` | Curzon Sea Containers                        | 1 request (the retrieve's own; it avoids the transform)                              |
+| `cinemas/sciencemuseum.org.uk/health.js`    | the Science Museum                           | 1 request, against a retrieve's 13                                                   |
 
 ### `film-date` -- a film x date matrix, no showing counts
 
@@ -134,7 +135,7 @@ endpoint genuinely has none, and say in the probe why.
 ## Known blind spots
 
 **Showings added to a film already listed on a date it already plays.**
-Invisible at 53 of the 127 covered venues -- every venue not on `performance`.
+Invisible at 57 of the 132 covered venues -- every venue not on `performance`.
 Seeing it costs a request per date, which is the trade the whole stage is built
 on. In publish terms it is a schedule tweak rather than a new listing: a new
 film or a new date, which are the signals that do land, cover the realistic
@@ -174,45 +175,30 @@ missing venue is exactly the evidence the log exists to keep.
 
 ## Venues without a probe
 
-32 eligible venues have none. All have their own `retrieve.js` -- there is no
+27 eligible venues have none. All have their own `retrieve.js` -- there is no
 untouched chain left, only single venues and small shared platforms:
 
 `acflondon.org`, `adventurecinema.co.uk-kew-gardens`, `backyardcinema.co.uk`,
-`bushtheatre.co.uk`, `cadoganhall.com`, `canarywharf.com-summer-screens`,
-`cinemamuseum.org.uk`, `closeupfilmcentre.com`, `davidleancinema.org.uk`,
-`eventimapollo.com`, `firmdalehotels.com-charlotte-street`,
-`firmdalehotels.com-covent-garden`, `firmdalehotels.com-soho`,
-`fulhampier.com`, `ibraaz.org`, `irishculturalcentre.co.uk`,
-`lewisham.gov.uk-deptford-lounge`, `londonbridgecity.co.uk`,
+`cadoganhall.com`, `canarywharf.com-summer-screens`, `cinemamuseum.org.uk`,
+`closeupfilmcentre.com`, `davidleancinema.org.uk`,
+`firmdalehotels.com-charlotte-street`, `firmdalehotels.com-covent-garden`,
+`firmdalehotels.com-soho`, `fulhampier.com`, `ibraaz.org`,
+`irishculturalcentre.co.uk`, `lewisham.gov.uk-deptford-lounge`,
 `museumofthehome.org.uk`, `not-nowhere.org`, `ogniskopolskie.org.uk`,
 `rafmuseum.org.uk-london`, `richmix.org.uk`, `royalalberthall.com`,
-`royalparks.org.uk-hyde-park`, `sandsfilms.co.uk`, `sciencemuseum.org.uk`,
-`sydenhamarts.co.uk`, `thehammondtheatre.co.uk`, `thehorsehospital.com`,
-`thewellwalktheatre.com`, `whitechapelgallery.org`
+`royalparks.org.uk-hyde-park`, `sandsfilms.co.uk`, `sydenhamarts.co.uk`,
+`thehammondtheatre.co.uk`, `thehorsehospital.com`, `whitechapelgallery.org`
 
-The Science Museum is the pick of them, and the only one left with a real date
-axis: one POST to its ticketing API -- the same call its retrieve makes, options
-and all -- returns 23 productions carrying 120 performances with ISO dates, and
-`performances[0].productTypeId === 3` filters those to film. 7 films, 240
-performances across 63 dates the day this was checked, for 1 request against a
-retrieve's 13.
-
-The Well Walk Theatre is the largest request saving left: its Beyonk shop list
-is one call, where the retrieve pays a detail call and twelve months of
-availability per experience, 53 in total. It counts shop items rather than
-films, since the four experiences it sells are a mix.
-
-Then Eventim Apollo (17 requests -> 1) and London Bridge City (10 -> 1), both of
-which can filter film at listing level -- the Apollo by a `data-search-text`
-carrying "film", London Bridge City by an entry reading "Catch a movie" -- and
-the Bush Theatre (13 -> 1), which cannot, so it would count listings. None of
-those three has a usable date axis: the Apollo's cards are dated, but one of the
-sixteen is a range rather than a day.
-
-Firmdale is the only shared platform left, three venues behind one probe, though
-its listing selector is generic enough (`.text-block`, fourteen on the page, the
-first being "Book a Room") that the probe would lean on the transform's text
-parsing.
+**The case for probing these is thin, and worth stating plainly.** Nearly all
+have a retrieve of one to three requests, so a probe there saves nothing - it
+costs what the retrieve costs. The only thing it buys is frequency, an hourly
+check instead of a daily one, at venues that screen a handful of films a year
+and whose ordinary row would read `no-listings-found`. That is a different
+proposition from everything above, where the probes replaced roughly 900
+requests with 45. Firmdale is the only shared platform left, three venues behind
+one probe, though its listing selector is generic enough (`.text-block`,
+fourteen on the page, the first being "Book a Room") that the probe would lean
+on the transform's text parsing.
 
 Rich Mix needs investigating rather than probing. It answers 403 site-wide, to
 any user agent, from a datacenter address -- so this is IP blocking rather than

@@ -1,6 +1,7 @@
 const { fetchText, assertSelector } = require("../../common/utils");
 const { domain, url } = require("./attributes");
 const cheerio = require("cheerio");
+const { isFilmEntry } = require("./utils");
 
 async function retrieve() {
   const movieListPage = await fetchText(url);
@@ -9,8 +10,7 @@ async function retrieve() {
 
   const filmEvents = [];
   $("[data-search-text]").each((_, element) => {
-    const searchText = $(element).attr("data-search-text");
-    if (searchText && searchText.toLowerCase().includes("film")) {
+    if (isFilmEntry($(element))) {
       const coverLink = $(element).find("a.cover-link");
       filmEvents.push(`${domain}${coverLink.attr("href")}`);
     }

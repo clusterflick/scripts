@@ -28,10 +28,17 @@ const GRANULARITY = "film-totals";
  *   venue with nothing on. That distinction is the whole point of asking for it
  *   separately from the entries.
  * @param {string} config.entry - a selector for each entry in the listing.
- * @param {string} config.link - a selector for the entry's link, taken within
- *   each entry and first match only, the way the retrieves read the same
- *   markup. Counting links across the page instead would double an entry that
- *   carries two of them.
+ * @param {($entry: object) => boolean} [config.isFilm] - keeps only the entries
+ *   a venue's own listing marks as film, where it marks any. A general what's-on
+ *   with no such marking counts as it stands and names its count `listings`
+ *   instead - dropping the rest would be a judgement about listings rather than
+ *   an observation about the source.
+ * @param {string|($entry: object) => string|undefined} config.link - how to
+ *   read the entry's link. A selector is taken within each entry, first match
+ *   only, the way the retrieves read the same markup - counting links across
+ *   the page instead would double an entry that carries two of them. A function
+ *   is for a listing whose link is not inside its entry: London Bridge City's
+ *   entry is a summary wrapped in the card's link rather than wrapping it.
  * @param {string} [config.countName] - what the entries are, as the row and the
  *   log should name them. `films` where the listing is the venue's film
  *   programme; `listings` where it is a general what's-on carrying more than
@@ -44,6 +51,7 @@ const createListingTotalsHealth = ({
   listing,
   entry,
   link,
+  isFilm,
   countName = "films",
   acceptStatuses,
 }) =>
@@ -76,7 +84,13 @@ const createListingTotalsHealth = ({
           }
 
           $(entry).each(function () {
-            const href = $(this).find(link).first().attr("href");
+            const $item = $(this);
+            if (isFilm && !isFilm($item)) return;
+
+            const href =
+              typeof link === "function"
+                ? link($item)
+                : $item.find(link).first().attr("href");
             if (href) entries.add(href);
             else unlinked.push(url);
           });
@@ -87,7 +101,7 @@ const createListingTotalsHealth = ({
       // retrieve reads the same link to know what to open next.
       if (unlinked.length > 0) {
         throw probeError(
-          `${unlinked.length} listing entr(y/ies) had no \`${link}\` link (e.g. on ${unlinked[0]})`,
+          `${unlinked.length} listing entr(y/ies) had no link (e.g. on ${unlinked[0]})`,
         );
       }
     } catch (error) {

@@ -1,29 +1,14 @@
 const cheerio = require("cheerio");
-const { format, addMonths } = require("date-fns");
 const { fetchText, fetchJson } = require("../../common/utils");
 const { domain } = require("./attributes");
-
-const stripClassification = (title) => title.replace(/\s+\([^)]+\)$/i, "");
+const {
+  getListingRequest,
+  isFilmProduction,
+  stripClassification,
+} = require("./utils");
 
 async function retrieve() {
-  const movieListPageUrl = `https://my.sciencemuseum.org.uk/api/products/productionseasons`;
-  const now = new Date();
-  const movieListPage = await fetchJson(movieListPageUrl, {
-    method: "POST",
-    headers: {
-      Accept: "application/json, text/javascript, */*; q=0.01",
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      productionSeasonIdFilter: [],
-      keywordIds: null,
-      startDate: `${format(now, "yyyy-MM-dd")}T00:00`,
-      // Only request 6 months ahead. The science museum doesn't schedule
-      // further ahead than that, and requesting 1 year returns an error.
-      endDate: `${format(addMonths(now, 6), "yyyy-MM-dd")}T23:59`,
-      keywords: [],
-    }),
-  });
+  const movieListPage = await fetchJson(...getListingRequest());
 
   // Expand season entries where performances have different titles
   // (e.g. "Star Trek Season" with 12 different films) into individual entries
@@ -50,9 +35,7 @@ async function retrieve() {
   });
 
   const moviePages = {};
-  const movies = expandedMovieListPage.filter(
-    ({ performances }) => performances[0].productTypeId === 3, // Movie
-  );
+  const movies = expandedMovieListPage.filter(isFilmProduction);
   for (const movie of movies) {
     const searchTerm = movie.searchTitle || movie.productionTitle;
     const searchResults = await fetchText(

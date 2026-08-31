@@ -57,11 +57,15 @@ const NO_SCHEDULES_PAGE =
  * them. Groups appear alongside experiences and are left in for the caller to
  * filter - they carry no schedule of their own.
  * @param {string} organisationId - The Beyonk organisation id
+ * @param {(url: string) => Promise<string>} [fetchPage] - how to fetch the
+ *   page. Injectable so the health probe can read the same shop through
+ *   `probeText`, which tells a bot challenge or a holding page from an outage
+ *   where a plain fetch cannot.
  * @returns {Promise<Array>} The shop's items
  */
-async function retrieveExperiences(organisationId) {
+async function retrieveExperiences(organisationId, fetchPage = fetchText) {
   const url = getExperiencesUrl(organisationId);
-  const html = await fetchText(url);
+  const html = await fetchPage(url);
   const listing = readEmbeddedPayloads(html).find(({ items }) =>
     Array.isArray(items),
   );

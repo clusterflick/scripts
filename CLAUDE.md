@@ -112,10 +112,10 @@ What a chain can count varies, and the row's `granularity` says which: Odeon,
 Curzon and Cineworld give a film x date matrix (`film-date`), while
 Picturehouse, Vue, Electric, Castle, Admit One, Olympic Studios, Savoy Systems,
 Rooftop, IndyCinemaGroup, Tribe Events, JW3, Prince Charles, the Garden Cinema,
-The Nickel, the ICA, Riverside Studios, Wilton's and Curzon Sea Containers
-return individual showings (`performance`). `byDate` is the same axis either
-way - films per date, or performances per date - so a publish reads the same
-everywhere: new keys appearing, or existing keys growing.
+The Nickel, the ICA, Riverside Studios, Wilton's, Curzon Sea Containers and the
+Science Museum return individual showings (`performance`). `byDate` is the same
+axis either way - films per date, or performances per date - so a publish reads
+the same everywhere: new keys appearing, or existing keys growing.
 
 Two kinds of source cannot answer that cheaply, and each says so with a
 granularity of its own rather than borrowing one that promises dates it doesn't
