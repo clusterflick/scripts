@@ -46,7 +46,7 @@ common/                  # Shared utilities (utils.js, normalize-title.js, get-m
 scripts/                 # Pipeline stages: retrieve/, transform/, combine/, match/, cache/, diff/,
                          #   registry/, departed/, health/
 helpers/                 # Dev helper scripts (data download, manual matching)
-docs/                    # Pipeline documentation (retrieve.md, transform.md)
+docs/                    # Pipeline documentation (retrieve.md, transform.md, health.md)
 schema.json              # JSON Schema for output validation
 ```
 
@@ -90,10 +90,12 @@ that would otherwise 404. It writes a separate artifact deliberately: nothing
 reading `combined-data.json` — the match stage, the client payload, the listings
 — should see films that aren't screening.
 
-`health` sits outside the pipeline. It probes a chain's listing endpoint,
-asserts the response is healthy and writes one row per venue to
-`health-data/<group>` - it never opens a per-title page, so the whole Odeon
-estate costs 2 requests against a retrieve's 323, cheap enough to run hourly.
+`health` sits outside the pipeline, and `docs/health.md` is its reference -
+which venues are covered, what each probe can and cannot see, and what fails
+the job. It probes a chain's listing endpoint, asserts the response is healthy
+and writes one row per venue to `health-data/<group>` - it never opens a
+per-title page, so the whole Odeon estate costs 2 requests against a retrieve's
+323, cheap enough to run hourly.
 Its unit is a chain group (the id prefix the venues share) rather than a venue,
 because one batched call can answer for all of them; a standalone venue can
 carry its own probe as an optional `health` export beside `retrieve` and
