@@ -1240,6 +1240,15 @@ function normalizeTitle(title, options) {
     title = hasFundraiser[1];
   }
 
+  // e.g. "Tribute to Dolly Parton: Nine to Five" → "Nine to Five"
+  const hasTribute = matchesStartingPrefix(
+    title,
+    "(?:a\\s+)?tribute to\\s+[^:;]+",
+  );
+  if (hasTribute) {
+    title = hasTribute[1];
+  }
+
   const hasSeparator = title.match(/^(.*?)\s+(?:\+|-|\/|\||•)\s*/);
   if (hasSeparator) {
     title = hasSeparator[1];
