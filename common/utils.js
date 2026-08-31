@@ -252,6 +252,12 @@ const withRetry = async (
     delayMs = 30_000,
     backoffFactor = 1,
     label = "Operation",
+    // Not every failure is worth waiting on. A permanent one - a 404, a
+    // rejected key - answers the same way on every attempt, so retrying it
+    // only delays the real error by the whole budget. Callers that can tell
+    // the two apart say so here; the default retries everything, which is what
+    // a caller without that knowledge needs.
+    shouldRetry = () => true,
   } = {},
 ) => {
   let lastError;
@@ -260,22 +266,25 @@ const withRetry = async (
       return await fn();
     } catch (error) {
       lastError = error;
-      if (attempt < retries) {
-        // Honour a server-provided Retry-After (e.g. on a 429) when present,
-        // otherwise back off from the configured delay. `backoffFactor` of 1
-        // keeps the historic fixed-delay behaviour; a higher factor widens the
-        // gap each attempt so a short retry budget can still span a longer dip.
-        // Jittered either way, so a fixed cadence can't keep landing in the
-        // same throttle window and concurrent jobs don't retry in lockstep.
-        const backoff = delayMs * backoffFactor ** attempt;
-        const wait = error.retryAfterMs ?? withJitter(backoff);
-        console.log(
-          ` ! - ${label} failed (${describeError(error)}), retrying in ${Math.round(wait / 1000)}s...`,
-        );
-        await sleep(wait);
-      } else {
+      // Out of attempts, or an error no amount of waiting will change: stop
+      // here rather than running the remaining attempts into the same wall.
+      if (attempt >= retries || !shouldRetry(error)) {
         console.log(` ! - ${label} failed (${describeError(error)})`);
+        break;
       }
+
+      // Honour a server-provided Retry-After (e.g. on a 429) when present,
+      // otherwise back off from the configured delay. `backoffFactor` of 1
+      // keeps the historic fixed-delay behaviour; a higher factor widens the
+      // gap each attempt so a short retry budget can still span a longer dip.
+      // Jittered either way, so a fixed cadence can't keep landing in the
+      // same throttle window and concurrent jobs don't retry in lockstep.
+      const backoff = delayMs * backoffFactor ** attempt;
+      const wait = error.retryAfterMs ?? withJitter(backoff);
+      console.log(
+        ` ! - ${label} failed (${describeError(error)}), retrying in ${Math.round(wait / 1000)}s...`,
+      );
+      await sleep(wait);
     }
   }
   throw lastError;
@@ -1100,6 +1109,7 @@ module.exports = {
   sleep,
   withJitter,
   withRetry,
+  parseRetryAfter,
   fetchWithRetry,
   fetchText,
   fetchWin1252Text,

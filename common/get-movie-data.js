@@ -2,12 +2,8 @@ const { MovieDb } = require("moviedb-promise");
 const slugify = require("slugify");
 const normalizeTitle = require("./normalize-title");
 const normalizeName = require("./normalize-name");
-const {
-  basicNormalize,
-  compareAsSimilar,
-  runLlmFunction,
-  sleep,
-} = require("./utils");
+const { basicNormalize, compareAsSimilar, runLlmFunction } = require("./utils");
+const { withMovieDbRetry, isMissingMovieDbEntry } = require("./moviedb-retry");
 const { dailyCache } = require("./cache");
 const askLlm = require("./ask-llm");
 const askLlmToReviewResults = require("./ask-llm-to-review-results");
@@ -138,18 +134,6 @@ function getForcedMatch(normalizedTitle) {
 const applyNameCorrections = (name) =>
   name.replace(/Scott McGhee/i, "Scott McGehee");
 
-const apiRetryWrapper = async (callback) => {
-  try {
-    return await callback();
-  } catch (e) {
-    console.log(
-      `Error contacting themoviedb; trying again in 60 seconds - ${e.message}`,
-    );
-    await sleep(60_000);
-    return await callback();
-  }
-};
-
 const moviedb = new MovieDb(process.env.MOVIEDB_API_KEY);
 
 const comparableChunk = (value) => value.replace(/\s+/g, "").slice(0, 200);
@@ -169,11 +153,13 @@ const matchesExpectedCastCrew = async (match, movie) => {
   let movieInfo;
   try {
     movieInfo = await getMovieInfoAndCacheResults(match);
-  } catch {
-    // Nothing to be done if the movieBD is having an issue!
-    // This can happen if the match has been removed, but is still being
-    // returned by the search API - looking up the movie will return 404
-    return false;
+  } catch (error) {
+    // A match removed since search last listed it returns 404 on lookup, and
+    // there is nothing to check its crew against - so it is not a match.
+    // Anything else means we could not reach the API, and swallowing that
+    // would quietly turn an outage into a run of wrong answers.
+    if (isMissingMovieDbEntry(error)) return false;
+    throw error;
   }
 
   const crewCredits = movieInfo.credits?.crew || [];
@@ -705,30 +691,38 @@ const getMovieInfoAndCacheResults = ({ id }) =>
       append_to_response:
         "credits,external_ids,keywords,release_dates,videos,alternative_titles",
     };
-    return apiRetryWrapper(() => moviedb.movieInfo(payload));
+    return withMovieDbRetry(`movieInfo ${id}`, () =>
+      moviedb.movieInfo(payload),
+    );
   });
 
 const getMovieGenresAndCacheResults = () =>
   dailyCache(`moviedb-genres`, async () =>
-    apiRetryWrapper(() => moviedb.genreMovieList()),
+    withMovieDbRetry("genreMovieList", () => moviedb.genreMovieList()),
   );
 
 const getCollectionInfoAndCacheResults = ({ id }) =>
   dailyCache(`moviedb-collection-${id}`, async () =>
-    apiRetryWrapper(() => moviedb.collectionInfo({ id })),
+    withMovieDbRetry(`collectionInfo ${id}`, () =>
+      moviedb.collectionInfo({ id }),
+    ),
   );
 
 const searchMovieAndCacheResults = (cacheKey, payload) =>
   dailyCache(cacheKey, async () => {
-    const firstPage = await apiRetryWrapper(() => moviedb.searchMovie(payload));
+    const firstPage = await withMovieDbRetry(
+      `searchMovie "${payload.query}"`,
+      () => moviedb.searchMovie(payload),
+    );
     let results = [].concat(firstPage.results);
     let pages = [1];
 
     // Get up to 5 pages of results, or all pages, whichever is smaller
     const maxPages = Math.min(5, firstPage.total_pages);
     for (let page = 2; page <= maxPages; page++) {
-      const nextPage = await apiRetryWrapper(() =>
-        moviedb.searchMovie({ ...payload, page }),
+      const nextPage = await withMovieDbRetry(
+        `searchMovie "${payload.query}" page ${page}`,
+        () => moviedb.searchMovie({ ...payload, page }),
       );
       pages = pages.concat(page);
       results = results.concat(nextPage.results);
@@ -742,12 +736,16 @@ const searchMovieAndCacheResults = (cacheKey, payload) =>
 
 const searchPersonAndCacheResults = (cacheKey, query) =>
   dailyCache(cacheKey, async () =>
-    apiRetryWrapper(() => moviedb.searchPerson({ query, include_adult: true })),
+    withMovieDbRetry(`searchPerson "${query}"`, () =>
+      moviedb.searchPerson({ query, include_adult: true }),
+    ),
   );
 
 const getPersonMovieCreditsAndCacheResults = (id) =>
   dailyCache(`moviedb-person-movie-credits-${id}`, async () =>
-    apiRetryWrapper(() => moviedb.personMovieCredits({ id })),
+    withMovieDbRetry(`personMovieCredits ${id}`, () =>
+      moviedb.personMovieCredits({ id }),
+    ),
   );
 
 module.exports = {

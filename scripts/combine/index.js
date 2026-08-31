@@ -111,16 +111,12 @@ const getCollectionId = async (
   // again for every other movie in it.
   if (rejectedCollections.has(id)) return undefined;
 
-  let collectionInfo;
-  try {
-    collectionInfo =
-      collectionCache[id] ||
-      (await getCollectionInfoAndCacheResults({ id: belongsTo.id }));
-  } catch {
-    collectionInfo = await getCollectionInfoAndCacheResults({
-      id: belongsTo.id,
-    });
-  }
+  // No local retry: every call into The Movie DB carries its own budget - see
+  // common/moviedb-retry.js - and a second one here only doubles the wait
+  // before the same error arrives.
+  const collectionInfo =
+    collectionCache[id] ||
+    (await getCollectionInfoAndCacheResults({ id: belongsTo.id }));
 
   const collection = buildCollection(collectionInfo, {
     // TheMovieDB suffixes these "<Franchise> Collection", occasionally
@@ -284,16 +280,12 @@ async function combine() {
           ` - Retriving data for ${outputTitle} ... ${"".padEnd(35 - outputTitle.length, " ")}`,
         );
         try {
-          try {
-            movieInfo =
-              cache[themoviedb.id] ||
-              (await getMovieInfoAndCacheResults(themoviedb));
-          } catch {
-            // Try again to get the data if it fails. The movie info will be
-            // cached from the previous run if it was successful.
-            process.stdout.write(`\\t🔄`);
-            movieInfo = await getMovieInfoAndCacheResults(themoviedb);
-          }
+          // Retries live with the API client (common/moviedb-retry.js), which
+          // already sits out a dip and gives up promptly on an error that
+          // won't change; retrying again here just doubles both.
+          movieInfo =
+            cache[themoviedb.id] ||
+            (await getMovieInfoAndCacheResults(themoviedb));
 
           console.log(
             `\t✅ Retrieved (${Math.round((Date.now() - start) / 1000)}s)`,

@@ -405,6 +405,21 @@ All TMDB API responses are cached daily to:
 - Speed up repeat runs
 - Handle API rate limits gracefully
 
+### Retries
+
+TMDB is contacted hundreds of times over a single venue's transform and drops
+connections under load, so every call goes through `withMovieDbRetry` in
+`common/moviedb-retry.js`: five attempts widening from 30 seconds (about 7.5
+minutes of waiting), jittered so concurrent venue jobs don't retry in lockstep,
+and honouring a `Retry-After` when TMDB sends one.
+
+The budget is only spent on failures that could answer differently next time - a
+dropped connection, a 429, a 5xx. A 404 or a 401 fails immediately: they answer
+the same way however long we wait, so retrying them would only delay the real
+error. That distinction also decides what callers may carry on from - a 404
+means the entry was deleted after search listed it, which is an answer, while
+any other error means TMDB was unreachable and must not be read as one.
+
 ---
 
 ## Error Handling
