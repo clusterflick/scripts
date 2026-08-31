@@ -190,20 +190,35 @@ untouched chain left, only single venues and small shared platforms:
 `sydenhamarts.co.uk`, `thehammondtheatre.co.uk`, `thehorsehospital.com`,
 `thewellwalktheatre.com`, `whitechapelgallery.org`
 
-Every listing worth checking was checked while scoping the probes above, and
-none of the remaining ones has a date axis that is both cheap and unambiguous --
-so each would be another `film-totals` probe. Firmdale is the only shared
-platform left, three venues behind one probe, though its listing selector is
-generic enough (`.text-block`, fourteen on the page, the first being "Book a
-Room") that the probe would lean on the transform's text parsing. Eventim
-Apollo (17 requests) and London Bridge City (10) are the largest single savings
-left.
+The Science Museum is the pick of them, and the only one left with a real date
+axis: one POST to its ticketing API -- the same call its retrieve makes, options
+and all -- returns 23 productions carrying 120 performances with ISO dates, and
+`performances[0].productTypeId === 3` filters those to film. 7 films, 240
+performances across 63 dates the day this was checked, for 1 request against a
+retrieve's 13.
 
-Two need investigating before they can be scoped. Rich Mix answers 403 to both a
-plain fetch and the pipeline's own `fetchText` from a datacenter address, which
-may be IP blocking rather than a breakage. The Science Museum's ticketing API
-rejects a plain GET, so a probe has to match the request options its retrieve
-passes.
+The Well Walk Theatre is the largest request saving left: its Beyonk shop list
+is one call, where the retrieve pays a detail call and twelve months of
+availability per experience, 53 in total. It counts shop items rather than
+films, since the four experiences it sells are a mix.
+
+Then Eventim Apollo (17 requests -> 1) and London Bridge City (10 -> 1), both of
+which can filter film at listing level -- the Apollo by a `data-search-text`
+carrying "film", London Bridge City by an entry reading "Catch a movie" -- and
+the Bush Theatre (13 -> 1), which cannot, so it would count listings. None of
+those three has a usable date axis: the Apollo's cards are dated, but one of the
+sixteen is a range rather than a day.
+
+Firmdale is the only shared platform left, three venues behind one probe, though
+its listing selector is generic enough (`.text-block`, fourteen on the page, the
+first being "Book a Room") that the probe would lean on the transform's text
+parsing.
+
+Rich Mix needs investigating rather than probing. It answers 403 site-wide, to
+any user agent, from a datacenter address -- so this is IP blocking rather than
+anything a probe would fix. Whether its retrieve is also being blocked where the
+pipeline actually runs is worth knowing: if it is, the venue has been failing
+daily, which matters more than any probe on this list.
 
 The browser-driven venues (Close-Up on camoufox; the Cinema Museum, Canary Wharf
 and Fulham Pier on Playwright) are the most expensive both to write and to run
