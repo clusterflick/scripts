@@ -91,31 +91,31 @@ reading `combined-data.json` — the match stage, the client payload, the listin
 — should see films that aren't screening.
 
 `health` sits outside the pipeline, and `docs/health.md` is its reference -
-which venues are covered, what each probe can and cannot see, and what fails
-the job. It probes a chain's listing endpoint, asserts the response is healthy
-and writes one row per venue to `health-data/<group>` - it never opens a
-per-title page, so the whole Odeon estate costs 2 requests against a retrieve's
-323, cheap enough to run hourly.
-Its unit is a chain group (the id prefix the venues share) rather than a venue,
-because one batched call can answer for all of them; a standalone venue can
-carry its own probe as an optional `health` export beside `retrieve` and
-`transform`. A group with no single call to batch - Castle, Olympic Studios,
-Savoy Systems, CineSync and IndyCinemaGroup on separate domains; Rooftop and
-Tate sharing a site but with a listing apiece - has nothing for a group probe to
-save, so each venue exports the `health` its siblings share from
-`common/<chain>/health.js`, one line apiece. Where that shared probe needs the
-venue's own listing url or view parameters, the cinema module binds them the way
-its `retrieve` does rather than re-exporting bare: Tribe Events is the example,
-and JW3 and Dugdale are both Spektrix venues whose probes have nothing in common
-beyond the helper.
+which venues are covered, what each probe can and cannot see, and what fails the
+job. It probes a chain's listing endpoint, asserts the response is healthy and
+writes one row per venue to `health-data/<group>` - it never opens a per-title
+page, so the whole Odeon estate costs 2 requests against a retrieve's 323, cheap
+enough to run hourly. Its unit is a chain group (the id prefix the venues share)
+rather than a venue, because one batched call can answer for all of them; a
+standalone venue can carry its own probe as an optional `health` export beside
+`retrieve` and `transform`. A group with no single call to batch - Castle,
+Olympic Studios, Savoy Systems, CineSync and IndyCinemaGroup on separate
+domains; Rooftop and Tate sharing a site but with a listing apiece - has nothing
+for a group probe to save, so each venue exports the `health` its siblings share
+from `common/<chain>/health.js`, one line apiece. Where that shared probe needs
+the venue's own listing url or view parameters, the cinema module binds them the
+way its `retrieve` does rather than re-exporting bare: Tribe Events is the
+example, and JW3 and Dugdale are both Spektrix venues whose probes have nothing
+in common beyond the helper.
 
 What a chain can count varies, and the row's `granularity` says which: Odeon,
 Curzon and Cineworld give a film x date matrix (`film-date`), while
 Picturehouse, Vue, Electric, Castle, Admit One, Olympic Studios, Savoy Systems,
-Rooftop, IndyCinemaGroup, Tribe Events, JW3, Prince Charles, the Garden Cinema
-and The Nickel return individual showings (`performance`). `byDate` is the same
-axis either way - films per date, or performances per date - so a publish reads
-the same everywhere: new keys appearing, or existing keys growing.
+Rooftop, IndyCinemaGroup, Tribe Events, JW3, Prince Charles, the Garden Cinema,
+The Nickel, the ICA, Riverside Studios, Wilton's and Curzon Sea Containers
+return individual showings (`performance`). `byDate` is the same axis either
+way - films per date, or performances per date - so a publish reads the same
+everywhere: new keys appearing, or existing keys growing.
 
 Two kinds of source cannot answer that cheaply, and each says so with a
 granularity of its own rather than borrowing one that promises dates it doesn't

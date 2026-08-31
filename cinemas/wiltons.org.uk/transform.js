@@ -1,6 +1,4 @@
 const cheerio = require("cheerio");
-const { parse, addYears, subDays } = require("date-fns");
-const { enGB } = require("date-fns/locale/en-GB");
 const {
   getText,
   generateShowingId,
@@ -10,25 +8,7 @@ const {
   createFormat,
 } = require("../../common/utils");
 const attributes = require("./attributes");
-
-// Table dates/times are given as "Wed 29 Jul" + "7 pm" (or "7.30 pm") with no
-// year. Parse them, rolling dates well in the past over to next year.
-const parsePerformanceDate = (dateText, timeText) => {
-  const now = new Date();
-  const timeFormat = /\d\.\d/.test(timeText) ? "h.mm a" : "h a";
-  let date = parse(`${dateText} ${timeText}`, `EEE d MMM ${timeFormat}`, now, {
-    locale: enGB,
-  });
-  if (Number.isNaN(date.getTime())) {
-    throw new Error(
-      `Unable to parse performance date: ${dateText} ${timeText}`,
-    );
-  }
-  if (date < subDays(now, 14)) {
-    date = addYears(date, 1);
-  }
-  return date;
-};
+const { parsePerformanceDate } = require("./utils");
 
 // The advertised running time is given as e.g. "Running time: 2 hours 5
 // minutes, including interval". Return the total length in minutes (the venue's

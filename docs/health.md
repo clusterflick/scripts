@@ -33,7 +33,7 @@ Four values, strongest first:
 
 | Granularity            | Venues | New film | New date | More showings of a film already on that date | `byDate` |
 | ---------------------- | -----: | :------: | :------: | :------------------------------------------: | :------: |
-| `performance`          |     70 |    ✅    |    ✅    |                      ✅                      |    ✅    |
+| `performance`          |     74 |    ✅    |    ✅    |                      ✅                      |    ✅    |
 | `film-date`            |     41 |    ✅    |    ✅    |                      ❌                      |    ✅    |
 | `film-and-date-totals` |      3 |    ✅    |   ✅\*   |                      ❌                      |    ❌    |
 | `film-totals`          |      4 |    ✅    |    ❌    |                      ❌                      |    ❌    |
@@ -52,8 +52,8 @@ or existing keys growing.
 | Cinema modules                                  |     409 |
 | Source-only (no endpoint of their own to probe) |     250 |
 | **Eligible for a health check**                 | **159** |
-| **Covered**                                     | **118** |
-| Remaining                                       |      41 |
+| **Covered**                                     | **122** |
+| Remaining                                       |      37 |
 
 `bfi.org.uk-stephen-street` sits under a chain prefix but is source-only, and
 the BFI probe excludes it by name; the BFI row count is 2, not 3.
@@ -82,6 +82,10 @@ Cost is what the probe spends, against what the same listing costs a retrieve.
 | `cinemas/thegardencinema.co.uk/health.js`   | the Garden Cinema                            | 1 request, against a retrieve's 103                                                  |
 | `cinemas/thenickel.co.uk/health.js`         | the Nickel                                   | 1 request, against a retrieve's 74                                                   |
 | `cinemas/jw3.org.uk/health.js`              | JW3                                          | 3 requests, against a retrieve's 45                                                  |
+| `cinemas/ica.art/health.js`                 | the ICA                                      | 1 request, against a retrieve's 41                                                   |
+| `cinemas/riversidestudios.co.uk/health.js`  | Riverside Studios                            | 1 request, against a retrieve's 38                                                   |
+| `cinemas/wiltons.org.uk/health.js`          | Wilton's Music Hall                          | 2 requests -- the listing walk only                                                  |
+| `cinemas/curzonseacontainers.com/health.js` | Curzon Sea Containers                        | 1 request (the retrieve's own; it avoids the transform)                              |
 
 ### `film-date` -- a film x date matrix, no showing counts
 
@@ -119,7 +123,7 @@ endpoint genuinely has none, and say in the probe why.
 ## Known blind spots
 
 **Showings added to a film already listed on a date it already plays.**
-Invisible at 48 of the 118 covered venues -- every venue not on `performance`.
+Invisible at 48 of the 122 covered venues -- every venue not on `performance`.
 Seeing it costs a request per date, which is the trade the whole stage is built
 on. In publish terms it is a schedule tweak rather than a new listing: a new
 film or a new date, which are the signals that do land, cover the realistic
@@ -135,9 +139,8 @@ number is read as the floor it is.
 In practice this matters less than it looks. Lumiere's 100 dates span three and
 a half months at 90% daily density, and 121 of its 130 films open inside that
 window -- so a new film almost never creates a new date there, and it is the
-film total that moves when the venue publishes. The date axis also rolls
-forward daily, so a programme extending past the window surfaces late rather
-than never.
+film total that moves when the venue publishes. The date axis also rolls forward
+daily, so a programme extending past the window surfaces late rather than never.
 
 **The `film-totals` venues have no date signal at all.** They catch the listing
 breaking, the film filter changing, and the programme emptying. They cannot see
@@ -160,30 +163,44 @@ missing venue is exactly the evidence the log exists to keep.
 
 ## Venues without a probe
 
-41 eligible venues have none. All have their own `retrieve.js` -- there is no
+37 eligible venues have none. All have their own `retrieve.js` -- there is no
 untouched chain left, only single venues and small shared platforms:
 
 `acflondon.org`, `adventurecinema.co.uk-kew-gardens`, `alexandrapalace.com`,
 `arthousecrouchend.co.uk`, `backyardcinema.co.uk`, `bushtheatre.co.uk`,
 `cadoganhall.com`, `canarywharf.com-summer-screens`, `cinemamuseum.org.uk`,
-`closeupfilmcentre.com`, `curzonseacontainers.com`, `davidleancinema.org.uk`,
-`eventimapollo.com`, `firmdalehotels.com-charlotte-street`,
-`firmdalehotels.com-covent-garden`, `firmdalehotels.com-soho`,
-`fulhampier.com`, `ibraaz.org`, `ica.art`, `institut-francais.org.uk`,
-`irishculturalcentre.co.uk`, `kilntheatre.com`,
+`closeupfilmcentre.com`, `davidleancinema.org.uk`, `eventimapollo.com`,
+`firmdalehotels.com-charlotte-street`, `firmdalehotels.com-covent-garden`,
+`firmdalehotels.com-soho`, `fulhampier.com`, `ibraaz.org`,
+`institut-francais.org.uk`, `irishculturalcentre.co.uk`, `kilntheatre.com`,
 `lewisham.gov.uk-deptford-lounge`, `londonbridgecity.co.uk`,
 `museumofthehome.org.uk`, `not-nowhere.org`, `ogniskopolskie.org.uk`,
 `peckhamplex.london`, `rafmuseum.org.uk-london`, `richmix.org.uk`,
-`riversidestudios.co.uk`, `royalalberthall.com`,
-`royalparks.org.uk-hyde-park`, `sandsfilms.co.uk`, `sciencemuseum.org.uk`,
-`sydenhamarts.co.uk`, `thehammondtheatre.co.uk`, `thehorsehospital.com`,
-`thewellwalktheatre.com`, `whitechapelgallery.org`, `wiltons.org.uk`
+`royalalberthall.com`, `royalparks.org.uk-hyde-park`, `sandsfilms.co.uk`,
+`sciencemuseum.org.uk`, `sydenhamarts.co.uk`, `thehammondtheatre.co.uk`,
+`thehorsehospital.com`, `thewellwalktheatre.com`, `whitechapelgallery.org`
 
-Best next candidates by requests saved: ICA (41), Peckhamplex (35) and Ciné
-Lumière (22) -- though all three list films without dates, so each would be
-another `film-totals` probe. The browser-driven venues (Close-Up on camoufox;
-the Cinema Museum, Canary Wharf and Fulham Pier on Playwright) are the most
-expensive both to write and to run hourly, and are best left last.
+Every listing here was checked for a date axis while scoping the probes above,
+and none of the remaining ones has one that is both cheap and unambiguous -- so
+each would be another `film-totals` probe. Best next by requests saved:
+Peckhamplex (35 -> 2), Ciné Lumière (22 -> 1), Alexandra Palace (18 -> 1), Kiln
+Theatre (12 -> 1) and ArtHouse Crouch End (7 -> 2); Firmdale is three venues
+behind one shared probe, though its listing selector is generic enough that the
+probe would lean on the transform's text parsing.
+
+Two need investigating before they can be scoped. Rich Mix answers 403 to both a
+plain fetch and the pipeline's own `fetchText` from a datacenter address, which
+may be IP blocking rather than a breakage. The Science Museum's ticketing API
+rejects a plain GET, so a probe has to match the request options its retrieve
+passes.
+
+The browser-driven venues (Close-Up on camoufox; the Cinema Museum, Canary Wharf
+and Fulham Pier on Playwright) are the most expensive both to write and to run
+hourly, and are best left last. Beyond those, most of what remains are
+occasional-film venues -- museums, music venues, parks, hotels -- where
+`no-listings-found` is the normal state, so a probe mostly confirms an empty
+listing. It still catches the listing changing shape while empty, which is a
+failure nobody would otherwise notice, but the return is thinner.
 
 ## Adding a probe
 
@@ -208,3 +225,7 @@ from scratch.
   selector or walk, it belongs in a `utils.js` both require -- two copies drift.
 - **Document the traps at the top of the probe.** These endpoints are quirkier
   than they look, and the comment is the only place that knowledge lives.
+- **`probeText` takes `acceptStatuses`** for a source that serves the listing
+  under a status it means nothing by -- the ICA's what's-on has answered 404
+  with the whole programme in the body. Use it only where the venue's `retrieve`
+  already tolerates the same status.
