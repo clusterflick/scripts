@@ -1325,6 +1325,9 @@ const knownRemovablePhrases = [
   "Yugesh Walia and the Birmingham Film Workshop:",
   "What's Up Daiquiris, bag switcheroos:",
   "HKFF 2026-27:",
+  "SEND FRIENDLY SCREENIN:",
+  "Arena:",
+  "Sartorial Correctness with Nick Egan:",
   "A presentation hosted by Kingston Friends of the Earth on behalf of ",
 
   // Weirdly specific fixes
@@ -1393,6 +1396,7 @@ const knownRemovablePhrases = [
   "Vinko Möderndorfer's",
   '("Biye Fiye Niye")',
   "Film Showing: Feat. Q&A w/ LGSM Organiser",
+  "— Live Forever",
 
   // Common superfluous pieces
   "** SCREENING CANCELLED **",
