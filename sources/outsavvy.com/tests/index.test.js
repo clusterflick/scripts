@@ -17,9 +17,12 @@ jest.mock("../../../common/utils", () => ({
 // Hide script output
 console.log = () => {};
 
+// The Vagina Museum reaches us through the "screening" hashtag rather than
+// "film" - its events are never tagged film - so matching against it is what
+// holds the second listing sweep in place.
 const cinema = {
-  name: "Hackney Picturehouse",
-  geo: { lat: 51.54474966715274, lon: -0.055025638908993514 },
+  name: "Vagina Museum",
+  geo: { lat: 51.53040329879552, lon: -0.05685235988623171 },
 };
 
 describe(attributes.name, () => {
@@ -29,14 +32,14 @@ describe(attributes.name, () => {
   it(
     "retrieve and find events",
     async () => {
-      const { movieListPage, moviePages } = await retrieve();
+      const { movieListPages, moviePages } = await retrieve();
 
       // Make sure the input looks roughly correct
-      expect(movieListPage).toBeTruthy();
+      expect(movieListPages).toHaveLength(2);
       expect(moviePages).toBeTruthy();
-      expect(Object.keys(moviePages)).toHaveLength(18);
+      expect(Object.keys(moviePages)).toHaveLength(30);
 
-      readJSON.mockImplementation(() => ({ movieListPage, moviePages }));
+      readJSON.mockImplementation(() => ({ movieListPages, moviePages }));
 
       const output = await findEvents(cinema);
       expect(

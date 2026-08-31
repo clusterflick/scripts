@@ -102,22 +102,22 @@ Studios - has no id prefix and nothing to batch, so each venue exports the
 `health` its siblings share from `common/<chain>/health.js`, one line apiece.
 
 What a chain can count varies, and the row's `granularity` says which: Odeon,
-Curzon and Cineworld give a film x date matrix (`film-date`), while Picturehouse,
-Vue, Electric, Castle, Admit One and Olympic Studios return individual showings
-(`performance`). `byDate` is the same axis either way - films per date, or
-performances per date - so a publish reads the same everywhere: new keys
-appearing, or existing keys growing. Omniplex is the exception, and says so with
-a third value: it publishes one date at a time, so its film x date matrix costs a
-request per published date - 54 at Sutton - which is what the retrieve pays and
-too much to repeat hourly. Its probe counts the two axes rather than their
-product (`film-and-date-totals`), reports no `byDate` at all rather than one
-built from a fraction of the dates, and a publish there reads as either total
-growing. Each probe checks the chain's own site list before asking for listings -
-that is what separates a venue with nothing on from an id that has gone stale;
-some chains answer a stale id with that list instead of a 404, which does the
-same job. These endpoints are quirkier than they look, and each probe documents
-its own traps at the top of `common/<chain>/health.js`: read it before changing a
-call or a parameter.
+Curzon and Cineworld give a film x date matrix (`film-date`), while
+Picturehouse, Vue, Electric, Castle, Admit One and Olympic Studios return
+individual showings (`performance`). `byDate` is the same axis either way -
+films per date, or performances per date - so a publish reads the same
+everywhere: new keys appearing, or existing keys growing. Omniplex is the
+exception, and says so with a third value: it publishes one date at a time, so
+its film x date matrix costs a request per published date - 54 at Sutton - which
+is what the retrieve pays and too much to repeat hourly. Its probe counts the
+two axes rather than their product (`film-and-date-totals`), reports no `byDate`
+at all rather than one built from a fraction of the dates, and a publish there
+reads as either total growing. Each probe checks the chain's own site list
+before asking for listings - that is what separates a venue with nothing on from
+an id that has gone stale; some chains answer a stale id with that list instead
+of a 404, which does the same job. These endpoints are quirkier than they look,
+and each probe documents its own traps at the top of `common/<chain>/health.js`:
+read it before changing a call or a parameter.
 
 A bot challenge is retried once after about a minute before it is recorded,
 because a challenge that clears was never worth a row - the point is complete
