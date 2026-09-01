@@ -49,7 +49,7 @@ const sourcedEvent = (bookingUrl) => ({
 const runTransform = (venueBookingUrl, sourced) =>
   transform(
     attributes,
-    "TheLexiCinema.dll",
+    { urlSlug: "TheLexiCinema.dll", tags: { notes: {} } },
     {
       movieListPage: { Events: [venueEvent(venueBookingUrl)] },
       moviePages: {},
@@ -168,7 +168,7 @@ describe("Savoy Systems transform", () => {
     };
     const movies = await transform(
       attributes,
-      "TheLexiCinema.dll",
+      { urlSlug: "TheLexiCinema.dll", tags: { notes: {} } },
       { movieListPage: { Events: [doubleBillEvent] }, moviePages: {} },
       {},
     );
@@ -189,7 +189,7 @@ describe("Savoy Systems transform", () => {
     };
     const movies = await transform(
       attributes,
-      "TheLexiCinema.dll",
+      { urlSlug: "TheLexiCinema.dll", tags: { notes: {} } },
       { movieListPage: { Events: [coDirectedEvent] }, moviePages: {} },
       {},
     );

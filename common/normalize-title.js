@@ -13,6 +13,11 @@ function normalizeTitle(title, options) {
   title = title.replace(/\s+/g, " ");
   // Normalise curly/smart apostrophes to straight for consistent phrase matching
   title = title.replace(/[\u2018\u2019]/g, "'");
+  // One venue publishes its separator as an underscore, so "NT LIVE_ GOLDEN
+  // BOY" never matches the broadcast prefixes spelled with a colon and the
+  // same performance arrives under a second name. Put the colon back before
+  // the theatre prefixing runs, which is what reads it.
+  title = title.replace(/\blive_\s/i, "live: ");
 
   title = standardizePrefixingForTheatrePerformances(
     title,
@@ -33,6 +38,8 @@ function normalizeTitle(title, options) {
     ["The Transformers: The Movie", "The Transformers The Movie ()"], // Retain "The Movie" suffix
     [/:? The Movie$/i, ""],
     ["The Fishermen", "The Fisherman"], // NOTE: This can be removed in the future once this specific misname has been removed
+    ["ESCAPES_ ", "Escapes: "],
+    [/\bscreenin:/i, "screening:"],
     // One venue bills the tour without the dash before the subtitle, so the
     // suffix-stripping that leaves every other listing as "neo city seoul"
     // never fires and the same show arrives under a second name.
@@ -146,6 +153,9 @@ function normalizeTitle(title, options) {
     ["twin peaks - ", "twin peaks "],
     [" - Part 1 - ", " I: "],
     ["- Part ", "Part "],
+    ["FUN IN THE LOUNGE - ", "Fun in the lounge: "],
+    ["FUN AT THE LOUNGE - ", "Fun in the lounge: "],
+    ["FREE ENTRY - ", "Free Entry: "],
     ["- FREE ENTRY", "FREE ENTRY"],
     ["Tour-Live", "Tour - Live"],
     ["- Live From", "Live From"],

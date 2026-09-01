@@ -1,11 +1,15 @@
-const savoySystemsTransform = require("../../common/savoysystems.co.uk/transform");
 const attributes = require("./attributes");
+const savoySystemsTransform = require("../../common/savoysystems.co.uk/transform");
 
-async function transform(movieData, sourcedEvents) {
+const tags = {
+  hardOfHearing: ["CC"], // Closed Captions
+};
+
+async function transform(data, sourcedEvents) {
   return savoySystemsTransform(
     attributes,
-    "TheArzner.dll",
-    movieData,
+    { urlSlug: "TheArzner.dll", tags },
+    data,
     sourcedEvents,
   );
 }
