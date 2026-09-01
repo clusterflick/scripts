@@ -37,6 +37,9 @@ function normalizeTitle(title, options) {
     [/Batman\s?:? The Movie/i, "Batman"],
     ["The Transformers: The Movie", "The Transformers The Movie ()"], // Retain "The Movie" suffix
     [/:? The Movie$/i, ""],
+    // Venues spell the stage-production suffix with a dash or a colon, so
+    // match the separator rather than carrying a phrase per spelling.
+    [/\s*(?:[-–]\s*)?:?\s*The Play\.?\s*$/i, ""],
     ["The Fishermen", "The Fisherman"], // NOTE: This can be removed in the future once this specific misname has been removed
     ["ESCAPES_ ", "Escapes: "],
     [/\bscreenin:/i, "screening:"],
@@ -48,6 +51,7 @@ function normalizeTitle(title, options) {
     // the same film arrives under two names and only the other one matches.
     // NOTE: This can be removed once the misnamed screening has passed
     ["Rubberhead: The Life & Times", "Rubberhead: The Life & Monsters"],
+    ["JOY + ", "JOY & "],
     ["Music with Tara Franks + ", "Music with Tara Franks & "],
     ["Storytelling + ", "Storytelling & "],
     ["Back and Forth + ", "Back and Forth & "],

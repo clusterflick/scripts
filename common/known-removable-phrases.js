@@ -487,7 +487,6 @@ const knownRemovablePhrases = [
   "Test Screening",
   "starring RMD",
   "– Dr Ghassan Abu-Sittah Speaks",
-  "– The Play",
   "Commentary Track Screening",
   "Movie, Cabaret & Pizza",
   "pre film mixer",
@@ -1187,6 +1186,7 @@ const knownRemovablePhrases = [
   "Screening of ",
   "ScreenX Fest ",
   "Scorsese/De Niro:",
+  "Scottish Ballet:",
   "Season 2 Premiere & Q&A:",
   "Secret Cinema:",
   "See Film First (SFF):",
@@ -1399,6 +1399,11 @@ const knownRemovablePhrases = [
   '("Biye Fiye Niye")',
   "Film Showing: Feat. Q&A w/ LGSM Organiser",
   "— Live Forever",
+  " x Marsm",
+  ": Desire and Disobedience",
+  "by JT Taylor",
+  "Blockbuster World War 2 drama on RAF legend",
+  "Amnesty UK Documentary Launch & Panel Event",
 
   // Common superfluous pieces
   "** SCREENING CANCELLED **",
