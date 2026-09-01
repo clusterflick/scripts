@@ -5,6 +5,8 @@ describe("isNonFilmEvent", () => {
     ["Community Pilates"],
     ["Bearpit Karaoke"],
     ["Paint your own Carafe or  Shot Glasses"],
+    ["Sip and Paint Experience"],
+    ["David Lynch Sip and Paint"],
     ["THE WEEKND FANPARK"],
     ["Crick Bioimage Analysis Symposium 2026"],
     ["Business Networking | Healthcare & Wellness Industry"],

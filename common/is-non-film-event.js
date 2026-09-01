@@ -4,6 +4,7 @@ const nonFilmEvents = [
   /Community Pilates/i,
   /Bearpit Karaoke/i,
   /Paint your own/i,
+  /Sip and Paint/i,
   /WEEKND FANPARK/i,
   /Bioimage Analysis/i,
   /Business Networking/i,
