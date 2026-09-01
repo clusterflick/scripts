@@ -31,6 +31,24 @@ const { format } = require("date-fns");
 // (Europe/London).
 const expectedClosures = [
   {
+    venue: "canarywharf.com-summer-screens",
+    from: "2026-09-01",
+    until: "2027-04-30",
+    // "Canary Wharf's Summer Screens returns [...] from Thursday 4 June until
+    // Tuesday 1 September 2026." The estate deletes the season's event page
+    // once the run is over rather than emptying it, so out of season the
+    // venue's URL 404s.
+    // https://cwg.com/press-release/canary-wharfs-summer-screens-return-with-3-month-programme-of-free-films-sports-and-games-29426/
+    //
+    // The window ends in April, not at the next season's opening night: the
+    // page is season-specific (`/whats-on/film-club-2/` was 2026's), so next
+    // year's listings arrive under a slug this venue does not yet point at.
+    // Ending the window around when the 2026 season was announced (29 April)
+    // turns that stale URL red while there is still time to re-point it,
+    // instead of swallowing it until June.
+    reason: "out of season, next Summer Screens season expected June 2027",
+  },
+  {
     venue: "myvue.com-finchley-road",
     from: "2026-08-28",
     until: "2026-09-04",

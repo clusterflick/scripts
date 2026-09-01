@@ -12,6 +12,7 @@ const {
   getId,
   basicNormalize,
 } = require("../../common/utils");
+const { getExpectedClosure } = require("../../common/expected-closures");
 const attributes = require("./attributes");
 
 function normalizeTime(timeStr) {
@@ -62,7 +63,18 @@ async function transform({ movieListPage }, sourcedEvents) {
   });
 
   if (movies.length === 0) {
-    throw new Error("No movies found — page structure may have changed");
+    // Summer Screens is a seasonal pop-up, and out of season the estate takes
+    // the season's event page down rather than emptying it - so the URL 404s
+    // and the accordion is simply absent, which is indistinguishable from a
+    // redesign. Stand down only for a declared closure, and say which one, so
+    // the empty output is explained in the log rather than silent.
+    const closure = getExpectedClosure(attributes.id);
+    if (!closure) {
+      throw new Error("No movies found — page structure may have changed");
+    }
+    console.log(
+      `      - ⚠️  No listings for ${attributes.id} - closed until ${closure.until} for ${closure.reason}`,
+    );
   }
 
   const listOfSourcedEvents = Object.values(sourcedEvents).flatMap(
