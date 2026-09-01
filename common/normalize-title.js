@@ -13,6 +13,11 @@ function normalizeTitle(title, options) {
   title = title.replace(/\s+/g, " ");
   // Normalise curly/smart apostrophes to straight for consistent phrase matching
   title = title.replace(/[\u2018\u2019]/g, "'");
+  // One venue publishes its separator as an underscore, so "NT LIVE_ GOLDEN
+  // BOY" never matches the broadcast prefixes spelled with a colon and the
+  // same performance arrives under a second name. Put the colon back before
+  // the theatre prefixing runs, which is what reads it.
+  title = title.replace(/\blive_\s/i, "live: ");
 
   title = standardizePrefixingForTheatrePerformances(
     title,
@@ -890,6 +895,10 @@ function normalizeTitle(title, options) {
     [/l.ff(?:\s+202\d)?:/i, ""],
     [/liaf(?:\s+\d+)?:/i, ""],
     [/hkff(?:uk)?(?:\s+\d+)?:/i, ""],
+    [/send[- ]?friendly(?:\s+screen(?:ing|in))?[:\s]*/i, ""],
+    [/escapes[:_]\s*/i, ""],
+    [/fun (?:in|at) the lounge\s*[-:]?\s*/i, ""],
+    [/free entry\s*[-:]\s*/i, ""],
     [/ AV SHOW$/i, ""],
     [/ Movie Screening$/i, ""],
     ["Tercera Video Club #2 - ", "Tercera Video Club #2: "],
