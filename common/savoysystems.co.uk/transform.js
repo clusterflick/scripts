@@ -44,84 +44,43 @@ function getStatus(performance) {
   return { soldOut: basicNormalize(performance.IsSoldOut) === "y" };
 }
 
-/**
- * Lexi Cinema Tags
- * - BF  => Baby-Friendly Screenings
- * - FF  => Family Fun
- * - AD  => Audio Described
- * - HOH => Hard of Hearing
- * - RS  => Relaxed Screening
- * - QA  => Q+A
- * - AS  => Accessible Screenings
- * [Specific events -- these may change]
- * - BHS => Black History Studies
- * - TP  => Talking Pictures
- * - WA  => Women of Almodóvar
- * - SL  => Spotlight
- * - BR  => Summer Nights in Brazil
- */
+// ---------------------------------------------------------------------------
+// Performance tags
+//
+// Savoy gives each venue its own short codes and lets it choose what they mean,
+// so the vocabulary is venue configuration rather than anything platform-wide.
+// The codes genuinely collide: `RS` is a Relaxed Screening at the Lexi and the
+// Rio but a Restoration at ActOne, and the Lexi's `HOH` is the Rio's `HoH`.
+// Reading every venue's codes on every venue would therefore file ActOne's 4K
+// restorations as relaxed screenings, so each venue passes only its own map and
+// a code it does not list is simply not its code.
+//
+// The map is `{ accessibilityField: [codes], notes: { code: text } }`; a venue
+// publishes the meanings as an "Event Key" on its own What's On page, which is
+// the only authority for what a code means. Leave a code out rather than
+// guessing at it - an unmapped code loses a detail, a wrong one states an
+// untruth about access.
+// ---------------------------------------------------------------------------
 
-/**
- * Rio Cinema Tags
- * - PP    => Pink Palace
- * - SP    => Special Event
- * - CM    => Classic Matinee
- * - QA    => Q+A / Discussion
- * - FF    => Family Flicks
- * - HoH   => Hard of Hearing
- * - RS    => Relaxed Screening
- * - CB    => Carers + Baby
- * - NoAds => No Ads or Trailers
- */
+const isTagged = (performance, codes = []) =>
+  codes.some((code) => basicNormalize(performance[code]) === "y");
 
-/**
- * Arzner Tags
- * - CC => Closed Captions
- */
-
-function getAccessibility(performance, synopsis) {
+function getAccessibility(performance, synopsis, tags) {
   return {
-    audioDescription: basicNormalize(performance.AD) === "y", // Lexi Cinema
-    hardOfHearing:
-      basicNormalize(performance.HOH) === "y" || // Lexi Cinema
-      basicNormalize(performance.HoH) === "y" || // Rio Cinema
-      basicNormalize(performance.CC) === "y", // Arzner
-    babyFriendly:
-      basicNormalize(performance.BF) === "y" || // Lexi Cinema
-      basicNormalize(performance.FF) === "y" || // Lexi Cinema
-      basicNormalize(performance.CB) === "y", // Rio Cinema
-    relaxed: basicNormalize(performance.RS) === "y", // Lexi Cinema, Rio Cinema
+    audioDescription: isTagged(performance, tags.audioDescription),
+    hardOfHearing: isTagged(performance, tags.hardOfHearing),
+    babyFriendly: isTagged(performance, tags.babyFriendly),
+    relaxed: isTagged(performance, tags.relaxed),
     subtitled:
-      basicNormalize(performance.HOH) === "y" || // Lexi Cinema
+      isTagged(performance, tags.subtitled) ||
       basicNormalize(synopsis).includes("with english subtitles"),
   };
 }
 
-function getNotesList(performance) {
-  const notes = [];
-  if (basicNormalize(performance.QA) === "y") {
-    // Lexi Cinema, Rio Cinema
-    notes.push("This screening will be followed by a Q&A");
-  }
-  if (basicNormalize(performance.AS) === "y") {
-    // Lexi Cinema
-    notes.push("Accessible screening");
-  }
-  if (basicNormalize(performance.TP) === "y") {
-    // Lexi Cinema
-    notes.push(
-      "Talking Pictures: A friendly film discussion group for seniors",
-    );
-  }
-  if (basicNormalize(performance.SP) === "y") {
-    // Rio Cinema
-    notes.push("Special Event");
-  }
-  if (basicNormalize(performance.NoAds) === "y") {
-    // Rio Cinema
-    notes.push("No Ads or Trailers");
-  }
-  return notes;
+function getNotesList(performance, notes = {}) {
+  return Object.entries(notes)
+    .filter(([code]) => basicNormalize(performance[code]) === "y")
+    .map(([, note]) => note);
 }
 
 function removeSuperfluousInformation(overview) {
@@ -143,7 +102,14 @@ function removeSuperfluousInformation(overview) {
 const namesJoinedByPlus = (value) =>
   value ? value.split(" + ").flatMap(convertNamesTextToList) : value;
 
-async function transform(attributes, urlSlug, movieData, sourcedEvents) {
+async function transform(attributes, config, movieData, sourcedEvents) {
+  const { urlSlug, tags } = config;
+  if (!tags) {
+    throw new Error(
+      `No performance tag map given for ${attributes.id} - a venue must declare its own codes`,
+    );
+  }
+
   const { movieListPage, moviePages } = movieData;
 
   // Remove private hire entries
@@ -175,7 +141,7 @@ async function transform(attributes, urlSlug, movieData, sourcedEvents) {
       performances: movie.Performances.map((performance) =>
         createPerformance({
           date: parseDate(performance),
-          notesList: getNotesList(performance),
+          notesList: getNotesList(performance, tags.notes),
           url: performance.URL.toLowerCase().startsWith("http")
             ? performance.URL
             : `${attributes.domain}/${urlSlug}/${performance.URL}`,
@@ -183,7 +149,7 @@ async function transform(attributes, urlSlug, movieData, sourcedEvents) {
           status: getStatus(performance),
           accessibility: createAccessibility(
             title,
-            getAccessibility(performance, overview),
+            getAccessibility(performance, overview, tags),
             overview,
           ),
           format: createFormat(title, {}, overview),
