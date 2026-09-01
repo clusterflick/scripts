@@ -38,6 +38,8 @@ function normalizeTitle(title, options) {
     ["The Transformers: The Movie", "The Transformers The Movie ()"], // Retain "The Movie" suffix
     [/:? The Movie$/i, ""],
     ["The Fishermen", "The Fisherman"], // NOTE: This can be removed in the future once this specific misname has been removed
+    ["ESCAPES_ ", "Escapes: "],
+    [/\bscreenin:/i, "screening:"],
     // One venue bills the tour without the dash before the subtitle, so the
     // suffix-stripping that leaves every other listing as "neo city seoul"
     // never fires and the same show arrives under a second name.
@@ -151,6 +153,9 @@ function normalizeTitle(title, options) {
     ["twin peaks - ", "twin peaks "],
     [" - Part 1 - ", " I: "],
     ["- Part ", "Part "],
+    ["FUN IN THE LOUNGE - ", "Fun in the lounge: "],
+    ["FUN AT THE LOUNGE - ", "Fun in the lounge: "],
+    ["FREE ENTRY - ", "Free Entry: "],
     ["- FREE ENTRY", "FREE ENTRY"],
     ["Tour-Live", "Tour - Live"],
     ["- Live From", "Live From"],
@@ -895,10 +900,6 @@ function normalizeTitle(title, options) {
     [/l.ff(?:\s+202\d)?:/i, ""],
     [/liaf(?:\s+\d+)?:/i, ""],
     [/hkff(?:uk)?(?:\s+\d+)?:/i, ""],
-    [/send[- ]?friendly(?:\s+screen(?:ing|in))?[:\s]*/i, ""],
-    [/escapes[:_]\s*/i, ""],
-    [/fun (?:in|at) the lounge\s*[-:]?\s*/i, ""],
-    [/free entry\s*[-:]\s*/i, ""],
     [/ AV SHOW$/i, ""],
     [/ Movie Screening$/i, ""],
     ["Tercera Video Club #2 - ", "Tercera Video Club #2: "],
