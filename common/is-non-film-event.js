@@ -4,7 +4,10 @@ const nonFilmEvents = [
   /Community Pilates/i,
   /Bearpit Karaoke/i,
   /Paint your own/i,
-  /Sip and Paint/i,
+  // Anchored: a venue billing a painting session after a film or director
+  // ("David Lynch Sip and Paint") is still listing that film, so only the
+  // listing that is nothing but the painting event is a non-film event.
+  /^Sip and Paint/i,
   /WEEKND FANPARK/i,
   /Bioimage Analysis/i,
   /Business Networking/i,
