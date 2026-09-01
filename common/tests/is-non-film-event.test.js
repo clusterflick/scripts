@@ -28,6 +28,9 @@ describe("isNonFilmEvent", () => {
     ["Ocean Film Festival World Tour: 22 OCT - Early Dinner Reservation"],
     ["Conferencing 4 Hour"],
     ["JOHNNIE WALKER PRESENTS R&B THURSDAYS:  KASH/PHARXOH"],
+    ["LIVE CONCERT: GYPSY DYNAMITE"],
+    ["Mary Jane Lowe & Matt Redman Live Concert"],
+    ["LIVE CONCERT - FREE ENTRY: Saskia Leigh Martić"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });
@@ -51,6 +54,10 @@ describe("isNonFilmEvent", () => {
     ["The Dinner"],
     ["Dinner at Eight"],
     ["Pitchblack Playback: Mystery Album Club - Post-Modern R&B"],
+    ["Haxan: Witchcraft Through the Ages + Live Score"],
+    ["Silent Film & Live Music: A Colour Box"],
+    ["Cine-Concert: new short films with live music"],
+    ["Preview Screening & Concert"],
   ])("does not flag '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(false);
   });

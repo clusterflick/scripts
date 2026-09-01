@@ -36,6 +36,9 @@ const nonFilmEvents = [
   /Dinner Reservation/i,
   /Conferencing \d+ Hour/i,
   /R&B THURSDAYS/i,
+  // Only the billed-as-a-gig phrasing - a film screened "with live orchestra"
+  // or with a live score is still a film.
+  /Live Concert/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
