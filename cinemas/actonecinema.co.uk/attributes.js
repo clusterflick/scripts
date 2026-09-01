@@ -4,7 +4,7 @@ module.exports = {
   alternativeNames: ["ActOne Cinema & Café"],
   domain: "https://actonecinema.co.uk",
   socials: {
-    letterboxd: null,
+    letterboxd: "ActOneCinema",
     twitter: "actone_cinema",
     instagram: "actone_cinema",
   },
