@@ -286,7 +286,7 @@ for local development without running the full pipeline:
 
 The `-for` variants take one or more venue ids (e.g. `thelexicinema.co.uk`) and
 suggest close matches if an id isn't in the release. Use these to inspect what
-the pipeline actually produced for a venue without downloading all 300+.
+the pipeline actually produced for a venue without downloading all 400+.
 
 **Requirements:** `curl`, `wget`, and `jq` (for the 10-days and `-for` scripts)
 

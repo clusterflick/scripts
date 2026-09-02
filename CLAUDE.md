@@ -40,7 +40,7 @@ npm run format         # Format with Prettier (JS, JSON, MD)
 
 ```
 index.js                 # CLI entry point (retrieve|transform|combine|match|cache|diff|registry|departed|health)
-cinemas/                 # 300+ cinema venue modules (each has attributes/retrieve/transform)
+cinemas/                 # 400+ cinema venue modules (each has attributes/retrieve/transform)
 sources/                 # 9 external ticketing platform modules
 common/                  # Shared utilities (utils.js, normalize-title.js, get-movie-data.js, etc.)
 scripts/                 # Pipeline stages: retrieve/, transform/, combine/, match/, cache/, diff/,
