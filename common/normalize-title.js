@@ -40,6 +40,10 @@ function normalizeTitle(title, options) {
     // Venues spell the stage-production suffix with a dash or a colon, so
     // match the separator rather than carrying a phrase per spelling.
     [/\s*(?:[-–]\s*)?:?\s*The Play\.?\s*$/i, ""],
+    // Only a title that ends on the label is a marathon of the films named
+    // before it; "The Hunger Games: Marathon Screening" is its own event and
+    // keeps the word, so anchor rather than carry ": Marathon" as a phrase.
+    [/:\s*Marathon$/i, ""],
     ["The Fishermen", "The Fisherman"], // NOTE: This can be removed in the future once this specific misname has been removed
     ["ESCAPES_ ", "Escapes: "],
     [/\bscreenin:/i, "screening:"],
@@ -47,10 +51,17 @@ function normalizeTitle(title, options) {
     // suffix-stripping that leaves every other listing as "neo city seoul"
     // never fires and the same show arrives under a second name.
     ["NEO CITY : SEOUL THE REDLINE", "NEO CITY : SEOUL - THE REDLINE"],
+    // One venue drops the strand from the title, so the same late screening
+    // arrives under a second name. Anchored because the listings that do carry
+    // the strand must not have it prefixed a second time.
+    [/^WET & MESSY$/i, "VHS Late Tapes: WET & MESSY"],
     // FrightFest bills one of its two screenings with the wrong subtitle, so
     // the same film arrives under two names and only the other one matches.
     // NOTE: This can be removed once the misnamed screening has passed
     ["Rubberhead: The Life & Times", "Rubberhead: The Life & Monsters"],
+    // The shorts programme is billed with a slash where every other listing
+    // uses an ampersand, so the same programme arrives under a second name.
+    ["Life / Drawing", "Life & Drawing"],
     ["JOY + ", "JOY & "],
     ["Music with Tara Franks + ", "Music with Tara Franks & "],
     ["Storytelling + ", "Storytelling & "],
