@@ -8,6 +8,7 @@ const {
   createPerformance,
   createAccessibility,
   createFormat,
+  isPrivateHire,
 } = require("../../common/utils");
 const { extractPeopleNames } = require("../../common/extract-people");
 const { parseDate } = require("./utils");
@@ -21,13 +22,23 @@ function getAccessibilityFrom(rawNote) {
 }
 
 async function transform({ moviePages }, sourcedEvents) {
-  const movies = Object.keys(moviePages).map((movieUrl) => {
+  const moviePageUrls = Object.keys(moviePages);
+  if (moviePageUrls.length === 0) {
+    throw new Error("No movies found - the page structure may have changed");
+  }
+
+  const movies = moviePageUrls.flatMap((movieUrl) => {
     const id = new URLSearchParams(new URL(movieUrl).search).get(
       "programme_id",
     );
     const moviePage = moviePages[movieUrl];
     const $ = cheerio.load(moviePage);
     const title = getText($(".prog-title"));
+
+    // Don't pull data for entries which aren't bookable films - screen hire is
+    // sold as a programme of its own, listed alongside the films
+    if (isPrivateHire(title)) return [];
+
     const youtubeId = $(".ytvideo").data("video");
     const accessibilityFromSynopsis = {};
     const commonPerformanceNotes = [];
@@ -103,10 +114,6 @@ async function transform({ moviePages }, sourcedEvents) {
       },
     };
   });
-
-  if (movies.length === 0) {
-    throw new Error("No movies found - the page structure may have changed");
-  }
 
   const listOfSourcedEvents = Object.values(sourcedEvents).flatMap(
     (events) => events,
