@@ -405,8 +405,6 @@ const knownRemovablePhrases = [
   "with Punishment Poll",
   "with Writer/Director Q&A",
   "w/ Reece Shearsmith intro",
-  "w/ Ben Wheatley Q&A",
-  "w/ Peter Strickland Q&A",
   "(BFI Classics) with David Forrest",
   "/ Broken Social Scene",
   "with the Hungarian Cultural Centre",
