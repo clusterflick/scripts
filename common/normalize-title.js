@@ -696,6 +696,18 @@ function normalizeTitle(title, options) {
     ],
     ["Tabby McTat + The Highway Rat", "Tabby McTat & The Highway Rat"],
     [
+      "We're Going on a Bear Hunt + The Tiger Who Came to Tea",
+      "We're Going on a Bear Hunt & The Tiger Who Came to Tea",
+    ],
+    [
+      "Cane Toads: An Unnatural History + Animalicious",
+      "Cane Toads: An Unnatural History & Animalicious",
+    ],
+    [
+      "Hidden in Pieces + Night of the Hunter",
+      "Hidden in Pieces & Night of the Hunter",
+    ],
+    [
       "Looney tunes: The day the world blew up",
       "Looney tunes: The day the earth blew up",
     ],
@@ -1332,6 +1344,16 @@ function normalizeTitle(title, options) {
   knownRemovablePhrases.forEach((phrase) => {
     title = title.replace(phrase.toLowerCase(), "");
   });
+
+  // Venues credit whoever is doing the Q&A, so the phrase varies by guest and
+  // by spelling ("w/" or "with"). One pattern rather than a string per guest,
+  // bounded to a short credit so a title is never eaten up to a later "Q&A".
+  // Runs after the phrase list so the longer phrases that also start on "with"
+  // still match in full.
+  title = title.replace(
+    /\s+w(?:ith|\/)\s+(?:[\w'./-]+\s+){0,3}q(?:&|\+)a\b/i,
+    "",
+  );
 
   const hasYear = title.trim().match(/\(\d{4}\)$/);
   if (hasYear) {
