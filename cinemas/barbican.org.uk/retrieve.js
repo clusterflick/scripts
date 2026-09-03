@@ -1,37 +1,27 @@
-const cheerio = require("cheerio");
 const { fetchJson, fetchText, getText } = require("../../common/utils");
-const { getParams } = require("./utils");
+const { walkListing } = require("./utils");
 const { domain } = require("./attributes");
 
 async function retrieve() {
   const movieIds = new Set();
   const movieTitles = new Map();
 
-  let page = 0;
-  while (true) {
-    const responseData = await fetchJson(
-      `${domain}/views/ajax?${getParams(page)}`,
-    );
-    const { data } = responseData.find(
-      ({ method }) =>
-        method === "infiniteScrollInsertView" || method === "replaceWith",
-    );
+  await walkListing(
+    (url) => fetchJson(url),
+    ($) => {
+      $(".listing--event").each(function () {
+        const movieId = $(this)
+          .find("button.saved-event-button")
+          .data("saved-event-id");
 
-    const $ = cheerio.load(data);
-
-    if ($(".no-result-message").length > 0) break;
-
-    $(".listing--event").each(function () {
-      const movieId = $(this)
-        .find("button.saved-event-button")
-        .data("saved-event-id");
-
-      movieIds.add(movieId);
-      movieTitles.set(movieId, getText($(this).find(".listing-title--event")));
-    });
-
-    page++;
-  }
+        movieIds.add(movieId);
+        movieTitles.set(
+          movieId,
+          getText($(this).find(".listing-title--event")),
+        );
+      });
+    },
+  );
 
   const moviePages = [];
   for (const movieId of movieIds) {

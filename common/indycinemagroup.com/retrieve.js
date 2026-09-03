@@ -1,8 +1,4 @@
-const variables = {
-  limit: 1000,
-  orderBy: "magic",
-  type: "all-published",
-};
+const { listingRequest } = require("./utils");
 
 const query = `
 query ($limit: Int, $orderBy: String, $type: String) {
@@ -52,16 +48,8 @@ query ($limit: Int, $orderBy: String, $type: String) {
 }
 `;
 
-async function retrieve({ siteId, domain }) {
-  const response = await fetch(`${domain}/graphql`, {
-    method: "POST",
-    body: JSON.stringify({ query, variables }),
-    headers: {
-      "Content-Type": "application/json",
-      "client-type": "consumer",
-      cookie: `site_id=${siteId}`,
-    },
-  });
+async function retrieve(attributes) {
+  const response = await fetch(...listingRequest(attributes, query));
 
   return await response.json();
 }

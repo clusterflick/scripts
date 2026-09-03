@@ -1,5 +1,4 @@
 const cheerio = require("cheerio");
-const { parse, isBefore, startOfDay, addYears, subDays } = require("date-fns");
 const {
   getText,
   createOverview,
@@ -9,7 +8,11 @@ const {
   generateShowingId,
 } = require("../utils");
 const { isNotSportShowing } = require("../is-sport-showing");
-const { getFilmSlug } = require("./utils");
+const {
+  getFilmSlug,
+  findScreeningDateText,
+  parseScreeningDate,
+} = require("./utils");
 
 function parseDurationToMins(value) {
   // Structured data durations are ISO 8601, e.g. "PT148M"
@@ -48,25 +51,6 @@ function getFilmDetails(html, filmSlug) {
   };
 }
 
-function parseScreeningDate(dateText, timeText) {
-  const dateOnly = parse(dateText, "EEE, MMM d", new Date());
-  const parsedDate = parse(timeText, "h:mm a", dateOnly);
-
-  if (isNaN(parsedDate.getTime())) {
-    throw new Error(
-      `Unable to parse screening date: "${dateText}" / "${timeText}"`,
-    );
-  }
-
-  // If the date is more than 14 days in the past, it's likely a year-boundary
-  // case (e.g. a December showing scraped in January) and we need to add a year.
-  // Events within 14 days may just be recently passed events still listed on the page.
-  const today = startOfDay(new Date());
-  if (isBefore(parsedDate, subDays(today, 14))) return addYears(parsedDate, 1);
-
-  return parsedDate;
-}
-
 async function transform(
   attributes,
   { screeningPages, soldOutDetails, filmPages },
@@ -95,14 +79,7 @@ async function transform(
       const url = `${domain}${href}`;
       const filmSlug = getFilmSlug(href);
 
-      let dateText;
-      $card.find("span").each((j, span) => {
-        const text = getText($(span));
-        if (/^\w+, \w+ \d+$/.test(text)) {
-          dateText = text;
-          return false;
-        }
-      });
+      const dateText = findScreeningDateText($, $card);
 
       let timeText;
       $card.find("[data-checkout-screening] span").each((j, span) => {

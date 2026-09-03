@@ -1,6 +1,7 @@
 const cheerio = require("cheerio");
 const { fetchText, assertSelector } = require("../../common/utils");
 const { url } = require("./attributes");
+const { isFilmEntry } = require("./utils");
 
 async function retrieve() {
   const movieListPage = await fetchText(url);
@@ -9,7 +10,7 @@ async function retrieve() {
 
   const moviePageUrls = new Set();
   $(".event-summary").each(function () {
-    if (!$(this).text().includes("Catch a movie")) return;
+    if (!isFilmEntry($(this))) return;
 
     const href = $(this).closest("a").attr("href");
     if (href) moviePageUrls.add(href);

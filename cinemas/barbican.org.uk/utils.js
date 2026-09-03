@@ -1,4 +1,6 @@
+const cheerio = require("cheerio");
 const { getText } = require("../../common/utils");
+const { domain } = require("./attributes");
 
 const sanitizeDatetime = ($timeEl) => {
   const datetime = $timeEl.attr("datetime");
@@ -39,6 +41,53 @@ const getParams = (page) =>
     // Pagination
     page,
   });
+
+// The cinema listing is an infinite scroll served by Drupal's ajax endpoint.
+// Each page answers with a list of command envelopes of which exactly one
+// carries the markup - `replaceWith` for the first page, `infiniteScrollInsertView`
+// for the rest - and the page past the end carries a no-results message rather
+// than an empty list, which is the only stopping signal there is.
+//
+// Shared with the health probe, which walks the same pages and stops the same
+// way: the envelope shape and the stop condition are the parts most likely to
+// change under us, and two copies of them would drift.
+const LISTING_COMMANDS = ["infiniteScrollInsertView", "replaceWith"];
+
+const extractListingMarkup = (commands) => {
+  const command = commands.find(({ method }) =>
+    LISTING_COMMANDS.includes(method),
+  );
+  if (!command) {
+    throw new Error(
+      `No listing markup in the ajax response (commands: ${commands
+        .map(({ method }) => method || "(unnamed)")
+        .join(", ")})`,
+    );
+  }
+  return command.data;
+};
+
+// Walk the listing from its first page to its last, handing each page's parsed
+// markup to `onPage`. `fetchPage` is the caller's own JSON fetch, so the
+// retrieve and the probe each bring their own error handling - the probe has to
+// tell a challenge from an outage, and a plain fetch cannot.
+//
+// Bounded because this runs hourly as a probe: an endpoint that stops serving
+// the no-results message would otherwise walk for ever. 20 pages is 600 events
+// against the 93 the cinema listing held when this was written.
+const MAX_LISTING_PAGES = 20;
+
+const walkListing = async (fetchPage, onPage) => {
+  for (let page = 0; page < MAX_LISTING_PAGES; page += 1) {
+    const commands = await fetchPage(`${domain}/views/ajax?${getParams(page)}`);
+    const $ = cheerio.load(extractListingMarkup(commands));
+    if ($(".no-result-message").length > 0) return;
+    onPage($);
+  }
+  throw new Error(
+    `Exceeded ${MAX_LISTING_PAGES} listing pages - the stopping condition may have changed`,
+  );
+};
 
 const convertDurationStringToMinutes = (duration) => {
   if (!duration) return undefined;
@@ -111,6 +160,7 @@ const getDirectorDuration = (value) => {
 
 module.exports = {
   getParams,
+  walkListing,
   convertDurationStringToMinutes,
   getYear,
   getDirectorDuration,

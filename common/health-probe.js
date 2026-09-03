@@ -162,9 +162,15 @@ const probeDocument = async (url, options) => {
   };
 };
 
-const probeText = async (url, options) => {
+// `acceptStatuses` is for a source that serves the listing under a status that
+// isn't ok and means nothing by it - the ICA's what's-on has answered 404 with
+// the whole programme in the body. A retrieve tolerating that and a probe
+// failing on it would have the stage red while the pipeline ran fine. Reach for
+// it only where the venue's `retrieve` already tolerates the same status, and
+// never to paper over a status the source means.
+const probeText = async (url, options, { acceptStatuses = [] } = {}) => {
   const { response, body } = await probeFetch(url, options);
-  if (response.ok) return body;
+  if (response.ok || acceptStatuses.includes(response.status)) return body;
   throw classifyFailure(url, response, body);
 };
 

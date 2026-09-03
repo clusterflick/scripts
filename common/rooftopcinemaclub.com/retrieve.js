@@ -1,20 +1,14 @@
 const cheerio = require("cheerio");
 const { fetchText, fetchJson } = require("../utils");
-const { getFilmSlug } = require("./utils");
-
-const NO_SCREENINGS_TEXT = "no upcoming screenings";
+const { getFilmSlug, walkScreeningPages } = require("./utils");
 
 async function retrieve({ domain, url }) {
   const screeningPages = [];
-  let page = 1;
 
-  while (true) {
-    const html = await fetchText(`${url}/screenings/list?page=${page}`);
-    const isLastPage = html.toLowerCase().includes(NO_SCREENINGS_TEXT);
-    if (isLastPage) break;
-    screeningPages.push(html.trim());
-    page++;
-  }
+  await walkScreeningPages(
+    (page) => fetchText(`${url}/screenings/list?page=${page}`),
+    (html) => screeningPages.push(html),
+  );
 
   // Sold-out cards only show doors-open time on the listing page.
   // Fetch the screening details endpoint to get accurate start times.

@@ -5,11 +5,7 @@ const {
   retrieveEventBooking,
 } = require("../../common/spektrix");
 const { domain } = require("./attributes");
-
-const spektrixClient = "jw3";
-
-const getSearchUrl = (page = 1) =>
-  `${domain}/whats-on?genres[]=19&max=27&page=${page}`;
+const { spektrixClient, getSearchUrl, LISTING_LINK } = require("./utils");
 
 async function retrieve() {
   const movieListPages = [];
@@ -18,7 +14,7 @@ async function retrieve() {
   while (true) {
     const searchResults = await fetchText(getSearchUrl(page));
     const $ = cheerio.load(searchResults);
-    const urlsOnPage = $(".eventCard .thumb a")
+    const urlsOnPage = $(LISTING_LINK)
       .map((i, el) => $(el).attr("href"))
       .get();
     if (urlsOnPage.length === 0) break;

@@ -1,9 +1,9 @@
 const { fetchText } = require("../../common/utils");
+const { extractEvents } = require("./utils");
 
 async function retrieve({ url }) {
   const page = await fetchText(url);
-  const events = page.match(/<script>\s*var\s+Events\s+=\s+(.*)\s+<\/script>/i);
-  const movieListPage = JSON.parse(events[1]);
+  const movieListPage = extractEvents(page);
 
   // Fetch the individual movie pages to get full descriptions
   const moviePages = {};

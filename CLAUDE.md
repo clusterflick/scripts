@@ -46,7 +46,7 @@ common/                  # Shared utilities (utils.js, normalize-title.js, get-m
 scripts/                 # Pipeline stages: retrieve/, transform/, combine/, match/, cache/, diff/,
                          #   registry/, departed/, health/
 helpers/                 # Dev helper scripts (data download, manual matching)
-docs/                    # Pipeline documentation (retrieve.md, transform.md)
+docs/                    # Pipeline documentation (retrieve.md, transform.md, health.md)
 schema.json              # JSON Schema for output validation
 ```
 
@@ -90,34 +90,69 @@ that would otherwise 404. It writes a separate artifact deliberately: nothing
 reading `combined-data.json` — the match stage, the client payload, the listings
 — should see films that aren't screening.
 
-`health` sits outside the pipeline. It probes a chain's listing endpoint,
-asserts the response is healthy and writes one row per venue to
-`health-data/<group>` - it never opens a per-title page, so the whole Odeon
-estate costs 2 requests against a retrieve's 323, cheap enough to run hourly.
-Its unit is a chain group (the id prefix the venues share) rather than a venue,
-because one batched call can answer for all of them; a standalone venue can
-carry its own probe as an optional `health` export beside `retrieve` and
-`transform`. A group whose venues sit on separate domains - Castle and Olympic
-Studios - has no id prefix and nothing to batch, so each venue exports the
-`health` its siblings share from `common/<chain>/health.js`, one line apiece.
+`health` sits outside the pipeline, and `docs/health.md` is its reference -
+which venues are covered, what each probe can and cannot see, and what fails the
+job. It probes a chain's listing endpoint, asserts the response is healthy and
+writes one row per venue to `health-data/<group>` - it never opens a per-title
+page, so the whole Odeon estate costs 2 requests against a retrieve's 323, cheap
+enough to run hourly. Its unit is a chain group (the id prefix the venues share)
+rather than a venue, because one batched call can answer for all of them; a
+standalone venue can carry its own probe as an optional `health` export beside
+`retrieve` and `transform`. A group with no single call to batch - Castle,
+Olympic Studios, Savoy Systems, CineSync and IndyCinemaGroup on separate
+domains; Rooftop and Tate sharing a site but with a listing apiece - has nothing
+for a group probe to save, so each venue exports the `health` its siblings share
+from `common/<chain>/health.js`, one line apiece. Where that shared probe needs
+the venue's own listing url or view parameters, the cinema module binds them the
+way its `retrieve` does rather than re-exporting bare: Tribe Events is the
+example, and JW3 and Dugdale are both Spektrix venues whose probes have nothing
+in common beyond the helper.
 
 What a chain can count varies, and the row's `granularity` says which: Odeon,
 Curzon and Cineworld give a film x date matrix (`film-date`), while
-Picturehouse, Vue, Electric, Castle, Admit One and Olympic Studios return
-individual showings (`performance`). `byDate` is the same axis either way -
-films per date, or performances per date - so a publish reads the same
-everywhere: new keys appearing, or existing keys growing. Omniplex is the
-exception, and says so with a third value: it publishes one date at a time, so
-its film x date matrix costs a request per published date - 54 at Sutton - which
-is what the retrieve pays and too much to repeat hourly. Its probe counts the
-two axes rather than their product (`film-and-date-totals`), reports no `byDate`
-at all rather than one built from a fraction of the dates, and a publish there
-reads as either total growing. Each probe checks the chain's own site list
-before asking for listings - that is what separates a venue with nothing on from
-an id that has gone stale; some chains answer a stale id with that list instead
-of a 404, which does the same job. These endpoints are quirkier than they look,
-and each probe documents its own traps at the top of `common/<chain>/health.js`:
-read it before changing a call or a parameter.
+Picturehouse, Vue, Electric, Castle, Admit One, Olympic Studios, Savoy Systems,
+Rooftop, IndyCinemaGroup, Tribe Events, JW3, Prince Charles, the Garden Cinema,
+The Nickel, the ICA, Riverside Studios, Wilton's, Curzon Sea Containers and the
+Science Museum return individual showings (`performance`). `byDate` is the same
+axis either way - films per date, or performances per date - so a publish reads
+the same everywhere: new keys appearing, or existing keys growing.
+
+Two kinds of source cannot answer that cheaply, and each says so with a
+granularity of its own rather than borrowing one that promises dates it doesn't
+have. Omniplex and CineSync publish one date at a time, so their film x date
+matrix costs a request per published date - 54 at Sutton, 256 at Lumiere
+Romford - which is what the retrieve pays and too much to repeat hourly. Their
+probes count the two axes rather than their product (`film-and-date-totals`),
+report no `byDate` at all rather than one built from a fraction of the dates,
+and a publish there reads as either total growing. CineSync adds a wrinkle: its
+calendar is capped at one page and says so only by coming back full, so a capped
+count is reported as the floor it is (`datesAtLeast` rather than `dates`).
+
+The Barbican, Tate and Dugdale have no date to count at all: their listing cards
+carry a title and a blurb and nothing else, or - at Tate - a start date written
+nine different ways that the transform reads off the event page instead. Their
+probes report a film total (`film-totals`) and no `byDate`, which catches the
+listing breaking, the film filter changing and the programme emptying, but
+cannot see a publish that adds dates to films already listed. Prefer a probe
+that can count dates; reach for this one only when the cheap endpoint genuinely
+has none, and say in the probe why.
+
+Each probe checks the chain's own site list before asking for listings - that is
+what separates a venue with nothing on from an id that has gone stale; some
+chains answer a stale id with that list instead of a 404, which does the same
+job. A venue on its own domain has no id to go stale, but where the probe counts
+from somewhere other than the venue's own site - JW3 counts from Spektrix - it
+reads that site first for the same reason. These endpoints are quirkier than
+they look, and each probe documents its own traps at the top of
+`common/<chain>/health.js`: read it before changing a call or a parameter.
+
+A probe reports what the source publishes, which is not always what we go on to
+publish: an archive endpoint is counted from today onwards (IndyCinemaGroup
+serves showings back to 2024, and counting them would leave a venue whose
+programme had emptied still reporting two hundred dates), while a general
+what's-on is counted as it stands, comedy nights and all, because dropping the
+non-film events is a judgement about listings rather than an observation about
+the source.
 
 A bot challenge is retried once after about a minute before it is recorded,
 because a challenge that clears was never worth a row - the point is complete

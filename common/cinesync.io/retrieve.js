@@ -1,4 +1,10 @@
-const { fetchSignedJson } = require("./utils");
+const {
+  fetchSignedJson,
+  apiUrlFor,
+  getDatesQueryBody,
+  getNowShowingQueryBody,
+  getDatesFrom,
+} = require("./utils");
 
 // The calendar endpoint answers with at most one page of dates and misreports
 // that it has done so: `total_pages` always comes back as 1, asking for page 2
@@ -10,29 +16,6 @@ const { fetchSignedJson } = require("./utils");
 // A single film's date list is served by the same endpoint but isn't capped in
 // practice, so when the calendar comes back full we ask each film on sale for
 // its own dates and screen those days too.
-
-const getDatesQueryBody = (cinema_location_id, url_key = "") => ({
-  api: "dates",
-  sales_channel_id: 1,
-  cinema_location_id,
-  page_number: "1",
-  url_key,
-  widget_id: "movie_calendar",
-  calendar_date_picker_option: "1",
-});
-
-// The list of films currently on sale, independent of any date. `has_limit: 0`
-// does turn off paging here, so this arrives complete in one call.
-const getNowShowingQueryBody = (cinema_location_id) => ({
-  api: "list",
-  sales_channel_id: 1,
-  cinema_location_id,
-  widget_id: "now_showing_list",
-  has_limit: 0,
-  per_page: 100,
-  page_number: 1,
-  url_key: "",
-});
 
 const getPerformancesQueryBodyFor = (cinema_location_id, session_date) => ({
   sales_channel_id: 1,
@@ -49,11 +32,8 @@ const getPerformancesQueryBodyFor = (cinema_location_id, session_date) => ({
   sort_by: "showtime",
 });
 
-const getDatesFrom = (page) =>
-  (page.data?.dates ?? []).map(({ session_start_date }) => session_start_date);
-
 async function retrieve({ apiKey, apiDomain, locationId }) {
-  const apiUrl = `${apiDomain}/api_v3/cms_widget/index`;
+  const apiUrl = apiUrlFor(apiDomain);
   const movieDatesPage = await fetchSignedJson(
     apiKey,
     apiUrl,
