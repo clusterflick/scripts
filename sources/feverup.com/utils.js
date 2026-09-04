@@ -49,27 +49,6 @@ function extractPlanGrid(transferState, url) {
 }
 
 /**
- * Extract the ids of every plan a venue is hosting, from its venue page. Venue
- * pages still run the older Astro-rendered template rather than the Angular one
- * the plan and listing pages moved to, so their state lives in a different tag.
- */
-function extractVenuePlanIds(html, url) {
-  const $ = cheerio.load(html);
-  const scriptEl = $("script#astro-tools-transfer-state");
-  if (!scriptEl.length) {
-    throw new Error(
-      `Missing script#astro-tools-transfer-state in page: ${url}`,
-    );
-  }
-
-  const planIdList = JSON.parse(scriptEl.html())["page-config"]?.planIdList;
-  if (!planIdList) {
-    throw new Error(`Missing page-config.planIdList in page: ${url}`);
-  }
-  return planIdList;
-}
-
-/**
  * Extract unique session times from an iterable of session responses.
  * Each response has level.items[] (time slots) with nested session items
  * (ticket tiers) that share the same start/end time.
@@ -101,6 +80,5 @@ function extractSessionTimes(sessionResponses) {
 module.exports = {
   extractTransferState,
   extractPlanGrid,
-  extractVenuePlanIds,
   extractSessionTimes,
 };

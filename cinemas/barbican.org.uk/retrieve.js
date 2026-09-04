@@ -1,6 +1,6 @@
 const cheerio = require("cheerio");
 const { fetchJson, fetchText, getText } = require("../../common/utils");
-const { getParams } = require("./utils");
+const { getParams, isArchivedListing } = require("./utils");
 const { domain } = require("./attributes");
 
 async function retrieve() {
@@ -22,12 +22,19 @@ async function retrieve() {
     if ($(".no-result-message").length > 0) break;
 
     $(".listing--event").each(function () {
-      const movieId = $(this)
+      const $listing = $(this);
+      const title = getText($listing.find(".listing-title--event"));
+      const movieId = $listing
         .find("button.saved-event-button")
         .data("saved-event-id");
 
+      if (movieId === undefined) {
+        if (isArchivedListing($listing)) return;
+        throw new Error(`Missing event id in listing: "${title}"`);
+      }
+
       movieIds.add(movieId);
-      movieTitles.set(movieId, getText($(this).find(".listing-title--event")));
+      movieTitles.set(movieId, title);
     });
 
     page++;
