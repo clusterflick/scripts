@@ -9,11 +9,7 @@ const { dailyCache } = require("../../common/cache.js");
 const { getAllCinemaAttributes } = require("../../cinemas");
 const { findMatchingCinema } = require("../../common/source-utils");
 const attributes = require("./attributes");
-const {
-  extractTransferState,
-  extractPlanGrid,
-  extractVenuePlanIds,
-} = require("./utils");
+const { extractTransferState, extractPlanGrid } = require("./utils");
 
 // Fever files a city's plans under "what plan filters" (its categories), and
 // its Cinema filter can't be relied on to hold the screenings: a dinner served
@@ -24,13 +20,19 @@ const {
 //
 // That catalogue is ranked and capped at 250 rather than exhaustive, so it can
 // only be a way in: it tells us which venues Fever hosts, not everything they
-// have on. A venue's own page is authoritative about that, so each venue we
-// recognise gets read directly - which is what turns up the screenings sitting
-// below the cap.
+// have on. A venue's own plan list is authoritative about that, so each venue
+// we recognise gets read directly - which is what turns up the screenings
+// sitting below the cap. That list is itself paged, and venues do run past the
+// first page, so it is followed to the end rather than stopping at page one.
 const CATALOGUE_WPF_ID = 967;
 const CITY_CODE = "LON";
-const CITY_SLUG = "london";
+// The plan list keys a venue's plans by Fever's numeric city id rather than by
+// the code the catalogue takes.
+const CITY_ID = 11;
 const PLANS_PER_PAGE = 48;
+// 20 is the largest page the venue plan list accepts - it answers anything
+// above it with a 400 rather than clamping.
+const VENUE_PLANS_PER_PAGE = 20;
 
 // How far ahead to ask for a plan's calendar. Fever caps how much availability
 // it will return, so this is an upper bound rather than a promise.
@@ -70,8 +72,9 @@ function getPlanApiUrl(planId) {
   return `${attributes.domain}/api/4.4/plans/${planId}/`;
 }
 
-function getVenueUrl(slug) {
-  return `${attributes.domain}/en/${CITY_SLUG}/venue/${slug}`;
+// A venue's plans - the call its own page makes to fill its listing grid.
+function getVenuePlansApiUrl(slug, page) {
+  return `${attributes.domain}/api/4.2/plans/?city_id=${CITY_ID}&items_per_page=${VENUE_PLANS_PER_PAGE}&page=${page}&place_slug=${slug}`;
 }
 
 function getAvailabilityApiUrl(planId, placeId, from, to) {
@@ -134,8 +137,8 @@ async function fetchPlanDetail(planId) {
 }
 
 /**
- * Every plan id the venues we recognise are hosting, read from their own pages
- * rather than from the capped catalogue.
+ * Every plan id the venues we recognise are hosting, read from their own plan
+ * lists rather than from the capped catalogue.
  */
 async function fetchPlanIdsAtKnownVenues(knownCinemas, planDetails) {
   const slugs = new Set();
@@ -147,10 +150,16 @@ async function fetchPlanIdsAtKnownVenues(knownCinemas, planDetails) {
 
   const planIds = new Set();
   for (const slug of slugs) {
-    const url = getVenueUrl(slug);
-    const html = await fetchCached(`feverup-venue-${slug}`, fetchText, url);
-    for (const planId of extractVenuePlanIds(html, url)) {
-      planIds.add(planId);
+    let page = 1;
+    while (true) {
+      const { results, next: nextPage } = await fetchCached(
+        `feverup-venue-plans-${slug}-${page}`,
+        fetchJson,
+        getVenuePlansApiUrl(slug, page),
+      );
+      for (const { id } of results) planIds.add(id);
+      if (!nextPage) break;
+      page++;
     }
   }
   return planIds;
