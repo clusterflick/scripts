@@ -85,6 +85,16 @@ const isOneOffEventByline = ($) => {
   return /,\s*\d{1,2}:\d{2}$/.test(getText($bylineTime));
 };
 
+// A listing carries its event id on the "save this event" button, and the
+// Barbican leaves that button off an event it has archived - there is nothing
+// left to save on a cancelled run. Such a listing has no id to look up and no
+// performances behind it, so it is dropped rather than followed to
+// /node/undefined. This is the only reason a listing legitimately has no id:
+// a listing missing the button without the label is a markup change, and
+// retrieve throws on it rather than quietly dropping a film that is on sale.
+const isArchivedListing = ($listing) =>
+  $listing.find(".search-listing__label--archived").length > 0;
+
 // Names of the event's ticketing products, read from the analytics dataLayer.
 // They spell out provisions the listing markup leaves off, e.g. "Outdoor
 // Cinema: Weathering With You (12A) (AD & Captioned)". An event with no
@@ -117,4 +127,5 @@ module.exports = {
   sanitizeDatetime,
   isOneOffEventByline,
   getTicketProductNames,
+  isArchivedListing,
 };
