@@ -70,7 +70,9 @@ function normalizeTitle(title, options) {
     [" + Zog", " and Zog"],
     ["Zog + ", "Zog & "],
     [" + Superworm", " and Superworm"],
-    [" + The Gruffalo's Child", " and The Gruffalo's Child"],
+    // The double bill is billed with and without the definite article, so the
+    // separator rule would otherwise drop the second film from one of them.
+    [/ \+ (?:The )?Gruffalo's Child/i, " and The Gruffalo's Child"],
     [" + The Scarecrow's Wedding", " and The Scarecrow's Wedding"],
     [" + 28YL: The Bone Temple", " "],
     [" + The Bone Temple (", " "],
@@ -94,6 +96,19 @@ function normalizeTitle(title, options) {
     // Remove prefix separators which will cause later processing to strip the wrong section
     [/Star Wars: Ep(?:isode)? ([IV]+) - /i, "Star Wars: Episode $1 "], // Remove the dash
     ["Rafadan Tayfa - Kapadokya", "Rafadan Tayfa: Kapadokya"],
+    // The restoration is billed with the strand spelled as "<film> - The Madness
+    // Film: 4K Restoration". Removed here rather than in the phrase list, which
+    // runs after the "film:" prefix rule has already read that colon as a
+    // prefix separator and thrown the film title away.
+    [/\s*-\s*The Madness Film: 4K Restoration/i, ""],
+    // The strand bills every film as "KinoTage: <director> - <movie>", with the
+    // separator spelled as a hyphen or an en dash, so the later separator rule
+    // would keep the director and drop the film. Strip the director credit here
+    // and leave the strand prefix for the phrase list to remove.
+    [
+      /^KinoTage(?: Opening Screening)?:\s+[^-–:]+\s+[-–]\s+(.+)$/i,
+      "KinoTage: $1",
+    ],
     ["Reel Talk - ", "Reel Talk: "],
     ["Average Rob -", "Average Rob:"],
     ["Roger Waters -", "Roger Waters:"],
@@ -1120,6 +1135,11 @@ function normalizeTitle(title, options) {
     ["Art is my Therapy - ", "Art is my Therapy: "],
     [/^Fall 2$/i, "Fall 2: Deadpoint"],
     [/^9\s*(?:[-–—]|to)\s*5$/i, "Nine to Five"],
+    // Venues credit a partner organisation on the end of the title and the
+    // partner changes with the event, so one pattern rather than a string per
+    // organisation. Bounded by a closing bracket for the listings that wrap
+    // the credit in one.
+    [/\s*\bin association with\b[^)]*/i, ""],
     // ODEON are idiots -- correct their years
     ["THE HUNGER GAMES (2026)", "THE HUNGER GAMES (2012)"],
     [
@@ -1340,6 +1360,10 @@ function normalizeTitle(title, options) {
     /(^|\s+)\d+th ann(iversary)?( screenings?)?( edition)?( show)?( cut)?( of)?(\s+|$|:)/i,
     " ",
   );
+
+  // Venues spell the cut with and without the possessive apostrophe and the
+  // definite article, so one pattern rather than a string per spelling.
+  title = title.replace(/\b(?:the )?directors?'?s? cut\b/i, "");
 
   knownRemovablePhrases.forEach((phrase) => {
     title = title.replace(phrase.toLowerCase(), "");
