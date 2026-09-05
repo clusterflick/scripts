@@ -44,6 +44,10 @@ const nonFilmEvents = [
   /1-to-1 Single .+ Meetup/i,
   /Dinner Reservation/i,
   /Conferencing \d+ Hour/i,
+  // The end-of-term recital a singing course puts on, billed by the course
+  // rather than by the venue. "singing" is kept in the pattern because a
+  // filmmaking course's showcase is a screening of the films it made.
+  /singing course showcase/i,
   /R&B THURSDAYS/i,
   // Only the billed-as-a-gig phrasing - a film screened "with live orchestra"
   // or with a live score is still a film.
