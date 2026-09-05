@@ -798,6 +798,12 @@ function normalizeTitle(title, options) {
       "",
     ],
     ["Kinoklub - ", "Kinoklub: "],
+    // The same club lists the meal before its KinoKlub screening as a listing
+    // of its own, naming only the dinner, so the film it belongs to has to be
+    // put back or the dinner arrives as a title in its own right. Anchored so
+    // only a listing that is nothing but the meal is renamed.
+    // NOTE: This can be removed once the screening has passed
+    [/^pre screening dinner$/i, "Kamerdyner (The Butler)"],
     ["Community Cinema at UCL East - ", "Community Cinema at UCL East: "],
     ["Cinema Night London - ", "Cinema Night London: "],
     ["An Afternoon Of Cinema - ", "An Afternoon Of Cinema: "],
@@ -1135,11 +1141,22 @@ function normalizeTitle(title, options) {
     ["Art is my Therapy - ", "Art is my Therapy: "],
     [/^Fall 2$/i, "Fall 2: Deadpoint"],
     [/^9\s*(?:[-–—]|to)\s*5$/i, "Nine to Five"],
+    // The gallery bills each night of the season as "Four Windows and a Room:
+    // <that night's programme>", so every showing of the same season arrives
+    // under a name of its own. The season name is the title here rather than a
+    // strand wrapped around a film, so collapse the subtitle instead of
+    // stripping the prefix.
+    [/^Four Windows and a Room\b.*$/i, "Four Windows and a Room"],
     // Venues credit a partner organisation on the end of the title and the
     // partner changes with the event, so one pattern rather than a string per
-    // organisation. Bounded by a closing bracket for the listings that wrap
-    // the credit in one.
-    [/\s*\bin association with\b[^)]*/i, ""],
+    // organisation. Spelled as "association" or "partnership" depending on the
+    // venue, so match the separator rather than carrying a phrase per wording.
+    // Bounded by a closing bracket for the listings that wrap the credit in one.
+    [/\s*\bin (?:association|partnership) with\b[^)]*/i, ""],
+    // One venue tags its own city onto the end of a title. Anchored to a title
+    // that ends on a closing bracket, because plenty of films end on the words
+    // themselves - "An American Werewolf in London", "A Year in London".
+    [/\)\s+in London$/i, ")"],
     // ODEON are idiots -- correct their years
     ["THE HUNGER GAMES (2026)", "THE HUNGER GAMES (2012)"],
     [
@@ -1165,6 +1182,7 @@ function normalizeTitle(title, options) {
     ["FREE Kids Movie Club: Off to Neverland", "peter pan"],
     ["FREE Kids Movie Club: The Italian Riviera", "luca"],
     ["FREE Kids Movie Club: The Family Madrigal", "encanto"],
+    ["FREE Kids Movie Club: Into the Highlands", "brave"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {

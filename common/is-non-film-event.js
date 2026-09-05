@@ -37,6 +37,11 @@ const nonFilmEvents = [
   /Photography Workshop/i,
   /Adtech Networking/i,
   /Entrepreneurs Meetup/i,
+  // The matrimonial series runs under a different community each time
+  // ("BENGALI MUSLIM MARRIAGE EVENT", "BLACK & AFRICAN MUSLIM MARRIAGE"),
+  // so match the singles-meetup billing they all share rather than
+  // carrying a pattern per community.
+  /1-to-1 Single .+ Meetup/i,
   /Dinner Reservation/i,
   /Conferencing \d+ Hour/i,
   /R&B THURSDAYS/i,
