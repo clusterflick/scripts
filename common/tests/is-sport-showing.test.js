@@ -24,6 +24,7 @@ describe("isSportShowing", () => {
     ["ENGLAND V CROATIA: WORLD CUP 2026 (WEMBLEY)"],
     ["FIFA World Cup Live Screenings"],
     ["Wimbledon Live Screenings & Activities"],
+    ["NFL Redzone Live Screening"],
     ["Aston Villa vs Man City Live Screening"],
     ["Bournemouth vs Liverpool Live Screening"],
     ["Man United vs Man City Live Screening"],
@@ -41,6 +42,7 @@ describe("isSportShowing", () => {
     ["Grand Prix (1966)"],
     ["Fanatic"],
     ["Live Screening"],
+    ["Red Zone Cuba"],
     ["Kramer vs. Kramer"],
   ])("does not flag '%s' as a sport showing", (title) => {
     expect(isSportShowing({ title })).toBe(false);

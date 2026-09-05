@@ -36,6 +36,9 @@ const sportShowings = [
   /TROPHY FINAL/i,
   /Wimbledon Live/i,
   /Wimbledon Finals/i,
+  // A whip-around of the day's NFL fixtures, so there is no team pairing
+  // in the title for the "<Home> vs <Away> Live Screening" rule to catch.
+  /NFL Redzone/i,
   /PLAYOFF FINAL/i,
   /BIG SCREEN FOOTBALL/i,
   // Chains bill league fixtures as "<Home> vs <Away> Live Screening" without

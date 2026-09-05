@@ -26,6 +26,10 @@ describe("isNonFilmEvent", () => {
     ["Neon Naked Life Drawing"],
     ["Advanced Photography Workshop + Photoshoot | London"],
     ["AdTech Networking Social for CEOs & Entrepreneurs Meetup"],
+    ["BENGALI MUSLIM MARRIAGE EVENT | 1-to-1 Single LONDON Meetup | 5th Sept"],
+    [
+      "BLACK & AFRICAN MUSLIM MARRIAGE | 1-to-1 Single LONDON Meetup | 5th Sept",
+    ],
     ["Ocean Film Festival World Tour: 22 OCT - Early Dinner Reservation"],
     ["Conferencing 4 Hour"],
     ["JOHNNIE WALKER PRESENTS R&B THURSDAYS:  KASH/PHARXOH"],
@@ -47,6 +51,7 @@ describe("isNonFilmEvent", () => {
     ["Risky Business"],
     ["Unfinished Business"],
     ["Women in Film & TV networking - LIFF 2025"],
+    ["Single White Female"],
     ["CLASSIC MATINEE: PERFORMANCE"],
     ["Mambar Pierrette - Fashion in Film Festival 2025"],
     ["Official Selection: La Salsa Vive (Salsa Lives)"],
