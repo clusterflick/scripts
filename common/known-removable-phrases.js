@@ -1492,6 +1492,7 @@ const knownRemovablePhrases = [
   "restoration premiere",
   "Phoenix for Nature:",
   "Projecting the Archive:",
+  "UK Premiere Screening",
   "premiere screening",
   "PREMIERE and SOCIAL for ",
   "Premier Cineworld Leicester Sqaure and afterparty",

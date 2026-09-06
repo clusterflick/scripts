@@ -31,6 +31,9 @@ const nonFilmEvents = [
   /Thrift Event/i,
   /Smithsonian Starstruck/i,
   /Neon Naked Life Drawing/i,
+  // A guided tour of the gallery sold alongside its listings, never a
+  // screening.
+  /Discovery Tour/i,
   /Homelessness Research/i,
   /Office Management Show/i,
   /Raver Tots Wembley/i,
