@@ -52,10 +52,14 @@ async function transform({ movieListPage }, sourcedEvents) {
       url: `${attributes.url}#:~:text=${encodeURIComponent(title)}`,
       overview,
       performances,
-      // TODO: Remove matching hints. For some reason Curzon Sea Containers
-      // has used the same description as a different version of the movie for
-      // "Wuthering Heights", so it's matching the 2022 version.
-      // matchingHints: { overview: getText($(this).find(".film-desc")) },
+      // Veezi gives no year and no crew, so the description is the only thing
+      // that separates a new release from an older film of the same name -
+      // and without it the LLM review step declines to run at all.
+      // The trap is a title TheMovieDB holds several versions of: it reuses
+      // one boilerplate synopsis across every adaptation of a novel, which
+      // once matched "Wuthering Heights" to the 2022 version. Watch for that
+      // rather than for descriptions being absent.
+      matchingHints: { overview: description },
     });
   });
 
