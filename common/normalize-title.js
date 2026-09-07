@@ -154,6 +154,16 @@ function normalizeTitle(title, options) {
     ["Closing Night + Awards", "Closing Night and Awards"],
     ["Poetry Slam", "Event: Poetry Slam"],
     ["Scared To Dance -", "Scared To Dance "],
+    // The Manic Street Preachers documentary is billed with dashes between the
+    // three parts of its name, which hasSeparator reads as a separator and
+    // cuts the title down to its first two words.
+    ["Be Pure - Be Vigilant - Behave", "Be Pure Be Vigilant Behave"],
+    // The company bills the ballet with and without the definite article, so
+    // the two venues showing it would otherwise arrive under different names.
+    [
+      /^English National Ballet presents:?\s+(?:the\s+)?/i,
+      "English National Ballet presents ",
+    ],
     ["ODEON Pride Nights - ", "ODEON Pride Nights "],
     ["VIP TV/FILM INDUSTRY SCREENING - ", "VIP TV/FILM INDUSTRY SCREENING: "],
     ["Hitchcock: The Gainsborough Days -", "Hitchcock: The Gainsborough Days "],
@@ -1147,6 +1157,21 @@ function normalizeTitle(title, options) {
     // strand wrapped around a film, so collapse the subtitle instead of
     // stripping the prefix.
     [/^Four Windows and a Room\b.*$/i, "Four Windows and a Room"],
+    // Venues credit whoever plays the score and the performer changes with the
+    // event, so one pattern rather than a string per composer. The wording
+    // either side varies too - "with live score by", "+ Live Score by", or
+    // just "live score by" - so match up to the "score by" that introduces the
+    // credit. The listings that only say "with live score", naming nobody, are
+    // left to the phrase list.
+    [
+      /\s*(?:[+&]\s*)?(?:\bw(?:ith|\/)\s+)?(?:new\s+|live\s+|original\s+)*score\s+(?:lead\s+)?by\s+.*$/i,
+      "",
+    ],
+    // Venues bill a discussion event as "<screening> and <panel> discussion of
+    // <film>", with the wording varying on either side, so match the
+    // "discussion of" that introduces the film rather than carrying a phrase
+    // per spelling.
+    [/^.*\bdiscussion of\s+/i, ""],
     // Venues credit a partner organisation on the end of the title and the
     // partner changes with the event, so one pattern rather than a string per
     // organisation. Spelled as "association" or "partnership" depending on the
@@ -1206,7 +1231,11 @@ function normalizeTitle(title, options) {
   }
 
   const hasPresents = title.match(/\s+presents?:?(?:\s|…)+(.*?)$/i);
-  if (hasPresents) {
+  // A company billing "<company> presents: <work>" is naming its own
+  // production rather than wrapping a strand around a film, and the work's
+  // name on its own collides with the film of it - "Sleeping Beauty" with the
+  // animation. Keep the company on the front, the way the theatre prefixes do.
+  if (hasPresents && !title.startsWith("english national ballet")) {
     title = hasPresents[1];
   }
 
