@@ -1064,7 +1064,6 @@ const knownRemovablePhrases = [
   "Open City Documentary Festival:",
   "Open City Documentary Fest:",
   "Open City Doc Fest:",
-  "Opening Night ",
   "Olivia Laing: The Silver Book",
   "Pavle Vujisic 100:",
   "Phoenix Classics:",

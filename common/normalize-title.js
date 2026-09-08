@@ -1417,6 +1417,15 @@ function normalizeTitle(title, options) {
     title = title.replace(phrase.toLowerCase(), "");
   });
 
+  // A festival's first night is a label wrapped around the film it opens with
+  // ("Opening Night The Sound of the Shaking Earth"), so the words come off and
+  // the film is what's left. They aren't a label when the opening night *is*
+  // the event being sold - a party has no film to fall back to, and stripping
+  // leaves the bare word to group with every other "party" on the listings.
+  // Runs after the phrase list so the longer phrases that also name the opening
+  // night ("BFI LFF: Opening Night Gala") still match in full.
+  title = title.replace(/opening night (?!party\b)/i, "");
+
   // Venues credit whoever is doing the Q&A, so the phrase varies by guest and
   // by spelling ("w/" or "with"). One pattern rather than a string per guest,
   // bounded to a short credit so a title is never eaten up to a later "Q&A".

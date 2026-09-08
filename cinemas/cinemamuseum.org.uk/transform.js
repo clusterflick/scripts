@@ -25,6 +25,26 @@ function parseDate(dateString) {
   return shortform;
 }
 
+// Film clubs and societies hire the museum for the night, and it credits them
+// in the event's category taxonomy rather than anywhere in the blurb - the
+// write-up names them in prose ("Women & Cocaine are back with another
+// screening of ..."), which no attribution pattern would read as a credit.
+// The museum has relabelled the taxonomy from Tribe's default "Event
+// Categories:" to "Presented by:", so the label is checked before the term is
+// read: if it ever goes back to naming plain categories, the credit is dropped
+// rather than invented.
+const PRESENTED_BY_LABEL = /^presented by:/i;
+
+function getFilmLevelNote($) {
+  const $categories = $("#tribe-events-content .tribe-event-categories");
+  if (!PRESENTED_BY_LABEL.test(getText($categories))) return;
+
+  const presenter = getText($categories.find("a"));
+  if (!presenter) return;
+
+  return `Presented by ${presenter}`;
+}
+
 function getDate($) {
   const dateString = getText($(".tribe-event-date-start"));
   const parsedDate = parseDate(dateString);
@@ -98,6 +118,7 @@ async function transform({ moviePages }, sourcedEvents) {
         date,
         url: bookingUrl || url,
         status,
+        notesList: [getFilmLevelNote($)],
         accessibility: createAccessibility(
           movies[showingId].title,
           {},
