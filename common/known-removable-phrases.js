@@ -89,6 +89,7 @@ const knownRemovablePhrases = [
   "at the Royal College of Art",
   "at 235 Shaftesbury Avenue",
   "at Cadogan Hall",
+  "at BMT",
   "at Everyman Barnet",
   "at Everyman Muswell Hill",
   "and Johannas Traum",

@@ -55,6 +55,8 @@ const nonFilmEvents = [
   // Only the billed-as-a-gig phrasing - a film screened "with live orchestra"
   // or with a live score is still a film.
   /Live Concert/i,
+  // An awards ceremony the venue hosts, not a screening.
+  /Social Media Awards/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
