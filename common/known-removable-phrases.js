@@ -225,6 +225,7 @@ const knownRemovablePhrases = [
   "– Family Screening",
   "- Family Screening",
   "– A Fundraiser for Latin Elephant",
+  "– Imagination Library fundraiser",
   "- Genesis Networking",
   "– OperaGlass Works",
   "– Poetry Film Screening and Fundraiser",
