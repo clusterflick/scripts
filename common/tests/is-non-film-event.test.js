@@ -38,6 +38,7 @@ describe("isNonFilmEvent", () => {
     ["LIVE CONCERT: GYPSY DYNAMITE"],
     ["Mary Jane Lowe & Matt Redman Live Concert"],
     ["LIVE CONCERT - FREE ENTRY: Saskia Leigh Martić"],
+    ["National Social Media Awards London"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });
