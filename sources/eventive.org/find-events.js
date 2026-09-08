@@ -96,8 +96,10 @@ async function findEvents(cinema) {
     for (const event of tenantEvents[tenant.id] || []) {
       // Passes and parties are sold as events alongside the screenings. They
       // carry no film, which separates them from a screening without having to
-      // guess at their names.
-      if (!event.films?.length) continue;
+      // guess at their names. A tenant that fills in no film records at all
+      // can't be read that way - every one of its events would look like a
+      // pass - so it opts out and takes everything it lists.
+      if (tenant.hasFilmRecords !== false && !event.films?.length) continue;
 
       const venueName = getVenueName(event.venue);
       if (!venueName) continue;

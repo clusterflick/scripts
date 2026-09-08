@@ -198,6 +198,14 @@ const knownRemovablePhrases = [
   " with Avery McNeilly",
   " with Pen Farthing",
   " with Shadow Cast",
+  // A touring programme credits the collective it co-presented each screening
+  // with, in the event's own billing - "Dhalinyaro with Ifriqiya Cinema". The
+  // collaborator is named, not the film, so each is its own entry rather than a
+  // rule about the word "with", which sits inside plenty of real titles.
+  " with Other Cinemas",
+  " with Ifriqiya Cinema",
+  " with the June Givanni Pan-African Cinema Archive",
+  ", a Film on Suspension with the Sudanese Kitchen",
   " In Conversation with James Chinlund",
   " In Conversation with Loose Willis",
   " Paul Thomas Anderson and Leonardo DiCaprio in Conversation",

@@ -19,20 +19,20 @@ console.log = () => {};
 
 describe(`${attributes.name}`, () => {
   setupPolly(isRecording, __dirname);
-  jest.useFakeTimers().setSystemTime(new Date("2026-08-27"));
+  jest.useFakeTimers().setSystemTime(new Date("2026-09-08"));
 
   describe.each([
     {
       name: "ODEON Luxe Leicester Square",
       address: "24-26 Leicester Square, London, WC2H 7JY, UK",
       geo: { lat: 51.51053736313127, lon: -0.12932277571696912 },
-      expectedMatches: 57,
+      expectedMatches: 60,
     },
     {
       name: "ODEON Luxe West End",
       address: "38 Leicester Square, London, WC2H 7DX, UK",
       geo: { lat: 51.509968860027634, lon: -0.13017680497804437 },
-      expectedMatches: 42,
+      expectedMatches: 45,
     },
     {
       // A third ODEON a two-minute walk away, to prove the festival's screens
@@ -42,7 +42,26 @@ describe(`${attributes.name}`, () => {
       geo: { lat: 51.50977762735127, lon: -0.13114905789292086 },
       expectedMatches: 0,
     },
-  ])("$name", ({ name, address, geo, expectedMatches }) => {
+    {
+      // A tenant that hangs no film record off its events, so every one of its
+      // listings reaches us through the hasFilmRecords opt-out rather than the
+      // usual pass filter
+      name: "Stockwell Park Community Centre",
+      alternativeNames: ["Stockwell Park Estate Community Centre"],
+      address: "21 Aytoun Place, London, SW9 0TE, UK",
+      geo: { lat: 51.469348, lon: -0.116817 },
+      expectedMatches: 3,
+    },
+    {
+      // Reached only by its alternative name: the programmer bills itself as
+      // the venue, and the postcode on the event is what ties it to Kilburn
+      name: "Metroland Studios",
+      alternativeNames: ["Other Cinemas"],
+      address: "91 Kilburn Square, London, NW6 6PS, UK",
+      geo: { lat: 51.53867412862321, lon: -0.19566687295430385 },
+      expectedMatches: 1,
+    },
+  ])("$name", ({ name, alternativeNames, address, geo, expectedMatches }) => {
     it(
       "retrieve and find events",
       async () => {
@@ -50,12 +69,13 @@ describe(`${attributes.name}`, () => {
 
         // Make sure the input looks roughly correct
         expect(tenantEvents).toBeTruthy();
-        expect(Object.keys(tenantEvents)).toHaveLength(1);
-        expect(tenantEvents.frightfest2026).toHaveLength(108);
+        expect(Object.keys(tenantEvents)).toHaveLength(2);
+        expect(tenantEvents.frightfest2026).toHaveLength(115);
+        expect(tenantEvents.bccwhenthestarsmeettheocean).toHaveLength(10);
 
         readJSON.mockImplementation(() => ({ tenantEvents }));
 
-        const cinema = { name, address, geo };
+        const cinema = { name, alternativeNames, address, geo };
         const output = await findEvents(cinema);
         expect(
           output.every((movie) =>
