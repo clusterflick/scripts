@@ -70,9 +70,10 @@ function normalizeTitle(title, options) {
     [" + Zog", " and Zog"],
     ["Zog + ", "Zog & "],
     [" + Superworm", " and Superworm"],
-    // The double bill is billed with and without the definite article, so the
-    // separator rule would otherwise drop the second film from one of them.
-    [/ \+ (?:The )?Gruffalo's Child/i, " and The Gruffalo's Child"],
+    // The double bill is billed with and without the definite article, and one
+    // venue closes the gap around the separator, so the separator rule would
+    // otherwise drop the second film from some of them.
+    [/\s*\+\s*(?:The )?Gruffalo's Child/i, " and The Gruffalo's Child"],
     [" + The Scarecrow's Wedding", " and The Scarecrow's Wedding"],
     [" + 28YL: The Bone Temple", " "],
     [" + The Bone Temple (", " "],
