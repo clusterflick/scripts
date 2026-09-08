@@ -24,6 +24,7 @@ const VENUE_SLUGS = [
   "ibraaz", // Ibraaz
   "londonnaturefilms", // London Nature Films
   "mildmayclubandinstituteltd", // The Mildmay Club
+  "staffordshirestcic", // Staffordshire St
 ];
 
 function retrieveVenuePage(getPage, slug) {

@@ -19,14 +19,14 @@ jest.mock("../../../common/utils", () => ({
 const isRecording = false;
 
 jest.mock("../../../common/cache");
-setupCacheMock(__dirname, "2026-08-23");
+setupCacheMock(__dirname, "2026-09-08");
 
 // Hide script output
 console.log = () => {};
 
 describe(`${attributes.name}`, () => {
   setupPolly(isRecording, __dirname);
-  jest.useFakeTimers().setSystemTime(new Date("2026-08-23"));
+  jest.useFakeTimers().setSystemTime(new Date("2026-09-08"));
 
   describe.each([
     {
@@ -40,7 +40,7 @@ describe(`${attributes.name}`, () => {
       name: "Good Shepherd Studios",
       alternativeNames: ["We Flock CIC"],
       address: "15A Davies Lane, Leytonstone, London, E11 3DR, UK",
-      expectedMatches: 1,
+      expectedMatches: 2,
     },
     {
       name: "Siobhan Davies Studios",
@@ -52,7 +52,7 @@ describe(`${attributes.name}`, () => {
       name: "Curzon Wimbledon",
       alternativeNames: [],
       address: "23 The Broadway, London, SW19 1RE, UK",
-      expectedMatches: 7,
+      expectedMatches: 6,
     },
     {
       name: "Lost Cinema",
@@ -64,7 +64,13 @@ describe(`${attributes.name}`, () => {
       name: "The Haggerston",
       alternativeNames: [],
       address: "438 Kingsland Road, London, E8 4AA, UK",
-      expectedMatches: 1,
+      expectedMatches: 0,
+    },
+    {
+      name: "Staffordshire St",
+      alternativeNames: ["Staffordshire Street", "STST"],
+      address: "49 Staffordshire St, London, SE15 5TJ, UK",
+      expectedMatches: 10,
     },
   ])("$name", ({ name, alternativeNames, address, expectedMatches }) => {
     it(
@@ -74,9 +80,9 @@ describe(`${attributes.name}`, () => {
 
         // Make sure the input looks roughly correct
         expect(clubPages).toBeTruthy();
-        expect(Object.keys(clubPages)).toHaveLength(19);
+        expect(Object.keys(clubPages)).toHaveLength(20);
         expect(eventPages).toBeTruthy();
-        expect(Object.keys(eventPages)).toHaveLength(46);
+        expect(Object.keys(eventPages)).toHaveLength(59);
 
         readJSON.mockImplementation(() => ({ clubPages, eventPages }));
 
