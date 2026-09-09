@@ -783,6 +783,7 @@ const knownRemovablePhrases = [
   "Electric Scream! ",
   "ELEPHANT SOCIAL:",
   "Elfi Mikesch:",
+  "Encore:",
   "Escape from Hanhounia Hell",
   "Escapes:",
   "Evening Event:",
