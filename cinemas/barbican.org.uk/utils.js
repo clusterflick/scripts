@@ -45,7 +45,11 @@ const convertDurationStringToMinutes = (duration) => {
 
   const normalized = duration
     .toLowerCase()
-    .replace("approx", "")
+    // The estimate marker is written both bare and abbreviated with a full
+    // stop - "Approx 75 mins" and "Approx. 75 mins" - and either can follow a
+    // "Programme length:" label, so it is stripped wherever it appears rather
+    // than only at the start.
+    .replace(/approx(?:imately)?\.?/, "")
     .replace("programme length:", "")
     .trim();
 
