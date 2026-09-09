@@ -1152,6 +1152,11 @@ function normalizeTitle(title, options) {
     ["Art is my Therapy - ", "Art is my Therapy: "],
     [/^Fall 2$/i, "Fall 2: Deadpoint"],
     [/^9\s*(?:[-–—]|to)\s*5$/i, "Nine to Five"],
+    // One venue bills the concert film with the party it is screened at,
+    // so the same film arrives under a second name. Anchored to the whole
+    // title because a listing that is only a party has no film to fall back
+    // to once the word comes off.
+    [/^Queen Budapest Party$/i, "Queen Budapest"],
     // The gallery bills each night of the season as "Four Windows and a Room:
     // <that night's programme>", so every showing of the same season arrives
     // under a name of its own. The season name is the title here rather than a
