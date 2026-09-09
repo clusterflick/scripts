@@ -66,6 +66,7 @@ const ignoredIds = [
   1361920, // Sinners -- https://www.themoviedb.org/movie/1361920-sinners
   1753122, // SURPRISE! -- https://www.themoviedb.org/movie/1753122-surprise
   847819, // Wallace & Gromit - Hearts of Clay -- https://www.themoviedb.org/movie/847819-wallace-gromit-coeurs-a-modeler
+  1414622, // Wet Dreams -- https://www.themoviedb.org/movie/1414622-wet-dreams
 ];
 
 /**
