@@ -47,6 +47,7 @@ const knownRemovablePhrases = [
   "***LONDON***",
   "***VHS***",
   "*ADVANCE*",
+  "35mm Roadshow Tour",
   "- 35mm",
   " 35mm",
   "the imax 3d experience",
