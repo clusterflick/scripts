@@ -72,6 +72,12 @@ describe(`${attributes.name}`, () => {
       address: "49 Staffordshire St, London, SE15 5TJ, UK",
       expectedMatches: 10,
     },
+    {
+      name: "The Mall Tavern",
+      alternativeNames: [],
+      address: "71-73 Palace Gardens Terrace, London, W8 4RU, UK",
+      expectedMatches: 1,
+    },
   ])("$name", ({ name, alternativeNames, address, expectedMatches }) => {
     it(
       "retrieve and find events",
