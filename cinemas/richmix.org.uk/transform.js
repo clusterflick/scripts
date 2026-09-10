@@ -109,7 +109,13 @@ async function transform({ moviePages }, sourcedEvents) {
     [],
   );
 
-  if (movies.length === 0) {
+  // Nothing was retrieved to parse, so there is nothing to have got wrong:
+  // `retrieve` only hands back an empty set once it has proved the cinema page
+  // is still the cinema page, so this is a venue with no films booked rather
+  // than a scrape that has broken, and an empty transform is the truth about
+  // it. Pages that were fetched and then parsed to nothing is the failure worth
+  // shouting about, and it still is.
+  if (movies.length === 0 && Object.keys(moviePages).length > 0) {
     throw new Error("No movies found - the page structure may have changed");
   }
 
