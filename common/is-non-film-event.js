@@ -60,6 +60,9 @@ const nonFilmEvents = [
   // The museum's own guided tour, sold under a series name and numbered by
   // edition, listed alongside the screenings in its cinemas.
   /alternative tour of the Science Museum/i,
+  // The venue's own carol concert, sung by the audience in the auditorium
+  // rather than projected onto it.
+  /Carols by Candlelight/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>

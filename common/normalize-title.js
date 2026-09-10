@@ -63,6 +63,7 @@ function normalizeTitle(title, options) {
     // uses an ampersand, so the same programme arrives under a second name.
     ["Life / Drawing", "Life & Drawing"],
     ["JOY + ", "JOY & "],
+    ["HALT BOOK LAUNCH + ", "HALT BOOK LAUNCH & "],
     ["Music with Tara Franks + ", "Music with Tara Franks & "],
     ["Storytelling + ", "Storytelling & "],
     ["Back and Forth + ", "Back and Forth & "],
@@ -183,6 +184,7 @@ function normalizeTitle(title, options) {
     ["SEEN Charity Film Screening - ", "SEEN Charity Film Screening: "],
     ["Romford Horror Festival - ", "Romford Horror Festival: "],
     ["Film Screening - ", "Film Screening: "],
+    ["Community Cinema Screening - ", "Community Cinema Screening: "],
     [/^SILVER\s*?SCREEN -/i, "SILVER SCREEN"],
     ["SUBTITLED -", "SUBTITLED "],
     [/^RELAXED -/i, "Relaxed screening: "],
