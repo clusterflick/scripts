@@ -265,6 +265,7 @@ const knownRemovablePhrases = [
   " in cinema",
   " and Creating Survivor",
   " plus 1 hour Q&A. Ticket giveaway",
+  " plus Amy Goodman Q&A",
   " plus Director Q&A",
   " plus Directors Q&A",
   " plus Filmmaker Q&A",
@@ -423,6 +424,10 @@ const knownRemovablePhrases = [
   "Sapphic Cinema and BFI Melodrama",
   "Free BFI Melodrama",
   'Free: BFI "Rip it Up" Late Night',
+  // The strand's late-night billing is the mystery-movie correction's now, so
+  // the branding is all that is left to strip. Both spellings are kept, longer
+  // first, so a late-night listing that names its film still loses the label.
+  'Free: BFI "Rip it Up"',
   "BFI Melodrama",
   "Marcin Wierzchowski:",
   "Mexican Melodrama:",

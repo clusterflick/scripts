@@ -39,6 +39,9 @@ describe("isNonFilmEvent", () => {
     ["Mary Jane Lowe & Matt Redman Live Concert"],
     ["LIVE CONCERT - FREE ENTRY: Saskia Leigh Martić"],
     ["National Social Media Awards London"],
+    [
+      "Untold Stories: The alternative tour of the Science Museum (2nd edition)",
+    ],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });
