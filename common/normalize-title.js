@@ -573,6 +573,10 @@ function normalizeTitle(title, options) {
     ["EXPOSED aka EXPONERAD", "EXPONERAD"],
     ["THE SEDUCERS AKA TOP SECRET", "THE SEDUCERS"],
     ["Song O Chyabrung", "Song Of Chyabrung"],
+    // The documentary is billed by its short name alongside the Q&A that
+    // follows it, which groups it apart from the full title the same film
+    // screens under elsewhere. Guarded so the full title is left alone.
+    [/steal this story(?!,? please)/i, "Steal This Story, Please"],
     [
       /Marcel,? Santa and the Little Pizza Delivery Man/i,
       "Marcel, Father Christmas and the Little Pizza Delivery Boy",
@@ -620,8 +624,12 @@ function normalizeTitle(title, options) {
       /^(free |monthly )?(mystery|surprise) ([\w+]+ )?([\w+]+ )?(night|film|movie|cinema|screening|matinees?|thriller):?( Nov| \d)?/i,
       "mystery movie",
     ],
+    // The strand a venue puts the unnamed film in is part of the billing, not
+    // a second film - "Late Night Mystery Cinema" is the same mystery movie as
+    // "Mystery Cinema", so the strand comes off with it rather than being left
+    // on the front of the standard title.
     [
-      /(free |monthly )?(mystery|surprise) ((?!short )[\w+]+ )?((?!short )[\w+]+ )?(night|film|movie|cinema|screening|matinees?):?( Nov| \d)?/i,
+      /(free |monthly )?(late night )?(mystery|surprise) ((?!short )[\w+]+ )?((?!short )[\w+]+ )?(night|film|movie|cinema|screening|matinees?):?( Nov| \d)?/i,
       "mystery movie",
     ],
     [/(classic |MUBI )?secret scre(e|a)(n|m)(ing)?( \d+)?/i, "mystery movie"],
