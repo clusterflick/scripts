@@ -43,6 +43,7 @@ describe("isNonFilmEvent", () => {
       "Untold Stories: The alternative tour of the Science Museum (2nd edition)",
     ],
     ["Carols by Candlelight"],
+    ["Autumnal Leaf Collages: COVID-Safe Social with Breathe Easy London"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });

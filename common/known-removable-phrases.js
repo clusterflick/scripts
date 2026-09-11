@@ -429,6 +429,10 @@ const knownRemovablePhrases = [
   // first, so a late-night listing that names its film still loses the label.
   'Free: BFI "Rip it Up"',
   "BFI Melodrama",
+  // The Halloween season of Secret Film Screenings. The strand name itself is
+  // the mystery-movie correction's, so the season's billing is all that is
+  // left to strip.
+  "Spooky Screenings",
   "Marcin Wierzchowski:",
   "Mexican Melodrama:",
   "MILKTEA Community Preview of",
@@ -907,7 +911,6 @@ const knownRemovablePhrases = [
   "Nagasaki Day:",
   "Philosophical Screens:",
   "Pirates Season :",
-  "AND PIRATE HAT MAKING WORKSHOP",
   "Pineapple cocktails, live music &",
   "Pomodoro Rosso Sangue X ",
   "POSTPONED:",

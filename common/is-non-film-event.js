@@ -63,6 +63,10 @@ const nonFilmEvents = [
   // The venue's own carol concert, sung by the audience in the auditorium
   // rather than projected onto it.
   /Carols by Candlelight/i,
+  // A support group's craft social, billed by whichever activity it runs that
+  // session ("Autumnal Leaf Collages"), so match the social's own billing
+  // rather than carrying a pattern per activity.
+  /COVID-Safe Social/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
