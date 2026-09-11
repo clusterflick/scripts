@@ -533,6 +533,11 @@ function normalizeTitle(title, options) {
       "MUPPET PUPPETS CHRISTMAS CAROL WORKSHOP & SING-ALONG",
       "Muppet Christmas Carol",
     ],
+    // The craft session billed after the sing-along is written with either
+    // spelling of the conjunction ("Sing-a-long & Pirate Hat Making Workshop",
+    // "SING-ALONG SCREENING AND PIRATE HAT MAKING WORKSHOP"), so one pattern
+    // rather than a string per spelling.
+    [/\s*(?:&|and)\s+pirate hat making workshop/i, ""],
     ["Film Club |", "Film Club: "],
     ["地道星期日影院 |", "地道星期日影院: "],
     ["IN-HOUSE - ", "IN-HOUSE: "],
