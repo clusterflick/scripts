@@ -18,6 +18,12 @@ function normalizeTitle(title, options) {
   // same performance arrives under a second name. Put the colon back before
   // the theatre prefixing runs, which is what reads it.
   title = title.replace(/\blive_\s/i, "live: ");
+  // One venue prefixes every title with its country code, and the theatre
+  // prefixing anchors on the front of the title, so "gb Met Opera 2026-27:
+  // Parsifal" never reaches the opera path and the same broadcast arrives
+  // under a second name. Drop the prefix before that runs rather than in the
+  // corrections below, which are too late to help it.
+  title = title.replace(/^gb\s+/i, "");
 
   title = standardizePrefixingForTheatrePerformances(
     title,
@@ -30,7 +36,6 @@ function normalizeTitle(title, options) {
   // Specific corrections
   const corrections = [
     ["&amp;", "&"],
-    [/^gb\s+/i, ""],
     [/^Screening Documentary/i, ""],
     ["HANNAH MONTANA: THE MOVIE", "HANNAH MONTANA MOVIE"],
     [/F1\s?®?:? The Movie/i, "F1"],
@@ -1441,6 +1446,16 @@ function normalizeTitle(title, options) {
   // Venues spell the cut with and without the possessive apostrophe and the
   // definite article, so one pattern rather than a string per spelling.
   title = title.replace(/\b(?:the )?directors?'?s? cut\b/i, "");
+
+  // Venues credit whoever is introducing the screening, so the phrase varies by
+  // guest and by article ("with introduction by", "with an introduction from").
+  // One pattern rather than a string per guest, bounded to a short credit so a
+  // title is never eaten. Runs before the phrase list, whose bare "with
+  // introduction" would otherwise take the label off and leave the guest behind.
+  title = title.replace(
+    /\s+with\s+(?:an?\s+)?introduction\s+(?:by|from)\s+(?:[\w'.&/-]+\s*){1,6}$/i,
+    "",
+  );
 
   knownRemovablePhrases.forEach((phrase) => {
     title = title.replace(phrase.toLowerCase(), "");
