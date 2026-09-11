@@ -247,6 +247,29 @@ GitHub Actions (`.github/workflows/ci.yml`):
 
 ## Title Normalisation Files
 
+**A transform emits the whole title the venue displays, and never less of it.**
+Where a venue splits that title across its own fields, put it back together —
+The O2 names the instalment only in its tagline, so `cinemas/theo2.co.uk` joins
+the two into "The Lord of The Rings: The Fellowship of The Ring In Concert".
+What a transform must never do is _reduce_ a title: stripping event branding
+("... Live", "... In Concert"), dropping a subtitle, or otherwise tidying it so
+a match lands. The title is displayed data, and trimming it here makes the
+listing say something the venue did not.
+
+Trimming is normalisation's job, one layer down. If a title matches the wrong
+film — or fails to match — the fix belongs in the files below. They feed every
+title comparison the pipeline makes: the TMDB search
+(`find-matches-on-the-movie-db`), the review-site matching against IMDb,
+Letterboxd, RT and Metacritic (`scripts/match/common.js`), and `combine`'s
+grouping key — but never the displayed title. That is why the fix belongs there:
+one entry corrects matching for every venue at once, while a transform that
+reshapes its own title corrupts the listing and fixes nothing for anyone else.
+Never reach back into the transform to reshape a title until it matches.
+
+Billing a venue keeps _out_ of its title belongs in the performance `notes`, as
+`cinemas/royalalberthall.com` does with its `Suffix`. Billing that is already
+part of the title is not repeated there.
+
 Two files handle title normalisation. Know which to edit:
 
 - **`common/normalize-title.js`** — corrections (spelling fixes, encoding,

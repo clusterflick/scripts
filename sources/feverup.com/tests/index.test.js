@@ -61,8 +61,8 @@ describe(attributes.name, () => {
 
         // Make sure the input looks roughly correct
         expect(movieListPage).toBeTruthy();
-        expect(Object.keys(planDetails)).toHaveLength(256);
-        expect(Object.keys(sessionPages)).toHaveLength(21);
+        expect(Object.keys(planDetails)).toHaveLength(258);
+        expect(Object.keys(sessionPages)).toHaveLength(22);
 
         readJSON.mockImplementation(() => ({
           movieListPage,

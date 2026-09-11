@@ -1185,6 +1185,13 @@ function normalizeTitle(title, options) {
       /\s*(?:[+&]\s*)?(?:\bw(?:ith|\/)\s+)?(?:new\s+|live\s+|original\s+)*score\s+(?:lead\s+)?by\s+.*$/i,
       "",
     ],
+    // The ensemble performing a live score changes with the event, so a pattern
+    // rather than a string per orchestra. End-anchored: "Musical Bingo with
+    // Brixton Chamber Orchestra Celebrating ..." keeps its mid-title credit.
+    [
+      /\s*[-–—:,]?\s*\bwith\s+(?:the\s+)?[^,;()]{0,60}?\b(?:orchestra|philharmonic|sinfonia)\s*$/i,
+      "",
+    ],
     // Venues bill a discussion event as "<screening> and <panel> discussion of
     // <film>", with the wording varying on either side, so match the
     // "discussion of" that introduces the film rather than carrying a phrase
