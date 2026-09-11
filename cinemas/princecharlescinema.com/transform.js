@@ -23,9 +23,19 @@ function getLine($, $lines, prefix) {
   return combinedLines;
 }
 
+// The spans after the classification in `.running-time` are genre categories
+// ("Drama", "Comedy"), but while a festival is running the venue drops its
+// marker in the same place — "LFF" during the BFI London Film Festival. The
+// marker is an uppercase acronym ending in "FF"; genres are title-case words
+// that never are, so surface any such token as a festival rather than a
+// category. Keeping it out of `categories` and putting it in each performance's
+// notes lets the website build its festival listing.
+const isFestivalMarker = (property) => /FF$/.test(property);
+
 function parseMovieProperties($, $movieProperties) {
   const properties = {
     categories: "",
+    festivals: [],
   };
   let isAfterAgeRestriction = false;
 
@@ -55,6 +65,10 @@ function parseMovieProperties($, $movieProperties) {
     }
 
     if (isAfterAgeRestriction) {
+      if (isFestivalMarker(movieProperty)) {
+        properties.festivals.push(movieProperty);
+        return;
+      }
       properties.categories = `${properties.categories}, ${movieProperty}`;
     }
   });
@@ -82,10 +96,13 @@ async function transform({ movieListPage }, sourcedEvents) {
     // Don't pull data for entries which aren't bookable films
     if (isPrivateHire(title)) return;
 
+    const movieProperties = parseMovieProperties($, $movieProperties);
+    const { festivals } = movieProperties;
+
     const overview = createOverview({
       directors: getLine($, $moviePeople, "Directed by "),
       actors: getLine($, $moviePeople, "Starring "),
-      ...parseMovieProperties($, $movieProperties),
+      ...movieProperties,
     });
 
     const synopsis = getText($movieDetails.find(".jacro-formatted-text"));
@@ -98,7 +115,11 @@ async function transform({ movieListPage }, sourcedEvents) {
 
       let $currentElement = $performanceDay.next();
       while ($currentElement.is("li")) {
-        const notesList = [];
+        // The marker is an acronym whose trailing "F" is already "Festival"
+        // (LFF), so the note says "Part of the LFF", not "... LFF festival".
+        const notesList = festivals.map(
+          (festival) => `Part of the ${festival}`,
+        );
         const statusText = getText($currentElement.find(".hover"));
         const status = { soldOut: statusText.toLowerCase() === "sold out" };
         if (
