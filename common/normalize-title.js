@@ -231,6 +231,11 @@ function normalizeTitle(title, options) {
       /(?:Knife: )?The Attempted Murder of Salman Rushdie/i,
       "Knife: The Attempted Murder of Salman Rushdie",
     ],
+    // One venue bills the same documentary by its first word alone, so
+    // "Knife + Recorded Q+A" loses the billing at the separator and groups with
+    // every other one-word "knife". Anchored, and requiring the separator, so a
+    // film actually named "Knife" is left alone.
+    [/^Knife \+ /i, "Knife: The Attempted Murder of Salman Rushdie + "],
     ["Wildnerness", "Wilderness"],
     [/\s+dub?$/i, ""], // Dubbed
     [/\s+sub?$/i, ""], // subbed
