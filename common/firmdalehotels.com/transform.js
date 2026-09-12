@@ -67,16 +67,22 @@ async function transform(attributes, { movieListPage }, sourcedEvents) {
     }
 
     // Find showings for this specific hotel
-    const $showingLinks = $textBlockContainer.find("ul li a");
+    //
+    // One showing is one list item, but not necessarily one link: the CMS
+    // sometimes splits a showing's link into several adjacent anchors sharing
+    // the same href, cutting the text mid-string ("... SUNDAY 1ST NOVEMBER,
+    // 3:" + "30PM"). Read the text off the list item so the showing stays
+    // whole, and take the url from its first anchor.
+    const $showings = $textBlockContainer.find("ul li");
     const hotelName = basicNormalize(attributes.name)
       .replace("firmdale", "")
       .trim();
 
     const performances = [];
-    $showingLinks.each((i, linkEl) => {
-      const $link = $(linkEl);
-      const linkText = getText($link);
-      const url = $link.attr("href");
+    $showings.each((i, showingEl) => {
+      const $showing = $(showingEl);
+      const linkText = getText($showing);
+      const url = $showing.find("a").first().attr("href");
 
       // Skip performances which aren't for this venue
       if (!basicNormalize(linkText).includes(hotelName)) return;
