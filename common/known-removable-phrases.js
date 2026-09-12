@@ -1349,6 +1349,10 @@ const knownRemovablePhrases = [
   "Community Cinema at UCL East:",
   "Community Cinema at UCL East ",
   "Underseen David Lean:",
+  // The season's own listings drop the colon after the year, so the generic
+  // "<name> Season:" prefix never fires and every film in the strand arrives
+  // under a name of its own.
+  "Horror Season 2026",
   "X-Mas Season 2025:",
   "YouTube Ciné-Club:",
   "Yugesh Walia and the Birmingham Film Workshop:",
