@@ -55,8 +55,17 @@ function extractScreeningIds(html) {
 
   // The push argument is `[chunkId, "<refId>:<react tree JSON>"]`. Parse the
   // argument, drop the leading RSC ref id, then parse the React tree itself.
+  // React numbers those ref ids in hex, so once a page streams more than ten
+  // rows ours arrives as `a:`, `1c:` and so on - matching digits alone leaves
+  // the prefix in place and the tree stops being JSON.
   const [, chunk] = JSON.parse(pushMatch[1]);
-  const tree = JSON.parse(chunk.replace(/^\d+:/, ""));
+  const refId = chunk.match(/^[0-9a-f]+:/);
+  if (!refId) {
+    throw new Error(
+      "Could not find the RSC ref id in the payload chunk. Has the page data changed?",
+    );
+  }
+  const tree = JSON.parse(chunk.slice(refId[0].length));
 
   const screenings = findInitialScreenings(tree);
   if (!screenings) {
