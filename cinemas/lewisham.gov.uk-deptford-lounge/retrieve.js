@@ -1,29 +1,11 @@
-const { fetchText } = require("../../common/utils");
-require("dotenv").config();
+const fetchHostedSource = require("../../common/host-non-web-sources/fetch-source");
 
-const SOURCE_URL =
-  "https://raw.githubusercontent.com/clusterflick/host-non-web-sources/refs/heads/main/deptfortlibrarycinemaclub%40clusterflick.com";
+// This venue's listings arrive as a monthly email rather than a poster, so the
+// hosted file is named for the address they are sent to instead of the venue id.
+const SOURCE_NAME = "deptfortlibrarycinemaclub@clusterflick.com";
 
 async function retrieve() {
-  const emailText = await fetchText(SOURCE_URL);
-
-  let errorResponse;
-  try {
-    // If we can parse this as JSON, then it's not a valid email text
-    errorResponse = JSON.parse(emailText);
-  } catch {
-    //
-  }
-
-  if (errorResponse) {
-    throw new Error(errorResponse.message);
-  }
-
-  if (!emailText) {
-    throw new Error("Failed to fetch email text - empty response");
-  }
-
-  return { emailText };
+  return { emailText: await fetchHostedSource(SOURCE_NAME) };
 }
 
 module.exports = retrieve;
