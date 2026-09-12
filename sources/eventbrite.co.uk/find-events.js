@@ -8,13 +8,17 @@ const {
   convertNamesTextToList,
 } = require("../../common/utils");
 const { createOverview, createPerformance } = require("../../common/utils");
-const { parseDate, getEventDescription } = require("./utils");
+const { parseDate, getEventVenue, getEventDescription } = require("./utils");
 const attributes = require("./attributes");
 const { venueMatchesCinema } = require("../../common/source-utils");
 const { isNotNonFilmEvent } = require("../../common/is-non-film-event");
 const { isLineUpEvent, expandLineUpEvent } = require("./expand-line-up-events");
 
-function isExcludedEvent({ name, tags }) {
+// Events recovered from an organiser's own calendar carry no `tags`:
+// Eventbrite attaches them to search results only, and they are absent from the
+// event page too. The tag rules below therefore can't speak to those events -
+// the name rules still do, as does isNotNonFilmEvent further down.
+function isExcludedEvent({ name, tags = [] }) {
   // Exclude events which are medical screenings
   if (
     tags.some(
@@ -88,47 +92,35 @@ async function findEvents(cinema) {
   );
   let movieListPages = [];
   let moviePages = {};
+  let organizerEvents = [];
   try {
     const data = await readJSON(dataSrc);
     movieListPages = data.movieListPages;
     moviePages = data.moviePages;
+    // Releases from before the organiser sweep have no such key.
+    organizerEvents = data.organizerEvents || [];
   } catch {
     // Source data may not always be available or required
   }
 
+  // Search results first: where the two overlap, the search carries the richer
+  // event, and uniqueEvents keeps whichever it sees first.
   const events = uniqueEvents(
-    movieListPages.flatMap(({ search_data: { events } }) => events.results),
+    movieListPages
+      .flatMap(({ search_data: { events } }) => events.results)
+      .concat(organizerEvents),
   );
 
   const filteredEvents = events.filter((event) => {
     if (event.is_cancelled || event.is_online_event) return false;
     if (isExcludedEvent(event)) return false;
-    if (!event.primary_venue) return false;
 
-    const {
-      primary_venue: {
-        name,
-        address: {
-          longitude: lon,
-          latitude: lat,
-          localized_address_display: eventAddress,
-        },
-      },
-    } = event;
-    // Split venue name before matching (e.g., "BFI Southbank, London" -> "BFI
-    // Southbank", "The Beehive Pub | Tottenham" -> "The Beehive Pub").
-    // Deliberately not splitting on a dash: it's as likely to precede the part
-    // that identifies the venue as to follow it, and "Vue Cinema London -
-    // Westfield Stratford" truncated to "Vue Cinema London" matches nothing.
-    // Must stay in step with discover-venues.js, which reports on the same names.
-    const [venueName] = name.split(/[,|]/);
-    // localized_address_display is like "265 Lavender Hill, London, SW11 1JB"
-    return venueMatchesCinema(
-      cinema,
-      venueName,
-      { lat, lon },
-      { eventAddress },
-    );
+    const venue = getEventVenue(event);
+    if (!venue) return false;
+
+    return venueMatchesCinema(cinema, venue.venueName, venue.coordinates, {
+      eventAddress: venue.eventAddress,
+    });
   });
 
   return filteredEvents

@@ -18,9 +18,22 @@ const searchPage = (events) =>
 const eventPage = (id) =>
   `<script> window.__SERVER_DATA__ = ${JSON.stringify({ id })};</script>`;
 
+// Retrieve only fetches a page for an event at a venue we hold, so these have
+// to sit at a real one or they'd be skipped before any of the retry behaviour
+// below gets a chance to run. Genesis Cinema, matching the attributes in
+// cinemas/genesiscinema.co.uk. No `primary_organizer_id`: that would send the
+// organiser sweep off making calls these tests have nothing to say about.
 const makeEvent = (id) => ({
   id,
   url: `https://www.eventbrite.co.uk/e/event-${id}`,
+  primary_venue: {
+    name: "Genesis Cinema",
+    address: {
+      latitude: "51.52128726645794",
+      longitude: "-0.051143457671891594",
+      localized_address_display: "93-95 Mile End Road, London, E1 4UJ",
+    },
+  },
 });
 
 const response = (status, body) => ({

@@ -1,6 +1,15 @@
 const cheerio = require("cheerio");
+const { format } = require("date-fns");
 const { fetchText, sleep, withJitter } = require("../../common/utils.js");
 const { dailyCache } = require("../../common/cache.js");
+const { getAllCinemaAttributes } = require("../../cinemas");
+const { findMatchingCinema } = require("../../common/source-utils");
+const { getEventVenue } = require("./utils");
+const {
+  fetchOrganizerEvents,
+  hasFilmShapedTitle,
+  normalizeOrganizerEvent,
+} = require("./organizer-events");
 const attributes = require("./attributes");
 
 function uniqueEvents(events) {
@@ -91,17 +100,115 @@ const getSearchResultsFor = async (searchTerm) => {
   return movieListPages;
 };
 
+/**
+ * Whether an event sits at a venue we hold, which is what makes its event page
+ * worth a request. Built once per run: findMatchingCinema walks every cinema,
+ * and there are over four hundred of them.
+ */
+function buildKnownVenueTest() {
+  const knownCinemas = getAllCinemaAttributes();
+
+  return (event) => {
+    const venue = getEventVenue(event);
+    if (!venue) return false;
+
+    return !!findMatchingCinema(
+      knownCinemas,
+      venue.venueName,
+      venue.coordinates,
+      { eventAddress: venue.eventAddress },
+    );
+  };
+}
+
+/**
+ * The events that organisers at venues we hold have on beyond the ones the
+ * search reached, in the organiser's own listing shape.
+ *
+ * Only organisers the search surfaced at least once can be asked - their id
+ * arrives on an event, so an organiser whose every listing ranks below the
+ * search's cut-off stays invisible to this. It recovers a truncated strand, not
+ * an unknown one.
+ */
+async function fetchEventsFromKnownOrganizers(
+  knownVenueEvents,
+  seenIds,
+  isAtKnownVenue,
+) {
+  const organizerIds = [
+    ...new Set(
+      knownVenueEvents
+        .map(({ primary_organizer_id: id }) => id)
+        .filter((id) => !!id),
+    ),
+  ];
+
+  console.log(
+    ` - Requesting calendars for ${organizerIds.length} organiser(s) at known venues...`,
+  );
+
+  const fromDate = format(new Date(), "yyyy-MM-dd");
+  const found = [];
+
+  for (const [index, organizerId] of organizerIds.entries()) {
+    if (index % 10 === 0)
+      console.log(
+        `    - ${Math.round((index / organizerIds.length) * 100)}% complete`,
+      );
+
+    for (const event of await fetchOrganizerEvents(organizerId, fromDate)) {
+      // The organiser's other venues are not our business, and an event the
+      // search already gave us arrives richer than this one. The title is
+      // checked before the venue because it costs nothing, where matching a
+      // venue walks every cinema we hold.
+      if (seenIds.has(event.id)) continue;
+      if (!hasFilmShapedTitle(event)) continue;
+      if (!isAtKnownVenue(event)) continue;
+      seenIds.add(event.id);
+      found.push(event);
+    }
+  }
+
+  console.log(
+    ` - Found ${found.length} event(s) at known venues that the search did not reach`,
+  );
+
+  return found;
+}
+
 async function retrieve() {
   console.log(" - Requesting search results pages...");
   const movieListPages = []
     .concat(await getSearchResultsFor("screening"))
     .concat(await getSearchResultsFor("film-and-media--events")); // This is a specific category
 
-  const events = uniqueEvents(
+  const searchEvents = uniqueEvents(
     movieListPages.flatMap(({ search_data: { events } }) => events.results),
   );
 
-  console.log(` - Requesting details for ${events.length} events...`);
+  const isAtKnownVenue = buildKnownVenueTest();
+  const knownVenueEvents = searchEvents.filter(isAtKnownVenue);
+  console.log(
+    ` - ${knownVenueEvents.length} of ${searchEvents.length} events are at a venue we hold`,
+  );
+
+  const organizerListings = await fetchEventsFromKnownOrganizers(
+    knownVenueEvents,
+    new Set(searchEvents.map(({ id }) => id)),
+    isAtKnownVenue,
+  );
+
+  // Only events at a venue we hold get their page fetched. find-events reads
+  // pages for exactly these events and discards the rest, and discover-venues
+  // works off the search listings rather than the pages, so a venue we don't
+  // hold yet is still reported without our paying a request per event for it.
+  // The same call feverup's retrieve makes when it spends its session requests
+  // only on plans held at a venue it knows.
+  const eventsNeedingPages = knownVenueEvents.concat(organizerListings);
+
+  console.log(
+    ` - Requesting details for ${eventsNeedingPages.length} events...`,
+  );
   const moviePages = {};
   const unreachable = [];
 
@@ -132,11 +239,11 @@ async function retrieve() {
     collected.push(event);
   };
 
-  for (const [index, event] of events.entries()) {
+  for (const [index, event] of eventsNeedingPages.entries()) {
     try {
       if (index % 10 === 0)
         console.log(
-          `    - ${Math.round((index / events.length) * 100)}% complete`,
+          `    - ${Math.round((index / eventsNeedingPages.length) * 100)}% complete`,
         );
       await fetchEventPage(event);
     } catch (e) {
@@ -148,7 +255,7 @@ async function retrieve() {
   // the wrong shape for these: whatever causes them lasts longer than any
   // sensible inline budget, so the inline retries all fail inside the same bad
   // window. By the time the loop ends the run has moved on by many minutes and
-  // the condition has almost always cleared — on run 32495277530 every event a
+  // the condition has almost always cleared - on run 32495277530 every event a
   // failing attempt dropped this way was fetched fine by the following attempt,
   // purely because that attempt came later. This sweep gives the run that
   // *succeeds* the same second chance, instead of only the ones that fail.
@@ -180,7 +287,15 @@ async function retrieve() {
     }
   }
 
-  return { movieListPages, moviePages };
+  // An organiser listing is too thin to publish on its own, so it is completed
+  // from the page fetched above. A removed event has no page to complete it
+  // with - the 404 above already said so - and is dropped here rather than
+  // shipped with no date.
+  const organizerEvents = organizerListings
+    .filter(({ url }) => !!moviePages[url])
+    .map((event) => normalizeOrganizerEvent(event, moviePages[event.url]));
+
+  return { movieListPages, moviePages, organizerEvents };
 }
 
 module.exports = retrieve;
