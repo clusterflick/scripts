@@ -1248,6 +1248,7 @@ function normalizeTitle(title, options) {
     ["FREE Kids Movie Club: The Italian Riviera", "luca"],
     ["FREE Kids Movie Club: The Family Madrigal", "encanto"],
     ["FREE Kids Movie Club: Into the Highlands", "brave"],
+    ["FREE Kids Movie Club: All That Jazz", "soul"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
@@ -1461,6 +1462,12 @@ function normalizeTitle(title, options) {
     /\s+with\s+(?:an?\s+)?introduction\s+(?:by|from)\s+(?:[\w'.&/-]+\s*){1,6}$/i,
     "",
   );
+
+  // Venues bill the set that comes with the screening using whichever
+  // connective they like ("plus", "and", "with", "&"), so one pattern rather
+  // than a string per spelling. Singular only: "Ceremony & Live Performances"
+  // is the event being sold rather than a film with a set attached to it.
+  title = title.replace(/\s*(?:plus|and|with|&)\s+live performance\b/i, "");
 
   knownRemovablePhrases.forEach((phrase) => {
     title = title.replace(phrase.toLowerCase(), "");
