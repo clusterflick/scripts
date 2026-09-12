@@ -274,8 +274,6 @@ const knownRemovablePhrases = [
   " plus shorts",
   " & Shorts",
   "Post show dinner available",
-  " plus live performance",
-  " and Live Performance",
   " plus live music from naomi banks",
   " PLUS Sinners movie breakdown",
   "Bottomless Brunch Party!",
@@ -294,6 +292,7 @@ const knownRemovablePhrases = [
   "Screening Without Ads or Trailers",
   "screening @ Rivoli Ballroom",
   "screening hosted by Romford CLP",
+  "hosted by Pure Powder",
   "supported by Film Earl's Court",
   "Screening by Adrenalin Pictures",
   "Unlimited Screening",
@@ -388,7 +387,6 @@ const knownRemovablePhrases = [
   "with Live Acoustic Guitar & Introduction",
   "with live brass band",
   "with Live Organ Improvisation",
-  "with Live Performance",
   "with Loose Willis & Maxim Melton",
   "with Loose Willis & Avery McNeilly",
   "with Loose Willis & Hypno-Vision!",
@@ -1444,6 +1442,12 @@ const knownRemovablePhrases = [
   "by JT Taylor",
   "Blockbuster World War 2 drama on RAF legend",
   "Amnesty UK Documentary Launch & Panel Event",
+  // The original trilogy is billed with the episode number the venue reads
+  // off the box set, but the film is named "Return of the Jedi" on its own,
+  // so the prefix comes off for the listing to match it. Only this episode:
+  // stripping the prefix off "Episode IV" would leave "A New Hope", which is
+  // not what that film is called either.
+  "Star Wars: Episode VI",
 
   // Common superfluous pieces
   "** SCREENING CANCELLED **",
