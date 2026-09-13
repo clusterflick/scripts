@@ -1,7 +1,11 @@
-const slugify = require("slugify");
 const cheerio = require("cheerio");
 const { dailyCache } = require("../../common/cache");
-const { fetchText, getText, getId } = require("../../common/utils");
+const {
+  fetchText,
+  getText,
+  getId,
+  getSearchSlug,
+} = require("../../common/utils");
 const {
   narrowYearRangeMatcher,
   broadYearRangeMatcher,
@@ -12,8 +16,7 @@ const {
 } = require("./common");
 
 const getSearchResults = async (term) => {
-  const slug = slugify(term, { strict: true }).toLowerCase();
-  const cacheKey = `rotten-tomatoes-search-${slug}`;
+  const cacheKey = `rotten-tomatoes-search-${getSearchSlug(term)}`;
   const rottenTomatoesSearch = await dailyCache(cacheKey, async () =>
     fetchText(
       `https://www.rottentomatoes.com/search?search=${encodeURIComponent(term)}`,

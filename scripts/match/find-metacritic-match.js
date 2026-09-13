@@ -1,6 +1,5 @@
-const slugify = require("slugify");
 const { dailyCache } = require("../../common/cache");
-const { fetchJson } = require("../../common/utils");
+const { fetchJson, getSearchSlug } = require("../../common/utils");
 const { getMatch, findSourceMatch } = require("./common");
 
 const getImdbIdFromPoster = (filename) => {
@@ -10,11 +9,10 @@ const getImdbIdFromPoster = (filename) => {
 };
 
 const getSearchResults = async (term) => {
-  const slug = slugify(term, { strict: true }).toLowerCase();
-  const cacheKey = `metacritic-search-${slug}`;
+  const cacheKey = `metacritic-search-${getSearchSlug(term)}`;
   const metacriticSearch = await dailyCache(cacheKey, async () =>
     fetchJson(
-      `https://backend.metacritic.com/finder/metacritic/search/${slug}/web?mcoTypeId=2&offset=0&limit=30`,
+      `https://backend.metacritic.com/finder/metacritic/search/${encodeURIComponent(term)}/web?mcoTypeId=2&offset=0&limit=30`,
     ),
   );
 
