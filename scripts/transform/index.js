@@ -187,15 +187,26 @@ async function transform(
       }
 
       // The movie listing page is still up advertising the movie.
-      // If we can't get the page or the page has a "not found" URL, then it's
-      // been removed; continue
+      // If the page itself says the listing is gone - a "not found" URL, a not
+      // ok status, a placeholder - then it's been removed; continue
       let response;
       let content;
       try {
         response = await fetch(movie.url);
         content = (await response.text()).replaceAll("&nbsp;", " ");
       } catch {
-        // If something goes wrong checking the URL, assume it's been removed
+        // Not reaching the page at all is not evidence the listing was removed,
+        // it is evidence we cannot tell. Keep the previously-known-good event,
+        // exactly as the bot challenge below does, rather than dropping a still
+        // valid one over a failure that says nothing about it.
+        //
+        // Royal Albert Hall is why this is not a rare case: its event pages sit
+        // behind Imperva, which answers a cookieless fetch with a 302 to the
+        // same URL indefinitely until `fetch` gives up on the redirect count
+        // and throws. Assuming removal there silently deleted every carried
+        // forward listing at the one moment recovery existed for.
+        console.log(" - Kept (unreachable, unverifiable):", movie.title);
+        matchedData.push(withRequiredPerformanceDefaults(movie));
         continue;
       }
 

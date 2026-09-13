@@ -1,9 +1,12 @@
 const { format } = require("date-fns");
 
-// Venues we know are dark, and the window they're dark for. A venue listed here
-// transforms to nothing when its listings come back empty, instead of failing
-// the run: an empty response from a closed cinema is the truth about the venue,
-// not evidence the scrape has broken.
+// Venues we know cannot list anything, and the window in which they can't.
+// Usually that is a venue that is dark; it can also be one whose doors are open
+// but whose listings have gone out of reach, as a box office mid-upgrade is.
+// A venue listed here transforms to nothing when its listings come back empty,
+// instead of failing the run: an empty response from a venue we already know
+// cannot answer is the truth about it, not evidence the scrape has broken. The
+// `reason` says which kind of entry it is.
 //
 // The health probe reads the same list, and needs it for more than empty
 // listings: a chain drops a shut venue from its own site list as readily as it
@@ -56,6 +59,26 @@ const expectedClosures = [
     // September for refurbishment works."
     // https://www.o2centre.co.uk/en/play-listing/vue
     reason: "refurbishment works, reopening Saturday 5th September 2026",
+  },
+  {
+    venue: "royalalberthall.com",
+    from: "2026-09-13",
+    until: "2026-09-14",
+    // "In order to keep our box office running smoothly we will be undertaking
+    // a major upgrade to our booking system. Due to this, we will be unable to
+    // process bookings for tickets, tours and restaurants online, over the
+    // phone or in person from Sunday 13 - Monday 14 September. [...] We will be
+    // able to take bookings online and over the phone again from Tuesday 15
+    // September."
+    // https://www.royalalberthall.com/about-the-hall/news/box-office-update
+    //
+    // Not a closure: the Hall is open and every film stays listed as On Sale.
+    // The upgrade takes the dates with it - each event in the feed, in every
+    // category and not just Film, comes back with an empty `Performances` - so
+    // the transform holds 20 films and not one bookable showing. Recovery
+    // carries the previous release's listings through the window, and can only
+    // do so because this entry stops the transform throwing first.
+    reason: "box office upgrade, bookings reopening Tuesday 15 September 2026",
   },
 ];
 
