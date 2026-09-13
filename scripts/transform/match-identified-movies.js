@@ -27,9 +27,20 @@ async function matchIdentifiedMovies(movie, identifyFn) {
   const matches = [];
   for (const identifiedMovie of highConfidenceMovies) {
     // Create a minimal movie object for searchForBestMatch
+    //
+    // The identified director goes in the overview, not just the hints. A hint
+    // is a name scraped out of a synopsis and may be garbage, so getBestMatch
+    // only consults hints once a search has left it more than one candidate -
+    // where a single same-titled result comes back it takes it on the title
+    // alone. That is the case an identified film is nearly always in: the short
+    // itself isn't on TheMovieDB, one unrelated film normalizes to the same
+    // title, and it gets matched to that. This director came from the
+    // programme's own "Poppy by Julia Schönstädt, 17 mins" billing rather than
+    // from name extraction, so it's the same class of data as a venue's own
+    // director field and belongs where that is checked.
     const searchMovie = {
       title: identifiedMovie.title,
-      overview: createOverview({}),
+      overview: createOverview({ directors: identifiedMovie.director ?? "" }),
       performances: movie.performances,
       matchingHints: {
         ...movie.matchingHints,

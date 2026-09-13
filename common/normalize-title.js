@@ -470,7 +470,6 @@ function normalizeTitle(title, options) {
     [/Dora:? Magic Mermaid Adventures/i, "Dora: Mermaid Adventures"],
     ["Dora's Magical Mermaid Adventures", "Dora: Mermaid Adventures"],
     ["LEGACY AFRICA FILM", "Legacy Africa "],
-    [/^(.+) Block \d+(.+FF(\s+\d{4})?)?$/i, "$1 Block $2"],
     [/Kantara:? A Legend/i, "Kantara"],
     [" - Chapter ", ": Chapter "],
     [" - Live on Stage", ": Live on Stage"],
