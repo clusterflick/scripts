@@ -2,7 +2,12 @@ const { MovieDb } = require("moviedb-promise");
 const slugify = require("slugify");
 const normalizeTitle = require("./normalize-title");
 const normalizeName = require("./normalize-name");
-const { basicNormalize, compareAsSimilar, runLlmFunction } = require("./utils");
+const {
+  basicNormalize,
+  compareAsSimilar,
+  runLlmFunction,
+  getSearchSlug,
+} = require("./utils");
 const { withMovieDbRetry, isMissingMovieDbEntry } = require("./moviedb-retry");
 const { dailyCache } = require("./cache");
 const askLlm = require("./ask-llm");
@@ -513,7 +518,7 @@ const searchForBestMatch = async ({
   year: yearValue,
   isUsingLlmData = false,
 }) => {
-  const slug = slugify(normalizedTitle, { strict: true }).toLowerCase();
+  const slug = getSearchSlug(normalizedTitle);
   const matchByDirector = await findMovieByDirector(normalizedTitle, movie);
   if (matchByDirector) return matchByDirector;
 

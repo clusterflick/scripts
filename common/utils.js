@@ -7,6 +7,7 @@ const { decode } = require("html-entities");
 const { isAfter, startOfDay } = require("date-fns");
 const stringify = require("json-stable-stringify");
 const diff = require("fast-diff");
+const slugify = require("slugify");
 
 const readJSON = async (filePath) => {
   const data = await fs.readFile(filePath, "utf8");
@@ -90,6 +91,19 @@ const sanitizePathSegment = (value = "") => {
     .toLowerCase()
     .replace(/[^a-z0-9-]/g, "") // whitelist chars
     .slice(0, 255);
+};
+
+// A search term is a film title, and `slugify` keeps only latin characters - so
+// a title written entirely in another script reduces to an empty string. Empty
+// is unusable twice over: as a URL path segment it asks a search endpoint for
+// nothing (Metacritic answers `search//web` with a 400), and as a cache key
+// every such title would share one file and be served back another film's
+// results. Fall back to a digest of the term - unreadable, but distinct.
+// A request always carries the term itself, percent-encoded, never this slug.
+const getSearchSlug = (term = "") => {
+  const slug = slugify(term, { strict: true }).toLowerCase();
+  if (slug) return slug;
+  return crypto.createHash("sha256").update(term).digest("hex").slice(0, 16);
 };
 
 const sortAndFilterMovies = (movies) => {
@@ -1100,6 +1114,7 @@ module.exports = {
   writeJSON,
   basicNormalize,
   sanitizePathSegment,
+  getSearchSlug,
   sortAndFilterMovies,
   getMovieTitleAndYearFrom,
   convertToList,
