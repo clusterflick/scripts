@@ -72,6 +72,7 @@ const ignoredIds = [
   1753122, // SURPRISE! -- https://www.themoviedb.org/movie/1753122-surprise
   847819, // Wallace & Gromit - Hearts of Clay -- https://www.themoviedb.org/movie/847819-wallace-gromit-coeurs-a-modeler
   1414622, // Wet Dreams -- https://www.themoviedb.org/movie/1414622-wet-dreams
+  1434306, // Board Games -- https://www.themoviedb.org/movie/1434306-board-games
 ];
 
 /**
