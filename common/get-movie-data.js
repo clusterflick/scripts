@@ -137,8 +137,21 @@ function getForcedMatch(normalizedTitle) {
   return getMovieInfoAndCacheResults({ id: matchId });
 }
 
+// Director names as venues write them, corrected to the name TheMovieDB files
+// the person under - so the search lands on them rather than on whoever is more
+// popular under a partial name.
+const nameCorrections = [
+  [/Scott McGhee/i, "Scott McGehee"],
+  // https://www.themoviedb.org/person/1277754-kiwi-chow-kwun-wai
+  [/^Kiwi Chow$/i, "Kiwi Chow Kwun-Wai"],
+];
+
 const applyNameCorrections = (name) =>
-  name.replace(/Scott McGhee/i, "Scott McGehee");
+  nameCorrections.reduce(
+    (corrected, [phrase, replacement]) =>
+      corrected.replace(phrase, replacement),
+    name,
+  );
 
 const moviedb = new MovieDb(process.env.MOVIEDB_API_KEY);
 
