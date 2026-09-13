@@ -248,6 +248,11 @@ function normalizeTitle(title, options) {
     ["Seigfried", "Siegfried"],
     ["Acroyd", "Ackroyd"],
     ["Possun Trot", "Possum Trot"],
+    ["in Harlen", "in Harlem"],
+    [
+      "Safflicks Film Festival: Where We Belong",
+      "Safflicks Film Festival: Where We Belong: Double Bill",
+    ],
     ["10180", "1080"],
     ["unknwon", "unknown"],
     ["colourful", "colorful"],
