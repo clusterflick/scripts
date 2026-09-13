@@ -247,6 +247,7 @@ function normalizeTitle(title, options) {
     ["Carvaggio", "Caravaggio"],
     ["Seigfried", "Siegfried"],
     ["Acroyd", "Ackroyd"],
+    ["Possun Trot", "Possum Trot"],
     ["10180", "1080"],
     ["unknwon", "unknown"],
     ["colourful", "colorful"],
