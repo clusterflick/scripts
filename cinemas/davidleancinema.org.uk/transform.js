@@ -7,6 +7,8 @@ const {
   generateShowingId,
   createAccessibility,
   createFormat,
+  getTitleAccessibility,
+  getTitleFormat,
   getText,
 } = require("../../common/utils");
 const attributes = require("./attributes");
@@ -83,16 +85,27 @@ function parseOverviewFromDescription(descriptionHtml) {
   };
 }
 
+// The per-event `event_attribute` is a label in the venue's own vocabulary
+// ("HoH Subtitled", "BiAs", "Dementia Friendly", "35mm"). Run it through the
+// shared label matchers as well as the venue-specific checks below, because
+// neither covers it alone: the shared list knows "Dementia Friendly" (and
+// "SEND-Friendly") means relaxed, while only the local checks catch this
+// venue's bare "Relaxed" and its "BiAs" shorthand for babes-in-arms.
 function mapAccessibilityFromAttribute(attr = "", overview = "") {
   const value = basicNormalize(attr);
+  const shared = getTitleAccessibility(attr.trim());
   return {
-    hardOfHearing: value.includes("hoh"),
+    hardOfHearing: shared.hardOfHearing || value.includes("hoh"),
     subtitled:
+      shared.subtitled ||
       value.includes("subtitl") ||
       basicNormalize(overview).includes("with english subtitles"),
-    babyFriendly: value.includes("babes-in-arms") || value.includes("bias"),
-    relaxed: value.includes("relaxed"),
-    audioDescription: value.includes("audio desc"),
+    babyFriendly:
+      shared.babyFriendly ||
+      value.includes("babes-in-arms") ||
+      value.includes("bias"),
+    relaxed: shared.relaxed || value.includes("relaxed"),
+    audioDescription: shared.audioDescription || value.includes("audio desc"),
   };
 }
 
@@ -141,7 +154,10 @@ function toMovie($, showEl) {
       url: bookingUrl,
       status: { soldOut },
       accessibility: createAccessibility(title, accessibility, overview),
-      format: createFormat(title, {}, overview),
+      // The same attribute also carries the print format, spelled either
+      // "35mm" or "35mm film" - so read it with the label matchers rather than
+      // as an exact token, which only the first spelling would satisfy.
+      format: createFormat(title, getTitleFormat(eventAttribute), overview),
     });
   });
 
