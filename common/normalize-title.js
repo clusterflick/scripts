@@ -18,12 +18,14 @@ function normalizeTitle(title, options) {
   // same performance arrives under a second name. Put the colon back before
   // the theatre prefixing runs, which is what reads it.
   title = title.replace(/\blive_\s/i, "live: ");
-  // One venue prefixes every title with its country code, and the theatre
-  // prefixing anchors on the front of the title, so "gb Met Opera 2026-27:
-  // Parsifal" never reaches the opera path and the same broadcast arrives
-  // under a second name. Drop the prefix before that runs rather than in the
-  // corrections below, which are too late to help it.
-  title = title.replace(/^gb\s+/i, "");
+  // One venue prefixes every title with the country code of the listing, and
+  // the theatre prefixing anchors on the front of the title, so "gb Met Opera
+  // 2026-27: Parsifal" never reaches the opera path and the same broadcast
+  // arrives under a second name. The Irish listings carry "ie" the same way,
+  // so match the codes the venue uses rather than a string apiece. Drop the
+  // prefix before that runs rather than in the corrections below, which are
+  // too late to help it.
+  title = title.replace(/^(?:gb|ie)\s+/i, "");
 
   title = standardizePrefixingForTheatrePerformances(
     title,
@@ -623,6 +625,9 @@ function normalizeTitle(title, options) {
     ["A Minecraft Movie Premiere", "A Minecraft Movie"],
     ["Evgenij Onegin", "Eugene Onegin"],
     ["NOVELLE VAGUE", "NOUVELLE VAGUE"],
+    // One venue misspells the play in its broadcast listing, so the same
+    // National Theatre Live performance arrives under a second name.
+    ["GOLDERN BOY", "GOLDEN BOY"],
     [/^David Bowie:? The Final Act/i, "Bowie: The Final Act"],
     [/JEFF BUCKLEY - IT'S NEVER OVER/i, "It's Never Over, Jeff Buckley"],
     ["Berliner Philharmoniker Live:", "Berliner Philharmoniker:"],

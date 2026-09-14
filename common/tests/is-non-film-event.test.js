@@ -45,6 +45,11 @@ describe("isNonFilmEvent", () => {
     ["Carols by Candlelight"],
     ["Autumnal Leaf Collages: COVID-Safe Social with Breathe Easy London"],
     ["Ground Level Presents: Gardening for Climate Resilience"],
+    ["New Year's Eve Concert with BerlinerPhilharmoniker"],
+    ["Berliner Philharmoniker LIVE: New Year’s Eve Concert 2025"],
+    ["Berliner Philharmoniker Live: NYE Concert 2025"],
+    ["Panel discussion: Reporting The Syrian Refugee Crisis"],
+    ["Panel Discussion: Asian Disapora Filmmakers"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });
@@ -76,6 +81,8 @@ describe("isNonFilmEvent", () => {
     ["Silent Film & Live Music: A Colour Box"],
     ["Cine-Concert: new short films with live music"],
     ["Preview Screening & Concert"],
+    ["Aftersun screening with panel discussion"],
+    ["The Zone of Interest + Panel Discussion"],
   ])("does not flag '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(false);
   });
