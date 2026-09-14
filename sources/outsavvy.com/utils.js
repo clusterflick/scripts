@@ -1,5 +1,7 @@
+const cheerio = require("cheerio");
 const { parse, isValid } = require("date-fns");
 const { enGB } = require("date-fns/locale/en-GB");
+const attributes = require("./attributes");
 
 // The header an event publishes its date in, e.g.
 // "Monday 3rd November 2025 at 7:30 PM"
@@ -14,6 +16,28 @@ const WIDGET_DATE_FORMAT = "EEEE do MMMM yyyy '@' h:mm a";
 // The widget's dates are assigned to a variable in an inline script, on one
 // line and without a trailing semicolon.
 const WIDGET_DATES = /var jsonDates\s*=\s*(\[.*\])\s*$/m;
+
+// The event cards in a hashtag listing, addressed by where they point rather
+// than by the grid they sit in. OutSavvy drops promotional panels into that
+// grid - a banner linking to whichever hashtag it is pushing that month - and
+// those carry an absolute href where an event card carries a path, so sweeping
+// up every link in the container and prefixing the domain built a URL with two
+// schemes in it. Taking only the event paths leaves the promo where it belongs
+// and makes the prefixing safe by construction.
+const EVENT_LINKS = "#eventscontent a[href^='/event/']";
+
+/**
+ * Read the event URLs out of a hashtag listing page.
+ *
+ * @param {string} html - HTML of a hashtag listing page
+ * @returns {string[]} URLs of the events listed under that hashtag
+ */
+function parseListingEventUrls(html) {
+  const $ = cheerio.load(html);
+  return $(EVENT_LINKS)
+    .map((i, elem) => `${attributes.domain}${$(elem).attr("href")}`)
+    .get();
+}
 
 function parseDate(date) {
   return parse(date, HEADER_DATE_FORMAT, new Date(), {
@@ -86,6 +110,7 @@ function parseEventDates(dateText, scriptText) {
 }
 
 module.exports = {
+  parseListingEventUrls,
   parseDate,
   parseBookingWidgetDates,
   parseEventDates,
