@@ -943,8 +943,35 @@ const removeMatchingHints = ({ matchingHints, ...movie }) => movie;
 
 const addTestCategory = (movie) => ({ ...movie, category: "event" });
 
+// Every caller compares normalized person names, where the tolerance below is
+// there to absorb a spelling variant - "Shoenbrun" for "Schoenbrun", "Antony"
+// for "Anthony", "Dan Kwan" for "Daniel Kwan". Measured over a release's worth
+// of venue-supplied directors, 924 of 933 matched their film's credits exactly:
+// the tolerance decides about one percent of matches, so it is worth keeping
+// tight.
+//
+// A budget of 3 allows one character to be substituted, or a difference of 3 in
+// length. The 4 it replaced was where wrong people met - "Michael Mann" against
+// "Michael Waxman", "Jacques Tati" against "Jacques Cottin", "Kenji Fukasaku"
+// against Kinji's son "Kenta" - while every genuine variant found sat at 3 or
+// fewer.
+const maximumLetterChanges = 3;
+
+// Below this length the budget is most of the string, so a fragment matches
+// anyone: "jane", left behind when the NLP split "Jane Austen's", came within 3
+// changes of "anglee" and matched every Forest Cinema screening of the 2026
+// Sense and Sensibility to Ang Lee's 1995 one. Nothing shorter than this
+// matched legitimately anywhere in that release, so short names must be exact.
+const minimumComparableLength = 7;
+
 const compareAsSimilar = (firstString, secondString) => {
   if (firstString === secondString) return true;
+
+  if (
+    Math.min(firstString.length, secondString.length) < minimumComparableLength
+  ) {
+    return false;
+  }
 
   // Compare strings, calculating a score based on the number of characters that
   // have changed. The following counts the number of characters changed
@@ -953,9 +980,7 @@ const compareAsSimilar = (firstString, secondString) => {
     (count, [score, letters]) => (score === 0 ? count : count + letters.length),
     0,
   );
-  // The threshold of 4 below allows for 2 characters to mismatch (a character
-  // deleted and then another added), or a difference of 4 characters in length.
-  return lettersChanges <= 4;
+  return lettersChanges <= maximumLetterChanges;
 };
 
 const getId = (value) =>

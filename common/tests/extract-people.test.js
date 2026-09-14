@@ -143,6 +143,32 @@ describe("extractPeopleNames", () => {
       ).toEqual(["Tom Hardy"]);
     });
 
+    test("strips a possessive credit for the source material", () => {
+      expect(
+        extractPeopleNames(
+          "From Focus Features and Working Title comes an irresistible new take on Jane Austen's iconic Sense and Sensibility, starring Daisy Edgar-Jones.",
+          { stripAttributions: true },
+        ),
+      ).toEqual(["Daisy Edgar-Jones"]);
+    });
+
+    test("strips a possessive credit the NLP would leave whole", () => {
+      expect(
+        extractPeopleNames(
+          "Spike Lee's latest film is a masterpiece starring Denzel Washington",
+          { stripAttributions: true },
+        ),
+      ).toEqual(["Denzel Washington"]);
+    });
+
+    test("leaves an apostrophe inside a name alone", () => {
+      expect(
+        extractPeopleNames("Tom Hanks and Peter O'Toole star.", {
+          stripAttributions: true,
+        }),
+      ).toEqual(["Tom Hanks", "Peter O'Toole"]);
+    });
+
     test("does not strip attributions by default", () => {
       const result = extractPeopleNames(
         "Directed by Christopher Nolan\nLeonardo DiCaprio stars in this thriller.",

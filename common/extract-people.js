@@ -1,5 +1,24 @@
 const nlp = require("compromise");
 
+// A run of capitalised words carrying a possessive - "Jane Austen's", "Spike
+// Lee's". Under `stripAttributions` the whole phrase goes before the NLP sees
+// it: whoever owns the work is being credited for the source material, not
+// billed in this production.
+//
+// Removing it also takes out a fragment the NLP leaves behind. Compromise only
+// recognises a possessive as part of a name when it knows the name, so
+// "Spike Lee's" comes back whole while "Jane Austen's" comes back as the bare
+// given name "Jane" - and a mononym that short is not an identity. Fed to
+// TheMovieDB as a crew hint, "jane" compared as similar to "anglee" and every
+// Forest Cinema screening of the 2026 Sense and Sensibility matched Ang Lee's
+// 1995 one.
+//
+// The trailing "s" is required rather than optional so that an apostrophe
+// inside a name - "O'Brien", "D'Angelo" - is not read as the possessive and
+// the name chopped in half.
+const POSSESSIVE_ATTRIBUTION =
+  /\p{Lu}[\p{L}\p{M}\p{N}'’.-]*(?:\s+\p{Lu}[\p{L}\p{M}\p{N}'’.-]*)*['’]s\b/gu;
+
 /**
  * Extract person names from text using NLP.
  *
@@ -9,10 +28,10 @@ const nlp = require("compromise");
  * @param {string} text - The text to extract names from (e.g. a synopsis).
  * @param {object} [options]
  * @param {boolean} [options.stripAttributions=false] - Strip credited role
- *   lines (e.g. "by Arthur Miller", "Directed by Ivo Van Hove") and
- *   parenthetical content (e.g. "(Breaking Bad)") before running NLP, to
- *   avoid extracting playwrights/directors/designers or treating film/show
- *   titles as person names.
+ *   lines (e.g. "by Arthur Miller", "Directed by Ivo Van Hove"), possessive
+ *   credits (e.g. "Jane Austen's") and parenthetical content (e.g. "(Breaking
+ *   Bad)") before running NLP, to avoid extracting playwrights/directors/
+ *   designers or treating film/show titles as person names.
  * @returns {string[] | undefined}
  */
 function extractPeopleNames(text, { stripAttributions = false } = {}) {
@@ -26,6 +45,7 @@ function extractPeopleNames(text, { stripAttributions = false } = {}) {
         /^(?:by|directed by|design by|written by|adapted by)\s+.+$/gim,
         "",
       )
+      .replace(POSSESSIVE_ATTRIBUTION, "")
       .replace(/\([^)]*\)/g, "");
   }
 
