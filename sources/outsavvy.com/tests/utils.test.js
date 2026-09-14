@@ -1,4 +1,7 @@
+const fs = require("node:fs");
+const path = require("node:path");
 const {
+  parseListingEventUrls,
   parseDate,
   parseBookingWidgetDates,
   parseEventDates,
@@ -9,6 +12,35 @@ const {
 // directly, using the wording taken from events that don't.
 
 const widgetScript = (dates) => `var jsonDates = ${JSON.stringify(dates)}`;
+
+// The event grid of the "film" hashtag listing as it was served on 2026-09-14,
+// trimmed to two event cards and the promotional panel that follows them.
+const listingWithPromoPanel = fs.readFileSync(
+  path.join(__dirname, "fixtures", "listing-with-promo-panel.html"),
+  "utf8",
+);
+
+describe("parseListingEventUrls", () => {
+  it("reads the events listed under a hashtag", () => {
+    expect(parseListingEventUrls(listingWithPromoPanel)).toEqual([
+      "https://outsavvy.com/event/38590/film-everybody-to-kenmure-street-in-association-with-tower-hamlets-stand-up-to-racism",
+      "https://outsavvy.com/event/39052/fringe-presents-straight-from-the-yard",
+    ]);
+  });
+
+  // The panel sits in the event grid and links out with an absolute URL, so
+  // taking every link in the grid and prefixing the domain asked for
+  // "https://outsavvy.comhttps://www.outsavvy.com/hashtag/halloween"
+  it("leaves the promotional panel OutSavvy puts in the grid", () => {
+    expect(
+      parseListingEventUrls(listingWithPromoPanel).join(" "),
+    ).not.toContain("hashtag");
+  });
+
+  it("reads nothing out of a listing that has stopped carrying events", () => {
+    expect(parseListingEventUrls('<div id="eventscontent"></div>')).toEqual([]);
+  });
+});
 
 describe("parseDate", () => {
   it("reads the date out of the header", () => {

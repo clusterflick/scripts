@@ -1,6 +1,6 @@
 const { fetchText } = require("../../common/utils.js");
-const cheerio = require("cheerio");
 const attributes = require("./attributes");
+const { parseListingEventUrls } = require("./utils");
 
 // OutSavvy has no film category - an event carries whatever hashtags its
 // organiser typed - so the listing is swept a tag at a time. "screening" is not
@@ -34,10 +34,7 @@ async function retrieve() {
 
     // The "Load More" button reveals cards that are already in the HTML, so a
     // single fetch holds the whole tag - there is nothing to page through.
-    const $ = cheerio.load(movieListPage);
-    const tagUrls = $("#eventscontent a")
-      .map((i, elem) => `${attributes.domain}${$(elem).attr("href")}`)
-      .get();
+    const tagUrls = parseListingEventUrls(movieListPage);
 
     if (tag === REQUIRED_TAG && tagUrls.length === 0) {
       throw new Error(
