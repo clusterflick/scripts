@@ -10,6 +10,7 @@ const {
   hasFilmShapedTitle,
   normalizeOrganizerEvent,
 } = require("./organizer-events");
+const seededOrganizerIds = require("./seeded-organizers");
 const attributes = require("./attributes");
 
 function uniqueEvents(events) {
@@ -122,13 +123,31 @@ function buildKnownVenueTest() {
 }
 
 /**
- * The events that organisers at venues we hold have on beyond the ones the
- * search reached, in the organiser's own listing shape.
+ * An organiser's calendar, with a stale seeded id named as such. A discovered
+ * id came off a live event, so a failure reading it is the platform's; a seeded
+ * id outlives the organiser that justified it, and that failure is ours to fix.
+ */
+async function fetchCalendar(organizerId, fromDate) {
+  try {
+    return await fetchOrganizerEvents(organizerId, fromDate);
+  } catch (error) {
+    if (!seededOrganizerIds.includes(organizerId)) throw error;
+    throw new Error(
+      `Seeded organiser ${organizerId} could not be read, so ` +
+        `sources/eventbrite.co.uk/seeded-organizers.js needs updating`,
+      { cause: error },
+    );
+  }
+}
+
+/**
+ * The events the organisers we can name have on beyond the ones the search
+ * reached, in the organiser's own listing shape.
  *
- * Only organisers the search surfaced at least once can be asked - their id
- * arrives on an event, so an organiser whose every listing ranks below the
- * search's cut-off stays invisible to this. It recovers a truncated strand, not
- * an unknown one.
+ * Most are discovered - their id arrives on a search result at a venue we hold,
+ * so asking them recovers the rest of a truncated strand. The rest are seeded
+ * by hand, for organisers the search never surfaces at all. Both are filtered
+ * identically below.
  */
 async function fetchEventsFromKnownOrganizers(
   knownVenueEvents,
@@ -136,15 +155,17 @@ async function fetchEventsFromKnownOrganizers(
   isAtKnownVenue,
 ) {
   const organizerIds = [
-    ...new Set(
-      knownVenueEvents
+    ...new Set([
+      ...seededOrganizerIds,
+      ...knownVenueEvents
         .map(({ primary_organizer_id: id }) => id)
         .filter((id) => !!id),
-    ),
+    ]),
   ];
 
   console.log(
-    ` - Requesting calendars for ${organizerIds.length} organiser(s) at known venues...`,
+    ` - Requesting calendars for ${organizerIds.length} organiser(s) - ` +
+      `${seededOrganizerIds.length} seeded, the rest found at known venues...`,
   );
 
   const fromDate = format(new Date(), "yyyy-MM-dd");
@@ -156,7 +177,7 @@ async function fetchEventsFromKnownOrganizers(
         `    - ${Math.round((index / organizerIds.length) * 100)}% complete`,
       );
 
-    for (const event of await fetchOrganizerEvents(organizerId, fromDate)) {
+    for (const event of await fetchCalendar(organizerId, fromDate)) {
       // The organiser's other venues are not our business, and an event the
       // search already gave us arrives richer than this one. The title is
       // checked before the venue because it costs nothing, where matching a

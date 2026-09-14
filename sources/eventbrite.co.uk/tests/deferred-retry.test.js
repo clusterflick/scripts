@@ -5,6 +5,10 @@ const { disableCache } = require("../../../common/test-utils");
 jest.mock("../../../common/cache");
 disableCache();
 
+// Stubbed out: an id added to the seed list later would ask for a calendar
+// these fixtures never captured. Seeding is organizer-sweep.test.js's business.
+jest.mock("../seeded-organizers", () => []);
+
 const retrieve = require("../retrieve");
 
 const SEARCH_URL_PATTERN = /\/d\/united-kingdom--london\//;

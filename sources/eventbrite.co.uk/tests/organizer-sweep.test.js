@@ -3,6 +3,12 @@ const { disableCache } = require("../../../common/test-utils");
 jest.mock("../../../common/cache");
 disableCache();
 
+// Stubbed rather than read: this file is about what the sweep does with an id,
+// not who is on the real list. Prefixed `mock` so jest's hoisting lets the
+// factory close over it, and left empty so only the seeding test adds one.
+const mockSeededOrganizerIds = [];
+jest.mock("../seeded-organizers", () => mockSeededOrganizerIds);
+
 const retrieve = require("../retrieve");
 
 const SEARCH_URL_PATTERN = /\/d\/united-kingdom--london\//;
@@ -97,6 +103,7 @@ describe("eventbrite organiser sweep", () => {
   afterEach(() => {
     jest.useRealTimers();
     jest.restoreAllMocks();
+    mockSeededOrganizerIds.length = 0;
   });
 
   it("recovers an organiser's events that the search did not reach", async () => {
@@ -217,5 +224,62 @@ describe("eventbrite organiser sweep", () => {
     // The filter runs on the listing, so the three that were dropped never
     // cost an event-page request. Event 1 is the search's own.
     expect(eventPagesFetched).toHaveLength(4);
+  }, 15000);
+  // An organiser the search omits entirely hands us no id to discover, so the
+  // seed list is the only route to them.
+  it("asks a seeded organiser the search never surfaced", async () => {
+    const SEEDED_ID = "114851363951";
+    mockSeededOrganizerIds.push(SEEDED_ID);
+    const organizersAsked = [];
+
+    global.fetch = jest.fn(async (url) => {
+      // The search finds nothing at a venue we hold, so it contributes no
+      // organiser of its own.
+      if (SEARCH_URL_PATTERN.test(url)) return response(200, searchPage([]));
+
+      if (ORGANIZER_URL_PATTERN.test(url)) {
+        organizersAsked.push(url.match(/organizers\/(\d+)\//)[1]);
+        return response(
+          200,
+          JSON.stringify({
+            events: [
+              organizerEvent("2", "Visions of Desire by Erotic Film Festival"),
+            ],
+            has_more: false,
+          }),
+        );
+      }
+
+      return response(200, eventPage(url.split("event-")[1]));
+    });
+
+    const { value, error } = await runRetrieve();
+
+    expect(error).toBeUndefined();
+    expect(organizersAsked).toEqual([SEEDED_ID]);
+    expect(value.organizerEvents).toHaveLength(1);
+    expect(value.organizerEvents[0]).toMatchObject({
+      id: "2",
+      name: "Visions of Desire by Erotic Film Festival",
+    });
+  }, 15000);
+
+  // A seeded id outlives the organiser that justified it, and the error is the
+  // only thing that can say the fix is ours rather than Eventbrite's.
+  it("names the seed list when a seeded organiser cannot be read", async () => {
+    mockSeededOrganizerIds.push("999");
+
+    global.fetch = jest.fn(async (url) => {
+      if (SEARCH_URL_PATTERN.test(url)) return response(200, searchPage([]));
+      if (ORGANIZER_URL_PATTERN.test(url)) return response(404, "");
+      return response(200, eventPage(url.split("event-")[1]));
+    });
+
+    const { error } = await runRetrieve();
+
+    expect(error).toBeDefined();
+    expect(error.message).toContain("Seeded organiser 999");
+    expect(error.message).toContain("seeded-organizers.js");
+    expect(error.cause).toBeDefined();
   }, 15000);
 });

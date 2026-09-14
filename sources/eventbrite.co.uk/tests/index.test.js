@@ -33,6 +33,10 @@ const CACHE_DATE = "2026-09-12";
 jest.mock("../../../common/cache");
 setupCacheMock(__dirname, CACHE_DATE);
 
+// Stubbed out: an id added to the seed list later would ask for a calendar
+// these fixtures never captured. Seeding is organizer-sweep.test.js's business.
+jest.mock("../seeded-organizers", () => []);
+
 // Hide script output
 console.log = () => {};
 
