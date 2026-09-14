@@ -71,6 +71,16 @@ const nonFilmEvents = [
   // rather than on the series presenting it ("Ground Level Presents"), because
   // a presenter bills films just as readily as talks.
   /Gardening for Climate/i,
+  // The orchestra's New Year's Eve concert, billed as the concert itself
+  // rather than as a film it scored. Both spellings of the billing are
+  // matched, because the correction that folds "NYE Concert" into the long
+  // form runs in normalisation, which this check never reaches.
+  /New Year.?s Eve Concert/i,
+  /NYE Concert/i,
+  // A talk billed as nothing but its panel. Anchored: "<film> screening with
+  // panel discussion" is still a screening of the film named before it, and
+  // only a listing that opens on the panel has no film in it at all.
+  /^Panel discussion:/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
