@@ -44,6 +44,7 @@ describe("isNonFilmEvent", () => {
     ],
     ["Carols by Candlelight"],
     ["Autumnal Leaf Collages: COVID-Safe Social with Breathe Easy London"],
+    ["Ground Level Presents: Gardening for Climate Resilience"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });

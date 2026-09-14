@@ -67,6 +67,10 @@ const nonFilmEvents = [
   // session ("Autumnal Leaf Collages"), so match the social's own billing
   // rather than carrying a pattern per activity.
   /COVID-Safe Social/i,
+  // A gardening talk the venue hosts, not a screening. Matched on the talk
+  // rather than on the series presenting it ("Ground Level Presents"), because
+  // a presenter bills films just as readily as talks.
+  /Gardening for Climate/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
