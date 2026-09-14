@@ -53,13 +53,17 @@ function convertToPrompt(movie, results, normalizedTitle) {
     parts.push(`\nCinema listing overview:\n${movie.matchingHints.overview}`);
   }
 
+  // Every field here lands in the prompt, and the prompt is the cache key - so
+  // a field TheMovieDB recomputes on its own schedule expires a day's cached
+  // answers for reasons that have nothing to do with the listing. popularity is
+  // exactly that: a float that moves daily, and one the instructions above
+  // never ask the model to weigh. Keep this to fields that identify the film.
   const filteredResults = results.map(
     ({
       id,
       original_language,
       original_title,
       overview,
-      popularity,
       release_date,
       title,
     }) => ({
@@ -67,7 +71,6 @@ function convertToPrompt(movie, results, normalizedTitle) {
       original_language,
       original_title,
       overview,
-      popularity,
       release_date,
       title,
     }),
