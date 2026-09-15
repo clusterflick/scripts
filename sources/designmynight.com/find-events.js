@@ -31,6 +31,14 @@ function extractMovieTitleFromTicketName(ticketName) {
   const originalName = ticketName;
 
   let title = ticketName
+    // A pop-up that sells the same screening by seat leads with the seating
+    // rather than the date ("1 sofa, 2 people - Friday 4th December - Elf"),
+    // so the date patterns below - which anchor on the front - never reach it
+    // and the seating ends up as the title. Take the seating off first and
+    // the film is what's left. The event title is no help here: it names the
+    // pop-up ("JOIA Rooftop Christmas Movie Pop Up & Dinner at art'otel London
+    // Battersea Power Station") and every film it runs would collapse into it.
+    .replace(/^\d+\s+\w+,\s*\d+\s+(?:person|persons|people)\s*[-:]\s*/i, "")
     // Remove common date patterns at the start:
     // - "Saturday 1st November- "
     // - "Sunday 2nd November: "
@@ -67,6 +75,10 @@ function extractMovieTitleFromTicketName(ticketName) {
   ) {
     return undefined;
   }
+
+  // A ticket that was nothing but seating ("1 sofa, 2 people") names no film,
+  // so it falls back to the event title rather than grouping under an empty one
+  if (!title) return undefined;
 
   return title;
 }
