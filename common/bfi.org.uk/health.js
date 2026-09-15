@@ -21,8 +21,16 @@ const GRANULARITY = "performance";
 
 // The default page size is 50 for IMAX (three pages of results), so ask for one
 // large page instead. `total_pages` below is what proves it was enough - the
-// search silently gives you the first page, and Southbank is already at 432.
-const PAGE_SIZE = 500;
+// search silently gives you the first page.
+//
+// Size it off Southbank, which is the big one and moves in a sawtooth: the
+// count drains as performances pass and jumps when a season goes on sale. It
+// ran 432 down to 231 through August, then a publish on 2026-09-15 took it from
+// 275 to over 500 within the hour - so a 500 page cost a red hour a season on a
+// venue that was up the whole time. The headroom is free: this caps the page,
+// it does not pad it, so the response still only carries the results that
+// exist.
+const PAGE_SIZE = 2000;
 
 // Two page loads in quick succession drew a Cloudflare challenge, so space them
 // the way the Southbank retrieve spaces its show pages. Jittered, because a
@@ -52,16 +60,27 @@ const searchUrl = ({ url, articleId }) => {
 
 // The results page carries its own tally in an inline `getPageObject()` script.
 // It is the only way to know the page wasn't truncated - the markup looks
-// identical whether you got all the results or the first 500 of them.
+// identical whether you got all the results or the first page of them.
 const getSearchInfo = (html) => {
   const match = html.match(
     /total_records:\s*(\d+),\s*total_pages:\s*(\d+),\s*page_size:\s*(\d+)/,
   );
   if (!match) throw probeError("No search totals in the results page");
-  const [totalRecords, totalPages] = [Number(match[1]), Number(match[2])];
+  const [totalRecords, totalPages, pageSize] = [
+    Number(match[1]),
+    Number(match[2]),
+    Number(match[3]),
+  ];
   if (totalPages > 1) {
+    // The tally echoes the page size the search actually used, which is the
+    // only thing separating a venue that has outgrown the page from a search
+    // that is capping what we ask for. Raising PAGE_SIZE fixes the first and
+    // does nothing at all for the second, so say which one happened rather than
+    // sending the next reader to raise a number already being ignored.
     throw probeError(
-      `Results ran to ${totalPages} pages of ${PAGE_SIZE}; raise PAGE_SIZE - only the first was read`,
+      pageSize < PAGE_SIZE
+        ? `Search capped page_size at ${pageSize} (asked for ${PAGE_SIZE}); ${totalRecords} results ran to ${totalPages} pages and only the first was read`
+        : `Results ran to ${totalPages} pages of ${PAGE_SIZE}; raise PAGE_SIZE - only the first was read`,
     );
   }
   return { totalRecords };
