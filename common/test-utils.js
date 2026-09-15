@@ -39,11 +39,65 @@ const SENSITIVE_BODY_PATTERNS = [
   /\b[ps]k\.eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+/g,
 ];
 
-function redactBody(text) {
+// Personal data a platform embeds in an otherwise ordinary listing response.
+// Unlike the credentials above, this is other people's data rather than a
+// site's own: Clyx returns the guest list inside the event record itself -
+// `members` holds attendees' names and avatar URLs - next to the organiser's
+// contact address and payment-account id. Nothing the pipeline reads touches
+// any of it, and a recording is a file in a public repo, so the fields are
+// dropped on the way in.
+//
+// Keyed by host, because these are ordinary words: a `members` or `email` field
+// on some other source may be exactly what that source is read for, and this
+// must not quietly delete it.
+const SENSITIVE_BODY_FIELDS = {
+  "app.clyx.com": ["members", "email", "stripeConnectId"],
+};
+
+// Delete the named keys wherever they appear, at any depth - an event record
+// nests the company that owns it, so the fields are not all top-level.
+function deleteFields(value, fields) {
+  if (Array.isArray(value)) {
+    for (const entry of value) deleteFields(entry, fields);
+    return;
+  }
+  if (!value || typeof value !== "object") return;
+
+  for (const field of fields) delete value[field];
+  for (const entry of Object.values(value)) deleteFields(entry, fields);
+}
+
+function redactBodyFields(text, url) {
+  let host;
+  try {
+    host = new URL(url).host;
+  } catch {
+    return text;
+  }
+
+  const fields = SENSITIVE_BODY_FIELDS[host];
+  if (!fields) return text;
+
+  // Only JSON can be narrowed by field. A body that doesn't parse is left as
+  // it is: the host-keyed list says the personal data is in this source's JSON,
+  // so a non-JSON body here is a redirect or an error page, not a quiet miss.
+  let parsed;
+  try {
+    parsed = JSON.parse(text);
+  } catch {
+    return text;
+  }
+
+  deleteFields(parsed, fields);
+  return JSON.stringify(parsed);
+}
+
+function redactBody(text, url) {
   if (typeof text !== "string") return text;
+  const withoutFields = redactBodyFields(text, url);
   return SENSITIVE_BODY_PATTERNS.reduce(
     (redacted, pattern) => redacted.replace(pattern, "[REDACTED]"),
-    text,
+    withoutFields,
   );
 }
 
@@ -91,6 +145,7 @@ function setupPollyWrapper(isRecording, dirname) {
       if (recording.response.content) {
         recording.response.content.text = redactBody(
           recording.response.content.text,
+          recording.request.url,
         );
       }
     });
