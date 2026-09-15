@@ -1,6 +1,12 @@
 module.exports = {
   id: "mason-fifth.com-westbourne-park",
   name: "Mason & Fifth",
+  // Platforms list the building alongside the neighbourhood it is named for,
+  // which the bare venue name never matches: Clyx sells the Coffeehouse Cinema
+  // screening against "Mason & Fifth, Westbourne Park". Mason & Fifth run
+  // several London buildings, so the neighbourhood is what distinguishes this
+  // one rather than noise to be stripped.
+  alternativeNames: ["Mason & Fifth, Westbourne Park"],
   domain: "https://mason-fifth.com",
   socials: {
     letterboxd: null,
