@@ -15,6 +15,9 @@ module.exports = [
   // Coffeehouse Cinema - curated short film screenings followed by a
   // filmmaker Q&A, run out of coffee shops. Mostly Los Angeles ("Vol. N"),
   // and from September 2026 at Mason & Fifth, Westbourne Park in London.
-  // https://clyx.com/feed/coffeehouse-cinema-london
+  // The slug is the one in their organiser page's URL, which is also what the
+  // API is keyed by - though that page answers a plain request with a bot
+  // challenge, so read it in a browser rather than expecting a fetch to work.
+  // https://clyx.com/community/coffeehouse-cinema
   "coffeehouse-cinema",
 ];
