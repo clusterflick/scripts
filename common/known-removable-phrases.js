@@ -39,8 +39,6 @@ const knownRemovablePhrases = [
   "from vintage VHS",
   "VHS SCREENING",
   "VHS DOUBLE BILL:",
-  "35mm edition uk charity screening",
-  "UK Charity Screening",
   "London Gala Screening",
   "Feature Screening",
   "Repeat Screening",
@@ -140,8 +138,6 @@ const knownRemovablePhrases = [
   ": Extended Edition",
   "The Extended Edition",
   " Extended Edition",
-  ": charity screening",
-  ": Medicinema Charity Screening",
   ": BNW",
   ": black & neurodiverse movie club launch",
   ": ANI DiFRANCO",
@@ -327,7 +323,6 @@ const knownRemovablePhrases = [
   "Gala Preview Screening",
   "Naturist Screening",
   "MediCinema Previews",
-  "Medi Cinema Charity Screenings",
   "Index on Censorship Panel Event",
   "Private Screening",
   "' Screening",
@@ -1444,6 +1439,9 @@ const knownRemovablePhrases = [
   "by JT Taylor",
   "Blockbuster World War 2 drama on RAF legend",
   "Amnesty UK Documentary Launch & Panel Event",
+  // The cultural centre credits the government channel carrying the film
+  // after the title, with the ministry behind the channel spelled out.
+  "Indian Diplomacy Channel, Ministry of External Affairs",
   // The original trilogy is billed with the episode number the venue reads
   // off the box set, but the film is named "Return of the Jedi" on its own,
   // so the prefix comes off for the listing to match it. Only this episode:

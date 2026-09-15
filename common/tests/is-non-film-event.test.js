@@ -48,6 +48,7 @@ describe("isNonFilmEvent", () => {
     ["New Year's Eve Concert with BerlinerPhilharmoniker"],
     ["Berliner Philharmoniker LIVE: New Year’s Eve Concert 2025"],
     ["Berliner Philharmoniker Live: NYE Concert 2025"],
+    ["Tech Run / Test"],
     ["Panel discussion: Reporting The Syrian Refugee Crisis"],
     ["Panel Discussion: Asian Disapora Filmmakers"],
   ])("flags '%s' as a non-film event", (title) => {

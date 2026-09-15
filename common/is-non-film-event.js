@@ -77,6 +77,9 @@ const nonFilmEvents = [
   // form runs in normalisation, which this check never reaches.
   /New Year.?s Eve Concert/i,
   /NYE Concert/i,
+  // The chain's own equipment check, sold through the public listings with a
+  // 15-minute runtime and no film attached to it.
+  /^Tech Run \/ Test/i,
   // A talk billed as nothing but its panel. Anchored: "<film> screening with
   // panel discussion" is still a screening of the film named before it, and
   // only a listing that opens on the panel has no film in it at all.
