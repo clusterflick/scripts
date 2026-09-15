@@ -999,6 +999,16 @@ function normalizeTitle(title, options) {
     [/hkff(?:uk)?(?:\s+\d+)?:/i, ""],
     [/ AV SHOW$/i, ""],
     [/ Movie Screening$/i, ""],
+    // The charity billing hung off the end of a title names whichever
+    // charity, format or occasion the screening is raising money through
+    // ("UK", "Special", "Medicinema", "35mm Edition UK"), so one pattern
+    // rather than a string per billing. Anchored: "Skylarks Charity
+    // Screening: Resilient Man" is a strand wrapped around the film that
+    // follows it, and only a trailing billing has no film after it.
+    [
+      /\s*[-–—:]?\s*(?:35mm edition\s+)?(?:uk|special|medi\s?cinema)?\s*charity screenings?$/i,
+      "",
+    ],
     ["Tercera Video Club #2 - ", "Tercera Video Club #2: "],
     ["Paw Patrol Dino Movie", "Paw Patrol The Dino Movie"],
     ["Paw Patrol 3: The Dino Movie", "Paw Patrol The Dino Movie"],
