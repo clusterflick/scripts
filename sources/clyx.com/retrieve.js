@@ -1,62 +1,30 @@
 const { fetchJson } = require("../../common/utils");
-const seededOrganizerSlugs = require("./seeded-organizers");
 
-// Clyx's own pages are a client-rendered app whose HTML carries no listing, and
-// the web tier answers a plain request with an AWS WAF challenge - so both
-// calls here go to the JSON API the app itself uses, which needs no browser and
-// no account.
-//
-// One endpoint on that API is deliberately not used: the guest list behind the
-// event page's "see full list" serves attendee names, email addresses and
-// phone numbers to anyone who asks. A listing needs none of it, and recording
-// it into a test fixture would commit other people's personal data.
+// Clyx's pages are a client-rendered app behind a bot check, so this reads the
+// JSON API the site itself uses, which needs no browser and no account.
 const apiUrl = (path) => `https://app.clyx.com/api/${path}`;
 
-// Pages are 1-based. `pagination.total` is not a global count - it reads 0 on a
-// page past the end - so paging follows `totalPages` from the first response
-// rather than counting results. 50 is comfortably above what a film club has on
-// at once, so the loop normally makes one request.
-const PAGE_SIZE = 50;
+// The feed filters on a city id exactly, and the city is a region label rather
+// than the venue's town - a Romford or Box Hill venue still files under London.
+// An id the feed doesn't recognise answers with a default set from another city
+// instead of an error, so the response is checked against what was asked for
+// below rather than trusted.
+const LONDON_CITY_ID = "ef6c2cc0-ef51-4f87-8835-ae615b6b7841";
 
-const organizerListUrl = (slug, page) =>
-  apiUrl(`company/${slug}/activity/list?page=${page}&pageSize=${PAGE_SIZE}`);
+const feedUrl = (page) =>
+  apiUrl(
+    `map/feed/list/web?page=${page}&pageSize=200&citiesIds[0]=${LONDON_CITY_ID}`,
+  );
 
-/**
- * One page of an organiser's calendar.
- *
- * Every slug we ask for is seeded by hand, so a 404 is ours to fix: the
- * organiser has been renamed or has left the platform. Anything else - a
- * timeout, a 5xx, a throttle - is the platform's and passes straight through,
- * because reporting it as a stale slug would send someone editing a list that
- * is still correct.
- */
-async function fetchOrganizerPage(slug, page) {
-  try {
-    return await fetchJson(organizerListUrl(slug, page));
-  } catch (error) {
-    if (error.status !== 404) throw error;
-    throw new Error(
-      `Seeded organiser ${slug} could not be read, so ` +
-        `sources/clyx.com/seeded-organizers.js needs updating`,
-      { cause: error },
-    );
-  }
-}
-
-/**
- * Every event an organiser has coming up, in the calendar's own listing shape.
- *
- * The calendar answers with upcoming events only - Coffeehouse Cinema's 14
- * events come back as the 2 still to happen - so there is nothing to filter by
- * date here.
- */
-async function fetchOrganizerEvents(slug) {
-  const firstPage = await fetchOrganizerPage(slug, 1);
+// Pages are 1-based, and `pagination.total` reads 0 on a page past the end, so
+// paging follows `totalPages` from the first response.
+async function fetchFeed() {
+  const firstPage = await fetchJson(feedUrl(1));
   const events = [...firstPage.data];
 
   const { totalPages = 1 } = firstPage.pagination ?? {};
   for (let page = 2; page <= totalPages; page += 1) {
-    const { data } = await fetchOrganizerPage(slug, page);
+    const { data } = await fetchJson(feedUrl(page));
     events.push(...data);
   }
 
@@ -64,15 +32,37 @@ async function fetchOrganizerEvents(slug) {
 }
 
 /**
+ * Every event Clyx has on in London, from the feed that powers its own map.
+ *
+ * Nothing but the city id narrows this, so it is all of London's events rather
+ * than the film ones - which is deliberate: a screening titled "Resident Evil"
+ * carries no word a keyword filter could catch, and venue matching is what
+ * decides relevance.
+ */
+async function fetchLondonEvents() {
+  const events = await fetchFeed();
+  const londonEvents = events.filter(({ city }) => city?.id === LONDON_CITY_ID);
+
+  // A stale city id doesn't 404 - it answers with another city's events - so
+  // events that are none of them London mean the id no longer names London and
+  // the source is reading someone else's listings.
+  if (events.length > 0 && londonEvents.length === 0) {
+    throw new Error(
+      `Clyx returned ${events.length} event(s), none in London - ` +
+        `the city id ${LONDON_CITY_ID} may no longer name London`,
+    );
+  }
+
+  return londonEvents;
+}
+
+/**
  * The fields a listing is built from, and only those.
  *
- * An event record arrives with the guest list inside it - `members` carries
- * attendees' names and avatars - alongside the organiser's contact email and
- * payment-account id. What retrieve returns is published as a release, so
- * keeping the record whole would republish four named strangers per screening
- * to anyone who downloads it. Nothing downstream reads any of it: the tiers are
- * read for their status and the company for its name, so both are narrowed to
- * that here rather than trusted to be ignored later.
+ * An event arrives with the guest list inside it - `members` carries
+ * attendees' names and avatars - beside the organiser's contact email and
+ * payment-account id. retrieve's output is published as a release, so the
+ * record is narrowed here rather than republishing strangers' details.
  */
 const pickListingFields = (event) => ({
   id: event.id,
@@ -92,10 +82,8 @@ const pickListingFields = (event) => ({
   company: event.company && { name: event.company.name },
 });
 
-/**
- * An event's full record, which the calendar listing doesn't carry: the ticket
- * tiers say whether a screening has sold out.
- */
+// The feed carries everything a listing needs except the ticket tiers, which
+// are what say whether a screening has sold out.
 async function fetchEvent(slug) {
   return pickListingFields(
     await fetchJson(apiUrl(`activity/one/event/${slug}`)),
@@ -103,25 +91,12 @@ async function fetchEvent(slug) {
 }
 
 async function retrieve() {
-  const eventSlugs = new Set();
+  const londonEvents = await fetchLondonEvents();
+  console.log(`    - Found ${londonEvents.length} event(s) on in London`);
 
-  for (const organizerSlug of seededOrganizerSlugs) {
-    const events = await fetchOrganizerEvents(organizerSlug);
-    for (const { slug } of events) eventSlugs.add(slug);
-  }
-
-  console.log(
-    `    - Found ${eventSlugs.size} upcoming event(s) across ` +
-      `${seededOrganizerSlugs.length} organiser(s)`,
-  );
-
-  // Keyed by slug, which is also what the event's public URL is built from, so
-  // find-events can go from a listing back to the page a reader would open.
-  // An organiser tours the same night between cities rather than repeating a
-  // slug, but two of our organisers co-promoting one screening would list it
-  // twice, so the set above spends one request on it either way.
+  // Keyed by slug, which is what the event's public URL is built from.
   const events = {};
-  for (const slug of eventSlugs) {
+  for (const { slug } of londonEvents) {
     events[slug] = await fetchEvent(slug);
   }
 

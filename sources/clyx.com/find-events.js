@@ -15,13 +15,10 @@ const normalizeVenueName = require("../../common/normalize-venue-name");
 
 const eventUrl = (slug) => `https://clyx.com/feed/${slug}`;
 
-// Clyx dates are wall-clock with no offset - "2026-09-23T18:30:00.000" - and
-// the zone they belong to is a sibling field. The pipeline runs in
-// Europe/London, so parsing one of its own dates lands on the right instant,
-// but the same string for the organiser's Los Angeles night would silently
-// shift by eight hours. Every event we keep has already matched a London
-// venue, so a zone other than London means the record disagrees with itself:
-// say so rather than publish a time that may be wrong.
+// Clyx dates are wall-clock with the zone in a sibling field, so the pipeline's
+// Europe/London reads its London events correctly and would shift any other
+// zone's by hours. Everything here has already matched a London venue, so a
+// zone other than London means the record disagrees with itself.
 const EXPECTED_TIME_ZONE = "Europe/London";
 
 function parseEventDate(value, { slug, timeZone }) {
@@ -39,16 +36,15 @@ function parseEventDate(value, { slug, timeZone }) {
   return date;
 }
 
-// Clyx's own tier states are on-sale, sold-out, sales-over and scheduled. Only
-// sold-out means there is nothing left to buy: sales-over is a deadline that
+// Clyx's tier states are on-sale, sold-out, sales-over and scheduled. Only
+// sold-out means there is nothing left to buy - sales-over is a deadline that
 // has passed, which says nothing about how full the room is.
 const isSoldOut = (tiers = []) =>
   tiers.length > 0 && tiers.every(({ status }) => status === "sold-out");
 
-// The organiser is named separately from the venue, and on Clyx the two are
-// usually different - a film club hiring a room. That attribution is worth
-// carrying, but a venue selling its own nights here would only repeat itself,
-// so drop a company that is the venue under another spelling.
+// On Clyx the organiser is usually a film club hiring a room rather than the
+// venue itself, so the attribution is worth carrying - but a venue selling its
+// own nights here would only repeat itself.
 function getPresentedByNote(company, cinema) {
   const presenter = company?.name?.trim();
   if (!presenter) return undefined;
@@ -65,9 +61,12 @@ function getPresentedByNote(company, cinema) {
 }
 
 function convertClyxEvent(event, cinema) {
-  const { id, slug, name, description, startDate, endDate, timeZone } = event;
+  const { id, slug, description, startDate, endDate, timeZone } = event;
   const url = eventUrl(slug);
   const overview = sanitizeRichText(description);
+  // Organisers leave stray whitespace on their titles ("... Resident Evil ").
+  // Only the padding goes - the title itself is displayed data.
+  const name = event.name.trim();
 
   const start = parseEventDate(startDate, { slug, timeZone });
   const end = endDate ? parseEventDate(endDate, { slug, timeZone }) : null;
@@ -107,7 +106,10 @@ async function findEvents(cinema) {
   }
 
   const matchingEvents = Object.values(events).filter(({ location }) => {
-    if (!location) return false;
+    // Some organisers give coordinates and an address but no venue name, and a
+    // name is what the matcher needs to agree on - coordinates only confirm
+    // it - so there is nothing for such an event to match against.
+    if (!location?.locationName) return false;
 
     return venueMatchesCinema(
       cinema,

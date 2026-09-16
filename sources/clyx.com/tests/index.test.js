@@ -30,6 +30,13 @@ describe(`${attributes.name}`, () => {
       expectedMatches: 1,
     },
     {
+      name: "Vue West End",
+      alternativeNames: ["Vue West End - Leicester Square"],
+      address: "Leicester Square, 3 Cranbourn Street, London, WC2H 7AL, UK",
+      geo: { lat: 51.51154027444083, lon: -0.12948804448422094 },
+      expectedMatches: 1,
+    },
+    {
       name: "The Woodfield Pavilion",
       alternativeNames: ["The Woodfield"],
       address: "16A Abbotswood Road, Tooting Common, London, SW16 1AP, UK",
@@ -42,12 +49,11 @@ describe(`${attributes.name}`, () => {
       async () => {
         const { events } = await retrieve();
 
-        // Make sure the input looks roughly correct. The organiser's calendar
-        // answers with upcoming events only, and both of theirs are here - the
-        // London screening and the Los Angeles night it tours alongside, which
-        // no London venue may claim.
+        // Make sure the input looks roughly correct. The feed is every event
+        // Clyx has on in London rather than the film ones, so most of these
+        // belong to no venue we hold.
         expect(events).toBeTruthy();
-        expect(Object.keys(events)).toHaveLength(2);
+        expect(Object.keys(events)).toHaveLength(27);
 
         readJSON.mockImplementation(() => ({ events }));
 
