@@ -1,7 +1,11 @@
 const fs = require("node:fs");
 const path = require("node:path");
+const cheerio = require("cheerio");
 const {
   parseListingEventUrls,
+  parseVenueCoordinates,
+  parseVenueAddress,
+  assertEventsAreLocatable,
   parseDate,
   parseBookingWidgetDates,
   parseEventDates,
@@ -18,6 +22,12 @@ const widgetScript = (dates) => `var jsonDates = ${JSON.stringify(dates)}`;
 const listingWithPromoPanel = fs.readFileSync(
   path.join(__dirname, "fixtures", "listing-with-promo-panel.html"),
   "utf8",
+);
+
+// An event page as served on 2026-09-16, keeping the location map and venue
+// block the two readers below take their answers from.
+const eventPage = cheerio.load(
+  fs.readFileSync(path.join(__dirname, "fixtures", "folklore.html"), "utf8"),
 );
 
 describe("parseListingEventUrls", () => {
@@ -39,6 +49,77 @@ describe("parseListingEventUrls", () => {
 
   it("reads nothing out of a listing that has stopped carrying events", () => {
     expect(parseListingEventUrls('<div id="eventscontent"></div>')).toEqual([]);
+  });
+});
+
+// The pair that place an event, pinned to the markup each is read from
+describe("parseVenueCoordinates", () => {
+  it("reads the coordinates behind the location map", () => {
+    expect(parseVenueCoordinates(eventPage)).toEqual({
+      lat: 51.5307,
+      lon: -0.0723475,
+    });
+  });
+
+  it("reads no coordinates from a page with no location map", () => {
+    expect(parseVenueCoordinates(cheerio.load("<html></html>"))).toBeNull();
+  });
+});
+
+describe("parseVenueAddress", () => {
+  it("reads the address without the venue name or the map link", () => {
+    expect(parseVenueAddress(eventPage).replace(/\s+/g, " ")).toBe(
+      "186 Hackney Road, London, E2 7QL",
+    );
+  });
+});
+
+describe("assertEventsAreLocatable", () => {
+  const url =
+    "https://outsavvy.com/event/39708/interactive-b-movie-cabaret-night-american-rickshaw";
+  const eventHtml = fs.readFileSync(
+    path.join(__dirname, "fixtures", "folklore.html"),
+    "utf8",
+  );
+
+  it("passes a sweep whose pages still say where their events are", () => {
+    expect(() => assertEventsAreLocatable({ [url]: eventHtml })).not.toThrow();
+  });
+
+  it("says nothing about a sweep that found no events", () => {
+    expect(() => assertEventsAreLocatable({})).not.toThrow();
+  });
+
+  // The shape the original breakage took: the map still on the page with the
+  // coordinates in it, just no longer where the reader looked
+  it("fails a sweep whose location maps have moved on", () => {
+    const moved = eventHtml.replace(
+      /MapboxHandler\.ashx/g,
+      "SomeNewHandler.ashx",
+    );
+
+    expect(() => assertEventsAreLocatable({ [url]: moved })).toThrow(
+      /No coordinates could be read from any of the 1 event pages swept/,
+    );
+  });
+
+  it("fails a sweep whose venue blocks have moved on", () => {
+    const moved = eventHtml.replace(/event-item-venue/g, "event-item-location");
+
+    expect(() => assertEventsAreLocatable({ [url]: moved })).toThrow(
+      /No venue address could be read from any of the 1 event pages swept/,
+    );
+  });
+
+  // One event without a map says nothing about the markup - only a whole sweep
+  // of them does
+  it("passes a sweep where a single page has no map", () => {
+    expect(() =>
+      assertEventsAreLocatable({
+        [url]: eventHtml,
+        "https://outsavvy.com/event/1/no-map": "<html></html>",
+      }),
+    ).not.toThrow();
   });
 });
 

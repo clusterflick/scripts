@@ -8,25 +8,13 @@ const {
   createFormat,
 } = require("../../common/utils");
 const { createOverview, createPerformance } = require("../../common/utils");
-const { parseEventDates } = require("./utils");
+const {
+  parseEventDates,
+  parseVenueAddress,
+  parseVenueCoordinates,
+} = require("./utils");
 const attributes = require("./attributes");
 const { venueMatchesCinema } = require("../../common/source-utils");
-
-function extractCoordinates($) {
-  const mapImg = $(".website-map img[data-src*='marker-point']");
-  const dataSrc = mapImg.attr("data-src");
-
-  // Extract coordinates from URL like: marker-point.png(-0.1011974,51.46507)
-  // or marker-point-small.png(-0.1011974,51.46507)
-  const match =
-    dataSrc && dataSrc.match(/marker-point(?:-small)?\.png\(([^,]+),([^)]+)\)/);
-  if (!match) return null;
-
-  return {
-    lon: parseFloat(match[1]),
-    lat: parseFloat(match[2]),
-  };
-}
 
 function extractEventDetails(html) {
   const $ = cheerio.load(html);
@@ -49,7 +37,8 @@ function extractEventDetails(html) {
     venueName,
     dates: parseEventDates(dateText, $("script").text()),
     description,
-    coordinates: extractCoordinates($),
+    coordinates: parseVenueCoordinates($),
+    venueAddress: parseVenueAddress($),
   };
 }
 
@@ -98,9 +87,15 @@ async function findEvents(cinema) {
     events.push({ url, ...eventDetails });
   }
 
-  const filteredEvents = events.filter(({ venueName, coordinates }) => {
-    return venueMatchesCinema(cinema, venueName, coordinates);
-  });
+  // OutSavvy is UK-wide, so a name needs pinning to a place - the Duke of
+  // York's it lists is the Brighton one. The address stands in where the
+  // coordinates don't: that event's are a central London fallback point.
+  const filteredEvents = events.filter(
+    ({ venueName, coordinates, venueAddress }) =>
+      venueMatchesCinema(cinema, venueName, coordinates, {
+        eventAddress: venueAddress,
+      }),
+  );
 
   return filteredEvents.map((event) => convertOutsavvyEvent(event));
 }

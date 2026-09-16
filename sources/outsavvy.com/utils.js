@@ -1,7 +1,19 @@
 const cheerio = require("cheerio");
 const { parse, isValid } = require("date-fns");
 const { enGB } = require("date-fns/locale/en-GB");
+const { getText } = require("../../common/utils");
 const attributes = require("./attributes");
+
+// The location map, e.g.
+// <img data-src="/Services/MapboxHandler.ashx?lng=-0.0723475&lat=51.5307&w=800" />
+const MAP_IMAGE = ".website-map img[data-src*='MapboxHandler.ashx']";
+const MAP_COORDINATES = /MapboxHandler\.ashx\?lng=([^&]+)&lat=([^&]+)&/;
+
+// The venue block, which names the venue in a span of its own and writes the
+// address around it, ending in a "(view map)" link:
+//   <span><span>Folklore</span><br />186 Hackney Road,&nbsp;London,&nbsp;E2 7QL
+//   <a href="#event_map">(view map)</a></span>
+const VENUE_BLOCK = ".event-item-venue span";
 
 // The header an event publishes its date in, e.g.
 // "Monday 3rd November 2025 at 7:30 PM"
@@ -37,6 +49,73 @@ function parseListingEventUrls(html) {
   return $(EVENT_LINKS)
     .map((i, elem) => `${attributes.domain}${$(elem).attr("href")}`)
     .get();
+}
+
+/**
+ * Read the coordinates an event page publishes its venue at.
+ *
+ * @param {Object} $ - Cheerio instance for an event page
+ * @returns {{lat: number, lon: number}|null} Venue coordinates, or null when
+ *   the page carries no map to read them from
+ */
+function parseVenueCoordinates($) {
+  const match = ($(MAP_IMAGE).attr("data-src") || "").match(MAP_COORDINATES);
+  if (!match) return null;
+
+  return { lon: parseFloat(match[1]), lat: parseFloat(match[2]) };
+}
+
+/**
+ * Read the address an event page publishes its venue at. Used as the postcode
+ * fallback for venues whose coordinates don't place them at the cinema.
+ *
+ * @param {Object} $ - Cheerio instance for an event page
+ * @returns {string} Venue address, empty when the page carries no venue block
+ */
+function parseVenueAddress($) {
+  const block = $(VENUE_BLOCK).first().clone();
+  block.find("span").first().remove();
+  block.find("a").remove();
+  return getText(block);
+}
+
+/**
+ * Assert that a sweep's event pages still say where their events are.
+ *
+ * Neither reader above can fail - a selector that stops matching reads as a
+ * venue with no location, which find-events matches on name alone - and the
+ * tests replay frozen captures, so retrieve is the only place a markup change
+ * can be noticed. Asserted over the sweep because one event without a map is
+ * plausible where a listing of them is not, and per reader because they break
+ * separately.
+ *
+ * @param {Object} moviePages - Event pages of a sweep, keyed by URL
+ * @throws {Error} When no page in the sweep can be located at all
+ */
+function assertEventsAreLocatable(moviePages) {
+  const urls = Object.keys(moviePages);
+  // Nothing to conclude from a sweep that found no events in the first place
+  if (urls.length === 0) return;
+
+  let withCoordinates = 0;
+  let withAddress = 0;
+  for (const html of Object.values(moviePages)) {
+    const $ = cheerio.load(html);
+    if (parseVenueCoordinates($)) withCoordinates += 1;
+    if (parseVenueAddress($)) withAddress += 1;
+  }
+
+  if (withCoordinates === 0) {
+    throw new Error(
+      `No coordinates could be read from any of the ${urls.length} event pages swept (e.g. ${urls[0]}) - the OutSavvy location map markup may have changed`,
+    );
+  }
+
+  if (withAddress === 0) {
+    throw new Error(
+      `No venue address could be read from any of the ${urls.length} event pages swept (e.g. ${urls[0]}) - the OutSavvy venue block markup may have changed`,
+    );
+  }
 }
 
 function parseDate(date) {
@@ -111,6 +190,9 @@ function parseEventDates(dateText, scriptText) {
 
 module.exports = {
   parseListingEventUrls,
+  parseVenueCoordinates,
+  parseVenueAddress,
+  assertEventsAreLocatable,
   parseDate,
   parseBookingWidgetDates,
   parseEventDates,

@@ -177,6 +177,30 @@ describe("findMatchingCinema", () => {
     expect(match).toBe(ritzy);
   });
 
+  test("holds a roaming venue to its own radius rather than the default", () => {
+    // A pop-up with no fixed home: the point we hold it at is one of its
+    // locations rather than the location, so a screening a couple of km away is
+    // still the same venue. Without the radius it is too far to be anything.
+    const canalClub = {
+      id: "example.com-canal-club",
+      name: "Canal Film Club",
+      address: "East London Canal, Hackney, London, E5 9RH, UK",
+      geo: { lat: 51.56312474391641, lon: -0.043491730782087026 },
+    };
+    const anotherCanal = { lat: 51.54364, lon: -0.0553621 };
+
+    expect(
+      findMatchingCinema([canalClub], "Canal Film Club", anotherCanal),
+    ).toBeUndefined();
+    expect(
+      findMatchingCinema(
+        [{ ...canalClub, geoRadius: 3 }],
+        "Canal Film Club",
+        anotherCanal,
+      ),
+    ).toBeDefined();
+  });
+
   test("keeps a known name whose coordinates are misconfigured when asked to", () => {
     const antipodes = { lat: -33.8688, lon: 151.2093 };
 

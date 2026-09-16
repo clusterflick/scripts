@@ -134,19 +134,25 @@ function cinemaNameMatches(cinema, venueName) {
   );
 }
 
+// Close enough to be the same building. A venue that roams has no one building
+// to be within, and sets `geoRadius` to the distance its screenings range over.
+const DEFAULT_MAX_DISTANCE = 0.35;
+
 /**
  * Check whether a venue is at the same place as a cinema, ignoring its name
- * @param {Object} cinema - Cinema object with geo and address
+ * @param {Object} cinema - Cinema object with geo, address and an optional geoRadius
  * @param {Object|null} coordinates - Venue coordinates {lat, lon}, or null
  * @param {string|null} eventPostcode - Postcode extracted from the event address, or null
  * @param {Object} options - Optional configuration
- * @param {number} options.maxDistance - Maximum distance in km (default: 0.35)
+ * @param {number} options.maxDistance - Maximum distance in km (default: the cinema's geoRadius, else 0.35)
  * @param {boolean} options.supportMisconfiguredCoordinates - Allow ridiculously far distances (> 5000km) for misconfigured data (default: false)
  * @returns {Object|null} Details of how the location matched, or null if it doesn't
  */
 function getLocationMatch(cinema, coordinates, eventPostcode, options = {}) {
-  const { maxDistance = 0.35, supportMisconfiguredCoordinates = false } =
-    options;
+  const {
+    maxDistance = cinema.geoRadius ?? DEFAULT_MAX_DISTANCE,
+    supportMisconfiguredCoordinates = false,
+  } = options;
 
   if (coordinates) {
     const distance = distanceInKmBetweenCoordinates(cinema.geo, coordinates);
