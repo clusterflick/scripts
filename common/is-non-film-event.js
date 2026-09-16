@@ -87,6 +87,12 @@ const nonFilmEvents = [
   // A conference day the venue hosts, billed by the association running it,
   // with no film attached to it.
   /PLASTA Research & Innovation Day/i,
+  // An audio horror podcast the venue hosts, billed by the episode it is
+  // recording ("Canned Laughter"), so match the series rather than carrying a
+  // pattern per episode. The possessive is matched loosely because the venue
+  // publishes the curly apostrophe and this check never reaches the
+  // normalisation that straightens it.
+  /Gavin.?s Graveyard Gold/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
