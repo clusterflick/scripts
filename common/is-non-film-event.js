@@ -84,6 +84,9 @@ const nonFilmEvents = [
   // panel discussion" is still a screening of the film named before it, and
   // only a listing that opens on the panel has no film in it at all.
   /^Panel discussion:/i,
+  // A conference day the venue hosts, billed by the association running it,
+  // with no film attached to it.
+  /PLASTA Research & Innovation Day/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>

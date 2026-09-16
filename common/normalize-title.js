@@ -71,6 +71,7 @@ function normalizeTitle(title, options) {
     ["Life / Drawing", "Life & Drawing"],
     ["JOY + ", "JOY & "],
     ["HALT BOOK LAUNCH + ", "HALT BOOK LAUNCH & "],
+    ["HERO + My Dad, Guyana and Me", "HERO & My Dad, Guyana and Me"],
     ["Music with Tara Franks + ", "Music with Tara Franks & "],
     ["Storytelling + ", "Storytelling & "],
     ["Back and Forth + ", "Back and Forth & "],
@@ -299,6 +300,12 @@ function normalizeTitle(title, options) {
     [/Last Supper (– )?Part 1/i, "Last Supper"],
     ["The Last Supper", "Last Supper"],
     ["Veera Dheera Sooran: Part 2", "Veera Dheera Sooran"],
+    // The two-part documentary is billed with the instalment in front of the
+    // subtitle, spelled with brackets or a colon and with or without a space
+    // around the dash, so the same film arrives under a name per spelling. One
+    // pattern rather than a string per spelling, and here rather than in the
+    // phrase list, which the separator rule beats to "De Gaulle: Part 2".
+    [/^de gaulle\s*:?\s*\(?part \d+\)?\s*[-–:]?\s*/i, "De Gaulle: "],
     ["Mulholland Dr.", "Mulholland Drive"], // Otherwise we match the TV pilot of the same name
     ["W&G:", "Wallace & Gromit:"],
     [
@@ -454,6 +461,7 @@ function normalizeTitle(title, options) {
       "The Invisible Doctrine: The Secret History of Neoliberalism ",
     ],
     ["The Fantastic Four: First Steps", "The Fantastic 4: First Steps"],
+    ["Bluebeard's Eighth Wife", "Bluebeard's 8th Wife"],
     ["Pip and Posy's", "Pip and Posy"],
     ["10 + 10", "10 plus 10"],
     ["Super Connected Live", "Super Connected"],
@@ -804,12 +812,19 @@ function normalizeTitle(title, options) {
     [/Guest `?Event - /i, "Guest Event: "],
     ["forty-five", "forty five"],
     ["Sixty-Year", "Sixty Year"],
-    [/ in \w+: live(?: viewing)?$/i, ""],
+    // The tour bills the city it is playing, and not every city is one word
+    // ("in Buenos Aires", "in Sao Paulo"), so match the city rather than a
+    // single word or the same show arrives under a name per city.
+    [/ in [\p{L}\s'-]+: live(?: viewing)?$/iu, ""],
     [/Fri-GAY/i, "Friday"],
     ["If I Had Legs I Would Kick You", "If I Had Legs I'd Kick You"],
     [/: One Battle$/i, ": One Battle After Another"],
     ["(When the Rainbow Is Enuf)", "When the Rainbow Is Enuf"],
     ["?Arirang", "Arirang"],
+    // One venue drops the tour from the front of the billing, so the same
+    // show arrives under a second name. Anchored because the listings that do
+    // carry it must not have it prefixed a second time.
+    [/^BTS '?Arirang'?/i, "BTS World Tour 'Arirang'"],
     ["BTS World Tour - ", "BTS World Tour: "],
     ["Records, cocktails + ", "Records, cocktails: "],
     ["Roman party, divine chorals + ", "Roman party, divine chorals: "],
@@ -920,6 +935,7 @@ function normalizeTitle(title, options) {
       "People's Emergency Briefing",
     ],
     ["People's Emergency Briefing Twickenham", "People's Emergency Briefing"],
+    ["People's Emergency Briefing for Business", "People's Emergency Briefing"],
     ["The The People's Emergency Briefing", "The People's Emergency Briefing"],
     ["TESTMortal Kombat IITEST", "Mortal Kombat II"],
     [
@@ -1489,6 +1505,13 @@ function normalizeTitle(title, options) {
   // than a string per spelling. Singular only: "Ceremony & Live Performances"
   // is the event being sold rather than a film with a set attached to it.
   title = title.replace(/\s*(?:plus|and|with|&)\s+live performance\b/i, "");
+
+  // A venue bills a restoration with or without the scan it was made from
+  // ("UK Premiere of 4K Restoration: Will", "UK Premiere of Restoration: Act
+  // of Violence"), so one pattern rather than a string per format. The
+  // premiere rule above has already taken "UK Premiere of" off the front by
+  // the time this runs, so the strand is what is left there.
+  title = title.replace(/^(?:\d+k\s+)?restoration:\s*/i, "");
 
   knownRemovablePhrases.forEach((phrase) => {
     title = title.replace(phrase.toLowerCase(), "");
