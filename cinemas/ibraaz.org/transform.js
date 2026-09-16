@@ -50,8 +50,11 @@ function parseMovie(url, moviePage) {
 
   return {
     title,
-    // The line under the title on a film page is the filmmaker.
-    directors: getText($(".hero__inner p.line--bold")),
+    // The line under the title on a film page is the filmmaker. It is the
+    // hero's only such line, and the one modifier it has kept across the
+    // site's rebuilds - an emphasis class that came and went with them would
+    // lose the credit without failing.
+    directors: getText($(".hero__inner p.line--lg")),
     overview: getText($(".richtext").first()).replace(/\s+/g, " "),
     screen: getSummaryValue($, "location"),
     eventId: getTicketTailorEventId($),
