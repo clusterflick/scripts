@@ -23,6 +23,14 @@ describe("getPresenterNote", () => {
     ).toEqual("Presented by Distorted Frame");
   });
 
+  test("reads a name from the sentence form of the inverted phrasing", () => {
+    expect(
+      getPresenterNote(
+        "This event is presented to you by The Witch Of Popcorn",
+      ),
+    ).toEqual("Presented by The Witch Of Popcorn");
+  });
+
   test("ignores a credit that isn't at the start of the text", () => {
     expect(
       getPresenterNote(

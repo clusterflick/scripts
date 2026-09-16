@@ -48,6 +48,21 @@ const folklore = {
   geo: { lat: 51.53071724137933, lon: -0.07234497283238506 },
 };
 
+// An event whose description opens on the credit for the film club behind it
+const creditUrl =
+  "https://outsavvy.com/event/39044/camp-classics-presents-starrbooty-at-the-divine";
+const creditPage = fs.readFileSync(
+  path.join(__dirname, "fixtures", "presenter-credit.html"),
+  "utf8",
+);
+
+// As held in cinemas/thedivine.co.uk/attributes.js
+const divine = {
+  name: "The Divine",
+  address: "33-35 Stoke Newington Road, London, N16 8BJ, UK",
+  geo: { lat: 51.55190978261229, lon: -0.07543040185169653 },
+};
+
 describe("findEvents", () => {
   it("takes the start time from the booking widget when the header has none", async () => {
     readJSON.mockImplementation(() => ({ moviePages: { [url]: page } }));
@@ -73,6 +88,32 @@ describe("findEvents", () => {
     await expect(findEvents(cinema)).rejects.toThrow(
       `No date could be read for ${url}`,
     );
+  });
+
+  it("notes the film club an event is presented by", async () => {
+    readJSON.mockImplementation(() => ({
+      moviePages: { [creditUrl]: creditPage },
+    }));
+
+    const events = await findEvents(divine);
+
+    expect(events).toHaveLength(1);
+    expect(events[0].performances[0].notes).toBe("Presented by CAMP CLASSICS");
+  });
+
+  // A venue promoting its own night tells a reader nothing by repeating itself
+  it("leaves out a credit naming the venue itself", async () => {
+    readJSON.mockImplementation(() => ({
+      moviePages: { [creditUrl]: creditPage },
+    }));
+
+    const events = await findEvents({
+      ...divine,
+      alternativeNames: ["CAMP CLASSICS"],
+    });
+
+    expect(events).toHaveLength(1);
+    expect(events[0].performances[0].notes).toBe("");
   });
 
   // OutSavvy is UK-wide, so a name we hold is not ours wherever it turns up -
