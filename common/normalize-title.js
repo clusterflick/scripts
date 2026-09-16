@@ -576,6 +576,7 @@ function normalizeTitle(title, options) {
     ["Bar Trash: Queer Horror / ", "Bar Trash: Queer Horror & "],
     ["Bar Trash: Silent Horror / ", "Bar Trash: Silent Horror & "],
     [/^BAR TRASH: (.+) \+ (.+)$/i, "BAR TRASH: $1 & $2"],
+    ["Final Shows - ", "Final Shows: "],
     ["Guest Event - ", "Guest Event: "],
     ["Throwback - ", "Throwback: "],
     ["Toddler - ", "Toddler: "],
@@ -630,6 +631,9 @@ function normalizeTitle(title, options) {
     ],
     [/Ella Mc Cay/i, "Ella McCay"],
     ["Superman 2025", "Superman (2025)"],
+    // The anniversary strand names the year without brackets, so the year is
+    // read as part of the title and the same film arrives under a second name.
+    ["Perks Of Being A Wallflower 2012", "Perks Of Being A Wallflower (2012)"],
     ["A Minecraft Movie Premiere", "A Minecraft Movie"],
     ["Evgenij Onegin", "Eugene Onegin"],
     ["NOVELLE VAGUE", "NOUVELLE VAGUE"],
@@ -764,6 +768,10 @@ function normalizeTitle(title, options) {
       "Under the Silver Lake (2018) + Tropico (2013)",
       "Under the Silver Lake (2018) & Tropico (2013)",
     ],
+    // The strand pairs two shorts, and the separator rule below keeps only what
+    // comes before the first plus, so both films have to be joined to survive.
+    ["Replikka (2025) + ", "Replikka (2025) & "],
+    ["Tellurian Drama (2020) + ", "Tellurian Drama (2020) & "],
     ["Tabby McTat + The Highway Rat", "Tabby McTat & The Highway Rat"],
     [
       "We're Going on a Bear Hunt + The Tiger Who Came to Tea",
@@ -1512,6 +1520,16 @@ function normalizeTitle(title, options) {
   // premiere rule above has already taken "UK Premiere of" off the front by
   // the time this runs, so the strand is what is left there.
   title = title.replace(/^(?:\d+k\s+)?restoration:\s*/i, "");
+
+  // Venues bill the last showings of a run in the singular or the plural
+  // ("FINAL SHOW: Hamnet", "Final Shows: The Odyssey"), so one pattern rather
+  // than a string per spelling.
+  title = title.replace(/\bfinal shows?:\s*/i, "");
+
+  // Venues bill the strand with and without the year it ran in ("Black History
+  // Month: Alain Gomis' DAO", "Black History Month 2026: Sugarcane"), so one
+  // pattern rather than a string per year.
+  title = title.replace(/\bblack history month(?:\s+\d{4})?:\s*/i, "");
 
   knownRemovablePhrases.forEach((phrase) => {
     title = title.replace(phrase.toLowerCase(), "");
