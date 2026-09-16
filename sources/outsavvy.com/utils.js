@@ -87,6 +87,52 @@ function parseVenueAddress($) {
   return getText(block);
 }
 
+/**
+ * Assert that a sweep's event pages still say where their events are.
+ *
+ * Neither reader above can fail: a selector that stops matching returns no
+ * location rather than an error, and find-events treats an event it can't place
+ * as one to match on its venue's name alone. On a UK-wide listing a name is not
+ * enough - the Brighton Duke of York's answers to the same one a London venue
+ * would - so that silence is the whole bug this guards against, and it went a
+ * year unnoticed because the tests replay captures that went stale with the
+ * code. Retrieve is the one stage that sees what OutSavvy serves today.
+ *
+ * Asserted over the sweep rather than per page, because one event missing a map
+ * is plausible where a whole listing of them is the markup having moved. Each
+ * reader is asserted separately: they are separate selectors and break
+ * separately, and coordinates quietly giving way to postcodes is a real loss of
+ * precision, not a degradation worth passing over.
+ *
+ * @param {Object} moviePages - Event pages of a sweep, keyed by URL
+ * @throws {Error} When no page in the sweep can be located at all
+ */
+function assertEventsAreLocatable(moviePages) {
+  const urls = Object.keys(moviePages);
+  // Nothing to conclude from a sweep that found no events in the first place
+  if (urls.length === 0) return;
+
+  let withCoordinates = 0;
+  let withAddress = 0;
+  for (const html of Object.values(moviePages)) {
+    const $ = cheerio.load(html);
+    if (parseVenueCoordinates($)) withCoordinates += 1;
+    if (parseVenueAddress($)) withAddress += 1;
+  }
+
+  if (withCoordinates === 0) {
+    throw new Error(
+      `No coordinates could be read from any of the ${urls.length} event pages swept (e.g. ${urls[0]}) - the OutSavvy location map markup may have changed`,
+    );
+  }
+
+  if (withAddress === 0) {
+    throw new Error(
+      `No venue address could be read from any of the ${urls.length} event pages swept (e.g. ${urls[0]}) - the OutSavvy venue block markup may have changed`,
+    );
+  }
+}
+
 function parseDate(date) {
   return parse(date, HEADER_DATE_FORMAT, new Date(), {
     locale: enGB,
@@ -161,6 +207,7 @@ module.exports = {
   parseListingEventUrls,
   parseVenueCoordinates,
   parseVenueAddress,
+  assertEventsAreLocatable,
   parseDate,
   parseBookingWidgetDates,
   parseEventDates,

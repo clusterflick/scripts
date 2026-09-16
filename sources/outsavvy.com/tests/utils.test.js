@@ -5,6 +5,7 @@ const {
   parseListingEventUrls,
   parseVenueCoordinates,
   parseVenueAddress,
+  assertEventsAreLocatable,
   parseDate,
   parseBookingWidgetDates,
   parseEventDates,
@@ -74,6 +75,56 @@ describe("parseVenueAddress", () => {
     expect(parseVenueAddress(eventPage).replace(/\s+/g, " ")).toBe(
       "186 Hackney Road, London, E2 7QL",
     );
+  });
+});
+
+describe("assertEventsAreLocatable", () => {
+  const url =
+    "https://outsavvy.com/event/39708/interactive-b-movie-cabaret-night-american-rickshaw";
+  const eventHtml = fs.readFileSync(
+    path.join(__dirname, "fixtures", "folklore.html"),
+    "utf8",
+  );
+
+  it("passes a sweep whose pages still say where their events are", () => {
+    expect(() => assertEventsAreLocatable({ [url]: eventHtml })).not.toThrow();
+  });
+
+  it("says nothing about a sweep that found no events", () => {
+    expect(() => assertEventsAreLocatable({})).not.toThrow();
+  });
+
+  // The shape the original breakage took: OutSavvy swapped the marker image for
+  // a Mapbox handler, so the map was still on the page and still had the
+  // coordinates in it - they were just no longer where the reader looked.
+  it("fails a sweep whose location maps have moved on", () => {
+    const moved = eventHtml.replace(
+      /MapboxHandler\.ashx/g,
+      "SomeNewHandler.ashx",
+    );
+
+    expect(() => assertEventsAreLocatable({ [url]: moved })).toThrow(
+      /No coordinates could be read from any of the 1 event pages swept/,
+    );
+  });
+
+  it("fails a sweep whose venue blocks have moved on", () => {
+    const moved = eventHtml.replace(/event-item-venue/g, "event-item-location");
+
+    expect(() => assertEventsAreLocatable({ [url]: moved })).toThrow(
+      /No venue address could be read from any of the 1 event pages swept/,
+    );
+  });
+
+  // One event without a map says nothing about the markup - only a whole sweep
+  // of them does
+  it("passes a sweep where a single page has no map", () => {
+    expect(() =>
+      assertEventsAreLocatable({
+        [url]: eventHtml,
+        "https://outsavvy.com/event/1/no-map": "<html></html>",
+      }),
+    ).not.toThrow();
   });
 });
 

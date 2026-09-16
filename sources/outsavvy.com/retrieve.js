@@ -1,6 +1,6 @@
 const { fetchText } = require("../../common/utils.js");
 const attributes = require("./attributes");
-const { parseListingEventUrls } = require("./utils");
+const { parseListingEventUrls, assertEventsAreLocatable } = require("./utils");
 
 // OutSavvy has no film category - an event carries whatever hashtags its
 // organiser typed - so the listing is swept a tag at a time. "screening" is not
@@ -50,6 +50,8 @@ async function retrieve() {
     const html = await fetchText(url);
     moviePages[url] = html;
   }
+
+  assertEventsAreLocatable(moviePages);
 
   return { movieListPages, moviePages };
 }
