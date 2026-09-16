@@ -18,6 +18,14 @@ const page = fs.readFileSync(
   "utf8",
 );
 
+// Folklore's first event postdates the recordings too, and is read the same way
+const folkloreUrl =
+  "https://outsavvy.com/event/39708/interactive-b-movie-cabaret-night-american-rickshaw";
+const folklorePage = fs.readFileSync(
+  path.join(__dirname, "fixtures", "folklore.html"),
+  "utf8",
+);
+
 // As held in cinemas/instagram.com-canalfilmclub/attributes.js - the event is
 // listed under the venue's alternative name rather than the name we call it by
 const cinema = {
@@ -28,6 +36,15 @@ const cinema = {
   ],
   address: "East London Canal, Hackney, London, E5 9RH, UK",
   geo: { lat: 51.56312474391641, lon: -0.043491730782087026 },
+};
+
+// As held in cinemas/folklorehoxton.co.uk/attributes.js - OutSavvy writes the
+// venue as plain "Folklore", which is the name we hold it under
+const folklore = {
+  name: "Folklore",
+  alternativeNames: ["Folklore Hoxton", "Falkor"],
+  address: "186 Hackney Road, London, E2 7QL, UK",
+  geo: { lat: 51.53071724137933, lon: -0.07234497283238506 },
 };
 
 describe("findEvents", () => {
@@ -54,6 +71,23 @@ describe("findEvents", () => {
 
     await expect(findEvents(cinema)).rejects.toThrow(
       `No date could be read for ${url}`,
+    );
+  });
+
+  it("matches Folklore by the name OutSavvy lists it under", async () => {
+    readJSON.mockImplementation(() => ({
+      moviePages: { [folkloreUrl]: folklorePage },
+    }));
+
+    const events = await findEvents(folklore);
+
+    expect(events).toHaveLength(1);
+    expect(events[0].title).toBe(
+      "Interactive B-Movie & Cabaret Night: American Rickshaw!",
+    );
+    expect(events[0].performances).toHaveLength(1);
+    expect(events[0].performances[0].time).toBe(
+      new Date("2026-10-13T18:00:00Z").getTime(),
     );
   });
 
