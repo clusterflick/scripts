@@ -6,6 +6,7 @@ const {
   getText,
   createAccessibility,
   createFormat,
+  getPresenterNote,
 } = require("../../common/utils");
 const { createOverview, createPerformance } = require("../../common/utils");
 const {
@@ -15,6 +16,36 @@ const {
 } = require("./utils");
 const attributes = require("./attributes");
 const { venueMatchesCinema } = require("../../common/source-utils");
+const normalizeVenueName = require("../../common/normalize-venue-name");
+
+// An organiser writes the credit wherever it suits them - the Witch Of Popcorn
+// signs off at the end of a page of billing - so each line is offered in turn
+// rather than the description as a whole, whose opening line is usually a
+// greeting. getPresenterNote anchors to the start of what it is given, and only
+// accepts a name shaped like an organisation, which is what keeps that from
+// reading marketing prose as a credit.
+//
+// A venue promoting its own night repeats its own name there, which tells a
+// reader nothing, so only a presenter that isn't the venue is kept - the same
+// rule DICE and Clyx apply to the promoter field they get handed.
+const getPresentedByNote = (description, cinema) => {
+  const notes = description
+    .split("\n")
+    .map((line) => getPresenterNote(line))
+    .filter(Boolean);
+  if (notes.length === 0) return undefined;
+
+  const [note] = notes;
+  const presenter = note.replace(/^presented by\s+/i, "");
+  const venueNames = [cinema.name, ...(cinema.alternativeNames || [])].filter(
+    Boolean,
+  );
+  const isVenueItself = venueNames.some(
+    (name) => normalizeVenueName(name) === normalizeVenueName(presenter),
+  );
+
+  return isVenueItself ? undefined : note;
+};
 
 function extractEventDetails(html) {
   const $ = cheerio.load(html);
@@ -42,7 +73,7 @@ function extractEventDetails(html) {
   };
 }
 
-function convertOutsavvyEvent(event) {
+function convertOutsavvyEvent(event, cinema) {
   // Extract event ID from URL (e.g., /event/31052/palestine-cinema-days-when-i-saw-you)
   const eventId = event.url.match(/\/event\/(\d+)\//)?.[1] || event.url;
 
@@ -61,6 +92,7 @@ function convertOutsavvyEvent(event) {
     performances: event.dates.map((date) =>
       createPerformance({
         date,
+        notesList: [getPresentedByNote(event.description, cinema)],
         url: event.url,
         accessibility: createAccessibility(event.title, {}, event.description),
         format: createFormat(event.title, {}, event.description),
@@ -97,7 +129,7 @@ async function findEvents(cinema) {
       }),
   );
 
-  return filteredEvents.map((event) => convertOutsavvyEvent(event));
+  return filteredEvents.map((event) => convertOutsavvyEvent(event, cinema));
 }
 
 module.exports = findEvents;

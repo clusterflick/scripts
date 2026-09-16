@@ -577,8 +577,11 @@ const stripNoteLabels = (notesList, { strip = [], drop = [] } = {}) => {
 // Both anchor to the start of the text they're given, and callers choose what
 // to offer: a credit buried mid-sentence is far likelier to be prose ("The film
 // presents a bleak vision ...") than an attribution.
+// The lead-in and the "to you" are optional because a credit is as often
+// written out as a sentence ("This event is presented to you by The Witch Of
+// Popcorn") as it is stated flat.
 const PRESENTER_PATTERNS = [
-  /^presented by\s+([^.,;:!?\n]{3,80})/i,
+  /^(?:this (?:event|screening|film) is )?presented (?:to you )?by\s+([^.,;:!?\n]{3,80})/i,
   /^([^.!?\n]{3,80}?)\s+presents?\s/i,
 ];
 
