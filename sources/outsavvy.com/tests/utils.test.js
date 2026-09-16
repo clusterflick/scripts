@@ -52,11 +52,7 @@ describe("parseListingEventUrls", () => {
   });
 });
 
-// The pair that place an event. find-events went on reading a marker image
-// OutSavvy had stopped serving, and a selector matching nothing reads as a venue
-// with no coordinates rather than as a breakage - so every event fell back to
-// matching on its name alone, across a UK-wide listing. These pin the markup
-// each one is read from.
+// The pair that place an event, pinned to the markup each is read from
 describe("parseVenueCoordinates", () => {
   it("reads the coordinates behind the location map", () => {
     expect(parseVenueCoordinates(eventPage)).toEqual({
@@ -94,9 +90,8 @@ describe("assertEventsAreLocatable", () => {
     expect(() => assertEventsAreLocatable({})).not.toThrow();
   });
 
-  // The shape the original breakage took: OutSavvy swapped the marker image for
-  // a Mapbox handler, so the map was still on the page and still had the
-  // coordinates in it - they were just no longer where the reader looked.
+  // The shape the original breakage took: the map still on the page with the
+  // coordinates in it, just no longer where the reader looked
   it("fails a sweep whose location maps have moved on", () => {
     const moved = eventHtml.replace(
       /MapboxHandler\.ashx/g,

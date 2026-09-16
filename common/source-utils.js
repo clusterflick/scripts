@@ -134,19 +134,12 @@ function cinemaNameMatches(cinema, venueName) {
   );
 }
 
-// Close enough to be the same building, which is what a venue's coordinates
-// usually mean.
+// Close enough to be the same building. A venue that roams has no one building
+// to be within, and sets `geoRadius` to the distance its screenings range over.
 const DEFAULT_MAX_DISTANCE = 0.35;
 
 /**
  * Check whether a venue is at the same place as a cinema, ignoring its name
- *
- * A venue that roams has no one building to be within: Canal Film Club screens
- * along the East London canals and releases the spot to ticket holders 48 hours
- * before, so the point we hold it at is one of its locations rather than the
- * location. Such a venue sets `geoRadius` to the distance its screenings
- * actually range over, and everything else keeps the default.
- *
  * @param {Object} cinema - Cinema object with geo, address and an optional geoRadius
  * @param {Object|null} coordinates - Venue coordinates {lat, lon}, or null
  * @param {string|null} eventPostcode - Postcode extracted from the event address, or null

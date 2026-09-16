@@ -87,11 +87,9 @@ async function findEvents(cinema) {
     events.push({ url, ...eventDetails });
   }
 
-  // OutSavvy is a UK-wide listing, so the name has to be pinned to a place:
-  // "Duke of York's Picturehouse" in the current sweep is the Brighton one. The
-  // address stands in where the coordinates don't place the event at the venue
-  // - that event is a case in point, published against a central London
-  // fallback point rather than its own.
+  // OutSavvy is UK-wide, so a name needs pinning to a place - the Duke of
+  // York's it lists is the Brighton one. The address stands in where the
+  // coordinates don't: that event's are a central London fallback point.
   const filteredEvents = events.filter(
     ({ venueName, coordinates, venueAddress }) =>
       venueMatchesCinema(cinema, venueName, coordinates, {

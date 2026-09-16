@@ -75,12 +75,8 @@ describe("findEvents", () => {
     );
   });
 
-  // OutSavvy is a UK-wide listing, so a venue's name alone doesn't identify it -
-  // the current sweep carries the Brighton Duke of York's. The coordinates come
-  // off the location map, and find-events read a marker image OutSavvy stopped
-  // serving long enough ago that no recording has one, which left every event
-  // matching on name alone. A venue somewhere else entirely under a name we hold
-  // must not be ours.
+  // OutSavvy is UK-wide, so a name we hold is not ours wherever it turns up -
+  // the sweep carries the Brighton Duke of York's
   it("rejects a venue matching by name but sitting somewhere else", async () => {
     readJSON.mockImplementation(() => ({
       moviePages: { [folkloreUrl]: folklorePage },

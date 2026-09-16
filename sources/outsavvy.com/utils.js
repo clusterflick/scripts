@@ -4,23 +4,15 @@ const { enGB } = require("date-fns/locale/en-GB");
 const { getText } = require("../../common/utils");
 const attributes = require("./attributes");
 
-// The location map an event page carries, which OutSavvy renders through its
-// own Mapbox handler:
-//   <img data-src="/Services/MapboxHandler.ashx?lng=-0.0723475&lat=51.5307&w=800&h=200&zoom=16" />
-// It used to be a static marker image spelling the pair as
-// "marker-point.png(<lon>,<lat>)", and find-events went on reading that long
-// after the markup moved - a selector that matches nothing returns no
-// coordinates rather than failing, so every event quietly fell back to matching
-// its venue on name alone. Both readers share this one now so the next change
-// of shape can only be missed once.
+// The location map, e.g.
+// <img data-src="/Services/MapboxHandler.ashx?lng=-0.0723475&lat=51.5307&w=800" />
 const MAP_IMAGE = ".website-map img[data-src*='MapboxHandler.ashx']";
 const MAP_COORDINATES = /MapboxHandler\.ashx\?lng=([^&]+)&lat=([^&]+)&/;
 
-// The venue block names the venue in a span of its own and then writes the
+// The venue block, which names the venue in a span of its own and writes the
 // address around it, ending in a "(view map)" link:
 //   <span><span>Folklore</span><br />186 Hackney Road,&nbsp;London,&nbsp;E2 7QL
 //   <a href="#event_map">(view map)</a></span>
-// Taking the block's text without those two leaves the address on its own.
 const VENUE_BLOCK = ".event-item-venue span";
 
 // The header an event publishes its date in, e.g.
@@ -90,19 +82,12 @@ function parseVenueAddress($) {
 /**
  * Assert that a sweep's event pages still say where their events are.
  *
- * Neither reader above can fail: a selector that stops matching returns no
- * location rather than an error, and find-events treats an event it can't place
- * as one to match on its venue's name alone. On a UK-wide listing a name is not
- * enough - the Brighton Duke of York's answers to the same one a London venue
- * would - so that silence is the whole bug this guards against, and it went a
- * year unnoticed because the tests replay captures that went stale with the
- * code. Retrieve is the one stage that sees what OutSavvy serves today.
- *
- * Asserted over the sweep rather than per page, because one event missing a map
- * is plausible where a whole listing of them is the markup having moved. Each
- * reader is asserted separately: they are separate selectors and break
- * separately, and coordinates quietly giving way to postcodes is a real loss of
- * precision, not a degradation worth passing over.
+ * Neither reader above can fail - a selector that stops matching reads as a
+ * venue with no location, which find-events matches on name alone - and the
+ * tests replay frozen captures, so retrieve is the only place a markup change
+ * can be noticed. Asserted over the sweep because one event without a map is
+ * plausible where a listing of them is not, and per reader because they break
+ * separately.
  *
  * @param {Object} moviePages - Event pages of a sweep, keyed by URL
  * @throws {Error} When no page in the sweep can be located at all
