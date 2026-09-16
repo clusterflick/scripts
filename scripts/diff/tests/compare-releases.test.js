@@ -2,12 +2,12 @@ const fs = require("node:fs");
 const os = require("node:os");
 const path = require("node:path");
 const { compareReleases } = require("..");
+const { silenceConsoleLog } = require("../../../common/test-utils");
 
 const AS_OF = new Date("2026-07-26T12:00:00Z").getTime();
 const DAY = 24 * 60 * 60 * 1000;
 
-// Hide script output
-console.log = () => {};
+silenceConsoleLog();
 
 const showing = (overrides = {}) => ({
   showingId: "venue.com-1",

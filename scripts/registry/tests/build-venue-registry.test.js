@@ -1,4 +1,5 @@
 const { buildVenueRegistry } = require("../index");
+const { silenceConsoleLog } = require("../../../common/test-utils");
 
 const RELEASE = "20260808.180256";
 
@@ -9,8 +10,7 @@ const registry = (venues) => ({
   venues,
 });
 
-// Hide script output
-console.log = () => {};
+silenceConsoleLog();
 
 describe("buildVenueRegistry", () => {
   it("stamps every venue that had a performance", () => {

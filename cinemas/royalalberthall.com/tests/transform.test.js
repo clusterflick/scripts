@@ -1,6 +1,7 @@
 const transform = require("../transform");
 const attributes = require("../attributes");
 const { expectedClosures } = require("../../../common/expected-closures");
+const { silenceConsoleLog } = require("../../../common/test-utils");
 
 // The declared closure this venue's carve-out rides on. Read rather than
 // hardcoded, so the test follows the entry when its dates move and disappears
@@ -28,6 +29,8 @@ const noDates = [
 ];
 
 describe("royal albert hall transform", () => {
+  const consoleLog = silenceConsoleLog();
+
   afterEach(() => {
     jest.useRealTimers();
   });
@@ -60,6 +63,11 @@ describe("royal albert hall transform", () => {
     async () => {
       setToday(`${closure.from}T12:00:00`);
       await expect(transform(noDates, {})).resolves.toEqual([]);
+      // The log is the whole point of the carve-out - an empty release that
+      // explains itself - so check it was said rather than only silenced.
+      expect(consoleLog()).toHaveBeenCalledWith(
+        expect.stringContaining(closure.reason),
+      );
     },
   );
 

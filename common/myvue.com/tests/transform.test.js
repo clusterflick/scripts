@@ -1,5 +1,6 @@
 const transform = require("../transform");
 const { expectedClosures } = require("../../expected-closures");
+const { silenceConsoleLog } = require("../../test-utils");
 
 const attributes = {
   id: "myvue.com-finchley-road",
@@ -18,6 +19,8 @@ const closure = expectedClosures.find(({ venue }) => venue === attributes.id);
 const noListings = { result: [] };
 
 describe("myvue transform with no listings", () => {
+  const consoleLog = silenceConsoleLog();
+
   afterEach(() => {
     jest.useRealTimers();
   });
@@ -36,6 +39,11 @@ describe("myvue transform with no listings", () => {
     async () => {
       setToday(`${closure.from}T12:00:00`);
       await expect(transform(attributes, noListings, {})).resolves.toEqual([]);
+      // The log is the whole point of the carve-out - an empty release that
+      // explains itself - so check it was said rather than only silenced.
+      expect(consoleLog()).toHaveBeenCalledWith(
+        expect.stringContaining(closure.reason),
+      );
     },
   );
 

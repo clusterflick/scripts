@@ -1,4 +1,5 @@
 const { buildRegistry, parseTagDate } = require("../index");
+const { silenceConsoleLog } = require("../../../common/test-utils");
 
 const RELEASE = "20260808.180256";
 
@@ -9,8 +10,7 @@ const registry = (movies) => ({
   movies,
 });
 
-// Hide script output
-console.log = () => {};
+silenceConsoleLog();
 
 describe("parseTagDate", () => {
   it("reads the date out of a release tag", () => {

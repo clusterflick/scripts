@@ -2,12 +2,12 @@ const fs = require("node:fs");
 const os = require("node:os");
 const path = require("node:path");
 const { getPresent } = require("..");
+const { silenceConsoleLog } = require("../../../common/test-utils");
 
 const TIME = new Date("2026-08-08T18:00:00Z").getTime();
 const HOUR = 60 * 60 * 1000;
 
-// Hide script output
-console.log = () => {};
+silenceConsoleLog();
 
 const showing = (overrides = {}) => ({
   showingId: "venue.com-1",

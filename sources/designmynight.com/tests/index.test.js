@@ -3,6 +3,7 @@ const {
   setupPolly,
   schemaValidate,
   disableCache,
+  silenceConsoleLog,
 } = require("../../../common/test-utils");
 const {
   readJSON,
@@ -23,8 +24,7 @@ disableCache();
 
 const isRecording = false;
 
-// Hide script output
-console.log = () => {};
+silenceConsoleLog();
 
 describe(`${attributes.name}`, () => {
   setupPolly(isRecording, __dirname);

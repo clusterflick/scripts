@@ -1,5 +1,9 @@
 /** @jest-environment setup-polly-jest/jest-environment-node */
-const { setupPolly, schemaValidate } = require("../../../common/test-utils");
+const {
+  setupPolly,
+  schemaValidate,
+  silenceConsoleLog,
+} = require("../../../common/test-utils");
 const {
   readJSON,
   removeMatchingHints,
@@ -14,8 +18,7 @@ jest.mock("../../../common/utils", () => ({
 
 const isRecording = false;
 
-// Hide script output
-console.log = () => {};
+silenceConsoleLog();
 
 describe(attributes.name, () => {
   setupPolly(isRecording, __dirname);

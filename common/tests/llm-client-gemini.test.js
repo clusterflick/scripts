@@ -15,9 +15,9 @@ const getGenerativeModel = jest.fn(() => ({
 GoogleGenerativeAI.mockImplementation(() => ({ getGenerativeModel }));
 
 const { callLlm } = require("../llm-client-gemini");
+const { silenceConsoleLog } = require("../test-utils");
 
-// Hide script output
-console.log = () => {};
+silenceConsoleLog();
 
 describe("llm-client-gemini", () => {
   beforeEach(() => {

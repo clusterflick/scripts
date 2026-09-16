@@ -3,6 +3,7 @@ const {
   setupPolly,
   schemaValidate,
   setupCacheMock,
+  silenceConsoleLog,
 } = require("../../../common/test-utils");
 const {
   sortAndFilterMovies,
@@ -16,8 +17,7 @@ const isRecording = false;
 jest.mock("../../../common/cache");
 setupCacheMock(__dirname, "2026-07-19");
 
-// Hide script output
-console.log = () => {};
+silenceConsoleLog();
 
 describe(attributes.name, () => {
   setupPolly(isRecording, __dirname);

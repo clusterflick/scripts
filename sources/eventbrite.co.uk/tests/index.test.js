@@ -3,6 +3,7 @@ const {
   setupPolly,
   setupCacheMock,
   schemaValidate,
+  silenceConsoleLog,
 } = require("../../../common/test-utils");
 const {
   readJSON,
@@ -37,8 +38,7 @@ setupCacheMock(__dirname, CACHE_DATE);
 // these fixtures never captured. Seeding is organizer-sweep.test.js's business.
 jest.mock("../seeded-organizers", () => []);
 
-// Hide script output
-console.log = () => {};
+silenceConsoleLog();
 
 const cinema = {
   name: "Genesis Cinema",

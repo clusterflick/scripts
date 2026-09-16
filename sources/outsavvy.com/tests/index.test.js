@@ -1,5 +1,9 @@
 /** @jest-environment setup-polly-jest/jest-environment-node */
-const { setupPolly, schemaValidate } = require("../../../common/test-utils");
+const {
+  setupPolly,
+  schemaValidate,
+  silenceConsoleLog,
+} = require("../../../common/test-utils");
 const {
   readJSON,
   removeMatchingHints,
@@ -14,8 +18,7 @@ jest.mock("../../../common/utils", () => ({
   readJSON: jest.fn(),
 }));
 
-// Hide script output
-console.log = () => {};
+silenceConsoleLog();
 
 // The Vagina Museum reaches us through the "screening" hashtag rather than
 // "film" - its events are never tagged film - so matching against it is what

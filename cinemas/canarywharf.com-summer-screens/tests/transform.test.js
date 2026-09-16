@@ -1,6 +1,7 @@
 const transform = require("../transform");
 const attributes = require("../attributes");
 const { expectedClosures } = require("../../../common/expected-closures");
+const { silenceConsoleLog } = require("../../../common/test-utils");
 
 // The declared closure this venue's carve-out rides on. Read rather than
 // hardcoded, so the test follows the entry when its dates move and disappears
@@ -13,6 +14,8 @@ const closure = expectedClosures.find(({ venue }) => venue === attributes.id);
 const outOfSeasonPage = `<html><body class="error404"><h1>Page not found</h1></body></html>`;
 
 describe("canary wharf summer screens transform with no listings", () => {
+  const consoleLog = silenceConsoleLog();
+
   afterEach(() => {
     jest.useRealTimers();
   });
@@ -33,6 +36,11 @@ describe("canary wharf summer screens transform with no listings", () => {
       await expect(
         transform({ movieListPage: outOfSeasonPage }, {}),
       ).resolves.toEqual([]);
+      // The log is the whole point of the carve-out - an empty release that
+      // explains itself - so check it was said rather than only silenced.
+      expect(consoleLog()).toHaveBeenCalledWith(
+        expect.stringContaining(closure.reason),
+      );
     },
   );
 });

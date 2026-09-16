@@ -1,5 +1,6 @@
-// Hide script output
-console.log = () => {};
+const { silenceConsoleLog } = require("../test-utils");
+
+silenceConsoleLog();
 
 const { rankPeople } = require("../get-movie-data");
 

@@ -3,6 +3,7 @@ const {
   setupPolly,
   setupCacheMock,
   schemaValidate,
+  silenceConsoleLog,
 } = require("../../../common/test-utils");
 const {
   readJSON,
@@ -24,8 +25,7 @@ const isRecording = false;
 jest.mock("../../../common/cache");
 setupCacheMock(__dirname, "2026-08-17");
 
-// Hide script output
-console.log = () => {};
+silenceConsoleLog();
 
 describe(attributes.name, () => {
   setupPolly(isRecording, __dirname);

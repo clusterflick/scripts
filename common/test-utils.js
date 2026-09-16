@@ -193,10 +193,37 @@ const setupCacheMock = (dirname, suffix) => {
   );
 };
 
+// Pipeline code narrates itself as it runs, and under test that narration
+// lands in the run's output where it reads as a warning about the test rather
+// than the progress report it is. Swallow it for the tests in scope, and hand
+// back the spy so a test that cares what was said can still assert on it -
+// which is the reason this exists rather than each file assigning over
+// `console.log`: the global comes back afterwards, and a log is evidence
+// instead of something discarded on the way past.
+const silenceConsoleLog = () => {
+  // Installed as the file is read rather than in `beforeEach`, because a module
+  // can narrate as it loads - `common/llm-client` announces its provider - and
+  // its `require` runs before any hook does. Call this above the requires that
+  // need covering. The history is cleared between tests so an assertion sees
+  // only its own test's logs.
+  const spy = jest.spyOn(console, "log").mockImplementation(() => {});
+
+  afterEach(() => {
+    spy.mockClear();
+  });
+
+  afterAll(() => {
+    spy.mockRestore();
+  });
+
+  return () => spy;
+};
+
 module.exports = {
   redactBody,
   setupPolly: setupPollyWrapper,
   schemaValidate,
   setupCacheMock,
   disableCache,
+  silenceConsoleLog,
 };
