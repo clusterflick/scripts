@@ -1147,6 +1147,14 @@ function normalizeTitle(title, options) {
     ],
     ["Metropolis at 100", "Metropolis"],
     ["Halloween (1978) + ", "Halloween (1978) & "],
+    // One venue truncates the second half of the double bill to the words the
+    // book shares with the film, so "The Tiger Who Came To" never reaches the
+    // title it is short for. Anchored to the end of the listing, because the
+    // full "The Tiger Who Came To Tea" must be left alone. The pairing is
+    // billed with a plus, which the separator rule would otherwise read as the
+    // end of the title and drop the second film entirely.
+    [/\s+The Tiger Who Came To$/i, " The Tiger Who Came To Tea"],
+    ["We're Going on a Bear Hunt + ", "We're Going on a Bear Hunt & "],
     ["MORE PUNK THAN PUNK + ", "MORE PUNK THAN PUNK & "],
     ["Sam Neill Tribute -", "Sam Neill Tribute: "],
     ["Miss Marple -", "Miss Marple: "],
@@ -1223,7 +1231,14 @@ function normalizeTitle(title, options) {
     ["The Playhouse Buster Keaton", "The Play house Buster Keaton"],
     ["Art is my Therapy - ", "Art is my Therapy: "],
     [/^Fall 2$/i, "Fall 2: Deadpoint"],
-    [/^9\s*(?:[-–—]|to)\s*5$/i, "Nine to Five"],
+    // The Dolly Parton comedy is listed under its numerals, and the anchored
+    // spelling only reaches a listing that is nothing but the title - the
+    // corrections run before the strand prefixes come off, so "Dementia-
+    // Friendly Screening: 9 to 5" still carries its label here. Only the
+    // worded separator is safe unanchored; "9 - 5" reads as a range anywhere
+    // else in a title, so that spelling stays pinned to the whole of it.
+    [/^9\s*[-–—]\s*5$/i, "Nine to Five"],
+    [/\b9\s*to\s*5\b/i, "Nine to Five"],
     // One venue bills the concert film with the party it is screened at,
     // so the same film arrives under a second name. Anchored to the whole
     // title because a listing that is only a party has no film to fall back
@@ -1530,6 +1545,17 @@ function normalizeTitle(title, options) {
   // Month: Alain Gomis' DAO", "Black History Month 2026: Sugarcane"), so one
   // pattern rather than a string per year.
   title = title.replace(/\bblack history month(?:\s+\d{4})?:\s*/i, "");
+
+  // The documentary festival's name is spelled a different way by every venue
+  // billing it - the apostrophe lands before or after the "n", or goes missing
+  // altogether - and the strand is named after it as often as not ("x Rio",
+  // "FF 24", "Film Festival 2025"). One pattern rather than a string per
+  // spelling. The colon is required, so a film actually called this keeps its
+  // name.
+  title = title.replace(
+    /\bdoc\s?'?\s?n'?\s?roll(?:\s+x\s+rio|\s+ff\s+\d+|\s+film festival(?:\s+\d{4})?)?:\s*/i,
+    "",
+  );
 
   knownRemovablePhrases.forEach((phrase) => {
     title = title.replace(phrase.toLowerCase(), "");
