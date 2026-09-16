@@ -1,7 +1,27 @@
 const cheerio = require("cheerio");
 const { parse, isValid } = require("date-fns");
 const { enGB } = require("date-fns/locale/en-GB");
+const { getText } = require("../../common/utils");
 const attributes = require("./attributes");
+
+// The location map an event page carries, which OutSavvy renders through its
+// own Mapbox handler:
+//   <img data-src="/Services/MapboxHandler.ashx?lng=-0.0723475&lat=51.5307&w=800&h=200&zoom=16" />
+// It used to be a static marker image spelling the pair as
+// "marker-point.png(<lon>,<lat>)", and find-events went on reading that long
+// after the markup moved - a selector that matches nothing returns no
+// coordinates rather than failing, so every event quietly fell back to matching
+// its venue on name alone. Both readers share this one now so the next change
+// of shape can only be missed once.
+const MAP_IMAGE = ".website-map img[data-src*='MapboxHandler.ashx']";
+const MAP_COORDINATES = /MapboxHandler\.ashx\?lng=([^&]+)&lat=([^&]+)&/;
+
+// The venue block names the venue in a span of its own and then writes the
+// address around it, ending in a "(view map)" link:
+//   <span><span>Folklore</span><br />186 Hackney Road,&nbsp;London,&nbsp;E2 7QL
+//   <a href="#event_map">(view map)</a></span>
+// Taking the block's text without those two leaves the address on its own.
+const VENUE_BLOCK = ".event-item-venue span";
 
 // The header an event publishes its date in, e.g.
 // "Monday 3rd November 2025 at 7:30 PM"
@@ -37,6 +57,34 @@ function parseListingEventUrls(html) {
   return $(EVENT_LINKS)
     .map((i, elem) => `${attributes.domain}${$(elem).attr("href")}`)
     .get();
+}
+
+/**
+ * Read the coordinates an event page publishes its venue at.
+ *
+ * @param {Object} $ - Cheerio instance for an event page
+ * @returns {{lat: number, lon: number}|null} Venue coordinates, or null when
+ *   the page carries no map to read them from
+ */
+function parseVenueCoordinates($) {
+  const match = ($(MAP_IMAGE).attr("data-src") || "").match(MAP_COORDINATES);
+  if (!match) return null;
+
+  return { lon: parseFloat(match[1]), lat: parseFloat(match[2]) };
+}
+
+/**
+ * Read the address an event page publishes its venue at. Used as the postcode
+ * fallback for venues whose coordinates don't place them at the cinema.
+ *
+ * @param {Object} $ - Cheerio instance for an event page
+ * @returns {string} Venue address, empty when the page carries no venue block
+ */
+function parseVenueAddress($) {
+  const block = $(VENUE_BLOCK).first().clone();
+  block.find("span").first().remove();
+  block.find("a").remove();
+  return getText(block);
 }
 
 function parseDate(date) {
@@ -111,6 +159,8 @@ function parseEventDates(dateText, scriptText) {
 
 module.exports = {
   parseListingEventUrls,
+  parseVenueCoordinates,
+  parseVenueAddress,
   parseDate,
   parseBookingWidgetDates,
   parseEventDates,

@@ -110,6 +110,7 @@ Venue metadata used throughout the pipeline.
 | `groupName`        | If group | Parent chain name (e.g. `"Odeon"`, `"Everyman"`)                 |
 | `alternativeNames` | No       | Array of alternative names for matching                          |
 | `excludedNames`    | No       | Array of names that belong to a neighbouring venue, not this one |
+| `geoRadius`        | No       | Km a roaming venue's screenings range over (default `0.35`)      |
 
 Additional venue-specific fields (e.g. `cinemaId`, `siteId`) can be added as
 needed by the retrieval and transformation logic.
@@ -158,6 +159,16 @@ against the source's name _before_ normalisation, which is the only place the
 two are still distinguishable, and it rejects the name by every route including
 the address line. `bbk.ac.uk-cinema` excludes `Birkbeck` and `bbk.ac.uk-central`
 excludes `Birkbeck Cinema`, so each name resolves to exactly one venue.
+
+**Use `geoRadius` for a venue with no fixed home.** The location check allows
+0.35km, which is "the same building" — right for a venue that has one. Canal
+Film Club screens along the East London canals and releases the spot to ticket
+holders 48 hours before, so the coordinates we hold are one of its locations
+rather than the location, and a source publishing another of them is 2.3km out
+through no error. `geoRadius` is the distance that venue's screenings actually
+range over, and it applies to that venue alone. Reach for it only when the venue
+genuinely moves: a wider radius on a fixed venue weakens the check that keeps
+same-named venues apart, which is the whole reason the location is compared.
 
 Because the comparison is on raw text, it only covers the spellings you list. A
 form nobody anticipated can still match both venues — `combine` asserts that no

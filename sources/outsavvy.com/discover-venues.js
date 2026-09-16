@@ -7,27 +7,12 @@ const {
   findMatchingCinema,
 } = require("../../common/source-utils");
 const { getAllCinemaAttributes } = require("../../cinemas");
-
-function extractCoordinates($) {
-  const mapImg = $(".website-map img[data-src*='MapboxHandler.ashx']");
-  const dataSrc = mapImg.attr("data-src");
-
-  // Extract coordinates from map URL
-  const match = (dataSrc || "").match(
-    /MapboxHandler\.ashx\?lng=([^&]+)&lat=([^&]+)&/,
-  );
-  if (!match) return null;
-
-  return {
-    lon: parseFloat(match[1]),
-    lat: parseFloat(match[2]),
-  };
-}
+const { parseVenueCoordinates } = require("./utils");
 
 function extractVenueDetails(html) {
   const $ = cheerio.load(html);
   const venueName = getText($(".event-item-venue span span").first());
-  const coordinates = extractCoordinates($);
+  const coordinates = parseVenueCoordinates($);
   return { venueName, coordinates };
 }
 

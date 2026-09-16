@@ -36,6 +36,7 @@ const cinema = {
   ],
   address: "East London Canal, Hackney, London, E5 9RH, UK",
   geo: { lat: 51.56312474391641, lon: -0.043491730782087026 },
+  geoRadius: 3,
 };
 
 // As held in cinemas/folklorehoxton.co.uk/attributes.js - OutSavvy writes the
@@ -72,6 +73,26 @@ describe("findEvents", () => {
     await expect(findEvents(cinema)).rejects.toThrow(
       `No date could be read for ${url}`,
     );
+  });
+
+  // OutSavvy is a UK-wide listing, so a venue's name alone doesn't identify it -
+  // the current sweep carries the Brighton Duke of York's. The coordinates come
+  // off the location map, and find-events read a marker image OutSavvy stopped
+  // serving long enough ago that no recording has one, which left every event
+  // matching on name alone. A venue somewhere else entirely under a name we hold
+  // must not be ours.
+  it("rejects a venue matching by name but sitting somewhere else", async () => {
+    readJSON.mockImplementation(() => ({
+      moviePages: { [folkloreUrl]: folklorePage },
+    }));
+
+    const elsewhere = {
+      ...folklore,
+      address: "1 Preston Road, Brighton, BN1 4NA, UK",
+      geo: { lat: 50.8348, lon: -0.1406 },
+    };
+
+    await expect(findEvents(elsewhere)).resolves.toEqual([]);
   });
 
   it("matches Folklore by the name OutSavvy lists it under", async () => {

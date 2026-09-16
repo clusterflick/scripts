@@ -1,7 +1,10 @@
 const fs = require("node:fs");
 const path = require("node:path");
+const cheerio = require("cheerio");
 const {
   parseListingEventUrls,
+  parseVenueCoordinates,
+  parseVenueAddress,
   parseDate,
   parseBookingWidgetDates,
   parseEventDates,
@@ -18,6 +21,12 @@ const widgetScript = (dates) => `var jsonDates = ${JSON.stringify(dates)}`;
 const listingWithPromoPanel = fs.readFileSync(
   path.join(__dirname, "fixtures", "listing-with-promo-panel.html"),
   "utf8",
+);
+
+// An event page as served on 2026-09-16, keeping the location map and venue
+// block the two readers below take their answers from.
+const eventPage = cheerio.load(
+  fs.readFileSync(path.join(__dirname, "fixtures", "folklore.html"), "utf8"),
 );
 
 describe("parseListingEventUrls", () => {
@@ -39,6 +48,32 @@ describe("parseListingEventUrls", () => {
 
   it("reads nothing out of a listing that has stopped carrying events", () => {
     expect(parseListingEventUrls('<div id="eventscontent"></div>')).toEqual([]);
+  });
+});
+
+// The pair that place an event. find-events went on reading a marker image
+// OutSavvy had stopped serving, and a selector matching nothing reads as a venue
+// with no coordinates rather than as a breakage - so every event fell back to
+// matching on its name alone, across a UK-wide listing. These pin the markup
+// each one is read from.
+describe("parseVenueCoordinates", () => {
+  it("reads the coordinates behind the location map", () => {
+    expect(parseVenueCoordinates(eventPage)).toEqual({
+      lat: 51.5307,
+      lon: -0.0723475,
+    });
+  });
+
+  it("reads no coordinates from a page with no location map", () => {
+    expect(parseVenueCoordinates(cheerio.load("<html></html>"))).toBeNull();
+  });
+});
+
+describe("parseVenueAddress", () => {
+  it("reads the address without the venue name or the map link", () => {
+    expect(parseVenueAddress(eventPage).replace(/\s+/g, " ")).toBe(
+      "186 Hackney Road, London, E2 7QL",
+    );
   });
 });
 
