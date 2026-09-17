@@ -93,6 +93,11 @@ const nonFilmEvents = [
   // publishes the curly apostrophe and this check never reaches the
   // normalisation that straightens it.
   /Gavin.?s Graveyard Gold/i,
+  // A poetry pamphlet's launch night, billed by the pamphlet being launched
+  // ("A Temporary Temple - '&' Poetry Pamphlet Launch"), so match the launch
+  // rather than carrying a pattern per pamphlet. Unanchored for the same
+  // reason: the pamphlet's own name is what the listing opens on.
+  /Poetry Pamphlet Launch/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>

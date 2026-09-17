@@ -484,6 +484,7 @@ const knownRemovablePhrases = [
   "& Celebrations",
   "& Celebration",
   "& Open Discussion",
+  "& Storytime",
   "feature film –",
   "FEATURE FILM ",
   "Featuring Steven McRae",
@@ -709,6 +710,7 @@ const knownRemovablePhrases = [
   "Cineworld 30:",
   "Clapham International Film Festival:",
   "Classroom Cinema:",
+  "Christine Choy:",
   "Claude Lanzmann:",
   "Clermont-Ferrand 2025:",
   "Clermont-Ferrand 2026:",
@@ -886,6 +888,7 @@ const knownRemovablePhrases = [
   "Goethe-Kino:",
   "Grab your ticket to ",
   "Guest Event:",
+  "Hackney Children's Film Fest:",
   "HW4P Solidarity on Screen:",
   "LIK:",
   "Lina Wertmüller:",
@@ -954,6 +957,7 @@ const knownRemovablePhrases = [
   "IFF 2026:",
   "IWD2026:",
   "Indian 101 Diwali Celebration:",
+  "In-Edit Cine-Documental:",
   "Islamophobia Awareness Month:",
   "Italy Through its Cinema:",
   "Jazz In Exile:",
@@ -1256,6 +1260,7 @@ const knownRemovablePhrases = [
   "Summer by the River:",
   "Summer Screenings at Greenford Quay:",
   "Summer Throwbacks",
+  "Sylvester Stallone:",
   "Sürreal Sinema:",
   "SMartphone Film Fest:",
   "Special Guest x",
@@ -1448,6 +1453,12 @@ const knownRemovablePhrases = [
   // stripping the prefix off "Episode IV" would leave "A New Hope", which is
   // not what that film is called either.
   "Star Wars: Episode VI",
+  // The anniversary screening bills the guest's Q&A and the season it belongs
+  // to after the film, running to more words than the film's own name.
+  "Screening & Q&A (15-20min) — Celebrating 50 Years of Rocky and The Steps",
+  // The late-night billing names the party the screening is wrapped in, with
+  // the crosses the venue publishes it under.
+  "PLUS ✝✝✝ BASEMENT NUNSPLOITATION COSTUME PARTY",
   // The film is named "Arrietty" here and "The Secret World of Arrietty"
   // abroad, and venues use both, so the longer billing comes off and the two
   // arrive under the one name.

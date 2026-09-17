@@ -51,6 +51,9 @@ function normalizeTitle(title, options) {
     // before it; "The Hunger Games: Marathon Screening" is its own event and
     // keeps the word, so anchor rather than carry ": Marathon" as a phrase.
     [/:\s*Marathon$/i, ""],
+    // The venue asterisks out the profanity in the title, so the film arrives
+    // under a name no review site or database spells that way.
+    ["F*RS", "FUCKERS"],
     ["The Fishermen", "The Fisherman"], // NOTE: This can be removed in the future once this specific misname has been removed
     ["ESCAPES_ ", "Escapes: "],
     [/\bscreenin:/i, "screening:"],
@@ -672,15 +675,18 @@ function normalizeTitle(title, options) {
     [/^Secret Film Screenings presents:?\s+.*$/i, "mystery movie"],
     [/(\w+ Film Festival: )?Surprise Screening/i, "mystery movie"],
     [
-      /^(free |monthly )?(mystery|surprise) ([\w+]+ )?([\w+]+ )?(night|film|movie|cinema|screening|matinees?|thriller):?( Nov| \d)?/i,
+      /^(free |monthly )?(mystery|surprise) ([\w+]+ )?([\w+]+ )?(night|film|movie|cinema|screening|matinees?|thriller|horror):?( Nov| \d)?/i,
       "mystery movie",
     ],
     // The strand a venue puts the unnamed film in is part of the billing, not
     // a second film - "Late Night Mystery Cinema" is the same mystery movie as
     // "Mystery Cinema", so the strand comes off with it rather than being left
-    // on the front of the standard title.
+    // on the front of the standard title. A venue billing the strand as a day
+    // out sells the same unnamed film, so the word goes with the billing
+    // rather than being left on the end as "mystery movie day". Only the
+    // singular: "mystery movie days" is a season rather than one screening.
     [
-      /(free |monthly )?(late night )?(mystery|surprise) ((?!short )[\w+]+ )?((?!short )[\w+]+ )?(night|film|movie|cinema|screening|matinees?):?( Nov| \d)?/i,
+      /(free |monthly )?(late night )?(mystery|surprise) ((?!short )[\w+]+ )?((?!short )[\w+]+ )?(night|film|movie|cinema|screening|matinees?):?( Nov| \d| day\b)?/i,
       "mystery movie",
     ],
     // The strand is billed with the year it runs in on the front, so the
