@@ -84,39 +84,55 @@ function extractMovieTitleFromTicketName(ticketName) {
 }
 
 /**
+ * The key a movie title is grouped and identified by. The showing id is built
+ * from this same value, so grouping on anything else lets two ticket names
+ * that slugify alike claim one id as two events - which is what art'otel
+ * Battersea sold on 29th October, the chair naming the film "Edward
+ * Scissorhands (29th October) - Dinner in TOZI Pizzeria & Cicchetti Bar" and
+ * the sofa naming it "Edward Scissorhands (29th October)  Dinner in TOZI
+ * Pizzeria & Cicchetti Bar". One screening, two spellings, one id.
+ */
+const getMovieTitleKey = (movieTitle) =>
+  slugify(basicNormalize(movieTitle), { strict: true });
+
+/**
  * Check if occurrences contain multiple different movies based on ticket names
  */
 function extractMovieGroupsFromOccurrences(occurrences) {
   const movieGroups = new Map();
 
+  const addToGroup = (key, title, occurrence) => {
+    if (!movieGroups.has(key)) movieGroups.set(key, { title, occurrences: [] });
+    movieGroups.get(key).occurrences.push(occurrence);
+  };
+
   for (const occurrence of occurrences) {
     if (occurrence.cancelled) continue;
 
-    // Get all unique movie titles from this occurrence's ticket types
-    const ticketMovieTitles = new Set();
-    if (occurrence.ticket_types && occurrence.ticket_types.length > 0) {
-      for (const ticketType of occurrence.ticket_types) {
-        const extractedTitle = extractMovieTitleFromTicketName(ticketType.name);
-        if (extractedTitle) {
-          ticketMovieTitles.add(extractedTitle);
-        }
+    // Get all unique movie titles from this occurrence's ticket types, keyed by
+    // the key they will be identified by, so an occurrence sold under two
+    // spellings of one film is added to that film's group once
+    const ticketMovieTitles = new Map();
+    for (const ticketType of occurrence.ticket_types ?? []) {
+      const extractedTitle = extractMovieTitleFromTicketName(ticketType.name);
+      if (!extractedTitle) continue;
+      const key = getMovieTitleKey(extractedTitle);
+      // A title left with nothing to slugify can carry no key of its own, so
+      // it falls back to the event title the way a missing title does
+      if (!key) continue;
+      if (!ticketMovieTitles.has(key)) {
+        ticketMovieTitles.set(key, extractedTitle);
       }
     }
 
     // If we found movie titles in tickets, group this occurrence by those titles
     if (ticketMovieTitles.size > 0) {
-      for (const movieTitle of ticketMovieTitles) {
-        if (!movieGroups.has(movieTitle)) {
-          movieGroups.set(movieTitle, []);
-        }
-        movieGroups.get(movieTitle).push(occurrence);
+      for (const [key, movieTitle] of ticketMovieTitles) {
+        addToGroup(key, movieTitle, occurrence);
       }
     } else {
       // No movie title found in tickets, use null key (will use event title)
-      if (!movieGroups.has(null)) {
-        movieGroups.set(null, []);
-      }
-      movieGroups.get(null).push(occurrence);
+      addToGroup(null, null, occurrence);
     }
   }
 
@@ -128,6 +144,7 @@ function convertDesignMyNightEvent(
   eventData,
   listingData,
   movieTitle,
+  movieTitleKey,
   occurrences,
 ) {
   const { event } = eventData;
@@ -184,10 +201,9 @@ function convertDesignMyNightEvent(
       });
     });
 
-  // Generate a unique showing ID - if we have a movie title, include it in the hash
-  const showingIdSuffix = movieTitle
-    ? `-${slugify(basicNormalize(movieTitle), { strict: true })}`
-    : "";
+  // Generate a unique showing ID - if we have a movie title, include the key it
+  // was grouped by in the hash
+  const showingIdSuffix = movieTitleKey ? `-${movieTitleKey}` : "";
   const showingId = generateShowingId(
     attributes,
     `${eventId}${showingIdSuffix}`,
@@ -249,12 +265,16 @@ async function findEvents(cinema) {
         eventData.occurrences,
       );
 
-      for (const [movieTitle, occurrences] of movieGroups.entries()) {
+      for (const [
+        movieTitleKey,
+        { title: movieTitle, occurrences },
+      ] of movieGroups.entries()) {
         const event = convertDesignMyNightEvent(
           eventId,
           eventData,
           listing,
           movieTitle,
+          movieTitleKey,
           occurrences,
         );
         if (event.performances.length > 0) {
