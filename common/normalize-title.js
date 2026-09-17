@@ -352,7 +352,6 @@ function normalizeTitle(title, options) {
     ["½", " 1/2"],
     [/Mr\.? Hulot/i, "Monsieur Hulot"], // Fix for Monsieur Hulot's Holiday
     [/^Mishima$/i, "Mishima: A Life in Four Chapters"],
-    [/^Arrietty$/i, "The Secret World of Arrietty"],
     ["My Heart Is That Eternal Love", "My Heart Is That Eternal Rose"],
     [/^A Tale of Sorrow$/i, "A Tale of Sorrow and Sadness"],
     [/^Eftihia$/i, "My Name is Eftihia"],
@@ -635,6 +634,13 @@ function normalizeTitle(title, options) {
     // read as part of the title and the same film arrives under a second name.
     ["Perks Of Being A Wallflower 2012", "Perks Of Being A Wallflower (2012)"],
     ["A Minecraft Movie Premiere", "A Minecraft Movie"],
+    // The screening is billed around the book being launched alongside it, but
+    // the film shown is the film of the book. Only this title: a book launch
+    // is an event in its own right elsewhere on the listings.
+    ["Morvern Callar Book Launch", "Morvern Callar"],
+    // The anniversary strand names the years since release after the title, so
+    // the film arrives under a name it only has in this one season.
+    ["Pressure at 50", "Pressure"],
     ["Evgenij Onegin", "Eugene Onegin"],
     ["NOVELLE VAGUE", "NOUVELLE VAGUE"],
     // One venue misspells the play in its broadcast listing, so the same
@@ -654,9 +660,14 @@ function normalizeTitle(title, options) {
       "R.E.M x Buster Keaton's Sherlock Jr.",
     ],
     ["Picture East Film Festival 2026 - ", "Picture East Film Festival 2026:"],
+    ["Bun Bites Screening - ", "Bun Bites Screening: "],
     ["Romford Horror 2026 -", "Romford Horror 2026:"],
     ["Romford Horror Festival 2026 -", "Romford Horror 2026:"],
     ["Opening Night -", "Opening Night "],
+    // The venue abbreviates the show and then spells it out after a dash, so
+    // the dash reads as a subtitle separator and the spelled-out half is
+    // dropped, leaving the initials on their own.
+    ["L&O - ", "L&O "],
     [/Surprise Film( \d{1,2}\.\d{1,2}\.\d{1,2})?/i, "mystery movie"],
     [/^Secret Film Screenings presents:?\s+.*$/i, "mystery movie"],
     [/(\w+ Film Festival: )?Surprise Screening/i, "mystery movie"],
@@ -672,7 +683,16 @@ function normalizeTitle(title, options) {
       /(free |monthly )?(late night )?(mystery|surprise) ((?!short )[\w+]+ )?((?!short )[\w+]+ )?(night|film|movie|cinema|screening|matinees?):?( Nov| \d)?/i,
       "mystery movie",
     ],
-    [/(classic |MUBI )?secret scre(e|a)(n|m)(ing)?( \d+)?/i, "mystery movie"],
+    // The strand is billed with the year it runs in on the front, so the
+    // correction leaves "2026" sitting in front of the standard title and the
+    // same unnamed film arrives under a second name. Only a year the title
+    // opens on: a season that names itself before the year ("Horror Season
+    // 2026 Classic Secret Screaming") needs the year left where the strand's
+    // own phrase can take it off with the rest of the billing.
+    [
+      /(^\d{4} )?(classic |MUBI )?secret scre(e|a)(n|m)(ing)?( \d+)?/i,
+      "mystery movie",
+    ],
     [/secret (classic )?bollywood cinema/i, "mystery movie"],
     [/scre(e|a)(n|m) unseen/i, "mystery movie"],
     [
