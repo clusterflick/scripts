@@ -51,6 +51,9 @@ function normalizeTitle(title, options) {
     // before it; "The Hunger Games: Marathon Screening" is its own event and
     // keeps the word, so anchor rather than carry ": Marathon" as a phrase.
     [/:\s*Marathon$/i, ""],
+    // The venue asterisks out the profanity in the title, so the film arrives
+    // under a name no review site or database spells that way.
+    ["F*RS", "FUCKERS"],
     ["The Fishermen", "The Fisherman"], // NOTE: This can be removed in the future once this specific misname has been removed
     ["ESCAPES_ ", "Escapes: "],
     [/\bscreenin:/i, "screening:"],
@@ -672,7 +675,7 @@ function normalizeTitle(title, options) {
     [/^Secret Film Screenings presents:?\s+.*$/i, "mystery movie"],
     [/(\w+ Film Festival: )?Surprise Screening/i, "mystery movie"],
     [
-      /^(free |monthly )?(mystery|surprise) ([\w+]+ )?([\w+]+ )?(night|film|movie|cinema|screening|matinees?|thriller):?( Nov| \d)?/i,
+      /^(free |monthly )?(mystery|surprise) ([\w+]+ )?([\w+]+ )?(night|film|movie|cinema|screening|matinees?|thriller|horror):?( Nov| \d)?/i,
       "mystery movie",
     ],
     // The strand a venue puts the unnamed film in is part of the billing, not

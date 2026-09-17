@@ -52,6 +52,7 @@ describe("isNonFilmEvent", () => {
     ["Panel discussion: Reporting The Syrian Refugee Crisis"],
     ["Panel Discussion: Asian Disapora Filmmakers"],
     ["PLASTA Research & Innovation Day, Sunday 8th November 2026"],
+    ["A Temporary Temple - ‘&’ Poetry Pamphlet Launch"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });
