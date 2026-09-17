@@ -1,135 +1,19 @@
-const { parseISO } = require("date-fns");
-const {
-  createOverview,
-  createPerformance,
-  createAccessibility,
-  createFormat,
-  getValidFormat,
-  generateShowingId,
-} = require("../../common/utils");
+const boxofficeapiTransform = require("../boxofficeapi/transform");
 
-const getCertificate = (attributeIds) => {
-  if (attributeIds.includes("u")) return "U";
-  if (attributeIds.includes("pg")) return "PG";
-  if (attributeIds.includes("12a")) return "12A";
-  if (attributeIds.includes("15")) return "15";
-  if (attributeIds.includes("18")) return "18";
-  return undefined;
+const accessibilityTags = {
+  "showtime.accessibility.subtitled": { subtitled: true },
+  "showtime.accessibility.audiodescription": { audioDescription: true },
+  "showtime.accessibility.autismfriendly": { relaxed: true },
+  "showtime.restriction.babyclub": { babyFriendly: true },
 };
 
-const getCategories = (attributeIds) => {
-  const categories = [];
-  if (attributeIds.includes("adventure")) categories.push("Adventure");
-  if (attributeIds.includes("drama")) categories.push("Drama");
-  if (attributeIds.includes("action")) categories.push("Action");
-  if (attributeIds.includes("animation")) categories.push("Animation");
-  if (attributeIds.includes("horror")) categories.push("Horror");
-  if (attributeIds.includes("comedy")) categories.push("Comedy");
-  return categories;
-};
-
-async function transform(
-  attributes,
-  { movieListPage, moviePages },
-  sourcedEvents,
-) {
-  const movies = {};
-  let events = [];
-
-  movieListPage.forEach((dayData) => {
-    events = events.concat(dayData.events);
-
-    dayData.films.forEach((film) => {
-      const additionalData = moviePages[film.id].filmDetails;
-
-      let year;
-      const parsedYear = parseInt(film.releaseYear, 10);
-      if (parsedYear && parsedYear < new Date().getFullYear()) {
-        year = film.releaseYear;
-      }
-
-      const overview = createOverview({
-        duration: film.length,
-        year,
-        categories: getCategories(film.attributeIds),
-        directors: additionalData.directors,
-        actors: additionalData.cast,
-        trailer: film.videoLink,
-        classification: getCertificate(film.attributeIds),
-      });
-
-      // Ignore placeholders for private screenings
-      if (film.name.toUpperCase() === "THEATRE LET") return;
-
-      movies[film.id] = {
-        showingId: generateShowingId(attributes, film.id),
-        title: film.name,
-        url: film.link,
-        overview,
-        performances: [],
-        matchingHints: { overview: additionalData.synopsis },
-      };
-    });
-  });
-
-  events.forEach((event) => {
-    const movie = movies[event.filmId];
-
-    // If the movie isn't available, then we've omitted it previously
-    if (!movie) return;
-
-    const status = {
-      soldOut: event.soldOut,
-    };
-    const accessibility = {};
-    const format = {};
-    const notesList = [];
-    event.attributeIds.forEach((attributeId) => {
-      if (attributeId === "audio-described") {
-        accessibility.audioDescription = true;
-      }
-      if (attributeId === "subbed") {
-        accessibility.subtitled = true;
-      }
-      if (attributeId === "autism-friendly") {
-        accessibility.relaxed = true;
-      }
-      if (attributeId === "movies-for-juniors") {
-        accessibility.babyFriendly = true;
-      }
-      if (attributeId === "classicfilm") {
-        notesList.push("This is a classic film");
-      }
-      // Screen format lives in the same per-performance attribute list
-      // (e.g. "imax", "4dx", "screenx"); getValidFormat drops the rest.
-      Object.assign(format, getValidFormat(attributeId));
-    });
-
-    movie.performances = movie.performances.concat(
-      createPerformance({
-        date: parseISO(event.eventDateTime),
-        screen: event.auditorium,
-        notesList,
-        url: event.bookingLink,
-        status,
-        accessibility: createAccessibility(
-          movie.title,
-          accessibility,
-          movie.matchingHints.overview,
-        ),
-        format: createFormat(movie.title, format, movie.matchingHints.overview),
-      }),
-    );
-  });
-
-  if (Object.keys(movies).length === 0) {
-    throw new Error("No movies found - the page structure may have changed");
-  }
-
-  const listOfSourcedEvents = Object.values(sourcedEvents).flatMap(
-    (events) => events,
+async function transform(attributes, data, sourcedEvents) {
+  return boxofficeapiTransform(
+    attributes,
+    data,
+    { accessibilityTags },
+    sourcedEvents,
   );
-  return Object.values(movies).concat(listOfSourcedEvents);
 }
 
 module.exports = transform;

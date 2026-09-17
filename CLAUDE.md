@@ -101,9 +101,9 @@ carry its own probe as an optional `health` export beside `retrieve` and
 Studios - has no id prefix and nothing to batch, so each venue exports the
 `health` its siblings share from `common/<chain>/health.js`, one line apiece.
 
-What a chain can count varies, and the row's `granularity` says which: Odeon,
-Curzon and Cineworld give a film x date matrix (`film-date`), while
-Picturehouse, Vue, Electric, Castle, Admit One and Olympic Studios return
+What a chain can count varies, and the row's `granularity` says which: Odeon and
+Curzon give a film x date matrix (`film-date`), while Picturehouse, Vue,
+Everyman, Cineworld, Electric, Castle, Admit One and Olympic Studios return
 individual showings (`performance`). `byDate` is the same axis either way -
 films per date, or performances per date - so a publish reads the same
 everywhere: new keys appearing, or existing keys growing. Omniplex is the

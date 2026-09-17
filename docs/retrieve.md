@@ -250,37 +250,10 @@ return data.props.pageProps.events;
 Fetches an index or date list, then iterates to fetch detailed data for each
 date or item. This is typical of cinema chains with dedicated data APIs.
 
-**Platforms:** Cineworld (12 venues), Picturehouse (11 venues)
+**Platforms:** Picturehouse (11 venues)
 
-```js
-// common/cineworld.co.uk/retrieve.js (simplified)
-async function retrieve({ cinemaId }) {
-  const activeDates = await fetchJson(
-    `${apiUrl}/quickbook/${tenantId}/dates/in-cinema/${cinemaId}/until/${untilDate}`,
-  );
-
-  const movieListPage = [];
-  for (const activeDate of activeDates.body.dates) {
-    const showingsOnDate = await fetchJson(
-      `${apiUrl}/quickbook/${tenantId}/film-events/in-cinema/${cinemaId}/at-date/${activeDate}`,
-    );
-    movieListPage.push(showingsOnDate.body);
-  }
-
-  // Fetch additional film details by distributor code
-  const moviePages = {};
-  for (const filmId of filmIds) {
-    moviePages[filmId] = await fetchJson(
-      `${apiUrl}/${tenantId}/films/byDistributorCode/${filmId}`,
-    );
-  }
-
-  return { movieListPage, moviePages };
-}
-```
-
-Picturehouse uses a similar pattern but with a POST request to fetch the initial
-movie list and HTML detail pages rather than JSON:
+Picturehouse uses a POST request to fetch the initial movie list and HTML detail
+pages rather than JSON:
 
 ```js
 // common/picturehouses.com/retrieve.js (simplified)
@@ -395,12 +368,14 @@ same endpoint to serve multiple cinemas.
 
 Reconstructs data from a Gatsby-built site by extracting the webpack hash,
 fetching static query blobs, then calling a BoxOffice API for schedule details.
+Shared in `common/boxofficeapi/`; each chain passes the page to bootstrap from
+and its own accessibility tag mapping.
 
-**Platform:** Everyman Cinema (16 venues)
+**Platforms:** Everyman Cinema (16 venues), Cineworld (12 venues)
 
 ```mermaid
 flowchart TD
-    A["Fetch /venues-list HTML"] --> B["Extract webpack-runtime src prefix"]
+    A["Fetch listing page HTML (/venues-list, /cinemas)"] --> B["Extract webpack-runtime src prefix"]
     B --> C["Fetch page-data.json for staticQueryHashes"]
     C --> D["Fetch each static query blob"]
     D --> E{"Find allMovie and allAttribute data"}
@@ -410,7 +385,7 @@ flowchart TD
 ```
 
 All Gatsby data fetches are wrapped in `dailyCache()` to avoid redundant
-requests when processing multiple Everyman venues in the same run.
+requests when processing multiple venues of the same chain in the same run.
 
 ### Browser Automation (Playwright)
 
@@ -529,8 +504,8 @@ async function retrieve() {
 | ----------------- | ------ | ------------------------------- | ----------------------------------------- |
 | Odeon (OCAPI)     | 20     | Playwright + OCAPI              | `common/odeon.co.uk/retrieve.js`          |
 | MyVue             | 17     | Playwright + in-browser fetch   | `common/myvue.com/retrieve.js`            |
-| Everyman          | 16     | Gatsby + BoxOffice API          | `common/everymancinema.com/retrieve.js`   |
-| Cineworld         | 12     | Multi-endpoint REST API         | `common/cineworld.co.uk/retrieve.js`      |
+| Everyman          | 16     | Gatsby + BoxOffice API          | `common/boxofficeapi/retrieve.js`         |
+| Cineworld         | 12     | Gatsby + BoxOffice API          | `common/boxofficeapi/retrieve.js`         |
 | Picturehouse      | 11     | POST API + HTML detail pages    | `common/picturehouses.com/retrieve.js`    |
 | Curzon (OCAPI)    | 10     | Omnia API + OCAPI               | `common/curzon.com/retrieve.js`           |
 | Savoy Systems     | 4      | Embedded JSON extraction        | `common/savoysystems.co.uk/retrieve.js`   |
