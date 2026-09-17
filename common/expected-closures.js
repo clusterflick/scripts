@@ -80,6 +80,32 @@ const expectedClosures = [
     // do so because this entry stops the transform throwing first.
     reason: "box office upgrade, bookings reopening Tuesday 15 September 2026",
   },
+  {
+    venue: "fulhampier.com",
+    from: "2026-09-17",
+    until: "2026-09-17",
+    // Not a closure, and not an announcement either - the only entry here whose
+    // evidence is our own observation, which is worth saying plainly. The venue
+    // is open; its domain is what has gone. fulhampier.com delegates to Azure
+    // DNS, and since roughly 01:00 today all four of NS1-05.AZURE-DNS.COM and
+    // its siblings answer REFUSED for every name in the zone, so the site
+    // resolves for nobody and the retrieve's navigation fails with
+    // ERR_NAME_NOT_RESOLVED. Confirmed against both 1.1.1.1 and 8.8.8.8 ("Name
+    // servers refused query (lame delegation?)"), and the registration is paid
+    // to 2028-01-31, so this is a zone deleted or lapsed on their side rather
+    // than a domain that has gone.
+    //
+    // One day, not a week. Nothing observed says when the zone comes back, so
+    // any longer window would be invented; this one buys the run that is
+    // blocked right now - a release for the other 434 venues, with transform's
+    // recovery carrying Fulham Pier's own listings forward from the previous
+    // release - and makes tomorrow a fresh decision rather than a window
+    // quietly running on. While the domain is dark recovery's URL check cannot
+    // reach the listings either, so what it carries is unverifiable and a
+    // screening cancelled today would stay up: a second day of that is a choice
+    // someone should make deliberately.
+    reason: "DNS delegation failed, listings unreachable",
+  },
 ];
 
 // The closure covering this venue today, or undefined if it has none - so a

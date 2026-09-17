@@ -7,6 +7,7 @@ const {
   createAccessibility,
   createFormat,
 } = require("../../common/utils");
+const { getExpectedClosure } = require("../../common/expected-closures");
 const attributes = require("./attributes");
 
 /**
@@ -77,7 +78,18 @@ async function transform({ eventsData }, sourcedEvents) {
   }
 
   if (movies.length === 0) {
-    throw new Error("No movies found - the page structure may have changed");
+    // The retrieve stands down to an empty `eventsData` while the venue's
+    // domain is unreachable, which arrives here as the same empty output a
+    // changed page would give. Stand down only for a declared closure, and say
+    // which one, so the empty output is explained in the log rather than
+    // silent.
+    const closure = getExpectedClosure(attributes.id);
+    if (!closure) {
+      throw new Error("No movies found - the page structure may have changed");
+    }
+    console.log(
+      `      - ⚠️  No listings for ${attributes.id} - closed until ${closure.until} for ${closure.reason}`,
+    );
   }
 
   const listOfSourcedEvents = Object.values(sourcedEvents).flatMap(
