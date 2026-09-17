@@ -681,9 +681,12 @@ function normalizeTitle(title, options) {
     // The strand a venue puts the unnamed film in is part of the billing, not
     // a second film - "Late Night Mystery Cinema" is the same mystery movie as
     // "Mystery Cinema", so the strand comes off with it rather than being left
-    // on the front of the standard title.
+    // on the front of the standard title. A venue billing the strand as a day
+    // out sells the same unnamed film, so the word goes with the billing
+    // rather than being left on the end as "mystery movie day". Only the
+    // singular: "mystery movie days" is a season rather than one screening.
     [
-      /(free |monthly )?(late night )?(mystery|surprise) ((?!short )[\w+]+ )?((?!short )[\w+]+ )?(night|film|movie|cinema|screening|matinees?):?( Nov| \d)?/i,
+      /(free |monthly )?(late night )?(mystery|surprise) ((?!short )[\w+]+ )?((?!short )[\w+]+ )?(night|film|movie|cinema|screening|matinees?):?( Nov| \d| day\b)?/i,
       "mystery movie",
     ],
     // The strand is billed with the year it runs in on the front, so the
