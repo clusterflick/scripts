@@ -49,6 +49,7 @@ const knownRemovablePhrases = [
   "- 35mm",
   " 35mm",
   "the imax 3d experience",
+  "the IMAX experience",
   "(IMAX)",
   "(SRX) ",
   "(SCX) ",
@@ -286,6 +287,7 @@ const knownRemovablePhrases = [
   "Screening and Q&A",
   ": screening and discussion",
   "Screening, Director Q&A, and Meet and Greet",
+  "Q&A and Networking",
   "Screening Without Ads or Trailers",
   "screening @ Rivoli Ballroom",
   "screening hosted by Romford CLP",
@@ -629,6 +631,7 @@ const knownRemovablePhrases = [
   "Brazilian Summer Nights:",
   "British Horror Studio:",
   "BTS ARMY:",
+  "Bun Bites Screening:",
   "Business Declares:",
   "by Burnermunde",
   "by Ektoras Arkomanis",
@@ -705,6 +708,7 @@ const knownRemovablePhrases = [
   "CINE MARICA:",
   "Cineworld 30:",
   "Clapham International Film Festival:",
+  "Classroom Cinema:",
   "Claude Lanzmann:",
   "Clermont-Ferrand 2025:",
   "Clermont-Ferrand 2026:",
@@ -892,6 +896,7 @@ const knownRemovablePhrases = [
   "Live folk music, Czech drinks & ",
   "Liberating Cinema",
   "Horace Ové's",
+  "— Horace Ové",
   "Kinoteka:",
   "Kino Bloc:",
   "Kino Polonia:",
@@ -957,6 +962,7 @@ const knownRemovablePhrases = [
   "Jim Henson's",
   "Jean Cocteau –",
   "Jean Cocteau:",
+  "Jeff Preiss:",
   "Jewish Culture Month: ",
   "Jewish Culutre Month: ",
   "Just Evidence 1:",
@@ -1442,6 +1448,10 @@ const knownRemovablePhrases = [
   // stripping the prefix off "Episode IV" would leave "A New Hope", which is
   // not what that film is called either.
   "Star Wars: Episode VI",
+  // The film is named "Arrietty" here and "The Secret World of Arrietty"
+  // abroad, and venues use both, so the longer billing comes off and the two
+  // arrive under the one name.
+  "The Secret World of",
 
   // Common superfluous pieces
   "** SCREENING CANCELLED **",
