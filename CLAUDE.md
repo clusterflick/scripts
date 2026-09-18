@@ -61,6 +61,23 @@ retrieve  ->  transform  ->  combine  ->  match
 
 All pipeline commands run with `TZ=Europe/London`.
 
+`combine` publishes each person in `people` with TheMovieDB's `popularity`
+alongside their name. It is a rolling trending score, recomputed daily from page
+views and searches, so it is only ever a tie-break between people who are
+otherwise indistinguishable - which is how `rankPeople` in
+`common/get-movie-data.js` already uses it, behind an exact name match and the
+person's department. The website reads it to decide which of two people sharing
+a surname a search meant.
+
+Published raw and unrounded, because rounding is a payload decision belonging to
+whoever pays for the bytes, and the website buckets it before it reaches the
+client. A credit TheMovieDB gives no score for is left without one rather than
+defaulted to zero: no score and a score of zero are different claims, and a
+consumer breaking a tie has to be able to tell them apart. A person credited on
+several films arrives once per film with a different cached snapshot each time,
+and the highest is kept - the maximum is order-independent, so re-running a
+release reproduces it.
+
 `diff` runs between `transform` and `combine`, comparing two `transform`
 releases (`transformed-data/current` vs `transformed-data/previous`) to write
 the change set published by `data-diffed`. `data-analysed`'s `compare:releases`
