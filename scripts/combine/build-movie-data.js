@@ -15,11 +15,36 @@ const getClassification = (movie) => {
   return releaseDateWithClassification.certification;
 };
 
+/**
+ * TheMovieDB's own measure of how much attention a person is getting, carried
+ * through from the credit record.
+ *
+ * It is a rolling trending score rather than a measure of standing - it is
+ * recomputed daily from page views and searches, so it rises and falls with
+ * whatever is in the news. Treat it as a tie-break between people who are
+ * otherwise indistinguishable, never as a ranking in its own right; that is how
+ * `rankPeople` in `common/get-movie-data.js` already uses it, behind an exact
+ * name match and the person's department.
+ *
+ * Published raw. Rounding is a payload decision and belongs to whoever is
+ * paying for the bytes - the website buckets it before it reaches the client.
+ *
+ * Absent on a credit TheMovieDB has no score for, rather than defaulted to
+ * zero: no score and a score of zero are different claims, and a consumer
+ * breaking a tie needs to be able to tell them apart.
+ */
+const getPopularity = ({ popularity }) =>
+  typeof popularity === "number" ? popularity : undefined;
+
 const getDirectors = (movie) => {
   const crew = movie.credits?.crew ?? [];
   return crew
     .filter(({ job }) => basicNormalize(job) === "director")
-    .map(({ id, name }) => ({ id: `${id}`, name }));
+    .map((person) => ({
+      id: `${person.id}`,
+      name: person.name,
+      popularity: getPopularity(person),
+    }));
 };
 
 const getActors = (movie) => {
@@ -27,9 +52,13 @@ const getActors = (movie) => {
   return Array.from(
     cast
       .sort((a, b) => a.order - b.order)
-      .reduce((actors, { id, name }) => {
-        if (actors.has(id)) return actors;
-        actors.set(id, { id: `${id}`, name });
+      .reduce((actors, person) => {
+        if (actors.has(person.id)) return actors;
+        actors.set(person.id, {
+          id: `${person.id}`,
+          name: person.name,
+          popularity: getPopularity(person),
+        });
         return actors;
       }, new Map())
       .values(),
@@ -68,6 +97,38 @@ const getOriginalLanguage = ({ original_language: originalLanguage }) =>
   originalLanguage && originalLanguage !== "en" ? originalLanguage : undefined;
 
 /**
+ * Add a person to siteData, keeping the highest popularity seen for them.
+ *
+ * A person credited on several films arrives once per film, and each film's
+ * TheMovieDB record was cached at a different time - so the same person carries
+ * a different popularity snapshot in each. Overwriting would leave the value
+ * decided by whichever cinema happened to be read last: stable within a run,
+ * but arbitrary, and liable to change under an unrelated reordering.
+ *
+ * The maximum is order-independent, so re-running a release reproduces it, and
+ * it is the least dulled by a stale cache entry - the score decays between
+ * fetches, so the highest snapshot is the freshest-looking rather than the
+ * oldest.
+ *
+ * @param {object} siteData - Receives the person
+ * @param {{id: string, name: string, popularity?: number}} person
+ */
+const registerPerson = (siteData, person) => {
+  const existing = siteData.people[person.id];
+  if (!existing) {
+    siteData.people[person.id] = person;
+    return;
+  }
+  if (
+    person.popularity !== undefined &&
+    (existing.popularity === undefined ||
+      person.popularity > existing.popularity)
+  ) {
+    existing.popularity = person.popularity;
+  }
+};
+
+/**
  * Map a TheMovieDB movie record onto the shape the website consumes.
  *
  * This is deliberately the only place that mapping happens. The `title` it
@@ -101,8 +162,8 @@ const buildMovieData = async (movieInfo, context) => {
     : undefined;
 
   // Register people and genres in siteData
-  directors.forEach((crew) => (siteData.people[crew.id] = crew));
-  actors.forEach((cast) => (siteData.people[cast.id] = cast));
+  directors.forEach((crew) => registerPerson(siteData, crew));
+  actors.forEach((cast) => registerPerson(siteData, cast));
   genres.forEach((genre) => (siteData.genres[genre.id] = genre));
 
   // Make sure the title can be slugified for use in URLs. If it can't

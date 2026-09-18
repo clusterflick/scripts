@@ -66,3 +66,61 @@ describe("buildMovieData", () => {
     expect(movie.originalTitle).toBeUndefined();
   });
 });
+
+describe("people popularity", () => {
+  const credits = (popularity) => ({
+    crew: [{ id: 1, name: "Jean-Pierre Jeunet", job: "Director", popularity }],
+    cast: [{ id: 2, name: "Audrey Tautou", order: 0, popularity: 9.5 }],
+  });
+
+  it("carries TheMovieDB's popularity through to the people record", async () => {
+    const ctx = context();
+    await buildMovieData(movieInfo({ credits: credits(12.5) }), ctx);
+    expect(ctx.siteData.people["1"]).toEqual({
+      id: "1",
+      name: "Jean-Pierre Jeunet",
+      popularity: 12.5,
+    });
+    expect(ctx.siteData.people["2"].popularity).toBe(9.5);
+  });
+
+  it("leaves popularity absent rather than defaulting a missing score to zero", async () => {
+    const ctx = context();
+    await buildMovieData(movieInfo({ credits: credits(undefined) }), ctx);
+    expect(ctx.siteData.people["1"].popularity).toBeUndefined();
+    expect("popularity" in ctx.siteData.people["1"]).toBe(true);
+  });
+
+  // Each film's TheMovieDB record was cached at a different moment, so the same
+  // person arrives with a different snapshot per film. Taking the maximum makes
+  // the published value independent of the order the films were read in.
+  it("keeps the highest popularity when a person is credited on several films", async () => {
+    const ctx = context();
+    await buildMovieData(movieInfo({ id: 1, credits: credits(12.5) }), ctx);
+    await buildMovieData(movieInfo({ id: 2, credits: credits(3.1) }), ctx);
+    expect(ctx.siteData.people["1"].popularity).toBe(12.5);
+  });
+
+  it("does not depend on the order the films are read in", async () => {
+    const ascending = context();
+    await buildMovieData(
+      movieInfo({ id: 1, credits: credits(3.1) }),
+      ascending,
+    );
+    await buildMovieData(
+      movieInfo({ id: 2, credits: credits(12.5) }),
+      ascending,
+    );
+    expect(ascending.siteData.people["1"].popularity).toBe(12.5);
+  });
+
+  it("takes a later score for a person first seen without one", async () => {
+    const ctx = context();
+    await buildMovieData(
+      movieInfo({ id: 1, credits: credits(undefined) }),
+      ctx,
+    );
+    await buildMovieData(movieInfo({ id: 2, credits: credits(4.2) }), ctx);
+    expect(ctx.siteData.people["1"].popularity).toBe(4.2);
+  });
+});
