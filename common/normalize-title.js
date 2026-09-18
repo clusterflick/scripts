@@ -1575,11 +1575,11 @@ function normalizeTitle(title, options) {
   // The documentary festival's name is spelled a different way by every venue
   // billing it - the apostrophe lands before or after the "n", or goes missing
   // altogether - and the strand is named after it as often as not ("x Rio",
-  // "FF 24", "Film Festival 2025"). One pattern rather than a string per
-  // spelling. The colon is required, so a film actually called this keeps its
-  // name.
+  // "FF 24", "Film Festival 2025", or the bare year in "Doc'n Roll 2026").
+  // One pattern rather than a string per spelling. The colon is required, so a
+  // film actually called this keeps its name.
   title = title.replace(
-    /\bdoc\s?'?\s?n'?\s?roll(?:\s+x\s+rio|\s+ff\s+\d+|\s+film festival(?:\s+\d{4})?)?:\s*/i,
+    /\bdoc\s?'?\s?n'?\s?roll(?:\s+x\s+rio|\s+ff\s+\d+|\s+film festival(?:\s+\d{4})?|\s+\d{4})?:\s*/i,
     "",
   );
 
