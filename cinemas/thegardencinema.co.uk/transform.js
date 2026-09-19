@@ -42,8 +42,13 @@ function getNotes($el, festivals) {
   // rather than the link keeps a film programmed both inside and outside a
   // festival - which the markup allows, listing every screening on one page -
   // from claiming all of its showings for it.
+  //
+  // Worded exactly as the cinema words it, without an article. Its festival
+  // names are a mix of things that take "the" ("... Film Festival") and things
+  // that cannot ("Celebrating 75 Years of Contemporary Films", "Stolen
+  // Identities"), and nothing in the markup says which a name is.
   if ($el.hasClass("festival")) {
-    notes.push(...festivals.map((festival) => `Part of the ${festival}`));
+    notes.push(...festivals.map((festival) => `Part of ${festival}`));
   }
   if ($el.hasClass("pay_what_you_can")) {
     notes.push(
