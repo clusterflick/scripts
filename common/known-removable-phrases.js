@@ -895,6 +895,7 @@ const knownRemovablePhrases = [
   "Lina Wertmüller:",
   "Little Venice Film Festival 2026:",
   "Little White Lies:",
+  "Limited Run:",
   "Live stand-up &",
   "live music & dinner",
   "Live folk music, Czech drinks & ",
