@@ -1367,6 +1367,11 @@ const knownRemovablePhrases = [
   "Arena:",
   "Sartorial Correctness with Nick Egan:",
   "A presentation hosted by Kingston Friends of the Earth on behalf of ",
+  // The Black History Month strand abbreviates itself in the listing, so the
+  // generic "Film Screening" entry takes the words off and leaves the
+  // initials sitting on the front of the film. Listed here, ahead of that
+  // entry, so the whole label comes off in one go.
+  "BHM Film Screening",
 
   // Weirdly specific fixes
   "愛殺",
@@ -1471,6 +1476,11 @@ const knownRemovablePhrases = [
   // abroad, and venues use both, so the longer billing comes off and the two
   // arrive under the one name.
   "The Secret World of",
+  // The band bills the screening as its own name followed by the word it
+  // coined for an album told as a film, with the work itself in between, so
+  // both ends come off and "Axis Mundi" is what is left.
+  "IMMINENCE:",
+  "ALBUMOVIE",
 
   // Common superfluous pieces
   "** SCREENING CANCELLED **",

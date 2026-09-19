@@ -1347,6 +1347,7 @@ function normalizeTitle(title, options) {
     ["FREE Kids Movie Club: The Family Madrigal", "encanto"],
     ["FREE Kids Movie Club: Into the Highlands", "brave"],
     ["FREE Kids Movie Club: All That Jazz", "soul"],
+    ["FREE Kids Movie Club: Monsters Welcome", "monsters inc"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
