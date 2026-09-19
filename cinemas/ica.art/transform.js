@@ -12,7 +12,15 @@ const {
 const attributes = require("./attributes");
 const { parseDate } = require("./utils");
 
-const getOverview = (colophon, trailer) => {
+// The colophon names one film. Where the listing is a double bill or a
+// programme of shorts it names only the first, so its duration describes part
+// of the show rather than the show - 16 minutes against a 96-minute double
+// bill, 31 against 64. The page states the real figure itself further down, so
+// prefer that and keep the colophon for the single-film listings that have no
+// total. Affects 12 of 87 pages in the current release.
+const totalRuntimeMatch = /total\s+runtime[:\s]+(\d+)\s*min/i;
+
+const getOverview = (colophon, body, trailer) => {
   const correctedColophon = colophon
     // Fix missing comma before film country
     .replace(/([^,])\s+Japan\s+/i, "$1, Japan ");
@@ -30,9 +38,11 @@ const getOverview = (colophon, trailer) => {
     value.toLowerCase().match(yearMatch),
   );
 
+  const totalRuntime = body?.match(totalRuntimeMatch)?.[1];
+
   return createOverview({
     year: countryYear ? countryYear.split(" ").at(-1) : undefined,
-    duration: duration?.replace(durationMatch, ""),
+    duration: totalRuntime ?? duration?.replace(durationMatch, ""),
     directors: director?.replace(directorMatch, ""),
     trailer,
   });
@@ -86,7 +96,7 @@ async function transform({ moviePages }, sourcedEvents) {
       showingId: generateShowingId(attributes, id),
       title,
       url: moviePageUrl,
-      overview: getOverview(details, trailer),
+      overview: getOverview(details, overview, trailer),
       performances: Array.from($(".performance-list .performance"))
         .map((el) => {
           const screen = getText($(el).find(".venue"));
