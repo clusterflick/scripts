@@ -73,6 +73,10 @@ function normalizeTitle(title, options) {
     // uses an ampersand, so the same programme arrives under a second name.
     ["Life / Drawing", "Life & Drawing"],
     ["JOY + ", "JOY & "],
+    // The Oct 7th Films strand bills its double bill with a plus, which the
+    // separator rule reads as a separator and drops the second film at, so the
+    // pairing is spelled with an ampersand before that runs.
+    ["Yellow Ribbons + ", "Yellow Ribbons & "],
     ["HALT BOOK LAUNCH + ", "HALT BOOK LAUNCH & "],
     ["HERO + My Dad, Guyana and Me", "HERO & My Dad, Guyana and Me"],
     ["Music with Tara Franks + ", "Music with Tara Franks & "],
@@ -304,11 +308,15 @@ function normalizeTitle(title, options) {
     ["The Last Supper", "Last Supper"],
     ["Veera Dheera Sooran: Part 2", "Veera Dheera Sooran"],
     // The two-part documentary is billed with the instalment in front of the
-    // subtitle, spelled with brackets or a colon and with or without a space
-    // around the dash, so the same film arrives under a name per spelling. One
-    // pattern rather than a string per spelling, and here rather than in the
-    // phrase list, which the separator rule beats to "De Gaulle: Part 2".
-    [/^de gaulle\s*:?\s*\(?part \d+\)?\s*[-–:]?\s*/i, "De Gaulle: "],
+    // subtitle, spelled with brackets or a colon, with or without a space
+    // around the dash, and with the number spelled out as a word, so the same
+    // film arrives under a name per spelling. One pattern rather than a string
+    // per spelling, and here rather than in the phrase list, which the
+    // separator rule beats to "De Gaulle: Part 2".
+    [
+      /^de gaulle\s*:?\s*\(?part (?:\d+|one|two)\)?\s*[-–:]?\s*/i,
+      "De Gaulle: ",
+    ],
     ["Mulholland Dr.", "Mulholland Drive"], // Otherwise we match the TV pilot of the same name
     ["W&G:", "Wallace & Gromit:"],
     [
@@ -391,6 +399,10 @@ function normalizeTitle(title, options) {
     ["Festival: Shorts -", "Festival: Shorts –"],
     [/^UK Asian Film Festival\s+/i, "UK Asian Film Festival: "],
     ["Ori - Rebirth", "Ori: Rebirth"],
+    // The sequel is billed with a dash before its subtitle, which the
+    // separator rule reads as a separator and cuts the title down to
+    // "Exorcist II".
+    ["Exorcist II - ", "Exorcist II: "],
     ["Premiere and Networking Event - ", "Premiere and Networking Event: "],
     ["R.S.V.P - ", ""], // Fixes R.S.V.P - Ronde Saare Viah Picho
     ["Member Library Lates: Tom Cruise", "Member Library Lates – Tom Cruise"],
@@ -1335,6 +1347,7 @@ function normalizeTitle(title, options) {
     ["FREE Kids Movie Club: The Family Madrigal", "encanto"],
     ["FREE Kids Movie Club: Into the Highlands", "brave"],
     ["FREE Kids Movie Club: All That Jazz", "soul"],
+    ["FREE Kids Movie Club: Monsters Welcome", "monsters inc"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
@@ -1571,6 +1584,12 @@ function normalizeTitle(title, options) {
   // Month: Alain Gomis' DAO", "Black History Month 2026: Sugarcane"), so one
   // pattern rather than a string per year.
   title = title.replace(/\bblack history month(?:\s+\d{4})?:\s*/i, "");
+
+  // The festival names itself after the year it runs in ("Odyssey 2025: Hong
+  // Kong New Talents", "Odyssey 2026: The Last Emperor"), so one pattern
+  // rather than a string per year. The colon is required, so a film actually
+  // named this way keeps its name.
+  title = title.replace(/\bodyssey \d{4}:\s*/i, "");
 
   // The documentary festival's name is spelled a different way by every venue
   // billing it - the apostrophe lands before or after the "n", or goes missing

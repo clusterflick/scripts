@@ -1066,7 +1066,6 @@ const knownRemovablePhrases = [
   "Noel Coward's",
   "Noirvember:",
   "ODEON Pride Nights",
-  "Odyssey 2025:",
   "Odyssey Film Fest:",
   "OffBeat:",
   "Off-Circuit Repeat",
@@ -1076,6 +1075,7 @@ const knownRemovablePhrases = [
   "OUT @ Clapham:",
   "OUT:",
   "OAC:",
+  "OCT 7TH FILMS:",
   "OFN: ",
   "OCDF: x FFC:",
   "OCDF x FFC:",
@@ -1367,6 +1367,11 @@ const knownRemovablePhrases = [
   "Arena:",
   "Sartorial Correctness with Nick Egan:",
   "A presentation hosted by Kingston Friends of the Earth on behalf of ",
+  // The Black History Month strand abbreviates itself in the listing, so the
+  // generic "Film Screening" entry takes the words off and leaves the
+  // initials sitting on the front of the film. Listed here, ahead of that
+  // entry, so the whole label comes off in one go.
+  "BHM Film Screening",
 
   // Weirdly specific fixes
   "愛殺",
@@ -1446,6 +1451,12 @@ const knownRemovablePhrases = [
   "by JT Taylor",
   "Blockbuster World War 2 drama on RAF legend",
   "Amnesty UK Documentary Launch & Panel Event",
+  // The strand names the programme the screening sits in after the film and
+  // its year, so the label comes off and the film is what is left.
+  ": From Short to Long Form",
+  // The strand names the night after the film it is wrapped around, running
+  // to more words than the film's own title.
+  "The Brooklyn Beat From Lauterbach's",
   // The cultural centre credits the government channel carrying the film
   // after the title, with the ministry behind the channel spelled out.
   "Indian Diplomacy Channel, Ministry of External Affairs",
@@ -1465,6 +1476,11 @@ const knownRemovablePhrases = [
   // abroad, and venues use both, so the longer billing comes off and the two
   // arrive under the one name.
   "The Secret World of",
+  // The band bills the screening as its own name followed by the word it
+  // coined for an album told as a film, with the work itself in between, so
+  // both ends come off and "Axis Mundi" is what is left.
+  "IMMINENCE:",
+  "ALBUMOVIE",
 
   // Common superfluous pieces
   "** SCREENING CANCELLED **",
