@@ -276,6 +276,21 @@ const rankPeople = (searchedName, people) => {
 const maxDirectorNameLength = 100;
 const isNameShaped = (name) => name.length <= maxDirectorNameLength;
 
+// TheMovieDB's person search is served from an index that outlives the record
+// behind it, so a person deleted or merged away is still listed for a while and
+// then answers 404 on lookup. A candidate with no record has no credits to
+// match against - so drop it and try the next one, exactly as a deleted movie
+// is treated above. Anything else means we could not reach the API, and
+// swallowing that would quietly turn an outage into a run of wrong answers.
+const getDirectorCreditsOrSkip = async (id) => {
+  try {
+    return await getPersonMovieCreditsAndCacheResults(id);
+  } catch (error) {
+    if (isMissingMovieDbEntry(error)) return null;
+    throw error;
+  }
+};
+
 async function findMovieByDirector(normalizedTitle, movie) {
   const movieDirectors = [
     ...movie.overview.directors,
@@ -297,7 +312,9 @@ async function findMovieByDirector(normalizedTitle, movie) {
   for (const director of directors.slice(0, 3)) {
     // Get the full list of movie credits for the director, filter down to just
     // their directing credits, and match against those
-    const credits = await getPersonMovieCreditsAndCacheResults(director.id);
+    const credits = await getDirectorCreditsOrSkip(director.id);
+    if (!credits) continue;
+
     const directorCredits = credits.crew.filter(
       ({ job }) => job && basicNormalize(job) === "director",
     );
