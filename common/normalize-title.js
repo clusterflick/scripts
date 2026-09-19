@@ -199,6 +199,7 @@ function normalizeTitle(title, options) {
     ["SEEN Charity Film Screening - ", "SEEN Charity Film Screening: "],
     ["Romford Horror Festival - ", "Romford Horror Festival: "],
     ["Film Screening - ", "Film Screening: "],
+    ["Limited Run - ", "Limited Run: "],
     ["Community Cinema Screening - ", "Community Cinema Screening: "],
     [/^SILVER\s*?SCREEN -/i, "SILVER SCREEN"],
     ["SUBTITLED -", "SUBTITLED "],
