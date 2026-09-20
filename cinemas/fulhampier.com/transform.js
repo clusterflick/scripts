@@ -33,10 +33,20 @@ function isFilmEvent(event) {
   return false;
 }
 
+// event_date_end closes the event, which for a recurring strand is the last
+// date it runs rather than the end of one sitting: "Family Film Club - Tuesday
+// and Thursday" spans two days and subtracts out to 2,970 minutes. A figure
+// like that is not a long film, it is the wrong quantity, so report nothing
+// rather than a runtime no screening could have.
+const LONGEST_PLAUSIBLE_SITTING_MINS = 8 * 60;
+
 function getDurationMins(startDate, endDate) {
   if (!startDate || !endDate) return undefined;
-  const durationMs = endDate.getTime() - startDate.getTime();
-  return durationMs / 1000 / 60;
+  const durationMins = (endDate.getTime() - startDate.getTime()) / 1000 / 60;
+  if (durationMins <= 0 || durationMins > LONGEST_PLAUSIBLE_SITTING_MINS) {
+    return undefined;
+  }
+  return durationMins;
 }
 
 async function transform({ eventsData }, sourcedEvents) {

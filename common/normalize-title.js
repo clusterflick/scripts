@@ -680,6 +680,20 @@ function normalizeTitle(title, options) {
     ["Romford Horror 2026 -", "Romford Horror 2026:"],
     ["Romford Horror Festival 2026 -", "Romford Horror 2026:"],
     ["Opening Night -", "Opening Night "],
+    // The Guild co-presents several festivals and the credit is appended to the
+    // festival's own name, so the same festival arrives under two titles. A
+    // The year comes off with the credit rather than being left behind: this
+    // runs after the trailing year has already been stripped, so taking only
+    // the credit leaves "The Hidden Film Festival 2026" still split from the
+    // plain billing, which normalises to "hidden film festival".
+    [/(\s+\d{4})?:\s*in association with the Film Festival Guild\s*$/i, ""],
+    // The Met's anniversary strand is billed four ways - plain, Encore, Live,
+    // and with the subtitle spelled out - for what is one celebration. Collapse
+    // them onto the fullest form rather than letting the extras split it.
+    [
+      /^Twenty Years of the Met in Cinemas.*$/i,
+      "Twenty Years of the Met: An Anniversary Celebration",
+    ],
     // The venue abbreviates the show and then spells it out after a dash, so
     // the dash reads as a subtitle separator and the spelled-out half is
     // dropped, leaving the initials on their own.
@@ -713,6 +727,11 @@ function normalizeTitle(title, options) {
       "mystery movie",
     ],
     [/secret (classic )?bollywood cinema/i, "mystery movie"],
+    // The Nickel bills its unnamed films under a strand name and then the kind
+    // of film it is: "Blue Monday" is the night, "Mystery XXX Cinema" is the
+    // same unnamed film its other strands sell. Without this the strand name
+    // survives on its own and the screening is grouped as "blue monday".
+    [/^Blue Monday\s*[-–—]\s*mystery.*$/i, "mystery movie"],
     [/scre(e|a)(n|m) unseen/i, "mystery movie"],
     [
       /(Orange Box )?Secret Film Screenings?(:? Summer Series)?/i,

@@ -11,7 +11,20 @@ const {
 } = require("../utils");
 const { parseDate } = require("./utils");
 
-function getOverviewFor($) {
+// The Film-info list gives a duration only when the show has one headline
+// film. A programme of shorts, or a discussion event, leaves it empty - and
+// the article body states the figure instead, as "Total running time 84min" or
+// "Total film programme running time 69min".
+//
+// Strictly a fallback, never an override. Pages append blocks for related
+// events, and those carry their own totals: "Funday: The Princess Diaries"
+// lists the film at 115min and then a foyer workshop at "Total running time
+// 60min". Preferring the stated total there replaces the film's runtime with
+// an unrelated activity's.
+const TOTAL_RUNNING_TIME =
+  /Total(?:\s+film\s+programme)?\s+running\s+time\s+(\d+)\s*min/i;
+
+function getOverviewFor($, body) {
   const overview = {
     categories: "",
     directors: "",
@@ -41,6 +54,11 @@ function getOverviewFor($) {
       }
     }
   });
+
+  if (!overview.duration) {
+    const totalRunningTime = body?.match(TOTAL_RUNNING_TIME)?.[1];
+    if (totalRunningTime) overview.duration = totalRunningTime;
+  }
 
   return createOverview(overview);
 }
@@ -217,7 +235,7 @@ async function transform(attributes, { moviePages }, sourcedEvents) {
       showingId,
       title: show.title,
       url,
-      overview: getOverviewFor($),
+      overview: getOverviewFor($, overview),
       performances,
       matchingHints: { overview },
     });
