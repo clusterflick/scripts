@@ -306,7 +306,7 @@ async function main() {
 
   await writeJSON(WORKSHEET_PATH, {
     generatedAt: new Date().toISOString(),
-    note: 'Set "correctId" on each row to the TheMovieDB id of the film actually being shown. Use "none" if no entry exists or the listing is not one identifiable film, and "unclear" if you cannot tell. The right film may not be among the candidates - check before settling for the closest one, and say "none" rather than picking it. Then re-run with --merge.',
+    note: 'Set "correctId" on each row to the TheMovieDB id of the film actually being shown. The candidates are only what one search returned, and the pipeline runs several - so the right film is sometimes missing from the list, and a row can arrive with no candidates at all. When that happens, look the film up on TheMovieDB and put ITS id in, rather than settling for the closest option or writing it off. Those rows are the point: the harness reports a right answer the search never offered separately, because no reviewer can choose what it was not shown. Use "none" only when no TheMovieDB entry exists for the film, or the listing is not one identifiable film - a marathon, a mystery screening, a season pass. Use "unclear" when you cannot tell, and it will be left out of scoring rather than counted against anything. Then re-run with --merge.',
     rows: rows.map((row, index) => ({ n: index + 1, ...row })),
   });
 
