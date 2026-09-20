@@ -788,6 +788,11 @@ const getPersonMovieCreditsAndCacheResults = (id) =>
 module.exports = {
   rankPeople,
   searchForBestMatch,
+  // Exported for helpers/write-matching-worksheet.js, which shows a human the
+  // same candidates the matcher was given. Nothing in the pipeline should call
+  // this directly - searchForBestMatch is the entry point, and it owns the
+  // order the searches are tried in.
+  searchMovieAndCacheResults,
   getMovieInfoAndCacheResults,
   getMovieGenresAndCacheResults,
   getCollectionInfoAndCacheResults,

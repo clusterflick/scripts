@@ -1,0 +1,16 @@
+{
+  "about": {
+    "what": "Hand-adjudicated TheMovieDB matches for real cinema listings. Each row carries the input a matcher sees - title, year, runtime, classification and the listing description - alongside the TheMovieDB id a human judged correct. Built while evaluating TypeSafe Jev against the incumbent LLM at the review-the-search-results step in September 2026, but it is not specific to either: it scores anything that maps a listing to a TheMovieDB id.",
+    "selfContained": "Rows embed their own input text on purpose. The listings themselves fall out of retrieved-data and transformed-data within weeks, and showingId is kept only for provenance - nothing here needs those releases to still exist.",
+    "noCandidates": "Candidate lists are deliberately NOT stored. TheMovieDB reorders search results by a popularity score it recomputes daily, and adds, merges and deletes entries continuously, so a frozen copy of a result list stops describing anything real within days. Scoring re-runs the search.",
+    "twoFailures": "Because the search is re-run, a wrong answer has two possible causes and they are not the same problem. Either the search never returned the right film, which no matcher can fix, or it did and the matcher chose wrong. A harness that does not separate these will blame the matcher for the search. Check whether correctId appears in the candidate list before scoring the choice.",
+    "labels": "correctId is a TheMovieDB movie id as a number. \"none\" means no entry for this film exists, or the listing is not one identifiable film. \"unclear\" means a human could not settle it either - exclude those rows from scoring rather than counting them against anything.",
+    "notABenchmark": "Do NOT read an accuracy figure off the whole file. Every row here was selected because it was already known to be hard, so the population is the tail and not a sample of listings. What it measures is whether a change helps on the cases that were going wrong, which is the question worth asking - it is not an estimate of how often the pipeline is right.",
+    "samples": {
+      "unstable": "Listings whose published match changed between releases, found by helpers/find-unstable-matches.js. At least one of the published answers was wrong, which is what makes them worth labelling without anyone having flagged them.",
+      "unmatched": "Listings categorised as a film that no release matched at all. The other half of the failure surface: these cost a missed match rather than a wrong one."
+    },
+    "venues": []
+  },
+  "rows": []
+}
