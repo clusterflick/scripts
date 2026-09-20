@@ -242,7 +242,30 @@ Defined in `.env.example`:
 
 - `MOVIEDB_API_KEY` - The Movie Database API key
 - `GEMINI_API_KEY` - Google Gemini API key
+- `OPENAI_API_KEY` - OpenAI API key
+- `TYPESAFE_API_KEY` - TypeSafe API key, used by the Jev arms below
 - `PAT` - GitHub personal access token
+
+Three toggles pick between interchangeable implementations. Each defaults to the
+incumbent, so an unset variable is the shipped behaviour, and each is a swap
+that has to be reversible by an env var rather than a revert:
+
+- `LLM_PROVIDER` - `gemini` (default) or `openai`, in `common/llm-client.js`
+- `CATEGORISER` - `llm` (default) or `jev`, in `common/categorise.js`
+- `MATCHER` - `llm` (default) or `jev`, in `common/review-results.js`, for the
+  step that chooses between TheMovieDB search results
+
+The two Jev arms are not interchangeable with a second vendor the way the LLM
+providers are, so when either is selected the LLM stays wired up behind it and a
+TypeSafe outage costs latency rather than a stage. Only conditions on the far
+side of the network fall back; our own bugs throw.
+
+`MATCHER=jev` scores 12/13 against the LLM's 10/13 on
+`common/tests/matching-labels.json`, at roughly half the latency and a third of
+the cost, and it is stable where the LLM is not - asked the same question four
+times with a nonce defeating both caches, the LLM answered differently on 4 of
+those 13 rows and Jev on none. Thirteen rows drawn from the known-hard tail is
+not a mandate, which is why the default has not moved.
 
 ## CI/CD
 

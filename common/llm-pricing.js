@@ -20,8 +20,8 @@ const PRICING_PER_MILLION_TOKENS = {
   // TypeSafe's Jev charges for input only - output is free, which is why the
   // rate is 0 rather than absent. Source: https://docs.typesafe.ai/models.md,
   // checked 2026-09-19. Called by ask-jev-to-categorise, which is live, and by
-  // ask-jev-to-review-results, which is not yet wired into the pipeline and is
-  // reached only through helpers/compare-matchers.js.
+  // ask-jev-to-review-results, which the pipeline reaches only when MATCHER is
+  // set to "jev" - the default is still the LLM.
   "typesafe:jev-latest": { input: 0.042, output: 0 },
 };
 
