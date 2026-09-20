@@ -71,9 +71,15 @@ const WORKSHEET_PATH = path.join(
   "matching-sample.json",
 );
 
-// A film the venue is showing that we should have been able to identify.
-// Every other category is expected to go unmatched.
-const FILM_CATEGORIES = new Set(["movie", "multiple-movies"]);
+// The only category this fixture can ask its question of. "Which single film
+// is this listing showing" has no answer for a double bill, a marathon or a
+// trilogy day: those carry `themoviedbs`, a list, matched by a different part
+// of the transform, and `combine` keys them by a hash of their title precisely
+// because there is no single `themoviedb` to key them by. Treating that as a
+// miss put four fully-matched programmes on the first worksheet, where the
+// only available answers were all wrong. Scoring `themoviedbs` is a real
+// question and a separate fixture; it is not this one.
+const LABELLABLE_CATEGORY = "movie";
 
 // Enough for a human to recognise the film without the file becoming a copy
 // of TheMovieDB. The id is in the row; the full entry is one click away.
@@ -107,6 +113,7 @@ async function mergeWorksheet() {
     .map((row) => ({
       showingId: row.showingId,
       venue: row.venue,
+      category: row.category,
       title: row.title,
       year: row.year ?? null,
       runtimeMinutes: row.runtimeMinutes ?? null,
@@ -227,9 +234,13 @@ async function collectRows(location, { labelled, unstableIds }) {
     }
     if (labelled.has(movie.showingId)) continue;
 
+    // Gates both populations, not just the unmatched one: a programme whose
+    // title hash moved between releases has not changed its mind about a
+    // film, it has changed its title.
+    if (record.category !== LABELLABLE_CATEGORY) continue;
+
     const wasUnstable = unstableIds.has(movie.showingId);
-    const wasUnmatched =
-      !record.themoviedb && FILM_CATEGORIES.has(record.category);
+    const wasUnmatched = !record.themoviedb;
     if (!wasUnstable && !wasUnmatched) continue;
 
     const titleWithYear = normalizeTitle(movie.title, { retainYear: true });
@@ -242,6 +253,9 @@ async function collectRows(location, { labelled, unstableIds }) {
       showingId: movie.showingId,
       venue: location,
       sample: wasUnstable ? "unstable" : "unmatched",
+      // Recorded so a row can never again reach a labeller without saying
+      // what kind of listing it is.
+      category: record.category,
       title: movie.title,
       normalizedTitle,
       year: movie.overview?.year ?? null,

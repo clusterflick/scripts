@@ -52,7 +52,13 @@ const DIRECTORY = args.find((arg) => !arg.startsWith("--")) || "combined-data";
 
 // A film the venue is showing that we could not identify. Every other category
 // is expected to go unmatched - a quiz has no TheMovieDB entry to find.
-const FILM_CATEGORIES = new Set(["movie", "multiple-movies"]);
+//
+// `multiple-movies` is excluded although it is films, because an unmatched
+// programme is usually not a failure: a double bill matches each film on the
+// bill into `themoviedbs` and is then keyed by a hash of its own title, since
+// there is no single id to key it by. Counting those as misses overstated this
+// number by 90 out of 244.
+const FILM_CATEGORIES = new Set(["movie"]);
 
 const KINDS = {
   rematched: "matched, then matched to a different TheMovieDB id",
