@@ -9,6 +9,12 @@
 
 let records = [];
 
+// Counted separately from `records` because a fallback is not a call site's
+// usage, it is a fact about the run: Jev was asked and could not answer. A run
+// with any of these produced some of its categories from the LLM, and the
+// report says so rather than leaving the run looking clean.
+let categoriserFallbacks = [];
+
 /**
  * @param {object} record
  * @param {string} record.cacheKeyPrefix - Identifies which callLlm call site
@@ -28,8 +34,28 @@ function getLlmUsageLog() {
   return records;
 }
 
-function clearLlmUsageLog() {
-  records = [];
+/**
+ * @param {object} fallback
+ * @param {string} fallback.title - The listing that fell back
+ * @param {string} fallback.reason - The error class that triggered it
+ */
+function recordCategoriserFallback(fallback) {
+  categoriserFallbacks.push(fallback);
 }
 
-module.exports = { recordLlmUsage, getLlmUsageLog, clearLlmUsageLog };
+function getCategoriserFallbacks() {
+  return categoriserFallbacks;
+}
+
+function clearLlmUsageLog() {
+  records = [];
+  categoriserFallbacks = [];
+}
+
+module.exports = {
+  recordLlmUsage,
+  getLlmUsageLog,
+  clearLlmUsageLog,
+  recordCategoriserFallback,
+  getCategoriserFallbacks,
+};

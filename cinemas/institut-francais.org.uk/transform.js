@@ -138,6 +138,22 @@ const getSinglePerformance = (
   ];
 };
 
+// A programme of shorts puts its films under a "Programme" heading - each with
+// its own director, year and duration - while `.definition` carries only a
+// sentence of framing. On those pages the definition alone says a programme
+// exists without saying what is in it, which is exactly the information a
+// categoriser needs to tell a shorts programme from a feature.
+//
+// Only matchingHints gets this. `overview` also feeds createFormat, and three
+// thousand characters of synopsis is a lot of new surface for a format marker
+// to match by accident - a false 35mm is worse than a missing one.
+const getProgramme = ($) => {
+  const heading = $("h2").filter((_index, element) =>
+    /programme/i.test(getText($(element))),
+  );
+  return heading.length > 0 ? getText(heading.parent()) : "";
+};
+
 async function transform({ moviePages }, sourcedEvents) {
   const movies = [];
 
@@ -175,7 +191,9 @@ async function transform({ moviePages }, sourcedEvents) {
               title,
               overview,
             ),
-      matchingHints: { overview },
+      matchingHints: {
+        overview: [overview, getProgramme($)].filter(Boolean).join("\n\n"),
+      },
     });
   }
 

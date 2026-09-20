@@ -8,7 +8,9 @@
     "samples": {
       "disagreement": "Rows where the incumbent LLM and Jev gave different answers. Selected BY model behaviour, so biased - useful for finding failure modes, useless for measuring accuracy.",
       "gate-sample": "Blind random sample of rows below the 0.85 confidence gate, stratified ~10 per band. Labelled without sight of either model answer.",
-      "high-sample": "Blind random sample of rows at or above 0.85 confidence. Labelled without sight of either model answer."
+      "high-sample": "Blind random sample of rows at or above 0.85 confidence. Labelled without sight of either model answer.",
+      "held-out-1": "Simple random sample from 8 venues not used to tune anything at the time. Spent afterwards: the 0.60 gate and the institut-francais fix were both derived from its errors, so it no longer measures generalisation.",
+      "held-out-2": "Every comparable row from 14 venues never used in any earlier sample or fix. The cleanest generalisation evidence in the file."
     },
     "bandPopulations": {
       "0.00-0.50": 13,
@@ -18,20 +20,42 @@
       "total": 243
     },
     "venues": [
-      "bfi.org.uk-southbank",
-      "cinemamuseum.org.uk",
-      "genesiscinema.co.uk",
-      "barbican.org.uk",
-      "princecharlescinema.com",
-      "ica.art",
-      "lumiereromford.com",
-      "thenickel.co.uk",
       "actonecinema.co.uk",
-      "riocinema.org.uk",
-      "thegardencinema.co.uk",
-      "thearzner.com",
+      "barbican.org.uk",
+      "bfi.org.uk-southbank",
+      "chiswickcinema.co.uk",
+      "cinemamuseum.org.uk",
       "coldharbourblue.com",
-      "royalalberthall.com"
+      "curzon.com-bloomsbury",
+      "davidleancinema.org.uk",
+      "fulhampier.com",
+      "genesiscinema.co.uk",
+      "ica.art",
+      "institut-francais.org.uk",
+      "lumiereromford.com",
+      "myvue.com-bromley",
+      "myvue.com-croydon-purley-way",
+      "myvue.com-harrow",
+      "myvue.com-romford",
+      "odeon.co.uk-kingston",
+      "odeon.co.uk-tottenham-court-road",
+      "phoenixcinema.co.uk",
+      "picturehouses.com-central",
+      "picturehouses.com-ealing",
+      "picturehouses.com-finsbury-park",
+      "picturehouses.com-greenwich",
+      "picturehouses.com-hackney",
+      "picturehouses.com-the-ritzy",
+      "princecharlescinema.com",
+      "regentstreetcinema.com",
+      "riocinema.org.uk",
+      "riversidestudios.co.uk",
+      "rooftopcinemaclub.com-peckham",
+      "royalalberthall.com",
+      "thearzner.com",
+      "thecastlecinema.com",
+      "thegardencinema.co.uk",
+      "thenickel.co.uk"
     ]
   },
   "rows": [
@@ -727,6 +751,645 @@
       "description": "Poetry Is Political\n\n+ poetic response by Binta Yade\n\nSarah Maldoror celebrates the power of culture through her portraits of Haitian poet René Depestre, Colombian artist Ana Mercedes Hoyos and Martinican French author Aimé Césaire.\n\nRené Depestre, poète haïtien\n\nRené Depestre, Poet\n\nFrance 1981. Director Sarah Maldoror. 5min. Video. With English subtitles\n\nAna Mercedes Hoyos\n\nAna Mercedes Hoyos, Painter\n\nFrance-Colombia 2008. Director Sarah Maldoror. 13min. Digital. With English subtitles\n\nEia pour Césaire\n\nPapa Césaire\n\nFrance 2009. Director Sarah Maldoror. 58min. Digital. With English subtitles\n\nTotal film programme running time 76min\n\nA sympathetic light is cast on poet and political activist René Depestre, an influential figure of Haitian literature. Through her portrait of visual artist Ana Mercedes Hoyos, Sarah Maldoror highlights the African roots of Colombian society in its relationship with slavery. Just after Aimé Césaire’s death, she returned to his home island of Martinique. There, she examines Césaire’s legacy through interviews with everyone from his secretary to people on the street, and employing excerpts from her previous documentaries on him.\n\nSee other screenings of Poetry Is Political.",
       "label": "shorts",
       "sample": "high-sample"
+    },
+    {
+      "showingId": "thecastlecinema.com-107296",
+      "venue": "thecastlecinema.com",
+      "title": "Big Bike Film Night 2026",
+      "runtimeMinutes": 150,
+      "description": "The Big Bike Film Night is on a mission - bringing the best short cycling films from around the world together for you.\n\nShowcasing 2.5 hours of mesmerizing bike films that have everything a cycle-centric audience could want – action, drama,\nhumour, and plenty of inspiration. The evening is unashamedly and utterly, utterly, utterly designed and devised to delight\nthe two-wheel devotee!\n\nThe 2026 treasure chest of films includes:\n• a dazzling mountain bike ride exploring the breathtaking landscapes of Norway, embracing the magic of the midnight sun\n• an inspiring film that captures the wettest, most miserable riding conditions imaginable\n• a moving movie that follows a father and son’s journey as they take on one of life’s most meaningful milestones-riding a bike together as a family\n• an immersive film that follows riders on the iconic ‘TransAtlantic Way’, a self-supported ultra-cycling event along Ireland’s Wild Atlantic Way\n• a film that playfully delves into the world of fat bikes\n• a compelling story about perseverance, showcasing the challenges and triumphs of navigating daily life following a life-altering injury, and how adaptive design has transformed and enriched the journey forward\n• a bold and uplifting story of an adventure activist, attempting to break the 24-hour Guinness World Record in downhill mountain biking- all to raise funds for reforesting foothills around Queenstown, New Zealand. Her relentless pursuit not only pushes the limits of endurance but also becomes a powerful symbol of resilience and environmental commitment\n• and crowning the night off… we all love an underdog tale. This charming, funny, heartfelt film inspires us to believe that we all have the capacity to be unlikely heroes in our own stories. The audience is transported back to the nostalgic 1990s, to the slopes of the punishing Mont Ventoux, in Southern France, to witness the drama of a battle between two giants\nALL in the mix!\n\nThese short films are a great reminder of why we love to ride our bike; with stories that captivate us, stories that move us, and most importantly of all – inspiring us to get out and ride. All celebrate the fun, adventure, and joy that cycling enables.\n\nSo...listen to the voice inside you; it’s telling you to go. Grab your mates, GO ON… grab your bike and come along for the\nride!!\n\nPREVIOUS ATTENDEE’S COMMENTS:\n“One of the most inspiring events of the year\"\n“If you only have one night a year out, make it this!!”\n“The Big Bike Film Night is always a wonderful, eclectic, wacky mix of films and I love it!”\n“If you haven’t experienced the cinematic excellence of The Big Bike Film Night – then YOU MUST!!!”",
+      "label": "shorts",
+      "sample": "held-out-1"
+    },
+    {
+      "showingId": "picturehouses.com-the-ritzy-HO00013066",
+      "venue": "picturehouses.com-the-ritzy",
+      "title": "Fitzroy’s Magnificent Sevens",
+      "runtimeMinutes": 60,
+      "description": "Fitzroy’s Magnificent Sevens is a concept of playing strictly 7” vinyl platters that matter via one man (Fitzroy Soul Survivors) on two turntables through the vision of his third eye, to the fourth dimension for five hours. \nMusically it will be a journey of soul, funk, jazz, disco, boogie, fusion, Latin, salsa, samba, electro, hip hop, house & alternative version excursions old & nu. \nSaturday 30th May, 20:00-01:00 @ The Ritzy in Brixton with £5 entry.\nFor those who want to dance & not prance, slide & glide or move & groove on a spacious wooden dance floor… What else are you waiting for?!",
+      "label": "music",
+      "sample": "held-out-1"
+    },
+    {
+      "showingId": "myvue.com-romford-HO00021502",
+      "venue": "myvue.com-romford",
+      "title": "BTS WORLD TOUR 'ARIRANG' IN SÃO PAULO: LIVE VIEWING",
+      "runtimeMinutes": 195,
+      "description": "Marking the grand finale of their Latin America tour, this monumental concert will bring the explosive energy of the packed stadium in Brazil straight to the big screen.",
+      "label": "movie",
+      "sample": "held-out-1"
+    },
+    {
+      "showingId": "picturehouses.com-finsbury-park-HO00018125",
+      "venue": "picturehouses.com-finsbury-park",
+      "title": "Club Room: Moon Idle",
+      "runtimeMinutes": 120,
+      "description": "Brighton's own dreamy triphoppers, Moon Idle, are coming through the cinema for a special set. \nThey've been releasing heat for years and have plenty of buzz down on the south coast.\nWe can't wait to have them in the space.",
+      "label": "music",
+      "sample": "held-out-1"
+    },
+    {
+      "showingId": "chiswickcinema.co.uk-40903",
+      "venue": "chiswickcinema.co.uk",
+      "title": "The Hunger Games: Marathon Screening",
+      "runtimeMinutes": 608,
+      "description": "Witness the first four films in the Hunger Games saga in a back to back quadruple bill for one day only at the cinema! <div>\n</div><div>Timings:</div><div>10:30 - The Hunger Games [142 mins]</div><div>12:52 - [15 minute break]</div><div>13:07 - The Hunger Games: Catching Fire [146 mins]</div><div>15:53 - [15 minute break]</div><div>16:08 - The Hunger Games: Mockingjay Part One [123 mins]</div><div>18:11 - [15 minute break]</div><div>18:26 - The Hunger Games: Mockingjay Part Two [137 mins]</div><div>20:43 - Ends</div><div>\n</div><div>\n</div><div>\n</div>",
+      "label": "multiple-movies",
+      "sample": "held-out-1"
+    },
+    {
+      "showingId": "thecastlecinema.com-112776",
+      "venue": "thecastlecinema.com",
+      "title": "Pitchblack Playback: A Tribe Called Quest 'The Low End Theory' (30th Anniversary)",
+      "runtimeMinutes": 58,
+      "description": "Immerse yourself in one of the greatest hip-hop albums of all-time at Pitchblack Playback's 30th anniversary listening session in the dark. Hear this stunning record played loud in uncompressed full-resolution audio through our powerful cinema sound system.\n\nNo phones; no talking; no signing; no distractions; just you and the music.\n\n\"This sounds great” — Rick Rubin\n\n\"A fabulous idea\" — Jay Kay, Jamiroquai\n\n\"The optimal way to listen to an album\" — Max Richter\n\n\"This might just be my favourite new thing to do\" — Nihal, BBC Radio 5 Live\n\n\nTicket includes recycled cotton Pitchblack Playback eye mask for extra darkness.\n\nAs recommended by The Guardian, What Hi-Fi?, GQ, Time Out, FT Weekend and BBC 6 Music.\n\nAlbum duration: 48 minutes \n\n*Please arrive by event start time as latecomers will not be admitted and refunds will not be offered*",
+      "label": "music",
+      "sample": "held-out-1"
+    },
+    {
+      "showingId": "picturehouses.com-the-ritzy-HO00018499",
+      "venue": "picturehouses.com-the-ritzy",
+      "title": "The South London Film Festival Presents: She Owns the Scene Vol. 2 + Closing Night",
+      "runtimeMinutes": 240,
+      "description": "Join us for an afternoon of 10 exceptional and thought-provoking films, amplifying the voices of both emerging and internationally acclaimed women in front of and behind the camera.\n \nIncluding How to Hide It, directed by professional boxer and Olympian Ramla Ali and Richard A. Moore, and executive produced by Idris Elba (Luther, Hijack) and Sabrina Elba; MANGO, written and directed by Joan Iyiola and executive produced by BAFTA-winning actor Wunmi Mosaku (Sinners, His House); BIFA-longlisted Leaving Ikorodu in 1999, directed by Rashida Seriki and starring Sheila Atim (The Woman King, The Underground Railroad), Tobi Bakre (Gangs of Lagos) and Tomi Ojo (Far From Home); Candy Bar, starring Damon Herriman (Once Upon a Time in Hollywood, Mr Inbetween) and directed by Nash Edgerton (Mr Inbetween, Gringo); Young Director Award winner With You Always, directed by Florence Poppy Deary; and When She Sings, directed by Paul Holbrook and starring Laura Bayston (Under Suspicion: Kate McCann) and Garrick Hagon (Star Wars: A New Hope).\n \nThe programme also includes award-winning comedy-drama Gan Canny, directed by Lou Burns and Aaron Burns; A Hundred and Fifteen Times Yes!, directed by Juliette Rose Mercier; We Are Here, Still, directed by Ava Bounds; and Sculpted, directed by Hannah Collins.\n \nFollowing the screening, join the filmmakers, festival team and fellow guests at the Picturehouse Ritzy as we bring the 2026 South London Film Festival to a close.",
+      "label": "shorts|multiple-movies",
+      "sample": "held-out-1"
+    },
+    {
+      "showingId": "institut-francais.org.uk-56727",
+      "venue": "institut-francais.org.uk",
+      "title": "Georgian Short & Documentaries",
+      "runtimeMinutes": null,
+      "description": "The 10th edition of the London Georgian Film Festival presents a programme of 2 documentaries and a short film curated by the festival’s director, Jason Osborn.\n\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\tIntroduction\nEach film will be introduced by the directors and members of the crew.",
+      "label": "shorts",
+      "sample": "held-out-1"
+    },
+    {
+      "showingId": "picturehouses.com-finsbury-park-HO00018464",
+      "venue": "picturehouses.com-finsbury-park",
+      "title": "What Lies Beneath - Wine Dark Short Film Festival",
+      "runtimeMinutes": 150,
+      "description": "Wine Dark Short Film Festival 20 September 2026 -Finsbury Park Picturehouse Cinema - An international celebration of disability, neurodiversity and mental health. \nThe Wine Dark Short Film Festival, in partnership with Finsbury Park Picturehouse Cinema, London, is delighted to be returning for its third year. The 2026 edition will be taking place on 20 September. Now a much-anticipated celebration of narrative & documentary short filmmaking made by D/deaf, disabled and neurodivergent teams, the festival is the first of its kind in London.\nThis year, 17 films by UK-based and international filmmakers will be showcased, inviting audiences to their exceptional selection of diverse films. There will also be a neurodivergent-friendly networking session, and a panel Q&A with film industry experts that will be announced in due course.\nFrom stunning animation to heart-wrenching realism, these films are an exploration of the uncomfortable truths we all struggle to accept. Can there ever be a sense of belonging in such a senseless world?\nWhat Lies Beneath\nSmall Hours by Oscar Wyndham Lewis, UK, 10:57\nSeeing by Simon Zhou, France, 4:10\nRuth by Paul Romero Méndez & Arturo M. Antolín, UK, 13:16\nI Love You, But It’s Time, Ciaran Parsons, UK, 5:41\nViola by Janine Piguet, Switzerland, 14:50\nA Game to Remember by Raffaele Trasatti, UK, 16:56",
+      "label": "shorts",
+      "sample": "held-out-1"
+    },
+    {
+      "showingId": "picturehouses.com-ealing-HO00016736",
+      "venue": "picturehouses.com-ealing",
+      "title": "Ealing Film Festival 2026: Selected Block 4",
+      "runtimeMinutes": 120,
+      "description": "The Ealing Film Festival is back at Ealing Picturehouse on Friday 16th and Saturday 17th October 2026.\n \nJoin us for screenings of short films celebrating bold storytelling, diverse voices, and the rich cinematic spirit of Ealing.\n \nWhether you’re a filmmaker, film enthusiast, or simply curious, this festival is not to be missed. The atmosphere is always electric, with passionate filmmaking on screen and a supportive audience in the room.\nCome celebrate the stories that reflect who we are and where we live.\n \nSaturday Selected Films: Block 4\nShowcasing the following films\n \nThe Last Dance\nRecalculating\nThe Following People DO NOT Smoke Weed\nPlastic Surgery\nThe Witches of Pool Bottom\nNight Whispers\nThe Hiring Protocol\nTwenty Twenty\nThe Left Behind\n \nTickets will also be valid for The Awards Ceremony and Prize Giving that will take place from 21:15 – 22:00",
+      "label": "shorts|multiple-movies",
+      "sample": "held-out-1"
+    },
+    {
+      "showingId": "picturehouses.com-the-ritzy-HO00018376",
+      "venue": "picturehouses.com-the-ritzy",
+      "title": "Book Club: Marlon James In Conversation + Signing",
+      "runtimeMinutes": 75,
+      "description": "We're thrilled to welcome Booker prize-winning author Marlon James to The Ritzy to celebrate the release of his new novel, The Disappearers: a triumphant return to the Jamaica of A Brief History of Seven Killings – a place of heat and chaos, and of danger for anyone outside the heteronormal.\n \nJames will appear live in conversation on the night and will be signing copies of The Disappearers after the screening.\n \nPresented as part of Picturehouse's Book Club: bringing your bookshelf to the big screens. Join us for curated screenings and events, conversations with literary minds, and more.\n \nMarlon James is the author of the New York Times bestselling Moon Witch, Spider King; the Sunday Times bestselling, National Book Award-finalist Black Leopard, Red Wolf; the Booker Prize-winning A Brief History of Seven Killings; The Book of Night Women and John Crow's Devil. In addition to the Booker Prize, his novels have won the American Book Award, the Los Angeles Times Ray Bradbury Prize for Science Fiction, the Anisfield-Wolf Award and the Dayton Literary Peace Prize. Born in Jamaica, Marlon James now lives in New York City.\n \n \nABOUT THE DISAPPEARERS\n \nWhen eight gay men meet for the first time, in Kingston in 1988, answering the casting call for an openly queer play, they are already taking a big risk. But that is nothing compared to what rains down on them when a mob descends on one of their rehearsals. By the end of this night, one man is dead, all are injured, and two subsequently disappear.\n \nAs the survivors heal, each man finds he must confront the bigotry and homophobia that the attack laid bare. Some try to forget; some embrace their rage; and some simply vanish – but all are forever scarred. As one of the victims puts it, ‘there’s a difference between when something ends and when something stops’. And this story won’t stop until both the disappearers and the perpetrators have been tracked, along trails both hot and cold, and an ending reached.\n \nEpic and intimate, violent and forgiving, The Disappearers is a tour de force which only Marlon James could have written – both an unflinching portrait of the hatred and shame faced by gay men in a society which refuses to accept them, and a deeply human story of acceptance and insight.\n \n \nPresented in partnership with Dark Matter.",
+      "label": "talk",
+      "sample": "held-out-1"
+    },
+    {
+      "showingId": "chiswickcinema.co.uk-41343",
+      "venue": "chiswickcinema.co.uk",
+      "title": "The Lord of the Rings Trilogy: Marathon",
+      "runtimeMinutes": 574,
+      "description": "One marathon screening to rule them all and in the darkness bind them. Witness the theatrical cuts of the greatest fantasy films of all time on the big screen in one spectacular day. For Frodo!<div>\n</div><div><div>Timings:</div><div>10:30 - The Fellowship of the Ring [171 mins]</div><div>13:21 - [15 minute break]</div><div>13:36 - The Two Towers [172 mins]</div><div>16:28 - [15 minute break]</div><div>16:43 - The Return of the King [201 mins]</div><div>20:04 - Ends</div></div>",
+      "label": "multiple-movies",
+      "sample": "held-out-1"
+    },
+    {
+      "showingId": "institut-francais.org.uk-57045",
+      "venue": "institut-francais.org.uk",
+      "title": "Short Animations for Adults",
+      "runtimeMinutes": null,
+      "description": "Enjoy a selection of recent French animation shorts for adults.",
+      "label": "shorts",
+      "sample": "held-out-1"
+    },
+    {
+      "showingId": "picturehouses.com-ealing-HO00018628",
+      "venue": "picturehouses.com-ealing",
+      "title": "Ealing Film Festival: Friday's Block 18:00 - 21:45",
+      "runtimeMinutes": 195,
+      "description": "The Ealing Film Festival is back at Ealing Picturehouse on Friday 16th and Saturday 17th October 2026. \nJoin us for screenings of short films celebrating bold storytelling, diverse voices, and the rich cinematic spirit of Ealing.\nWhether you’re a filmmaker, film enthusiast, or simply curious, this festival is not to be missed. \nThe atmosphere is always electric, with passionate filmmaking on screen and a supportive audience in the room.\nCome celebrate the stories that reflect who we are and where we live.\n \nFilm Schools Showcase 18:00 \n- University of West London \n- University of Roehampton\n- MetFilm School Ealing\n \nThis showcase will be followed by a 15-minute interval\n \nFriday Selected Films 19:30. Showcasing the following films: \n- Skopein \n- Fobos \n- Overtones \n- Undertone \n- Fruity \n- Lilly’s House \n- The Ambrose Finch \n- Deli Meat \n- Close \n- The Tide \n \nTickets will also be valid for The Influencing Your Film panel taking place from 21:00 – 21:45",
+      "label": "shorts|multiple-movies",
+      "sample": "held-out-1"
+    },
+    {
+      "showingId": "picturehouses.com-finsbury-park-HO00018266",
+      "venue": "picturehouses.com-finsbury-park",
+      "title": "LAFS PRESENTS: ALL MY FRIENDS… DOUBLE BILL",
+      "runtimeMinutes": 190,
+      "description": "Hot on the heels of the European premiere of witty indie romcom, ALL MY FRIENDS ARE BACK IN BRISBANE at this summer’s London Australian Film Festival, we take you back to where it all began! \nCome see the original cult classic, 2007’s ALL MY FRIENDS ARE LEAVING BRISBANE, followed by its spiritual sequel in a special double bill event, followed by an in-person Q&A with the films’ writer, Stephen Vagg. \nA perennial tale of talented young folks fleeing their home town for pastures supposedly greener, All My Friends are Leaving Brisbane follows 20-something Anthea (Charlotte Gregg), who hates her job almost as much as she hates seeing all her friends moving away. Meanwhile, All My Friends are Back in Brisbane picks up the thread twenty years later, when lawyer Cris (Nelle Lee) returns home to the Sunshine State after a long spell in London, and must contend with the lives (and loves) she left behind.\nRarely screened together, both of these films have been deftly directed by Louise Alston (Jucy, Back of the Net), from sparkling scripts by Stephen Vagg (Neighbours, Rock Island Mysteries), who joins us after the screening to chat about comings, goings, and all things Brisbane. \nAussie snacks, sweets & gifts will be on sale in the foyer before the screening. \nWith thanks to Stephen Vagg and Louise Alston",
+      "label": "multiple-movies",
+      "sample": "held-out-1"
+    },
+    {
+      "showingId": "picturehouses.com-finsbury-park-HO00018465",
+      "venue": "picturehouses.com-finsbury-park",
+      "title": "The Hero's Journey - Wine Dark Short Film Festival",
+      "runtimeMinutes": 135,
+      "description": "Wine Dark Short Film Festival -  20 September 2026 - Finsbury Park Picturehouse Cinema An international celebration of disability, neurodiversity and mental health. \nThe Wine Dark Short Film Festival, in partnership with Finsbury Park Picturehouse Cinema, London, is delighted to be returning for its third year. The 2026 edition will be taking place on 20 September. Now a much-anticipated celebration of narrative & documentary short filmmaking made by D/deaf, disabled and neurodivergent teams, the festival is the first of its kind in London.\nThis year, 17 films by UK-based and international filmmakers will be showcased, inviting audiences to their exceptional selection of diverse films. There will also be a neurodivergent-friendly networking session, and a panel Q&A with film industry experts that will be announced in due course.\nIn all classic stories, the hero must respond to the call to adventure. Our heroes cross the threshold into unknown worlds and uncharted territories, facing their deepest fears with equal parts lightness and conviction. Will they make it through unscathed, or does adventure make one forever changed?\nThe Hero's Journey\nThe Weight of Blue by Fay Beck, UK, 20:35\nEver Green & The F***ing Spectrum by Peter Kangas, USA, 14:59\nNeri on Earth by Lucy Moles & Jane Lee, UK, 5:35\nLook at Me by Fabrice Garcia-Carpintero, France, 10:00\nThe Kite by Xochitl Enriquez, Australia, 5:31\nGrace by Anna Rodgers, Ireland, 25:00",
+      "label": "shorts",
+      "sample": "held-out-1"
+    },
+    {
+      "showingId": "picturehouses.com-ealing-HO00018630",
+      "venue": "picturehouses.com-ealing",
+      "title": "Ealing Film Festival 2026: Selected Block 2",
+      "runtimeMinutes": 150,
+      "description": "The Ealing Film Festival is back at Ealing Picturehouse on Friday 16th and Saturday 17th October 2026.\nJoin us for screenings of short films celebrating bold storytelling, diverse voices, and the rich cinematic spirit of Ealing.\nWhether you’re a filmmaker, film enthusiast, or simply curious, this festival is not to be missed.\nThe atmosphere is always electric, with passionate filmmaking on screen and a supportive audience in the room.\nCome celebrate the stories that reflect who we are and where we live.\nSaturday Selected Films: Block 2\nShowcasing the following films\n- Codec \n- Crunch Point \n- G.S.W \n- friendship was a safe bet \n- Falcon Eyes \n- Exeat \n- Pushed Together \n- All Change \n- In Between \n \nTickets will also be valid for The Women in Film & TV panel taking place from 15:45 to 16:30",
+      "label": "shorts|multiple-movies",
+      "sample": "held-out-1"
+    },
+    {
+      "showingId": "institut-francais.org.uk-56657",
+      "venue": "institut-francais.org.uk",
+      "title": "Lumière! The Adventure Continues",
+      "runtimeMinutes": 105,
+      "description": "130 years ago, the Lumière brothers invented cinema. Everything was already there: the composition, tracking shots, dramatic scenes, comedy sketches, actors… Thanks to the restoration of over 100 previously unseen Lumière ‘views’ –comedies, dramas, and travelogues –Thierry Frémaux offers us a spectacle of the world at the turn of the century and a stimulating journey to the origins of the moving image, of cinema through the pioneering achievements of the French entrepreneurs Auguste and Louis Lumière \nThierry Frémaux, the director of the Cannes Film Festival, the Institut Lumière, and the Lumière Film Festival in Lyon, France, the birthplace of these remarkable brothers, brings a wealth of insight, history, and revelation to this journey back to the 1890s, when the Lumière Company, with their astonishing new invention, the cinematograph, made it possible for audiences to voyage around the world in moving pictures for the first time. Set to an evocative score of period music by Gabriel Fauré, this wondrous documentary enables contemporary viewers to imagine an entirely new language of storytelling unfolding film by glorious film. \n\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\tSpecial Screening\nThe screening on 28 Sept will be followed by a discussion with Thierry Frémaux, moderated by film critic and broadcaster Danny Leigh (Financial Times)",
+      "label": "movie",
+      "sample": "held-out-1"
+    },
+    {
+      "showingId": "myvue.com-romford-HO00021468",
+      "venue": "myvue.com-romford",
+      "title": "We're Going on a Bear Hunt + The Tiger Who Came to Tea",
+      "runtimeMinutes": 49,
+      "description": "We’re Going on a Bear Hunt - Wrap up warm and step into the snow for a wonderful animated adventure based on the best-selling bedtime book by Michael Rosen.",
+      "label": "shorts",
+      "sample": "held-out-1"
+    },
+    {
+      "showingId": "picturehouses.com-ealing-HO00018632",
+      "venue": "picturehouses.com-ealing",
+      "title": "Ealing Film Festival 2026: Awards Winners",
+      "runtimeMinutes": 150,
+      "description": "Ealing Film Festival is returning for its seventh year, bigger and better than ever. \nThis session will feature the 13 winning films, followed by the Michael Pitts masterclass from 16:00–16:30.\nEnjoy the 2026 Ealing Film Festival!",
+      "label": "shorts|multiple-movies",
+      "sample": "held-out-1"
+    },
+    {
+      "showingId": "picturehouses.com-ealing-HO00018629",
+      "venue": "picturehouses.com-ealing",
+      "title": "Ealing Film Festival 2026: Selected Block 1",
+      "runtimeMinutes": 120,
+      "description": "The Ealing Film Festival is back at Ealing Picturehouse on Friday 16th and Saturday 17th October 2026. \nJoin us for screenings of short films celebrating bold storytelling, diverse voices, and the rich cinematic spirit of Ealing.\nWhether you’re a filmmaker, film enthusiast, or simply curious, this festival is not to be missed. \nThe atmosphere is always electric, with passionate filmmaking on screen and a supportive audience in the room.\nCome celebrate the stories that reflect who we are and where we live. \nSaturday Selected Films: Block 1 \nShowcasing the following films\n- On the Pursuit of Greatness \n- The Bluebird’s Daughter\n- Route 23 - We Dream in Colour\n- The Test\n- Spiderling House\n- Among the Smoke\n- The Cleanse\n- Stumbling Blocks\n- God of Mischief",
+      "label": "shorts|multiple-movies",
+      "sample": "held-out-1"
+    },
+    {
+      "showingId": "picturehouses.com-finsbury-park-HO00018137",
+      "venue": "picturehouses.com-finsbury-park",
+      "title": "Club Room: Cutscene",
+      "runtimeMinutes": 180,
+      "description": "Manchesters art-rock/post-punk crew Cutscene are coming through for their debut London headline show! Expect dreamy guitars and some proper riffage.\n \nSupport from dreamy shoegazers, Pevova.\n \nThis gig is taking placee in the Club Room which is a converted cinema screen with a bar.",
+      "label": "music",
+      "sample": "held-out-1"
+    },
+    {
+      "showingId": "chiswickcinema.co.uk-29361",
+      "venue": "chiswickcinema.co.uk",
+      "title": "TCC Film Quiz",
+      "runtimeMinutes": 210,
+      "description": "Hosted by Ashley Fisher, our popular Film Quiz night is open to everyone and sees teams of up to six people compete based on their cinema knowledge. Spanning all genres and eras, and accessible to beginners, this fun night offers a selection of themed prizes. \n\nThe bar is open throughout. \n\nA fee of £3 per person is payable to the quiz host on the evening.\n\nAdvanced booking is strongly recommended.",
+      "label": "quiz",
+      "sample": "held-out-1"
+    },
+    {
+      "showingId": "picturehouses.com-central-HO00018541",
+      "venue": "picturehouses.com-central",
+      "title": "Exclusive Preview of Channel 4’s Break Clause +Q&A",
+      "runtimeMinutes": 150,
+      "description": "Their relationship's over. The tenancy isn't. Break Clause follows Ben (Samuel Bottomley) and Lil (Lara Ricote) as they navigate their break-up whilst stuck in the same flat.\nMoving on from your first love is hard enough. Turns out moving out is even harder…\nCreated by Jess Bray and directed by Alice Snedden, the six-part romantic comedy series is produced by BBC Studios Comedy and will launch on Channel 4 in October.\nThe screening of Episode 1, 2 and 3 will be followed by a Q&A with Lara, Samuel, Jess, Alice and Executive Producer, Molly Seymour.",
+      "label": "tv",
+      "sample": "held-out-1"
+    },
+    {
+      "showingId": "picturehouses.com-central-HO00018531",
+      "venue": "picturehouses.com-central",
+      "title": "Book Club: Audrey Niffenegger In Conversation",
+      "runtimeMinutes": 90,
+      "description": "We're thrilled to welcome best-selling author Audrey Niffenegger to Picturehouse Central to celebrate the release of her new novel, Life Out Of Order, the long-awaited sequel to her acclaimed debut, The Time Traveler's Wife.\nAudrey will appear live in conversation with our guest host. Signed copies of Life Out Of Order will be available to purchase on the night courtesy of our bookselling partner, Sevenoaks Bookshop.\nPresented as part of Picturehouse's Book Club: bringing your bookshelf to the big screens. Join us for curated screenings and events, conversations with literary minds, and more.   \nAudrey Niffeneger is a visual artist and writer who has published six books, including the novels The Time Traveler’s Wife and Her Fearful Symmetry. She is also a Professor in the Fiction Department of Columbia College.\nABOUT LIFE OUT OF ORDER \nTwo great loves. A world in chaos. And a life that never lands in order. Alba DeTamble is a time traveler, slipping unpredictably through decades like her father before her.\nBut the hardest thing she carries isn’t the burden of futures she can’t understand, or pasts she cannot change – it’s a secret: she is in love with two different people. Each of them offers a different life. Zach lives in the present and can’t follow her when she disappears. Oliver can travel through time, just like she can. \nAs Alba careens from time to time, she must face a question she can no longer avoid: how is it possible to love, and live a meaningful life, in an increasingly troubled, fractured world? Intimate and expansive, Life Out of Order is a kaleidoscopic story of love, resilience and hope when time is running out.  \nPresented in partnership with Dark Matter.",
+      "label": "talk",
+      "sample": "held-out-1"
+    },
+    {
+      "showingId": "picturehouses.com-central-HO00014428",
+      "venue": "picturehouses.com-central",
+      "title": "Ali Plumb’s Untitled Film Quiz Project",
+      "runtimeMinutes": 180,
+      "description": "Ali Plumb – that movie bloke off the internet with the interviews and the specs and the beard – is taking his delightfully nerdy film quiz on the road again… and you should definitely come.\n \nTaking place INSIDE YOUR FAVOURITE CINEMA with an ACTUAL CINEMA SCREEN (fancy!), he'll be taking his suitcase full of prizes and brain full of silly film-related questions to your local Picturehouse. What should you expect, you wonder? Think 'Guess the film from the Lego minifigure', 'Where's Wally?' but with Paddington, and an absolute belter of a big-screen video observation round. Trust us.\n \nSo if you know your Batman from your One Battle After Another, your Spielberg from your Cronenberg, your Disney from your Pixar (okay, Disney•Pixar), join Ali Plumb for an evening of spot prizes, absurd music rounds, perplexing motion picture puzzles and the occasional half-decent joke as he clumsily, amiably, enthusiastically asks you questions that’ll make you go, “Oh I know this one!” or “Argh, I nearly know this one!” You know, in a fun way.\n \nPlease note that this quiz is the same as those put on in the rest of Ali's tour - for more info, head to his website. \n \nMax. 5 people per team. It's unallocated seating in the cinema and we will leave some gaps between you and the other teams.\n \nWe're thrilled to bring the quiz to Cinema City on 15 November as part of the 2026 Norwich Film Festival.Please note that the Picturehouse Central screening on Friday 25 September is now sold out. There are still tickets available at Hackney on Friday 11 September.",
+      "label": "quiz",
+      "sample": "held-out-1"
+    },
+    {
+      "showingId": "institut-francais.org.uk-56673",
+      "venue": "institut-francais.org.uk",
+      "title": "Shorts From Galicia",
+      "runtimeMinutes": 75,
+      "description": "Discover a panorama of galician cinema through a selection of short films.",
+      "label": "shorts",
+      "sample": "held-out-1"
+    },
+    {
+      "showingId": "picturehouses.com-central-HO00018555",
+      "venue": "picturehouses.com-central",
+      "title": "Lumière! The Adventure Begins + Thierry Frémaux In Conversation",
+      "runtimeMinutes": 165,
+      "description": "In collaboration with the Institut Français, Picturehouse Cinemas are thrilled to welcome Thierry Frémaux to Picturehouse Central for a special presentation of Lumière! The Adventure Begins, the 2016 film that marked Frémaux’s first journey into the work of the Lumières.\nFrémaux will introduce the film before taking part in a post-screening conversation with Picturehouse’s BAFTA-winning Creative Director, Clare Binns.\nAs inventors of the cinematograph, Louis and August Lumière helped to define and create what we've come to know as cinema. With his expert commentary, Frémaux's film guides us through an expansive collection of restored Lumière shorts — some famous, some unseen until now — to explore how the earliest works of cinema continue to reverberate across the world of film today.\nFor any film lover or film worker, this event at Picturehouse offers an opportunity to further reflect on titans of cinema past and present with Frémaux, whose work at Cannes and beyond, championing new voices and expanding viewers' horizons, has helped continue the Lumière legacy.\nThis event has been enabled by the generous support of Unifrance.",
+      "label": "movie",
+      "sample": "held-out-1"
+    },
+    {
+      "showingId": "thecastlecinema.com-112766",
+      "venue": "thecastlecinema.com",
+      "title": "Pitchblack Playback: John Coltrane 'Highlights 1957-1964'",
+      "runtimeMinutes": 98,
+      "description": "Immerse yourself in some of John Coltrane's finest recordings at Pitchblack Playback's listening session in the dark, celebrating the Centenary of his birthday. Hear this new highlights package — bringing together his recordings from various labels together in one package for the first time — played loud in uncompressed audio on a powerful cinema sound system.\n\nNo phones; no talking; no signing; no distractions; just you and the music.\n\n\"This sounds great” — Rick Rubin\n\n\"A fabulous idea\" — Jay Kay, Jamiroquai\n\n\"The optimal way to listen to an album\" — Max Richter\n\n\"This might just be my favourite new thing to do\" — Nihal, BBC Radio 5 Live\n\n\nTicket includes recycled cotton Pitchblack Playback eye mask for extra darkness.\n\nAs recommended by The Guardian, What Hi-Fi?, GQ, Time Out, FT Weekend and BBC 6 Music.\n\nDuration: 88 minutes (with 10-minute interval)\n\n*Please arrive by event start time as latecomers will not be admitted and refunds will not be offered*",
+      "label": "music",
+      "sample": "held-out-1"
+    },
+    {
+      "showingId": "picturehouses.com-finsbury-park-HO00018466",
+      "venue": "picturehouses.com-finsbury-park",
+      "title": "Radical Acceptance - Wine Dark Short Film Festival",
+      "runtimeMinutes": 150,
+      "description": "Wine Dark Short Film Festival - 20 September 2026 - Finsbury Park Picturehouse Cinema - An international celebration of disability, neurodiversity and mental health. \nThe Wine Dark Short Film Festival, in partnership with Finsbury Park Picturehouse Cinema, London, is delighted to be returning for its third year. The 2026 edition will be taking place on 20 September. Now a much-anticipated celebration of narrative & documentary short filmmaking made by D/deaf, disabled and neurodivergent teams, the festival is the first of its kind in London.\nThis year, 17 films by UK-based and international filmmakers will be showcased, inviting audiences to their exceptional selection of diverse films. There will also be a neurodivergent-friendly networking session, and a panel Q&A with film industry experts that will be announced in due course. It is what it is and it is what it could be.\nIrrespective of your circumstances, the possibilities are endless. As the poet Mary Oliver said, “...whoever you are, no matter how lonely, the world opens itself up to your imagination.” \nRadical Acceptance\nYou and Me Make 3 by Emmalie El Fadli, UK, 18:42\nDeaf Date by David Levy & Paul Persic, Canada, 5:39\nDysfluent Journeys by Cathy Soreny, UK, 20:14\nBRIDGE - My Little Friends - by Kazuyuki Ishihara, Japan, 9:30\nThe goalkeeper by Salvatore Lizzio & Daniele Bonarini, Italy, 20:00",
+      "label": "shorts",
+      "sample": "held-out-1"
+    },
+    {
+      "showingId": "fulhampier.com-105170",
+      "venue": "fulhampier.com",
+      "title": "Secret Film Screenings presents: Around the World in Movies",
+      "runtimeMinutes": 120,
+      "description": "Secret Film Screenings is taking you on a cinematic journey around the world, with a different destination, film and wine pairing revealed each month.",
+      "label": "movie",
+      "sample": "held-out-2"
+    },
+    {
+      "showingId": "fulhampier.com-106361",
+      "venue": "fulhampier.com",
+      "title": "Parent and Baby Secret Film Screenings",
+      "runtimeMinutes": 150,
+      "description": "At Parent and Baby Secret Film Screenings expect a feel good movie experience created just for mums and their little sidekicks.",
+      "label": "movie",
+      "sample": "held-out-2"
+    },
+    {
+      "showingId": "fulhampier.com-106344",
+      "venue": "fulhampier.com",
+      "title": "Secret Film Screenings: Spooky Edition",
+      "runtimeMinutes": 120,
+      "description": "Secret Film Screenings is taking you on a cinematic journey around the world, with a different destination, film and wine pairing revealed each month.",
+      "label": "movie",
+      "sample": "held-out-2"
+    },
+    {
+      "showingId": "fulhampier.com-106001",
+      "venue": "fulhampier.com",
+      "title": "Family Film Club - Tuesday and Thursday",
+      "runtimeMinutes": 2970,
+      "description": "Join us in Riverside Market for a relaxed family film screening, where children are free to move, chat and enjoy the film in their own way.",
+      "label": "movie",
+      "sample": "held-out-2"
+    },
+    {
+      "showingId": "rooftopcinemaclub.com-peckham-gilmore-girls",
+      "venue": "rooftopcinemaclub.com-peckham",
+      "title": "Gilmore Girls",
+      "runtimeMinutes": 135,
+      "description": "Get ready for a night that’s more iconic than Lorelai’s coffee addiction! Rooftop Cinema Club is hosting a Gilmore Girls marathon —so grab your PSL, your coziest blanket, and your besties, because missing this would be as tragic as a Luke’s Diner closure!",
+      "label": "tv",
+      "sample": "held-out-2"
+    },
+    {
+      "showingId": "rooftopcinemaclub.com-peckham-supernatural-mini-marathon",
+      "venue": "rooftopcinemaclub.com-peckham",
+      "title": "Supernatural Mini Marathon",
+      "runtimeMinutes": 150,
+      "description": "Two brothers follow their father's footsteps as hunters, fighting evil supernatural beings of many kinds, including monsters, demons, and gods that roam the earth.",
+      "label": "tv",
+      "sample": "held-out-2"
+    },
+    {
+      "showingId": "rooftopcinemaclub.com-peckham-skins",
+      "venue": "rooftopcinemaclub.com-peckham",
+      "title": "Skins",
+      "runtimeMinutes": 120,
+      "description": "The messy lives, loves, delirious highs and inevitable lows of raucous teenage friends in Bristol.",
+      "label": "tv",
+      "sample": "held-out-2"
+    },
+    {
+      "showingId": "rooftopcinemaclub.com-peckham-secret-scream",
+      "venue": "rooftopcinemaclub.com-peckham",
+      "title": "Secret Scream",
+      "runtimeMinutes": 120,
+      "description": ".",
+      "label": "movie",
+      "sample": "held-out-2"
+    },
+    {
+      "showingId": "odeon.co.uk-kingston-HO00009401",
+      "venue": "odeon.co.uk-kingston",
+      "title": "NCT 127 - ‘NEO CITY : SEOUL - THE REDLINE' LIVE",
+      "runtimeMinutes": 255,
+      "description": "NCT 127 5TH TOUR ‘NEO CITY : SEOUL - THE REDLINE’ in CINEMAS brings the explosive opening of NCT 127’s long-awaited return to the big screen through a special live viewing event in theaters around the world. Marking the group’s first tour in a year and eight months, this event captures the scale, energy, and electrifying performances of NCT 127 as they kick off a new chapter of NEO CITY in Seoul.\nBroadcast live from KSPO DOME, audiences worldwide are invited to experience the intensity of the concert in a cinematic setting, taking in every moment of the setlist, staging, and onstage charisma with fans across the globe. For NCTzens and K-pop audiences alike, this cinematic experience is a chance to witness the heat of THE REDLINE together, beyond borders, on the biggest screen possible. \n",
+      "label": "movie",
+      "sample": "held-out-2"
+    },
+    {
+      "showingId": "odeon.co.uk-kingston-HO00009488",
+      "venue": "odeon.co.uk-kingston",
+      "title": "BTS 'ARIRANG' IN SÃO PAULO: LIVE VIEWING",
+      "runtimeMinutes": 195,
+      "description": "Experience the BTS WORLD TOUR 'ARIRANG' in cinemas worldwide, broadcasting from São Paulo, Brazil!\n\nMarking the grand finale of their Latin America tour, this monumental concert will bring the explosive energy of the packed stadium in Brazil straight to the big screen.\n\nPlease note that broadcasts in some territories are scheduled later to accommodate local time zones.\n",
+      "label": "movie",
+      "sample": "held-out-2"
+    },
+    {
+      "showingId": "odeon.co.uk-tottenham-court-road-HO00009401",
+      "venue": "odeon.co.uk-tottenham-court-road",
+      "title": "NCT 127 - ‘NEO CITY : SEOUL - THE REDLINE' LIVE",
+      "runtimeMinutes": 255,
+      "description": "NCT 127 5TH TOUR ‘NEO CITY : SEOUL - THE REDLINE’ in CINEMAS brings the explosive opening of NCT 127’s long-awaited return to the big screen through a special live viewing event in theaters around the world. Marking the group’s first tour in a year and eight months, this event captures the scale, energy, and electrifying performances of NCT 127 as they kick off a new chapter of NEO CITY in Seoul.\nBroadcast live from KSPO DOME, audiences worldwide are invited to experience the intensity of the concert in a cinematic setting, taking in every moment of the setlist, staging, and onstage charisma with fans across the globe. For NCTzens and K-pop audiences alike, this cinematic experience is a chance to witness the heat of THE REDLINE together, beyond borders, on the biggest screen possible. \n",
+      "label": "movie",
+      "sample": "held-out-2"
+    },
+    {
+      "showingId": "odeon.co.uk-tottenham-court-road-HO00009488",
+      "venue": "odeon.co.uk-tottenham-court-road",
+      "title": "BTS 'ARIRANG' IN SÃO PAULO: LIVE VIEWING",
+      "runtimeMinutes": 195,
+      "description": "Experience the BTS WORLD TOUR 'ARIRANG' in cinemas worldwide, broadcasting from São Paulo, Brazil!\n\nMarking the grand finale of their Latin America tour, this monumental concert will bring the explosive energy of the packed stadium in Brazil straight to the big screen.\n\nPlease note that broadcasts in some territories are scheduled later to accommodate local time zones.\n",
+      "label": "movie",
+      "sample": "held-out-2"
+    },
+    {
+      "showingId": "regentstreetcinema.com-41151",
+      "venue": "regentstreetcinema.com",
+      "title": "London Breeze Film Festival Industry Roundtables",
+      "runtimeMinutes": 90,
+      "description": "<p class=\"isSelectedEnd\">Please note: During the registration process, you will be asked to select a seat. Please select any available seat. On the day, the space will be set up with roundtables, and everyone will be able to choose their preferred seat at each table on a first-come, first-served basis.\n<p class=\"isSelectedEnd\">Join us during London Breeze Film Festival for a series of informal roundtable discussions hosted by leading industry professionals. These small-group sessions give filmmakers the opportunity to ask questions, seek practical advice and gain valuable insights directly from experienced industry figures.\n<p class=\"isSelectedEnd\">Whether you’re looking for guidance on a specific project or simply keen to learn more about the industry, these roundtables are designed to encourage honest discussion, knowledge sharing and meaningful connections in a relaxed setting.\n<p class=\"isSelectedEnd\">Everyone will have the opportunity to change tables once during the session, giving you the chance to meet two different hosts. We’re keeping the groups small to encourage meaningful conversations, so places are very limited.\n<p class=\"isSelectedEnd\">A free soft drink is included with your ticket!\n<p class=\"isSelectedEnd\">Confirmed roundtable hosts so far:\n<ul data-spread=\"false\">Thomas Pullen, Digital Commissioning Executive and Ad-Funded Programming Lead, Channel 4Kamila Serkebaeva, Film Executive Producer (work includes Kneecap)Oliver Murray, Director and Writer (work includes The Beatles Anthology and My Life as a Rolling Stone)Jamie Gamache, Co-Founder of Lowkey FilmsMiles Coleman, Head of Development, VenturelandChristine Hartland, Co-Founder & COO at My SMASH MediaFaye Ward, Creative Director & Founder, Fable Pictures",
+      "label": "talk|workshop",
+      "sample": "held-out-2"
+    },
+    {
+      "showingId": "regentstreetcinema.com-41663",
+      "venue": "regentstreetcinema.com",
+      "title": "London Breeze Film Festival: UK Women of Film Part 1",
+      "runtimeMinutes": 15,
+      "description": "<p class=\"xmsonormal\">Co-curated by our partners, Girls\non Tops, this is a brilliant selection of UK short narrative films to open\nLondon Breeze Film Festival’s eleventh edition. Made by and starring women,\nthese seven short films are powerful, uplifting, and get into the nitty gritty\nof womanhood. (Part 2 will screen at The Lexi Cinema at 3pm on 25th October.)\n\n\n<p class=\"xmsonormal\">The Intimacy Coordinator (21 min)\nDir. Louisa Connolly-Burnham<o:p></o:p>\n\n\n<p class=\"xmsonormal\">Game Over (13 min) Dir. Cleo\nSamoles-Little <o:p></o:p>\n\n\n<p class=\"xmsonormal\">Dirt (18 min) Dir. Isabella\nSpeaight <o:p></o:p>\n\n\n<p class=\"xmsonormal\">Requirements (18 min) Dir.\nCaroline Hajny <o:p></o:p>\n\n\n<p class=\"xmsonormal\">Laundreams (14 min) Dir. Evie\nWard-Drummond, Amber Gadd <o:p></o:p>\n\n\n<p class=\"xmsonormal\">All Well. All Good. All Perfect.\n(11 min) Dir. Dubheasa Lanipekun \n<p class=\"xmsonormal\">The Wolf (11 min) Dir. Maeve\nMurphy",
+      "label": "shorts",
+      "sample": "held-out-2"
+    },
+    {
+      "showingId": "regentstreetcinema.com-41854",
+      "venue": "regentstreetcinema.com",
+      "title": "UK Premiere: The Magic of It All - The Story of Strawbs + Q&A with director & Derek \"Blue\" Weaver",
+      "runtimeMinutes": 82,
+      "description": "<p dir=\"auto\" data-start=\"0\" data-end=\"88\" class=\"PDq2pG_selectionAnchorContainer\">A legacy built on music. A journey defined by resilience. A final act no one saw coming.\n<p style=\"margin:0cm\">\n\n<p dir=\"auto\" data-start=\"90\" data-end=\"685\" data-is-last-node=\"\" data-is-only-node=\"\">In 2022, Dave Cousins, frontman of British folk-rock pioneers Strawbs, travelled to Cape Town for what was intended to be a simple recording session. Instead, facing cancer, he delayed treatment and endured eight months of isolation to complete his swansong. Featuring Rick Wakeman and Tony Visconti, this intimate documentary captures an extraordinary period of artistic rebirth, friendship and sacrifice, culminating in a triumphant final performance before 25,000 fans in Oxford. The Magic of It All is a moving tribute to Strawbs and the transcendent power of music in the face of mortality.",
+      "label": "movie",
+      "sample": "held-out-2"
+    },
+    {
+      "showingId": "picturehouses.com-greenwich-HO00018618",
+      "venue": "picturehouses.com-greenwich",
+      "title": "We're Going on a Bear Hunt + The Tiger Who Came To Tea",
+      "runtimeMinutes": 53,
+      "description": "We’re Going on a Bear Hunt - Wrap up warm and step into the snow for a wonderful animated adventure based on the best-selling bedtime book by Michael Rosen. \nVoice cast: Olivia Colman, Pam Ferris, Mark Williams\nThe Tiger Who Came to Tea - Animated, fun-filled adventure based on the classic story by Judith Kerr. \nSophie and her mummy are having tea when a tiger arrives at their door and eats them out of house and home.\nVoice cast: David Oyelowo, Benedict Cumberbatch, Tamsin Greig",
+      "label": "shorts",
+      "sample": "held-out-2"
+    },
+    {
+      "showingId": "picturehouses.com-greenwich-HO00018596",
+      "venue": "picturehouses.com-greenwich",
+      "title": "New Year's Eve Concert with BerlinerPhilharmoniker",
+      "runtimeMinutes": 120,
+      "description": "Can classical music be humorous? Absolutely! \nThe Berliner Philharmoniker and their chief conductor Kirill Petrenko will demonstrate this at the 2026 New Year’s Eve Concert: in his sparkling Symphonie classique, Sergei Prokofiev parodies the music of Haydn and Mozart.\nDmitri Shostakovich also had the First Viennese School in mind when he wrote his witty Double Concerto for Piano and Trumpet. \nIn this performance, pianist Alexander Malofeev, born in 2001, makes his debut alongside principal trumpeter David Guerrier. \nKirill Petrenko also sets off a fireworks display of mischief with Richard Strauss’s Till Eulenspiegel’s Merry Pranks. Enjoy this lively New Year’s Eve celebration live in cinemas!",
+      "label": "music",
+      "sample": "held-out-2"
+    },
+    {
+      "showingId": "picturehouses.com-hackney-HO00018173",
+      "venue": "picturehouses.com-hackney",
+      "title": "The Attic Comedy Club",
+      "runtimeMinutes": 180,
+      "description": "Big screens. Bigger laughs. Join us at The Attic at Hackney Picturehouse for a monthly night of fresh comedy from some of the most exciting names in the game! There’ll be quality jokes, plus delicious food and drink waiting at our bar. (If all else fails, you can at least go and see a film instead.)\nWe're delighted to welcome Finlay Christie, Cecily Hitchcock, Helen Bauer, and MC Raul Kohli to our next night of stand up comedy on Saturday the 19th of September.\nFinlay ChristieFinlay misguidedly believes that his muggers fancied him, that being a f*ckboy is cool and that Kim Jong Un would love him. Funny, self-aware and internet-brained, this is an hour about the myths constructed by incels, billionaires and even human people, that mean we don’t have to admit we’re ordinary, rejected or wrong. There’s also a strong section on air fryers. As seen on social media (1M+ followers), Live at the Apollo, Have I Got News For You and 8 Out of 10 Cats Does Countdown. 'The voice of a generation' **** (Chortle.co.uk).\nCecily Hitchcock\n\nCecily Hitchcock is a comedy siren, crowd enchantress & heckler annihilator. Her unique mix of outlandish anecdotes and off-beat observations have gained traction both online and on stage. Cecily is an accomplished live M.C and her sketches and stand up videos have amassed over 25 million views on social media and have been featured on Ladbible, The Sidemen & Brewdog. She is making her highly anticipated Edinburgh Fringe debut in 2026 with her show ‘Family Recipe’.\n“Outstanding” – The Independent\n“Hot” – Katherine Ryan\n \n\nHelen Bauer\nHelen Bauer, started making comedy sketches in London and Berlin, when she lived there, and came to prominence as a finalist in the 2018 BBC New Comedy Award.Her debut show, Little Miss Baby Angel Face, was nominated for best newcomer in the 2019 Dave's Edinburgh Comedy Award. She made her debut on Live At The Apollo in 2021.\n \nRaul Kohli Raul Kohli is one of the most captivating acts in UK comedy. Growing up Indian in Newcastle upon Tyne, he’s developed a worldview that playfully upends ethnicity, culture and class, combining what The Scotsman called “superb political comedy” with surreal storytelling. His debut show was selected as a top pick of Edinburgh Fringe 2016 by BBC Radio 4, The Huffington Post and The Skinny. He was nominated for Best Show at Leicester Comedy Festival 2019, and his 2024 Edinburgh Fringe show (Ish Awards) was hailed by Chortle as “one of the most important shows of the fringe,” with jokes featured in The Guardian and The Daily Mail’s Top Ten of the Fringe.",
+      "label": "comedy",
+      "sample": "held-out-2"
+    },
+    {
+      "showingId": "picturehouses.com-hackney-HO00017650",
+      "venue": "picturehouses.com-hackney",
+      "title": "Hackney Film Quiz",
+      "runtimeMinutes": 150,
+      "description": "Join us for our monthly film quiz, hosted by very own Will Alcock, upstairs in the newly refurbished Attic Bar at Hackney Picturehouse. \nDoors to The Attic will open from 18:30 if you wish to join us for a drink. The quiz itself will start at 19:30 so we ask all teams to be seated at least 15 minutes before so the quiz can start and end on time.\nTickets are per person and teams are typically capped at 4 players but if you wish to host a larger team, please contact our Events Team ([email protected]) before purchasing your tickets. Please note that teams of more than 4 players lose a point for each additional player.\nEntry is £2.50, first prize is a £50 bar tab and additional film related goodies will be up for grabs!",
+      "label": "quiz",
+      "sample": "held-out-2"
+    },
+    {
+      "showingId": "davidleancinema.org.uk-1173693769",
+      "venue": "davidleancinema.org.uk",
+      "title": "BAD APPLES (Babes-In-Arms)",
+      "runtimeMinutes": null,
+      "description": "",
+      "label": "movie|event",
+      "sample": "held-out-2"
+    },
+    {
+      "showingId": "davidleancinema.org.uk-1173693774",
+      "venue": "davidleancinema.org.uk",
+      "title": "CASE 137",
+      "runtimeMinutes": null,
+      "description": "",
+      "label": "movie|event",
+      "sample": "held-out-2"
+    },
+    {
+      "showingId": "davidleancinema.org.uk-1173692744",
+      "venue": "davidleancinema.org.uk",
+      "title": "CINEMINI: A MAGICAL FIRST CINEMA EXPERIENCE",
+      "runtimeMinutes": null,
+      "description": "Cinemini: A Magical First Cinema Experience\nA specially created film event for young children and their grown-ups, combining short films, sensory play and creative exploration.\nFor the Harvest Festival, discover a playful collection of short films inspired by the natural world, where sounds become drawings, travellers become birds, trees change shape and a dog’s tail takes on a life of its own.\nAfter the films, explore a cinematic world of light, colour, shadow, movement and play where children can follow their curiosity and discover the magic of cinema together.\nAnimal Habitats\nAs part of our Harvest Festival film line-up, we are delighted to team up again with Small World Cinema, who are taking inspiration from this collection of funny and imaginative short films featuring curious animals, brave little characters and unexpected adventures.\nFrom a lynx discovering the bright lights of the city to a tiny fox with a very big imagination, these charming stories are perfect for young children and their families.\nBefore the screening, children can create their own miniature animal habitats using natural materials and found objects, including twigs, acorns, feathers, fabric and more. (Animals not included!)\nPresented by Small World Cinema in association with Croydon Harvest. Tickets £6.",
+      "label": "shorts",
+      "sample": "held-out-2"
+    },
+    {
+      "showingId": "davidleancinema.org.uk-1173692743",
+      "venue": "davidleancinema.org.uk",
+      "title": "CINIMINI: A MAGICAL FIRST CINEMA EXPERIENCE",
+      "runtimeMinutes": null,
+      "description": "Cinemini: A Magical First Cinema Experience\nA specially created film event for young children and their grown-ups, combining short films, sensory play and creative exploration.\nFor the Harvest Festival, discover a playful collection of short films inspired by the natural world, where sounds become drawings, travellers become birds, trees change shape and a dog’s tail takes on a life of its own.\nAfter the films, explore a cinematic world of light, colour, shadow, movement and play where children can follow their curiosity and discover the magic of cinema together.\nFamily Film Screening: OINK (cert PG)\n“This is Oink. Oink is the best birthday present I’ve ever had in my life.”\nNine-year-old Babs has always dreamed of having a pet of her own, so she's overjoyed when her grandfather arrives with a little piglet for her ninth birthday. She persuades her parents to let her keep the newly named Oink, and despite some chaotic toilet training, the little pig soon wins everyone over. But Grandpa's gift isn't quite as innocent as it seems. He's hiding a secret… and it involves sausages.\nBefore the film, join us for a relaxed Eco-Crafternoon celebrating the Harvest Festival. Using an assortment of recycled materials, we'll create real and imagined farmyard animals inspired by the film. Each creation will be filmed in time-lapse as it joins our growing farmyard, building a bustling menagerie of companions for Oink.\nThe event finishes at 2.30pm. Presented by Small World Cinema in association with Croydon Harvest. Tickets £6.\nThe event finishes at 2.30pm.\nPresented by Small World Cinema in association with Croydon Harvest. Tickets £6.",
+      "label": "movie",
+      "sample": "held-out-2"
+    },
+    {
+      "showingId": "davidleancinema.org.uk-1173693765",
+      "venue": "davidleancinema.org.uk",
+      "title": "DIGGER",
+      "runtimeMinutes": null,
+      "description": "",
+      "label": "movie|event",
+      "sample": "held-out-2"
+    },
+    {
+      "showingId": "davidleancinema.org.uk-1173693771",
+      "venue": "davidleancinema.org.uk",
+      "title": "SENSE & SENSIBILITY",
+      "runtimeMinutes": null,
+      "description": "",
+      "label": "movie|event",
+      "sample": "held-out-2"
+    },
+    {
+      "showingId": "curzon.com-bloomsbury-HO00007139",
+      "venue": "curzon.com-bloomsbury",
+      "title": "Twenty Years of the Met in Cinemas",
+      "runtimeMinutes": 180,
+      "description": "Twenty Years of the Met in Cinemas is a celebration of the Met’s two decades of onstage glory as experienced in movie theaters, featuring highlights from the company’s collection of more than 185 extraordinary onscreen performances. \nHosted by star soprano Renée Fleming, this special presentation will showcase unforgettable moments from some of opera’s greatest stars, culled from the series’ vast archive of transmissions, featuring such remarkable artists as Lise Davidsen, Natalie Dessay, Joyce DiDonato, Juan Diego Flórez, Elīna Garanča, Dmitri Hvorostovsky,  Jonas Kaufmann, Peter Mattei, Matthew Polenzani, Sondra Radvanovsky, Nadine Sierra, and, of course, Fleming herself.",
+      "label": "movie",
+      "sample": "held-out-2"
+    },
+    {
+      "showingId": "curzon.com-bloomsbury-HO00007356",
+      "venue": "curzon.com-bloomsbury",
+      "title": "DocHouse: Christine Choy: Double Bill",
+      "runtimeMinutes": 75,
+      "description": "The first programme in our retrospective of pioneering Asian American filmmaker Christine Choy is a double bill of two short films reflecting Choy's interest in the little-shown experience of East and Southeast Asian immigrants to the US. Giving voice to workers, community leaders and refugees, the films were unusual for their focus and candour at the time, and are still strikingly humanistic testaments to the complexity of the immigrant experience.\n\nFeaturing FROM SPIKES TO SPINDLES (1976, 45 mins) and BITTERSWEET SURVIVAL: SOUTHEAST ASIAN REFUGEES IN AMERICA (1982, 30 mins)",
+      "label": "shorts",
+      "sample": "held-out-2"
+    },
+    {
+      "showingId": "curzon.com-bloomsbury-HO00007266",
+      "venue": "curzon.com-bloomsbury",
+      "title": "DocHouse: What We Were and What We Are",
+      "runtimeMinutes": 60,
+      "description": "First-time directors from the Sahrawi Refugee camps explore how their culture has changed after 50 years of enforced displacement. World Premiere screening of films and a Q&A. Organised by IRSAAN, UCL and UAL\n\nWHAT WE WERE AND WHAT WE ARE is an event centered on a World Premiere screening of documentary films made by first-time directors from the Sahrawi Refugee camps. The young filmmakers have made works about their elders and how the Sahrawi culture has changed after 50 years of enforced displacement. The event will also comprise of talks and opportunities for Q&A sessions with the filmmakers and members of IRSAAN a Sahrawi led health charity based in the camps.",
+      "label": "shorts",
+      "sample": "held-out-2"
+    },
+    {
+      "showingId": "riversidestudios.co.uk-4515",
+      "venue": "riversidestudios.co.uk",
+      "title": "The Echo of Other Voices (Ecos de otras voces) + Q&A",
+      "runtimeMinutes": 71,
+      "description": "The London Spanish Film Festival returns for its 22nd edition with a selection of some of the most exciting films made recently in Spain - and much more! Explore the program to discover the films, the guests, and some very special events.\n\nUK Premiere\n\nFollowed by a Q&A with filmmaker Adriana Domínguez\n\nAdolfo Domínguez is both a fashion icon and an enigma. His slogan, \"Wrinkles Are Beautiful,\" captured the spirit of a generation in the early years of Spain's democracy, expressing a new aesthetic for a country embracing a new set of values. Directed by his daughter, the film looks beyond the iconic fashion brand to reveal the man behind it, offering an intimate portrait of the visionary who helped redefine Spanish fashion during a period of profound social and cultural change.\n\nAge Rating: 18\nLanguage: Spanish with subtitles\nContent Warnings: TBC\nDirector: Adriana Dominguez\nCast: Adolfo Domínguez, Adriana Domínguez, María Eugenia Alberti, Pepa Bueno\nCompany: London Spanish Film Festival\nTrailers: 20 mins\nYear of Release: 2024",
+      "label": "movie",
+      "sample": "held-out-2"
+    },
+    {
+      "showingId": "riversidestudios.co.uk-4635",
+      "venue": "riversidestudios.co.uk",
+      "title": "Pitchblack Mixtapes: Logical Progression (Disc 2) (30th Anniversary)",
+      "runtimeMinutes": 66,
+      "description": "Please arrive by event start time as latecomers will not be admitted and refunds will not be offered.\n\nImmerse yourself in one of the greatest electronic compilations of all-time at Pitchblack Playback's listening session in the dark, celebrating the 30th anniversary of LTJ Bukem's seminal 'Logical Progression Vol. 1'. Hear Disc 2 of this hugely influential deep atmospheric jungle testament played loud in uncompressed audio on our powerful Screen One cinema sound system.\n\nNo phones; no talking; no signing; no distractions; just you and the music.\n\n\"This sounds great” — Rick Rubin\n\n\"A fabulous idea\" — Jay Kay, Jamiroquai\n\n\"The optimal way to listen to an album\" — Max Richter\n\n\"This might just be my favourite new thing to do\" — Nihal, BBC Radio 5 Live\n\nTicket includes recycled cotton Pitchblack Playback eye mask for extra darkness.\n\nAs recommended by The Guardian, GQ, Time Out and BBC 6 Music.",
+      "label": "music",
+      "sample": "held-out-2"
+    },
+    {
+      "showingId": "riversidestudios.co.uk-5240",
+      "venue": "riversidestudios.co.uk",
+      "title": "In The Gallows: Shorts Programme (London Breeze Film Festival)",
+      "runtimeMinutes": 120,
+      "description": "London Breeze Film Festival Presents a ‘3 for 2’ Dark Comedy Fright Night\n\nJoin us for a night of dark comedic thrills starting at 5pm with shorts programme, In the Gallows, followed at 7.20pm by feature preview, Synthesized, and ending with feature preview, Man Baby at 9.30pm. See individual listings for details.\n\nBuy all three and get one screening FREE at checkout.\n\n‘In the Gallows’ is the first of three screening events for one night only. These eight morbidly funny shorts that explore the human (and not-so-human) condition of using humour to illuminate and cope with the darkness in the world.\n\nThe Visitors (UK 18 min) Dir. Zach Thoday\n\nLife Goes On (UK 19 min) Dir. Kat Butterfield, Daniel Audritt\n\nPlease and Thank You (USA 11 min) Dir. Hal Kirkland\n\nThe Cranberry Effect (IT/BU 8 min) Dir. MATHERY\n\nDead Grandma (USA 1 min) Dir. Rachel Kempf, Nick Toti\n\nGan Canny (UK 17 min) Dir. Lou Burns, Aaron Burns\n\nMarmalade (Good Boy) (UK 10 min) Dir. Ben Hunter\n\nUncle Artoo (UK 10 min) Dir. Zoë Whittaker",
+      "label": "shorts",
+      "sample": "held-out-2"
+    },
+    {
+      "showingId": "riversidestudios.co.uk-5244",
+      "venue": "riversidestudios.co.uk",
+      "title": "Rhapsody on the Outlaw Ocean (London Breeze Film Festival UK Premiere + Q&A)",
+      "runtimeMinutes": 65,
+      "description": "Rhapsody on the Outlaw Ocean (USA 61 min) Dir. Ian Urbina\n\nAnd now for something completely different! As part of our IMPACT day, London Breeze is thrilled to present the UK premiere of writer director, Ian Urbina, and composer William Segal’s animated musical rap documentary exposing the lawless world of international waters, drawn from ten years of reporting and featuring vocal talent from Broadway’s Hamilton, including Sydney James Harcourt and Brandon Victor Dixon.\n\nThe film offers a rare window into an unseen world as well as one journalist’s attempt to find new ways to chronicle a place that feels too foreign, too hard to believe, to be captured through traditional means.\n\nFor over ten years, Pulitzer Prize-winning journalist, Ian Urbina, embarked on a journey to uncover the hidden truths of what happens on the high seas. Over 50 million people work offshore in a realm without governments, police or oversight. What he found was a hidden world. On the outlaw ocean, bad actors take advantage for their own gain, and good actors exploit legal loopholes to achieve what could never be done on land. The reporting behind these stories is stunning and important. Stowaways left out to die at sea. Vigilantes chasing an illegal fishing ship. A man recalling the trauma of being enslaved on a ship. Crimes against human rights, crimes against the environment — made possible through the void of government on the water that covers two thirds of the planet.\n\nIn Rhapsody on the Outlaw Ocean, these true and harrowing stories are rendered into an animated musical rap documentary, as we follow the path of the Journalist as he traverses the high seas by ship from Antarctica to the South China Sea to the North Atlantic and beyond, uncovering the unbelievable stories of the people who work on the world’s oceans.\n\n+ Iridescence (FRA 4 min) Dir. Adrien Lhoste\n\nA single drop of water is carried inside a bottle by a drone. It travels across a scorching, futuristic desert world where each place becomes increasingly dangerous. Along the way, it narrowly escapes a man with a net, a boxing kangaroo, and giant jellyfish… until it finally finds itself in the middle of a billionaire’s party.",
+      "label": "movie|shorts",
+      "sample": "held-out-2"
+    },
+    {
+      "showingId": "riversidestudios.co.uk-5075",
+      "venue": "riversidestudios.co.uk",
+      "title": "London Breeze Film Festival Gala Closing Film + Awards: Such a Vivid Imagination (UK) + Q&A",
+      "runtimeMinutes": 73,
+      "description": "The red carpet will be out for London Breeze’s closing gala and awards ceremony on 25th October - a London premiere.\n\nTwelve-year-old Celia's imagination becomes a dangerous refuge after she discovers her mum's affair and a body lying in the woods.\n\nSUCH A VIVID IMAGINATION is a dark folk tale, steeped in the violence and ruthlessness of nature. It's also a mystery to solve with a shocking twist that few will see coming. But above all, it's a coming-of-age story about three teenage girls, struggling with parents, with sexuality and their place in the world.\n\nGENRE: dark family drama, coming of age, mystery\n\nIt is a UK drama made for a family audience and with the full support of the local community (talent, resources and spirit) of Nailsworth in the Cotswolds. This is the debut feature of German born director Ina Lüders and writer Dave Fedash, starring a young cast led by exceptional talent, Sheherazade Farrell (A House in Jerusalem). The film is produced by Julia Gurry of musical duo, belleroscoe with an original score by Matt Gurry. The film has won Best South West Feature at Bath Film Festival where it will have its UK premiere.\n\nMeet the director, writer, producer and members of the cast in a Q&A and stay for the London Breeze awards ceremony immediately after to celebrate the best of the festival.\n\nAge Rating: TBC (likely 12A)\nLanguage: English\nContent / Trigger Warnings: TBC\nDirector: Ina Lüders\nCast: Sheherazade Farrell, Laura Ashcroft, Nancy Breheny, Cherry Walters\nCompany: London Breeze Film Festival\nTrailers: 20 mins\nYear of Release: 2026\n\nPLUS SHORT FILM\n\nAMUSEMENT (UK 11m) Dir. Stephanie Zari\n\nOn a trip to the amusements, a ten-year-old girl needs to act quickly to win her dream prize before a determined boy gets there first.",
+      "label": "movie|shorts",
+      "sample": "held-out-2"
+    },
+    {
+      "showingId": "phoenixcinema.co.uk-729415",
+      "venue": "phoenixcinema.co.uk",
+      "title": "Being Human Dementia Film Club",
+      "runtimeMinutes": 150,
+      "description": "Dementia Film Club How can collaborative filmmaking support active brain health? Join Vesna Lukic to explore the benefits of filmmaking for people living with dementia. Dementia Film Club at the Phoenix Cinema is an interactive and creative cinema workshop, where you will find out about the processes of making a film. There will be a screening of a work-in-progress film made with the Barnet Age UK Day Opportunities Centre, and you will be invited to give feedback and make suggestions for the next stages of the project. There will also be opportunities to learn how to handle cameras and record sound and images. Come along and be part of this creative process! This workshop is designed specifically to accommodate people living with dementia and their carers, and is open to anyone with an interest in filmmaking. Suitable for all ages.\nThis event is part of Being Human Festival, the UK’s national festival of the humanities, taking place 5-14 November 2026. Led by the School of Advanced Study, University of London, in partnership with the Arts and Humanities Research Council and the British Academy. For further information please see beinghumanfestival.org",
+      "label": "workshop",
+      "sample": "held-out-2"
+    },
+    {
+      "showingId": "phoenixcinema.co.uk-599182",
+      "venue": "phoenixcinema.co.uk",
+      "title": "Kendal Mountain Festival: The Film Edit",
+      "runtimeMinutes": 90,
+      "description": "Join us for a special evening celebrating the spirit of adventure, with a lovingly curated selection of films fresh from the Kendal Mountain Festival. Bringing together powerful stories from around the world, this collection features stunning landscapes, people, passion, and a shared love of the outdoors that connects us all. Whether it’s climbing, running, exploring, or simply finding joy in wild places, these films reflect the experiences that resonate close to home. Can’t make it to Kendal? Come along, meet fellow enthusiasts, and be inspired together. It’s a chance to gather, connect, and celebrate the adventurous spirit that makes our community special.\nAbout Kendal Mountain Festival: Established in 1980, Kendal Mountain Festival celebrates all aspects of outdoor and adventure culture. An internationally-acclaimed gathering for filmmakers, writers, adventurers, and enthusiasts, the Festival showcases films, talks, exhibitions, and activities that inspire a love for the outdoors. Kendal Mountain is a global platform for sharing stories of nature, exploration, adventure, and discovery. During the four-day Festival, held 19-22nd November 2026, over 200 live sessions – including 300+ speakers, 150+ films, and 60+ activities – engage over 25,000 adventure-seekers and outdoor enthusiasts.\nFilms:\nSurfing with a Penguin 8 mins | Director: Will Bendix From sharks and seals to whales and everything in between, Cape Town, South Africa, is renowned for wildlife encounters in the water. But it is rare for surfers to see a penguin, let alone share a few waves with one - until this little guy came along. Virtus: The Four P's 11 mins | Director: Toby Roney Virtus centres on Ed Jackson's climb of the Matterhorn, but at its heart, it is not really about the mountain. It is about the values that have shaped Ed's life after trauma: purpose, perspective, progress and perseverance. Through scenes from the climb, moments from recovery and connections with the Millimetres to Mountains community, the film explores how challenge can rebuild identity, deepen perspective and create meaningful growth. It Takes Two to Tandem 6 mins | Directors: Catherine Aeppel and Anna Wilder-Burns This feel-good short follows longtime riding partners Sam and Jazz as they take a tandem bike across some of their favourite trails, marking ten years since their first tandem adventure together. Part celebration and part reflection, the film explores friendship, trust and the rare joy of moving through the world in sync. Zuma Rock 34 mins | Director: Luke Logan-Malik Rotimi, an amateur climber and writer from London with deep family roots in Nigeria, sets out to achieve the unthinkable: the first ascent of Zuma Rock, a 300-metre monolith considered sacred by the communities living in its shadow. To do it, he enlists Olympic climbing champion Shauna Coxsey - but neither of them has ever tackled a wall of this scale. Find Mor 28 mins | Director: Steve Small Exploration. Community. Discovery. Scotland's mysteries are still roaring through remote glens, sometimes hidden in plain sight. Find Mor follows a group of canyoneers over two years as they explore the hidden corners of the Scottish Highlands. Offering a unique perspective from within this relatively unknown community, the film reveals the many motivations behind their shared passion and curiosity. They set off in search of uncharted canyons, but find true adventure and a deeper connection to people and place. \"You come for the canyons but stay for the people.\" Hunter's Moon 14 mins | Directors: Christina Lusti and Gee Pierrel Mountaineers Christina Lusti and Gee Pierrel attempt to become the first people to summit and ski New Zealand's Aoraki / Mount Cook via a line they name Hunter's Moon .",
+      "label": "shorts",
+      "sample": "held-out-2"
+    },
+    {
+      "showingId": "myvue.com-bromley-HO00021502",
+      "venue": "myvue.com-bromley",
+      "title": "BTS WORLD TOUR 'ARIRANG' IN SÃO PAULO: LIVE VIEWING",
+      "runtimeMinutes": 195,
+      "description": "Marking the grand finale of their Latin America tour, this monumental concert will bring the explosive energy of the packed stadium in Brazil straight to the big screen.",
+      "label": "movie",
+      "sample": "held-out-2"
+    },
+    {
+      "showingId": "myvue.com-bromley-HO00021468",
+      "venue": "myvue.com-bromley",
+      "title": "We're Going on a Bear Hunt + The Tiger Who Came to Tea",
+      "runtimeMinutes": 49,
+      "description": "We’re Going on a Bear Hunt - Wrap up warm and step into the snow for a wonderful animated adventure based on the best-selling bedtime book by Michael Rosen.",
+      "label": "shorts",
+      "sample": "held-out-2"
+    },
+    {
+      "showingId": "myvue.com-croydon-purley-way-HO00021502",
+      "venue": "myvue.com-croydon-purley-way",
+      "title": "BTS WORLD TOUR 'ARIRANG' IN SÃO PAULO: LIVE VIEWING",
+      "runtimeMinutes": 195,
+      "description": "Marking the grand finale of their Latin America tour, this monumental concert will bring the explosive energy of the packed stadium in Brazil straight to the big screen.",
+      "label": "movie",
+      "sample": "held-out-2"
+    },
+    {
+      "showingId": "myvue.com-croydon-purley-way-HO00021468",
+      "venue": "myvue.com-croydon-purley-way",
+      "title": "We're Going on a Bear Hunt + The Tiger Who Came to Tea",
+      "runtimeMinutes": 49,
+      "description": "We’re Going on a Bear Hunt - Wrap up warm and step into the snow for a wonderful animated adventure based on the best-selling bedtime book by Michael Rosen.",
+      "label": "shorts",
+      "sample": "held-out-2"
+    },
+    {
+      "showingId": "myvue.com-harrow-HO00021502",
+      "venue": "myvue.com-harrow",
+      "title": "BTS WORLD TOUR 'ARIRANG' IN SÃO PAULO: LIVE VIEWING",
+      "runtimeMinutes": 195,
+      "description": "Marking the grand finale of their Latin America tour, this monumental concert will bring the explosive energy of the packed stadium in Brazil straight to the big screen.",
+      "label": "movie",
+      "sample": "held-out-2"
+    },
+    {
+      "showingId": "myvue.com-harrow-HO00021468",
+      "venue": "myvue.com-harrow",
+      "title": "We're Going on a Bear Hunt + The Tiger Who Came to Tea",
+      "runtimeMinutes": 49,
+      "description": "We’re Going on a Bear Hunt - Wrap up warm and step into the snow for a wonderful animated adventure based on the best-selling bedtime book by Michael Rosen.",
+      "label": "shorts",
+      "sample": "held-out-2"
     }
   ],
   "snapshot": {

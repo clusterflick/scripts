@@ -22,26 +22,32 @@ require("dotenv").config();
 //     an explanation made the answer better. Jev has no equivalent, and the
 //     replacement is decomposition: see DECOMPOSED_SIGNALS below.
 //  2. `confidence` here is a calibrated 0-1 concentration of the probability
-//     distribution, not a model's self-reported 0-9. The two are not
-//     comparable and CONFIDENT is a placeholder until measured - see below.
+//     distribution, not a model's self-reported 0-9. It is reported, not acted
+//     on - see the note on gating below.
 
 const MODEL = "jev-latest";
 
-// The LLM path gates on a self-reported `confidence > 7`, a number the prompt
-// has to argue the model into producing ("score it 8 or 9 so the choice isn't
-// discarded"). Jev's confidence is trained rather than asserted, so the
-// threshold has to be found on our own data rather than carried across.
+// There is deliberately no confidence gate.
 //
-// 0.85 is a provisional value, not a calibrated one. It started at 0.9 - the
-// cutoff TypeSafe's cookbook uses for classifying SEC filings - and moved once
-// 11 listings showed 0.9 discarding answers worth keeping, including a film
-// festival Jev called "multiple-movies" at 0.86 where the LLM had given up.
+// The obvious design is to discard low-confidence answers as "event", which is
+// what the LLM path does with its self-reported `confidence > 7`. Measured
+// against 142 hand-labelled listings it is the single largest source of error
+// in this module, at every threshold tried:
 //
-// Four listings is not a calibration, and the observed run-to-run jitter is
-// about +/-0.05, which is the same size as the move. helpers/compare-
-// categorisers.js sweeps thresholds against real listings - widen the corpus
-// and let that pick the number.
-const CONFIDENT = 0.85;
+//   no gate   128/142 correct    gate 0.60   117/142
+//   gate 0.50 124/142            gate 0.85    85/142
+//
+// The reason is that "event" is not a safe default, it is another answer, and
+// it is wrong more often than a low-confidence guess is. Dropping the gate
+// turns 20 listings from "event" into a real category: 13 right, 7 wrong, and
+// on five of those seven the LLM is wrong too.
+//
+// "event" is still produced two ways: Jev choosing it outright, and the
+// structural short-circuit below for a listing carrying no description to
+// judge. Both are answers about the listing rather than about our uncertainty.
+//
+// Before adding a gate back, re-run helpers/compare-categorisers.js against
+// common/tests/categorisation-labels.json and check it actually helps.
 
 // Every option gets a criteria entry. Structured objects rather than bare
 // strings because several categories are defined by what they exclude, and Jev
@@ -263,7 +269,7 @@ async function askJevToCategorise(
 
   return {
     ...movie,
-    category: confidence >= CONFIDENT ? category : "event",
+    category,
     jev: {
       category,
       confidence,
@@ -281,4 +287,3 @@ async function askJevToCategorise(
 }
 
 module.exports = askJevToCategorise;
-module.exports.CONFIDENT = CONFIDENT;

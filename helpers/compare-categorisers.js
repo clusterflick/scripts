@@ -98,9 +98,11 @@ function reportCost(rows) {
   );
 }
 
-// The gate is the only knob on this thing, and every row already carries the
-// distribution needed to replay it, so there is no reason to guess at a value
-// and re-run. Sweep it instead and let the corpus name the number.
+// ask-jev-to-categorise deliberately does not gate on confidence - see the long
+// note there for the measurements. This sweep is kept anyway: it is how any
+// future proposal to add a gate back gets tested, against real listings rather
+// than intuition. Every row already carries the distribution needed to replay
+// it, so no threshold needs re-running to evaluate.
 //
 // Read the columns together, not the agreement rate alone: "recovered" is rows
 // where the LLM gave up and Jev has a category to offer, which is the whole
@@ -129,13 +131,9 @@ function reportThresholdSweep(rows) {
       (row) => row.llm === "event" && row.category !== "event",
     ).length;
 
-    const marker =
-      Math.abs(gate - askJevToCategorise.CONFIDENT) < 0.001
-        ? "  <- current"
-        : "";
     console.log(
       `  ${gate.toFixed(2)}   ${String(agrees).padStart(2)}/${rows.length}    ` +
-        `${String(keptButWrong).padStart(6)}           ${String(recovered).padStart(6)}${marker}`,
+        `${String(keptButWrong).padStart(6)}           ${String(recovered).padStart(6)}`,
     );
   }
 }

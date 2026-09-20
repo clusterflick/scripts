@@ -1,0 +1,936 @@
+{
+  "about": {
+    "what": "A human verdict on every disagreement between Jev and the shipped LLM categories, across a full-coverage run of the September 2026 release (434 listings that reached the categoriser, 97% of the path).",
+    "verdicts": "\"correct\" = Jev's category is the better one. \"incorrect\" = the shipped category was better. \"ambiguous\" = the listing genuinely supports both.",
+    "notLabels": "These are verdicts on a MOVEMENT (llm -> jev), not category labels. Several of the \"incorrect\" rows have no agreed correct category - Twenty Years of the Met is a transform fix rather than a categorisation, and Liberation Cell by Cell could not be checked because the page is gone. Converting these to ground-truth labels needs case-by-case care; common/tests/categorisation-labels.json holds the labels that were given directly.",
+    "totals": {
+      "rowsCompared": 434,
+      "agreed": 332,
+      "disagreed": 102,
+      "correct": 73,
+      "ambiguous": 11,
+      "incorrect": 18
+    },
+    "adjudicatedAt": "2026-09-20"
+  },
+  "rows": [
+    {
+      "showingId": "actonecinema.co.uk-28244",
+      "venue": "actonecinema.co.uk",
+      "title": "ACTONORY 2",
+      "llm": "event",
+      "jev": "comedy",
+      "confidence": 0.33,
+      "verdict": "ambiguous"
+    },
+    {
+      "showingId": "barbican.org.uk-227306",
+      "venue": "barbican.org.uk",
+      "title": "FKA twigs – Body High live at Adidas Arena + Q&A",
+      "llm": "music",
+      "jev": "movie",
+      "confidence": 0.99,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "barbican.org.uk-225344",
+      "venue": "barbican.org.uk",
+      "title": "Lawrence Abu Hamdan: 450 XL: A silent movie",
+      "llm": "talk",
+      "jev": "movie",
+      "confidence": 0.24,
+      "verdict": "incorrect"
+    },
+    {
+      "showingId": "barbican.org.uk-225363",
+      "venue": "barbican.org.uk",
+      "title": "Wallace and Gromit: The Wrong Trousers + A Close Shave",
+      "llm": "multiple-movies",
+      "jev": "shorts",
+      "confidence": 0.84,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "bfi.org.uk-southbank-B03E4D85-AFA2-4373-96EB-862FC30A07A5",
+      "venue": "bfi.org.uk-southbank",
+      "title": "Good Morning, Britain: TV-am Revisited",
+      "llm": "tv",
+      "jev": "talk",
+      "confidence": 0.76,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "bfi.org.uk-southbank-FF0DB11F-F455-4D78-9583-95DFB2CA6E65",
+      "venue": "bfi.org.uk-southbank",
+      "title": "From Saint-Denis to Algiers",
+      "llm": "event",
+      "jev": "multiple-movies",
+      "confidence": 1,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "cinemamuseum.org.uk-12762",
+      "venue": "cinemamuseum.org.uk",
+      "title": "Away Up North – An Evening Of Movie Mavericks from Finland",
+      "llm": "multiple-movies",
+      "jev": "shorts",
+      "confidence": 0.99,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "cinemamuseum.org.uk-12876",
+      "venue": "cinemamuseum.org.uk",
+      "title": "Extravaganza of Silent Films About Filmmaking – to Help The Cinema Museum Buy its Home",
+      "llm": "movie",
+      "jev": "multiple-movies",
+      "confidence": 0.94,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "cinemamuseum.org.uk-11037",
+      "venue": "cinemamuseum.org.uk",
+      "title": "Frankenstein Unchained!",
+      "llm": "event",
+      "jev": "movie",
+      "confidence": 0.63,
+      "verdict": "incorrect"
+    },
+    {
+      "showingId": "cinemamuseum.org.uk-12366",
+      "venue": "cinemamuseum.org.uk",
+      "title": "GEMMA & ROBERT ROSS – THE COMEDY SALON",
+      "llm": "comedy",
+      "jev": "talk",
+      "confidence": 0.61,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "cinemamuseum.org.uk-2366",
+      "venue": "cinemamuseum.org.uk",
+      "title": "The Bill Reunion 17",
+      "llm": "tv",
+      "jev": "talk",
+      "confidence": 0.91,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "cinemamuseum.org.uk-12584",
+      "venue": "cinemamuseum.org.uk",
+      "title": "The Blinking Buzzards – 17 October",
+      "llm": "event",
+      "jev": "multiple-movies",
+      "confidence": 0.49,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "cinemamuseum.org.uk-12587",
+      "venue": "cinemamuseum.org.uk",
+      "title": "The Blinking Buzzards – 9 October",
+      "llm": "event",
+      "jev": "multiple-movies",
+      "confidence": 0.53,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "cinemamuseum.org.uk-12582",
+      "venue": "cinemamuseum.org.uk",
+      "title": "The Blinking Buzzards – 10 July",
+      "llm": "event",
+      "jev": "talk",
+      "confidence": 0.73,
+      "verdict": "ambiguous"
+    },
+    {
+      "showingId": "cinemamuseum.org.uk-12577",
+      "venue": "cinemamuseum.org.uk",
+      "title": "The Blinking Buzzards – 10 April",
+      "llm": "event",
+      "jev": "talk",
+      "confidence": 0.71,
+      "verdict": "ambiguous"
+    },
+    {
+      "showingId": "cinemamuseum.org.uk-12599",
+      "venue": "cinemamuseum.org.uk",
+      "title": "The Blinking Buzzards – 9 January",
+      "llm": "event",
+      "jev": "talk",
+      "confidence": 0.76,
+      "verdict": "ambiguous"
+    },
+    {
+      "showingId": "cinemamuseum.org.uk-14243",
+      "venue": "cinemamuseum.org.uk",
+      "title": "The Smallest Shows on Earth",
+      "llm": "event",
+      "jev": "talk",
+      "confidence": 0.72,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "cineworld.co.uk-bexleyheath-1000052295",
+      "venue": "cineworld.co.uk-bexleyheath",
+      "title": "2026 Classic Secret Screaming",
+      "llm": "event",
+      "jev": "movie",
+      "confidence": 0.91,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "cineworld.co.uk-feltham-1000052295",
+      "venue": "cineworld.co.uk-feltham",
+      "title": "2026 Classic Secret Screaming",
+      "llm": "event",
+      "jev": "movie",
+      "confidence": 0.91,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "cineworld.co.uk-leicester-square-1000052295",
+      "venue": "cineworld.co.uk-leicester-square",
+      "title": "2026 Classic Secret Screaming",
+      "llm": "event",
+      "jev": "movie",
+      "confidence": 0.91,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "cineworld.co.uk-the-o2-greenwich-1000052295",
+      "venue": "cineworld.co.uk-the-o2-greenwich",
+      "title": "2026 Classic Secret Screaming",
+      "llm": "event",
+      "jev": "movie",
+      "confidence": 0.91,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "cineworld.co.uk-wandsworth-1000052295",
+      "venue": "cineworld.co.uk-wandsworth",
+      "title": "2026 Classic Secret Screaming",
+      "llm": "event",
+      "jev": "movie",
+      "confidence": 0.91,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "cineworld.co.uk-west-india-quay-1000052295",
+      "venue": "cineworld.co.uk-west-india-quay",
+      "title": "2026 Classic Secret Screaming",
+      "llm": "event",
+      "jev": "movie",
+      "confidence": 0.91,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "cineworld.co.uk-wood-green-1000052295",
+      "venue": "cineworld.co.uk-wood-green",
+      "title": "2026 Classic Secret Screaming",
+      "llm": "event",
+      "jev": "movie",
+      "confidence": 0.91,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "coldharbourblue.com-international-anthem-video-showcase",
+      "venue": "coldharbourblue.com",
+      "title": "International Anthem Video Showcase",
+      "llm": "event",
+      "jev": "multiple-movies",
+      "confidence": 0.7,
+      "verdict": "ambiguous"
+    },
+    {
+      "showingId": "coldharbourblue.com-darkroom-festival-2026",
+      "venue": "coldharbourblue.com",
+      "title": "DARKROOM FESTIVAL 2026",
+      "llm": "event",
+      "jev": "multiple-movies",
+      "confidence": 0.81,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "dice.fm-avx87d",
+      "venue": "coldharbourblue.com",
+      "title": "International Anthem Video Showcase",
+      "llm": "music",
+      "jev": "multiple-movies",
+      "confidence": 0.47,
+      "verdict": "ambiguous"
+    },
+    {
+      "showingId": "curzon.com-bloomsbury-HO00007139",
+      "venue": "curzon.com-bloomsbury",
+      "title": "Twenty Years of the Met in Cinemas",
+      "llm": "event",
+      "jev": "multiple-movies",
+      "confidence": 0.54,
+      "verdict": "incorrect"
+    },
+    {
+      "showingId": "curzon.com-bloomsbury-HO00007356",
+      "venue": "curzon.com-bloomsbury",
+      "title": "DocHouse: Christine Choy: Double Bill",
+      "llm": "multiple-movies",
+      "jev": "shorts",
+      "confidence": 1,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "curzon.com-bloomsbury-HO00007266",
+      "venue": "curzon.com-bloomsbury",
+      "title": "DocHouse: What We Were and What We Are",
+      "llm": "movie",
+      "jev": "shorts",
+      "confidence": 0.82,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "curzon.com-kingston-HO00007139",
+      "venue": "curzon.com-kingston",
+      "title": "Twenty Years of the Met in Cinemas",
+      "llm": "event",
+      "jev": "multiple-movies",
+      "confidence": 0.54,
+      "verdict": "incorrect"
+    },
+    {
+      "showingId": "curzon.com-mayfair-HO00007139",
+      "venue": "curzon.com-mayfair",
+      "title": "Twenty Years of the Met in Cinemas",
+      "llm": "event",
+      "jev": "multiple-movies",
+      "confidence": 0.54,
+      "verdict": "incorrect"
+    },
+    {
+      "showingId": "curzon.com-richmond-HO00007139",
+      "venue": "curzon.com-richmond",
+      "title": "Twenty Years of the Met in Cinemas",
+      "llm": "event",
+      "jev": "multiple-movies",
+      "confidence": 0.54,
+      "verdict": "incorrect"
+    },
+    {
+      "showingId": "curzon.com-victoria-HO00007139",
+      "venue": "curzon.com-victoria",
+      "title": "Twenty Years of the Met in Cinemas",
+      "llm": "event",
+      "jev": "multiple-movies",
+      "confidence": 0.54,
+      "verdict": "incorrect"
+    },
+    {
+      "showingId": "curzon.com-wimbledon-HO00007139",
+      "venue": "curzon.com-wimbledon",
+      "title": "Twenty Years of the Met in Cinemas",
+      "llm": "event",
+      "jev": "multiple-movies",
+      "confidence": 0.54,
+      "verdict": "incorrect"
+    },
+    {
+      "showingId": "ticketsource.co.uk-e-yrkkxd",
+      "venue": "davidleancinema.org.uk",
+      "title": "Richard DeDomenici / Crollywood Tour & Redux: Heads of State",
+      "llm": "event",
+      "jev": "movie",
+      "confidence": 0.65,
+      "verdict": "ambiguous"
+    },
+    {
+      "showingId": "dugdaleartscentre.co.uk-753130",
+      "venue": "dugdaleartscentre.co.uk",
+      "title": "Liberation Cell by Cell; Life Line Conversations: Sickle Cell, Blood Donation & Community",
+      "llm": "talk",
+      "jev": "movie",
+      "confidence": 0.93,
+      "verdict": "incorrect"
+    },
+    {
+      "showingId": "everymancinema.com-barnet-1000044545",
+      "venue": "everymancinema.com-barnet",
+      "title": "Twenty Years of the Met in Cinemas",
+      "llm": "music",
+      "jev": "multiple-movies",
+      "confidence": 0.37,
+      "verdict": "incorrect"
+    },
+    {
+      "showingId": "everymancinema.com-belsize-park-1000044545",
+      "venue": "everymancinema.com-belsize-park",
+      "title": "Twenty Years of the Met in Cinemas",
+      "llm": "music",
+      "jev": "multiple-movies",
+      "confidence": 0.37,
+      "verdict": "incorrect"
+    },
+    {
+      "showingId": "fulhampier.com-105170",
+      "venue": "fulhampier.com",
+      "title": "Secret Film Screenings presents: Around the World in Movies",
+      "llm": "event",
+      "jev": "movie",
+      "confidence": 0.58,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "fulhampier.com-106361",
+      "venue": "fulhampier.com",
+      "title": "Parent and Baby Secret Film Screenings",
+      "llm": "event",
+      "jev": "movie",
+      "confidence": 0.49,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "fulhampier.com-106344",
+      "venue": "fulhampier.com",
+      "title": "Secret Film Screenings: Spooky Edition",
+      "llm": "event",
+      "jev": "movie",
+      "confidence": 0.62,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "fulhampier.com-106001",
+      "venue": "fulhampier.com",
+      "title": "Family Film Club - Tuesday and Thursday",
+      "llm": "event",
+      "jev": "movie",
+      "confidence": 0.54,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "genesiscinema.co.uk-101940",
+      "venue": "genesiscinema.co.uk",
+      "title": "LIFF Mini-Market (invitation only)",
+      "llm": "event",
+      "jev": "workshop",
+      "confidence": 0.75,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "genesiscinema.co.uk-114463",
+      "venue": "genesiscinema.co.uk",
+      "title": "Steel of Film (in 35 mm) + Q&A",
+      "llm": "multiple-movies",
+      "jev": "shorts",
+      "confidence": 0.36,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "eventbrite.co.uk-1995903092879",
+      "venue": "genesiscinema.co.uk",
+      "title": "Aleto at 15: Documentary Premiere, Alumni Awards & Celebration",
+      "llm": "event",
+      "jev": "movie",
+      "confidence": 0.49,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "ica.art-back-and-forth-to-lavoisier-on-16mm",
+      "venue": "ica.art",
+      "title": "Back and Forth + To Lavoisier, Who Died In The Reign of Terror on 16mm",
+      "llm": "multiple-movies",
+      "jev": "shorts",
+      "confidence": 0.89,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "ica.art-bodies-adrift-miami",
+      "venue": "ica.art",
+      "title": "Bodies Adrift: Miami",
+      "llm": "multiple-movies",
+      "jev": "shorts",
+      "confidence": 1,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "institut-francais.org.uk-56727",
+      "venue": "institut-francais.org.uk",
+      "title": "Georgian Short & Documentaries",
+      "llm": "event",
+      "jev": "shorts",
+      "confidence": 1,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "lewisham.gov.uk-deptford-lounge-short-film-screening-and-discussion-group-1790269200000",
+      "venue": "lewisham.gov.uk-deptford-lounge",
+      "title": "Short Film Screening and Discussion Group",
+      "llm": "shorts",
+      "jev": "movie",
+      "confidence": 0.5,
+      "verdict": "incorrect"
+    },
+    {
+      "showingId": "outsavvy.com-39692",
+      "venue": "lewisham.gov.uk-deptford-lounge",
+      "title": "Bollywood on Hollywood the Fundraiser",
+      "llm": "event",
+      "jev": "shorts",
+      "confidence": 0.75,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "lumiereromford.com-1554",
+      "venue": "lumiereromford.com",
+      "title": "The Hidden Film Festival 2026: in association with the Film Festival Guild",
+      "llm": "event",
+      "jev": "multiple-movies",
+      "confidence": 0.51,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "lumiereromford.com-1362",
+      "venue": "lumiereromford.com",
+      "title": "The British Horror Film Festival: in association with the Film Festival Guild",
+      "llm": "event",
+      "jev": "multiple-movies",
+      "confidence": 0.92,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "lumiereromford.com-1047",
+      "venue": "lumiereromford.com",
+      "title": "Well Socials - Being Creative with Other People",
+      "llm": "event",
+      "jev": "workshop",
+      "confidence": 0.99,
+      "verdict": "incorrect"
+    },
+    {
+      "showingId": "lumiereromford.com-1154",
+      "venue": "lumiereromford.com",
+      "title": "Parent & Baby Sound Bath",
+      "llm": "music",
+      "jev": "workshop",
+      "confidence": 0.45,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "lumiereromford.com-1397",
+      "venue": "lumiereromford.com",
+      "title": "Christmas Wine Tasting Night",
+      "llm": "talk",
+      "jev": "workshop",
+      "confidence": 0.74,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "eventbrite.co.uk-1998508003236",
+      "venue": "lumiereromford.com",
+      "title": "The Hidden Film Festival 2026",
+      "llm": "event",
+      "jev": "multiple-movies",
+      "confidence": 0.69,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "myvue.com-bromley-HO00021502",
+      "venue": "myvue.com-bromley",
+      "title": "BTS WORLD TOUR 'ARIRANG' IN SÃO PAULO: LIVE VIEWING",
+      "llm": "music",
+      "jev": "movie",
+      "confidence": 0.68,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "myvue.com-croydon-purley-way-HO00021502",
+      "venue": "myvue.com-croydon-purley-way",
+      "title": "BTS WORLD TOUR 'ARIRANG' IN SÃO PAULO: LIVE VIEWING",
+      "llm": "music",
+      "jev": "movie",
+      "confidence": 0.68,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "myvue.com-harrow-HO00021502",
+      "venue": "myvue.com-harrow",
+      "title": "BTS WORLD TOUR 'ARIRANG' IN SÃO PAULO: LIVE VIEWING",
+      "llm": "music",
+      "jev": "movie",
+      "confidence": 0.68,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "myvue.com-islington-HO00021502",
+      "venue": "myvue.com-islington",
+      "title": "BTS WORLD TOUR 'ARIRANG' IN SÃO PAULO: LIVE VIEWING",
+      "llm": "music",
+      "jev": "movie",
+      "confidence": 0.68,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "myvue.com-leicester-square-HO00021502",
+      "venue": "myvue.com-leicester-square",
+      "title": "BTS WORLD TOUR 'ARIRANG' IN SÃO PAULO: LIVE VIEWING",
+      "llm": "music",
+      "jev": "movie",
+      "confidence": 0.68,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "eventbrite.co.uk-1998506639156",
+      "venue": "myvue.com-leicester-square",
+      "title": "London Fashion Film Festival 2026- 13th Edition",
+      "llm": "event",
+      "jev": "multiple-movies",
+      "confidence": 0.42,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "myvue.com-romford-HO00021502",
+      "venue": "myvue.com-romford",
+      "title": "BTS WORLD TOUR 'ARIRANG' IN SÃO PAULO: LIVE VIEWING",
+      "llm": "music",
+      "jev": "movie",
+      "confidence": 0.68,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "myvue.com-westfield-HO00021502",
+      "venue": "myvue.com-westfield",
+      "title": "BTS WORLD TOUR 'ARIRANG' IN SÃO PAULO: LIVE VIEWING",
+      "llm": "music",
+      "jev": "movie",
+      "confidence": 0.68,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "myvue.com-westfield-stratford-city-HO00021502",
+      "venue": "myvue.com-westfield-stratford-city",
+      "title": "BTS WORLD TOUR 'ARIRANG' IN SÃO PAULO: LIVE VIEWING",
+      "llm": "music",
+      "jev": "movie",
+      "confidence": 0.68,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "odeon.co.uk-greenwich-HO00009488",
+      "venue": "odeon.co.uk-greenwich",
+      "title": "BTS 'ARIRANG' IN SÃO PAULO: LIVE VIEWING",
+      "llm": "music",
+      "jev": "movie",
+      "confidence": 0.65,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "odeon.co.uk-kingston-HO00009401",
+      "venue": "odeon.co.uk-kingston",
+      "title": "NCT 127 - ‘NEO CITY : SEOUL - THE REDLINE' LIVE",
+      "llm": "music",
+      "jev": "movie",
+      "confidence": 0.45,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "odeon.co.uk-kingston-HO00009488",
+      "venue": "odeon.co.uk-kingston",
+      "title": "BTS 'ARIRANG' IN SÃO PAULO: LIVE VIEWING",
+      "llm": "music",
+      "jev": "movie",
+      "confidence": 0.65,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "odeon.co.uk-lee-valley-HO00009488",
+      "venue": "odeon.co.uk-lee-valley",
+      "title": "BTS 'ARIRANG' IN SÃO PAULO: LIVE VIEWING",
+      "llm": "music",
+      "jev": "movie",
+      "confidence": 0.65,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "odeon.co.uk-richmond-HO00009488",
+      "venue": "odeon.co.uk-richmond",
+      "title": "BTS 'ARIRANG' IN SÃO PAULO: LIVE VIEWING",
+      "llm": "music",
+      "jev": "movie",
+      "confidence": 0.65,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "odeon.co.uk-streatham-HO00009488",
+      "venue": "odeon.co.uk-streatham",
+      "title": "BTS 'ARIRANG' IN SÃO PAULO: LIVE VIEWING",
+      "llm": "music",
+      "jev": "movie",
+      "confidence": 0.65,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "odeon.co.uk-tottenham-court-road-HO00009401",
+      "venue": "odeon.co.uk-tottenham-court-road",
+      "title": "NCT 127 - ‘NEO CITY : SEOUL - THE REDLINE' LIVE",
+      "llm": "music",
+      "jev": "movie",
+      "confidence": 0.45,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "odeon.co.uk-tottenham-court-road-HO00009488",
+      "venue": "odeon.co.uk-tottenham-court-road",
+      "title": "BTS 'ARIRANG' IN SÃO PAULO: LIVE VIEWING",
+      "llm": "music",
+      "jev": "movie",
+      "confidence": 0.65,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "odeon.co.uk-uxbridge-HO00009488",
+      "venue": "odeon.co.uk-uxbridge",
+      "title": "BTS 'ARIRANG' IN SÃO PAULO: LIVE VIEWING",
+      "llm": "music",
+      "jev": "movie",
+      "confidence": 0.65,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "odeon.co.uk-wimbledon-HO00009488",
+      "venue": "odeon.co.uk-wimbledon",
+      "title": "BTS 'ARIRANG' IN SÃO PAULO: LIVE VIEWING",
+      "llm": "music",
+      "jev": "movie",
+      "confidence": 0.65,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "picturehouses.com-ealing-HO00018632",
+      "venue": "picturehouses.com-ealing",
+      "title": "Ealing Film Festival 2026: Awards Winners",
+      "llm": "event",
+      "jev": "multiple-movies",
+      "confidence": 0.64,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "eventbrite.co.uk-1999203860564",
+      "venue": "picturehouses.com-hackney",
+      "title": "Tug Short Film Screening",
+      "llm": "shorts",
+      "jev": "movie",
+      "confidence": 0.7,
+      "verdict": "ambiguous"
+    },
+    {
+      "showingId": "picturehouses.com-the-ritzy-HO00018499",
+      "venue": "picturehouses.com-the-ritzy",
+      "title": "The South London Film Festival Presents: She Owns the Scene Vol. 2 + Closing Night",
+      "llm": "shorts",
+      "jev": "multiple-movies",
+      "confidence": 0.94,
+      "verdict": "ambiguous"
+    },
+    {
+      "showingId": "picturehouses.com-the-ritzy-HO00010004",
+      "venue": "picturehouses.com-the-ritzy",
+      "title": "Spark Storytelling Open Mic",
+      "llm": "talk",
+      "jev": "comedy",
+      "confidence": 0.95,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "princecharlescinema.com-31617164",
+      "venue": "princecharlescinema.com",
+      "title": "Mystery Horror Movie",
+      "llm": "multiple-movies",
+      "jev": "movie",
+      "confidence": 0.8,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "princecharlescinema.com-31617534",
+      "venue": "princecharlescinema.com",
+      "title": "Have A Gd Trip presents Welcome To Hell & Bag of Suck Double Feature",
+      "llm": "multiple-movies",
+      "jev": "shorts",
+      "confidence": 0.75,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "princecharlescinema.com-31617017",
+      "venue": "princecharlescinema.com",
+      "title": "Music Video Preservation Society with special guest Tim Pope",
+      "llm": "event",
+      "jev": "movie",
+      "confidence": 0.85,
+      "verdict": "ambiguous"
+    },
+    {
+      "showingId": "riocinema.org.uk-2779469",
+      "venue": "riocinema.org.uk",
+      "title": "Dream Emulator: SUFFER THE SILENT SUN – FOLK HORROR IN OUR DIGITAL IMAGINATIONS",
+      "llm": "shorts",
+      "jev": "multiple-movies",
+      "confidence": 0.77,
+      "verdict": "ambiguous"
+    },
+    {
+      "showingId": "riversidestudios.co.uk-5244",
+      "venue": "riversidestudios.co.uk",
+      "title": "Rhapsody on the Outlaw Ocean (London Breeze Film Festival UK Premiere + Q&A)",
+      "llm": "movie",
+      "jev": "shorts",
+      "confidence": 0.98,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "riversidestudios.co.uk-5075",
+      "venue": "riversidestudios.co.uk",
+      "title": "London Breeze Film Festival Gala Closing Film + Awards: Such a Vivid Imagination (UK) + Q&A",
+      "llm": "movie",
+      "jev": "shorts",
+      "confidence": 0.56,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "rooftopcinemaclub.com-peckham-supernatural-mini-marathon",
+      "venue": "rooftopcinemaclub.com-peckham",
+      "title": "Supernatural Mini Marathon",
+      "llm": "tv",
+      "jev": "multiple-movies",
+      "confidence": 0.76,
+      "verdict": "incorrect"
+    },
+    {
+      "showingId": "rooftopcinemaclub.com-stratford-supernatural-mini-marathon",
+      "venue": "rooftopcinemaclub.com-stratford",
+      "title": "Supernatural Mini Marathon",
+      "llm": "tv",
+      "jev": "multiple-movies",
+      "confidence": 0.76,
+      "verdict": "incorrect"
+    },
+    {
+      "showingId": "royalalberthall.com-2027",
+      "venue": "royalalberthall.com",
+      "title": "Maestro of the Movies: A Tribute to John Williams",
+      "llm": "music",
+      "jev": "multiple-movies",
+      "confidence": 0.53,
+      "verdict": "incorrect"
+    },
+    {
+      "showingId": "eventbrite.co.uk-1987400758167",
+      "venue": "sandsfilms.co.uk",
+      "title": "Sands Films Cinema Club",
+      "llm": "event",
+      "jev": "movie",
+      "confidence": 0.39,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "thearzner.com-116208",
+      "venue": "thearzner.com",
+      "title": "Mystery Sapphic Film (Anniversary Screening)",
+      "llm": "event",
+      "jev": "movie",
+      "confidence": 0.76,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "thearzner.com-297151",
+      "venue": "thearzner.com",
+      "title": "Safflicks Film Festival: Where We Belong",
+      "llm": "event",
+      "jev": "multiple-movies",
+      "confidence": 0.97,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "thecinemainthepowerstation.com-a8c7f637",
+      "venue": "thecinemainthepowerstation.com",
+      "title": "Miraval Masterclass",
+      "llm": "talk",
+      "jev": "workshop",
+      "confidence": 0.75,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "thegardencinema.co.uk-20082",
+      "venue": "thegardencinema.co.uk",
+      "title": "Members’ Scratch Night",
+      "llm": "event",
+      "jev": "workshop",
+      "confidence": 0.69,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "thegardencinema.co.uk-27238",
+      "venue": "thegardencinema.co.uk",
+      "title": "London Breeze Industry Event: Festival Formula Meet the Festivals Marketplace",
+      "llm": "event",
+      "jev": "workshop",
+      "confidence": 0.42,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "thegardencinema.co.uk-27236",
+      "venue": "thegardencinema.co.uk",
+      "title": "London Breeze: The Sound of Storytelling + Networking",
+      "llm": "talk",
+      "jev": "shorts",
+      "confidence": 0.96,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "thegardencinema.co.uk-27256",
+      "venue": "thegardencinema.co.uk",
+      "title": "London Breeze: Women Of Film Short Documentary Pitching Competition + Networker",
+      "llm": "event",
+      "jev": "talk",
+      "confidence": 0.66,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "thenickel.co.uk-685",
+      "venue": "thenickel.co.uk",
+      "title": "MYSTERY MOVIE",
+      "llm": "event",
+      "jev": "movie",
+      "confidence": 0.85,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "thenickel.co.uk-696",
+      "venue": "thenickel.co.uk",
+      "title": "MYSTERY MOVIE",
+      "llm": "event",
+      "jev": "movie",
+      "confidence": 0.85,
+      "verdict": "correct"
+    },
+    {
+      "showingId": "thenickel.co.uk-762",
+      "venue": "thenickel.co.uk",
+      "title": "MYSTERY EROTIC THRILLER",
+      "llm": "event",
+      "jev": "multiple-movies",
+      "confidence": 0.57,
+      "verdict": "incorrect"
+    },
+    {
+      "showingId": "thenickel.co.uk-711",
+      "venue": "thenickel.co.uk",
+      "title": "BLUE MONDAY - MYSTERY XXX CINEMA",
+      "llm": "event",
+      "jev": "multiple-movies",
+      "confidence": 0.69,
+      "verdict": "incorrect"
+    },
+    {
+      "showingId": "thenickel.co.uk-713",
+      "venue": "thenickel.co.uk",
+      "title": "MYSTERY MOVIE",
+      "llm": "event",
+      "jev": "movie",
+      "confidence": 0.85,
+      "verdict": "correct"
+    }
+  ]
+}
