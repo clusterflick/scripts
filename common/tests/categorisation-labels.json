@@ -1,0 +1,1123 @@
+{
+  "about": {
+    "what": "Hand-adjudicated categories for real cinema listings. Each row carries the input a categoriser sees - title, runtime and the listing description - alongside the category a human judged correct. Built while evaluating TypeSafe Jev against the incumbent LLM in September 2026, but it is not specific to either: it scores anything that maps a listing to one of the categories in CLAUDE.md.",
+    "selfContained": "Rows embed their own input text on purpose. The listings themselves fall out of retrieved-data and transformed-data within weeks, and showingId is kept only for provenance - nothing here needs those releases to still exist.",
+    "notABenchmark": "Do NOT read an accuracy figure off the whole file. The rows were drawn three different ways and none of the three is a random sample of listings. Score a sample, then weight by the band populations recorded below - see howToScore.",
+    "scoring": "A label of \"either\" means the listing is genuinely ambiguous; exclude those rows from scoring. A label containing \"|\" lists acceptable alternatives (\"tv|movie\"), and an answer matching ANY of them counts as correct.",
+    "howToScore": "For a population estimate, score the blind-sample rows within each confidence band, then weight each band by bandPopulations - the band sizes measured across the 243 comparable listings in the 14 venues below. The disagreement rows are deliberately biased and must be left out of any such estimate.",
+    "samples": {
+      "disagreement": "Rows where the incumbent LLM and Jev gave different answers. Selected BY model behaviour, so biased - useful for finding failure modes, useless for measuring accuracy.",
+      "gate-sample": "Blind random sample of rows below the 0.85 confidence gate, stratified ~10 per band. Labelled without sight of either model answer.",
+      "high-sample": "Blind random sample of rows at or above 0.85 confidence. Labelled without sight of either model answer."
+    },
+    "bandPopulations": {
+      "0.00-0.50": 13,
+      "0.50-0.70": 20,
+      "0.70-0.85": 26,
+      "0.85-1.00": 184,
+      "total": 243
+    },
+    "venues": [
+      "bfi.org.uk-southbank",
+      "cinemamuseum.org.uk",
+      "genesiscinema.co.uk",
+      "barbican.org.uk",
+      "princecharlescinema.com",
+      "ica.art",
+      "lumiereromford.com",
+      "thenickel.co.uk",
+      "actonecinema.co.uk",
+      "riocinema.org.uk",
+      "thegardencinema.co.uk",
+      "thearzner.com",
+      "coldharbourblue.com",
+      "royalalberthall.com"
+    ]
+  },
+  "rows": [
+    {
+      "showingId": "bfi.org.uk-southbank-13438611-38F6-49EF-A35C-76642A0AF727",
+      "venue": "bfi.org.uk-southbank",
+      "title": "Passing through Paris",
+      "runtimeMinutes": null,
+      "description": "Passing through Paris\n\nFrance becomes the focus of this programme, with two shorts exploring Paris’s architecture, while the last film looks at race and immigration through a satirical and comedic lens.\n\nLe cimetière du Père Lachaise\n\nPère Lachaise Cemetery\n\nFrance 1978. Director Sarah Maldoror. 7min. Video. With English subtitles\n\nL’ architecture d’inspiration étrangère à Paris\n\nFrance 1979. Director Sarah Maldoror. 3min. Video. With English subtitles\n\nUK Premiere of 4K restoration: Un dessert pour Constance\n\nA Dessert for Constance\n\nFrance 1979. Director Sarah Maldoror. 59min. Digital 4K (restoration). With English subtitles\n\nRestored in 4K with the support of Centre national du cinéma et de l'image animée.\n\nTotal film programme running time 69min\n\nA camera roams the famous flagstones and foliage of Père Lachaise cemetery, to the sound of poems such as Liberté by Paul Éluard. Paris is regarded through the prism of its architecture that has drawn on foreign inspiration. And in Un dessert pour Constance, which acknowledges the culinary prowess of French cuisine, comedy combats racist stereotypes and nationalist ideas via a portrait of the daily lives of African migrants in Paris, who mobilise to allow one of their own to return home to die.\n\nThe screening of Passing through Paris on Monday 7 September will include a discussion curated and hosted by programmer Abiba Coulibaly.",
+      "label": "shorts",
+      "sample": "disagreement"
+    },
+    {
+      "showingId": "bfi.org.uk-southbank-4BFE43C9-6613-43F0-A9BF-5F349DF69A1D",
+      "venue": "bfi.org.uk-southbank",
+      "title": "All Is Politics + intro by Carine Harmand, Curator at Tate Liverpool",
+      "runtimeMinutes": null,
+      "description": "All Is Politics\n\n+ intro by Carine Harmand, Curator at Tate Liverpool\n\nSarah Maldoror points her camera at a number of influential African and diasporic figures through her beautifully filmed and intimate portraits.\n\nAlberto Carlisky\n\nFrance 1980. Director Sarah Maldoror. 4min. Digital. With English subtitles\n\nPortrait d’une femme africaine\n\nFrance 1985. Director Sarah Maldoror. 3min. Digital. With English subtitles\n\nChristiane Diop\n\nFrance 1985. Director Sarah Maldoror. 5min. Digital. With English subtitles\n\nUn sénégalais en Normandie\n\nFrance 1986. Director Sarah Maldoror. 13min. Digital. With English subtitles\n\nUK Premiere of restoration: Aimé Césaire – un homme une terre\n\nAimé Césaire, A Man, A Land\n\nFrance 1977. Director Sarah Maldoror. 57min. Digital (restoration). With English subtitles\n\nTotal film programme running time 82min\n\nA portrait of Argentinian sculptor Alberto Carlisky, who replaces his militant and journalistic life in Buenos Aires with his role as an assistant to Paris-based Cubist sculptor Ossip Zadkine, eventually becoming an artist himself. A brief but intimate portrait of a young Senegalese cook in a workers hostel finds her keen to travel through France but taking umbrage at the term ‘immigrant’. Christiane Diop, the first Black woman to run a major publishing house in Paris, is the subject of a portrait that also features Sophie Mondesir, a French illustrator of West Indian-Guadeloupean origin. The testimonies of Senegalese poet Léopold Sédar Senghor’s neighbours are intertwined with his poems and conversations about his life and career. And in Un homme, une terre, Sarah Maldoror and Aimé Césaire discuss surrealism, poetry and the future of Martinique, which he likens to a tree.\nContains scenes of cockfighting and racist language.\nSee other screenings of All Is Politics.",
+      "label": "shorts",
+      "sample": "disagreement"
+    },
+    {
+      "showingId": "bfi.org.uk-southbank-95F28C45-684F-4954-AA32-F85156C248A2",
+      "venue": "bfi.org.uk-southbank",
+      "title": "All to Mexico!",
+      "runtimeMinutes": null,
+      "description": "All to Mexico!\n\nHere, Sarah Maldoror’s work focuses on two Soviet artists, painter Vlady Kibalchich and writer Victor Serge.\n\nL’hôpital de Leningrad\n\nLeningrad Hospital\n\nFrance 1982. Director Sarah Maldoror. With Roger Blin, Rüdiger Vogler, Victor Garrivier, Anne Wiazemsky. 52min. Digital. With English subtitles\n\nWorld Premiere of 4K restoration: Vlady\n\nFrance-Mexico 1989. Director Sarah Maldoror. 24min. Digital 4K (restoration). With English subtitles\n\nTotal film programme running time 76min\n\nIn Mexico, Russian refugee and painter Vlady Kibalchich Rusakov completes an eight-year project to paint the frescoes in San Felipe Neri chapel, which the Mexican government has converted into the Miguel Lerdo library. He would have liked to paint landscapes, but cannot detach himself from his history, and reproduces the world revolutions. Leningrad Hospital, highlighting Sarah Maldoror’s denunciation of political imprisonment – a key element of her work – adheres to Russian writer Victor Serge’s text as it denounces the psychiatric hospitals that Stalin’s state police placed the leader’s opponents.\n\nThe screening of All to Mexico! on Wednesday 3 September will be introduced by season curator Annouchka de Andrade.",
+      "label": "shorts",
+      "sample": "disagreement"
+    },
+    {
+      "showingId": "cinemamuseum.org.uk-12762",
+      "venue": "cinemamuseum.org.uk",
+      "title": "Away Up North – An Evening Of Movie Mavericks from Finland",
+      "runtimeMinutes": null,
+      "description": "After its milestone 40th anniversary, the legendary Midnight Sun Film Festival makes a one-off pilgrimage to the home of film history, the Cinema Museum in London. Founded in the Finnish Arctic Circle by Director brothers Aki and Mika Kaurismäki, the renowned international film festival has been exciting movie fans at the top of the world for decades.\nLondon will be treated to a showcase of films curated from the vaults of the Finnish Film Archive. In the true spirit of the festival that never sleeps, there will be new discoveries and contemporary classics from Finnish mavericks. The highlight will be live accompaniment by notable Finnish musicians Lau Nau and Henri Utan K. This continues the festival’s long legacy of reinterpreting silent cinema with fresh, contemporary live scores.\nThe evening closes with a rare 35mm screening of Mika Kaurismäki’s wisecracking cult film The Liar (1981), written and starring his brother Aki. It is preceded by Aki’s tribute to the Lumiére brothers, The Foundry (2007) and festival favourite Finnish Frustrations (1969), a groundbreaking feminist short by Eija Kaarresalo-Kasari.\nTervetuloa – a warm welcome.\n7PM: INTRO\nMidnight Sun Film Festival (Heikki Ortamo, 1987, 9min)\nThe greatest film festival (anti-)promotional short ever made, which explains why Midnight Sun is a unique event for both Finnish film buffs and some of the stellar international talents who attend it. The latter also appear in this hilarious guide to a very Finland way of sharing films.\nFormat: 35mm.\n7.15 PM: PART ONE\nJean Sibelius at Home (Aho & Soldan, 1927, 6 min) – live score by Lau Nau\nLate autumn, 1927, at the home of maestro Jean Sibelius in Ainola, Finland. A charming, little, free-form documentary about Sibelius and his family celebrating an autumn day. Heidi and Margareta Sibelius play four-hand piano, Aino is busy in the garden, the morning papers and a cigar start the master’s day. A classic from Finnish documentary pioneers Heikki Aho and Björn Soldan.\nFormat 16mm.\nOnce Upon Time There Was Winter – and Snow (Unknown,1934, 6 min) – live score by Lau Nau\nThe Finnish realm of snow and ice. In this unknown gem from almost a century ago, the progress of an icebreaker ship feels like a symbol of the modernisation and urbanisation of the world: slow but inevitable. The relationship with nature is still carefree. Joys of winter are taken for granted, and the urban core of Finland produces images that may seem like a fairytale to an outsider. Greetings from a time of innocence.\nFormat: DCP.\nVarala, Women’s Paradise (Aimo Jäderholm, 1947, 9 min) – live score by Henri Utan K\nSummer 1947, a poetic, skillfully rhythmic documentary about Varala, the legendary women’s physical education institute. Located in a scenic peninsula on the shores of Lake Pyhäjärvi, it is the pride of Finland’s second city, Tampere. For decades Varala has been a haven for women’s sports. “Even though we only appear to be playing, we are doing it for the good of the fatherland.”\nFormat: 16mm.\nRocky VI (Aki Kaurismäki, 1986, 9 min)\nA musical parody of Rocky IV (1985) topped with Aki Kaurismäki’s singular deadpan humour. Rocky, played by Silu Seppänen of Leningrad Cowboys fame, defends the Free World and battles the hulking Siberian boxer, Igor. Has Rocky finally met his match?\nFormat: 35mm.\nA Planet Far Away (Juha Kuosmanen, 2023, 16 min) – live score by Lau Nau & Henri Utan K\nUsing handmade trickery, silent cinema is reawakened with a modern twist. From the Cannes-winning director Juho Kuosmanen (Compartment No. 6), the final instalment of the celebrated silent trilogy tells a story of lighthouse-keeper Marlanda and her little brother Maximilian. It’s a bedtime story about the end of everything and the extraordinary attempts to survive it. But it’s not bedtime, it’s just the interval.\nFormat: DCP.\n8:15 PM: INTERMISSION\n8:30 PM: PART TWO\nThe Foundry (Aki Kaurismäki, 2007, 4 min)\nAnother proletarian life slice, this time set in Karkkila, hometown of director Aki Kaurismäki. Workers at a foundry eat their lunch while watching the Lumiére brothers’ film La Sortie de l’usine Lumière à Lyon (1895).\nFormat: DCP.\nFinnish Frustrations (Eija Kaarresalo-Kasari, 1969, 7 min)\nDiminishing dances. The last chance for women and men to find a partner. In seven minutes, this feminist cornerstone of Finnish cinema isolates an aspect of sexual inequality with a narrative starkness.\nFormat: DCP.\nThe Liar (Mika Kaurismäki, 1981, 53 min)\nMika Kaurismäki’s debut film set the tone for his groundbreaking Finnish cinema of the following decades. Ville Alfa (Aki Kaurismäki) is a lazy, young student vainly trying to finish his first proletarian novel. He likes to walk the streets of Helsinki, tell stories, spin lies and scam money off his friends. All for more drink and more women. Then one day, he meets Tuula (Pirkko Hämäläinen) and tries to change. A witty tribute to Jean-Luc Godard, and a delightful discovery for many.\nFormat: 35mm.\nTotal duration: approx. 2.5 hours including interval.\nMUSICIANS\nLau Nau\nLau Nau, AKA Laura Naukkarinen, is a Finnish composer and sound artist whose music is imbued with an idiosyncratic, finely honed, sonic world view. Her palette often consists of traditional instruments, singing voice, modular synthesisers and field recordings.\nReleasing albums on record labels in Europe, US and Japan, Lau Nau has toured internationally for 25 years. Venues such as the Castro Theatre in San Francisco, Super Deluxe in Tokyo, and NYC’s Knitting Factory have all welcomed her music. Lau Nau has played live accompaniment to silent films at festivals such as Midnight Sun Film Festival, San Francisco Silent Film Festival and Bologna’s Il Cinema Ritrovato.\nHenri Utan K\nHenri Utan K [ˈhɛn⟨r⟩ɪ uːtʌn kɒ] is the moniker of Finnish-born, London-based experimental guitarist and composer Henri Växby. On the fringes of the new music scene since the early 00s, his work moves between part-improvisation and full composition, combining stark dissonance with gently hypnotic soundscapes and ambient drones.\nHenri studied composition at Goldsmiths University under Prof. Roger Redgate and at City St George’s University under Dr Claudia Molitor. He has been featured on BBC 6 Music, BBC Radio 3, at the Rainy Days Festival and Cafe OTO. Henri is also co-leader of avant-pop duo French For Cartridge and Finnish, post-Beatles outfit Icons of Elegance.\nThe event is supported by the Finnish Institute in the UK and Ireland.",
+      "label": "shorts",
+      "sample": "disagreement"
+    },
+    {
+      "showingId": "cinemamuseum.org.uk-2366",
+      "venue": "cinemamuseum.org.uk",
+      "title": "The Bill Reunion 17",
+      "runtimeMinutes": null,
+      "description": "Misty Moon is back with Sun Hill’s finest.\nOur first guest to be announced is Graham Cole aka PC Tony Stamp. More guests to be announced over the coming months.\nAfter the Q&A there will be a meet and greet and a chance for the audience to purchase autographs.",
+      "label": "either",
+      "sample": "disagreement"
+    },
+    {
+      "showingId": "cinemamuseum.org.uk-12584",
+      "venue": "cinemamuseum.org.uk",
+      "title": "The Blinking Buzzards – 17 October",
+      "runtimeMinutes": null,
+      "description": "Quarterly meeting of The UK Buster Keaton Society (AKA The Blinking Buzzards) – dedicated to the appreciation of the silent comedian.\nThe last meeting of the year is a request session, so expect to see beloved gems chosen by Society members.\nThe meeting runs from 4pm to 7pm.",
+      "label": "multiple-movies",
+      "sample": "disagreement"
+    },
+    {
+      "showingId": "cinemamuseum.org.uk-12587",
+      "venue": "cinemamuseum.org.uk",
+      "title": "The Blinking Buzzards – 9 October",
+      "runtimeMinutes": null,
+      "description": "Quarterly meeting of The UK Buster Keaton Society (AKA The Blinking Buzzards) – dedicated to the appreciation of the silent comedian.\nThe last meeting of the year is a request session, so expect to see beloved gems chosen by Society members.\nThe meeting runs from 4pm to 7pm.",
+      "label": "multiple-movies",
+      "sample": "disagreement"
+    },
+    {
+      "showingId": "cinemamuseum.org.uk-14243",
+      "venue": "cinemamuseum.org.uk",
+      "title": "The Smallest Shows on Earth",
+      "runtimeMinutes": null,
+      "description": "A celebration of the little, lost, ‘fleapit’ cinemas of East London with social historian and Radio 4 presenter Alan Dein. Alan is a multi-award winning writer and broadcaster whose great grandparents were the proprietors of The Cable Picture Palace, a notorious ‘fleapit’ in Cable Street, hugely popular with the locals, but raised to the ground in 1941 during The Blitz.\nAlan’s fascinating talk will include a screening of The Smallest Show on Earth (1957) starring Margaret Rutherford, Bernard Miles and Peter Sellers, accompanied by some theatrical surprises along the way.",
+      "label": "talk",
+      "sample": "disagreement"
+    },
+    {
+      "showingId": "genesiscinema.co.uk-101940",
+      "venue": "genesiscinema.co.uk",
+      "title": "LIFF Mini-Market (invitation only)",
+      "runtimeMinutes": 90,
+      "description": "LIFF Mini-Market (invitation only)\nRunning time: 90 mins\nGenre:\nRelease Date: 11/10/2026\nPitch Your Feature at the London Independent Film 2026\nGot a feature film project ready to pitch? The London Independent Film Festival (LIFF) Mini-Market with My SMASH Media is your chance to get in front of top sales agents, producers, and industry pros!\nSubmission Deadline: 27th September 2026\nSMASH pitching prep session: 4th Oct 2026\nEvent Date: 11th October 2026 (invitation only)\nWhat’s on offer\n•\tSpeed-pitching session with real decision-makers\n•\tInvaluable industry feedback & networking\n•\tPotential connections to help move your film forward\n•\tPitch Training from SMASH founders to prepare you for the event\nWhat they are looking for\n•\tFeature-length projects with a clear vision\n•\tAll Genres welcome\nWho can apply\n•\tOpen to all with first and second-time filmmakers particularly encouraged to apply.\nIf you have projects that fit these criteria, we want to hear from you!\nWhat you need to include in your SMASH Pitch\nYour SMASH Snapshot must include at minimum:\n•\tLogline\n•\tFormat; Genre; Setting; Runtime\n•\tBrief Biog of key creatives\n•\tSynopsis with all major plot points - set up; inciting incident; rising conflict; mid story twist; crisis; climax and resolution.\n•\tCreative vision\n•\tVisual references (poster/concept art optional)\n•\tBudget range\n•\tCast ideas (That would work with your budget)\n•\tComparables (recent TV or Film at your budget level that capture a similar feeling or energy)\nAny projects submitted without this information will not be accepted.\nHow to Apply\n•\tCreate your FREE SMASH Pitch at app.mysmash.media.\n•\tBuild your Snapshot with the required elements above.\n•\tHit ‘Share Project’ and select “London Independent Film Festival” from the Call Out page.\n•\tSubmit before 27th September 2026 at midday.\nProtect your IP\nAt SMASH, protecting your creative work is at the heart of everything we do. Every project uploaded to the platform is automatically timestamped and securely stored, giving you a verifiable digital record of ownership. Your pitch is only shared when you choose, and with the people you choose - ensuring your ideas remain yours, always. We call it Pitch Protection, and it’s how we make sure creators can share their work with confidence, knowing their IP is safe and traceable.\nKey Dates\n•\tSubmission Deadline: 27th September 2026 at midday\n•\tPitch Workshop: 4th Oct 2026 (mandatory for shortlisted participants)\n•\tLive Pitch: 11th October 2026 at 14.00 -15.30 (By invitation only)\nImportant Notes\n•\tSelected participants will be contacted directly and must attend the SMASH Pitch session on 4th October 2026 at the London Independent Film Festival (LIFF).\n•\tIndustry experts may not commission your project directly but will provide feedback, connections, and guidance.\n•\tQuestions? Contact: cupid@mysmash.media\nAbout London Independent Film Festival\nThe London Independent Film Festival (LIFF) is devoted to the advancement of first- and second-time filmmakers telling amazing stories with limited budgets. Hosted every spring at the Genesis cinema – repeatedly voted the best cinema in the UK – the October 2026 London Independent Film Festival will screen the work of almost 100 filmmakers from around the world. Stretching over 10 days with numerous industry events, LIFF offers an unmissable opportunity for networking and building collaborations for future projects. It's little wonder that Time Out Magazine has called LIFF \"a treasure trove of undiscovered cinematic gems, one of Europe's top indie film fests\". With a reputable support system for emerging filmmakers, LIFF includes popular training programs run by industry professionals who understand the ins and outs of moving a filmmaker's career to the next level.",
+      "label": "either",
+      "sample": "disagreement"
+    },
+    {
+      "showingId": "barbican.org.uk-227306",
+      "venue": "barbican.org.uk",
+      "title": "FKA twigs – Body High live at Adidas Arena + Q&A",
+      "runtimeMinutes": null,
+      "description": "In this concert film, FKA twigs brings her visionary spectacle to Paris for a genre-defying show as part of her Body High tour.\n\n  \n\n\n        \n              \n            The performance served as a culmination of all that the artist has represented to culture over the last decade. It highlighted her mastery of WuShu, opera, visual arts, vogueing, pole-dancing, and her professional background in dance, while she performed songs from her GRAMMY Award-winning album EUSEXUA and her lauded discography. A towering figure in modern music, FKA twigs is celebrated for her unique perspective and her total art approach – where sound, visuals, and performance merge into a single, immersive experience. The performance unfolds within a breathtaking scenography: video projections, theatrical vignettes, and choreography, all of which have earned praise from numerous publications, including The Guardian, which has described the tour as 'an Olympian display of pop prowess.'\n      \n              \n    Tagged with: \n                Cinema\n                      Contemporary music\n                \n\n              \n    \n  The screening will be followed by a 30 min Q&A with creative director Jordan Hemingway, show co-director Theo Adams and choreographer Blake Wood.\n  \n\n              \n  Produced by Walter Films and ARTE France.\n\n\n            \n            \n          \nShow more\n        \n\n  \n            \n                    \n  \n    Ticket prices\n  \n  \n    \n  \n    \n    Free\n    \n  \n\n  \n  \n\n  \n  \n    \n  \n  \n      \n\n\n\n          \n          \n  \n        \n  Checking availability...\n\n    \n\n\n\n        \n                      \n  \n    \n    Save for later\n  \n\n  \n    \n      \n      \n    \n    Event saved",
+      "label": "movie",
+      "sample": "disagreement"
+    },
+    {
+      "showingId": "ica.art-bodies-adrift-miami",
+      "venue": "ica.art",
+      "title": "Bodies Adrift: Miami",
+      "runtimeMinutes": 64,
+      "description": "Both from 1981, Tent City and Mayami Nuestro present contrasting and penetrating non-fiction portraits of Latin American diaspora communities in Miami.\nOver several months in 1980, some 120,000 Cubans left their island for the United States in a mass exodus known as the Mariel boatlift. Fifteen years after having left Cuba herself, Miñuca Villaverde, alongside her husband Fernando visited the so-called “Tent City”, an improvised camp of these marielitos beneath the I-95 highway in Miami. Tent City explores that microcosm and reveals the day-to-day life of several refugees, “men and women, homosexuals and heterosexuals, whose lives were only separated by cloth curtains hanging between the beds like floating walls”. Empathetic but refusing victimhood, moving and reflexive, Tent City is one of the essential films about the Cuban diaspora, a portrait of people discarded by history in their incessant search for agency and liberty.\nCarlos Oteyza’s Mayami Nuestro, meanwhile, takes a satirical yet affectionate look at Venezuela’s elite, capturing the exodus of petro-dollars from Venezuela to Miami in the 1980s. Contrasting Venezuela’s social inequalities with Miami’s sanitised consumerism, the film humorously registers both a frivolous neocolonial fantasy as well as a fleeting reversal of global capitalist hierarchies, when oil wealth gave the Venezuelan upper classes unprecedented power. With millions of Venezuelans in recent years traversing the Darién Gap in search of opportunity in the US, Mayami Nuestro resonates anew, highlighting the persistence of economic and cultural hierarchies in the Americas and beyond.\nProgramme\nTent City, dir. Miñuca Villaverde, USA 1981, 31 min.\nMayami Nuestro, dir. Carlos Oteyza, USA 1981, 33 min.\nTotal runtime: 64 min.\nPresented by Jonathan Ali, José Luis Aparicio and Cinema Mentiré. With thanks to Cinesa, Francisco Llinas, Filmoteca de Catalunya and Fernando and Miñuca Villaverde.\nCinema Mentiré is a pop-up film club bringing a taste of rare classic and contemporary Latin American films to UK audiences.\nJonathan Ali is a film curator and writer with a particular interest in critical Caribbean cinema.\nJosé Luis Aparicio is a Cuban filmmaker and curator based in Madrid, Spain.",
+      "label": "shorts",
+      "sample": "disagreement"
+    },
+    {
+      "showingId": "ica.art-la-raison-avant-la-passion-a-b-in-ontario-on-16mm",
+      "venue": "ica.art",
+      "title": "La Raison Avant La Passion + A&B in Ontario on 16mm",
+      "runtimeMinutes": 96,
+      "description": "La Raison Avant La Passion dir. Joyce Wieland, Canada 1969, 16mm, 80 min\nA Canadian road trip and Pierre Trudeau's titular political motto provide the framework for Joyce Wieland's groundbreaking exploration of landscape, language and national identity. A journey from east coast to west coast, punctuated by an ambiguous portrait of the country's next prime minister, captures changing days and seasons at the same time as subverting the traditional travelogue and expanding the possibilities of structuralist film.\n\"Joyce Wieland’s rarely screened 1969 masterpiece is a neglected landmark of avant-garde film.\" – Fred Camper\nA&B in Ontario dir. Joyce Wieland and Hollis Frampton, Canada 1984, 16mm, 16min\nIn 1967, Joyce Wieland and Hollis Frampton documented a holiday in Toronto by using Bolex wind-up cameras to play a game of hide-and-seek. Seventeen years later, Wieland, having been sent Frampton's reel after his death, assembled and edited the footage. The result is a lighthearted portrait of both filmmakers, whose often-mirrored point-of-view shots move from domestic spaces into the city and then the waterfront.\n\"We followed each other around. We enjoyed ourselves. We said we were going to make a film about each other, and we did.\" – Joyce Wieland\nTotal runtime: 96 min.",
+      "label": "multiple-movies",
+      "sample": "disagreement"
+    },
+    {
+      "showingId": "ica.art-lff-ghazal-e-sorkh-shab-nameh-women-of-iran-s-forgotten-left",
+      "venue": "ica.art",
+      "title": "Experimenta Special Presentation Shab-Nameh: Women of Iran’s Forgotten Left",
+      "runtimeMinutes": 61,
+      "description": "These two research-based works draw on fragments from the archives of the final years of imperial Iran and the early post-revolutionary period. Weaving together textual traces, personal memory and cinematic imagination, Tafakory reveals what has been obscured by censorship and political repression. Rather than reconstructing the past, her poetic practice inhabits its silences, creating space for alternative histories and forgotten political imaginaries to emerge.\nShab-Nameh: Women of Iran’s Forgotten Left, dir. Maryam Tafakory, UK/Iran 2026, 41 min.\nFollowing a screening of her short Ghazal-e Sorkh, Jarman Award–winning artist Maryam Tafakory presents this live film performance, which explores erased histories of women’s political resistance in Iran.\nGhazal-e Sorkh, dir. Maryam Tafakory, UK/Iran/France 2026, 20 min.\nBuilt on extensive research into Iran’s political history in the 1970s, Ghazal-e-Sorkh is a layered cinematic poem that draws connections between historical events, hidden meanings and contemporary resonances, expressed through a distinctive interplay of musicality, rhythm and visual composition.\nTotal runtime: 61 min.",
+      "label": "shorts",
+      "sample": "disagreement"
+    },
+    {
+      "showingId": "lumiereromford.com-1554",
+      "venue": "lumiereromford.com",
+      "title": "The Hidden Film Festival 2026: in association with the Film Festival Guild",
+      "runtimeMinutes": 180,
+      "description": "A secret world of cinema awaits - one night only, shrouded in mystery and prestige. Always unforgettable. Will you be there?\nOn Friday 25th September the doors of the Lumiere Cinema open at 6pm to cinema’s most secret gathering. For one night only, step into a world of mystery and cinematic magic - where the films remain hidden until the moment they appear on screen. Each year this exclusive event sells out, leaving only those inside to share its secrets.\nWhat gems will you discover?\nThe Lineup - A Secret to Be Revealed\nAt The Hidden Film Festival, the selection remains a closely guarded secret until the very moment the lights go down. Expect the unexpected—perhaps an intoxicating mix of stories and visions? Daring shorts or breathtaking cinematic journeys? Only those in the room will know what our panel of curators has chosen. And you’ll be at the centre of it all, with a chance to make some extra magic happen on the night.",
+      "label": "multiple-movies",
+      "sample": "disagreement"
+    },
+    {
+      "showingId": "lumiereromford.com-1362",
+      "venue": "lumiereromford.com",
+      "title": "The British Horror Film Festival: in association with the Film Festival Guild",
+      "runtimeMinutes": 720,
+      "description": "Featuring the best in independent horror! Organised by the Film Festival Guild.\nFilm screenings, filmmaker Q&As, glitzy awards, and a whole day to celebrate all things dark & daring!\nThe British Horror Film Festival returns for 2026, taking over Lumiere Cinema in Romford for one unforgettable day of independent horror cinema.\nFrom chilling short film programmes to a feature presentations, BHFF celebrates the fearless filmmakers pushing the boundaries of the horror/thriller genres from around the world. The evening culminates in our Awards Ceremony, recognising the best of this year's submissions.\nDate: Saturday 26 September 2026\nVenue: Lumiere Cinema, The Mercury Shopping Centre (Level 3), Romford RM1 3EE\nWhat's Screening: 4 individual screenings (with exclusive Q&As by the filmmakers) & an awards ceremony.",
+      "label": "multiple-movies",
+      "sample": "disagreement"
+    },
+    {
+      "showingId": "lumiereromford.com-1047",
+      "venue": "lumiereromford.com",
+      "title": "Well Socials - Being Creative with Other People",
+      "runtimeMinutes": 120,
+      "description": "A monthly event for those who want to be creative with other people!\nWell Socials is our monthly get-together for anyone who likes to be creative and meet new people.\nCome along to relax, make, chat, and share ideas in a friendly, welcoming space. We’ll have some basic art materials available, and you’re more than welcome to bring along something you’re already working on.\nWhether you just want to doodle, want opinions on something you're working on, or just want to be around other creative people and get inspired - everyone is welcome.\nKeeping it Well Social!\nThe £5 contribution pays for minimal overhead costs at community cinema, Lumiere Romford.\nThe cinema has refreshments, hot drinks and food available.\nClick the Buy Tickets link to get your ticket.",
+      "label": "event",
+      "sample": "disagreement"
+    },
+    {
+      "showingId": "lumiereromford.com-1397",
+      "venue": "lumiereromford.com",
+      "title": "Christmas Wine Tasting Night",
+      "runtimeMinutes": 120,
+      "description": "Join us for a special festive wine tasting night!\nSimon Jarvis has been in the wine business for many years and now is bringing his wine skills for another special night at Lumiere, this time selectng wines to think about for Christmas. If you like any of the wines you'll be able to purchase wines from us following the event itself. Each wine priced lower than the RRP.\nEach wine comes with a fun educational adventure as Simon explains the roots of the vineyard and a selection of bits of random trivia, you never knew you needed its a great opportunity to try new wines and make new friends. It's a wonderfully sophisticated evening, for those that either love wine or are taking their first steps into the world of wines.\nPlease note there are only 30 spaces available, and despite the fact it says it's in Screen 6, it will actually run in the bar area.\nOver 18s only.",
+      "label": "workshop",
+      "sample": "disagreement"
+    },
+    {
+      "showingId": "thenickel.co.uk-690",
+      "venue": "thenickel.co.uk",
+      "title": "FRINGE PRESENTS: PROCESSING",
+      "runtimeMinutes": null,
+      "description": "Processing takes film as a site of alchemy: a medium to be scratched, spliced, remixed and reanimated until its material grain becomes indistinguishable from memory itself. Across hand-processed Super 8, analogue video synthesis and found footage, this shorts programme interlaces the medium and materiality of queer film with desire and speculative futures; it refuses fixity.\n\nAs part of the screening, you are invited to take part in a cameraless 16mm filmmaking workshop. Working collaboratively through a series of material experiments, shared scores and collective processes, the group will scratch, draw on and rework film by hand. These experiments will be assembled into a short community film and screened as part of the programme.\n\nWorkshop: 60 min\nFilm Screening: 45 min",
+      "label": "either",
+      "sample": "disagreement"
+    },
+    {
+      "showingId": "thenickel.co.uk-792",
+      "venue": "thenickel.co.uk",
+      "title": "MYSTERY EROTIC HORROR",
+      "runtimeMinutes": null,
+      "description": "Mystery Erotic Horror presents undisclosed deep cuts from cinema’s most feverish and forbidden corners - where desire collides with religious mania, occult ritual, sadism and bloodshed. Expect perverse passions, sacrilegious imagery, decadent excess and exquisitely bad decisions, as sex and death become dangerously intertwined. Come blind, surrender to the mystery and discover a film you may never otherwise have thought to see. **These screenings are strictly for adult audiences and may contain explicit sexual content, violence and other potentially offensive material. Do not attend if you are of a sensitive disposition. Adults only.**",
+      "label": "movie",
+      "sample": "disagreement"
+    },
+    {
+      "showingId": "actonecinema.co.uk-28493",
+      "venue": "actonecinema.co.uk",
+      "title": "HKFFUK 2026: Whose Family - Filipino Domestic Workers in Hong Kong and Beyond + Discussion",
+      "runtimeMinutes": 98,
+      "description": "There are nearly 400,000 domestic migrant workers in Hong Kong, most of them women from the Philippines and Indonesia. The lack of a legal cap on working hours, alongside the live-in requirement, subjects these workers to overwork and cramped living conditions, and leaves them more vulnerable to physical and emotional abuse.\nThis Pay-What-You-Can community screening reflects on the labour conditions of Filipino domestic migrant workers in Hong Kong and the UK. Followed by a discussion over Hong Kong and Filipino snacks with Rose Ann Cotitob at The Voice of Domestic Workers.\nThe Model Family Award Germany, Philippines | 2008 | Colour | 12’ | In English and Filipino with English subtitles Dir.: Lizza May David\nEvery year in the Philippines, awards are given to ‘the most outstanding Filipino workers and their families for their exceptional achievements’. Artist Lizza May David captures the irony behind this glamorisation of a national labour-export policy built on the disruption of family life.\nWe Don’t Dance For Nothing Hong Kong, Canada, Philippines, USA\n| 2022 | 87’ | Colour | In Cantonese, English, Filipino with English subtitles Dir.: Stefanos Tai\n“There were so many fighting to be free, but I wondered — how many of them went home to dinner cooked by someone like me?” We Don't Dance For Nothing follows H\n(Miles Sible), a Filipina domestic worker caring for a family of four in the city, at a time when hundreds of thousands of people are marching in the streets, demanding their freedom. H dreams of freedom too: a life where she can run away with her girlfriend Sampa (Xyza Cada). Her own life feels constantly on pause for the lives of others, a rhythm filmmaker Stefanos Tai renders through photo-montage — one that only finds its flow again when she is dancing.\nRose Ann Cotitob is a proud migrant domestic worker and campaigner with The Voice of Domestic Workers. She is originally from the Philippines and today works as a nanny and housekeeper in Hackney. In 2023, her employer brought her to London and she was later identified as a victim of modern slavery.\n---\nHong Kong Film Festival UK returns for its fourth edition from 25 September to 4 October in London, presenting reflective and shape-shifting cinema from Hong Kong, the wider Asian diaspora and beyond, marking the start of a more year-round festival.\nThis year’s programme foregrounds diaspora as agency — behind the camera, on screen and between communities. Across contemporary and historical cinema, artists’ moving image and interdisciplinary art practices, the festival moves through questions of migration, colonisation, activism and gender. Together, these works reshape ideas of memory and community.",
+      "label": "multiple-movies",
+      "sample": "disagreement"
+    },
+    {
+      "showingId": "actonecinema.co.uk-28096",
+      "venue": "actonecinema.co.uk",
+      "title": "ROYAL BALLET & OPERA LIVE_ MACBETH",
+      "runtimeMinutes": 210,
+      "description": "Two of opera’s most extraordinary artists return to The Met: Live in HD for Verdi’s thrilling take on the immortal Shakespearean tale of the scheming couple determined to seize power at any cost. Following past triumphs in many of Verdi’s signature baritone roles, Quinn Kelsey is the Scottish king haunted by the ghosts of his murderous ascent to the throne, opposite Lise Davidsen—the world’s reigning dramatic soprano—as the power-mad Lady Macbeth, whose ruinous ambition damns them both. Met Music Director Yannick Nézet-Séguin takes the podium for a penetrating production by Louisa Proske, a brilliant young director making waves around the world. Rounding out the all-star cast are tenor Freddie De Tommaso as the heroic Macduff and bass-baritone Ryan Speedo Green as Macbeth’s friend-turned-victim Banquo.\n\nThis production is part of the Met’s award-winning Live in HD series, bringing opera to cinemas across the globe.\nApproximate runtime: 3h 30min / 210min, One Interval\nSung in Italian with English subtitles",
+      "label": "movie",
+      "sample": "disagreement"
+    },
+    {
+      "showingId": "actonecinema.co.uk-28245",
+      "venue": "actonecinema.co.uk",
+      "title": "ROYAL BALLET & OPERA LIVE_ LA FANCIULLA DEL WEST",
+      "runtimeMinutes": 195,
+      "description": "Puccini’s exhilarating drama of the Wild West returns in a new staging by Richard Jones, marking the company’s first new production of La Fanciulla del West in more than 30 years. Soprano Vida Miknevičiūtė makes her Met company debut singing the role of Minnie, the tough tavern owner with a heart of gold who finds love when she least expects it. Tenor SeokJong Baek is the dashing bandit who rambles into the remote California mining town to steal her heart, opposite baritone Christopher Maltman as the lawman determined to deliver justice—and win Minnie for himself. Maestro Keri-Lynn Wilson takes the podium to conduct one of opera’s most action-packed adventures, live from the Met stage to cinemas worldwide.\n\nThis production is part of the Met’s award-winning Live in HD series, bringing opera to cinemas across the globe.\nApproximate runtime: 3h 15min / 195min, One Interval\nSung in Italian with English subtitles.",
+      "label": "movie",
+      "sample": "disagreement"
+    },
+    {
+      "showingId": "riocinema.org.uk-2844006",
+      "venue": "riocinema.org.uk",
+      "title": "YEAH YEAH YEAHS: HIDDEN IN PIECES + NIGHT OF THE HUNTER",
+      "runtimeMinutes": 120,
+      "description": "Yeah Yeah Yeahs present a special evening of music and cinema, pairing Barnaby Clay’s HIDDEN IN PIECES — a dreamlike black-and-white visual companion to the band’s Hidden in Pieces: Live at the Royal Albert Hall record — with Charles Laughton’s haunting 1955 classic THE NIGHT OF THE HUNTER, personally selected by Karen O.\nTHE NIGHT OF THE HUNTER, follows Rev. Harry Powell, played by an indelible Robert Mitchum, a religious fanatic and serial killer who targets women who use their sexuality to attract men. Serving time in prison for car theft, he meets condemned murderer Ben Harper, who confesses to hiding $10,000 in stolen loot. Released from jail, Powell is obsessed with finding the money, and he tracks down Harper's widow, Willa, and her two children, John and Pearl...\nHIDDEN IN PIECES is a 22-minute visual companion-piece to the Yeah Yeah Yeah's live record Hidden in Pieces: Live at the Royal Albert Hall. The black and white short film is directed by award-winning filmmaker Barnaby Clay, who previously directed the Mick Rock documentary Shot! and horror film The Seeding. “I wanted to create a film that not only captured the live performance but also felt close to the spirit of what the band was going for with their shows; something delicate and dream-like, like a precious memory, timeless, emotionally charged and shrouded in mystery.” The special live session was recorded at the legendary Orpheum Theatre in Los Angeles at the end of the band’s recent 25th anniversary tour. Hidden in Pieces was produced by Lana Kim and Jett Steiger, via production company Ways & Means and made in collaboration with Dropbox.About the film, the band says, “Barney Clay has made a stunning film of the live performance that takes you there in the moment with us in the most heavenly way.\"\nEach ticket purchase comes with a limited edition poster for the film, must pick up in person.\nPre-order Hidden in Pieces: Live at the Royal Albert Hall out on October 23rd, through this link.",
+      "label": "multiple-movies",
+      "sample": "disagreement"
+    },
+    {
+      "showingId": "thegardencinema.co.uk-20082",
+      "venue": "thegardencinema.co.uk",
+      "title": "Members’ Scratch Night",
+      "runtimeMinutes": 180,
+      "description": "After a brief summer break, our regular Members’ Scratch Night returns on Wednesday 30 September to help more of the creatives in our membership community develop their WIP projects. This is an opportunity to test out material – be it unfinished films, scripts, pieces of writing, or other art forms – in front of a supportive audience, who will be able to provide you with their thoughts and feedback in a casual setting. The event will take place in the Atrium Bar, and will be hosted by fellow cinema member Roberto Prestia.\n\nWe’ll have 6x 15-minute slots available for members to present their material (with microphones and a projector available to use, if needed), and additional tickets for audience members who are interested in discovering new work by fellow members, and in contributing to their creative process.\n\nTickets for the event are £5, and include a token for a complimentary glass of house wine, a beer, or a soft drink at the bar. They are restricted to 2 per member, so you’re welcome to bring along a curious +1. \n\nPlease ensure you select the right option when booking a ticket:\n\nPresenter ticket: If you’re looking to present a project, please purchase a Presenter ticket. There are just 6 of these available, so if the option doesn’t appear, they are unfortunately sold out. However, please send an email to membership@thegardencinema.co.uk if you’re interested in presenting, so we can contact you if a spot does become available.\nAudience ticket: If you’d just like to watch the presentations and provide feedback, please purchase an Audience ticket.\n\nThe schedule on the night will be as follows:\n19:00-20:00  Introduction and first three presentations of 15 minutes each\n20:00-20:30  Break for drinks, providing feedback, and mingling\n20:30-21:15  Additional three presentations of 15 minutes each\n21:15-22:00  Drinks, providing feedback, and further mingling\n\nAbout Roberto:\nRoberto Prestia is a London based independent filmmaker. In his quest for DIY filmmaking and creative freedom, he has made constant use of scratch nights and workshops with fellow creatives, as a tool for developing his early shorts as well as his second feature film, which is currently in the making.",
+      "label": "either",
+      "sample": "disagreement"
+    },
+    {
+      "showingId": "thegardencinema.co.uk-27256",
+      "venue": "thegardencinema.co.uk",
+      "title": "London Breeze: Women Of Film Short Documentary Pitching Competition + Networker",
+      "runtimeMinutes": 75,
+      "description": "Five teams of women filmmakers take to the stage for an exciting live pitching event, presenting bold new ideas for short documentaries to an industry judging panel. Be part of the audience as emerging creative voices share their stories, sharpen their visions and compete for support in bringing their films to the screen.\n\nPRIZES: \n– 2 hour My SMASH Media workshop on pitching skills (all finalists)\n– Adobe Creative Content software (all finalists)\n– live pitching event to industry panel with feedback (all finalists)\n– One-year My SMASH Media Pro Membership (winner and runner up)\n– XO Rental kit hire worth £750 (winner only)\n– One year professional mentoring (winner only)\n\nJudges include:\nKatie Bignell, Festival Formula\nJennie Horwell, Bertha DocHouse\n\nSupported by My SMASH Media & hosted by Girls on Tops. \n\nIn partnership with We Are Doc Women. \n\nSMASH is the pitch builder and pitch protector for creators. It helps you build a professional, shareable pitch deck that can be discovered by industry decision-makers. SMASH is free for creators. Upgrade to SMASHPro for SMASHCupid support & advanced tools to make your pitch perfect.\n\nGirls on Tops began as a T-shirt celebration of women in cinema and has grown into a platform for female voices through editorial, screenings and events. Every purchase supports female-led filmmaking and writing on film.\n\nWe Are Doc Women was founded in 2017 to provide peer support for women directors working in factual television in the UK. They have grown to become a collective of directors, producers, assistant producers and executive producers advocating for equal opportunities, greater support and fair recognition within our industry.",
+      "label": "either",
+      "sample": "disagreement"
+    },
+    {
+      "showingId": "thearzner.com-116208",
+      "venue": "thearzner.com",
+      "title": "Mystery Sapphic Film (Anniversary Screening)",
+      "runtimeMinutes": 110,
+      "description": "What will it be?\nWe'll give you a clue! It's an anniversary screening; what anniversary...we dare not say...",
+      "label": "movie",
+      "sample": "disagreement"
+    },
+    {
+      "showingId": "coldharbourblue.com-darkroom-festival-2026",
+      "venue": "coldharbourblue.com",
+      "title": "DARKROOM FESTIVAL 2026",
+      "runtimeMinutes": 180,
+      "description": "DARKROOM FESTIVAL presents an evening of experimental and documentary films from around the world. Full programme available on the website darkroomfestival.com",
+      "label": "multiple-movies",
+      "sample": "disagreement"
+    },
+    {
+      "showingId": "cinemamuseum.org.uk-12612",
+      "venue": "cinemamuseum.org.uk",
+      "title": "The Live Ghost Tent – Quarterly Meeting June 2027",
+      "runtimeMinutes": null,
+      "description": "The Live Ghost Tent – quarterly meeting of The Laurel and Hardy Society.\nProgramme tba.\nThe meeting runs from 3pm to 7pm.\nMore details on our Facebook page.",
+      "label": "event",
+      "sample": "gate-sample"
+    },
+    {
+      "showingId": "cinemamuseum.org.uk-12531",
+      "venue": "cinemamuseum.org.uk",
+      "title": "Early Colour Live!",
+      "runtimeMinutes": null,
+      "description": "A collaboration between legendary magic lanternists Jeremy and Carolyn Brooker, and the Kennington Bioscope, this unique evening will feature a fantasia of colour from the era of the magic lantern through to early cinema. The Brookers will use an original triunial lantern to show how spectacular and inventive a magic lantern show could be, while Christopher Bird will demonstrate examples of colour in early cinema, including stencil colour, hand-coloured Méliès, and genuine Kinemacolor, the first true colour system, on his hand-cranked 35mm projector, all with musical accompaniment.",
+      "label": "workshop|talk",
+      "sample": "gate-sample"
+    },
+    {
+      "showingId": "cinemamuseum.org.uk-13005",
+      "venue": "cinemamuseum.org.uk",
+      "title": "Home Movie Day 2026",
+      "runtimeMinutes": null,
+      "description": "Don’t throw your films away; bring them to Home Movie Day!\n“Saving our film heritage should not be limited only to commercially produced films. Home movies do not just capture the important private moments of our family’s lives, but they are historical and cultural documents as well. Home Movie Day is a celebration of these films and the people who shot them. I urge anyone with an interest in learning more about how to care for and preserve their own personal memories to join in the festivities being offered in their community…”— Martin Scorsese\nThis year sees the 24th anniversary of Home Movie Day and we’ll be celebrating in true archive film style! This event is free, open to the public, and promises a day filled with nostalgia, education, and camaraderie.\nFilm archivists will take time out of the vaults to help the public enjoy and save their home movies. Home Movie Day shows how home movies on 8mm, Super8, 9.5mm and 16mm offer a unique view of past life in London and of family history.\nIt’s a family-friendly event, and everyone is welcome to attend. But remember, you don’t need to bring a film to participate fully in the day’s activities!\nJoin us on October 24, 2026, from 10.30 to 16.00.\nEntry is absolutely free.\nTo make the day even sweeter, tea and cake will be available for all attendees.",
+      "label": "shorts",
+      "sample": "gate-sample"
+    },
+    {
+      "showingId": "cinemamuseum.org.uk-12608",
+      "venue": "cinemamuseum.org.uk",
+      "title": "The Live Ghost Tent – Quarterly Meeting March 2027",
+      "runtimeMinutes": null,
+      "description": "The Live Ghost Tent – quarterly meeting of The Laurel and Hardy Society.\nProgramme tba.\nThe meeting runs from 3pm to 7pm.\nMore details on our Facebook page.",
+      "label": "event",
+      "sample": "gate-sample"
+    },
+    {
+      "showingId": "genesiscinema.co.uk-114463",
+      "venue": "genesiscinema.co.uk",
+      "title": "Steel of Film (in 35 mm) + Q&A",
+      "runtimeMinutes": 75,
+      "description": "Steel of Film (in 35 mm) + Q&A\nRunning time: 75 mins\nGenre:\nRelease Date: 25/10/2026\nThis autumn, documentary filmmaker Joe Cornick will take his powerful debut feature Steel: The Blood of Us 2026 on a UK screening roadshow, alongside Hignett’s intimate 1976 documentary The Face of Change. Made exactly 50 years apart, the two films offer contrasting perspectives on Britain’s steel industry and the communities shaped by it. Cornick’s film, shot on 16mm celluloid and completed this year, documents the final years of traditional steelmaking in Port Talbot, Wales.\nThe screening will be followed by a Q&A.",
+      "label": "shorts",
+      "sample": "gate-sample"
+    },
+    {
+      "showingId": "actonecinema.co.uk-28244",
+      "venue": "actonecinema.co.uk",
+      "title": "ACTONORY 2",
+      "runtimeMinutes": 90,
+      "description": "Our spoken word and live music night returns with another evening of original stories set to amuse, disturb and delight. Our last event was a sell out, so book early. Are you sitting comfortably? Then we’ll begin…\n\nThe tales and music will be performed by Simon Roberts, Nigel Lawrence and Graham Brough.\nSimon is a writer of short fiction and plays. He has been shortlisted for a number of awards including the Fish Flash Fiction Prize (2025) and Plaza Prizes Short Story Competition (2024). His adaptation of Patrick Hamilton’s novel ‘The Slaves of Solitude’ premiered at The Questors Theatre in 2024. website Nigel is a graduate of the Creative Writing MA at UEA. An award winning poet, including a highly commended in the 1997 National Poetry Competition, he has also written for the stage, and his plays ‘Hemingway in Barcelona’ (2022) and ‘The Last Testament of Nancy Cunard’ (2025) were both given rehearsed readings at The Questors Theatre. His audio drama, ‘Nothing But Complete Oblivion’(2021), written under the penname of Ian Fulton, is available on YouTube. As well as performances at the Actone open night, he has appeared at the Hay, Sherborne and Ilkley literature festivals.\nMusician Graham Brough has spent 40 years on classical guitar and double bass for stage productions. He began composing for The Questors, Ealing in 2002. As a double bassist he has regularly played UK jazz festivals and venues such as the 606, Groucho and Union clubs – even the Tower of London. As a writer and session guitarist he has been recorded in Nashville, New York and London, including a residency with the producers of the UK RnB artists Mis-Teek, Honeyz and Craig David. He has recently been filmed performing his own music for a Netflix documentary production and has composed for a New York arts festival as well as Arts Council England. He is a full time songwriter.",
+      "label": "talk|music",
+      "sample": "gate-sample"
+    },
+    {
+      "showingId": "barbican.org.uk-225344",
+      "venue": "barbican.org.uk",
+      "title": "Lawrence Abu Hamdan: 450 XL: A silent movie",
+      "runtimeMinutes": null,
+      "description": "A new performance brings together image, text and sound drawn from Earshot's 'earwitness' investigation of a reported sonic attack during a silent vigil in Belgrade in March 2025.  \n\n  \n\n\n        \n              \n            Drawing from testimonies, recordings and forensic analysis, 450XL: A silent movie explores the politics of listening and the role of sound as both evidence and weapon. The event opens with an introductory lecture by Abu Hamdan, 'Listening to Punks', and evolves into the newly commissioned performance featuring visuals by Earshot researcher and artist Hyeongji Yang and an original live score by James Hoff.Using image, text and sound, the work investigates a contested event, and examines how acts of listening can reveal, reconstruct and challenge official accounts.\n      \n              \n    Tagged with: \n                Cinema\n                      Lawrence Abu Hamdan: Repercussions\n                      Theatre & dance\n                \n\n              \n    \n  Book two ticketed events as part of the Lawrence Abu Hamdan: Repercussions takeover and get 20% off, book three or more and get 30% off. \n  \n\n              \n  Repercussions is generously supported by Cockayne Grants for the Arts, a Donor Advised Fund, held at The Prism Charitable Trust. 450XL: A silent movie by Lawrence Abu Hamdan is commissioned by the Barbican and FIGURA with additional support from the Commissioning Council and the Fondazione In Between Art Film.Founding members of the Commissioning Council include: Anastasia Bukhman/Bukhman Foundation, Stephanie Camu, Aarti Lohia/SP Lohia Foundation, Mark and Dana Strong, Tia Collection and Brian Yue & Claire Bi/Cheng-Lan Foundation. Supported by \n\n\n            \n            \n      \n\n        \n          \n              \n  \n\n\n\n\n\n\n      \n        \n\n  \n\n\n\n          \nShow more\n        \n\n  \n            \n                    \n  \n    Ticket prices\n  \n  \n    \n  \n    \n    Standard\n    From £24 (£20 + £4 transaction fee)\n  \n\n  \n  \n    \n    \n    \n    \n    \n      Members\n      \n\n    \n  \n\n  \n    \n      Members enjoy 20% off tickets.No booking fees. Subject to availability.Become a member\n    \n  \n\n  \n  \n    \n    \n    \n    \n    \n      Access tickets\n      \n\n    \n  \n\n  \n    \n      From £24 (£20 + £4 transaction fee) + free essential companion ticket if needed.You need to sign up to our free Access Scheme to book access tickets online. Wheelchair spaces and free companion seats may now be booked online. Please select the relevant preferences on the access registration page during your booking so we can provide you with the correct information and discounts.Booking a wheelchair space: Select a seat displaying the wheelchair user icon and then select wheelchair user ticket type. The ticket will be priced at the lowest price for that event. If you need an essential companion, please select the click the E icon next to the wheelchair space you have selected. Booking essential companion tickets: Please select at least two tickets and one of them will be automatically discounted to zero in the basket. Booking British Sign Language or Captioned Seats: Select seats in the area appropriate to your needs.\n    \n  \n\n  \n  \n    \n    \n    \n    \n    \n      Young Barbican\n      \n\n    \n  \n\n  \n    \n      £1216–25? Join Young Barbican for freeSubject to availability \n    \n  \n\n  \n  \n    \n    \n    \n    \n    \n      Multibuys\n      \n\n    \n  \n\n  \n    \n      Book two ticketed events as part of the Lawrence Abu Hamdan: Repercussions takeover and get 20% off, book three or more and get 30% off. **Events must be booked at the same time.\n    \n  \n\n  \n  \n\n  \n  \n    \n  \n  \n      \n\n\n\n          \n          \n  \n        \n  Checking availability...\n\n    \n\n\n\n        \n                      \n  \n    \n    Save for later\n  \n\n  \n    \n      \n      \n    \n    Event saved",
+      "label": "talk",
+      "sample": "gate-sample"
+    },
+    {
+      "showingId": "thegardencinema.co.uk-27238",
+      "venue": "thegardencinema.co.uk",
+      "title": "London Breeze Industry Event: Festival Formula Meet the Festivals Marketplace",
+      "runtimeMinutes": 90,
+      "description": "Join London Breeze Film Festival and Festival Formula for a unique opportunity to meet festivals. After the great success of last year’s edition, the Festivals Marketplace returns. Don’t miss this chance to discover which festivals are the best fit for your film and get advice directly from festival teams.\n\nLeaders in the field, Festival Formula, invited several film festivals from across the UK to join us for this special event. Meet festival representatives in person, ask questions, learn more about what they are looking for and make valuable connections. Festival Formula is the conduit between filmmaker and festival, so what better way to get you altogether in the same room.\n\nA tea or coffee will be included with the ticket! \n\nConfirmed festivals so far:\n1. Sheffield DocFest\n2. Sunrise Film Festival\n3. Kino Short\n4. Brighton Rocks\n5. LSFF\n6. British Urban Film Festival\n7. Exit 6\n8. Women X\n9. Women of the Lens\n10. Bournemouth Intl \n11. Mansfield Town Film Festival\n\nFestival Formula is a leading light and trusted company with 20+ years experience focusing on festival strategy, helping filmmakers worldwide on their festival journey.",
+      "label": "event|workshop",
+      "sample": "gate-sample"
+    },
+    {
+      "showingId": "thegardencinema.co.uk-27224",
+      "venue": "thegardencinema.co.uk",
+      "title": "Site&Sound 12 – Suburbs",
+      "runtimeMinutes": 90,
+      "description": "Site&Sound is an event series that explores the relationship between architecture and film. Each session will feature curated clips and short films around a chosen theme, inviting discussion around particular elements of representation and the different techniques employed by filmmakers. Themes will examine a multitude of perspectives on architecture, as we explore a world through the lens of the built environment.\n\n“What the hell, I don’t know, but to me a home in the suburbs is a sort of isolated hell where nothing happens” – Jack Kerouac\n\nThe suburbs appear as a place of safety and order, often depicted with row upon row of identikit houses and manicured lawns. However, films understand that there is more beneath the surface, which is often weird, wonderful and a bit disturbing.  You can argue that suburbs are built on exclusion, when anything outside the narrow bounds of acceptable becomes threatening and intolerable. Prejudices based on race, sexuality, class and even appearance lead to ideas that such nonconformity must be contained, denied or expelled.\n\nThe juxtaposition of banal and weird emerges from this tension, with the suburbs’ visual perfection becoming a container for secrets. But perhaps it is the normality that is the true mask. To combat this, cinema creates outliers – such as Edward Scissorhands – to figure out what happens when their appearance challenges the landscape of artificial perfection, and the response is often swift and brutal. The Incredibles reverses it, as a superhero family performs mundane suburban life while harbouring extraordinary secrets, using the domestic space to cover for their radical difference.\n\nThis edition of Site&Sound will examine how the suburb’s visual serenity sets the scene for what happens when people cannot (or will not) fit the mould.\n\nSpeakers include:\nRosie Dart\nJohn Grindrod\nSofia Smith",
+      "label": "shorts",
+      "sample": "gate-sample"
+    },
+    {
+      "showingId": "lumiereromford.com-1154",
+      "venue": "lumiereromford.com",
+      "title": "Parent & Baby Sound Bath",
+      "runtimeMinutes": 60,
+      "description": "Parent & Baby Sound Bath\nA calming sensory experience for you and your baby.\nJoin us for a gentle and immersive parent and baby sound bath, designed to support relaxation, bonding, and calm for both you and your little one.\nHeld in the unique setting of a cinema screen, this session invites you to lie down comfortably and be surrounded by soothing sounds and soft sensory elements. Using instruments such as crystal bowls, chimes, and ambient sound, the experience creates a peaceful environment where both parent and baby can unwind together. There is also option to seat in comfy cinema seats.\nThis is not a silent or strict session — babies are free to move, make noise, feed, and settle naturally. The space is fully baby-friendly and relaxed.\nWho it’s for:\nThis session is suitable for parents and their babies 0-9 months old.\nBe sure to bring:\nAnything your baby may need (milk, comfort items, toys)\nAnd a blanket for you too :)\nTake a moment to pause, breathe, and connect — with yourself, your baby, and others in a shared, calming space. These sessions are proven to provide relaxation, slowing down, and aiding better sleep.",
+      "label": "event",
+      "sample": "gate-sample"
+    },
+    {
+      "showingId": "cinemamuseum.org.uk-11037",
+      "venue": "cinemamuseum.org.uk",
+      "title": "Frankenstein Unchained!",
+      "runtimeMinutes": null,
+      "description": "An interactive trip through the world of Mary Shelley’s classic story, featuring live narration by Madeline Smith, star of such films as Frankenstein and the Monster from Hell (1974, with Peter Cushing), Taste the Blood of Dracula (1970, with Christopher Lee) and the James Bond film Live and Let Die (1973), and a new original soundtrack, performed live by Jason Frederick to picture to underline and support the story, at the historic Cinema Museum, presented by Misty Moon. \nAfter the show there will be a meet and greet where the audience can purchase autographs.",
+      "label": "talk",
+      "sample": "gate-sample"
+    },
+    {
+      "showingId": "cinemamuseum.org.uk-12366",
+      "venue": "cinemamuseum.org.uk",
+      "title": "GEMMA & ROBERT ROSS – THE COMEDY SALON",
+      "runtimeMinutes": null,
+      "description": "“A really happy, fun – always interesting – feelgood day. A ‘Forget your Troubles and Let’s Get Happy’ time.” Georgina Moon\nYes, they’re back! In what has become an extremely popular treat for devotees of the Best of British Comedy. Robert Ross – the man Barry Cryer dubbed ‘Britain’s Comedy Historian’ – hosts another full day of hilarious anecdotes, rare treasures from the vaults, and a roll-call of very special guests.\nAnd Gemma Ross, co-author of best-selling book The Carry On Girls, will, as always, be on hand to keep the fun forever flowing. Robert and Gemma will also be happy to sign any of their books you bring along on the day, as part of your ticket price.\nThroughout the day there will be ample opportunity to purchase signed photographs and books, grab a happy snap with your favourite star, and mingle with our celebrities in a relaxed and informal setting.\nOur previous guests have included such comedy favourites as Brad Ashton, Carol Cleveland, Robert Gillespie, Jeffrey Holland, Valerie Leon, Richard O’Callaghan, Jacki Piper, Brian Murphy, Penny Spencer, David Barry, and, beamed in from New York City, Jim Dale. All guests appear subject to other work and family commitments, but you can be guaranteed of an amazing line-up.\nDo follow our Instagram and Facebook accounts @robertrosscomedyhistorian for regular updates.\nGemma & Robert Ross’s next Comedy Carnival is coming… Saturday 3rd April 2027.\n“Wonderful Events. Robert and Gemma are the Masters of Carry On!” Madeline Smith",
+      "label": "comedy",
+      "sample": "gate-sample"
+    },
+    {
+      "showingId": "royalalberthall.com-2027",
+      "venue": "royalalberthall.com",
+      "title": "Maestro of the Movies: A Tribute to John Williams",
+      "runtimeMinutes": null,
+      "description": "Experience scenes and clips from John Williams’ best-loved films, projected in HD, whilst the scores are played live-to-picture by the London Symphony Orchestra.",
+      "label": "music",
+      "sample": "gate-sample"
+    },
+    {
+      "showingId": "thenickel.co.uk-762",
+      "venue": "thenickel.co.uk",
+      "title": "MYSTERY EROTIC THRILLER",
+      "runtimeMinutes": null,
+      "description": "Mystery Erotic Thriller presents undisclosed deep cuts from the genre’s overheated history - from neon-soaked 80s neo-noir and glossy 90s studio sleaze to forgotten direct-to-video delirium. Expect dangerous affairs, obsessive desire, double-crosses, voyeurism, murder and exquisitely bad decisions, as sex becomes a weapon and nobody proves quite as innocent as they first appear. Come blind, surrender to the mystery and discover a film you may never otherwise have thought to see.\n\n**These screenings are strictly for adult audiences and may contain explicit sexual content, violence and other potentially offensive material. Do not attend if you are of a sensitive disposition. Adults only.**",
+      "label": "movie",
+      "sample": "gate-sample"
+    },
+    {
+      "showingId": "bfi.org.uk-southbank-B6516B85-6002-4DB2-ABE2-2C89D206804A",
+      "venue": "bfi.org.uk-southbank",
+      "title": "Member Exclusive: BFI Southbank and BFI IMAX Tour",
+      "runtimeMinutes": null,
+      "description": "Member Exclusive\n\nBFI Southbank and BFI IMAX Tour\n\nAn opportunity to see the inner workings of the UK’s national cinema.\n\nBFI Members are offered an exclusive tour of our venues. You’ll have the chance to visit the NFT1 projection booth, uncover the secrets stored in the BFI Reuben Library, tour the archive on display at the BFI Mediatheque and go behind the scenes at BFI IMAX, the UK’s largest screen.\n\nThe tour will run until 13:30.\n\nTickets £8 (Members only).\n\nIf you have any access requirements, please contact us at membership@bfi.org.uk.",
+      "label": "event",
+      "sample": "gate-sample"
+    },
+    {
+      "showingId": "bfi.org.uk-southbank-F6621012-3FAE-4672-A9E1-17B530DD3442",
+      "venue": "bfi.org.uk-southbank",
+      "title": "Twende: African Women and Cinema Symposium",
+      "runtimeMinutes": null,
+      "description": "Twende: African Women and Cinema Symposium\n\nJoin us to celebrate the vision, creativity and enduring influence of African women in cinema.\n\nCopyright: CamilleMillerand – CopieLIGHT\n13:00-17:00\n\n\nBringing together filmmakers, curators, scholars, archivists and audiences, this special symposium and screening programme explores the journeys, histories and evolving practices of women who have shaped African cinema – both on screen and behind the camera. Featuring filmmakers from across the continent and the diaspora, Twende brings together curated screenings, lively panel discussions and public conversations that reflect on authorship, representation, archives, distribution and the future of African filmmaking.",
+      "label": "talk",
+      "sample": "gate-sample"
+    },
+    {
+      "showingId": "cinemamuseum.org.uk-12618",
+      "venue": "cinemamuseum.org.uk",
+      "title": "The Live Ghost Tent – Quarterly Meeting December 2027",
+      "runtimeMinutes": null,
+      "description": "The Live Ghost Tent – quarterly meeting of The Laurel and Hardy Society.\nProgramme tba.\nThe meeting runs from 3pm to 7pm.\nMore details on our Facebook page.",
+      "label": "event",
+      "sample": "gate-sample"
+    },
+    {
+      "showingId": "riocinema.org.uk-2860979",
+      "venue": "riocinema.org.uk",
+      "title": "We Are Parable: A Masterclass in Black British Music Videos",
+      "runtimeMinutes": 90,
+      "description": "Join We Are Parable in collaboration with The Music is Black Festival from East Bank for a Masterclass in Black British Music Videos.\nWe’ll be showing some of the most iconic music videos of our time on the big screen, featuring two leading voices in the industry: Award winning director Mo Ali (who has worked with Skepta, Lethal Bizzle, Bashy and Chip) and Music Video rep Lee Fairweather (collaborator with Stormzy, Joy Crookes, Arlo Parks and PinkPantheress) who will be unpacking what goes into the creation of an iconic music video. The conversation will be led by We Are Parable’s Aleah Scott followed by audience Q&A. Whether you’re an aspiring director, artist, producer, music fan or simply someone who loves the power of visual storytelling, this is an opportunity to hear directly from experts from the music industry on music videos that have helped shape Black British music culture. This event includes a live in-person Q&A with Mo Ali and Lee Fairweather.",
+      "label": "talk|music",
+      "sample": "gate-sample"
+    },
+    {
+      "showingId": "cinemamuseum.org.uk-12615",
+      "venue": "cinemamuseum.org.uk",
+      "title": "The Live Ghost Tent – Quarterly Meeting September 2027",
+      "runtimeMinutes": null,
+      "description": "The Live Ghost Tent – quarterly meeting of The Laurel and Hardy Society.\nProgramme tba.\nThe meeting runs from 3pm to 7pm.\nMore details on our Facebook page.",
+      "label": "event",
+      "sample": "gate-sample"
+    },
+    {
+      "showingId": "thenickel.co.uk-711",
+      "venue": "thenickel.co.uk",
+      "title": "BLUE MONDAY - MYSTERY XXX CINEMA",
+      "runtimeMinutes": null,
+      "description": "Blue Monday presents undisclosed selections from the deepest recesses of horny cult cinema - encapsulating everything from erotic thrillers, carnal noir, golden age porno and transgressive sleaze from both the underground and the mainstream.\n\nThis screening will feature adult-themed content, including sexually explicit and risqué material. Please consider yourself forewarned that these films may (and probably will) contain offensive and upsetting content. Do not attend if you are of a sensitive disposition.\n\nAdults only.",
+      "label": "movie",
+      "sample": "gate-sample"
+    },
+    {
+      "showingId": "thegardencinema.co.uk-27132",
+      "venue": "thegardencinema.co.uk",
+      "title": "Bar Shorts with Caroline Leaf",
+      "runtimeMinutes": 90,
+      "description": "Bar Shorts welcomes you to an evening of creativity and inspiration with Caroline Leaf. \n\nStep into the world of a true legend of frame-by-frame storytelling. Bar Shorts is thrilled to present an exclusive screening of inspirations of pioneer director and animator Caroline Leaf. Caroline’s iconic, award-winning films for the National Film Board of Canada like The Street and The Owl Who Married a Goose, have attained international recognition. Showing her signature sand-animation and paint-on-glass techniques. Get a rare look into Caroline’s inspirations as she curates the evening. Join us for an unforgettable evening with one of the medium’s greatest masters. \n\nAfter the screenings, she’ll sit down for an in‑depth conversation with writer and filmmaker Chris Shepherd, exploring the ideas, influences and behind‑the‑scenes stories that fuel her work. A relaxed night of films, conversation and drinks in one of London’s most atmospheric independent cinemas.",
+      "label": "shorts",
+      "sample": "gate-sample"
+    },
+    {
+      "showingId": "lumiereromford.com-237",
+      "venue": "lumiereromford.com",
+      "title": "(Mauritian community) Secret Classic Bollywood Cinema",
+      "runtimeMinutes": 210,
+      "description": "Join our Mauritian community for a mystery screening of an all-time Classic Bollywood Epic.\nThere will also be Mauritian food and snacks available for purchase on the day.\nThe runtime of the film on 19th September is 2 hours 15 minutes.\nThe runtime of the film on 29th November is 3 hours 5 minutes.",
+      "label": "movie",
+      "sample": "gate-sample"
+    },
+    {
+      "showingId": "cinemamuseum.org.uk-11963",
+      "venue": "cinemamuseum.org.uk",
+      "title": "Ronnie, Reggie & Me with Fred Dinenage",
+      "runtimeMinutes": null,
+      "description": "The definitive insight into the real lives of Britain’s most notorious gangsters, from their trusted official biographer. For decades they were feared as the ultimate criminal gang lords of the London underworld, but their reign of terror came crashing to an end when in 1969 both Ronnie and Reggie Kray were given life sentences by a judge at the Old Bailey. Reggie went on to serve decades in some of the toughest prisons in the country, while Ronnie became a patient at Broadmoor with an insanity that was only kept under control by massive doses of drugs.\nTV legend Fred Dinenage was chosen by the twins to tell their official story, and he became one of the very few people allowed into their inner circle. Fred gained an unparalleled insight into the real lives of the legendary kings of crime, and in this show, he reveals stories and situations for the first time that have never been told publicly before. Including recordings he made while visiting Ronnie at Broadmoor.\nJoin Fred in person as he discloses what it was like to venture into some of Britain’s toughest institutions and meet the most foreboding twins in criminal history, who other journalists just couldn’t get close to. You’ll hear stories that will fascinate and intrigue, while learning about the gritty reality of being a gangster in the criminal underworld of the swinging 60s, from the only man they trusted to tell their tale.\nRecommended minimum age: 16+ (Occasional use of profanities when quoting others)",
+      "label": "talk",
+      "sample": "gate-sample"
+    },
+    {
+      "showingId": "cinemamuseum.org.uk-12582",
+      "venue": "cinemamuseum.org.uk",
+      "title": "The Blinking Buzzards – 10 July",
+      "runtimeMinutes": null,
+      "description": "Quarterly meeting of The UK Buster Keaton Society (AKA The Blinking Buzzards) – dedicated to the appreciation of the silent comedian. \nProgramme tba.\nThe meeting runs from 4pm to 7pm.",
+      "label": "either",
+      "sample": "gate-sample"
+    },
+    {
+      "showingId": "royalalberthall.com-1763",
+      "venue": "royalalberthall.com",
+      "title": "Film Music Live: Sci-Fi and Fantasy",
+      "runtimeMinutes": null,
+      "description": "Explore the wonderfully imaginative realms of sci-fi and fantasy films through the power of live music from the Royal Philharmonic Orchestra.",
+      "label": "music",
+      "sample": "gate-sample"
+    },
+    {
+      "showingId": "princecharlescinema.com-31617164",
+      "venue": "princecharlescinema.com",
+      "title": "Mystery Horror Movie",
+      "runtimeMinutes": 95,
+      "description": "HorrOctober invades our Mystery Movie strand this October! We'll be serving up four Mystery Horror Movies over four weeks! That is the only hint we will give you! No other hints. No clues. No refunds!\n\nYou can find a list of every MYSTERY MOVIE we have ever screened HERE; if a film is on this list, it is not eligible for future Mystery Movie screenings!\n\n---\n\nContent Advice : As these films are a mystery, we aren't able to provide specific ratings / guidance on the film's content. We strongly advise that you take this into consideration before purchasing a ticket.",
+      "label": "movie",
+      "sample": "gate-sample"
+    },
+    {
+      "showingId": "genesiscinema.co.uk-114459",
+      "venue": "genesiscinema.co.uk",
+      "title": "Replikka (2025) + My Foreign Land (2025) + Intro - Whose Land? Whose Lens?",
+      "runtimeMinutes": 114,
+      "description": "Replikka (2025) + My Foreign Land (2025) + Intro - Whose Land? Whose Lens?\nRunning time: 114 mins\nGenre:\nRelease Date: 02/12/2026\nReplikka is a Brazilian short film directed by Heloísa Passos and Piratá Waurá, exploring the\nintersection of Indigenous wisdom and technology through a spiritual and meditative lens,\nfocusing on the resilience of the Wauja people of the Upper Xingu.\nMy Foreign Land is a collaborative documentary film directed by Coletivo Lakapoy, Louise\nBotkay, and João Moreira Salles. It follows the Suruí, an indigenous people in western Brazil,\nduring the tense final month leading up to the pivotal 2022 Brazilian presidential elections. It\ntracks tribal leader Almir Suruí campaigning locally in Rondônia while his daughter, young\nactivist Txai Suruí, travels abroad to advocate for rainforest protection against logging and\nmining.\nThis screening is curated by Meliza George as part of ‘Whose Land? Whose Lens?’ a season of\nworks from the global south discussing the protection of land and therefore peoples through the\nlens of slow cinema. The season is presented with the National Film and Television’s Film\nStudies, Curation and Programming MA.",
+      "label": "multiple-movies",
+      "sample": "gate-sample"
+    },
+    {
+      "showingId": "princecharlescinema.com-31617534",
+      "venue": "princecharlescinema.com",
+      "title": "Have A Gd Trip presents Welcome To Hell & Bag of Suck Double Feature",
+      "runtimeMinutes": 95,
+      "description": "For one night only, Have A Gd Trip brings Skateboarding Film Club back to Prince Charles Cinema for an essential double bill celebrating two definitive eras of skate culture.\n\nKicking off the night is the 20th anniversary of Enjoi’s Bag of Suck (2006)—a Transworld Video of the Year winner that balanced jaw-dropping technical progression (anchored by Jerry Hsu’s legendary parts) with the irreverent, fun-first humour that made Enjoi an instant classic.\n\nFollowed by the 30th anniversary of Toy Machine’s Welcome to Hell (1996)—a relentless masterpiece that set the standard for high-impact handrail skating, immortalised Jamie Thomas’s raw style, and helped launch legends like Elissa Steamer.\n\nWelcome to Hell\n1996 | 45mins | USA | (18) | Skateboarding Video\nDirected by Jamie Thomas, Video introduction by Ed Templeton\nStarring Jamie Thomas, Ed Templeton, Elissa Steamer, Chad Muska, Brian Anderson, Donny Barley\n\nBag of Suck\n2006 | 50mins | USA | (18) | Skateboarding Video\nDirected by Matt Eversole and Kyle Camarillo, Video introduction by Louie Barletta\nStarring Jerry Hsu, Louie Barletta, Marc Johnson, Caswell Berry, Stevie Williams, Cairo Foster\n\"Pandas, heavy handrails, and pure raw energy.\"\n\nTwo iconic videos, three decades of skate history, together for one night only. Rarely seen on the big screen—don't miss out.",
+      "label": "shorts|multiple-movies",
+      "sample": "gate-sample"
+    },
+    {
+      "showingId": "bfi.org.uk-southbank-B03E4D85-AFA2-4373-96EB-862FC30A07A5",
+      "venue": "bfi.org.uk-southbank",
+      "title": "Good Morning, Britain: TV-am Revisited",
+      "runtimeMinutes": null,
+      "description": "Good Morning, Britain: TV-am Revisited\n\nWith an all-star lineup taking over the sofa, we revisit the origins of breakfast television.\n\nTotal running time 120min\nTo celebrate the BFI National Archive’s work to digitise and preserve a decade of broadcasts, we’re travelling back to the 1980s and the heady days of TV-am. Relive the (then) brave new world of shoulder pads, breaking news stories, children’s programming and, of course, aerobics. Sanjeev Bhaskar hosts a one-off sofa of special guests, including Lorraine Kelly, Nick Owen, Lizzie Webb, Gyles Brandreth and Timmy Mallett, to revisit a historic, much-loved era of breakfast television.\n\nTickets £17, concessions £14 (Members pay £2.50 less).\n\n£5 from each ticket purchase will fund the BFI National Archive’s work towards digitising and preserving the TV-am collection and our television heritage.",
+      "label": "talk|tv",
+      "sample": "gate-sample"
+    },
+    {
+      "showingId": "ica.art-lolaff-stories-of-resilience",
+      "venue": "ica.art",
+      "title": "Stories of Resilience",
+      "runtimeMinutes": 82,
+      "description": "This programme brings together four short films exploring the theme of resilience. Across different contexts and forms, the films consider resilience as the capacity to move through what does not work, and to adapt to life’s challenges rather than remaining in a static state. \nThrough acts of rebellion, resistance and fighting for what we value in the face of repression, as well as through creativity and joy, these films explore the different ways we find strength, agency and ways forward.\nProgramme\nPharmacies (Farmacias), dir. Martín Montellano, Mexico 2025\nCollective Memory (Memoria Colectiva), dir. Cristina Colmenares, Colombia, Peru 2025\nQuebrante, dir. Janaina Wagner, Brazil 2024\nCold Water (Agua Fría), dir. Meme Cabello, Chile 2025\nTotal runtime: 82 min.",
+      "label": "shorts",
+      "sample": "gate-sample"
+    },
+    {
+      "showingId": "genesiscinema.co.uk-101955",
+      "venue": "genesiscinema.co.uk",
+      "title": "SMASH pitching workshop - LIFF",
+      "runtimeMinutes": 90,
+      "description": "SMASH pitching workshop - LIFF\nRunning time: 90 mins\nGenre:\nRelease Date: 04/10/2026\nThe SMASH Pitch Workshop will be hosted by My SMASH Media to help content-creators refine their pitching skills.\nPitching is rarely a walk in the park so the team at My SMASH Media is keen to help filmmakers feel as relaxed and confident as possible when it comes to selling a project to potential backers.\nJoin us and pick up some useful tips.\nThis workshop is open to all but also it is a requirement for those who submitted to the London Independent Film Festival Mini-Market on Sunday 11th October. You will NOT be selected for the Mini-Market if you have not attended this workshop.\n—----------\nThe SMASH 1-2-1 Pitch Service Offer\nIf you would like a 1-2-1 Pitch session with a member of the SMASH team please share your SMASH Snapshot to cupid@mysmash.media for a 30-minute pitch session. Fee is £50.\nAbout London Independent Film Festival\nThe London Independent Film Festival (LIFF) is devoted to the advancement of first- and second-time filmmakers telling amazing stories with limited budgets. Hosted every spring at the Genesis cinema – repeatedly voted the best cinema in the UK – the October 2026 London Independent Film Festival will screen the work of almost 100 filmmakers from around the world. Stretching over 10 days with numerous industry events, LIFF offers an unmissable opportunity for networking and building collaborations for future projects. It's little wonder that Time Out Magazine has called LIFF \"a treasure trove of undiscovered cinematic gems, one of Europe's top indie film fests\". With a reputable support system for emerging filmmakers, LIFF includes popular training programs run by industry professionals who understand the ins and outs of moving a filmmaker's career to the next level.",
+      "label": "workshop",
+      "sample": "high-sample"
+    },
+    {
+      "showingId": "ica.art-lolaff-concepcion",
+      "venue": "ica.art",
+      "title": "Concepción",
+      "runtimeMinutes": 104,
+      "description": "This captivating documentary by Jochi Melero and Carlos Larrieu explores the life and legacy of César Concepción (1909-1974), a maestro of La Plena, and trailblazer in Latin music. Featuring rare performances, personal interviews with Gilberto Santa Rosa, Danny Rivera, Rafael Ithier, Frank Grillo “Machito” and other iconic figures of his era, it brings his contributions to life while showcasing the timeless power of his music.",
+      "label": "movie",
+      "sample": "high-sample"
+    },
+    {
+      "showingId": "princecharlescinema.com-3262426",
+      "venue": "princecharlescinema.com",
+      "title": "The Lord of the Rings Trilogy [Theatrical Editions]",
+      "runtimeMinutes": 558,
+      "description": "ALL NIGHTER : FAQs, HOUSE RULES & TIPS\n\nPeter Jackson's THE LORD OF THE RINGS TRILOGY is back from the rarely screened Theatrical Editions – from 35mm! Join us as we venture back into Middle-earth the way you would have seen the films on release!\n\nTHE FELLOWSHIP OF THE RING; A meek Hobbit from the Shire and eight companions set out on a journey to destroy the powerful One Ring and save Middle-earth from the Dark Lord Sauron.\n\nTHE TWO TOWERS; While Frodo and Sam edge closer to Mordor with the help of the shifty Gollum, the divided fellowship makes a stand against Sauron's new ally, Saruman, and his hordes of Isengard.\n\nTHE RETURN OF THE KING; Gandalf and Aragorn lead the World of Men against Sauron's army to draw his gaze from Frodo and Sam as they approach Mount Doom with the One Ring.\n\n-----------------------------------------------------------------------\n\nNO ADMISSIONS TO THE CINEMA AFTER MIDNIGHT\n\nNO ALCOHOL PURCHASED FROM OUTSIDE IS PERMITTED IN THE BUILDING!\n\nAGE RESTRICTIONS: For the All Night Marathon, due to the event running through the night, all attendees must be 16+. For the daytime marathon, the rating is 12a.",
+      "label": "multiple-movies",
+      "sample": "high-sample"
+    },
+    {
+      "showingId": "princecharlescinema.com-31617509",
+      "venue": "princecharlescinema.com",
+      "title": "The Story of Documentary Film (The 1990s)",
+      "runtimeMinutes": 120,
+      "description": "Tickets Are Only Available via BFI London Film Festival Website from Tuesday 17 September 2026 10:00am: Click Here To Book\n\nThis fascinating chapter from Mark Cousins’ epic essay on the history of documentary chronicles a decade of formal reinvention and mainstream success.\n\nCousins, the creator of the groundbreaking The Story of Film: A New Generation and Women Make Film, trains his distinctive film-historian lens on the evolution of documentary. The result is a rich tapestry of landmark works and underappreciated gems. In this illuminating chapter, he guides us through the 1990s, a decade of filmmakers exploring bodies, spirituality, labour, war and politics, against the backdrop of rising commercial interest in the form.",
+      "label": "tv|movie",
+      "sample": "high-sample"
+    },
+    {
+      "showingId": "thenickel.co.uk-685",
+      "venue": "thenickel.co.uk",
+      "title": "MYSTERY MOVIE",
+      "runtimeMinutes": null,
+      "description": "Not for the easily offended, and strictly programmed for adult audiences only - our mystery films are eye-popping forays into the bold and bonkers world of psychotronic cinema. Expect the unacceptable.\n\n**Please consider yourself forewarned that these films may (and probably will) contain offensive and upsetting content. Do not attend if you are of a sensitive disposition.**",
+      "label": "movie",
+      "sample": "high-sample"
+    },
+    {
+      "showingId": "princecharlescinema.com-31617470",
+      "venue": "princecharlescinema.com",
+      "title": "Halloween (1978) + Halloween II (1981) • Double Feature",
+      "runtimeMinutes": 183,
+      "description": "HALLOWEEN (1978): Fifteen years after murdering his sister on Halloween Night 1963, Michael Myers escapes from a mental hospital and returns to the small town of Haddonfield, Illinois to kill again.\n\nHALLOWEEN II (1981): After failing to kill stubborn survivor Laurie and taking a bullet or six from former psychiatrist Dr. Sam Loomis, Michael Myers has followed Laurie to the Haddonfield Memorial Hospital, where she’s been admitted for Myers’ attempt on her life. The institution proves to be particularly suited to serial killers, however, as Myers cuts, stabs and slashes his way through hospital staff to reach his favourite victim.\n\nPresented with a 10-15 minute break between features",
+      "label": "multiple-movies",
+      "sample": "high-sample"
+    },
+    {
+      "showingId": "thenickel.co.uk-775",
+      "venue": "thenickel.co.uk",
+      "title": "THE NICKEL’S PSYCHOTRONIC HALLOWEEN MYSTERY MOVIE MASH - DAY ONE 31/10",
+      "runtimeMinutes": null,
+      "description": "DAY ONE ONLY - 31/11\n\nPresenting four deep-cut psychotronic horror films: forgotten exploitation, regional nightmares, video-era mutations, disreputable sleaze and eye-popping oddities that have slipped through the cracks of horror history.\n\nEvery title remains secret until showtime. Come for one day or sacrifice yourself to the entire weekend.\n\nFilms will screen at 2:00pm, 4:15pm, 6:30pm and 9pm on Saturday 31st October. Weekend passes and day tickets for Sunday the 1st November also available.\n\nCostumes highly encouraged.\n\nArtwork by [Jordan McLaughlin](https://www.instagram.com/doomsday_soiree)",
+      "label": "multiple-movies",
+      "sample": "high-sample"
+    },
+    {
+      "showingId": "thenickel.co.uk-696",
+      "venue": "thenickel.co.uk",
+      "title": "MYSTERY MOVIE",
+      "runtimeMinutes": null,
+      "description": "Not for the easily offended, and strictly programmed for adult audiences only - our mystery films are eye-popping forays into the bold and bonkers world of psychotronic cinema. Expect the unacceptable.\n\n**Please consider yourself forewarned that these films may (and probably will) contain offensive and upsetting content. Do not attend if you are of a sensitive disposition.**",
+      "label": "movie",
+      "sample": "high-sample"
+    },
+    {
+      "showingId": "ica.art-lff-tracing-islands",
+      "venue": "ica.art",
+      "title": "Tracing Islands",
+      "runtimeMinutes": 94,
+      "description": "These films invite reflection on places that remember, histories that persist, and cinema’s role in unearthing hidden relationships between ecology, extractive capitalism and collective survival.\nAn Unimaginable Leap, dir. Hope Pearl Strickland, UK/Jamaica 2025, 18 min.\nThrough contemporary Jamaica, everyday life, celebration and respite converge in a meditation on revolutionary time, climate crisis and cinema.\nLandscapes of Shame, dir. Patrick Hough, Ireland/UK 2026, 30 min.\nNavigating Ireland's haunted landscapes, ecological extinction and cultural suppression emerge as intertwined forms of colonial erasure.\nGuided Tour, dir. Alba Jaramillo, France/Puerto Rico 2026, 15 min.\nZuania's tropical paradise conceals a former US military site, where abandoned ruins echo the violence of an unhealed colonial past.\nBadak, dir. Riar Rizaldi, Indonesia/Thailand 2025, 31 min.\nBadak reflects on extraction as both method and worldview – on the pulling of value and meaning from creatures, minerals and landscapes, and the scars left behind.\nTotal runtime: 94 min.",
+      "label": "shorts",
+      "sample": "high-sample"
+    },
+    {
+      "showingId": "princecharlescinema.com-31616848",
+      "venue": "princecharlescinema.com",
+      "title": "Prince Charles Cinema Film Quiz",
+      "runtimeMinutes": 140,
+      "description": "Put your cinematic knowledge to the test with The Prince Charles Cinema Film Quiz!\n\nThis is a full-blown, no-holds-barred celebration of cinematic chaos, cult classics, and endless movie trivia. Hosted by Chevy Mclaren live in the heart of London cinema - this is your chance to test your film knowledge in this night of movie madness!\n\nExpect limited-edition PCC merch, free cinema tickets, exclusive movie prizes, live performances, and bonkers audience games. Bring your cinephile friends (teams up to 5), grab a drink, and prepare to scream, guess, act, and laugh your way through the most chaotic quiz night in London!",
+      "label": "quiz",
+      "sample": "high-sample"
+    },
+    {
+      "showingId": "thegardencinema.co.uk-27236",
+      "venue": "thegardencinema.co.uk",
+      "title": "London Breeze: The Sound of Storytelling + Networking",
+      "runtimeMinutes": 120,
+      "description": "From unforgettable scores to immersive sound design, music and sound are among the most powerful tools in a filmmaker’s creative arsenal, shaping emotion, atmosphere and the stories that stay with us long after the credits roll.\n\nThis year, the London Breeze Film Festival Industry Programme shines a spotlight on the art of music and sound with a special afternoon dedicated to exploring their creative impact on filmmaking.\n\nThe event begins with a panel discussion featuring leading professionals, offering insights into the craft, collaboration and creative possibilities of working with sound. This will be followed by a curated screening of short films showcasing the many ways music and sound can elevate storytelling, from outstanding original scores and innovative sound design to music-driven narratives.\n\nWe’ll round off the day with industry networking designed to bring together filmmakers and creative professionals from across the industry. Whether you’re looking to meet potential collaborators, exchange ideas or expand your network, it’s an opportunity to make meaningful connections in a relaxed and welcoming setting.\n\nA beer or a soft drink is included with every ticket.\n\nConfirmed panellists:\nJohn Warhurst (Bohemian Rhapsody, Michael)\nKathleen Wallfisch (Gladiator II, Napoleon)\nTrevor Jones (Notting Hill, Last of the Mohicans)\nRuth Barrett (Bodyguard, Victoria)\nModerator: Louise Kattenhorn, BBC podcast commissioner and sound recordist / designer \nThe screening will be hosted by Kezia Tomsett, Composer, Orchestrator and Vocalist.\n\nThe Short Film Programme:\nSeven short films with remarkable soundscapes follow the panel discussion.\nSound Asleep (ESP/UK 6 min) Dir. Nadaav Soudry\nPoint (UK 6 min) Dir. Ari Sohn\nEchoes in Amber (UK 12 min) Dir. Oliver Murray\nRed (With the Green Hair) (UK 15 min) Dir. Clemente Löhr\nIntermittent & Continuous (UK 11 min) Dir. Olivia Hird\nSynthesize Me (USA 15 min) Dir. Bear Damen\nCelebrating Tchaikovsky (UK 5 min) Dir. Mariam Majid\n\nTimings:\nPanel: 13:30-14:20\nShort Films: 14:20-15:30\nNetworking: 15:30- 17:00\n\nThe event is kindly sponsored by Cavendish Music\n\nCavendish Music is the UK’s largest independent production music catalogue and part of the Slipstream Music group. \n\nTracing its roots back to the 1930s, the Cavendish library encompasses six bespoke in-house labels and represents a premier selection of catalogues from around the world. The entire catalogue features just about every genre of music imaginable: from iconic classical pieces, legendary television themes and authentic archival recordings, alongside cutting-edge cinematic scores, pop, rap, and underground electronic music. The close-knit Cavendish team is a family of music lovers who create and place music in Advertising, TV, Film, Games and Trailers all over the world. Always on hand to offer free music searches, the team works closely with you, the creatives, to ensure they get you the perfect sound for your project. Links to our pages below…\n\nCavendish Music \nInstagram \nLinkedIn \nSlipstream \nInstagram  \n\nThe event is in partnership with the Alliance for Women Film Composers and Off Script.\n\nThe Alliance for Women Film Composers is a non-profit organization founded in LA in 2014 to increase visibility and opportunities for women and gender-diverse composers in the film, tv, game, and visual media industries. Through advocacy, support and education, and a global community of over 1,000 members, they are working to achieve gender parity in media music. Learn more about the AWFC and find out how you can get involved at www.theawfc.org\n\nOFF SCRIPT is a monthly meet-up for film and TV creatives in London, designed to help you connect with industry peers, expand your network, and learn from leading voices across the screen industries. With a friendly, returning crowd and a relaxed atmosphere, Off Script is fast becoming one of the most valuable networking events for London’s screen creatives.",
+      "label": "shorts",
+      "sample": "high-sample"
+    },
+    {
+      "showingId": "ica.art-vhs-late-tapes-wet-messy",
+      "venue": "ica.art",
+      "title": "WET & MESSY",
+      "runtimeMinutes": null,
+      "description": "WET & MESSY is the eleventh iteration of the Late Tapes series – an ongoing exploration of fetishistic desire curated by Harlan Whittingham and Helena Whittingham in collaboration with the Bishopsgate Institute's UK Fetish Archive.\nDrawing on the golden age of British sploshing and the long-running output of WSM productions, Aquantics, Artscene Wetlook, and others, this edition celebrates the pleasure of ruining a good outfit: substances poured, dumped, smeared and thrown, with full slapstick commitment. Come and experience custard, mud and mushy peas in all of their squelching glory; just don’t send us your dry-cleaning bill.\nAll films will be presented in their original VHS format.\nProgramme duration: 60 minutes.",
+      "label": "shorts",
+      "sample": "high-sample"
+    },
+    {
+      "showingId": "princecharlescinema.com-4346120",
+      "venue": "princecharlescinema.com",
+      "title": "Blade Runner : Double Feature",
+      "runtimeMinutes": 281,
+      "description": "BLADE RUNNER : THE FINAL CUT : Deckard (Harrison Ford) is forced by the police Boss (M. Emmet Walsh) to continue his old job as Replicant Hunter. His assignment: eliminate four escaped Replicants from the colonies who have returned to Earth. Before starting the job, Deckard goes to the Tyrell Corporation and he meets Rachel (Sean Young), a Replicant girl he falls in love with.\n\nBLADE RUNNER 2049 : Officer K (Ryan Gosling), a new blade runner for the Los Angeles Police Department, unearths a long-buried secret that has the potential to plunge what's left of society into chaos. His discovery leads him on a quest to find Rick Deckard (Harrison Ford), a former blade runner who's been missing for 30 years.\n\nPlease Note: We will be running the films with a short 10min break between. We would ask that you remain in your seat for the duration of this break.",
+      "label": "multiple-movies",
+      "sample": "high-sample"
+    },
+    {
+      "showingId": "princecharlescinema.com-31617462",
+      "venue": "princecharlescinema.com",
+      "title": "Halloween Marathon",
+      "runtimeMinutes": 617,
+      "description": "ALL NIGHTER : FAQs, HOUSE RULES & TIPS\n\nHALLOWEEN (1978): Fifteen years after murdering his sister on Halloween Night 1963, Michael Myers escapes from a mental hospital and returns to the small town of Haddonfield, Illinois to kill again.\n\nHALLOWEEN II (1981): After failing to kill stubborn survivor Laurie and taking a bullet or six from former psychiatrist Dr. Sam Loomis, Michael Myers has followed Laurie to the Haddonfield Memorial Hospital, where she’s been admitted for Myers’ attempt on her life. The institution proves to be particularly suited to serial killers, however, as Myers cuts, stabs and slashes his way through hospital staff to reach his favourite victim.\n\nHALLOWEEN III: SEASON OF THE WITCH (1982): After a terrified toy salesman is mysteriously attacked and brought to the hospital, clutching the year’s most popular Halloween mask, Dr. Daniel Challis sets out to investigate the strange events and finds himself thrust into a nightmarish conspiracy.\n\nHALLOWEEN 4: THE RETURN OF MICHAEL MYERS (1988): Ten years after his original massacre, the invalid Michael Myers awakens on Halloween Eve and returns to Haddonfield to kill his seven-year-old niece.\n\nHALLOWEEN 5: THE REVENGE OF MICHAEL MYERS (1989): After lying in a coma for a year, Michael Myers awakens and stalks his way back to his small hometown in Illinois, intent on killing his niece, Jamie, who has been confined to a mental institution since his last attempt to slay her.\n\nHALLOWEEN: THE CURSE OF MICHAEL MYERS [Producer's Cut] (1995): Six years after being presumed dead in a fire, and just as the town prepares to finally celebrate Halloween again, Michael Myers returns to Haddonfield to continue his reign of terror.\n\n-----------------------------------------------------------------------\n\nNO ADMISSIONS TO THE CINEMA AFTER MIDNIGHT\n\nNO ALCOHOL PURCHASED FROM OUTSIDE IS PERMITTED IN THE BUILDING!\n\nAGE RESTRICTIONS: This event is strictly 18+",
+      "label": "multiple-movies",
+      "sample": "high-sample"
+    },
+    {
+      "showingId": "lumiereromford.com-1271",
+      "venue": "lumiereromford.com",
+      "title": "The Lumiere Halloween Event",
+      "runtimeMinutes": 840,
+      "description": "Join us on Halloween 2026 for a day of horror!\nArrive from 9am in time to get your pumpkin latte before the films begin at 10am!\nThe day's lineup:\n10am - Scream (1996)\n12pm - A Nightmare On Elm Street (1984)\n1:45pm - Prince Of Darkness (1987)\n3:45pm - Messiah Of Evil\n5:30pm - The Fog (1980)\n7:10pm - Texas Chainsaw Massacre (1974)\n8:55pm - Inside (2007)\n10:30pm - REC (2007)\nPlease note in order to fit the films into one day, the last three movies of the day will only a few minutes break between each one.",
+      "label": "multiple-movies",
+      "sample": "high-sample"
+    },
+    {
+      "showingId": "royalalberthall.com-2253",
+      "venue": "royalalberthall.com",
+      "title": "The Music of Zimmer vs Williams 2027",
+      "runtimeMinutes": null,
+      "description": "Two of the greatest film composers of all time go head-to-head in The Music of Zimmer vs Williams at the Royal Albert Hall.",
+      "label": "music",
+      "sample": "high-sample"
+    },
+    {
+      "showingId": "actonecinema.co.uk-458319",
+      "venue": "actonecinema.co.uk",
+      "title": "Open Mic",
+      "runtimeMinutes": 120,
+      "description": "FREE ENTRY - Please RSVP for free below so we can manage numbers - Donations help us keep our community events free!\nOur Open Mic Nights take place on the last Thursday of each month, from 8pm. Sign up for performers is from 7:30PM; 10min slots per act.\nDo you love to perform? What about that two minute comedy sketch you've been writing and want to try out in front of an audience? Whether you write poetry or perform with an instrument, ActOne's Open Mic Night is a warm and welcoming community space in which to experiment, play and meet likeminded individuals who are being brave and putting themselves out there. Our Open Mic Nights are for everyone! We aim to cultivate an atmosphere of energy, enthusiasm and unconditional support, so whether you wish to perform or sit back and be entertained come ready to clap your hands until they're sore!\nGet notified of all our free events by becoming a member on our Meetup Groups: West London Board Games and Free Open Mic & Jazz Nights in West London !",
+      "label": "comedy|talk",
+      "sample": "high-sample"
+    },
+    {
+      "showingId": "thegardencinema.co.uk-27263",
+      "venue": "thegardencinema.co.uk",
+      "title": "Before It Was Cool: The Brooklyn Beat From Lauterbach’s  + Q&A",
+      "runtimeMinutes": 93,
+      "description": "In early-1980s Brooklyn, an unassuming dive bar became the unlikely birthplace of a musical movement. \n\nLauterbach’s brought together a fiercely creative community of punk, indie and alternative musicians who forged what became known as “The Brooklyn Beat.” Through intimate interviews, archival footage and animation, Before It Was Cool uncovers this overlooked chapter of New York music history and the artists who transformed competition into collaboration. When Lauterbach’s suddenly closed, its community scattered but its influence endured. A love letter to pre-gentrification Brooklyn, the film celebrates a time when music was driven by experimentation, survival and an unbreakable sense of community. \n\nDoc’n Roll Film Festival returns to London this autumn for its 13th edition, bringing another exciting selection of music and arts documentaries to cinemas across the city from 22 October to 8 November. Fiercely independent and rooted in a DIY spirit, Doc’n Roll celebrates the artists, outsiders, scenes and stories that shape music culture, spanning genres, generations and musical movements from around the world.",
+      "label": "movie",
+      "sample": "high-sample"
+    },
+    {
+      "showingId": "genesiscinema.co.uk-108750",
+      "venue": "genesiscinema.co.uk",
+      "title": "Closing Party + Awards ceremony - LIFF",
+      "runtimeMinutes": 120,
+      "description": "Closing Party + Awards ceremony - LIFF\nRunning time: 120 mins\nGenre:\nRelease Date: 11/10/2026\nThis is a chance to support and celebrate independent film and we will be announcing the winners of this year’s festival. It is an event open to all as well as other filmmakers and film-lovers! We will have a red-carpet and a step & repeat board so please make sure you are prepared to have your photo taken (or tell the photographer not to).\nYou don’t need to register and the event is free. Just come along! However entry will only be allowed until the capacity is reached.\nAbout London Independent Film Festival\nThe London Independent Film Festival (LIFF) is devoted to the advancement of first- and second-time filmmakers telling amazing stories with limited budgets. Hosted every spring at the Genesis cinema – repeatedly voted the best cinema in the UK – the October 2026 London Independent Film Festival will screen the work of almost 100 filmmakers from around the world. Stretching over 10 days with numerous industry events, LIFF offers an unmissable opportunity for networking and building collaborations for future projects. It's little wonder that Time Out Magazine has called LIFF \"a treasure trove of undiscovered cinematic gems, one of Europe's top indie film fests\". With a reputable support system for emerging filmmakers, LIFF includes popular training programs run by industry professionals who understand the ins and outs of moving a filmmaker's career to the next level.",
+      "label": "event",
+      "sample": "high-sample"
+    },
+    {
+      "showingId": "bfi.org.uk-southbank-63E0F9B0-8B8B-4DD3-86B5-686BA4BB8183",
+      "venue": "bfi.org.uk-southbank",
+      "title": "Poetry Is Political + poetic response by Binta Yade",
+      "runtimeMinutes": null,
+      "description": "Poetry Is Political\n\n+ poetic response by Binta Yade\n\nSarah Maldoror celebrates the power of culture through her portraits of Haitian poet René Depestre, Colombian artist Ana Mercedes Hoyos and Martinican French author Aimé Césaire.\n\nRené Depestre, poète haïtien\n\nRené Depestre, Poet\n\nFrance 1981. Director Sarah Maldoror. 5min. Video. With English subtitles\n\nAna Mercedes Hoyos\n\nAna Mercedes Hoyos, Painter\n\nFrance-Colombia 2008. Director Sarah Maldoror. 13min. Digital. With English subtitles\n\nEia pour Césaire\n\nPapa Césaire\n\nFrance 2009. Director Sarah Maldoror. 58min. Digital. With English subtitles\n\nTotal film programme running time 76min\n\nA sympathetic light is cast on poet and political activist René Depestre, an influential figure of Haitian literature. Through her portrait of visual artist Ana Mercedes Hoyos, Sarah Maldoror highlights the African roots of Colombian society in its relationship with slavery. Just after Aimé Césaire’s death, she returned to his home island of Martinique. There, she examines Césaire’s legacy through interviews with everyone from his secretary to people on the street, and employing excerpts from her previous documentaries on him.\n\nSee other screenings of Poetry Is Political.",
+      "label": "shorts",
+      "sample": "high-sample"
+    }
+  ],
+  "snapshot": {
+    "takenAt": "2026-09-20",
+    "note": "What each categoriser answered at the time of labelling. This goes stale the moment a prompt, a criteria set or a model changes - it is kept for reproducing the September 2026 comparison, not as ground truth. Only `label` above is durable.",
+    "answers": {
+      "bfi.org.uk-southbank-13438611-38F6-49EF-A35C-76642A0AF727": {
+        "llm": "shorts",
+        "jev": "shorts",
+        "jevConfidence": 1
+      },
+      "bfi.org.uk-southbank-4BFE43C9-6613-43F0-A9BF-5F349DF69A1D": {
+        "llm": "shorts",
+        "jev": "shorts",
+        "jevConfidence": 0.94
+      },
+      "bfi.org.uk-southbank-95F28C45-684F-4954-AA32-F85156C248A2": {
+        "llm": "shorts",
+        "jev": "shorts",
+        "jevConfidence": 1
+      },
+      "cinemamuseum.org.uk-12762": {
+        "llm": "multiple-movies",
+        "jev": "shorts",
+        "jevConfidence": 0.99
+      },
+      "cinemamuseum.org.uk-2366": {
+        "llm": "tv",
+        "jev": "talk",
+        "jevConfidence": 0.86
+      },
+      "cinemamuseum.org.uk-12584": {
+        "llm": "event",
+        "jev": "multiple-movies",
+        "jevConfidence": 0.81
+      },
+      "cinemamuseum.org.uk-12587": {
+        "llm": "event",
+        "jev": "multiple-movies",
+        "jevConfidence": 0.78
+      },
+      "cinemamuseum.org.uk-14243": {
+        "llm": "event",
+        "jev": "talk",
+        "jevConfidence": 0.76
+      },
+      "genesiscinema.co.uk-101940": {
+        "llm": "event",
+        "jev": "workshop",
+        "jevConfidence": 0.73
+      },
+      "barbican.org.uk-227306": {
+        "llm": "music",
+        "jev": "movie",
+        "jevConfidence": 0.99
+      },
+      "ica.art-bodies-adrift-miami": {
+        "llm": "multiple-movies",
+        "jev": "shorts",
+        "jevConfidence": 1
+      },
+      "ica.art-la-raison-avant-la-passion-a-b-in-ontario-on-16mm": {
+        "llm": "multiple-movies",
+        "jev": "multiple-movies",
+        "jevConfidence": 1
+      },
+      "ica.art-lff-ghazal-e-sorkh-shab-nameh-women-of-iran-s-forgotten-left": {
+        "llm": "shorts",
+        "jev": "shorts",
+        "jevConfidence": 1
+      },
+      "lumiereromford.com-1554": {
+        "llm": "event",
+        "jev": "multiple-movies",
+        "jevConfidence": 0.75
+      },
+      "lumiereromford.com-1362": {
+        "llm": "event",
+        "jev": "multiple-movies",
+        "jevConfidence": 0.91
+      },
+      "lumiereromford.com-1047": {
+        "llm": "event",
+        "jev": "workshop",
+        "jevConfidence": 0.99
+      },
+      "lumiereromford.com-1397": {
+        "llm": "talk",
+        "jev": "workshop",
+        "jevConfidence": 0.79
+      },
+      "thenickel.co.uk-690": {
+        "llm": "shorts",
+        "jev": "shorts",
+        "jevConfidence": 0.51
+      },
+      "thenickel.co.uk-792": {
+        "llm": "movie",
+        "jev": "multiple-movies",
+        "jevConfidence": 0.57
+      },
+      "actonecinema.co.uk-28493": {
+        "llm": "multiple-movies",
+        "jev": "multiple-movies",
+        "jevConfidence": 1
+      },
+      "actonecinema.co.uk-28096": {
+        "llm": "movie",
+        "jev": "movie",
+        "jevConfidence": 0.83
+      },
+      "actonecinema.co.uk-28245": {
+        "llm": "movie",
+        "jev": "movie",
+        "jevConfidence": 0.85
+      },
+      "riocinema.org.uk-2844006": {
+        "llm": "multiple-movies",
+        "jev": "multiple-movies",
+        "jevConfidence": 0.98
+      },
+      "thegardencinema.co.uk-20082": {
+        "llm": "event",
+        "jev": "workshop",
+        "jevConfidence": 0.7
+      },
+      "thegardencinema.co.uk-27256": {
+        "llm": "event",
+        "jev": "talk",
+        "jevConfidence": 0.66
+      },
+      "thearzner.com-116208": {
+        "llm": "event",
+        "jev": "movie",
+        "jevConfidence": 0.53
+      },
+      "coldharbourblue.com-darkroom-festival-2026": {
+        "llm": "event",
+        "jev": "multiple-movies",
+        "jevConfidence": 0.93
+      },
+      "cinemamuseum.org.uk-12612": {
+        "llm": "event",
+        "jev": "event",
+        "jevConfidence": 0.49
+      },
+      "cinemamuseum.org.uk-12531": {
+        "llm": "event",
+        "jev": "event",
+        "jevConfidence": 0.25
+      },
+      "cinemamuseum.org.uk-13005": {
+        "llm": "event",
+        "jev": "event",
+        "jevConfidence": 0.46
+      },
+      "cinemamuseum.org.uk-12608": {
+        "llm": "event",
+        "jev": "event",
+        "jevConfidence": 0.48
+      },
+      "genesiscinema.co.uk-114463": {
+        "llm": "multiple-movies",
+        "jev": "shorts",
+        "jevConfidence": 0.36
+      },
+      "actonecinema.co.uk-28244": {
+        "llm": "event",
+        "jev": "comedy",
+        "jevConfidence": 0.33
+      },
+      "barbican.org.uk-225344": {
+        "llm": "talk",
+        "jev": "movie",
+        "jevConfidence": 0.24
+      },
+      "thegardencinema.co.uk-27238": {
+        "llm": "event",
+        "jev": "workshop",
+        "jevConfidence": 0.42
+      },
+      "thegardencinema.co.uk-27224": {
+        "llm": "talk",
+        "jev": "talk",
+        "jevConfidence": 0.43
+      },
+      "lumiereromford.com-1154": {
+        "llm": "music",
+        "jev": "workshop",
+        "jevConfidence": 0.45
+      },
+      "cinemamuseum.org.uk-11037": {
+        "llm": "event",
+        "jev": "movie",
+        "jevConfidence": 0.63
+      },
+      "cinemamuseum.org.uk-12366": {
+        "llm": "comedy",
+        "jev": "talk",
+        "jevConfidence": 0.61
+      },
+      "royalalberthall.com-2027": {
+        "llm": "music",
+        "jev": "multiple-movies",
+        "jevConfidence": 0.53
+      },
+      "thenickel.co.uk-762": {
+        "llm": "event",
+        "jev": "multiple-movies",
+        "jevConfidence": 0.57
+      },
+      "bfi.org.uk-southbank-B6516B85-6002-4DB2-ABE2-2C89D206804A": {
+        "llm": "event",
+        "jev": "event",
+        "jevConfidence": 0.65
+      },
+      "bfi.org.uk-southbank-F6621012-3FAE-4672-A9E1-17B530DD3442": {
+        "llm": "talk",
+        "jev": "talk",
+        "jevConfidence": 0.68
+      },
+      "cinemamuseum.org.uk-12618": {
+        "llm": "event",
+        "jev": "event",
+        "jevConfidence": 0.59
+      },
+      "riocinema.org.uk-2860979": {
+        "llm": "talk",
+        "jev": "talk",
+        "jevConfidence": 0.6
+      },
+      "cinemamuseum.org.uk-12615": {
+        "llm": "event",
+        "jev": "event",
+        "jevConfidence": 0.53
+      },
+      "thenickel.co.uk-711": {
+        "llm": "event",
+        "jev": "multiple-movies",
+        "jevConfidence": 0.69
+      },
+      "thegardencinema.co.uk-27132": {
+        "llm": "shorts",
+        "jev": "shorts",
+        "jevConfidence": 0.72
+      },
+      "lumiereromford.com-237": {
+        "llm": "movie",
+        "jev": "movie",
+        "jevConfidence": 0.8
+      },
+      "cinemamuseum.org.uk-11963": {
+        "llm": "talk",
+        "jev": "talk",
+        "jevConfidence": 0.74
+      },
+      "cinemamuseum.org.uk-12582": {
+        "llm": "event",
+        "jev": "talk",
+        "jevConfidence": 0.73
+      },
+      "royalalberthall.com-1763": {
+        "llm": "music",
+        "jev": "music",
+        "jevConfidence": 0.71
+      },
+      "princecharlescinema.com-31617164": {
+        "llm": "multiple-movies",
+        "jev": "movie",
+        "jevConfidence": 0.8
+      },
+      "genesiscinema.co.uk-114459": {
+        "llm": "multiple-movies",
+        "jev": "multiple-movies",
+        "jevConfidence": 0.81
+      },
+      "princecharlescinema.com-31617534": {
+        "llm": "multiple-movies",
+        "jev": "shorts",
+        "jevConfidence": 0.75
+      },
+      "bfi.org.uk-southbank-B03E4D85-AFA2-4373-96EB-862FC30A07A5": {
+        "llm": "tv",
+        "jev": "talk",
+        "jevConfidence": 0.76
+      },
+      "ica.art-lolaff-stories-of-resilience": {
+        "llm": "shorts",
+        "jev": "shorts",
+        "jevConfidence": 0.8
+      },
+      "genesiscinema.co.uk-101955": {
+        "llm": "workshop",
+        "jev": "workshop",
+        "jevConfidence": 1
+      },
+      "ica.art-lolaff-concepcion": {
+        "llm": "movie",
+        "jev": "movie",
+        "jevConfidence": 0.99
+      },
+      "princecharlescinema.com-3262426": {
+        "llm": "multiple-movies",
+        "jev": "multiple-movies",
+        "jevConfidence": 1
+      },
+      "princecharlescinema.com-31617509": {
+        "llm": "movie",
+        "jev": "movie",
+        "jevConfidence": 0.87
+      },
+      "thenickel.co.uk-685": {
+        "llm": "event",
+        "jev": "movie",
+        "jevConfidence": 0.85
+      },
+      "princecharlescinema.com-31617470": {
+        "llm": "multiple-movies",
+        "jev": "multiple-movies",
+        "jevConfidence": 1
+      },
+      "thenickel.co.uk-775": {
+        "llm": "multiple-movies",
+        "jev": "multiple-movies",
+        "jevConfidence": 1
+      },
+      "thenickel.co.uk-696": {
+        "llm": "event",
+        "jev": "movie",
+        "jevConfidence": 0.85
+      },
+      "ica.art-lff-tracing-islands": {
+        "llm": "shorts",
+        "jev": "shorts",
+        "jevConfidence": 0.95
+      },
+      "princecharlescinema.com-31616848": {
+        "llm": "quiz",
+        "jev": "quiz",
+        "jevConfidence": 1
+      },
+      "thegardencinema.co.uk-27236": {
+        "llm": "talk",
+        "jev": "shorts",
+        "jevConfidence": 0.96
+      },
+      "ica.art-vhs-late-tapes-wet-messy": {
+        "llm": "shorts",
+        "jev": "shorts",
+        "jevConfidence": 0.93
+      },
+      "princecharlescinema.com-4346120": {
+        "llm": "multiple-movies",
+        "jev": "multiple-movies",
+        "jevConfidence": 1
+      },
+      "princecharlescinema.com-31617462": {
+        "llm": "multiple-movies",
+        "jev": "multiple-movies",
+        "jevConfidence": 1
+      },
+      "lumiereromford.com-1271": {
+        "llm": "multiple-movies",
+        "jev": "multiple-movies",
+        "jevConfidence": 1
+      },
+      "royalalberthall.com-2253": {
+        "llm": "music",
+        "jev": "music",
+        "jevConfidence": 0.99
+      },
+      "actonecinema.co.uk-458319": {
+        "llm": "comedy",
+        "jev": "comedy",
+        "jevConfidence": 0.98
+      },
+      "thegardencinema.co.uk-27263": {
+        "llm": "movie",
+        "jev": "movie",
+        "jevConfidence": 0.93
+      },
+      "genesiscinema.co.uk-108750": {
+        "llm": "event",
+        "jev": "event",
+        "jevConfidence": 0.97
+      },
+      "bfi.org.uk-southbank-63E0F9B0-8B8B-4DD3-86B5-686BA4BB8183": {
+        "llm": "shorts",
+        "jev": "shorts",
+        "jevConfidence": 1
+      }
+    }
+  }
+}

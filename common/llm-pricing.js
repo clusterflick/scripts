@@ -17,6 +17,11 @@ const PRICING_PER_MILLION_TOKENS = {
   "gemini:gemini-2.5-flash": { input: 0.3, output: 2.5 },
   "openai:gpt-4.1-nano": { input: 0.1, output: 0.4 },
   "openai:gpt-4.1-mini": { input: 0.4, output: 1.6 },
+  // TypeSafe's Jev charges for input only - output is free, which is why the
+  // rate is 0 rather than absent. Source: https://docs.typesafe.ai/models.md,
+  // checked 2026-09-19. Called only by ask-jev-to-categorise, which is a
+  // parallel experiment and not wired into the pipeline.
+  "typesafe:jev-latest": { input: 0.042, output: 0 },
 };
 
 /**
