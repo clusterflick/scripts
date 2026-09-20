@@ -7,7 +7,6 @@ const {
 const askLlmToCategorise = require("./ask-llm-to-categorise");
 const askJevToCategorise = require("./ask-jev-to-categorise");
 const { basicNormalize } = require("./utils");
-const { recordCategoriserFallback } = require("./llm-usage-log");
 require("dotenv").config();
 
 // Which categoriser the transform uses, selected at startup via the
@@ -53,17 +52,14 @@ async function categorise(movie) {
   } catch (error) {
     if (!isTransient(error)) throw error;
 
-    // Loud on purpose. A fallback that ran silently would look exactly like a
-    // working Jev run, and the whole point of the A/B is knowing which
-    // answered. The usage report counts these so a run that limped through on
-    // the LLM cannot be read as a clean one.
+    // Loud on purpose: a fallback that ran silently would look exactly like a
+    // working Jev run. Not recorded anywhere beyond the job log, because the
+    // usage report already shows it - the two categorisers use different cache
+    // key prefixes, so `ask-llm-to-categorise` appearing in byCallSite during a
+    // CATEGORISER=jev run is itself the signal that Jev could not answer.
     console.log(
       ` ! - Jev unavailable (${error.constructor.name}); falling back to the LLM for "${movie.title}"`,
     );
-    recordCategoriserFallback({
-      title: movie.title,
-      reason: error.constructor.name,
-    });
 
     return askLlmToCategorise(movie);
   }
