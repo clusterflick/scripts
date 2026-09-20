@@ -184,6 +184,11 @@ async function scoreRow(row, releases) {
 
   return {
     ...row,
+    // The fixture stores an id as a JSON number and the sentinels as strings,
+    // while both arms answer with a string. Normalise once here rather than
+    // at each comparison, where one `===` against the raw value silently
+    // counted every correct row as wrong.
+    correct: String(row.correctId),
     candidateCount: results.length,
     inCandidates,
     jevAnswer,
@@ -197,7 +202,9 @@ async function scoreRow(row, releases) {
 }
 
 function report(rows) {
-  const scoreable = rows.filter((row) => !UNSCOREABLE.has(row.correctId));
+  const scoreable = rows.filter(
+    (row) => !UNSCOREABLE.has(String(row.correctId)),
+  );
   const skipped = rows.length - scoreable.length;
 
   console.log(`\n=== population ===`);
@@ -221,7 +228,7 @@ function report(rows) {
     return;
   }
 
-  const jevRight = reachable.filter((row) => row.jevAnswer === row.correctId);
+  const jevRight = reachable.filter((row) => row.jevAnswer === row.correct);
   console.log(`\n=== jev (review step only) ===`);
   console.log(
     ` - correct: ${jevRight.length}/${reachable.length} (${Math.round((jevRight.length / reachable.length) * 100)}%)`,
@@ -250,45 +257,58 @@ function report(rows) {
   }
 
   if (runLlm) {
-    const llmRight = reachable.filter((row) => row.llmAnswer === row.correctId);
+    const llmRight = reachable.filter((row) => row.llmAnswer === row.correct);
     console.log(`\n=== llm (review step only, like for like) ===`);
     console.log(
       ` - correct: ${llmRight.length}/${reachable.length} (${Math.round((llmRight.length / reachable.length) * 100)}%)`,
     );
 
     const both = reachable.filter(
-      (row) =>
-        row.jevAnswer === row.correctId && row.llmAnswer === row.correctId,
+      (row) => row.jevAnswer === row.correct && row.llmAnswer === row.correct,
     ).length;
     const neither = reachable.filter(
-      (row) =>
-        row.jevAnswer !== row.correctId && row.llmAnswer !== row.correctId,
+      (row) => row.jevAnswer !== row.correct && row.llmAnswer !== row.correct,
     ).length;
     console.log(`\n=== head to head ===`);
     console.log(` - both right:  ${both}`);
     console.log(` - jev only:    ${jevRight.length - both}`);
     console.log(
-      ` - llm only:    ${reachable.filter((row) => row.llmAnswer === row.correctId).length - both}`,
+      ` - llm only:    ${reachable.filter((row) => row.llmAnswer === row.correct).length - both}`,
     );
     console.log(` - both wrong:  ${neither}`);
   }
 
-  const wrong = reachable.filter((row) => row.jevAnswer !== row.correctId);
+  // Every row at least one arm missed, not just Jev's: a row the incumbent
+  // alone got wrong is the case for a swap, and printing only Jev's misses
+  // would show the cost and hide the benefit.
+  const wrong = reachable.filter(
+    (row) =>
+      row.jevAnswer !== row.correct ||
+      (runLlm && row.llmAnswer !== row.correct),
+  );
   if (wrong.length === 0) return;
 
-  console.log(`\n=== every row jev got wrong ===`);
+  console.log(`\n=== every row an arm got wrong ===`);
   for (const row of wrong) {
     console.log(`\n ${row.showingId}  [${row.venue}]`);
     console.log(`   "${row.title}"`);
     console.log(
-      `   correct ${row.correctId}, jev said ${row.jevAnswer} (confidence ${row.jevConfidence.toFixed(2)}, ${row.candidateCount} candidates)`,
+      `   correct ${row.correct} (${row.candidateCount} candidates offered)`,
     );
+    console.log(
+      `   jev ${row.jevAnswer === row.correct ? "\u2713" : "\u2717"} ${row.jevAnswer} at confidence ${row.jevConfidence.toFixed(2)}`,
+    );
+    if (runLlm) {
+      console.log(
+        `   llm ${row.llmAnswer === row.correct ? "\u2713" : "\u2717"} ${row.llmAnswer}`,
+      );
+    }
     if (row.publishedSeen > 0) {
       console.log(
         `   published ${row.publishedAnswers.join(" / ")} - right on ${row.publishedCorrect}/${row.publishedSeen} releases`,
       );
     }
-    const fit = row.jevFits?.[row.correctId];
+    const fit = row.jevFits?.[row.correct];
     if (fit !== undefined) {
       console.log(`   its noul for the correct film: ${fit.toFixed(2)}`);
     }
