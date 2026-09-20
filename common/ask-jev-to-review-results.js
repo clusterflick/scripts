@@ -91,9 +91,32 @@ const instructions = {
     "The listing's description is about the screening. An option matches when the film it describes is the film being screened.",
     "A film and a documentary about the making of that film are different options. The listing is showing the film unless it says otherwise.",
     "Names in the listing - a director, an actor, a character - identify the film when an option's overview or title carries the same name.",
+    "A listing billed as a premiere, a preview, a first look or an opening night is showing a film released around now. An option released years ago is not that film, however well its title fits.",
     `Answer "${NO_MATCH}" when the film the listing describes is not among the options.`,
   ],
 };
+
+// The gap below is computed against the year the LISTING gives, and most
+// listings give none - so on those, nothing says anything about when a
+// candidate came out. That is how a 1992 thriller was offered as the "Feature
+// Film Premiere" of an independent film, and a ten-minute short as a "World
+// Wide Premiere": both listings carried no year, so both candidates arrived
+// with no temporal signal at all.
+//
+// This says how old each candidate is now. Computed here for the same reason
+// the gap is: Jev reads a date as text rather than as an ordered quantity, so
+// "2026-04-01" against today is not a comparison to hand it. Phrased without
+// naming a conclusion - it says how long ago the film came out and leaves what
+// that means to the Choice.
+function describeAge(candidateYear) {
+  if (!candidateYear) return undefined;
+  const age = new Date().getFullYear() - Number(candidateYear);
+  if (!Number.isFinite(age)) return undefined;
+  if (age < 0) return "Not released yet; due next year or later.";
+  if (age === 0) return "Released this year.";
+  if (age === 1) return "Released last year.";
+  return `Released ${age} years ago.`;
+}
 
 // Jev reads dates as text rather than as ordered quantities, so "1990" against
 // "2025" is not a comparison it can be relied on to make. The subtraction
@@ -155,6 +178,7 @@ function buildCriteria(labels, listingYear) {
           originalTitle: result.original_title,
         }),
       ...(year && { releasedIn: year }),
+      ...(describeAge(year) && { howOld: describeAge(year) }),
       ...(describeYearGap(year, listingYear) && {
         comparedToTheListing: describeYearGap(year, listingYear),
       }),
@@ -176,12 +200,20 @@ function buildCriteria(labels, listingYear) {
 // wrong, so it is context for a judgement and never a rule - the same job it
 // does in the LLM prompt.
 //
-// The venue's own title is deliberately not sent, only the normalised one, so
-// this arm reads exactly what the LLM arm reads. Whether the venue's wording
-// helps is worth measuring, but not at the same time as everything else.
+// Both titles are sent. The normalised one is what the search was given, so it
+// says which query produced these candidates; the venue's own is what the
+// listing actually says, and normalisation removes exactly the part a reviewer
+// wants. Across five pilot venues 48% of titles differ, and what goes missing
+// is evidence: "[a.k.a Murder, My Sweet]" names the film outright,
+// "[30th Anniversary]" says it is an old one, "- The Play" says it is not a
+// film. The description is already sent raw, so sending a scrubbed title
+// beside it was the inconsistent half.
 function convertToState(movie, normalizedTitle) {
+  const billedAs = movie.title?.trim();
   return {
     title: normalizedTitle,
+    ...(billedAs &&
+      billedAs.toLowerCase() !== normalizedTitle.toLowerCase() && { billedAs }),
     ...(movie.overview?.year && { year: movie.overview.year }),
     ...(movie.overview?.classification && {
       classification: movie.overview.classification,
