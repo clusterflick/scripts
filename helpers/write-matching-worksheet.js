@@ -111,6 +111,11 @@ async function mergeWorksheet() {
       year: row.year ?? null,
       runtimeMinutes: row.runtimeMinutes ?? null,
       classification: row.classification ?? null,
+      // Carried even though the review step does not read them: a harness
+      // that replays the whole of searchForBestMatch rather than just the
+      // review does, and the fixture outlives the releases they came from.
+      directors: row.directors ?? [],
+      actors: row.actors ?? [],
       description: row.description,
       correctId: row.correctId,
       sample: row.sample,

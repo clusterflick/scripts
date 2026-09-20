@@ -19,8 +19,9 @@ const PRICING_PER_MILLION_TOKENS = {
   "openai:gpt-4.1-mini": { input: 0.4, output: 1.6 },
   // TypeSafe's Jev charges for input only - output is free, which is why the
   // rate is 0 rather than absent. Source: https://docs.typesafe.ai/models.md,
-  // checked 2026-09-19. Called only by ask-jev-to-categorise, which is a
-  // parallel experiment and not wired into the pipeline.
+  // checked 2026-09-19. Called by ask-jev-to-categorise, which is live, and by
+  // ask-jev-to-review-results, which is not yet wired into the pipeline and is
+  // reached only through helpers/compare-matchers.js.
   "typesafe:jev-latest": { input: 0.042, output: 0 },
 };
 
