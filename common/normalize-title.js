@@ -165,6 +165,11 @@ function normalizeTitle(title, options) {
     ],
     ["Outdoor Silent Cinema - ", "Outdoor Silent Cinema: "],
     ["Film Africa 2025 -", "Film Africa 2025:"],
+    // The premiere bills the Turkish title and its English translation
+    // either side of a dash, which hasSeparator reads as a separator and
+    // cuts the film off at, leaving the strand rather than the film. Spell
+    // it with the colon the prefixes use so the label comes off instead.
+    ["İFŞA -", "İFŞA: "],
     ["Preview Screening - ", "Preview Screening: "],
     ["Cinema Film Screening - ", "Cinema Film Screening "],
     ["Cinema Film Screening & Talk - ", "Cinema Film Screening & Talk: "],
@@ -1513,7 +1518,11 @@ function normalizeTitle(title, options) {
     title = hasTribute[1];
   }
 
-  const hasSeparator = title.match(/^(.*?)\s+(?:\+|-|\/|\||•)\s*/);
+  // One venue draws its billing blocks with the heavy box-drawing bar
+  // ("EXPOSE ┃FILM PREMIERE┃LONDON"), which is the pipe in every way that
+  // matters here, so it joins the separators rather than surviving as far as
+  // the character stripping and leaving the billing behind as words.
+  const hasSeparator = title.match(/^(.*?)\s+(?:\+|-|\/|\||•|┃)\s*/);
   if (hasSeparator) {
     title = hasSeparator[1];
   }

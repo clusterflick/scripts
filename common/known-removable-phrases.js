@@ -1367,6 +1367,7 @@ const knownRemovablePhrases = [
   "SEND FRIENDLY:",
   "Arena:",
   "Sartorial Correctness with Nick Egan:",
+  "İFŞA:",
   "A presentation hosted by Kingston Friends of the Earth on behalf of ",
   // The Black History Month strand abbreviates itself in the listing, so the
   // generic "Film Screening" entry takes the words off and leaves the
@@ -1375,6 +1376,11 @@ const knownRemovablePhrases = [
   "BHM Film Screening",
 
   // Weirdly specific fixes
+  // The premiere bills the guest and the extras that come with the film
+  // ("ft Scorcher: Screening, Q&A + After Party"). hasSeparator has already
+  // cut the title at the "+" by the time this list runs, so the entry stops
+  // where that cut does rather than carrying the tail it can never match.
+  "ft Scorcher: Screening, Q&A",
   "愛殺",
   "老虎出更",
   "リンダ リンダ リンダ",
