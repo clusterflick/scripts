@@ -683,13 +683,18 @@ function normalizeTitle(title, options) {
     // One venue misspells the play in its broadcast listing, so the same
     // National Theatre Live performance arrives under a second name.
     ["GOLDERN BOY", "GOLDEN BOY"],
-    // JOIA bills the 1994 film with Santa's surname rather than the clause
-    // the film turns on, so it arrives under a name no database spells that
-    // way. Anchored on the article so the films actually about Santa Claus -
-    // "Santa Claus: The Movie" and the rest - keep their spelling.
-    [/\bThe Santa Claus\b/i, "The Santa Clause"],
+    // JOIA spells the 1994 film with Santa's surname rather than the clause
+    // the film turns on, but only on the tickets that come with dinner - its
+    // own screening tickets spell it right - so the same film arrives under a
+    // second name. Matched together with that dinner billing, which is JOIA's
+    // alone: "The Santa Claus" on its own is another venue's listing, and
+    // correcting every venue's spelling from here would reach the films that
+    // really are about Santa Claus.
+    [/The Santa Claus(?=\s*-\s*DINNER IN TOZI)/i, "The Santa Clause"],
     // The same venue bills the 2000 film the way the rhyme runs rather than
-    // the way it is titled, so it arrives under a second name. The "how" is
+    // the way it is titled, so it arrives under a second name. Corrected for
+    // every venue rather than for JOIA alone, because no film is called this:
+    // whoever writes it means "How The Grinch Stole Christmas". The "how" is
     // optional in the match so a listing that already carries one is not left
     // with two.
     [
