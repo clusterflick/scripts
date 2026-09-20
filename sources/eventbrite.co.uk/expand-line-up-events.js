@@ -7,7 +7,7 @@ const {
   createFormat,
   convertNamesTextToList,
 } = require("../../common/utils");
-const { parseDate, getEventDescription } = require("./utils");
+const { parseDate, getEventDescription, getEventStatus } = require("./utils");
 const attributes = require("./attributes");
 
 // Some organisers put a whole season behind a single Eventbrite listing: one
@@ -249,6 +249,10 @@ function expandLineUpEvent(event, details) {
           date,
           notesList: [note],
           url: event.tickets_url,
+          // One listing, one ticket pool, so a sold-out season is sold out on
+          // every date it covers. Eventbrite reports nothing per-date here -
+          // that is the whole reason these events need expanding.
+          status: getEventStatus(details),
           accessibility: createAccessibility(film.title, {}, overview),
           format: createFormat(film.title, {}, overview),
         }),

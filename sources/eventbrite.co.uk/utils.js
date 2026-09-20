@@ -60,8 +60,31 @@ function getEventDescription(details) {
   );
 }
 
+/**
+ * The ticket availability Eventbrite reports for a listing, as a performance
+ * `status`.
+ *
+ * `salesStatus` describes the listing as a whole. `sold_out` is the live case;
+ * once selling stops the status becomes `sales_ended` and the reason moves to
+ * `messageCode`, so an event that sold out and then closed reads
+ * `sales_ended`/`tickets_sold_out` and is still a sell-out. Sales ending for
+ * any other reason is not, hence keying on the message code rather than the
+ * status.
+ *
+ * An event whose page we could not reach carries no status at all, and gets
+ * none here: unknown availability and confirmed availability are different
+ * claims, and only the second is safe to publish as `soldOut: false`.
+ */
+function getEventStatus(details) {
+  const salesStatus = details?.props?.pageProps?.context?.salesStatus;
+  if (!salesStatus) return {};
+
+  return { soldOut: salesStatus.messageCode === "tickets_sold_out" };
+}
+
 module.exports = {
   parseDate,
   getEventVenue,
   getEventDescription,
+  getEventStatus,
 };

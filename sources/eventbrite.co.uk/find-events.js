@@ -8,7 +8,12 @@ const {
   convertNamesTextToList,
 } = require("../../common/utils");
 const { createOverview, createPerformance } = require("../../common/utils");
-const { parseDate, getEventVenue, getEventDescription } = require("./utils");
+const {
+  parseDate,
+  getEventVenue,
+  getEventDescription,
+  getEventStatus,
+} = require("./utils");
 const attributes = require("./attributes");
 const { venueMatchesCinema } = require("../../common/source-utils");
 const { isNotNonFilmEvent } = require("../../common/is-non-film-event");
@@ -63,6 +68,7 @@ function convertEventbriteEvent(event, details) {
         date: startDate,
         notesList: [],
         url: event.tickets_url,
+        status: getEventStatus(details),
         accessibility: createAccessibility(event.name, {}, overview),
         format: createFormat(event.name, {}, overview),
       }),

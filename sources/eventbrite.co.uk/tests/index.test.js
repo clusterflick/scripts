@@ -45,6 +45,18 @@ const cinema = {
   geo: { lat: 51.52128726645794, lon: -0.051143457671891594 },
 };
 
+// Every Genesis showing above is on sale, so availability needs a venue where
+// it isn't. St Lawrence Jewry's two screenings had both sold out when the
+// fixtures were taken, which is what makes it the one worth asserting on.
+const soldOutCinema = {
+  name: "St Lawrence Jewry",
+  alternativeNames: [
+    "St. Lawrence Jewry next Guildhall",
+    "The Guild Church of St Lawrence Jewry",
+  ],
+  geo: { lat: 51.515374328307246, lon: -0.09249330021593258 },
+};
+
 describe(attributes.name, () => {
   setupPolly(isRecording, __dirname);
   jest.useFakeTimers().setSystemTime(new Date(CACHE_DATE));
@@ -83,4 +95,22 @@ describe(attributes.name, () => {
     expect(data).toHaveLength(4);
     expect(data).toMatchSnapshot();
   }, 30_000); // over HTTP needed. // under full-suite parallelism, though far short of what replaying them // Reading ~900 cache files back is still more than the default 5s allows
+
+  it("reads ticket availability off the event page", async () => {
+    const { movieListPages, moviePages, organizerEvents } = await retrieve();
+    readJSON.mockImplementation(() => ({
+      movieListPages,
+      moviePages,
+      organizerEvents,
+    }));
+
+    const output = await findEvents(soldOutCinema);
+
+    expect(output).toHaveLength(2);
+    expect(
+      output.flatMap(({ performances }) =>
+        performances.map(({ status }) => status),
+      ),
+    ).toEqual([{ soldOut: true }, { soldOut: true }]);
+  }, 30_000);
 });
