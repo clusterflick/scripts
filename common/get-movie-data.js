@@ -11,7 +11,7 @@ const {
 const { withMovieDbRetry, isMissingMovieDbEntry } = require("./moviedb-retry");
 const { dailyCache } = require("./cache");
 const askLlm = require("./ask-llm");
-const askLlmToReviewResults = require("./ask-llm-to-review-results");
+const reviewResults = require("./review-results");
 require("dotenv").config();
 
 /**
@@ -527,22 +527,6 @@ const tryFindingMatchUsingLlm = async (movie) => {
   return null;
 };
 
-const reviewResultsUsingLlm = async (movie, results, normalizedTitle) => {
-  const result = await runLlmFunction(() =>
-    askLlmToReviewResults(movie, results, normalizedTitle),
-  );
-  if (result === null) return null;
-
-  const { confidence, match } = result;
-
-  if (confidence >= 8) {
-    const matchingResult = results.find(({ id }) => id === match?.id);
-    if (matchingResult) return matchingResult;
-  }
-
-  return null;
-};
-
 const searchForBestMatch = async ({
   normalizedTitle,
   movie,
@@ -590,7 +574,7 @@ const searchForBestMatch = async ({
       const searchTitleResultsWithReleaseDate =
         searchTitle.results.filter(isReleasedMovie);
       if (searchTitleResultsWithReleaseDate.length > 0) {
-        const bestLlmMatchFromResults = await reviewResultsUsingLlm(
+        const bestLlmMatchFromResults = await reviewResults(
           movie,
           searchTitleResultsWithReleaseDate,
           normalizedTitle,
@@ -706,9 +690,10 @@ const searchForBestMatch = async ({
     const seachRelatedYearResultsWithReleaseDate =
       seachRelatedYear.results.filter(isReleasedMovie);
     if (seachRelatedYearResultsWithReleaseDate.length > 0) {
-      const bestLlmMatchFromResults = await reviewResultsUsingLlm(
+      const bestLlmMatchFromResults = await reviewResults(
         movie,
         seachRelatedYearResultsWithReleaseDate,
+        normalizedTitle,
       );
       if (bestLlmMatchFromResults) return bestLlmMatchFromResults;
     }

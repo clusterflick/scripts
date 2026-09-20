@@ -26,6 +26,17 @@ function normalizeTitle(title, options) {
   // prefix before that runs rather than in the corrections below, which are
   // too late to help it.
   title = title.replace(/^(?:gb|ie)\s+/i, "");
+  // Dropping the apostrophe out of a possessive is an ordinary venue typo
+  // everywhere else, but it lands on the one rule that reads one: the opera
+  // and ballet prefixing strips a possessive owner off the front of a work,
+  // so that it can match "Puccini's Turandot" to TheMovieDB's "Turandot".
+  // Written correctly, "Alice's Adventures in Wonderland" loses its first word
+  // on both sides and still matches - the eleven listings spelled that way
+  // agree with each other and with TheMovieDB. The one listing spelled
+  // "Alices" keeps the word and groups as a different ballet. Put the
+  // apostrophe back before the prefixing runs; the corrections below are too
+  // late, for the same reason the country-code prefix is handled up here.
+  title = title.replace(/\bAlices(?=\s+Adventures\b)/i, "Alice's");
 
   title = standardizePrefixingForTheatrePerformances(
     title,
