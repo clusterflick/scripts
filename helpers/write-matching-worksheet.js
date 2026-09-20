@@ -37,6 +37,7 @@
 // whose listings arrive through a source loses its description without them,
 // which is most of what a human labels from.
 
+const fs = require("node:fs");
 const path = require("node:path");
 const {
   readJSON,
@@ -182,11 +183,27 @@ async function getCandidates(normalizedTitle) {
 async function collectRows(location, { labelled, unstableIds }) {
   const { transform, attributes } = getCinema(location);
 
-  const retrieved = await readJSON(dataPath("retrieved-data", location));
+  // A source-only venue has no site to scrape, so its `retrieve` returns {}
+  // and the release carries no asset for it - its listings arrive entirely
+  // through the sources. Absent retrieved-data is therefore normal for those
+  // and a missing download for anything else, and the two are told apart
+  // below by whether the replay produced anything.
+  const retrievedPath = dataPath("retrieved-data", location);
+  const hasRetrieved = fs.existsSync(retrievedPath);
+  const retrieved = hasRetrieved ? await readJSON(retrievedPath) : {};
   const published = await readJSON(dataPath("transformed-data", location));
 
   const sourcedEvents = await getSourcedEventsFor(attributes);
   const replayed = await transform(retrieved, sourcedEvents ?? {});
+
+  if (replayed.length === 0 && !hasRetrieved) {
+    throw new Error(
+      `Replaying ${location} produced no listings and it has no retrieved-data. ` +
+        `If it has a site, download it: ./helpers/get-latest-retrieved-data-for.sh ${location}. ` +
+        `If it is source-only, its sources' retrieved-data is missing instead ` +
+        `(eventbrite.co.uk, ticketsource.co.uk, designmynight.com, ...).`,
+    );
+  }
 
   const publishedById = new Map(
     (Array.isArray(published) ? published : Object.values(published)).map(
