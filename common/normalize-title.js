@@ -683,6 +683,19 @@ function normalizeTitle(title, options) {
     // One venue misspells the play in its broadcast listing, so the same
     // National Theatre Live performance arrives under a second name.
     ["GOLDERN BOY", "GOLDEN BOY"],
+    // JOIA bills the 1994 film with Santa's surname rather than the clause
+    // the film turns on, so it arrives under a name no database spells that
+    // way. Anchored on the article so the films actually about Santa Claus -
+    // "Santa Claus: The Movie" and the rest - keep their spelling.
+    [/\bThe Santa Claus\b/i, "The Santa Clause"],
+    // The same venue bills the 2000 film the way the rhyme runs rather than
+    // the way it is titled, so it arrives under a second name. The "how" is
+    // optional in the match so a listing that already carries one is not left
+    // with two.
+    [
+      /(?:How )?The Grinch Who Stole Christmas/i,
+      "How The Grinch Stole Christmas",
+    ],
     [/^David Bowie:? The Final Act/i, "Bowie: The Final Act"],
     [/JEFF BUCKLEY - IT'S NEVER OVER/i, "It's Never Over, Jeff Buckley"],
     ["Berliner Philharmoniker Live:", "Berliner Philharmoniker:"],
