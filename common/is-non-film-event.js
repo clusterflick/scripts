@@ -98,6 +98,11 @@ const nonFilmEvents = [
   // rather than carrying a pattern per pamphlet. Unanchored for the same
   // reason: the pamphlet's own name is what the listing opens on.
   /Poetry Pamphlet Launch/i,
+  // A sketch comedy scratch night, numbered by edition ("Sketchburn 7: a
+  // scratch night for sketch comedy films"), so match the numbered series
+  // rather than carrying a pattern per edition. The night is what is being
+  // sold - there is no film behind the billing to fall back to.
+  /Sketchburn \d+:/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>

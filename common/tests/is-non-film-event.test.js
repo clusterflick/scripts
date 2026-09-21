@@ -53,6 +53,7 @@ describe("isNonFilmEvent", () => {
     ["Panel Discussion: Asian Disapora Filmmakers"],
     ["PLASTA Research & Innovation Day, Sunday 8th November 2026"],
     ["A Temporary Temple - ‘&’ Poetry Pamphlet Launch"],
+    ["Sketchburn 7: a scratch night for sketch comedy films"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });
@@ -86,6 +87,7 @@ describe("isNonFilmEvent", () => {
     ["Preview Screening & Concert"],
     ["Aftersun screening with panel discussion"],
     ["The Zone of Interest + Panel Discussion"],
+    ["Sketch Artist"],
   ])("does not flag '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(false);
   });
