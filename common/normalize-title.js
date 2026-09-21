@@ -1647,6 +1647,18 @@ function normalizeTitle(title, options) {
     "",
   );
 
+  // Nosferatu's English subtitle comes off, so the 1922 film groups with the
+  // bare "Nosferatu" the rest of the listings give it. Scoped to the film's
+  // own billing: the Silents Synced screening ("Radiohead X Nosferatu: A
+  // Symphony of Horror") is the album played over the film rather than the
+  // film on its own, and keeps its subtitle so it stays a group apart from
+  // the plain screenings. A pattern rather than a phrase-list entry because
+  // the string list cannot read what comes before the phrase.
+  title = title.replace(
+    /(?<!radiohead x )\bnosferatu: a symphony of horror/i,
+    "nosferatu",
+  );
+
   // The knitting night numbers itself by volume ("Knitflix Club Vol. I: Mamma
   // Mia!"), so one pattern rather than a string per volume - the numeral is
   // the only thing that changes between them. Roman numerals, and the
