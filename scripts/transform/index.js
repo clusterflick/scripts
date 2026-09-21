@@ -281,7 +281,7 @@ async function transform(
   console.log("Categorising data ...");
   try {
     const start = Date.now();
-    matchedData = await categoriseEntries(matchedData);
+    matchedData = await categoriseEntries(matchedData, previousRelease);
     const duration = Math.round((Date.now() - start) / 1000);
     console.log(` - ✅ Categorised (${duration}s)`);
   } catch (e) {
