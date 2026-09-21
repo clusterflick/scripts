@@ -9,6 +9,7 @@ const {
   createFormat,
   generateShowingId,
 } = require("../../common/utils");
+const { getMoviePageUrl } = require("../../common/omniplex.co.uk/utils");
 const attributes = require("./attributes");
 
 function extractDurationInMinutes(text) {
@@ -39,6 +40,28 @@ function findMovieCard($anchor) {
   return null;
 }
 
+// A film's own page labels its credits in plain paragraphs -
+// `<p class="text"><b>Director:</b> Christopher Nolan</p>` - and embeds its
+// trailer. None of that reaches a showtimes page. A label that is absent is not
+// an error: a live relay or a documentary often names no director.
+function parseMoviePage(html) {
+  const $ = cheerio.load(html);
+  const labelled = (label) => {
+    const $p = $("p.text")
+      .filter((i, el) => getText($(el).find("b").first()) === label)
+      .first();
+    if (!$p.length) return "";
+    const $credits = $p.clone();
+    $credits.find("b").remove();
+    return getText($credits);
+  };
+  return {
+    directors: labelled("Director:"),
+    actors: labelled("Starring:"),
+    trailer: $(".video_player iframe").first().attr("src"),
+  };
+}
+
 function parseMovieCard($card, $, dateStr) {
   const eventId = $card
     .find('img[id^="favourite"]')
@@ -50,9 +73,7 @@ function parseMovieCard($card, $, dateStr) {
   const title = getText($titleLink);
   const moviePath = $titleLink.attr("href");
   if (!title || !moviePath) return null;
-  const url = moviePath.startsWith("http")
-    ? moviePath
-    : `${attributes.domain}${moviePath}`;
+  const url = getMoviePageUrl(attributes.domain, moviePath);
 
   const ratingImgSrc =
     $card.find('img[src*="ratings/UK_"]').first().attr("src") || "";
@@ -113,7 +134,16 @@ function parseMovieCard($card, $, dateStr) {
   };
 }
 
-async function transform({ datePages }, sourcedEvents) {
+async function transform({ datePages, moviePages }, sourcedEvents) {
+  // Retrieved data from before the film pages were fetched has no key at all.
+  // That is a stale retrieve, not a venue with no credits, and quietly carrying
+  // on would drop every director and cast member without anyone noticing.
+  if (!moviePages) {
+    throw new Error(
+      "Retrieved data has no moviePages - it predates the film-page retrieve, so re-run the retrieve",
+    );
+  }
+
   const movieMap = new Map();
 
   for (const [date, html] of Object.entries(datePages)) {
@@ -141,6 +171,14 @@ async function transform({ datePages }, sourcedEvents) {
       if (movieMap.has(url)) {
         movieMap.get(url).performances.push(...performances);
       } else {
+        const moviePage = moviePages[url];
+        if (!moviePage) {
+          throw new Error(
+            `No film page was retrieved for ${url} - the retrieve and transform disagree about which films are on`,
+          );
+        }
+        const { directors, actors, trailer } = parseMoviePage(moviePage);
+
         movieMap.set(url, {
           showingId: generateShowingId(attributes, eventId),
           title,
@@ -149,6 +187,9 @@ async function transform({ datePages }, sourcedEvents) {
             duration,
             categories: genre,
             classification,
+            directors,
+            actors,
+            trailer,
           }),
           performances,
           matchingHints: { overview: synopsis },

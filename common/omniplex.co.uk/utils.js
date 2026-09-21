@@ -19,4 +19,12 @@ function extractAllowedDates(html) {
   return [...new Set(timestamps.map(toDateStr))].sort();
 }
 
-module.exports = { extractAllowedDates };
+// A film's own page carries the director and cast that no showtimes page does,
+// so the retrieve fetches it and the transform reads it back, keyed by URL. Both
+// build that URL here: two copies that drifted apart would not fail, they would
+// quietly look up a key that was never stored.
+function getMoviePageUrl(domain, path) {
+  return path.startsWith("http") ? path : `${domain}${path}`;
+}
+
+module.exports = { extractAllowedDates, getMoviePageUrl };
