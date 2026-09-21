@@ -103,6 +103,32 @@ const nonFilmEvents = [
   // rather than carrying a pattern per edition. The night is what is being
   // sold - there is no film behind the billing to fall back to.
   /Sketchburn \d+:/i,
+  // A chess social the venue runs over brunch, with no film attached to it.
+  /Chess Brunch/i,
+  // The lino version of the printing class the venue already runs, sitting
+  // beside the photography workshop above.
+  /Lino Printing Workshop/i,
+  // A singles-events promoter's night, billed by whichever activity it runs
+  // that session ("SINGLES SALSA"), so match the promoter rather than
+  // carrying a pattern per activity. The salsa pattern above only catches the
+  // free ones.
+  /Datenites Presents/i,
+  // A club-night promoter, billed by the night it is putting on ("BOXING DAY",
+  // "RAMPAGE SOUNDS ALL NIGHT"), so match the promoter rather than carrying a
+  // pattern per night - and because the nights are named after films often
+  // enough that the billing alone would read as one. "PRESENTS" is kept in the
+  // pattern so the venue's own mixtape strand ("Balik Bayan: MIXTAPE: Filipino
+  // Edition") still reaches the listings.
+  /Mixtape Presents/i,
+  // A pub's own events listing, billed by the event it is running that night
+  // ("SIERRA LEONE PUB QUIZ EVENT.. PART2"), so match the promoter rather than
+  // carrying a pattern per event. Matched there rather than on the quiz,
+  // because a quiz a cinema runs is a listing the pipeline publishes.
+  /Prince of Peckham Presents/i,
+  // A charity's fundraiser, billed by the show put on for it that year ("THE
+  // GIFT OF LAUGHTER"), so match the fundraiser rather than carrying a pattern
+  // per show.
+  /ACLT Fundraiser/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>

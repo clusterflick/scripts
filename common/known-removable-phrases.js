@@ -1314,8 +1314,6 @@ const knownRemovablePhrases = [
   "TWICE:",
   "Two Boxes :",
   "UFF 2025:",
-  "UKJFF 2025:",
-  "UKJFF:",
   "UKAFF:",
   "Ukrainian Film Fest:",
   "U2'S Adam Clayton's",
@@ -1385,6 +1383,12 @@ const knownRemovablePhrases = [
   "老虎出更",
   "リンダ リンダ リンダ",
   "BY AWARD WINNING MAEVE MURPHY",
+  // The concert film is billed by the bands playing it, while TheMovieDB names
+  // it by the subtitle they left off ("Back to the Beginning: Ozzy's Final
+  // Bow"), so the same film arrives under two names. Both halves come off and
+  // the shared middle is what is left.
+  "Ozzy & Black Sabbath:",
+  "Ozzy's Final Bow",
   "Alumni Awards",
   "Afronauts & ",
   "Cockroach & ",

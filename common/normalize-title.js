@@ -97,6 +97,7 @@ function normalizeTitle(title, options) {
     ["HERO + My Dad, Guyana and Me", "HERO & My Dad, Guyana and Me"],
     ["Music with Tara Franks + ", "Music with Tara Franks & "],
     ["Storytelling + ", "Storytelling & "],
+    ["Life on the Horn (2020) + ", "Life on the Horn (2020) & "],
     ["Back and Forth + ", "Back and Forth & "],
     [" + Cat", " and Cat"],
     [" + Zog", " and Zog"],
@@ -1647,6 +1648,11 @@ function normalizeTitle(title, options) {
   // Month: Alain Gomis' DAO", "Black History Month 2026: Sugarcane"), so one
   // pattern rather than a string per year.
   title = title.replace(/\bblack history month(?:\s+\d{4})?:\s*/i, "");
+
+  // The Jewish film festival bills its strand with and without the year it
+  // runs in ("UKJFF: Pink Lady", "UKJFF 2026: Shana"), so one pattern rather
+  // than a string per year.
+  title = title.replace(/\bukjff(?:\s+\d{4})?:\s*/i, "");
 
   // The festival names itself after the year it runs in ("Odyssey 2025: Hong
   // Kong New Talents", "Odyssey 2026: The Last Emperor"), so one pattern
