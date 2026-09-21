@@ -528,12 +528,106 @@ const tryFindingMatchUsingLlm = async (movie) => {
   return null;
 };
 
+// A reviewer can only be trusted to choose between candidates the evidence
+// leaves open. When a listing names its director and a same-titled candidate
+// credits someone else, code has already ruled that candidate out - the crew
+// check in getBestMatch rejects it - but searchForBestMatch then hands the
+// reviewer the whole list, rejected candidate included, and neither reviewer is
+// told who directed anything. On 21 September that is how four festival shorts
+// were matched by the Jev reviewer to unrelated films of the same name - "Little
+// Brother" at the London Indie Film Festival to a 102-minute Matt Spicer feature
+// among them - when each short's billed director was absent from the credits of
+// the film it was given. The LLM reviewer declined all four, but out of general
+// caution rather than because it could see the conflict.
+//
+// So those candidates are removed before either reviewer sees the list. Narrowly:
+//  - only when the listing's own director field names someone. A name pulled
+//    out of a synopsis into matchingHints.crew is garbage often enough (see
+//    getBestMatch) that it must never be what rules a film out.
+//  - only a candidate sharing the listing's title: the set the crew check has
+//    already judged.
+//  - only when the candidate credits a director of its own. No credits is no
+//    evidence either way, and it stays.
+//  - and not when the crew check would accept it anyway - a listed director
+//    found anywhere in its crew, or a listed actor in its cast - by the same
+//    lenient name comparison.
+// Opera and ballet relays are exempt, as they are from the crew check, because
+// the names they list as directors are usually wrong.
+//
+// Only a film identified inside a programme is filtered, never a listing on its
+// own - see ruleOutContradictedDirectors in searchForBestMatch. This only ever
+// runs where the crew check has already failed, and it fails for one of two
+// reasons: the film is not on TheMovieDB under that director, or the director
+// the listing gives is wrong. A programme's shorts are nearly always the first.
+// A venue's own director field is the second often enough to matter: measured
+// across every venue on 21 September, ruling out contradicted candidates for
+// single listings removed the correct film from Always Lalisa ("Sue Kim (II)"),
+// Coco ("Adrian Molina Lee Unkrich"), My Father and Qaddafi ("Jihan K"),
+// Artists and Models (a sentence about Frank Tashlin) and Teenage Sex and
+// Death at Camp Miasma (credited to the wrong person entirely) - every one of
+// which the reviewer had been matching correctly. A programme's director comes
+// from its own "Poppy by Julia Schönstädt" billing, and none of the 39 films it
+// removed there were of that kind.
+async function contradictsListedDirector(result, movie) {
+  let movieInfo;
+  try {
+    movieInfo = await getMovieInfoAndCacheResults(result);
+  } catch (error) {
+    // An entry the search still lists but the lookup 404s on has no credits to
+    // contradict anything with, so it is left for the reviewer as before.
+    if (isMissingMovieDbEntry(error)) return false;
+    throw error;
+  }
+
+  const creditsADirector = (movieInfo.credits?.crew || []).some(
+    ({ job }) => job && basicNormalize(job) === "director",
+  );
+  if (!creditsADirector) return false;
+
+  return !(await matchesExpectedCastCrew(result, movie));
+}
+
+async function withoutContradictedDirectors(results, movie, normalizedTitle) {
+  if (
+    !movie.overview.directors?.length ||
+    !hasCrewFor(movie, normalizedTitle)
+  ) {
+    return results;
+  }
+
+  const kept = [];
+  for (const result of results) {
+    if (
+      matchesMovieTitle(normalizedTitle)(result) &&
+      (await contradictsListedDirector(result, movie))
+    ) {
+      // Loud, because a candidate removed here is one no reviewer can pick, and
+      // anyone asking why a listing went unmatched needs to be able to see it.
+      console.log(
+        ` - Ruling out ${result.id} "${result.title}" for "${movie.title}": its credits name none of ${movie.overview.directors.join(", ")}`,
+      );
+      continue;
+    }
+    kept.push(result);
+  }
+  return kept;
+}
+
 const searchForBestMatch = async ({
   normalizedTitle,
   movie,
   year: yearValue,
   isUsingLlmData = false,
+  ruleOutContradictedDirectors = false,
 }) => {
+  // The candidates a reviewer may choose from. Filtered only when the caller
+  // vouches that the listing's director is programme billing rather than a
+  // venue's own field - see withoutContradictedDirectors.
+  const reviewable = (results) =>
+    ruleOutContradictedDirectors
+      ? withoutContradictedDirectors(results, movie, normalizedTitle)
+      : results;
+
   const slug = getSearchSlug(normalizedTitle);
   const matchByDirector = await findMovieByDirector(normalizedTitle, movie);
   if (matchByDirector) return matchByDirector;
@@ -572,8 +666,9 @@ const searchForBestMatch = async ({
 
     // Only run the LLM on this is we haven't already done so
     if (!isUsingLlmData) {
-      const searchTitleResultsWithReleaseDate =
-        searchTitle.results.filter(isReleasedMovie);
+      const searchTitleResultsWithReleaseDate = await reviewable(
+        searchTitle.results.filter(isReleasedMovie),
+      );
       if (searchTitleResultsWithReleaseDate.length > 0) {
         const bestLlmMatchFromResults = await reviewResults(
           movie,
@@ -688,8 +783,9 @@ const searchForBestMatch = async ({
 
   // Only run the LLM on this is we haven't already done so
   if (!isUsingLlmData) {
-    const seachRelatedYearResultsWithReleaseDate =
-      seachRelatedYear.results.filter(isReleasedMovie);
+    const seachRelatedYearResultsWithReleaseDate = await reviewable(
+      seachRelatedYear.results.filter(isReleasedMovie),
+    );
     if (seachRelatedYearResultsWithReleaseDate.length > 0) {
       const bestLlmMatchFromResults = await reviewResults(
         movie,
@@ -774,6 +870,7 @@ const getPersonMovieCreditsAndCacheResults = (id) =>
 module.exports = {
   rankPeople,
   searchForBestMatch,
+  withoutContradictedDirectors,
   // Exported for helpers/write-matching-worksheet.js, which shows a human the
   // same candidates the matcher was given. Nothing in the pipeline should call
   // this directly - searchForBestMatch is the entry point, and it owns the

@@ -56,6 +56,22 @@ describe("matchIdentifiedMovies", () => {
     ]);
   });
 
+  it("asks the search to rule out same-titled films by other directors", async () => {
+    // A programme's director is its own billing, so a same-titled film made by
+    // someone else can be excluded before a reviewer sees it. Single listings
+    // never ask for this - a venue's own director field is too often wrong.
+    await matchIdentifiedMovies(programme, async () =>
+      identifying({
+        title: "Poppy",
+        director: "Julia Schönstädt",
+        year: "2026",
+        confidence: 9,
+      }),
+    );
+
+    expect(searchedWith().ruleOutContradictedDirectors).toBe(true);
+  });
+
   it("splits a director credit shared between two people", async () => {
     await matchIdentifiedMovies(programme, async () =>
       identifying({

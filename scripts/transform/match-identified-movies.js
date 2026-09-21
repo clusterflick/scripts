@@ -55,10 +55,16 @@ async function matchIdentifiedMovies(movie, identifyFn) {
     });
 
     try {
+      // This director is the programme's own billing, so a same-titled film
+      // made by someone else is ruled out before any reviewer can pick it -
+      // otherwise a festival short that isn't on TheMovieDB gets matched to an
+      // unrelated film of the same name. Not done for a venue's own director
+      // field, which is wrong often enough to rule out the right film.
       const result = await searchForBestMatch({
         normalizedTitle,
         movie: searchMovie,
         year: identifiedMovie.year,
+        ruleOutContradictedDirectors: true,
       });
 
       if (result) {
