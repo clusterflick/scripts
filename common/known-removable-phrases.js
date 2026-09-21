@@ -1376,6 +1376,11 @@ const knownRemovablePhrases = [
   "BHM Film Screening",
 
   // Weirdly specific fixes
+  // Nosferatu's English subtitle, which venues bill with the film as readily
+  // as without it ("Nosferatu: A Symphony of Horror", "Radiohead X Nosferatu:
+  // A Symphony of Horror"). Off it comes, so every spelling of the 1922 film
+  // groups with the bare "Nosferatu" the rest of the listings give it.
+  "A Symphony of Horror",
   // The premiere bills the guest and the extras that come with the film
   // ("ft Scorcher: Screening, Q&A + After Party"). hasSeparator has already
   // cut the title at the "+" by the time this list runs, so the entry stops

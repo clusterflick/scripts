@@ -1647,6 +1647,13 @@ function normalizeTitle(title, options) {
     "",
   );
 
+  // The knitting night numbers itself by volume ("Knitflix Club Vol. I: Mamma
+  // Mia!"), so one pattern rather than a string per volume - the numeral is
+  // the only thing that changes between them. Roman numerals, and the
+  // abbreviation is matched with or without its full stop because a venue
+  // publishes either.
+  title = title.replace(/\bknitflix club vol\.?\s*[ivxlcdm]+:\s*/i, "");
+
   knownRemovablePhrases.forEach((phrase) => {
     title = title.replace(phrase.toLowerCase(), "");
   });
