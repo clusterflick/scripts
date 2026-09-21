@@ -54,6 +54,13 @@ describe("isNonFilmEvent", () => {
     ["PLASTA Research & Innovation Day, Sunday 8th November 2026"],
     ["A Temporary Temple - ‘&’ Poetry Pamphlet Launch"],
     ["Sketchburn 7: a scratch night for sketch comedy films"],
+    ["CHESS BRUNCH"],
+    ["LINO PRINTING WORKSHOP"],
+    ["DATENITES PRESENTS: SINGLES SALSA"],
+    ["MIXTAPE PRESENTS: BOXING DAY"],
+    ["MIXTAPE PRESENTS: RAMPAGE SOUNDS ALL NIGHT"],
+    ["PRINCE OF PECKHAM PRESENTS: SIERRA LEONE PUB QUIZ EVENT.. PART2"],
+    ["THE GIFT OF LAUGHTER: ACLT FUNDRAISER"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });
@@ -88,6 +95,10 @@ describe("isNonFilmEvent", () => {
     ["Aftersun screening with panel discussion"],
     ["The Zone of Interest + Panel Discussion"],
     ["Sketch Artist"],
+    ["Chess of the Wind + The Crown Jewels of Iran + Intro"],
+    ["Balik Bayan: MIXTAPE: Filipino Edition"],
+    ["Prince Charles Cinema Film Quiz"],
+    ["Film Club Animation Workshop"],
   ])("does not flag '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(false);
   });
