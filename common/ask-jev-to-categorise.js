@@ -132,6 +132,18 @@ const instructions = {
 // mitigation. Recorded rather than acted on by default: whether composing them
 // in code beats the raw Choice is a question for the harness, not an
 // assumption to ship. See `useDecomposedSignals`.
+//
+// Tested once, on 21 September 2026: `hasMultipleFeatures` as the tie-break
+// for a movie/multiple-movies near-tie (top two within 20 points). Across all
+// 142 scoreable rows of categorisation-labels.json, three rounds with the cache
+// cleared, it fixed 0 and broke 0 - accuracy 127, 127 and 125 with or without
+// it. It fired on only three listings, and on each the noul agreed with the
+// Choice, including the two where both were wrong (0.58 and 0.51). The noul is
+// not biased - median 0.10 on rows labelled movie, 0.77 on multiple-movies -
+// but on a near-tie it reads the same text the Choice does and is unsure in
+// the same place, so it adds no independent evidence. Not worth an extra
+// question on every call. The churn it was meant to address is held instead by
+// holdYesterdaysCategory in categorise.js.
 const DECOMPOSED_SIGNALS = {
   hasFeature: noul(
     "At least one film in this programme runs 40 minutes or longer.",
