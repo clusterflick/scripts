@@ -262,10 +262,15 @@ side of the network fall back; our own bugs throw.
 
 `MATCHER=jev` scores 12/13 against the LLM's 10/13 on
 `common/tests/matching-labels.json`, at roughly half the latency and a third of
-the cost, and it is stable where the LLM is not - asked the same question four
-times with a nonce defeating both caches, the LLM answered differently on 4 of
-those 13 rows and Jev on none. Thirteen rows drawn from the known-hard tail is
-not a mandate, which is why the default has not moved.
+the cost. Asked the same question four times with a nonce defeating both caches,
+the LLM answered differently on 4 of those 13 rows and Jev on none - but that
+measured the reviewer on 13 rows, and it does not make Jev deterministic. Asked
+one listing three times over, the Jev categoriser flips on near-ties: of 7
+listings whose top two categories sat within 0.01-0.20 of each other, 3 changed
+answer inside three identical calls. Treat a low-confidence Jev answer as one
+draw rather than a fixed result - and since `cache-llm` is keyed by day, a
+near-tie listing gets a fresh draw each morning. Thirteen rows drawn from the
+known-hard tail is not a mandate, which is why the default has not moved.
 
 ## CI/CD
 
