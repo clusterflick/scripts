@@ -10,8 +10,9 @@ module.exports = {
   },
   url: "https://www.thetrafalgarchelsea.com/events/",
   address: "224-226 King's Road, London, SW3 5UA, UK",
-  geo: { lat: 51.4878627, lon: -0.1681639 },
-  structure: "solo",
+  geo: { lat: 51.48792279749226, lon: -0.16812098638306794 },
+  structure: "group",
+  groupName: "Three Cheers Pub Co.",
   type: "Pub & Bar",
   programming: "host",
 };

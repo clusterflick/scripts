@@ -10,7 +10,7 @@ module.exports = {
   },
   url: "https://www.thebotree.com/triple-bond/",
   address: "30 Marylebone Lane, London, W1U 2DR, UK",
-  geo: { lat: 51.5154762, lon: -0.1488534 },
+  geo: { lat: 51.515497897147945, lon: -0.14885876453053876 },
   structure: "solo",
   type: "Other",
   programming: "host",

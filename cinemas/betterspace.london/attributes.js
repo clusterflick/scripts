@@ -10,7 +10,7 @@ module.exports = {
   },
   url: "https://www.betterspace.london/events",
   address: "127 Farringdon Road, London, EC1R 3DA, UK",
-  geo: { lat: 51.5235777, lon: -0.1088578 },
+  geo: { lat: 51.52368252892709, lon: -0.10888859987386558 },
   structure: "solo",
   type: "Creative Space",
   programming: "host",

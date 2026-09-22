@@ -10,7 +10,7 @@ module.exports = {
   },
   url: "https://www.theroofgardens.com",
   address: "99 Kensington High Street, London, W8 5SA, UK",
-  geo: { lat: 51.5010397, lon: -0.1914084 },
+  geo: { lat: 51.5011732457159, lon: -0.19146204590618515 },
   structure: "solo",
   type: "Other",
   programming: "host",

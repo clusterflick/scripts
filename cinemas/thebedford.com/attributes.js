@@ -15,7 +15,8 @@ module.exports = {
   url: "https://thebedford.com",
   address: "77 Bedford Hill, London, SW12 9HD, UK",
   geo: { lat: 51.44291585259206, lon: -0.14947377474434165 },
-  structure: "solo",
+  structure: "group",
+  groupName: "Three Cheers Pub Co.",
   type: "Pub & Bar",
   programming: "host",
 };
