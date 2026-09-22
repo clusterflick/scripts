@@ -8,6 +8,7 @@ const {
   readJSON,
 } = require("../../common/utils");
 const { venueMatchesCinema } = require("../../common/source-utils");
+const { isNotNonFilmEvent } = require("../../common/is-non-film-event");
 const normalizeVenueName = require("../../common/normalize-venue-name");
 const attributes = require("./attributes");
 const { getDescriptionText } = require("./utils");
@@ -105,7 +106,14 @@ async function findEvents(cinema) {
     });
   });
 
-  return filteredEvents.map((event) => convertLumaEvent(event, cinema));
+  // Luma has no film category, so the sweep reads a whole city's Arts &
+  // Culture listings - a venue we hold for its screenings offers up its
+  // exhibitions, book launches and workshops alongside them. Drop the ones we
+  // know aren't films, here rather than downstream: a venue with its own
+  // transform concatenates what a source hands it without consulting the list.
+  return filteredEvents
+    .map((event) => convertLumaEvent(event, cinema))
+    .filter(isNotNonFilmEvent);
 }
 
 module.exports = findEvents;
