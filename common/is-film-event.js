@@ -23,7 +23,13 @@ const FILM_KEYWORDS = [
   "film club",
   "film screening",
   "screening",
-  "short films",
+  // Singular, so it covers "short films" too - matching is a substring test.
+  // A listing billing "an exclusive short film premiere" is a screening, and
+  // the plural spelling alone missed it.
+  "short film",
+  // A premiere is a screening however the listing words it, and one billed as
+  // a premiere often never says "screening" at all.
+  "film premiere",
   "cinema",
   "cineclub",
   "cine club",

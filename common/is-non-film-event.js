@@ -130,6 +130,14 @@ const nonFilmEvents = [
   // per show.
   /ACLT Fundraiser/i,
   /Matchstick LDN/i,
+  // A gallery and archive series of previews, billed by the exhibition or
+  // curator talk it is previewing ("KQ Private View | Londoners on Trial at
+  // The London Archives"), so match the series rather than carrying a pattern
+  // per show. Never a screening: the listings are exhibitions and talks.
+  /KQ Private View/i,
+  // The gallery's late opening, billed by the strand running that night. Music,
+  // workshops and talks across the building, never a film.
+  /Tate Modern Lates/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>

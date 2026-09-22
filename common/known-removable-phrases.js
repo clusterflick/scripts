@@ -1391,12 +1391,6 @@ const knownRemovablePhrases = [
   // The book club names the novel's author after the film's title.
   "by Jhumpa Lahiri",
   "and Conversation with Director Tomisin Adepeju",
-  // KQ bills the host venue after the work being shown. The separator is
-  // normalised to a colon in normalize-title.js first, so only one spelling
-  // is listed here.
-  "KQ Private View:",
-  "the Francis Crick Institute",
-  "at The London Archives",
   "愛殺",
   "老虎出更",
   "リンダ リンダ リンダ",
