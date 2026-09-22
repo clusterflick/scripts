@@ -1654,6 +1654,14 @@ function normalizeTitle(title, options) {
   // than a string per year.
   title = title.replace(/\bukjff(?:\s+\d{4})?:\s*/i, "");
 
+  // The same for the strand billed as a bare "IFF", with and without the year
+  // ("IFF: Migration", "IFF 2026: Sundown"). A pattern rather than a string
+  // per year, and anchored on a word boundary because the string list is not:
+  // "IFF 2026:" matched inside "PRIFF 2026: Memory, Home & Exile" and left the
+  // festival's initials behind as "pr", grouping the film under a key no other
+  // venue could produce.
+  title = title.replace(/\biff(?:\s+\d{4})?:\s*/i, "");
+
   // The festival names itself after the year it runs in ("Odyssey 2025: Hong
   // Kong New Talents", "Odyssey 2026: The Last Emperor"), so one pattern
   // rather than a string per year. The colon is required, so a film actually
