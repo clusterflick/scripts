@@ -129,6 +129,7 @@ const nonFilmEvents = [
   // GIFT OF LAUGHTER"), so match the fundraiser rather than carrying a pattern
   // per show.
   /ACLT Fundraiser/i,
+  /Matchstick LDN/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>

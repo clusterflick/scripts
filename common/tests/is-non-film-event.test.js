@@ -54,6 +54,7 @@ describe("isNonFilmEvent", () => {
     ["PLASTA Research & Innovation Day, Sunday 8th November 2026"],
     ["A Temporary Temple - ‘&’ Poetry Pamphlet Launch"],
     ["Sketchburn 7: a scratch night for sketch comedy films"],
+    ["Matchstick LDN"],
     ["CHESS BRUNCH"],
     ["LINO PRINTING WORKSHOP"],
     ["DATENITES PRESENTS: SINGLES SALSA"],

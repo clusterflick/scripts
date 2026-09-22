@@ -59,6 +59,12 @@ function normalizeTitle(title, options) {
     [/F1\s?®?:? The Movie/i, "F1"],
     [/Batman\s?:? The Movie/i, "Batman"],
     ["The Transformers: The Movie", "The Transformers The Movie ()"], // Retain "The Movie" suffix
+    // The subtitle is part of the film's own title, so the brackets come off
+    // before the trailing-parenthesis rule gets to strip them with it.
+    [
+      "Birdman or (The Unexpected Virtue of Ignorance)",
+      "Birdman or The Unexpected Virtue of Ignorance",
+    ],
     [/:? The Movie$/i, ""],
     // Venues spell the stage-production suffix with a dash or a colon, so
     // match the separator rather than carrying a phrase per spelling.
