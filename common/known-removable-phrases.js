@@ -1383,6 +1383,20 @@ const knownRemovablePhrases = [
   // where that cut does rather than carrying the tail it can never match.
   "ft Scorcher: Screening, Q&A",
   "with Peter Suschitzky",
+  // Film clubs on Luma bill themselves ahead of the film they are showing,
+  // and each spells its own name its own way.
+  "AI Movie Club x",
+  "ABRC FILM CLUB",
+  "ABRC:",
+  // The book club names the novel's author after the film's title.
+  "by Jhumpa Lahiri",
+  "and Conversation with Director Tomisin Adepeju",
+  // KQ bills the host venue after the work being shown. The separator is
+  // normalised to a colon in normalize-title.js first, so only one spelling
+  // is listed here.
+  "KQ Private View:",
+  "the Francis Crick Institute",
+  "at The London Archives",
   "愛殺",
   "老虎出更",
   "リンダ リンダ リンダ",

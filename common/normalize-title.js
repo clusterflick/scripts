@@ -1441,6 +1441,9 @@ function normalizeTitle(title, options) {
     ["FREE Kids Movie Club: Into the Highlands", "brave"],
     ["FREE Kids Movie Club: All That Jazz", "soul"],
     ["FREE Kids Movie Club: Monsters Welcome", "monsters inc"],
+    // KQ separates its series name from the work with a pipe; the phrase list
+    // carries the colon spelling only.
+    ["KQ Private View |", "KQ Private View: "],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
