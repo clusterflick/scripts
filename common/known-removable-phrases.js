@@ -1383,6 +1383,14 @@ const knownRemovablePhrases = [
   // where that cut does rather than carrying the tail it can never match.
   "ft Scorcher: Screening, Q&A",
   "with Peter Suschitzky",
+  // Film clubs on Luma bill themselves ahead of the film they are showing,
+  // and each spells its own name its own way.
+  "AI Movie Club x",
+  "ABRC FILM CLUB",
+  "ABRC:",
+  // The book club names the novel's author after the film's title.
+  "by Jhumpa Lahiri",
+  "and Conversation with Director Tomisin Adepeju",
   "愛殺",
   "老虎出更",
   "リンダ リンダ リンダ",

@@ -1,6 +1,12 @@
 module.exports = {
   id: "electriccinema.co.uk-white-city",
   name: "Electric Cinema White City",
+  // The cinema sits inside Soho House's White City House and shares its
+  // address, so a platform taking the venue from whoever booked the room
+  // lists it under the members' club rather than the cinema. findMatchingCinema
+  // requires the name to match before it will look at the location, so without
+  // this an exact address and coordinate pair still fails to match.
+  alternativeNames: ["White City House", "Soho House White City"],
   domain: "https://www.electriccinema.co.uk",
   socials: {
     letterboxd: "electriccinemas",
