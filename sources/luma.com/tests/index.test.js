@@ -50,6 +50,16 @@ describe(`${attributes.name}`, () => {
       expectedMatches: 1,
     },
     {
+      // Luma lists this one by its bare address - the building lets its studios
+      // individually, so the venue is whatever the booker typed. Matches only
+      // through alternativeNames.
+      name: "The Exchange NW1",
+      alternativeNames: ["24-46 Lisson Grove", "The Exchange"],
+      address: "24-46 Lisson Grove, London, NW1 6TZ, UK",
+      geo: { lat: 51.5223366, lon: -0.1649506 },
+      expectedMatches: 1,
+    },
+    {
       name: "Vue West End",
       alternativeNames: ["Vue West End - Leicester Square"],
       address: "Leicester Square, 3 Cranbourn Street, London, WC2H 7AL, UK",
@@ -64,7 +74,7 @@ describe(`${attributes.name}`, () => {
 
         // Make sure the input looks roughly correct
         expect(events).toBeTruthy();
-        expect(Object.keys(events)).toHaveLength(175);
+        expect(Object.keys(events)).toHaveLength(176);
 
         readJSON.mockImplementation(() => ({ events }));
 
