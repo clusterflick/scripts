@@ -306,6 +306,8 @@ const knownRemovablePhrases = [
   "Spielberg Sci-Fi Week:",
   "Spielberg Week:",
   "Steven Spielberg season",
+  "Comics Come Alive season",
+  "I Trans Awareness programme",
   "Presentation & Screening:",
   "Black Cinema Film Nights at the The Source",
   "BLACK CINEMA FILM NIGHTS at The Source",
@@ -437,6 +439,7 @@ const knownRemovablePhrases = [
   "MINDWARCINEMA:",
   "Miskatonic:",
   "Members Preview",
+  "Member's Preview",
   "Exclusive Advance Film Screening",
   "Exclusive Screening & After-Party",
   "Exclusive Prewiew",
@@ -1012,6 +1015,7 @@ const knownRemovablePhrases = [
   "Leytonstone Library",
   "LRB/London Reviewed:",
   "LRB Screen/London Reviewed:",
+  "London Review of Books/London Reviewed:",
   "LRB Screen x MUBI:",
   "LRMN's",
   "London Migration Film Festival",
@@ -1378,6 +1382,7 @@ const knownRemovablePhrases = [
   // cut the title at the "+" by the time this list runs, so the entry stops
   // where that cut does rather than carrying the tail it can never match.
   "ft Scorcher: Screening, Q&A",
+  "with Peter Suschitzky",
   "愛殺",
   "老虎出更",
   "リンダ リンダ リンダ",
