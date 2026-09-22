@@ -1030,7 +1030,13 @@ const isPrivateHire = (title = "") =>
   // Hour", "Conferencing 4 Hour", "Conferencing 6 Hour" - so match the family
   // rather than a single length
   /conferencing \d+ hour/.test(basicNormalize(title)) ||
-  basicNormalize(title).includes("do not book");
+  basicNormalize(title).includes("do not book") ||
+  // The same marker in the other wording venues use for a listing they have
+  // killed but not taken down ("David Byrne's American Utopia - do not use").
+  // Cancellation is otherwise only seen where the source states it - Spektrix
+  // flags the instance, and the transform reads "cancelled event" off the
+  // fetched page - and neither of those sees a title carrying the note.
+  basicNormalize(title).includes("do not use");
 
 const isOnline = (title = "") =>
   basicNormalize(title).includes("online workshop");

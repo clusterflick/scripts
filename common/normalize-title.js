@@ -232,8 +232,22 @@ function normalizeTitle(title, options) {
     ["Saturday night at the movies -", "Saturday night at the movies:"],
     ["Pierre Boulez - Boulez", "Pierre Boulez "],
     ["twin peaks - ", "twin peaks "],
-    [" - Part 1 - ", " I: "],
+    // TheMovieDB numbers the trilogy's instalments with Roman numerals and a
+    // colon ("The Human Condition I: No Greater Love"), where the venue bills
+    // the part and the subtitle as two dashed clauses. Anchored to the film,
+    // because a double bill that names a "Part 1" in its second half is not
+    // this trilogy and must keep the numeral it was billed with.
+    [/^The Human Condition - Part 1 - /i, "The Human Condition I: "],
     ["- Part ", "Part "],
+    // The double bill is billed with a plus, which the separator rule would
+    // otherwise read as the end of the title, dropping the second film. Named
+    // as the pairing rather than the prefix alone, because the same venue also
+    // bills "American History X + Intro By Tony Kaye", where what follows the
+    // plus is the billing and the rule that drops it is the right one.
+    [
+      "American History X + Humpty Dumpty X",
+      "American History X & Humpty Dumpty X",
+    ],
     ["FUN IN THE LOUNGE - ", "Fun in the lounge: "],
     ["FUN AT THE LOUNGE - ", "Fun in the lounge: "],
     ["FREE ENTRY - ", "Free Entry: "],
@@ -1245,15 +1259,28 @@ function normalizeTitle(title, options) {
     ],
     ["Metropolis at 100", "Metropolis"],
     ["Halloween (1978) + ", "Halloween (1978) & "],
-    // One venue truncates the second half of the double bill to the words the
-    // book shares with the film, so "The Tiger Who Came To" never reaches the
-    // title it is short for. Anchored to the end of the listing, because the
-    // full "The Tiger Who Came To Tea" must be left alone. The pairing is
-    // billed with a plus, which the separator rule would otherwise read as the
-    // end of the title and drop the second film entirely.
-    [/\s+The Tiger Who Came To$/i, " The Tiger Who Came To Tea"],
-    ["We're Going on a Bear Hunt + ", "We're Going on a Bear Hunt & "],
+    // The pairing is billed with a plus, which the separator rule would
+    // otherwise read as the end of the title and drop the second film
+    // entirely. One venue publishes it without the spaces, so the plus is
+    // matched with whatever whitespace it is given rather than a string per
+    // spacing. Runs before the completion below, which needs the separator to
+    // be a word apart from the title it is completing.
+    [/We're Going on a Bear Hunt\s*\+\s*/i, "We're Going on a Bear Hunt & "],
+    // Venues truncate the second half of the double bill to the words the book
+    // shares with the film, so "The Tiger Who Came To" never reaches the title
+    // it is short for - one drops the article as well and marks the cut with an
+    // ellipsis ("Tiger Who Came to..."). Anchored to the end of the listing,
+    // because the full "The Tiger Who Came To Tea" must be left alone.
+    [
+      /\s+(?:The\s+)?Tiger Who Came To(?:\s*(?:\.{3}|…))?$/i,
+      " The Tiger Who Came To Tea",
+    ],
     ["MORE PUNK THAN PUNK + ", "MORE PUNK THAN PUNK & "],
+    // The book launch is the billing and the film is on the far side of the
+    // plus, so the separator rule would keep the launch and drop the film
+    // entirely. Joined here and the launch taken off as a phrase, which leaves
+    // the film the evening is built around.
+    ["Arrows of Desire Book Launch + ", "Arrows of Desire Book Launch & "],
     ["Sam Neill Tribute -", "Sam Neill Tribute: "],
     ["Miss Marple -", "Miss Marple: "],
     ["BFI 'Rip it Up' -", "BFI 'Rip it Up': "],
@@ -1653,6 +1680,14 @@ function normalizeTitle(title, options) {
   // runs in ("UKJFF: Pink Lady", "UKJFF 2026: Shana"), so one pattern rather
   // than a string per year.
   title = title.replace(/\bukjff(?:\s+\d{4})?:\s*/i, "");
+
+  // The same for the strand billed as a bare "IFF", with and without the year
+  // ("IFF: Migration", "IFF 2026: Sundown"). A pattern rather than a string
+  // per year, and anchored on a word boundary because the string list is not:
+  // "IFF 2026:" matched inside "PRIFF 2026: Memory, Home & Exile" and left the
+  // festival's initials behind as "pr", grouping the film under a key no other
+  // venue could produce.
+  title = title.replace(/\biff(?:\s+\d{4})?:\s*/i, "");
 
   // The festival names itself after the year it runs in ("Odyssey 2025: Hong
   // Kong New Talents", "Odyssey 2026: The Last Emperor"), so one pattern
