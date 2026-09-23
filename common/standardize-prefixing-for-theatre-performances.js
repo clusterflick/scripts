@@ -45,10 +45,11 @@ function standardizePrefixingForNationalTheatrePerformances(title) {
     .replace(/Preview Screening/i, "")
     .replace(/Preview/i, "");
 
+  // The year comes off even when a note follows it ("Hamlet (2026) (Dublin)")
   return `National Theatre Live: ${updatedTitle}`
     .replace(/\s+:\s+/, " ")
     .replace(/\s+/g, " ")
-    .replace(/\(\d{4}\)$/i, "")
+    .replace(/\(\d{4}\)(?=(?:\s*\([^()]*\))*$)/i, "")
     .replace(/\(\d{4}\s+encore\)$/i, "")
     .trim();
 }

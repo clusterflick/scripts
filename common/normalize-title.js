@@ -1884,9 +1884,11 @@ function normalizeTitle(title, options) {
     title = title.replace(/\((\d{4})\)$/, " ($1)"); // Add a space before it
   }
 
+  // A year followed by a note ("(1955) (70th Anniversary)") keeps the year,
+  // the same as a year on its own at the end
   if (!hasYear) {
-    title = title.replace(/\([^(]*\)$/, "").trim();
-    title = title.replace(/\([^(]*\)$/, "").trim(); // Do it twice in case there's more paraenthesis
+    title = title.replace(/\((?!\d{4}\))[^(]*\)$/, "").trim();
+    title = title.replace(/\((?!\d{4}\))[^(]*\)$/, "").trim(); // Do it twice in case there's more paraenthesis
   }
 
   // Anything else in brackets is information about the listing or the film -
