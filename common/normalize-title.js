@@ -295,6 +295,13 @@ function normalizeTitle(title, options) {
     [/\s+(?:live\s+)?(?:in\s+)?(3|2)d$/i, ""], // 3d or 2d, with optional "live in" prefix
     [/\s+2026$/i, ""], // Year
     ["Vasthunnam", "Vasthunam"],
+    // TheMovieDB drops an "i" from the film's title, which the venues and IMDb
+    // both spell in full, and its search finds nothing under the full spelling
+    // - so the venue's title is corrected to TheMovieDB's.
+    // NOTE: This must be removed once TheMovieDB fixes the entry, as searching
+    // the misspelling will then stop finding it
+    // https://www.themoviedb.org/movie/1544847
+    ["Pradhama Drishtiya Kuttakkar", "Pradhama Drishtya Kuttakkar"],
     ["Melagaon", "Malegaon"],
     ["Chadian", "Chadum"],
     ["Carvaggio", "Caravaggio"],
