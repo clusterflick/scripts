@@ -148,6 +148,28 @@ const probeJson = async (url, options) => {
   throw classifyFailure(url, response, body);
 };
 
+// `probeJson` for a response a probe read from inside a browser page, where the
+// request had to carry the browser's fingerprint to be answered at all. Takes
+// the plain fields `page.evaluate` can hand back, and classifies them the same
+// way, so a refusal is recorded as the same kind of row either way.
+const parseProbeJson = (url, { ok, status, statusText, cfMitigated, body }) => {
+  if (cfMitigated === "challenge") {
+    throw new ProbeFailure({
+      kind: "bot-challenge",
+      via: "cf-mitigated",
+      status,
+    });
+  }
+  if (ok) {
+    try {
+      return JSON.parse(body);
+    } catch {
+      // Fall through, as in `probeJson`.
+    }
+  }
+  throw classifyFailure(url, { status, statusText }, body);
+};
+
 // Like `probeText`, but also hands back the cookies the response set. A chain
 // whose second call is CSRF-gated needs both the token from the page and the
 // session that token was issued against.
@@ -230,6 +252,7 @@ module.exports = {
   ProbeFailure,
   probeError,
   probeJson,
+  parseProbeJson,
   probeText,
   probeDocument,
   classifyPage,

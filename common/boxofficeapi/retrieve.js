@@ -6,12 +6,20 @@ const { dailyCache } = require("../cache");
 // Boxoffice's API under `/api/gatsby-source-boxofficeapi/`. The chain module
 // supplies which page to bootstrap from and how to key the chain-wide caches;
 // everything after that is identical.
+//
+// Only the calls to the chain's own domain go through `transport`. The build
+// assets (page-data) live on Webedia's CDN, a different host - one Cineworld's
+// bot challenge does not cover - so they are always fetched directly.
+const directTransport = { text: fetchText, json: fetchJson };
 
 const formatDate = (date) => format(date, "yyyy-MM-dd'T'HH:mm:ss");
 
-async function retrieve({ domain, cinemaId }, { listingPath, cachePrefix }) {
+async function retrieve(
+  { domain, cinemaId },
+  { listingPath, cachePrefix, transport = directTransport },
+) {
   const mainPage = await dailyCache(`${cachePrefix}-main-page`, async () =>
-    fetchText(`${domain}/${listingPath}`),
+    transport.text(`${domain}/${listingPath}`),
   );
 
   // Extract the CMS hash URL from the main page
@@ -53,7 +61,7 @@ async function retrieve({ domain, cinemaId }, { listingPath, cachePrefix }) {
   moviesParams.append("basic", "false");
   moviesParams.append("castingLimit", "10");
   movieIds.forEach((movieId) => moviesParams.append("ids", movieId));
-  const movieDetails = await fetchJson(
+  const movieDetails = await transport.json(
     `${domain}/api/gatsby-source-boxofficeapi/movies?${moviesParams}`,
   );
 
@@ -63,7 +71,7 @@ async function retrieve({ domain, cinemaId }, { listingPath, cachePrefix }) {
     from: formatDate(startOfDay(today)),
     to: formatDate(endOfDay(addYears(today, 1))),
   });
-  const schedule = await fetchJson(
+  const schedule = await transport.json(
     `${domain}/api/gatsby-source-boxofficeapi/schedule?${scheduleParams}`,
   );
 

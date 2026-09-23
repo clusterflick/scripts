@@ -30,7 +30,9 @@ const MAX_THEATERS_PER_REQUEST = 10;
 
 const formatDate = (date) => format(date, "yyyy-MM-dd'T'HH:mm:ss");
 
-const getSchedules = async (domain, venues) => {
+// `requestJson` is how the call is made: `probeJson` directly, unless the chain
+// module has a reason to make it from somewhere else - see `withSession` below.
+const getSchedules = async (domain, venues, requestJson) => {
   if (venues.length > MAX_THEATERS_PER_REQUEST) {
     throw probeError(
       `Asked for ${venues.length} theaters, over the ${MAX_THEATERS_PER_REQUEST} the endpoint silently truncates at`,
@@ -49,7 +51,7 @@ const getSchedules = async (domain, venues) => {
     );
   }
 
-  const schedules = await probeJson(
+  const schedules = await requestJson(
     `${domain}/api/gatsby-source-boxofficeapi/schedule?${params}`,
   );
   if (!schedules || typeof schedules !== "object") {
@@ -84,7 +86,13 @@ const chunk = (items, size) =>
     [],
   );
 
-async function health(venues, domain) {
+// A chain whose API only answers a browser supplies `withSession`, which runs
+// the call it is handed with a `requestJson` of its own. It wraps each chunk's
+// call whole, so the challenge retry below gets a fresh session rather than
+// being refused again by one that was already challenged.
+const direct = (fn) => fn(probeJson);
+
+async function health(venues, domain, { withSession = direct } = {}) {
   const { countRequest, reasonFor, finalise } = startObservation(GRANULARITY);
 
   const untracked = venues.filter(({ cinemaId }) => !cinemaId);
@@ -101,7 +109,10 @@ async function health(venues, domain) {
     let schedules;
     try {
       schedules = await withChallengeRetry(
-        () => getSchedules(domain, group),
+        () =>
+          withSession((requestJson) =>
+            getSchedules(domain, group, requestJson),
+          ),
         `theaters ${group.map(({ cinemaId }) => cinemaId).join(", ")}`,
       );
       countRequest();

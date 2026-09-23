@@ -90,8 +90,8 @@ async function withCamoufoxSession(fn, sessionOptions = {}) {
   // string skips the browser entirely, and returning null reports a challenge
   // and escalates the rest of the session. Without it, every call uses the
   // browser.
-  const getPage = (url, cacheKey, callback, options = {}) =>
-    dailyCache(cacheKey, async () => {
+  const getPage = (url, cacheKey, callback, options = {}) => {
+    const load = async () => {
       if (options.withoutBrowser && !escalated) {
         const content = await options.withoutBrowser(url);
         if (content !== null) return content;
@@ -202,7 +202,14 @@ async function withCamoufoxSession(fn, sessionOptions = {}) {
           }
         }
       }
-    });
+    };
+
+    // See the equivalent comment in `get-page-with-playwright.js`: a caller
+    // whose whole point is a fresh answer, such as an hourly health probe, has
+    // to opt out of the day cache or it replays the first response all day.
+    const disableCache = options.disableCache ?? sessionOptions.disableCache;
+    return disableCache ? load() : dailyCache(cacheKey, load);
+  };
 
   try {
     return await fn(getPage);
