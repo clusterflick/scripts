@@ -1651,6 +1651,15 @@ const knownRemovablePhrases = [
   "()",
   "(((",
   ")))",
+  "Rob Zombie's ",
+  "John Carpenter's ",
+  "Lee Cronin's ",
+  "Ti West's ",
+  "Harold Lloyd's ",
+  "Buster Keaton's ",
+  "Lucy Raven's ",
+  "John Shuttleworth: ",
+  "An Afternoon with Walter Murch",
 ];
 
 module.exports = knownRemovablePhrases;

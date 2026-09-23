@@ -65,6 +65,9 @@ function normalizeTitle(title, options) {
       "Birdman or (The Unexpected Virtue of Ignorance)",
       "Birdman or The Unexpected Virtue of Ignorance",
     ],
+    // The venue follows the suffix with the language, so the rule below that
+    // strips it from the end of the title never fires.
+    [/^Mirzapur: The Movie\b/i, "Mirzapur"],
     [/:? The Movie$/i, ""],
     // Venues spell the stage-production suffix with a dash or a colon, so
     // match the separator rather than carrying a phrase per spelling.
@@ -109,10 +112,18 @@ function normalizeTitle(title, options) {
     [" + Zog", " and Zog"],
     ["Zog + ", "Zog & "],
     [" + Superworm", " and Superworm"],
+    ["Superworm + ", "Superworm & "],
+    // TheMovieDB has no entry for the pair, so it matches the sequel on its
+    // own. Name it as the double bill it is, which one venue already does.
+    [
+      /\bThe Gruffalo\s*\+\s*(?:The )?Gruffalo's Child(?:\s+Double[\s-]Bill)?/i,
+      "The Gruffalo and The Gruffalo's Child Double Bill",
+    ],
     // The double bill is billed with and without the definite article, and one
     // venue closes the gap around the separator, so the separator rule would
     // otherwise drop the second film from some of them.
     [/\s*\+\s*(?:The )?Gruffalo's Child/i, " and The Gruffalo's Child"],
+    ["The Gruffalo + ", "The Gruffalo & "],
     [" + The Scarecrow's Wedding", " and The Scarecrow's Wedding"],
     [" + 28YL: The Bone Temple", " "],
     [" + The Bone Temple (", " "],
@@ -203,10 +214,11 @@ function normalizeTitle(title, options) {
     // three parts of its name, which hasSeparator reads as a separator and
     // cuts the title down to its first two words.
     ["Be Pure - Be Vigilant - Behave", "Be Pure Be Vigilant Behave"],
-    // The company bills the ballet with and without the definite article, so
-    // the two venues showing it would otherwise arrive under different names.
+    // The company bills the ballet with and without the definite article, and
+    // with "presents" or a bare colon, so the venues showing it would
+    // otherwise arrive under different names.
     [
-      /^English National Ballet presents:?\s+(?:the\s+)?/i,
+      /^English National Ballet(?:\s+presents:?|:)\s+(?:the\s+)?/i,
       "English National Ballet presents ",
     ],
     ["ODEON Pride Nights - ", "ODEON Pride Nights "],
@@ -395,9 +407,10 @@ function normalizeTitle(title, options) {
       /^The End of Evangelion$/i,
       "Neon Genesis Evangelion: The End of Evangelion",
     ],
+    // The pairing is the film released as Revival of Evangelion
     [
       "Evangelion: Death (True)² + The End of Evangelion",
-      "Neon Genesis Evangelion: Death (True)² & The End of Evangelion",
+      "Revival of Evangelion",
     ],
     ["We Live Here + Chornobyl 22", "We Live Here & Chornobyl 22"],
     ["Terror Dome", "Terrordome"],
@@ -1088,11 +1101,104 @@ function normalizeTitle(title, options) {
     [/Kapodistrias[\s–:]+ The Governor/i, "Kapodistrias"],
     [/Film Festival:? Opening Night/i, "Film Festival - Opening Night"],
     ["Washington, DC", "Washington, D.C."],
-    [/Glastonbury:? The Movie:?\s/i, "Glastonbury The Movie in Flashback: "],
+    // TheMovieDB already bills the film with its subtitle, so skip a title
+    // that carries it or the subtitle is added a second time.
+    [
+      /Glastonbury:? The Movie:?\s(?!in flashback\b)/i,
+      "Glastonbury The Movie in Flashback: ",
+    ],
     ["Andre Rieu - ", "Andre Rieu's "],
     ["Andre Rieu ", "Andre Rieu's "],
     ["Andre Rieu's Summer 2026:", "Andre Rieu's 2026 Summer Concert:"],
     [" + UK Premiere: Replikka", " + Replikka"],
+    // TheMovieDB bills the film with a dash before its subtitle, which
+    // hasSeparator cuts at, while venues use an em dash it doesn't read.
+    [
+      /My Undesirable Friends: Part II\s*[-–—]\s*Exile/i,
+      "My Undesirable Friends: Part II: Exile",
+    ],
+    // TheMovieDB has the film without its subtitle
+    [/^The Vvaan: Force of the Forrest/i, "The Vvaan"],
+    // Venues spell the festival with and without spaces
+    [/\bCat Video Fest\b/i, "CatVideoFest"],
+    // Venues spell these the British way and TheMovieDB has the American.
+    // Case by case, because the normalised title is also the search, and a
+    // British film listed with its own spelling ("The Favourite") has to
+    // keep it to be found.
+    [/\bThe Colour of (Lies|Pomegranates)\b/i, "The Color of $1"],
+    [/\bHonour Among Thieves\b/i, "Honor Among Thieves"],
+    // Polanski's Macbeth was released in the US as "The Tragedy of Macbeth",
+    // which is also the Coen film's own title. Both land on "Macbeth", which
+    // the search still finds the Coen film under.
+    [/\bThe Tragedy of Macbeth\b/i, "Macbeth"],
+    // Venues bill these under a shorter or differently spelled title than the
+    // one TheMovieDB has
+    [/\bThe Dull Ice Flower\b/i, "The Dull-Ice Flower"],
+    [/\bHadestown\b(?!:?\s+The Musical)/i, "Hadestown: The Musical"],
+    [
+      /\bAbbott and Costello Meet Frankenstein\b/i,
+      "Bud Abbott and Lou Costello Meet Frankenstein",
+    ],
+    [
+      /\bAmadou & Mariam\b(?!:?\s+The Blind Couple)/i,
+      "Amadou & Mariam: The Blind Couple from Mali",
+    ],
+    [
+      /^DocHouse: Black is Beautiful$/i,
+      "Black Is Beautiful: The Kwame Brathwaite Story",
+    ],
+    // Anchored, because the opera is billed under this spelling too
+    [/^Boris Godunov$/i, "Boris Godounov"],
+    [/^Home Alone 2$/i, "Home Alone 2: Lost in New York"],
+    [
+      /^Hero: Blockbuster World War 2 drama on RAF legend Ulric Cross$/i,
+      "Hero: Inspired by the Extraordinary Life & Times of Mr. Ulric Cross",
+    ],
+    // The " - " would otherwise be read as a separator and cut the title
+    [
+      /\bErnest and Celestine\s*-\s*Winter Tales\b/i,
+      "Ernest & Celestine's Winter",
+    ],
+    [/\b(?:De La )?Com[eé]die Fran[cç]aise\b/i, "Comédie-Française"],
+    // Venues bill these under their UK or alternate title and TheMovieDB has
+    // another
+    [/\bCassandra Cat\b/i, "When the Cat Comes"],
+    [/\bChampagne and Bullets\b/i, "GetEven"],
+    [/\bClosely Observed Trains\b/i, "Closely Watched Trains"],
+    [/\bFear Over the City\b/i, "The Night Caller"],
+    [/\bFrankenstein vs\.? Baragon\b/i, "Frankenstein Conquers the World"],
+    [/\bLa Plan[eè]te Sauvage\b/i, "Fantastic Planet"],
+    // Anchored, because the rapper's concert films start with this spelling
+    [/^Machine Gun Kelly$/i, "Machine-Gun Kelly"],
+    // The " - " would otherwise be read as a separator and cut the subtitle
+    [
+      /\bKing of Them All\s*-\s*The Story of King Records/i,
+      "King of Them All: The Story of King Records",
+    ],
+    [/^\s*Ram[oó]n y Cajal$/i, "Ramón y Cajal: Drawings on the Retina"],
+    [/^Romance X$/i, "Romance"],
+    // Scoped to the Japanese spelling, as several other films are called
+    // "Shall We Dance"
+    [/Shall we ダンス/i, "Shall We Dance"],
+    // TheMovieDB titles the original trilogy without the franchise prefix, and
+    // the first film as plain "Star Wars"
+    [/^Star Wars: A New Hope\b/i, "Star Wars"],
+    [/^Star Wars: (?=(?:The Empire Strikes Back|Return of the Jedi)\b)/i, ""],
+    // TheMovieDB titles the sequels with the series name
+    [
+      /^Twilight: (?=(?:New Moon|Eclipse|Breaking Dawn)\b)/i,
+      "The Twilight Saga: ",
+    ],
+    [
+      /\bThe Watergate Caper\b(?!:)/i,
+      "The Watergate Caper: Richard Nixon and the Death of the American Dream",
+    ],
+    [/\bThe Man with X-Ray Eyes\b/i, "The Man with the X-Ray Eyes"],
+    // The venue bills a pair of documentaries by the author they're about
+    [/\s*-\s*2 Documentaries\s*$/i, " Double Bill"],
+    // Venue misspellings
+    [/\bA Quite Place\b/i, "A Quiet Place"],
+    [/^All the Beauty and Bloodshed/i, "All the Beauty and the Bloodshed"],
     [/ [+&] Iggy Pop [–\-�] Lust for life/i, " & Lust for life"],
     [
       /Bluey At The Cinema - Playdates$/i,
@@ -1216,6 +1322,7 @@ function normalizeTitle(title, options) {
     ["Cucumbers Restoration", "Cucumbers"],
     ["T4T - ", "T4T: "],
     ["Remembering David Hockney", "David Hockney at the Royal Academy of Arts"],
+    [/^EOS: David Hockney$/i, "David Hockney at the Royal Academy of Arts"],
     ["Parents & Baby Screening - ", "Parents & Baby Screening: "],
     ["RAMPAGE + ", "RAMPAGE & "],
     [" - live at the Blue", ": live at the Blue"],
@@ -1376,10 +1483,6 @@ function normalizeTitle(title, options) {
     [
       /Special Screening of Bitters$/i,
       "Special Screening of Bitter Sweet Ballad",
-    ],
-    [
-      "The Conversation: An Afternoon with Walter Murch",
-      "An Afternoon with Walter Murch",
     ],
     ["The Playhouse Buster Keaton", "The Play house Buster Keaton"],
     ["Art is my Therapy - ", "Art is my Therapy: "],
@@ -1786,6 +1889,17 @@ function normalizeTitle(title, options) {
     title = title.replace(/\([^(]*\)$/, "").trim(); // Do it twice in case there's more paraenthesis
   }
 
+  // Anything else in brackets is information about the listing or the film -
+  // an original or translated title, a language, a format - and which side
+  // of it is the film is not something the title can tell us, so it comes
+  // off wherever it sits. Brackets inside a word ("(Dis)orientalism",
+  // "Histoire(s) du Cinéma", "Death (True)²") are the title's own spelling
+  // and stay.
+  title = title
+    .replace(/(?<=^|\s)\((?![\d\s/,-]+\))[^()]*\)(?=$|[\s:;.,'"!?\-–—])/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
   // Remove tagline which may be added between "..."
   // e.g. "Sachein ... The Miracle Of Love ..."
   title = title
@@ -1809,7 +1923,7 @@ function normalizeTitle(title, options) {
     .replace(/\s+[au]nd\s+/gi, " ")
     .replace(/(?:\s+|^)&\s+/gi, " ")
     .replace(/[:|&]$/, "")
-    .replace(/'|`|\u200B|‘|’|"|“|”|²|®|,|/g, "")
+    .replace(/'|`|\u200B|‘|’|"|“|”|²|®|,|ʹ|/g, "")
     .replace(/\s+(-|–)(\s|$)/g, " ")
     .replace(/\s+(-|–)\s+/g, " ")
     .replace(/^(-|–)/g, "")
@@ -1826,6 +1940,7 @@ function normalizeTitle(title, options) {
     .replace(/^(.+),\s+the$/, "the $1")
     .trim()
     .replace(/^the (?=\S+\s+(?![[(]))/i, "")
+    .replace(/^a (?=\S+\s+(?![[(]))/i, "") // Venues drop "a" as readily as "the"
     .replace(/([a-z])-([a-z])/gi, "$1$2")
     .replace(/\s+q&a$/i, "")
     .replace(/\s3d$/i, "")

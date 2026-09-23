@@ -75,6 +75,7 @@ const ignoredIds = [
   1434306, // Board Games -- https://www.themoviedb.org/movie/1434306-board-games
   1625268, // Remembrance -- https://www.themoviedb.org/movie/1625268-remembrance
   1221680, // Sense and Sensibility -- https://www.themoviedb.org/movie/1221680-sense-and-sensibility
+  455989, // The Witcher 3: Wild Hunt - Live Concert -- https://www.themoviedb.org/movie/455989-the-witcher-3-wild-hunt-live-concert
 ];
 
 /**
