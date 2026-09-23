@@ -1306,6 +1306,9 @@ function normalizeTitle(title, options) {
     ["Harry Potter Philosopher", "Harry Potter and the Philosopher"],
     ["Maybe Tomorrow + ", "Maybe Tomorrow & "],
     [/^Documentary (screenings? )?/i, ""],
+    // Billed with the word "documentary" after the title, which is not part
+    // of it.
+    [/^Mission Accomplished documentary$/i, "Mission Accomplished"],
     ["Monkey's Shadow + Dance", "Monkey's Shadow & Dance"],
     [
       "The Last Guest at the Holloway Motel",
@@ -1315,6 +1318,12 @@ function normalizeTitle(title, options) {
     [/^Tonight: /i, ""],
     ["Freud's Afternoon Session - ", "Freud's Afternoon Session: "],
     ["Live folk music, Czech drinks + ", "Live folk music, Czech drinks & "],
+    // The "+" would otherwise split the title there and keep the refreshments,
+    // so it becomes "&" and the phrase list takes the refreshments off.
+    [
+      "Taiwanese nibbles, traditional drinks + ",
+      "Taiwanese nibbles, traditional drinks & ",
+    ],
     ["Evil Resident: Afterlife", "Resident Evil: Afterlife"],
     ["Khali Balak Min Nafsak", "Take Care of Yourself"],
     ["Transformers: 40th Anniversary Event", "The Transformers: The Movie"],
