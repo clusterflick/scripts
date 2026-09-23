@@ -121,6 +121,17 @@ async function transform(
       // can't be reliably detected
       "rooftopcinemaclub.com-peckham",
       "rooftopcinemaclub.com-stratford",
+      // - TEMPORARY: Etcetera Theatre film filter changeover -
+      // The Etcetera Theatre moved to the film-listings transform, so the plays,
+      // scratch nights and comedy we used to take from Humanitix have gone from
+      // this run but are still in the previous release. Humanitix still places
+      // them here and their event pages stay up, so the URL check passes and
+      // recovery would put every one of them straight back. isNonFilmEvent
+      // doesn't catch them - it matches named event series, not whole
+      // categories.
+      // Remove this once one release has been published without them; by then
+      // the recovery baseline is clean and the entry does nothing.
+      "etceteratheatrecamden.com",
     ];
     const previousReleaseData = optedOut.includes(location)
       ? []
