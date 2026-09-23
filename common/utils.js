@@ -1160,6 +1160,7 @@ module.exports = {
   withRetry,
   parseRetryAfter,
   fetchWithRetry,
+  fetchError,
   fetchText,
   fetchWin1252Text,
   fetchJson,

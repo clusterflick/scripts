@@ -1,18 +1,10 @@
 const boxofficeapiRetrieve = require("../boxofficeapi/retrieve");
-const { BOT_CHALLENGE_TEXT, isBotBlockText } = require("../bot-challenge");
+const { isBotBlockText } = require("../bot-challenge");
+const { describeRefusal } = require("../camoufox-site-page");
 const { requestFromPage, withCineworldPage } = require("./browser");
 
 const LISTING_PATH = "cinemas";
 const CACHE_PREFIX = "cineworld";
-
-// Say which refusal it was: a challenge Camoufox failed to solve and an outright
-// block need different next steps, and a bare 403 says neither.
-const describeRefusal = ({ status, statusText, cfMitigated, body }) => {
-  if (cfMitigated === "challenge") return `${status} challenge (cf-mitigated)`;
-  if (isBotBlockText(body)) return `${status} blocked outright`;
-  if (BOT_CHALLENGE_TEXT.test(body)) return `${status} challenge (page copy)`;
-  return `${status} ${statusText}`;
-};
 
 const overBrowser = (page) => {
   const request = async (url) => {

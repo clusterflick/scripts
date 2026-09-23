@@ -30,8 +30,8 @@ const authHeaders = (authToken) => ({
 // stopped existing. And an unrecognised `siteIds` 400s the *whole* request rather than
 // omitting one site, so without this a single stale id would blind the probe
 // for the entire estate instead of costing one unknown-venue-id row.
-const getSiteIds = async ({ url, apiUrl, authToken }) => {
-  const { sites } = await probeJson(
+const getSiteIds = async ({ url, apiUrl, authToken }, requestJson) => {
+  const { sites } = await requestJson(
     `${url || apiUrl}/ocapi/v1/sites`,
     authHeaders(authToken),
   );
@@ -41,11 +41,15 @@ const getSiteIds = async ({ url, apiUrl, authToken }) => {
   return new Set(sites.map((site) => site.id));
 };
 
-const getFilmScreeningDates = async ({ url, apiUrl, authToken }, venues) => {
+const getFilmScreeningDates = async (
+  { url, apiUrl, authToken },
+  venues,
+  requestJson,
+) => {
   const siteIds = venues
     .map(({ cinemaId }) => `siteIds=${encodeURIComponent(cinemaId)}`)
     .join("&");
-  const { filmScreeningDates } = await probeJson(
+  const { filmScreeningDates } = await requestJson(
     `${url || apiUrl}/ocapi/v1/film-screening-dates?${siteIds}`,
     authHeaders(authToken),
   );
@@ -79,7 +83,14 @@ const tallyByVenue = (filmScreeningDates, venues) => {
   return tallies;
 };
 
-async function health(venues, getApi) {
+// A chain whose API only answers a browser supplies `withSession`, which runs
+// the unit it is handed with a `getApi` and `requestJson` of its own - it is
+// handed the chain's `getApi` to pass on or replace. It wraps the unit whole,
+// so the challenge retry below gets a fresh session rather than being refused
+// again by one that was already challenged.
+const direct = (fn, getApi) => fn({ getApi, requestJson: probeJson });
+
+async function health(venues, getApi, { withSession = direct } = {}) {
   const { countRequest, reasonFor, finalise } = startObservation(GRANULARITY);
 
   const untracked = venues.filter(({ cinemaId }) => !cinemaId);
@@ -96,27 +107,37 @@ async function health(venues, getApi) {
   try {
     // Retried as one unit: the token, the site list and the listing all come off
     // one browser session, so a challenge to any of them wants a fresh one.
-    ({ missing, tallies } = await withChallengeRetry(async () => {
-      const api = await getApi();
-      const knownSiteIds = await getSiteIds(api);
-      countRequest();
+    ({ missing, tallies } = await withChallengeRetry(
+      () =>
+        withSession(async ({ getApi, requestJson }) => {
+          const api = await getApi();
+          const knownSiteIds = await getSiteIds(api, requestJson);
+          countRequest();
 
-      const known = venues.filter(({ cinemaId }) => knownSiteIds.has(cinemaId));
-      const unknown = venues.filter(
-        ({ cinemaId }) => !knownSiteIds.has(cinemaId),
-      );
+          const known = venues.filter(({ cinemaId }) =>
+            knownSiteIds.has(cinemaId),
+          );
+          const unknown = venues.filter(
+            ({ cinemaId }) => !knownSiteIds.has(cinemaId),
+          );
 
-      // Skip the listing call rather than send an empty `siteIds`, which is a
-      // different question with a different answer.
-      if (!known.length) return { missing: unknown, tallies: new Map() };
+          // Skip the listing call rather than send an empty `siteIds`, which
+          // is a different question with a different answer.
+          if (!known.length) return { missing: unknown, tallies: new Map() };
 
-      const filmScreeningDates = await getFilmScreeningDates(api, known);
-      countRequest();
-      return {
-        missing: unknown,
-        tallies: tallyByVenue(filmScreeningDates, known),
-      };
-    }, "the chain listing"));
+          const filmScreeningDates = await getFilmScreeningDates(
+            api,
+            known,
+            requestJson,
+          );
+          countRequest();
+          return {
+            missing: unknown,
+            tallies: tallyByVenue(filmScreeningDates, known),
+          };
+        }, getApi),
+      "the chain listing",
+    ));
   } catch (error) {
     // Every venue shares the failure because they shared the call.
     const reason = reasonFor(error);

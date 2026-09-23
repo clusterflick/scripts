@@ -1,6 +1,7 @@
 const getPageWithPlaywright = require("../get-page-with-playwright");
-const { classifyPage } = require("../health-probe");
+const { classifyPage, parseProbeJson, probeJson } = require("../health-probe");
 const ocapiv1Health = require("../ocapi-v1/health");
+const { requestFromPage, withCurzonPage } = require("./browser");
 
 // The homepage, not a venue page. `retrieve.js` here loads each venue's page for
 // its `vistaCinema.key`; the probe reads `cinemaId` off attributes instead, so
@@ -27,8 +28,41 @@ const getApi = (domain) =>
     { disableCache: true },
   );
 
+// Direct first, and through a Curzon page in Camoufox only once that is
+// refused - see `browser.js` for what the refusal looks like, and for why the
+// token still comes from the Playwright page rather than this one.
+const withSession = (domain) => async (fn, getApi) => {
+  try {
+    return await fn({ getApi, requestJson: probeJson });
+  } catch (error) {
+    if (error.reason?.kind !== "bot-challenge") throw error;
+    console.log(" ! - Refused directly; retrying through Camoufox ...");
+  }
+
+  return withCurzonPage(
+    domain,
+    // Never read - the cache is off - but named apart from the retrieve's.
+    "health--curzon.com",
+    (page) =>
+      fn({
+        getApi,
+        requestJson: async (url, options) =>
+          parseProbeJson(url, await requestFromPage(page, url, options)),
+      }),
+    {
+      // An hourly probe must not replay the first answer of the day.
+      disableCache: true,
+      onUnsettled: (page, response) =>
+        classifyPage(page, response, `No Curzon page at ${domain}`),
+    },
+  );
+};
+
 async function health(venues) {
-  return ocapiv1Health(venues, () => getApi(venues[0].domain));
+  const { domain } = venues[0];
+  return ocapiv1Health(venues, () => getApi(domain), {
+    withSession: withSession(domain),
+  });
 }
 
 module.exports = health;
