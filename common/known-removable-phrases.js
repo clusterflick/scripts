@@ -509,6 +509,9 @@ const knownRemovablePhrases = [
   "pre film mixer",
   "with family sound workshop",
   " on The Big Screen at The Griffin",
+  "with Bookish Besties",
+  "with Special Introduction",
+  "screening and live Q+A",
 
   // Prefixes
   "(4DX) ",
@@ -1373,6 +1376,7 @@ const knownRemovablePhrases = [
   "Sartorial Correctness with Nick Egan:",
   "İFŞA:",
   "A presentation hosted by Kingston Friends of the Earth on behalf of ",
+  "Private Showing:",
   // The Black History Month strand abbreviates itself in the listing, so the
   // generic "Film Screening" entry takes the words off and leaves the
   // initials sitting on the front of the film. Listed here, ahead of that
