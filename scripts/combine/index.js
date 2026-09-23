@@ -16,6 +16,7 @@ const standardizePrefixingForTheatrePerformances = require("../../common/standar
 const stripSerialBlockSuffix = require("../../common/strip-serial-block-suffix");
 const stripDateSuffix = require("../../common/strip-date-suffix");
 const assertUniqueShowingIds = require("./assert-unique-showing-ids");
+const selectDisplayMovie = require("./select-display-movie");
 const { buildMovieData } = require("./build-movie-data");
 
 /**
@@ -448,12 +449,7 @@ async function combine() {
 
   Object.values(confirmedConbinations).forEach((group) => {
     const matched = group.find(({ isUnmatched }) => !isUnmatched);
-    const shortestName = group.reduce(
-      (selected, challenger) =>
-        selected.title.length > challenger.title.length ? challenger : selected,
-      group[0],
-    );
-    const container = { ...(matched || shortestName) };
+    const container = { ...(matched || selectDisplayMovie(group)) };
     const originalTitle = container.title;
     container.title = stripDateSuffix(
       stripSerialBlockSuffix(
