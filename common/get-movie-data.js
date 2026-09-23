@@ -76,6 +76,7 @@ const ignoredIds = [
   1625268, // Remembrance -- https://www.themoviedb.org/movie/1625268-remembrance
   1221680, // Sense and Sensibility -- https://www.themoviedb.org/movie/1221680-sense-and-sensibility
   455989, // The Witcher 3: Wild Hunt - Live Concert -- https://www.themoviedb.org/movie/455989-the-witcher-3-wild-hunt-live-concert
+  1777404, // Avengers: Endgame Encore -- https://www.themoviedb.org/movie/1777404-avengers-endgame-encore
 ];
 
 /**
