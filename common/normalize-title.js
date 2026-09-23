@@ -1071,9 +1071,13 @@ function normalizeTitle(title, options) {
     ["People's Emergency Briefing for Business", "People's Emergency Briefing"],
     ["The The People's Emergency Briefing", "The People's Emergency Briefing"],
     ["TESTMortal Kombat IITEST", "Mortal Kombat II"],
+    // TheMovieDB lists the film as "The Mandalorian and Grogu", without the
+    // franchise name venues bill it under. Only this one: the saga films are
+    // listed there with "Star Wars:" and must keep it.
+    [/Star Wars:? (?=The Mandalorian|Mando )/i, ""],
     [
       /^(?:Dog Friendly: )?(?:Parent and Baby: )?The Mandalorian/i,
-      "Star Wars: The Mandalorian",
+      "The Mandalorian",
     ],
     ["Mando & Grogu", "The Mandalorian and Grogu"],
     [/^LIK\s+/i, "LIK: Love Insurance Kompany "],
@@ -1097,6 +1101,8 @@ function normalizeTitle(title, options) {
     ["A Night of Latin Jazz - ", "A Night of Latin Jazz: "],
     ["Classic Night - ", "Classic Night: "],
     ["Weird Wednesday - ", "Weird Wednesday: "],
+    ["Kids Club - ", "Kids Club: "],
+    ["My Five Year Plan", "My Five-Year Plan"],
     ["Bar Trash: 4TH BIRTHDAY - ", "Bar Trash: 4TH BIRTHDAY: "],
     ["Elon Musk Unveiled -", "Elon Musk Unveiled: "],
     ["Goethe-Kino - ", "Goethe-Kino: "],
