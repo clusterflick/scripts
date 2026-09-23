@@ -1,4 +1,8 @@
-const { fetchJson } = require("../../common/utils.js");
+const { fetchJson, fetchText } = require("../../common/utils.js");
+const { getEventUrl } = require("./utils");
+
+const USER_AGENT =
+  "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:151.0) Gecko/20100101 Firefox/151.0";
 
 const API_URL = "https://humanitix.com/api/recommendations";
 
@@ -23,8 +27,7 @@ async function fetchPage(page) {
   return fetchJson(API_URL, {
     method: "POST",
     headers: {
-      "User-Agent":
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:151.0) Gecko/20100101 Firefox/151.0",
+      "User-Agent": USER_AGENT,
       "content-type": "application/json",
       Accept: "*/*",
     },
@@ -60,7 +63,19 @@ async function retrieve() {
     page += 1;
   }
 
-  return { events: allEvents };
+  // The search results carry no description, so each event's own page is
+  // fetched for it - without one, matching and the film-listing filter have
+  // only the title to go on.
+  const eventPages = {};
+  for (const event of allEvents) {
+    const url = getEventUrl(event);
+    if (eventPages[url]) continue;
+    eventPages[url] = await fetchText(url, {
+      headers: { "User-Agent": USER_AGENT },
+    });
+  }
+
+  return { events: allEvents, eventPages };
 }
 
 module.exports = retrieve;

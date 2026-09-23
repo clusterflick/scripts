@@ -22,15 +22,15 @@ silenceConsoleLog();
 
 describe(attributes.name, () => {
   setupPolly(isRecording, __dirname);
-  jest.useFakeTimers().setSystemTime(new Date("2026-06-11"));
+  jest.useFakeTimers().setSystemTime(new Date("2026-09-23"));
 
   describe.each([
     {
-      name: "The Fellowship Cinema",
-      alternativeNames: ["The Fellowship Inn"],
-      address: "Randlesdown Road, London, SE6 3BT, UK",
-      geo: { lat: 51.433108588491734, lon: -0.019912945972504828 },
-      expectedMatches: 1,
+      name: "Finch Community Cinema",
+      alternativeNames: ["Finch Cafe/Restaurant"],
+      address: "12 Sidworth Street, London, E8 3SD, UK",
+      geo: { lat: 51.53977173949334, lon: -0.05752235164484993 },
+      expectedMatches: 2,
     },
     {
       name: "Rio Cinema",
@@ -43,13 +43,14 @@ describe(attributes.name, () => {
     it(
       "retrieve and find events",
       async () => {
-        const { events } = await retrieve();
+        const { events, eventPages } = await retrieve();
 
         // Make sure the input looks roughly correct
         expect(events).toBeTruthy();
-        expect(events).toHaveLength(16);
+        expect(events).toHaveLength(25);
+        expect(Object.keys(eventPages)).toHaveLength(25);
 
-        readJSON.mockImplementation(() => ({ events }));
+        readJSON.mockImplementation(() => ({ events, eventPages }));
 
         const cinema = { name, alternativeNames, address, geo };
         const output = await findEvents(cinema);
@@ -58,6 +59,10 @@ describe(attributes.name, () => {
             Object.prototype.hasOwnProperty.call(movie, "matchingHints"),
           ),
         ).toBe(true);
+        // Every event's description comes off its own page
+        expect(output.every((movie) => movie.matchingHints.overview)).toBe(
+          true,
+        );
 
         const data = JSON.parse(JSON.stringify(output))
           .map(removeMatchingHints)
