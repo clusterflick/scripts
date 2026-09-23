@@ -65,6 +65,13 @@ describe("isNonFilmEvent", () => {
     ["MIXTAPE PRESENTS: RAMPAGE SOUNDS ALL NIGHT"],
     ["PRINCE OF PECKHAM PRESENTS: SIERRA LEONE PUB QUIZ EVENT.. PART2"],
     ["THE GIFT OF LAUGHTER: ACLT FUNDRAISER"],
+    [
+      "5x15: Can We Reclaim Childhood from Big Tech? Beeban Kidron & Sandi Toksvig",
+    ],
+    [
+      "An Evening Of Clairvoyance with Lee Roberts - Raising Funds for Mitchell's Miracles",
+    ],
+    ["The ADHD & Women Summit - London 2026"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });

@@ -138,6 +138,10 @@ const nonFilmEvents = [
   // The gallery's late opening, billed by the strand running that night. Music,
   // workshops and talks across the building, never a film.
   /Tate Modern Lates/i,
+  // A talks series: five speakers, fifteen minutes each, never a screening.
+  /^5x15:/i,
+  /Evening Of Clairvoyance/i,
+  /ADHD & Women Summit/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
