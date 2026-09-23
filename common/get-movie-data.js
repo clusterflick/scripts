@@ -74,6 +74,7 @@ const ignoredIds = [
   1414622, // Wet Dreams -- https://www.themoviedb.org/movie/1414622-wet-dreams
   1434306, // Board Games -- https://www.themoviedb.org/movie/1434306-board-games
   1625268, // Remembrance -- https://www.themoviedb.org/movie/1625268-remembrance
+  1221680, // Sense and Sensibility -- https://www.themoviedb.org/movie/1221680-sense-and-sensibility
 ];
 
 /**
