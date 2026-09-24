@@ -168,6 +168,7 @@ function normalizeTitle(title, options) {
     ["CBeebies Panto 2025", "CBeebies Panto"],
     ["Ex Libris - ", "Ex Libris: "],
     ["Bison - ", "Bison: "],
+    ["Between Two Worlds - ", "Between Two Worlds: "],
     ["COLD ISLANDERS - ", "COLD ISLANDERS: "],
     ["Jozef Van Wissem - ", "Jozef Van Wissem: "],
     ["The World of Hans Zimmer-", "The World of Hans Zimmer: "],
@@ -238,6 +239,9 @@ function normalizeTitle(title, options) {
     ["Girlguiding Screening - ", "Girlguiding Screening: "],
     ["SEEN Charity Film Screening - ", "SEEN Charity Film Screening: "],
     ["Romford Horror Festival - ", "Romford Horror Festival: "],
+    // Removed here rather than in the phrase list, which runs after the rule
+    // below has turned the dash into a prefix separator and kept only "London".
+    [" Special Film Screening - London", ""],
     ["Film Screening - ", "Film Screening: "],
     ["Limited Run - ", "Limited Run: "],
     ["Community Cinema Screening - ", "Community Cinema Screening: "],
