@@ -142,6 +142,7 @@ const nonFilmEvents = [
   /^5x15:/i,
   /Evening Of Clairvoyance/i,
   /ADHD & Women Summit/i,
+  /Deaf Improv Comedy/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
