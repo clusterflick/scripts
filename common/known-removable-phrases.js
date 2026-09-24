@@ -1513,6 +1513,15 @@ const knownRemovablePhrases = [
   "IMMINENCE:",
   "ALBUMOVIE",
 
+  "with Shamim Sarif",
+  "&discussion on Somali communities&care",
+  " – Documentary",
+  "Come watch '",
+  "with Philosofriends",
+  // The Russian-language listing bills the screening and its Q&A after the
+  // film's title, which is left in guillemets once this comes off.
+  "ПОКАЗ ФИЛЬМА И Q&A С ДМИТРИЕМ КРЫМОВЫМ",
+
   // Common superfluous pieces
   "** SCREENING CANCELLED **",
   "CANCELLED DUE TO ILLNESS:",
@@ -1662,6 +1671,7 @@ const knownRemovablePhrases = [
   "Lucy Raven's ",
   "John Shuttleworth: ",
   "An Afternoon with Walter Murch",
+  "Exclusive Screening",
 ];
 
 module.exports = knownRemovablePhrases;

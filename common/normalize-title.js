@@ -76,12 +76,17 @@ function normalizeTitle(title, options) {
     // before it; "The Hunger Games: Marathon Screening" is its own event and
     // keeps the word, so anchor rather than carry ": Marathon" as a phrase.
     [/:\s*Marathon$/i, ""],
-    // The venue asterisks out the profanity in the title, so the film arrives
+    // Venues asterisk out the profanity in the title, so the film arrives
     // under a name no review site or database spells that way.
     ["F*RS", "FUCKERS"],
+    ["F*N'", "FUCKIN'"],
     ["The Fishermen", "The Fisherman"], // NOTE: This can be removed in the future once this specific misname has been removed
     ["ESCAPES_ ", "Escapes: "],
     [/\bscreenin:/i, "screening:"],
+    // The fundraiser is billed after the film as "screening: <cause>", which
+    // the "screening:" prefix rule reads as a label and keeps the cause as the
+    // title. It runs before the phrase list, so the billing comes off here.
+    [" screening: Lambeth Larder fundraiser", ""],
     // One venue bills the tour without the dash before the subtitle, so the
     // suffix-stripping that leaves every other listing as "neo city seoul"
     // never fires and the same show arrives under a second name.
@@ -299,6 +304,7 @@ function normalizeTitle(title, options) {
     // Fix spelling which causes missed match
     [/^seven$/i, "se7en"],
     ["The Return The Return", "The Return"],
+    ["Salmon Rushdie", "Salman Rushdie"],
     // Documentary is released as "Knife: The Attempted Murder of Salman Rushdie"
     [
       /(?:Knife: )?The Attempted Murder of Salman Rushdie/i,
@@ -530,6 +536,12 @@ function normalizeTitle(title, options) {
       "Lord of the Rings: The Return of the King",
     ],
     ["Doctor Who: Projections in Time -", "Doctor Who: "], // Remove unnecessary "Projections in Time" prefix
+    // One venue bills the Doctor Who Day double bill by its second episode
+    // alone, so it would arrive under a second name.
+    [
+      /^Doctor Who: The Satan Pit$/i,
+      "Doctor Who Day: The Impossible Planet & The Satan Pit",
+    ],
     ["H I / P D", "Hidden Inventory/Premature Death"], // Fixes Jujutsu Kaisen: H I / P D
     [
       "Modigliani: Three Days on the Wings of Madness",
@@ -1931,7 +1943,7 @@ function normalizeTitle(title, options) {
     .replace(/\s+[au]nd\s+/gi, " ")
     .replace(/(?:\s+|^)&\s+/gi, " ")
     .replace(/[:|&]$/, "")
-    .replace(/'|`|\u200B|‘|’|"|“|”|²|®|,|ʹ|/g, "")
+    .replace(/'|`|\u200B|‘|’|"|“|”|«|»|²|®|,|ʹ|/g, "")
     .replace(/\s+(-|–)(\s|$)/g, " ")
     .replace(/\s+(-|–)\s+/g, " ")
     .replace(/^(-|–)/g, "")

@@ -143,6 +143,11 @@ const nonFilmEvents = [
   /Evening Of Clairvoyance/i,
   /ADHD & Women Summit/i,
   /Deaf Improv Comedy/i,
+  // A gig billed by the act and the venue it is playing ("Lily Juniper -
+  // 'Bloom Gloom' Live at The Blue"), never a screening.
+  /Live at The Blue/i,
+  // A guided tour of the gallery, beside the discovery tour above.
+  /Semi-Private Tour/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
