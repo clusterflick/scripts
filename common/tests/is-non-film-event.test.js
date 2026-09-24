@@ -72,6 +72,8 @@ describe("isNonFilmEvent", () => {
       "An Evening Of Clairvoyance with Lee Roberts - Raising Funds for Mitchell's Miracles",
     ],
     ["The ADHD & Women Summit - London 2026"],
+    ["Lily Juniper - 'Bloom Gloom' Live at The Blue"],
+    ["The Tate Modern: Semi-Private Tour"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });
