@@ -260,6 +260,10 @@ function normalizeTitle(title, options) {
     // because a double bill that names a "Part 1" in its second half is not
     // this trilogy and must keep the numeral it was billed with.
     [/^The Human Condition - Part 1 - /i, "The Human Condition I: "],
+    // Tony Kaye's film is billed with "- PART 1", which the rule below and the
+    // later "Part N" rule would reduce to a bare numeral on the end of the
+    // title ("humpty dumpty x 1"), so the part is dropped before either runs.
+    [/Humpty Dumpty X\s*[-–]?\s*Part 1\b/i, "Humpty Dumpty X"],
     ["- Part ", "Part "],
     // The double bill is billed with a plus, which the separator rule would
     // otherwise read as the end of the title, dropping the second film. Named
