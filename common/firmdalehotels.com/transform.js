@@ -74,6 +74,7 @@ async function transform(attributes, { movieListPage }, sourcedEvents) {
     // 3:" + "30PM"). Read the text off the list item so the showing stays
     // whole, and take the url from its first anchor.
     const $showings = $textBlockContainer.find("ul li");
+    const url = `${attributes.url}#:~:text=${encodeURIComponent(title)}`;
     const hotelName = basicNormalize(attributes.name)
       .replace("firmdale", "")
       .trim();
@@ -82,7 +83,10 @@ async function transform(attributes, { movieListPage }, sourcedEvents) {
     $showings.each((i, showingEl) => {
       const $showing = $(showingEl);
       const linkText = getText($showing);
-      const url = $showing.find("a").first().attr("href");
+      // A showing announced before booking opens is listed as plain text, with
+      // no link - point it at the listing until one appears. That url is
+      // already encoded, so it's passed as a function to skip `encodeURI`
+      const bookingUrl = $showing.find("a").first().attr("href") || (() => url);
 
       // Skip performances which aren't for this venue
       if (!basicNormalize(linkText).includes(hotelName)) return;
@@ -96,7 +100,7 @@ async function transform(attributes, { movieListPage }, sourcedEvents) {
         const accessibility = createAccessibility(title, {}, details);
         const format = createFormat(title, {}, details);
         performances.push(
-          createPerformance({ url, date, accessibility, format }),
+          createPerformance({ url: bookingUrl, date, accessibility, format }),
         );
       }
     });
@@ -111,7 +115,7 @@ async function transform(attributes, { movieListPage }, sourcedEvents) {
     movies.push({
       showingId: generateShowingId(attributes, id),
       title,
-      url: `${attributes.url}#:~:text=${encodeURIComponent(title)}`,
+      url,
       overview: createOverview({
         actors,
         classification,

@@ -70,6 +70,30 @@ describe("Firmdale Hotels transform", () => {
     expect(performances[0].bookingUrl).toBe(BOOKING_URL);
   });
 
+  // A showing announced before booking opens is listed as plain text, with no
+  // link to take a booking url from.
+  it("points a showing without a link at the listing", async () => {
+    const movies = await transform(
+      attributes,
+      {
+        movieListPage: movieListPage().replace(
+          "<li></li>",
+          "<li>THE SOHO HOTEL - SUNDAY 22ND NOVEMBER, 3:30PM</li>",
+        ),
+      },
+      {},
+    );
+
+    expect(movies).toHaveLength(1);
+    expect(movies[0].performances).toHaveLength(1);
+    expect(new Date(movies[0].performances[0].time).toISOString()).toBe(
+      "2026-11-22T15:30:00.000Z",
+    );
+    expect(movies[0].performances[0].bookingUrl).toBe(
+      `${attributes.url}#:~:text=Bad%20Apples`,
+    );
+  });
+
   it("skips a showing at another Firmdale hotel", async () => {
     const movies = await transform(
       attributes,
