@@ -577,6 +577,12 @@ function normalizeTitle(title, options) {
       /Royal Ballet & Opera \d{4}: Eugene Onegin/i,
       "The Metropolitan Opera: Eugene Onegin",
     ],
+    // As above, venues bill the Met's Macbeth under the RBO season. Keeps the
+    // season year so it groups with the listings billed as the Met's.
+    [
+      /Royal Ballet & Opera (\d{4}): Macbeth/i,
+      "The Metropolitan Opera $1: Macbeth",
+    ],
     ["Worlds25 - Finals in Cinema", "World Finals 2025"],
     ["Love + War", "Love+War"],
     ["Neighbour Totoro", "Neighbor Totoro"],
