@@ -569,18 +569,10 @@ function normalizeTitle(title, options) {
     [" - Chapter ", ": Chapter "],
     [" - Live on Stage", ": Live on Stage"],
     [" - A Sneak Peek", ": A Sneak Peek"],
+    // Venues bill these Met productions under the RBO season. Keeps the
+    // season year so they group with the listings billed as the Met's.
     [
-      /Royal Ballet & Opera \d{4}: La Sonnambula/i,
-      "The Metropolitan Opera: La Sonnambula",
-    ],
-    [
-      /Royal Ballet & Opera \d{4}: Eugene Onegin/i,
-      "The Metropolitan Opera: Eugene Onegin",
-    ],
-    // As above, venues bill these Met productions under the RBO season. Keeps
-    // the season year so they group with the listings billed as the Met's.
-    [
-      /Royal Ballet & Opera (\d{4}): (Macbeth|La Fanciulla Del West)/i,
+      /Royal Ballet & Opera (\d{4}): (La Sonnambula|Eugene Onegin|Macbeth|La Fanciulla Del West)/i,
       "The Metropolitan Opera $1: $2",
     ],
     ["Worlds25 - Finals in Cinema", "World Finals 2025"],
