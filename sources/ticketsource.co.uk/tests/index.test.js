@@ -46,6 +46,11 @@ describe(`${attributes.name}`, () => {
       geo: { lat: 51.45004001959767, lon: -0.3313163212241062 },
       expectedMatches: 16,
     },
+    {
+      name: "The Brookmill",
+      geo: { lat: 51.47108461569823, lon: -0.022075945907327966 },
+      expectedMatches: 4,
+    },
   ])("$name", ({ name, alternativeNames, geo, expectedMatches }) => {
     it(
       "retrieve and find events",

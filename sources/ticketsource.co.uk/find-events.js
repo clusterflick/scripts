@@ -17,12 +17,26 @@ const getDirectors = require("./get-directors");
 const attributes = require("./attributes");
 const { venueMatchesCinema } = require("../../common/source-utils");
 
+// Some TicketSource promoters aren't the venue but film clubs or other organisers
+// who put screenings on at venues they don't run, such as Deptford Cinema's
+// residencies at The Brookmill and Telegraph Hill Centre. For those, note the
+// provenance on each performance so consumers can see who is putting the
+// screening on. Keyed on the promoter's URL slug and worded by hand, because
+// the promoter name TicketSource hands back is free text - it carries
+// addresses, charity numbers and company suffixes - and often just names the
+// venue again.
+const PROMOTER_NOTES = {
+  deptfordcinema: "Presented by Deptford Cinema",
+};
+
 function createPerformanceFromHit(
-  { dateTimeString, venueSlug, timeHash, hint },
+  { dateTimeString, venueSlug, timeHash, hint, promoterNameURL },
   title,
   eventText,
   overview,
 ) {
+  const note = PROMOTER_NOTES[promoterNameURL];
+
   return createPerformance({
     // `timestamp` is also available on the hit, but TicketSource encodes local
     // UK time as if it were UTC, making it wrong by 1 hour during BST.
@@ -40,6 +54,7 @@ function createPerformanceFromHit(
       overview,
     ),
     format: createFormat(title, {}, overview),
+    notesList: note ? [note] : [],
   });
 }
 
