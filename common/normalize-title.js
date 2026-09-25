@@ -319,7 +319,12 @@ function normalizeTitle(title, options) {
     [/\s+dub?$/i, ""], // Dubbed
     [/\s+sub?$/i, ""], // subbed
     [/\s+(?:live\s+)?(?:in\s+)?(3|2)d$/i, ""], // 3d or 2d, with optional "live in" prefix
-    [/\s+2026$/i, ""], // Year
+    // Year - except CatVideoFest's, which is part of the title: TheMovieDB
+    // has a film per year ("CatVideoFest 2026"). Anchored to the end, this
+    // also misses a year followed by a subtitle ("CatVideoFest 2026 -
+    // Celebrating Black Cat Day"), which keeps it once the subtitle is cut,
+    // so stripping it here split the two billings apart.
+    [/(?<!\bCat ?Video ?Fest)\s+2026$/i, ""],
     ["Vasthunnam", "Vasthunam"],
     // TheMovieDB drops an "i" from the film's title, which the venues and IMDb
     // both spell in full, and its search finds nothing under the full spelling
