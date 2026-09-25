@@ -1521,6 +1521,9 @@ const knownRemovablePhrases = [
   // The Russian-language listing bills the screening and its Q&A after the
   // film's title, which is left in guillemets once this comes off.
   "ПОКАЗ ФИЛЬМА И Q&A С ДМИТРИЕМ КРЫМОВЫМ",
+  "Musical Matinees:",
+  "Don DeLillo at 90:",
+  "with Ben Rivers",
 
   // Common superfluous pieces
   "** SCREENING CANCELLED **",
