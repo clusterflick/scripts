@@ -388,6 +388,18 @@ function normalizeTitle(title, options) {
     [/Last Supper (– )?Part 1/i, "Last Supper"],
     ["The Last Supper", "Last Supper"],
     ["Veera Dheera Sooran: Part 2", "Veera Dheera Sooran"],
+    // The third film of the documentary is known by its numeral, "The Battle
+    // of Chile III", rather than by the part the venue bills it as.
+    [/Battle Of Chile Part 3$/i, "Battle of Chile III"],
+    // The double bill names both films either side of a slash, which the
+    // separator rule would cut down to the first alone.
+    ["Memorial / ", "Memorial "],
+    // The festival is billed with a dash, which the separator rule would
+    // otherwise read as the end of the title and leave only the festival.
+    [
+      "Black History Month Film Festival - ",
+      "Black History Month Film Festival: ",
+    ],
     // The two-part documentary is billed with the instalment in front of the
     // subtitle, spelled with brackets or a colon, with or without a space
     // around the dash, and with the number spelled out as a word, so the same
@@ -541,10 +553,12 @@ function normalizeTitle(title, options) {
       "Lord of the Rings: The Return of the King",
     ],
     ["Doctor Who: Projections in Time -", "Doctor Who: "], // Remove unnecessary "Projections in Time" prefix
-    // One venue bills the Doctor Who Day double bill by its second episode
-    // alone, so it would arrive under a second name.
+    // Venues bill the Doctor Who Day double bill by its second episode alone,
+    // with a colon or a dash and with or without the "Day", so it would arrive
+    // under a name per spelling - and the dash would lose the episode to the
+    // separator rule. One pattern rather than a string per spelling.
     [
-      /^Doctor Who: The Satan Pit$/i,
+      /^Doctor Who(?: Day)?(?::| -) The Satan Pit$/i,
       "Doctor Who Day: The Impossible Planet & The Satan Pit",
     ],
     ["H I / P D", "Hidden Inventory/Premature Death"], // Fixes Jujutsu Kaisen: H I / P D

@@ -148,6 +148,18 @@ const nonFilmEvents = [
   /Live at The Blue/i,
   // A guided tour of the gallery, beside the discovery tour above.
   /Semi-Private Tour/i,
+  // A wine tasting billed on its own ("CHATTY PATTY X JUDICIOUS POURS: WINE
+  // TASTING", "Wine Tasting Night"). Anchored to the end, and not after
+  // "with", so a screening sold with a tasting ("Downton Abbey: Grand Finale
+  // with Wine Tasting") still reaches the listings.
+  /(?<!with )Wine Tasting(?: Night)?$/i,
+  // A community workshop series, billed by the session it runs ("WAYS OF
+  // BEING: IDENTITY"), so match the series in either number rather than
+  // carrying a pattern per session.
+  /CVC Community Workshops?/i,
+  // A DJ night, billed by the act playing it ("WITH AKWAFLOW"), so match the
+  // night rather than carrying a pattern per act.
+  /Mixtape: More Black Excellence/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
