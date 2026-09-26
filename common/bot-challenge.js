@@ -17,6 +17,14 @@ const isBotChallengeResponse = (response) =>
 const isBotChallengeFetchResponse = (response) =>
   response?.headers?.get("cf-mitigated") === "challenge";
 
+// SiteGround's equivalent, read off a `fetch` Response. Its challenge is a 202
+// carrying a meta refresh to `/.well-known/sgcaptcha/`, which `fetch` counts as
+// ok - so without this a challenge passes for the page itself. It labels every
+// challenged response with `sg-captcha: challenge`, the header to trust over
+// its copy for the same reason as Cloudflare's.
+const isSiteGroundChallengeFetchResponse = (response) =>
+  response?.headers?.get("sg-captcha") === "challenge";
+
 // A *block* is not a challenge: there is no puzzle being offered, the request
 // was simply refused. It carries no `cf-mitigated` header and none of the
 // challenge copy, so without this it reads as an ordinary failed page load —
@@ -36,4 +44,5 @@ module.exports = {
   isBotBlockText,
   isBotChallengeResponse,
   isBotChallengeFetchResponse,
+  isSiteGroundChallengeFetchResponse,
 };

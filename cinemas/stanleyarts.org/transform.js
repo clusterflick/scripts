@@ -8,6 +8,7 @@ const {
   getTitleAccessibility,
 } = require("../../common/utils");
 const { extractJsonLdEvents } = require("../../common/tribe-events/transform");
+const { getExpectedClosure } = require("../../common/expected-closures");
 const attributes = require("./attributes");
 
 function decodeDescription(rawDescription) {
@@ -52,7 +53,16 @@ async function transform({ movieListPages }, sourcedEvents) {
   }
 
   if (movies.length === 0) {
-    throw new Error("No movies found — page structure may have changed");
+    // The retrieve stands down to no pages while the site is unreachable,
+    // which arrives here as the same empty output a changed page would give.
+    // Stand down only for a declared closure, and say which one.
+    const closure = getExpectedClosure(attributes.id);
+    if (!closure) {
+      throw new Error("No movies found — page structure may have changed");
+    }
+    console.log(
+      `      - ⚠️  No listings for ${attributes.id} - closed until ${closure.until} for ${closure.reason}`,
+    );
   }
 
   const listOfSourcedEvents = Object.values(sourcedEvents).flatMap(

@@ -106,6 +106,29 @@ const expectedClosures = [
     // someone should make deliberately.
     reason: "DNS delegation failed, listings unreachable",
   },
+  {
+    venue: "stanleyarts.org",
+    from: "2026-09-26",
+    until: "2026-09-26",
+    // Not a closure, and like Fulham Pier's entry the evidence is observation
+    // rather than an announcement. The venue is open; its site answers nobody.
+    // stanleyarts.org is hosted on SiteGround, whose bot protection has been
+    // refusing every request since at least 03:14 today: our runner gets a 429
+    // on the first page of the retrieve, on every attempt and every re-run;
+    // elsewhere every URL on the domain - the home page included, with or
+    // without www, over http or https - is a 202 "Robot Challenge Screen"
+    // (`sg-captcha: challenge`) that a headless browser does not clear; and
+    // the site would not load in an ordinary browser on either a home or a
+    // mobile network.
+    //
+    // One day, for the same reason as Fulham Pier's: nothing observed says
+    // when it lifts, and this buys the run that is blocked now - a release for
+    // every other venue, with transform's recovery carrying Stanley Arts' two
+    // listings forward from the previous release - and makes tomorrow a fresh
+    // decision. Recovery cannot verify them past the same wall, so a screening
+    // cancelled today would stay up.
+    reason: "SiteGround refusing all requests, listings unreachable",
+  },
 ];
 
 // The closure covering this venue today, or undefined if it has none - so a
