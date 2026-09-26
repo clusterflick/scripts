@@ -585,8 +585,10 @@ function normalizeTitle(title, options) {
     ["Die Hard 2: Die Harder", "Die Hard 2"],
     ["PRINCE - SIGN O'THE TIMES", "PRINCE: SIGN O THE TIMES"],
     [" 2.1 ", " 2 "],
-    ["Disney Junior Cinema Club 2025", "Disney Junior Cinema Club"],
-    ["Disney Junior Club 2025", "Disney Junior Cinema Club"],
+    [
+      /Disney (?:Junior|Jr\.?) (?:Cinema )?Club(?: \d{4})?/i,
+      "Disney Junior Cinema Club",
+    ],
     ["Downtown Abbey", "Downton Abbey"],
     [
       "Reality Is Not Enough: Irvine Welsh",
@@ -1422,6 +1424,7 @@ function normalizeTitle(title, options) {
     ],
     ["Metropolis at 100", "Metropolis"],
     ["Halloween (1978) + ", "Halloween (1978) & "],
+    ["Nishi Ginza Station + ", "Nishi Ginza Station & "],
     // The pairing is billed with a plus, which the separator rule would
     // otherwise read as the end of the title and drop the second film
     // entirely. One venue publishes it without the spaces, so the plus is
@@ -1603,6 +1606,8 @@ function normalizeTitle(title, options) {
     ["FREE Kids Movie Club: Into the Highlands", "brave"],
     ["FREE Kids Movie Club: All That Jazz", "soul"],
     ["FREE Kids Movie Club: Monsters Welcome", "monsters inc"],
+    ["FREE Kids Movie Club: Halloween Morning", "nightmare before christmas"],
+    ["FREE Kids Movie Club: The Haunted House", "muppets haunted mansion"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
