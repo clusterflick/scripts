@@ -9,7 +9,10 @@ const {
 } = require("../../common/utils");
 const { isSportShowing } = require("../../common/is-sport-showing");
 const { isNonFilmEvent } = require("../../common/is-non-film-event");
-const { BOT_CHALLENGE_TEXT } = require("../../common/bot-challenge");
+const {
+  BOT_CHALLENGE_TEXT,
+  isSiteGroundChallengeFetchResponse,
+} = require("../../common/bot-challenge");
 const { getCinema } = require("../../cinemas");
 const findMatchesOnTheMovieDb = require("./find-matches-on-the-movie-db");
 const getSourcedEventsFor = require("./get-sourced-events-for");
@@ -225,11 +228,24 @@ async function transform(
       // removed. Treat it as inconclusive and keep the previously-known-good
       // event rather than dropping a still-valid one. (A proper fix would verify
       // via Playwright like the retrieve step does.)
+      // SiteGround's challenge is a 202, so it would otherwise read as the
+      // listing page and be kept as though it had been checked.
       const isBotChallenge =
-        (response.status === 403 || response.status === 503) &&
-        BOT_CHALLENGE_TEXT.test(content);
+        ((response.status === 403 || response.status === 503) &&
+          BOT_CHALLENGE_TEXT.test(content)) ||
+        isSiteGroundChallengeFetchResponse(response);
       if (isBotChallenge) {
         console.log(" - Kept (bot challenge, unverifiable):", movie.title);
+        matchedData.push(withRequiredPerformanceDefaults(movie));
+        continue;
+      }
+
+      // Nor is being rate limited: a 429 says how often we asked, not whether
+      // the listing is still there. Stanley Arts is why - SiteGround answered
+      // its whole site with 429s during an outage, which dropped every listing
+      // recovery was carrying forward as though each had been removed.
+      if (response.status === 429) {
+        console.log(" - Kept (rate limited, unverifiable):", movie.title);
         matchedData.push(withRequiredPerformanceDefaults(movie));
         continue;
       }
