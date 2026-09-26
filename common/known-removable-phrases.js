@@ -1194,10 +1194,10 @@ const knownRemovablePhrases = [
   "Romford Film Festival 2026:",
   "Rooftop Cinema:",
   "Rooftop Cinema :",
-  "Sapphic Cinema:",
   "Sapphic Cinema Valentine's Afternoon Screening",
   "Sapphic screening and social",
   'Sapphic Cinema & BFI "Rip it Up": ',
+  "Sapphic Cinema",
   "Sake, onigiri +",
   "Sam Neill Tribute:",
   "Samosa Haus x Lumiere:",
@@ -1674,6 +1674,9 @@ const knownRemovablePhrases = [
   "Lucy Raven's ",
   "John Shuttleworth: ",
   "An Afternoon with Walter Murch",
+  "John Berger at 100:",
+  // The German film's subtitle, billed after its title.
+  " Das drachenprächtige Ungeheuer",
   "Exclusive Screening",
 ];
 
