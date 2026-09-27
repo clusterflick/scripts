@@ -388,9 +388,12 @@ function normalizeTitle(title, options) {
     [/Last Supper (– )?Part 1/i, "Last Supper"],
     ["The Last Supper", "Last Supper"],
     ["Veera Dheera Sooran: Part 2", "Veera Dheera Sooran"],
-    // The third film of the documentary is known by its numeral, "The Battle
-    // of Chile III", rather than by the part the venue bills it as.
-    [/Battle Of Chile Part 3$/i, "Battle of Chile III"],
+    // The three films of the documentary are known as "Part I", "Part II" and
+    // "Part III", but venues bill them with a digit or a bare numeral, and the
+    // later "Part N" rule would reduce a digit to a numeral on the end.
+    [/Battle Of Chile(?: Part)? (?:1|I)\b/i, "Battle of Chile Part I"],
+    [/Battle Of Chile(?: Part)? (?:2|II)\b/i, "Battle of Chile Part II"],
+    [/Battle Of Chile(?: Part)? (?:3|III)\b/i, "Battle of Chile Part III"],
     // The double bill names both films either side of a slash, which the
     // separator rule would cut down to the first alone.
     ["Memorial / ", "Memorial "],
