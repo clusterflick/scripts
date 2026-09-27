@@ -1282,6 +1282,7 @@ function normalizeTitle(title, options) {
     [/.*\(A (.*) EXHIBITION\)/i, "$1"],
     ["ZOOTROPOLIS", "Zootopia"],
     ["DR DOLITTLE", "DOCTOR DOLITTLE"],
+    [/\bzoo escape\b/i, "Zoo Break Out"],
     ["• world premiere of ", ""],
     // Variant families collapsed from known-removable-phrases.js
     // Each pattern covers multiple near-identical string entries that shared a common structure
