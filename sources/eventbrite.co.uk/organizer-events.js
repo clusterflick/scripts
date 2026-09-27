@@ -110,18 +110,21 @@ async function fetchOrganizerEvents(organizerId, fromDate) {
 // here: those categories exist for a venue's own listings, where the programme
 // is the venue's own, but an event arriving from a source has to earn its place.
 const FILM_SHAPED_TITLE =
-  /\b(cinema|film|screening|movie|short film|documentar)|\((?:19|20)\d\d\)/i;
+  /\b(cinema|film|screening|movie|short film|documentar|premi[eè]re)|\((?:19|20)\d\d\)/i;
 
-// Film festivals whose programmes are titled with the festival's name and a
-// theme, and nothing a film word could catch: "PRIFF 2026: What We Carry" is a
+// Film festivals title their programmes with the festival's acronym and year,
+// and often nothing a film word could catch: "PRIFF 2026: What We Carry" is a
 // shorts programme at The Castle Cinema. On the 2026-09-27 retrieve the search
 // reached 12 of PRIFF UK's 18 events, and 5 of the 6 it missed were screenings
 // at venues we hold, dropped here by title alone.
 //
-// Anchored to the start of the title, because that is where a festival puts its
-// name on its own programme - PRIFF's talks and workshops ("MASTERCLASS: ...",
-// "Casting Workshop with ...") lead with something else and stay out.
-const FILM_FESTIVAL_TITLE = /^\s*(PRIFF)\b/i;
+// Across the 3,194 titles in that retrieve and the 2026-09-12 fixtures, an
+// acronym ending "FF" followed by a year opens 14, every one a festival
+// programme: PRIFF's, WICFF's and WWIFF's opening gala. It is anchored to the
+// start and kept case-sensitive because that is where a festival puts its name
+// on its own programme. Unanchored, it also takes "From Script to Screen One
+// Day Masterclass LFF 2026", and case-insensitive, any word ending "ff".
+const FILM_FESTIVAL_TITLE = /^\s*[A-Z]+FF:?\s+20\d\d\b/;
 
 /**
  * Whether an organiser's event is worth pursuing as a film screening. Checked

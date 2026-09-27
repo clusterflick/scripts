@@ -12,11 +12,11 @@ module.exports = {
   socials: {
     letterboxd: null,
     twitter: null,
-    instagram: "propositionstudios",
+    instagram: null,
   },
   url: "https://www.propositionstudios.com/whats-on",
   address: "279 Cambridge Heath Road, London, E2 0EL, UK",
-  geo: { lat: 51.5264031, lon: -0.05566989999999999 },
+  geo: { lat: 51.52662674607975, lon: -0.05577717288953959 },
   structure: "solo",
   type: "Creative Space",
   programming: "host",
