@@ -203,6 +203,9 @@ describe("eventbrite organiser sweep", () => {
               organizerEvent("5", "Life Drawing Classes at the Meeting House"),
               organizerEvent("6", "Pilates"),
               organizerEvent("7", "Wreath Making"),
+              organizerEvent("8", "PRIFF 2026: What We Carry"),
+              organizerEvent("9", "Networking Drinks - PRIFF 2026"),
+              organizerEvent("10", "Casting Workshop with PRIFF UK"),
             ],
             has_more: false,
           }),
@@ -220,10 +223,12 @@ describe("eventbrite organiser sweep", () => {
       "Kids' Film Club @Leyton Library",
       // Caught only by the bracketed year - no film word in the title.
       "The Phantom of the Opera (1925)",
+      // Caught only by opening with a festival's name.
+      "PRIFF 2026: What We Carry",
     ]);
-    // The filter runs on the listing, so the three that were dropped never
+    // The filter runs on the listing, so the five that were dropped never
     // cost an event-page request. Event 1 is the search's own.
-    expect(eventPagesFetched).toHaveLength(4);
+    expect(eventPagesFetched).toHaveLength(5);
   }, 15000);
   // An organiser the search omits entirely hands us no id to discover, so the
   // seed list is the only route to them.

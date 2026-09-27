@@ -38,6 +38,23 @@ setupCacheMock(__dirname, CACHE_DATE);
 // these fixtures never captured. Seeding is organizer-sweep.test.js's business.
 jest.mock("../seeded-organizers", () => []);
 
+// Held to the venues we had when the fixtures were taken, for the same reason:
+// a venue added since turns events the search captured into ones at a venue we
+// hold, and retrieve then asks for their organiser's calendar and event pages,
+// which were never written. Add a venue here when its events are in the
+// fixtures, and empty the list when they are replaced.
+const mockVenuesAddedSinceFixtures = ["lfs.org.uk", "propositionstudios.com"];
+jest.mock("../../../cinemas", () => {
+  const cinemas = jest.requireActual("../../../cinemas");
+  return {
+    ...cinemas,
+    getAllCinemaAttributes: () =>
+      cinemas
+        .getAllCinemaAttributes()
+        .filter(({ id }) => !mockVenuesAddedSinceFixtures.includes(id)),
+  };
+});
+
 silenceConsoleLog();
 
 const cinema = {

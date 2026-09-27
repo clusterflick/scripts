@@ -112,12 +112,24 @@ async function fetchOrganizerEvents(organizerId, fromDate) {
 const FILM_SHAPED_TITLE =
   /\b(cinema|film|screening|movie|short film|documentar)|\((?:19|20)\d\d\)/i;
 
+// Film festivals whose programmes are titled with the festival's name and a
+// theme, and nothing a film word could catch: "PRIFF 2026: What We Carry" is a
+// shorts programme at The Castle Cinema. On the 2026-09-27 retrieve the search
+// reached 12 of PRIFF UK's 18 events, and 5 of the 6 it missed were screenings
+// at venues we hold, dropped here by title alone.
+//
+// Anchored to the start of the title, because that is where a festival puts its
+// name on its own programme - PRIFF's talks and workshops ("MASTERCLASS: ...",
+// "Casting Workshop with ...") lead with something else and stay out.
+const FILM_FESTIVAL_TITLE = /^\s*(PRIFF)\b/i;
+
 /**
  * Whether an organiser's event is worth pursuing as a film screening. Checked
  * on the listing, before the event page is requested - it is the difference
  * between 81 event pages and 507.
  */
-const hasFilmShapedTitle = ({ name }) => FILM_SHAPED_TITLE.test(name || "");
+const hasFilmShapedTitle = ({ name }) =>
+  FILM_SHAPED_TITLE.test(name || "") || FILM_FESTIVAL_TITLE.test(name || "");
 
 // "2026-10-03T17:00:00" -> ["2026-10-03", "17:00"]
 //
