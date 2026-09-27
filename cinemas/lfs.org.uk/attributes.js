@@ -1,9 +1,9 @@
-// The school's two cinemas are described on its site as being at its Shelton
-// Street building, but every screening it publishes gives the Parker Street
-// campus above The Garden Cinema. Nothing says which room is used, so this
-// holds the address the tickets carry: it is where the listings send people,
-// and what every source matches against. Sharing a building with The Garden
-// Cinema is safe - a source event has to match the name as well as the place.
+// The school has two sites 400m apart. Its two cinemas are at Shelton Street,
+// where most screenings - including those by groups hiring the rooms - are
+// listed, so that is the address held here. The Parker Street campus, above
+// The Garden Cinema, has no cinema but still turns up on some listings (PRIFF's
+// programmes there don't name a room). `geoRadius` covers both sites; nothing
+// else answers to the name, so the wider radius can't pull in a neighbour.
 module.exports = {
   id: "lfs.org.uk",
   name: "London Film School",
@@ -15,8 +15,9 @@ module.exports = {
     instagram: "thelondonfilmschool",
   },
   url: "https://lfs.org.uk",
-  address: "39-41 Parker Street, London, WC2B 5PQ, UK",
-  geo: { lat: 51.516245688243266, lon: -0.12133723562486562 },
+  address: "24 Shelton Street, London, WC2H 9UB, UK",
+  geo: { lat: 51.51373576262482, lon: -0.1254816305618999 },
+  geoRadius: 0.5,
   structure: "solo",
   type: "University & College",
   programming: "host",
