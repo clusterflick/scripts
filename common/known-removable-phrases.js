@@ -282,6 +282,7 @@ const knownRemovablePhrases = [
   "Intergalactic Experience",
   "Community Screening and Q&A",
   "Film Screening and Q&A",
+  ": screening and panel discussion with director",
   "screening and Q&A with Byline Times",
   "Special Screening and Q&A",
   "Documentary pre-screening and Q&A",
@@ -462,6 +463,7 @@ const knownRemovablePhrases = [
   " x Film House: Pride Edition",
   " x Gala Screening",
   " x Lethal Reppin",
+  " X Leethal Reppin",
   " X Migrants' Rights Network",
   " x SCRT",
   " x Sofar Sounds",
@@ -644,6 +646,7 @@ const knownRemovablePhrases = [
   "BTS ARMY:",
   "Bun Bites Screening:",
   "Business Declares:",
+  "By Aura Satz",
   "by Burnermunde",
   "by Ektoras Arkomanis",
   "by Erotic Film Festival London",
@@ -1237,6 +1240,8 @@ const knownRemovablePhrases = [
   "See Film First :",
   "SEEN Charity Film Screening:",
   "Silent Film & Live Music:",
+  "Silent Film & Music:",
+  "Student Day:",
   "Silents Synced:",
   ": Silents Synced",
   "SLA:",
@@ -1384,6 +1389,10 @@ const knownRemovablePhrases = [
   // initials sitting on the front of the film. Listed here, ahead of that
   // entry, so the whole label comes off in one go.
   "BHM Film Screening",
+  // Billed after the film's name with nothing between the two, so it has to
+  // come off whole before the generic "Film Screening" entry takes the first
+  // two words and leaves the rest on the title.
+  "Film Screening Featuring Q&A With Director",
 
   // Weirdly specific fixes
   // The premiere bills the guest and the extras that come with the film
