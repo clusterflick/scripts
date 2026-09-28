@@ -1,5 +1,6 @@
 const path = require("node:path");
 const cheerio = require("cheerio");
+const { decode } = require("html-entities");
 const {
   generateShowingId,
   createOverview,
@@ -14,6 +15,7 @@ const { parseDate } = require("../../common/bfi.org.uk/utils");
 const attributes = require("./attributes");
 
 // Indices within each articleContext.searchResults entry (confirmed from live data)
+const RESULT_TITLE = 5; // "Act 3"
 const RESULT_DATETIME = 7; // "Friday 20 March 2026 15:30"
 const RESULT_YEAR = 11; // "2026"
 const RESULT_BOOKING_URL = 18; // "default.asp?doWork::WScontent..."
@@ -196,7 +198,12 @@ async function findEvents(cinema) {
     if (!searchResults || searchResults.length === 0) continue;
 
     const $ = cheerio.load(html);
-    const title = searchResults[0][5];
+    // The search result carries the title as the BFI's editors typed it into
+    // their CMS, entities and all ("LFF for Free:&nbsp;In Praise of
+    // Stillness"), so decode it - and fold the non-breaking space it becomes
+    const title = decode(searchResults[0][RESULT_TITLE])
+      .replace(/\s+/g, " ")
+      .trim();
 
     const isShortFilmCollection = $(".Short__film").length > 1;
     const overview = isShortFilmCollection
