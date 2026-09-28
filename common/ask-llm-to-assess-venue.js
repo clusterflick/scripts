@@ -12,7 +12,11 @@ const responseSchema = {
   properties: {
     isFilmVenue: { type: "boolean" },
     programmeType: { type: "string", enum: programmeTypes },
-    reason: { type: "string" },
+    // The prompt asks for 150 characters, but only the schema holds the model
+    // to it. Without the limit, a sparse listing ("1 Ham Yard", one gala) sent
+    // it restating its answer inside `reason` until the output ran out - and
+    // at temperature 0 it does so every time.
+    reason: { type: "string", maxLength: 150 },
     confidence: { type: "number" },
   },
   required: ["isFilmVenue", "programmeType", "confidence"],
