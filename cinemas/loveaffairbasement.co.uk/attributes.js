@@ -1,6 +1,7 @@
 module.exports = {
   id: "loveaffairbasement.co.uk",
   name: "Love Affair Basement",
+  alternativeNames: ["Love Affair Baement"],
   domain: "https://www.loveaffairbasement.co.uk",
   socials: {
     letterboxd: null,

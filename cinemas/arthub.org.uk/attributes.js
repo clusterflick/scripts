@@ -1,7 +1,7 @@
 module.exports = {
   id: "arthub.org.uk",
   name: "Art Hub Studios",
-  alternativeNames: ["Art Hub", "The Mornington Centre"],
+  alternativeNames: ["Art Hub", "The Mornington Centre", "Art Hub Studios CIC"],
   domain: "https://www.arthub.org.uk",
   socials: {
     letterboxd: null,

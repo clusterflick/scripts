@@ -1,7 +1,11 @@
 module.exports = {
   id: "regentstreetcinema.com",
   name: "Regent Street Cinema",
-  alternativeNames: ["University of Westminster"],
+  alternativeNames: [
+    "University of Westminster",
+    "University of Westminster - Regent Street",
+    "UG05 - University of Westminster",
+  ],
   domain: "https://www.regentstreetcinema.com",
   socials: {
     letterboxd: "regentstcinema",

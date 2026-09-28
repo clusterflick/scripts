@@ -1,7 +1,10 @@
 module.exports = {
   id: "sciencemuseum.org.uk",
   name: "Science Museum",
-  alternativeNames: ["Science Museum IMAX"],
+  alternativeNames: [
+    "Science Museum IMAX",
+    "Science Museum IMAX: The Ronson Theatre",
+  ],
   domain: "https://www.sciencemuseum.org.uk",
   socials: {
     letterboxd: null,

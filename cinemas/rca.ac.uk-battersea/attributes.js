@@ -6,6 +6,7 @@ module.exports = {
     "Royal College of Art",
     "Royal College of Art Battersea",
     "RCA",
+    "Gorvy Lecture Theatre",
   ],
   domain: "https://www.rca.ac.uk",
   socials: {

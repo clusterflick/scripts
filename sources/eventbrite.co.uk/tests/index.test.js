@@ -49,14 +49,40 @@ const mockVenuesAddedSinceFixtures = [
   "centralfilmschool.com",
   "houseofannetta.org",
 ];
+// A name added to a venue we already held does the same thing to the events
+// listed under it, so those names are held back too - by venue, as the venue
+// itself stays. Empty this alongside the list above.
+const mockAlternativeNamesAddedSinceFixtures = {
+  "arthub.org.uk": ["Art Hub Studios CIC"],
+  "kilntheatre.com": ["Kiln Cinema"],
+  "myvue.com-leicester-square": ["Vue Leicester Square"],
+  "otterchaos.co.uk": ["Otter Chaos Brixton"],
+  "oxfordhouse.org.uk": ["Oxford House in Bethnal Green"],
+  "rca.ac.uk-battersea": ["Gorvy Lecture Theatre"],
+  "regentstreetcinema.com": [
+    "University of Westminster - Regent Street",
+    "UG05 - University of Westminster",
+  ],
+};
 jest.mock("../../../cinemas", () => {
   const cinemas = jest.requireActual("../../../cinemas");
+  const withoutNamesAddedSinceFixtures = (cinema) => {
+    const addedNames = mockAlternativeNamesAddedSinceFixtures[cinema.id];
+    if (!addedNames) return cinema;
+    return {
+      ...cinema,
+      alternativeNames: cinema.alternativeNames.filter(
+        (name) => !addedNames.includes(name),
+      ),
+    };
+  };
   return {
     ...cinemas,
     getAllCinemaAttributes: () =>
       cinemas
         .getAllCinemaAttributes()
-        .filter(({ id }) => !mockVenuesAddedSinceFixtures.includes(id)),
+        .filter(({ id }) => !mockVenuesAddedSinceFixtures.includes(id))
+        .map(withoutNamesAddedSinceFixtures),
   };
 });
 

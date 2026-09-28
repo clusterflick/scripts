@@ -1,6 +1,7 @@
 module.exports = {
   id: "oxfordhouse.org.uk",
   name: "Oxford House",
+  alternativeNames: ["Oxford House in Bethnal Green"],
   domain: "https://www.oxfordhouse.org.uk",
   socials: {
     letterboxd: null,

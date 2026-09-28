@@ -1,6 +1,7 @@
 module.exports = {
   id: "picturehouses.com-finsbury-park",
   name: "Finsbury Park Picturehouse",
+  alternativeNames: ["The Club Room At Finsbury Park Picturehouse"],
   domain: "https://www.picturehouses.com",
   socials: {
     letterboxd: "picturehouses",
