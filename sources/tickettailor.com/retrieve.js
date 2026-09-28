@@ -25,6 +25,9 @@ const VENUE_SLUGS = [
   "londonnaturefilms", // London Nature Films
   "mildmayclubandinstituteltd", // The Mildmay Club
   "staffordshirestcic", // Staffordshire St
+  "offshootsfestival", // Offshoots Festival
+  "palestinehouse", // Palestine House
+  "passengercinema", // Passenger Cinema
 ];
 
 function retrieveVenuePage(getPage, slug) {

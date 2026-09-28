@@ -23,8 +23,12 @@ const { spawnSync } = require("node:child_process");
 //   6. Reconcile the length assertions offline in replay until green.
 //   7. Confirm the artefacts it uses (and __snapshots__) were written.
 //
-// Usage: node helpers/regenerate-recordings.js <venue-id>
+// Sources work the same way: their per-case `expectedMatches` counts are
+// reconciled in the `describe.each` table row of whichever case failed.
+//
+// Usage: node helpers/regenerate-recordings.js <venue-or-source-id>
 //   e.g. node helpers/regenerate-recordings.js cineworld.co.uk-bexleyheath
+//        node helpers/regenerate-recordings.js tickettailor.com
 
 const colors = {
   reset: "\x1b[0m",
@@ -62,15 +66,22 @@ const todayIso = () =>
     day: "2-digit",
   }).format(new Date());
 
-// Resolve the venue's test directory.
+// Resolve the test directory of a cinema or a source - `npm run retrieve`
+// accepts either, so the id alone says which it is.
 function resolveTestDir(venueId) {
-  const venueDir = path.join(ROOT, "cinemas", venueId);
-  if (!fs.existsSync(venueDir)) {
-    fail(`No such venue: cinemas/${venueId}`);
+  const candidates = ["cinemas", "sources"].map((kind) =>
+    path.join(kind, venueId),
+  );
+  const found = candidates.filter((dir) => fs.existsSync(path.join(ROOT, dir)));
+  if (found.length === 0) {
+    fail(`No such venue or source: ${candidates.join(" or ")}`);
   }
-  const dir = path.join(venueDir, "tests");
+  if (found.length > 1) {
+    fail(`Ambiguous id, both exist: ${found.join(" and ")}`);
+  }
+  const dir = path.join(ROOT, found[0], "tests");
   if (!fs.existsSync(path.join(dir, "index.test.js"))) {
-    fail(`No index.test.js found under cinemas/${venueId}/tests`);
+    fail(`No index.test.js found under ${found[0]}/tests`);
   }
   return dir;
 }
@@ -126,6 +137,9 @@ function parseLengthFailures(json, testFile) {
           failures.push({
             line: Number(lineMatch[1]),
             received: Number(receivedMatch[1]),
+            // The innermost describe - for a `describe.each` table this is the
+            // case's title, which is how a data-driven count finds its row.
+            caseTitle: assertion.ancestorTitles.at(-1),
           });
         } else {
           others.push(message.split("\n").slice(0, 6).join("\n"));
@@ -138,11 +152,47 @@ function parseLengthFailures(json, testFile) {
 
 const escapeRegExp = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
-// Replace the number inside `toHaveLength(...)` on a specific 1-indexed line.
-function updateLengthOnLine(testFile, line, received) {
+// A source test asserts `toHaveLength(expectedMatches)` once for every row of a
+// `describe.each` table titled by `$name`, so the number to change lives in the
+// failing case's row: the `<property>: N` following its `name: "<title>"`.
+function updateLengthInTableRow(testFile, property, caseTitle, received) {
+  const lines = fs.readFileSync(testFile, "utf8").split("\n");
+  const nameLine = `name: ${JSON.stringify(caseTitle)},`;
+  const rows = lines.flatMap((text, index) =>
+    text.trim() === nameLine ? [index] : [],
+  );
+  if (rows.length !== 1) {
+    fail(
+      `Expected one \`${nameLine}\` row for the failing case, found ${rows.length}.`,
+    );
+  }
+
+  const propertyPattern = new RegExp(`^(\\s*${property}:\\s*)\\d+(,?)$`);
+  for (let index = rows[0] + 1; index < lines.length; index++) {
+    if (/^\s*name:/.test(lines[index])) break;
+    if (propertyPattern.test(lines[index])) {
+      const original = lines[index];
+      lines[index] = original.replace(propertyPattern, `$1${received}$2`);
+      fs.writeFileSync(testFile, lines.join("\n"));
+      return {
+        from: `${caseTitle} ${original.trim()}`,
+        to: lines[index].trim(),
+      };
+    }
+  }
+  fail(`No \`${property}: N\` in the "${caseTitle}" row.`);
+}
+
+// Replace the number inside `toHaveLength(...)` on a specific 1-indexed line,
+// or - when the argument is a table property - in the failing case's row.
+function updateLengthOnLine(testFile, line, received, caseTitle) {
   const lines = fs.readFileSync(testFile, "utf8").split("\n");
   const index = line - 1;
   const original = lines[index];
+  const property = original.match(/toHaveLength\(([A-Za-z_$][\w$]*)\)/)?.[1];
+  if (property) {
+    return updateLengthInTableRow(testFile, property, caseTitle, received);
+  }
   if (!/toHaveLength\(\d+\)/.test(original)) {
     fail(
       `Expected a toHaveLength(...) on line ${line} but found:\n    ${original}`,
@@ -248,7 +298,7 @@ function dirHasFiles(dir) {
 function main() {
   const venueId = process.argv[2];
   if (!venueId) {
-    fail("Usage: node helpers/regenerate-recordings.js <venue-id>");
+    fail("Usage: node helpers/regenerate-recordings.js <venue-or-source-id>");
   }
 
   const testDir = resolveTestDir(venueId);
@@ -342,8 +392,15 @@ function main() {
     }
 
     // Apply deepest line first so edits never shift a not-yet-applied line.
-    for (const { line, received } of failures.sort((a, b) => b.line - a.line)) {
-      const { from, to } = updateLengthOnLine(testFile, line, received);
+    for (const { line, received, caseTitle } of failures.sort(
+      (a, b) => b.line - a.line,
+    )) {
+      const { from, to } = updateLengthOnLine(
+        testFile,
+        line,
+        received,
+        caseTitle,
+      );
       log.ok(`Line ${line}: ${from}  →  ${to}`);
     }
 
