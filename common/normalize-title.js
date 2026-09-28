@@ -937,6 +937,7 @@ function normalizeTitle(title, options) {
     ],
     [/Scarecrows' Wedding \+ /i, "Scarecrows' Wedding & "],
     ["Tiddler + ", "Tiddler & "],
+    ["LIAF + ", "LIAF & "],
     ["Lost and Found + Shoom's Odyssey", "Lost and Found & Shoom's Odyssey"],
     ["Chico and Rita + 20 Años", "Chico and Rita & 20 Años"],
     [

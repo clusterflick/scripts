@@ -166,6 +166,9 @@ const nonFilmEvents = [
   // An R&B day party, billed with its theme and head count ("RNB LAND -
   // Summer Closing RnB & Slow Jams Day Party"), never a screening.
   /RNB LAND/i,
+  // A college's social for its new graduates ("Grads: Graduate Mixer"), held
+  // in the theatre it screens films in.
+  /Graduate Mixer/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>

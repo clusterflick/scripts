@@ -304,6 +304,9 @@ const knownRemovablePhrases = [
   "Special Screening & Q&A",
   "Special Screening in London!",
   "Special Screening Evening",
+  // Ahead of "special screening", which would otherwise take the end of it
+  // and leave the strand name on the title
+  "Black History Month special screening",
   "special screening",
   "Special Presentation:",
   "Spielberg Sci-Fi Week:",
@@ -321,6 +324,7 @@ const knownRemovablePhrases = [
   "screening in Tottenham",
   "Film Screening and Maker's Market",
   "Film Screening & After Party",
+  "Film screening and discussion",
   "Film Lovers Queer Mix & Mingle:",
   "Fan First Premiere exclusively in IMAX",
   "ft. live original score",
@@ -342,6 +346,7 @@ const knownRemovablePhrases = [
   "March To Hitchcock:",
   "for Halloween",
   "followed by a Talk with Joshua Magor",
+  "followed by discussion",
   "The Film with Live Band",
   "with intro and Q&A",
   "with an Introduction, Prologue, and a mark of respect by the Monks",
@@ -516,8 +521,21 @@ const knownRemovablePhrases = [
   "with Bookish Besties",
   "with Special Introduction",
   "screening and live Q+A",
+  // Seasons named after the film, each kept whole with its venue so the
+  // season's own words ("Spooky Cinema", "Festive Films") are never taken
+  // from another venue's title
+  "Spooky Cinema at Gunnersbury Museum",
+  "Festive Films at Gunnersbury Museum",
+  "Halloween Outdoor Cinema at Osterley Park and House, London",
+  "at Canada Water Library",
 
   // Prefixes
+  "LFF for Free:",
+  "Violent World:",
+  "Film club presents:",
+  // Its "(dog-friendly movie night)" billing is already gone by the time the
+  // list runs, colon and all, so only the series name is left to strip
+  "Pooches & Popcorn",
   "(4DX) ",
   "(4DX 3D) ",
   "(4DX Rewind 25)",
@@ -632,6 +650,7 @@ const knownRemovablePhrases = [
   ": Book Launch",
   "Book launch Third Woman",
   "Book Launch of Third Woman, talk & film screening",
+  "Book Launch and Screening",
   "Book Club &",
   "+Book Signing",
   "BOTY:",
@@ -673,6 +692,7 @@ const knownRemovablePhrases = [
   "Curzon Film 50:",
   "Mamoru Hosoda's",
   "Mondays for Members:",
+  "Mongolia in movies:",
   "Member's Pick ",
   "Members' Exclusive:",
   "Members':",
