@@ -20,13 +20,13 @@ jest.mock("../../../common/utils", () => ({
 const isRecording = false;
 
 jest.mock("../../../common/cache");
-setupCacheMock(__dirname, "2026-02-23");
+setupCacheMock(__dirname, "2026-09-28");
 
 silenceConsoleLog();
 
 describe(attributes.name, () => {
   setupPolly(isRecording, __dirname);
-  jest.useFakeTimers().setSystemTime(new Date("2026-02-23"));
+  jest.useFakeTimers().setSystemTime(new Date("2026-09-28"));
 
   describe.each([
     {
@@ -34,7 +34,17 @@ describe(attributes.name, () => {
       name: "BFI Southbank",
       alternativeNames: [],
       geo: { lat: 51.50661723132389, lon: -0.11579438330226112 },
-      expectedMatches: 72,
+      expectedMatches: 168,
+    },
+    {
+      id: "southbankcentre.co.uk",
+      name: "Southbank Centre",
+      alternativeNames: [
+        "Royal Festival Hall",
+        "The Southbank Centre's Royal Festival Hall",
+      ],
+      geo: { lat: 51.5057791, lon: -0.116787 },
+      expectedMatches: 27,
     },
     {
       id: "curzon.com-mayfair",
@@ -52,7 +62,7 @@ describe(attributes.name, () => {
         // Make sure the input looks roughly correct
         expect(movieListPages).toBeTruthy();
         expect(moviePages).toBeTruthy();
-        expect(Object.keys(moviePages)).toHaveLength(72);
+        expect(Object.keys(moviePages)).toHaveLength(246);
 
         readJSON.mockImplementation(() => ({ movieListPages, moviePages }));
 
