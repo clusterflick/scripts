@@ -9,7 +9,7 @@ module.exports = {
   },
   url: "https://www.instagram.com/blownawaystudios/",
   address: "78 Luke Street, London, EC2A 4PY, UK",
-  geo: { lat: 51.52421, lon: -0.08189 },
+  geo: { lat: 51.52425172066137, lon: -0.08186049570245718 },
   structure: "solo",
   type: "Creative Space",
   programming: "host",

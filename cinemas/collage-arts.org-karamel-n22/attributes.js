@@ -10,7 +10,7 @@ module.exports = {
   },
   url: "https://www.collage-arts.org/karamel-n22/",
   address: "Chocolate Factory 2, 4 Coburg Road, London, N22 6UJ, UK",
-  geo: { lat: 51.594217, lon: -0.1131255 },
+  geo: { lat: 51.594390290733436, lon: -0.1131040423455834 },
   structure: "solo",
   type: "Café & Restaurant",
   programming: "host",

@@ -5,11 +5,11 @@ module.exports = {
   socials: {
     letterboxd: null,
     twitter: null,
-    instagram: null,
+    instagram: "nellofolddrury",
   },
   url: "https://www.nellofolddrury.co.uk",
   address: "29 Catherine Street, London, WC2B 5JS, UK",
-  geo: { lat: 51.5126125, lon: -0.1205904 },
+  geo: { lat: 51.512746011796466, lon: -0.12057967289003957 },
   structure: "solo",
   type: "Pub & Bar",
   programming: "host",

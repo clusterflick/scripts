@@ -6,11 +6,11 @@ module.exports = {
   socials: {
     letterboxd: null,
     twitter: null,
-    instagram: null,
+    instagram: "ucl",
   },
   url: "https://studentsunionucl.org/whats-on/venue/garwood-lecture-theatre-south-wing",
   address: "South Wing, UCL, Gower Street, London, WC1E 6BT, UK",
-  geo: { lat: 51.523707, lon: -0.1324928 },
+  geo: { lat: 51.52414359125373, lon: -0.13345418652609464 },
   structure: "group",
   groupName: "University College London",
   type: "University & College",

@@ -1,9 +1,6 @@
 module.exports = {
   id: "southbankcentre.co.uk",
   name: "Southbank Centre",
-  // The BFI lists London Film Festival galas at the Royal Festival Hall both
-  // as "Southbank Centre, Royal Festival Hall" - venue and hall - and as one
-  // string
   alternativeNames: [
     "Royal Festival Hall",
     "The Southbank Centre's Royal Festival Hall",
@@ -15,8 +12,8 @@ module.exports = {
     instagram: "southbankcentre",
   },
   url: "https://www.southbankcentre.co.uk",
-  address: "Royal Festival Hall, Southbank Centre Square, London, SE1 8XX, UK",
-  geo: { lat: 51.5057791, lon: -0.116787 },
+  address: "Belvedere Road, London, SE1 8XX, UK",
+  geo: { lat: 51.50585425187143, lon: -0.11661340864198254 },
   structure: "solo",
   type: "Arts Centre",
   programming: "venue",

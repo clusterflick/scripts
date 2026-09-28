@@ -6,11 +6,11 @@ module.exports = {
   socials: {
     letterboxd: null,
     twitter: null,
-    instagram: null,
+    instagram: "moyletts",
   },
   url: "https://moyletts.co.uk",
   address: "181 Clarence Road, London, E5 8EE, UK",
-  geo: { lat: 51.55572970000001, lon: -0.05621049999999999 },
+  geo: { lat: 51.55575163400716, lon: -0.0562074901626508 },
   structure: "solo",
   type: "Pub & Bar",
   programming: "host",
