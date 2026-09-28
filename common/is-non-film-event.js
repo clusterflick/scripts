@@ -160,6 +160,9 @@ const nonFilmEvents = [
   // A DJ night, billed by the act playing it ("WITH AKWAFLOW"), so match the
   // night rather than carrying a pattern per act.
   /Mixtape: More Black Excellence/i,
+  // An R&B day party, billed with its theme and head count ("RNB LAND -
+  // Summer Closing RnB & Slow Jams Day Party"), never a screening.
+  /RNB LAND/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>

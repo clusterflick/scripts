@@ -133,6 +133,7 @@ const knownRemovablePhrases = [
   ": english language version",
   ": Everyman In Therapy",
   ": Director's Definitive Edition",
+  ", the definitive version",
   ": Dance-Along",
   ": Knit-Along",
   ", The (Extended Edition)",
