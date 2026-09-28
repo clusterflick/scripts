@@ -57,6 +57,13 @@ const mockVenuesAddedSinceFixtures = [
   "southwark.gov.uk-canada-water-library",
   "ucl.ac.uk-garwood-lecture-theatre",
   "visitgunnersbury.org",
+  "armenianinstitute.org.uk",
+  "arts.ac.uk-central-saint-martins",
+  "camden.gov.uk-swiss-cottage-library",
+  "collage-arts.org-karamel-n22",
+  "enfield.gov.uk-enfield-town-library",
+  "lambeth.gov.uk-minet-library",
+  "soas.ac.uk",
 ];
 // A name added to a venue we already held does the same thing to the events
 // listed under it, so those names are held back too - by venue, as the venue
