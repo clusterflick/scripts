@@ -43,7 +43,12 @@ jest.mock("../seeded-organizers", () => []);
 // hold, and retrieve then asks for their organiser's calendar and event pages,
 // which were never written. Add a venue here when its events are in the
 // fixtures, and empty the list when they are replaced.
-const mockVenuesAddedSinceFixtures = ["lfs.org.uk", "propositionstudios.com"];
+const mockVenuesAddedSinceFixtures = [
+  "lfs.org.uk",
+  "propositionstudios.com",
+  "centralfilmschool.com",
+  "houseofannetta.org",
+];
 jest.mock("../../../cinemas", () => {
   const cinemas = jest.requireActual("../../../cinemas");
   return {
