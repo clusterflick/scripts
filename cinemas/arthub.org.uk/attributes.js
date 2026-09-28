@@ -10,7 +10,7 @@ module.exports = {
   },
   url: "https://www.arthub.org.uk",
   address: "Stanley Street, New Cross, London, SE8 4BL, UK",
-  geo: { lat: 51.4765265, lon: -0.0311154 },
+  geo: { lat: 51.47654157164299, lon: -0.031176847975718007 },
   structure: "solo",
   type: "Creative Space",
   programming: "host",
