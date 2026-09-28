@@ -22,6 +22,19 @@ high-level steps:
    trilogies
 7. **Validate Output** - Ensure data conforms to the JSON schema
 
+Two inputs are the same for every location in a run: the first-seen timestamps
+from the last ten days of combined data (step 4), and yesterday's transformed
+release (step 5). Each location is transformed in its own process, so rather
+than every one of them rebuilding these, `transform-prepare` builds them once
+into `transform-inputs/` and every `transform` reads them from there:
+
+- `transform-inputs/historical-seen.json` - `showingId` → earliest `seen`
+- `transform-inputs/previous-release/<location>` - that location's output from
+  the last release published yesterday (absent if it had none, and the directory
+  empty if nothing was published yesterday)
+
+`transform` fails if `transform-inputs/` has not been prepared.
+
 ## Flow Diagram
 
 ```mermaid

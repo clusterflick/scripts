@@ -61,6 +61,13 @@ retrieve  ->  transform  ->  combine  ->  match
 
 All pipeline commands run with `TZ=Europe/London`.
 
+`transform-prepare` runs once per run, before any venue's `transform`. Each
+venue is its own process, and the first-seen history (ten days of combined data,
+~175MB to parse) and yesterday's transformed release are the same for all of
+them, so it builds both into `transform-inputs/` and every `transform` reads
+them from there - see `scripts/transform/transform-inputs.js`. `transform`
+throws if they have not been prepared rather than rebuilding them itself.
+
 `combine` publishes each person in `people` with TheMovieDB's `popularity`
 alongside their name. It is a rolling trending score, recomputed daily from page
 views and searches, so it is only ever a tie-break between people who are
