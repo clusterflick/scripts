@@ -1635,6 +1635,13 @@ function normalizeTitle(title, options) {
     return "doctor who wish world the reality war";
   }
 
+  // The listing names no film, so the prefix is all that tells this double
+  // bill apart from every other one - stripping it as the phrase list would
+  // leaves the bare "double bill" to group with anything billed that way.
+  if (title === "free film screening: double bill") {
+    return "free film screening double bill";
+  }
+
   const hasPresents = title.match(/\s+presents?:?(?:\s|…)+(.*?)$/i);
   // A company billing "<company> presents: <work>" is naming its own
   // production rather than wrapping a strand around a film, and the work's

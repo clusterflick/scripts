@@ -74,6 +74,7 @@ describe("isNonFilmEvent", () => {
     ["The ADHD & Women Summit - London 2026"],
     ["Lily Juniper - 'Bloom Gloom' Live at The Blue"],
     ["The Tate Modern: Semi-Private Tour"],
+    ["RNB LAND - Summer Closing RnB & Slow Jams Day Party  (2000+ Ravers)"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });
