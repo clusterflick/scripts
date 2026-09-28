@@ -184,6 +184,13 @@ async function findEvents(cinema) {
 
   for (const [articleUrl, movie] of Object.entries(moviePages)) {
     const { html, articleContext, domain, note } = movie;
+    // Retrieved before the festival pages were loaded through
+    // common/bfi.org.uk, which is what captures the article context
+    if (!articleContext) {
+      throw new Error(
+        `No articleContext for ${articleUrl} - the retrieved data predates the current retrieve; re-run it`,
+      );
+    }
     const searchResults = articleContext.searchResults;
 
     if (!searchResults || searchResults.length === 0) continue;
