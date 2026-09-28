@@ -75,6 +75,7 @@ describe("isNonFilmEvent", () => {
     ["Lily Juniper - 'Bloom Gloom' Live at The Blue"],
     ["The Tate Modern: Semi-Private Tour"],
     ["RNB LAND - Summer Closing RnB & Slow Jams Day Party  (2000+ Ravers)"],
+    ["An Evening of Slowing Down | Yoga, Travel Photography & Connection"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });

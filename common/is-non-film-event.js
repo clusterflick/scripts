@@ -153,6 +153,9 @@ const nonFilmEvents = [
   // "with", so a screening sold with a tasting ("Downton Abbey: Grand Finale
   // with Wine Tasting") still reaches the listings.
   /(?<!with )Wine Tasting(?: Night)?$/i,
+  // A wellbeing evening of yoga and a photography talk ("An Evening of Slowing
+  // Down | Yoga, Travel Photography & Connection"), never a screening.
+  /An Evening of Slowing Down/i,
   // A community workshop series, billed by the session it runs ("WAYS OF
   // BEING: IDENTITY"), so match the series in either number rather than
   // carrying a pattern per session.

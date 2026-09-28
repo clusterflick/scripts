@@ -1196,6 +1196,12 @@ function normalizeTitle(title, options) {
       /^Hero: Blockbuster World War 2 drama on RAF legend Ulric Cross$/i,
       "Hero: Inspired by the Extraordinary Life & Times of Mr. Ulric Cross",
     ],
+    // The " - " would otherwise be read as a separator and cut the title,
+    // leaving the bare "Action Force" to group with anything else called that
+    [
+      /^Action Force\s*-\s*A G\.I\. Joe Marathon$/i,
+      "Action Force: A G.I. Joe Marathon",
+    ],
     // The " - " would otherwise be read as a separator and cut the title
     [
       /\bErnest and Celestine\s*-\s*Winter Tales\b/i,
@@ -1430,6 +1436,11 @@ function normalizeTitle(title, options) {
     ["Metropolis at 100", "Metropolis"],
     ["Halloween (1978) + ", "Halloween (1978) & "],
     ["Nishi Ginza Station + ", "Nishi Ginza Station & "],
+    // The shorts and the feature are one event, so the plus is not a separator
+    ["Big Screen Hack: AI Shorts + ", "Big Screen Hack: AI Shorts & "],
+    // One venue adds an "All" the book's title doesn't have. Runs before the
+    // plus is rewritten below, which matches the title as published.
+    [/We're All Going on a Bear Hunt/i, "We're Going on a Bear Hunt"],
     // The pairing is billed with a plus, which the separator rule would
     // otherwise read as the end of the title and drop the second film
     // entirely. One venue publishes it without the spaces, so the plus is
