@@ -47,6 +47,17 @@ function isExcludedEvent({ name, tags = [] }) {
   );
 }
 
+// Some Eventbrite organisers aren't the venue but film clubs who hire a screen
+// for the night. For those, note the provenance on each performance so
+// consumers can see who is putting the screening on. Keyed on the organiser id,
+// which search results and organiser calendars both carry as
+// `primary_organizer_id`, and worded as the organiser names itself on its own
+// Eventbrite page.
+const ORGANIZER_NOTES = {
+  // https://www.eventbrite.co.uk/o/window-seat-cinema-club-121667174975
+  121667174975: "Presented by Window Seat Cinema Club",
+};
+
 function convertEventbriteEvent(event, details) {
   const startDate = parseDate(`${event.start_date}T${event.start_time}`);
   const endDate = parseDate(`${event.end_date}T${event.end_time}`);
@@ -57,6 +68,7 @@ function convertEventbriteEvent(event, details) {
   const castMatch = eventDescription.match(/Cast:(.*)\n/i);
   const overview =
     `Duration: ${duration}\n\n${event.summary}\n\n${eventDescription}`.trim();
+  const note = ORGANIZER_NOTES[event.primary_organizer_id];
 
   return {
     showingId: generateShowingId(attributes, event.id),
@@ -66,7 +78,7 @@ function convertEventbriteEvent(event, details) {
     performances: [
       createPerformance({
         date: startDate,
-        notesList: [],
+        notesList: note ? [note] : [],
         url: event.tickets_url,
         status: getEventStatus(details),
         accessibility: createAccessibility(event.name, {}, overview),

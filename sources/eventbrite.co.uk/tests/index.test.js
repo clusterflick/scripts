@@ -74,6 +74,12 @@ const soldOutCinema = {
   geo: { lat: 51.515374328307246, lon: -0.09249330021593258 },
 };
 
+const closeUpCinema = {
+  name: "Close-Up Film Centre",
+  alternativeNames: ["Close-Up Cinema"],
+  geo: { lat: 51.52363533860424, lon: -0.07204024586584808 },
+};
+
 describe(attributes.name, () => {
   setupPolly(isRecording, __dirname);
   jest.useFakeTimers().setSystemTime(new Date(CACHE_DATE));
@@ -129,5 +135,26 @@ describe(attributes.name, () => {
         performances.map(({ status }) => status),
       ),
     ).toEqual([{ soldOut: true }, { soldOut: true }]);
+  }, 30_000);
+
+  // Window Seat Cinema Club hires Close-Up for the night; its screening there
+  // is in the fixtures, recovered from the club's own calendar.
+  it("notes who presents a film club's screening", async () => {
+    const { movieListPages, moviePages, organizerEvents } = await retrieve();
+    readJSON.mockImplementation(() => ({
+      movieListPages,
+      moviePages,
+      organizerEvents,
+    }));
+
+    const output = await findEvents(closeUpCinema);
+    const windowSeat = output.filter(({ url }) =>
+      url.endsWith("-1998553349869"),
+    );
+
+    expect(windowSeat).toHaveLength(1);
+    expect(windowSeat[0].performances.map(({ notes }) => notes)).toEqual([
+      "Presented by Window Seat Cinema Club",
+    ]);
   }, 30_000);
 });
