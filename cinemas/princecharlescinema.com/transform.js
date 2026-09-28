@@ -12,6 +12,7 @@ const {
 } = require("../../common/utils");
 const { calculate24Hours, parseDate } = require("./utils");
 const attributes = require("./attributes");
+const withoutScreeningsListedByVenue = require("../../sources/bfi.org.uk-bfi-festivals/without-screenings-listed-by-venue");
 
 function getLine($, $lines, prefix) {
   let combinedLines = "";
@@ -203,9 +204,11 @@ async function transform({ movieListPage }, sourcedEvents) {
     throw new Error("No movies found - the page structure may have changed");
   }
 
-  const listOfSourcedEvents = Object.values(sourcedEvents).flatMap(
-    (events) => events,
-  );
+  // The venue lists its own London Film Festival screenings, which the
+  // festival source finds here as well
+  const listOfSourcedEvents = Object.values(
+    withoutScreeningsListedByVenue(movies, sourcedEvents),
+  ).flatMap((events) => events);
   return movies.concat(listOfSourcedEvents);
 }
 

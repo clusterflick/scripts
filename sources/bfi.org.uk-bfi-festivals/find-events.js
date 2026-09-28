@@ -183,7 +183,8 @@ async function findEvents(cinema) {
   const events = [];
 
   for (const [articleUrl, movie] of Object.entries(moviePages)) {
-    const { html, searchResults, domain, festival } = movie;
+    const { html, articleContext, domain, note } = movie;
+    const searchResults = articleContext.searchResults;
 
     if (!searchResults || searchResults.length === 0) continue;
 
@@ -212,7 +213,7 @@ async function findEvents(cinema) {
           date,
           url: `${domain}${result[RESULT_BOOKING_URL]}`,
           screen,
-          notesList: [`Part of the ${festival} festival`],
+          notesList: [note],
           accessibility: createAccessibility(
             title,
             accessibilityFlags,
@@ -226,23 +227,26 @@ async function findEvents(cinema) {
     if (performances.length === 0) continue;
 
     // A festival article covers every screening of the film, which for a
-    // multi-venue festival spans more than one cinema, so the permalink alone is
-    // not unique. `combine` keys showings by id, so two venues sharing one would
-    // see the later overwrite the earlier and carry off its performances. Flare
-    // is BFI Southbank only, but the festival list this source is built around
-    // is the point at which that stops being true.
+    // multi-venue festival spans more than one cinema, so the article id alone
+    // is not unique. `combine` keys showings by id, so two venues sharing one
+    // would see the later overwrite the earlier and carry off its performances -
+    // the London Film Festival screens a film at BFI Southbank and the ICA under
+    // the one article.
     if (!cinema.id) {
       throw new Error(
         `Cannot build a showing id for ${articleUrl}: the cinema has no id`,
       );
     }
-    const slug = new URL(articleUrl).searchParams.get(
-      "BOparam::WScontent::loadArticle::permalink",
-    );
+    // The page is fetched by article id, but links out by its permalink where
+    // it has one - the address readers see, and the one venues link to
+    const canonicalUrl = $('link[rel="canonical"]').attr("href");
     events.push({
-      showingId: generateShowingId(attributes, `${slug}-${cinema.id}`),
+      showingId: generateShowingId(
+        attributes,
+        `${articleContext.articleId}-${cinema.id}`,
+      ),
       title,
-      url: articleUrl,
+      url: canonicalUrl || articleUrl,
       overview,
       performances,
       matchingHints: { overview: overviewText },

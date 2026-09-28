@@ -4,6 +4,7 @@ const {
 } = require("../../common/get-page-with-playwright");
 const discoverCalendarShows = require("../../common/bfi.org.uk/discover-calendar");
 const { loadShowInto } = require("../../common/bfi.org.uk/load-shows");
+const { jitteredDelay } = require("../../common/bfi.org.uk/request-delay");
 const { getText, getId } = require("../../common/utils");
 const attributes = require("./attributes");
 
@@ -18,18 +19,6 @@ const { url, articleId } = attributes;
 // The index is loaded first (establishing the set of article ids we have), then
 // the calendar is used to gap-fill only the articles the index didn't cover.
 const FILMS_INDEX_URL = `${url}?BOparam::WScontent::loadArticle::permalink=filmsindex`;
-
-// Pace show-page fetches to stay under BFI's request throttle, which otherwise
-// slams roughly every 7th rapid request with a ~2min penalty. Measured floor:
-// 5s still trips it, 8s is clear - so keep spacing at ~7s+.
-// A fixed interval is itself a detectable signature, so jitter each wait across
-// a band centred on 10s (8s-12s) - keeps the known-clear 8s floor while
-// breaking up the regular cadence.
-const REQUEST_DELAY_MIN_MS = 8000;
-const REQUEST_DELAY_MAX_MS = 12000;
-const jitteredDelay = () =>
-  REQUEST_DELAY_MIN_MS +
-  Math.floor(Math.random() * (REQUEST_DELAY_MAX_MS - REQUEST_DELAY_MIN_MS + 1));
 
 async function getFilmsIndex(getPageWithPlaywright) {
   // Distinct from the calendar search's cache key (which also keys on the venue

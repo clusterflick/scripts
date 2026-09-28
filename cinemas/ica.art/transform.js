@@ -10,6 +10,7 @@ const {
   basicNormalize,
 } = require("../../common/utils");
 const attributes = require("./attributes");
+const withoutScreeningsListedByVenue = require("../../sources/bfi.org.uk-bfi-festivals/without-screenings-listed-by-venue");
 const { parseDate } = require("./utils");
 
 // The colophon names one film. Where the listing is a double bill or a
@@ -141,9 +142,11 @@ async function transform({ moviePages }, sourcedEvents) {
     throw new Error("No movies found - the page structure may have changed");
   }
 
-  const listOfSourcedEvents = Object.values(sourcedEvents).flatMap(
-    (events) => events,
-  );
+  // The venue lists its own London Film Festival screenings, which the
+  // festival source finds here as well
+  const listOfSourcedEvents = Object.values(
+    withoutScreeningsListedByVenue(movies, sourcedEvents),
+  ).flatMap((events) => events);
   return movies.concat(listOfSourcedEvents);
 }
 
