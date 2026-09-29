@@ -35,7 +35,15 @@ async function retrieve() {
   const $ = cheerio.load(firstPage);
   const totalPages = getTotalPages($);
 
-  getEventUrls($).forEach((url) => urls.add(url));
+  // An empty first page is not a venue with nothing on - it is the site
+  // serving us something other than its listing, and passing it on as an empty
+  // retrieve only defers the failure to transform, past the retry that could
+  // clear it.
+  const firstPageUrls = getEventUrls($);
+  if (firstPageUrls.length === 0) {
+    throw new Error(`No events found on ${getPageUrl(1)}`);
+  }
+  firstPageUrls.forEach((url) => urls.add(url));
   for (let page = 2; page <= totalPages; page++) {
     const pageHtml = await fetchText(getPageUrl(page));
     movieListPages.push(pageHtml);

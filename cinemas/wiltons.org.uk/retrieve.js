@@ -16,6 +16,13 @@ async function retrieve() {
     const $ = cheerio.load(listPage);
     const bookButtons = $(".WhatsOnList .WhatsonItem .BookBtn");
 
+    // An empty page past the first is the end of the listing. An empty first
+    // page is not a venue with nothing on - it is the site serving us something
+    // other than its listing, and passing it on as an empty retrieve only
+    // defers the failure to transform, past the retry that could clear it.
+    if (bookButtons.length === 0 && page === 1) {
+      throw new Error(`No films found on ${url}&event-page=${page}`);
+    }
     if (bookButtons.length === 0) break;
 
     movieListPages.push(listPage);
