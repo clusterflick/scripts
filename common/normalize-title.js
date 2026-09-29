@@ -1312,6 +1312,7 @@ function normalizeTitle(title, options) {
     ["DR DOLITTLE", "DOCTOR DOLITTLE"],
     [/\bzoo escape\b/i, "Zoo Break Out"],
     [/\bthe beast must die\b/i, "This Man Must Die"],
+    [/\btenebrae\b/i, "Tenebre"],
     ["• world premiere of ", ""],
     // Variant families collapsed from known-removable-phrases.js
     // Each pattern covers multiple near-identical string entries that shared a common structure
@@ -1722,7 +1723,13 @@ function normalizeTitle(title, options) {
   }
 
   const hasTalk = matchesOpenPrefix(title, "talk");
-  if (hasTalk) {
+  // A "Screen Talk" is an on-stage interview billed by its guest's name alone
+  // ("Screen Talk: Andrew Scott"), so stripping the label leaves a person's
+  // name to be searched for as a film, and it lands on one of theirs. Keeping
+  // the label in the key gives the search nothing to match. The BFI's
+  // "ScreenTalk:" is a different billing - it names the film being screened -
+  // and is stripped as a known phrase before this runs.
+  if (hasTalk && !title.startsWith("screen talk:")) {
     title = hasTalk[1];
   }
 

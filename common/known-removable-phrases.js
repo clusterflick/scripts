@@ -1716,6 +1716,8 @@ const knownRemovablePhrases = [
   " Das drachenprächtige Ungeheuer",
   "Exclusive Screening",
   "NOT YET CERTIFIED:",
+  ": The Last Temptation",
+  ": A Wu-Tang Fable",
 ];
 
 module.exports = knownRemovablePhrases;
