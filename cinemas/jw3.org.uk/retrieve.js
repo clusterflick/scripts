@@ -30,6 +30,12 @@ async function retrieve() {
     }
     if (urlsOnPage.length === 0) break;
 
+    // JW3 answers a page past the end with a listing it has already served
+    // rather than an empty one, so an empty page alone never ends the loop -
+    // it pages on until Bunny Shield challenges the crawl. A page that adds
+    // nothing new is the end of the listing.
+    if (urlsOnPage.every((url) => urls.has(url))) break;
+
     movieListPages.push(searchResults);
     urlsOnPage.forEach((url) => urls.add(url));
     page += 1;

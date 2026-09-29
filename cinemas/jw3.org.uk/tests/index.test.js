@@ -20,7 +20,7 @@ describe(attributes.name, () => {
 
       // Make sure the input looks roughly correct
       expect(movieListPages).toBeTruthy();
-      expect(movieListPages).toHaveLength(2);
+      expect(movieListPages).toHaveLength(1);
       expect(moviePages).toBeTruthy();
       expect(Object.keys(moviePages)).toHaveLength(21);
 
