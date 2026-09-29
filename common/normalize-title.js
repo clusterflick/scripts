@@ -1208,6 +1208,15 @@ function normalizeTitle(title, options) {
       /\bErnest and Celestine\s*-\s*Winter Tales\b/i,
       "Ernest & Celestine's Winter",
     ],
+    // The " - " would otherwise be read as a separator and cut the subtitle
+    [/^C\.I\.N\.E\.M\.A\s*-\s*(?=Caring, inclusive)/i, "C.I.N.E.M.A: "],
+    // The " - " would otherwise be read as a separator and cut the programme
+    // name
+    [
+      /^Deep Focus: Forces of Attraction\s*-\s*/i,
+      "Deep Focus: Forces of Attraction: ",
+    ],
+    ["NOT YET CERTIFIED -", "NOT YET CERTIFIED:"],
     [/\b(?:De La )?Com[eé]die Fran[cç]aise\b/i, "Comédie-Française"],
     // Venues bill these under their UK or alternate title and TheMovieDB has
     // another

@@ -1702,12 +1702,14 @@ const knownRemovablePhrases = [
   "Harold Lloyd's ",
   "Buster Keaton's ",
   "Lucy Raven's ",
+  "Andy Warhol's ",
   "John Shuttleworth: ",
   "An Afternoon with Walter Murch",
   "John Berger at 100:",
   // The German film's subtitle, billed after its title.
   " Das drachenprächtige Ungeheuer",
   "Exclusive Screening",
+  "NOT YET CERTIFIED:",
 ];
 
 module.exports = knownRemovablePhrases;
