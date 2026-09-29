@@ -214,6 +214,18 @@ async function findEvents(cinema) {
 
     const accessibilityByTime = buildAccessibilityByTime($, searchResults);
 
+    // Resolved by name, as BFI Southbank's transform does: availability_num is
+    // the seat count, 0 when sold out and -1 when unavailable. Both mean the
+    // screening can't be booked, so both are marked sold out.
+    const availabilityColumn = (articleContext.searchNames || []).indexOf(
+      "availability_num",
+    );
+    if (availabilityColumn === -1) {
+      throw new Error(
+        `BFI searchNames is missing the availability_num column on ${articleUrl}`,
+      );
+    }
+
     const performances = [];
     for (const result of searchResults) {
       const [venueName, screen] = result[RESULT_SCREEN_FULL_NAME].split(", ");
@@ -228,6 +240,7 @@ async function findEvents(cinema) {
           url: `${domain}${result[RESULT_BOOKING_URL]}`,
           screen,
           notesList: [note],
+          status: { soldOut: Number(result[availabilityColumn]) <= 0 },
           accessibility: createAccessibility(
             title,
             accessibilityFlags,
