@@ -169,6 +169,9 @@ const nonFilmEvents = [
   // A college's social for its new graduates ("Grads: Graduate Mixer"), held
   // in the theatre it screens films in.
   /Graduate Mixer/i,
+  // A writing workshop held at the venue ("Between the bells: A Creative
+  // Writing Workshop"), never a screening.
+  /Creative Writing Workshop/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
