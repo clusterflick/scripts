@@ -21,6 +21,13 @@ async function retrieve() {
     const urlsOnPage = $(".eventCard .thumb a")
       .map((i, el) => $(el).attr("href"))
       .get();
+    // An empty page past the first is the end of the listing. An empty first
+    // page is not a programme with nothing on - it is JW3 serving us something
+    // other than its listing, and passing it on as an empty retrieve only
+    // defers the failure to transform, past the retry that could clear it.
+    if (urlsOnPage.length === 0 && page === 0) {
+      throw new Error(`No events found on ${getSearchUrl(page)}`);
+    }
     if (urlsOnPage.length === 0) break;
 
     movieListPages.push(searchResults);
