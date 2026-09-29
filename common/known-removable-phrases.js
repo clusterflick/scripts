@@ -528,6 +528,8 @@ const knownRemovablePhrases = [
   "Festive Films at Gunnersbury Museum",
   "Halloween Outdoor Cinema at Osterley Park and House, London",
   "at Canada Water Library",
+  "An evening of film & conversation",
+  "...The movie",
 
   // Prefixes
   "LFF for Free:",
@@ -568,6 +570,7 @@ const knownRemovablePhrases = [
   "Academy Awards Best Picture Winner 2026:",
   "Adult-Only:",
   "Adults Only:",
+  "After Dark:",
   "Agnes Varda's",
   "Antonia Luxem:",
   "Akira Kurosawa's ",
@@ -947,6 +950,7 @@ const knownRemovablePhrases = [
   "Philosophical Screens:",
   "Pirates Season :",
   "Pineapple cocktails, live music &",
+  "Pawel Pawlikowski:",
   "Pomodoro Rosso Sangue X ",
   "POSTPONED:",
   "PROTOMARTYR X THE NICKEL CINEMA:",
@@ -1360,6 +1364,7 @@ const knownRemovablePhrases = [
   "Valentine's Classic :",
   "Valentines Cinema-",
   "Vauxhall Summer Screens:",
+  "Vampire Ball: Live Violin, Cocktails &",
   "VE Day Anniversary:",
   "viewing party",
   "VIP TV/FILM INDUSTRY SCREENING:",

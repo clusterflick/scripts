@@ -1270,6 +1270,14 @@ function normalizeTitle(title, options) {
     ["Bar Trash: 4TH BIRTHDAY - ", "Bar Trash: 4TH BIRTHDAY: "],
     ["Elon Musk Unveiled -", "Elon Musk Unveiled: "],
     ["Goethe-Kino - ", "Goethe-Kino: "],
+    [
+      "Film: Goethe-Kino: Pawel Pawlikowski -",
+      "Film: Goethe-Kino: Pawel Pawlikowski:",
+    ],
+    [
+      "Vampire Ball: Live Violin, Cocktails +",
+      "Vampire Ball: Live Violin, Cocktails &",
+    ],
     ["Henry Henry Henry + ", "Henry Henry Henry & "],
     ["Fundraiser + ", "Fundraiser & "],
     ["Le Beau Mec + ", "Le Beau Mec & "],

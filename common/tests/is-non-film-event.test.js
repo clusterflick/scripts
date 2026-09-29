@@ -77,6 +77,7 @@ describe("isNonFilmEvent", () => {
     ["RNB LAND - Summer Closing RnB & Slow Jams Day Party  (2000+ Ravers)"],
     ["An Evening of Slowing Down | Yoga, Travel Photography & Connection"],
     ["Grads: Graduate Mixer"],
+    ["Between the bells: A Creative Writing Workshop"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });
