@@ -1278,6 +1278,7 @@ function normalizeTitle(title, options) {
       "Vampire Ball: Live Violin, Cocktails +",
       "Vampire Ball: Live Violin, Cocktails &",
     ],
+    ["EDWARD SAID - BETWEEN WORLDS", "EDWARD SAID: BETWEEN WORLDS"],
     ["Henry Henry Henry + ", "Henry Henry Henry & "],
     ["Fundraiser + ", "Fundraiser & "],
     ["Le Beau Mec + ", "Le Beau Mec & "],

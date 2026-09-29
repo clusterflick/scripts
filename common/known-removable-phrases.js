@@ -938,6 +938,7 @@ const knownRemovablePhrases = [
   "Taiwanese nibbles, traditional drinks & ",
   "Liberating Cinema",
   "Horace Ové's",
+  "House No: 47",
   "— Horace Ové",
   "Kinoteka:",
   "Kino Bloc:",
