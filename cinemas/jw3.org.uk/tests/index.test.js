@@ -11,7 +11,7 @@ const isRecording = false;
 
 describe(attributes.name, () => {
   setupPolly(isRecording, __dirname);
-  jest.useFakeTimers().setSystemTime(new Date("2026-08-06"));
+  jest.useFakeTimers().setSystemTime(new Date("2026-09-29"));
 
   it(
     "retrieve and transform",
@@ -22,7 +22,7 @@ describe(attributes.name, () => {
       expect(movieListPages).toBeTruthy();
       expect(movieListPages).toHaveLength(1);
       expect(moviePages).toBeTruthy();
-      expect(Object.keys(moviePages)).toHaveLength(21);
+      expect(Object.keys(moviePages)).toHaveLength(17);
 
       const output = sortAndFilterMovies(
         await transform({ movieListPages, moviePages }, {}),
@@ -38,7 +38,7 @@ describe(attributes.name, () => {
         .map(addTestCategory);
 
       // Make sure the data looks roughly correct
-      expect(data).toHaveLength(21);
+      expect(data).toHaveLength(17);
 
       expect(schemaValidate(data)).toBe(true);
       expect(data).toMatchSnapshot();

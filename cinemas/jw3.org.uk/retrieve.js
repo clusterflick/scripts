@@ -8,13 +8,16 @@ const { domain } = require("./attributes");
 
 const spektrixClient = "jw3";
 
-const getSearchUrl = (page = 1) =>
-  `${domain}/whats-on?genres[]=19&max=27&page=${page}`;
+// JW3 pages its listing with `p54_page` - the 54 is the id of the page part
+// holding the listing - and ignores `page`, answering it with page 1 whatever
+// the number. Without `list_type=events` the listing is one card per film.
+const getSearchUrl = (page) =>
+  `${domain}/whats-on?genres[]=19&max=27&p54_page=${page}`;
 
 async function retrieve() {
   const movieListPages = [];
   const urls = new Set();
-  let page = 0;
+  let page = 1;
   while (true) {
     const searchResults = await fetchText(getSearchUrl(page));
     const $ = cheerio.load(searchResults);
@@ -25,16 +28,20 @@ async function retrieve() {
     // page is not a programme with nothing on - it is JW3 serving us something
     // other than its listing, and passing it on as an empty retrieve only
     // defers the failure to transform, past the retry that could clear it.
-    if (urlsOnPage.length === 0 && page === 0) {
+    if (urlsOnPage.length === 0 && page === 1) {
       throw new Error(`No events found on ${getSearchUrl(page)}`);
     }
     if (urlsOnPage.length === 0) break;
 
-    // JW3 answers a page past the end with a listing it has already served
-    // rather than an empty one, so an empty page alone never ends the loop -
-    // it pages on until Bunny Shield challenges the crawl. A page that adds
-    // nothing new is the end of the listing.
-    if (urlsOnPage.every((url) => urls.has(url))) break;
+    // A page adding nothing new is JW3 ignoring the page parameter, as it did
+    // `page` - the loop would otherwise run until Bunny Shield challenges the
+    // crawl. Fail rather than stop, since stopping here would silently drop
+    // every film past the first page.
+    if (urlsOnPage.every((url) => urls.has(url))) {
+      throw new Error(
+        `No new events on ${getSearchUrl(page)} - is the page parameter still honoured?`,
+      );
+    }
 
     movieListPages.push(searchResults);
     urlsOnPage.forEach((url) => urls.add(url));
