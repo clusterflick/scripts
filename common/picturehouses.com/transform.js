@@ -51,6 +51,19 @@ function getSynopsis(data) {
   return getText($(".synopsisDiv"));
 }
 
+// The listing gives the requested cinema's showings `SoldoutStatus` as a
+// string ("0" or "1") and every other cinema's as a number, so a truthiness
+// check reads "0" as sold out. Accept either form, and nothing else.
+function isSoldOut({ SoldoutStatus: soldOutStatus, SessionId: sessionId }) {
+  const value = String(soldOutStatus);
+  if (value !== "0" && value !== "1") {
+    throw new Error(
+      `Unexpected SoldoutStatus "${soldOutStatus}" for session ${sessionId}`,
+    );
+  }
+  return value === "1";
+}
+
 async function transform(
   attributes,
   { movieListPage: { movies: moviesData }, moviePages },
@@ -97,7 +110,7 @@ async function transform(
             Object.keys(getValidFormat(attribute)).length > 0;
 
           const status = {
-            soldOut: !!showing.SoldoutStatus,
+            soldOut: isSoldOut(showing),
           };
 
           const accessibility = createAccessibility(
