@@ -26,6 +26,13 @@ npm run lint           # Run ESLint
 npm run format         # Format with Prettier (JS, JSON, MD)
 ```
 
+**Always run tests through `npm test`**, including a subset:
+`npm test -- common/picturehouses.com`. The script sets `TZ=Europe/London`, and
+running `jest` or `npx jest` directly does not. Without it, snapshot and date
+tests fail for reasons unrelated to the change. If you must call Jest directly,
+prefix it yourself: `TZ=Europe/London npx jest <paths>`. A failure from a run
+without the timezone tells you nothing.
+
 ## Tech Stack
 
 - **Runtime:** Node.js 24.13.0 (see `.node-version`)
@@ -207,7 +214,8 @@ module.exports = {
   `__recordings__/`
 - Tests use Polly.js to record and replay HTTP interactions (sensitive headers
   redacted)
-- Test timezone is always `Europe/London`
+- Tests must run with `TZ=Europe/London` — use `npm test`, never bare `jest`
+  or `npx jest` (see Quick Reference)
 - Schema validation via AJV against `schema.json`
 - Shared test utilities in `common/test-utils.js`
 
