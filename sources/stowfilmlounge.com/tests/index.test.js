@@ -92,6 +92,71 @@ describe(`${attributes.name}`, () => {
     isRecording ? 600_000 : undefined,
   );
 
+  // Markup trimmed from the live page, where a screening gave only its doors
+  // time: "Doors open 19:00 & Close 22:00", with no "Film" time anywhere
+  it("uses the doors time when no film time is published", async () => {
+    const movieListPage = `
+      <section>
+        <div class="sqs-html-content">
+          <h3>STOW FILM LOUNGE @ WALTHAMSTOW TRADES HALL</h3>
+          <h4>TUESDAY 10th NOVEMBER</h4>
+        </div>
+        <figure>
+          <figcaption>
+            <p>A HARD DAY’S NIGHT (Richard Lester, 1964, Cert PG, 87mins)</p>
+            <p>Doors open 19:00 &amp; Close 22:00</p>
+          </figcaption>
+        </figure>
+        <div class="sqs-block-button-container">
+          <a href="https://www.eventbrite.co.uk/e/a-hard-days-night-screening-samira-ahmed-in-conversation-tickets-2002399477741">BOOK NOW</a>
+        </div>
+        <div class="sqs-html-content">
+          <p>Doors: Open 19:00, Close 22:00</p>
+        </div>
+      </section>
+    `;
+
+    readJSON.mockImplementation(() => ({ movieListPage }));
+
+    const output = await findEvents({ name: "Walthamstow Trades Hall" });
+
+    expect(output).toHaveLength(1);
+    expect(output[0].title).toBe("A HARD DAY’S NIGHT");
+    expect(output[0].performances).toHaveLength(1);
+    expect(new Date(output[0].performances[0].time)).toEqual(
+      new Date("2026-11-10T19:00:00Z"),
+    );
+    expect(output[0].performances[0].notes).toBe(
+      "Doors open 19:00 & Close 22:00",
+    );
+  });
+
+  it("throws when neither a film nor a doors time is published", async () => {
+    const movieListPage = `
+      <section>
+        <div class="sqs-html-content">
+          <h3>STOW FILM LOUNGE @ WALTHAMSTOW TRADES HALL</h3>
+          <h4>TUESDAY 10th NOVEMBER</h4>
+        </div>
+        <figure>
+          <figcaption>
+            <p>A HARD DAY’S NIGHT (Richard Lester, 1964, Cert PG, 87mins)</p>
+            <p>Close 22:00</p>
+          </figcaption>
+        </figure>
+        <div class="sqs-block-button-container">
+          <a href="https://www.eventbrite.co.uk/e/a-hard-days-night-screening-samira-ahmed-in-conversation-tickets-2002399477741">BOOK NOW</a>
+        </div>
+      </section>
+    `;
+
+    readJSON.mockImplementation(() => ({ movieListPage }));
+
+    await expect(
+      findEvents({ name: "Walthamstow Trades Hall" }),
+    ).rejects.toThrow("Could not extract film or doors time");
+  });
+
   it("returns no events for unrelated cinema", async () => {
     const { movieListPage } = await retrieve();
 
