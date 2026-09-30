@@ -49,19 +49,27 @@ const getSoldOut = async (...showings) => {
 describe("Picturehouse transform sold out status", () => {
   it("reads the string statuses given to the requested cinema", async () => {
     await expect(
-      getSoldOut(showing("122686", "0"), showing("122687", "1")),
-    ).resolves.toEqual([false, true]);
+      getSoldOut(
+        showing("122686", "0"),
+        showing("122687", "1"),
+        showing("122688", "2"),
+      ),
+    ).resolves.toEqual([false, false, true]);
   });
 
   it("reads the numeric statuses given to other cinemas", async () => {
     await expect(
-      getSoldOut(showing("122686", 0), showing("122687", 1)),
-    ).resolves.toEqual([false, true]);
+      getSoldOut(
+        showing("122686", 0),
+        showing("122687", 1),
+        showing("122688", 2),
+      ),
+    ).resolves.toEqual([false, false, true]);
   });
 
   it("fails on a status it does not recognise", async () => {
-    await expect(getSoldOut(showing("122686", "2"))).rejects.toThrow(
-      'Unexpected SoldoutStatus "2" for session 122686',
+    await expect(getSoldOut(showing("122686", "3"))).rejects.toThrow(
+      'Unexpected SoldoutStatus "3" for session 122686',
     );
   });
 });
