@@ -51,17 +51,21 @@ function getSynopsis(data) {
   return getText($(".synopsisDiv"));
 }
 
-// The listing gives the requested cinema's showings `SoldoutStatus` as a
-// string ("0" or "1") and every other cinema's as a number, so a truthiness
-// check reads "0" as sold out. Accept either form, and nothing else.
+// `SoldoutStatus` is a three-state flag. Picturehouse's own film page shows
+// "SELLING FAST" for 1 and "SOLD OUT" for 2, and the seat counts agree: 0 has
+// 25+ seats left, 1 has 1-24, 2 has none. The requested cinema's showings give
+// it as a string and every other cinema's as a number, so compare the value
+// rather than its truthiness. Only 2 is sold out; anything unlisted throws.
+const soldOutStatuses = { 0: false, 1: false, 2: true };
+
 function isSoldOut({ SoldoutStatus: soldOutStatus, SessionId: sessionId }) {
-  const value = String(soldOutStatus);
-  if (value !== "0" && value !== "1") {
+  const soldOut = soldOutStatuses[String(soldOutStatus)];
+  if (soldOut === undefined) {
     throw new Error(
       `Unexpected SoldoutStatus "${soldOutStatus}" for session ${sessionId}`,
     );
   }
-  return value === "1";
+  return soldOut;
 }
 
 async function transform(
