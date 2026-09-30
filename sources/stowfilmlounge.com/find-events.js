@@ -46,18 +46,32 @@ function parseFilmInfo(filmText) {
   };
 }
 
-/**
- * Parse date from format like "FRIDAY 16th JANUARY" with time from "Film 19:45"
- */
-function parseEventDate(dateText, timesText) {
-  // Extract film start time from times text (e.g., "Doors 19:00, Film 19:45, Close 22:30")
-  const timeMatch = timesText.match(/Films?\s+([^,]+)/i);
-  if (!timeMatch) {
-    throw new Error("Could not extract film time");
-  }
+const filmTimeMatcher = /Films?\s+([^,]+)/i;
+const doorsTimeMatcher = /Doors:?\s+(?:open\s+)?(\d{1,2}:\d{2})/i;
 
+/**
+ * Most screenings give a film time ("Doors 19:00, Film 19:45, Close 22:30"),
+ * but some give only the doors time ("Doors open 19:00 & Close 22:00"). When
+ * that's the only time published it stands in for the performance - the
+ * screening is real and bookable, and the times text goes in its notes so the
+ * listing says it's a doors time.
+ */
+function getEventTime(timesText) {
+  const filmMatch = timesText.match(filmTimeMatcher);
+  if (filmMatch) return { time: filmMatch[1].trim(), isDoorsTime: false };
+
+  const doorsMatch = timesText.match(doorsTimeMatcher);
+  if (doorsMatch) return { time: doorsMatch[1], isDoorsTime: true };
+
+  throw new Error(`Could not extract film or doors time from "${timesText}"`);
+}
+
+/**
+ * Parse date from format like "FRIDAY 16th JANUARY" with a time like "19:45"
+ */
+function parseEventDate(dateText, time) {
   // "FRIDAY 16th JANUARY" + "19:45"
-  const dateString = `${dateText} ${timeMatch[1].trim()}`;
+  const dateString = `${dateText} ${time}`;
   const now = new Date();
 
   let eventDate = parse(dateString, "EEEE do MMMM HH:mm", now, {
@@ -183,7 +197,12 @@ function parseEventSection($, section) {
     });
 
   const { title, ...overview } = parseFilmInfo(filmText);
-  const eventDate = parseEventDate(dateText, timesText);
+  const { time, isDoorsTime } = getEventTime(timesText);
+  const eventDate = parseEventDate(dateText, time);
+  const notesList = [
+    ...(isFreeEntry ? [buttonLabel] : []),
+    ...(isDoorsTime ? [timesText] : []),
+  ];
 
   const eventId = bookingUrl
     ? extractEventId(bookingUrl)
@@ -201,7 +220,7 @@ function parseEventSection($, section) {
         createPerformance({
           date: eventDate,
           url: bookingUrl || attributes.url,
-          notesList: isFreeEntry ? [buttonLabel] : [],
+          notesList,
           status: {},
           accessibility: createAccessibility(title, {}, synopsis),
           format: createFormat(title, {}, synopsis),
