@@ -172,6 +172,10 @@ const nonFilmEvents = [
   // A writing workshop held at the venue ("Between the bells: A Creative
   // Writing Workshop"), never a screening.
   /Creative Writing Workshop/i,
+  // A studio's audience research session, run at the evening and weekend
+  // alike ("Evening Focus Group: Share Your Thoughts on Good Shepherd Studios
+  // & Beyond"), so match the session rather than carrying a pattern per slot.
+  /Focus Group: Share Your Thoughts/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>

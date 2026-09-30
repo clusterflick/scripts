@@ -1693,6 +1693,11 @@ const knownRemovablePhrases = [
   "Preview Screenings",
   "preview screening",
   "Previews",
+  // Preview billings wrapped around the film they preview. Listed before the
+  // bare "preview" below, which would otherwise take the word out of the
+  // middle of them.
+  "A MilkTea Community Preview",
+  "Special Preview of",
   "[Preview]",
   "preview",
   "live action",
@@ -1720,6 +1725,9 @@ const knownRemovablePhrases = [
   "NOT YET CERTIFIED:",
   ": The Last Temptation",
   ": A Wu-Tang Fable",
+  "Q+A: Live Broadcast",
+  "with Katja Hoyer",
+  "MEMBER'S SHOW:",
 ];
 
 module.exports = knownRemovablePhrases;

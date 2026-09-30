@@ -78,6 +78,12 @@ describe("isNonFilmEvent", () => {
     ["An Evening of Slowing Down | Yoga, Travel Photography & Connection"],
     ["Grads: Graduate Mixer"],
     ["Between the bells: A Creative Writing Workshop"],
+    [
+      "Evening Focus Group: Share Your Thoughts on Good Shepherd Studios & Beyond",
+    ],
+    [
+      "Weekend Focus Group: Share Your Thoughts on Good Shepherd Studios & Beyond",
+    ],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });

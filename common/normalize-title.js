@@ -1957,6 +1957,14 @@ function normalizeTitle(title, options) {
     title = title.replace(phrase.toLowerCase(), "");
   });
 
+  // An exclaimed billing hung off the end of the film it screens ("Rocky
+  // Horror Picture Show Screening!"). Anchored, so "This Is Not A Screening!
+  // An Open Projection Night" keeps it, and not after "Movie", where the
+  // billing is all there is ("Summer Movie Screening!"). Runs after the phrase
+  // list so the longer billings that end the same way ("Launch Screening")
+  // still match in full.
+  title = title.replace(/(?<!\bmovie) screening!$/i, "");
+
   // A festival's first night is a label wrapped around the film it opens with
   // ("Opening Night The Sound of the Shaking Earth"), so the words come off and
   // the film is what's left. They aren't a label when the opening night *is*
