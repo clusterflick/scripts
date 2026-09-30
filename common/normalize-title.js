@@ -1313,6 +1313,9 @@ function normalizeTitle(title, options) {
     [/\bzoo escape\b/i, "Zoo Break Out"],
     [/\bthe beast must die\b/i, "This Man Must Die"],
     [/\btenebrae\b/i, "Tenebre"],
+    ["PREVIEW -", "PREVIEW:"],
+    ["'NEW_'", "[NEW_]"],
+    ["Arshin Mal Alan", "Arsin Mal Alan"],
     ["• world premiere of ", ""],
     // Variant families collapsed from known-removable-phrases.js
     // Each pattern covers multiple near-identical string entries that shared a common structure
@@ -1856,8 +1859,11 @@ function normalizeTitle(title, options) {
     title = hasUkranianFilm[1];
   }
 
+  // An anniversary concert is its own event rather than a screening of the
+  // film it celebrates, so the anniversary stays on the key and it does not
+  // group with, or search as, the film.
   title = title.replace(
-    /(^|\s+)\d+th ann(iversary)?( screenings?)?( edition)?( show)?( cut)?( of)?(\s+|$|:)/i,
+    /(^|\s+)\d+th ann(iversary)?(?! concert)( screenings?)?( edition)?( show)?( cut)?( of)?(\s+|$|:)/i,
     " ",
   );
 
