@@ -1058,6 +1058,7 @@ const knownRemovablePhrases = [
   "LRMN's",
   "London Migration Film Festival",
   "London Indian Film Festival 2026:",
+  "London Palestine Film Festival 2026:",
   "London Indian Film Festival",
   "Love... Obsession... Music!:",
   "BFI LFF: Opening Night Gala",
@@ -1706,7 +1707,10 @@ const knownRemovablePhrases = [
   "preview",
   "live action",
   "Re-Edit",
+  // Ahead of "Sapphic", which would otherwise leave the plural's "s" behind.
+  "Sapphics",
   "Sapphic",
+  "with Em—Dash",
   "XXX RATED",
   "Featuring…",
   "()",
