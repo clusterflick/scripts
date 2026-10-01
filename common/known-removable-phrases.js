@@ -1234,6 +1234,7 @@ const knownRemovablePhrases = [
   "Samosa Haus x Lumiere:",
   "Sanrizuka 5:",
   "Save the Cinema Museum:",
+  "Saturday Film Nights:",
   "Scared To Dance:",
   "Schools Screening IWD26:",
   "See it First:",
