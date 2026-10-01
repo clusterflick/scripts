@@ -28,10 +28,12 @@ describe(attributes.name, () => {
         ),
       ).toBe(true);
 
-      // The yard sales are dropped as not film, and the last film night is
-      // dropped until its film is named.
+      // The yard sales are dropped as not film. A film night listed before its
+      // film is named is still a screening, so it is kept as the venue titles
+      // it.
       expect(output.map(({ title }) => title)).toEqual([
         "National Theatre Live - The Misanthrope",
+        "Saturday Film Nights -",
         "Saturday Film Nights - Jurassic Park",
         "Saturday Film Nights - Paddington 2",
         "Saturday Film Nights - Spirited Away",
@@ -43,7 +45,7 @@ describe(attributes.name, () => {
         .map(addTestCategory);
 
       // Make sure the data looks roughly correct
-      expect(data).toHaveLength(5);
+      expect(data).toHaveLength(6);
 
       expect(schemaValidate(data)).toBe(true);
       expect(data).toMatchSnapshot();

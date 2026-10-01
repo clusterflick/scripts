@@ -16,11 +16,6 @@ const attributes = require("./attributes");
 const isFilmListing = ({ title, description }) =>
   isFilmEvent(`${title} ${description}`);
 
-// The film nights are listed before the film is picked, as "Saturday Film
-// Nights -" with nothing after the dash. That names no film, so there is
-// nothing to match or show; it arrives on the run after the film is added.
-const isFilmNamed = ({ title }) => !/[-–:]\s*$/.test(title);
-
 function getStartDate({ title, scheduling }) {
   const { scheduleTbd, startDate, recurrences } = scheduling.config;
   if (scheduleTbd || !startDate) {
@@ -35,34 +30,31 @@ function getStartDate({ title, scheduling }) {
 }
 
 async function transform({ events }, sourcedEvents) {
-  const movies = events
-    .filter(isFilmListing)
-    .filter(isFilmNamed)
-    .map((event) => {
-      const { id, title, description, slug, registration } = event;
-      // The path the events page links each event's "Buy Tickets" button to.
-      const url = `${attributes.domain}/event-details-registration/${slug}`;
-      const overview = description.replace(/\s+/g, " ").trim();
+  const movies = events.filter(isFilmListing).map((event) => {
+    const { id, title, description, slug, registration } = event;
+    // The path the events page links each event's "Buy Tickets" button to.
+    const url = `${attributes.domain}/event-details-registration/${slug}`;
+    const overview = description.replace(/\s+/g, " ").trim();
 
-      return {
-        showingId: generateShowingId(attributes, id),
-        title,
-        url,
-        // The event's end time is when the room closes rather than when the
-        // film does, so it isn't published as a duration.
-        overview: createOverview({}),
-        performances: [
-          createPerformance({
-            date: getStartDate(event),
-            url,
-            accessibility: createAccessibility(title, {}, overview),
-            format: createFormat(title, {}, overview),
-            status: { soldOut: registration?.ticketing?.soldOut === true },
-          }),
-        ],
-        matchingHints: { overview },
-      };
-    });
+    return {
+      showingId: generateShowingId(attributes, id),
+      title,
+      url,
+      // The event's end time is when the room closes rather than when the
+      // film does, so it isn't published as a duration.
+      overview: createOverview({}),
+      performances: [
+        createPerformance({
+          date: getStartDate(event),
+          url,
+          accessibility: createAccessibility(title, {}, overview),
+          format: createFormat(title, {}, overview),
+          status: { soldOut: registration?.ticketing?.soldOut === true },
+        }),
+      ],
+      matchingHints: { overview },
+    };
+  });
 
   // An empty result is left to stand: between seasons the studio can have
   // nothing but yard sales on, and retrieve has already refused a page whose
