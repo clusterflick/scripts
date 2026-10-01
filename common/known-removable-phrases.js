@@ -1010,6 +1010,7 @@ const knownRemovablePhrases = [
   "Jeff Preiss:",
   "Jewish Culture Month: ",
   "Jewish Culutre Month: ",
+  "Joe Allen Sunday ",
   "Just Evidence 1:",
   "Just Evidence 1.",
   "John Smith:",
