@@ -1491,6 +1491,8 @@ function normalizeTitle(title, options) {
       "The Edges of Cinema: Book Launch +",
       "The Edges of Cinema: Book Launch &",
     ],
+    ["Clown of Gaza +", "Clown of Gaza &"],
+    ["Lovely Butterfly +", "Lovely Butterfly &"],
     ["Sam Neill Tribute -", "Sam Neill Tribute: "],
     ["Miss Marple -", "Miss Marple: "],
     ["BFI 'Rip it Up' -", "BFI 'Rip it Up': "],
