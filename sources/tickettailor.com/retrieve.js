@@ -28,6 +28,7 @@ const VENUE_SLUGS = [
   "offshootsfestival", // Offshoots Festival
   "palestinehouse", // Palestine House
   "passengercinema", // Passenger Cinema
+  "joeallenmysteryfilms", // Joe Allen
 ];
 
 function retrieveVenuePage(getPage, slug) {

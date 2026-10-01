@@ -214,8 +214,8 @@ module.exports = {
   `__recordings__/`
 - Tests use Polly.js to record and replay HTTP interactions (sensitive headers
   redacted)
-- Tests must run with `TZ=Europe/London` — use `npm test`, never bare `jest`
-  or `npx jest` (see Quick Reference)
+- Tests must run with `TZ=Europe/London` — use `npm test`, never bare `jest` or
+  `npx jest` (see Quick Reference)
 - Schema validation via AJV against `schema.json`
 - Shared test utilities in `common/test-utils.js`
 
