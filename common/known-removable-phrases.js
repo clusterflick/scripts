@@ -650,6 +650,9 @@ const knownRemovablePhrases = [
   "Black Ballad Members' Perk:",
   "Black History Studies:",
   "BLOC CINEMA:",
+  // Ahead of ": Book Launch", which would otherwise leave the book's title
+  // behind in place of the film.
+  "The Edges of Cinema: Book Launch",
   ": Book Launch",
   "Book launch Third Woman",
   "Book Launch of Third Woman, talk & film screening",
