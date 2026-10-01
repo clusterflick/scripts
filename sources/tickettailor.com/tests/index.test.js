@@ -20,13 +20,13 @@ jest.mock("../../../common/utils", () => ({
 const isRecording = false;
 
 jest.mock("../../../common/cache");
-setupCacheMock(__dirname, "2026-09-28");
+setupCacheMock(__dirname, "2026-10-01");
 
 silenceConsoleLog();
 
 describe(`${attributes.name}`, () => {
   setupPolly(isRecording, __dirname);
-  jest.useFakeTimers().setSystemTime(new Date("2026-09-28"));
+  jest.useFakeTimers().setSystemTime(new Date("2026-10-01"));
 
   describe.each([
     {
@@ -40,7 +40,7 @@ describe(`${attributes.name}`, () => {
       name: "Good Shepherd Studios",
       alternativeNames: ["We Flock CIC"],
       address: "15A Davies Lane, Leytonstone, London, E11 3DR, UK",
-      expectedMatches: 0,
+      expectedMatches: 5,
     },
     {
       name: "Siobhan Davies Studios",
@@ -52,7 +52,7 @@ describe(`${attributes.name}`, () => {
       name: "Curzon Wimbledon",
       alternativeNames: [],
       address: "23 The Broadway, London, SW19 1RE, UK",
-      expectedMatches: 6,
+      expectedMatches: 5,
     },
     {
       name: "Lost Cinema",
@@ -70,13 +70,19 @@ describe(`${attributes.name}`, () => {
       name: "Staffordshire St",
       alternativeNames: ["Staffordshire Street", "STST"],
       address: "49 Staffordshire St, London, SE15 5TJ, UK",
-      expectedMatches: 7,
+      expectedMatches: 6,
     },
     {
       name: "The Mall Tavern",
       alternativeNames: [],
       address: "71-73 Palace Gardens Terrace, London, W8 4RU, UK",
       expectedMatches: 1,
+    },
+    {
+      name: "Joe Allen",
+      alternativeNames: [],
+      address: "2 Burleigh Street, London, WC2E 7PX, UK",
+      expectedMatches: 2,
     },
   ])("$name", ({ name, alternativeNames, address, expectedMatches }) => {
     it(
@@ -86,9 +92,9 @@ describe(`${attributes.name}`, () => {
 
         // Make sure the input looks roughly correct
         expect(clubPages).toBeTruthy();
-        expect(Object.keys(clubPages)).toHaveLength(23);
+        expect(Object.keys(clubPages)).toHaveLength(24);
         expect(eventPages).toBeTruthy();
-        expect(Object.keys(eventPages)).toHaveLength(73);
+        expect(Object.keys(eventPages)).toHaveLength(84);
 
         readJSON.mockImplementation(() => ({ clubPages, eventPages }));
 
