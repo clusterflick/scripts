@@ -1487,6 +1487,10 @@ function normalizeTitle(title, options) {
     // entirely. Joined here and the launch taken off as a phrase, which leaves
     // the film the evening is built around.
     ["Arrows of Desire Book Launch + ", "Arrows of Desire Book Launch & "],
+    [
+      "The Edges of Cinema: Book Launch +",
+      "The Edges of Cinema: Book Launch &",
+    ],
     ["Sam Neill Tribute -", "Sam Neill Tribute: "],
     ["Miss Marple -", "Miss Marple: "],
     ["BFI 'Rip it Up' -", "BFI 'Rip it Up': "],
