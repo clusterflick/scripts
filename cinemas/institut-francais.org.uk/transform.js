@@ -35,6 +35,14 @@ const getDetails = ($, $movieData) => {
   return details;
 };
 
+// "Bookings opening soon" is the venue's own placeholder for a screening not yet
+// on sale. It goes stale the moment booking opens, and whether a ticket can be
+// bought yet isn't something we report for any other venue, so it is dropped
+// rather than shown as a note.
+const getMoreInformation = (details) =>
+  details["more information"]?.replace(/bookings? opening soon/gi, "").trim() ||
+  undefined;
+
 const getOverview = (details) => {
   const duration = details.duration
     ? details.duration.replace("mins", "").trim()
@@ -64,7 +72,7 @@ const getMultiplePerformances = (
       const time = $single.find("time.time").attr("datetime");
       const calendarNote = getText($single.find(".calendar-note"));
       const performanceUrl = $single.find("a.button").attr("href");
-      const moreInformation = details["more information"];
+      const moreInformation = getMoreInformation(details);
       const languageDetails = basicNormalize(details.language);
 
       return createPerformance({
@@ -104,7 +112,7 @@ const getSinglePerformance = (
   const time = $single.find(".timetable time.time").attr("datetime");
   const calendarNote = getText($single.find(".timetable .calendar-note"));
   const performanceUrl = $single.find(".actions a.button").attr("href");
-  const moreInformation = details["more information"];
+  const moreInformation = getMoreInformation(details);
 
   if (basicNormalize(calendarNote) === basicNormalize("Cancelled")) {
     return [];
