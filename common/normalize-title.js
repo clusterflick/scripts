@@ -1366,6 +1366,22 @@ function normalizeTitle(title, options) {
     ["KIDS + ", "KIDS & "],
     ["BA Media Degree Show — Screening:", "BA Media Degree Show - "],
     ["CANCELLED DUE TO ILLNESS - ", "CANCELLED DUE TO ILLNESS: "],
+    ["FRIGHT NIGHT at The Griffin |", "FRIGHT NIGHT at The Griffin:"],
+    // The strand bills its film "on the Big Screen", which is the venue's
+    // wording rather than the title's. Scoped to the strand, since "Talking Tom
+    // Heroes: Suddenly Super on the Big Screen" carries it as part of its name.
+    [/(?<=^fright night at the griffin: .+) on the big screen\b/i, ""],
+    // Both of these are "We Were Here: The Untold History of Black Africans in
+    // Renaissance Europe", one venue rewording the subtitle and another
+    // dropping half of it, so each is put back to the film's own title.
+    [
+      /(?<=we were here\W+)untold story of black africans/i,
+      "The Untold History of Black Africans",
+    ],
+    [
+      /(?<=we were here\W+)black africans in renaissance europe/i,
+      "The Untold History of Black Africans in Renaissance Europe",
+    ],
     ["libya in motion (2015) film shorts", "libya in motion (2015)"],
     [
       "Paul McCarthy: Selected Video Works 1970-2025",
@@ -2026,7 +2042,7 @@ function normalizeTitle(title, options) {
 
   if (title.trim() === "") return backReturnTitle;
 
-  return removeDiacritics(title)
+  const normalizedTitle = removeDiacritics(title)
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/\u00AD/g, "") // Remove soft hyphens
@@ -2063,6 +2079,15 @@ function normalizeTitle(title, options) {
     .replace(/\([^)]+$/i, "") // Remove stuff in brackets where the last bracket got removed elsehwere (e.g. there was a separator within the brackets)
     .replace(/^([^(]+)\)$/i, "$1") // Remove trailing ending bracket
     .trim();
+
+  // The check above only sees what the phrase list left, and that can be
+  // punctuation alone - "The Edges of Cinema: Book Launch + Panel Discussion"
+  // loses both halves and keeps the "&" joining them - which the clean-up
+  // above then strips to nothing. An empty key groups every such listing
+  // together, so fall back the same way.
+  if (normalizedTitle === "") return backReturnTitle;
+
+  return normalizedTitle;
 }
 
 module.exports = normalizeTitle;
