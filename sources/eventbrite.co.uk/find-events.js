@@ -18,6 +18,10 @@ const attributes = require("./attributes");
 const { venueMatchesCinema } = require("../../common/source-utils");
 const { isNotNonFilmEvent } = require("../../common/is-non-film-event");
 const { isLineUpEvent, expandLineUpEvent } = require("./expand-line-up-events");
+const {
+  getLineUpSeriesId,
+  expandSeriesLineUp,
+} = require("./expand-series-line-ups");
 
 // Events recovered from an organiser's own calendar carry no `tags`:
 // Eventbrite attaches them to search results only, and they are absent from the
@@ -111,12 +115,15 @@ async function findEvents(cinema) {
   let movieListPages = [];
   let moviePages = {};
   let organizerEvents = [];
+  let seriesEvents = {};
   try {
     const data = await readJSON(dataSrc);
     movieListPages = data.movieListPages;
     moviePages = data.moviePages;
     // Releases from before the organiser sweep have no such key.
     organizerEvents = data.organizerEvents || [];
+    // Nor does any release from before series line-ups were expanded.
+    seriesEvents = data.seriesEvents || {};
   } catch {
     // Source data may not always be available or required
   }
@@ -141,14 +148,29 @@ async function findEvents(cinema) {
     });
   });
 
+  // Every session of a series reads back the whole series, so whichever one
+  // arrives first expands it and the rest are skipped.
+  const expandedSeriesIds = new Set();
+
   return filteredEvents
-    .flatMap((event) =>
+    .flatMap((event) => {
+      const details = moviePages[event.url];
+
       // A handful of listings pack a whole season of screenings into one event,
       // with the individual dates written out only in the body text.
-      isLineUpEvent(event)
-        ? expandLineUpEvent(event, moviePages[event.url])
-        : convertEventbriteEvent(event, moviePages[event.url]),
-    )
+      if (isLineUpEvent(event)) return expandLineUpEvent(event, details);
+
+      // Others are a series whose sessions share a title, and only the body
+      // text says which film plays on which night.
+      const seriesId = getLineUpSeriesId(details);
+      if (seriesId) {
+        if (expandedSeriesIds.has(seriesId)) return [];
+        expandedSeriesIds.add(seriesId);
+        return expandSeriesLineUp(event, details, seriesEvents[seriesId]);
+      }
+
+      return convertEventbriteEvent(event, details);
+    })
     .filter(isNotNonFilmEvent);
 }
 
