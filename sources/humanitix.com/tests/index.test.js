@@ -77,3 +77,57 @@ describe(attributes.name, () => {
     );
   });
 });
+
+describe(`${attributes.name} descriptions`, () => {
+  const cinema = {
+    name: "Kensington Central Library",
+    address: "12 Phillimore Walk, London W8 7RX, UK",
+    geo: { lat: 51.5013, lon: -0.1937 },
+  };
+  const event = {
+    _id: "6abf6a11a9ff66983c2964c3",
+    name: "60 Years of Carnival",
+    hostname: "https://events.humanitix.com/",
+    slug: "60-years-of-carnival",
+    dates: [{ startDate: "2026-10-10T13:00:00.000Z" }],
+    eventLocation: {
+      venueName: "Kensington Central Library",
+      address: "12 Phillimore Walk, London W8 7RX, UK",
+    },
+  };
+  const url = "https://events.humanitix.com/60-years-of-carnival";
+  const module = (heading, content) =>
+    `<div class="EventModuleRichText"><h2>${heading}</h2><div class="RichContent">${content}</div></div>`;
+  const video =
+    '<figure><iframe src="https://www.youtube.com/embed/abc"></iframe></figure>';
+
+  it("skips a Description module holding only a video", async () => {
+    readJSON.mockImplementation(() => ({
+      events: [event],
+      eventPages: {
+        [url]:
+          module("Description", video) +
+          module("Description", "<p>Steel pan</p><p>Plus Q&amp;A</p>"),
+      },
+    }));
+
+    const output = await findEvents(cinema);
+    expect(output).toHaveLength(1);
+    expect(output[0].matchingHints.overview).toBe("Steel pan\nPlus Q&A");
+  });
+
+  it("throws when two Description modules carry text", async () => {
+    readJSON.mockImplementation(() => ({
+      events: [event],
+      eventPages: {
+        [url]:
+          module("Description", "<p>One</p>") +
+          module("Description", "<p>Two</p>"),
+      },
+    }));
+
+    await expect(findEvents(cinema)).rejects.toThrow(
+      '2 "Description" modules with text',
+    );
+  });
+});
