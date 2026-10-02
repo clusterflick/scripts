@@ -9,6 +9,7 @@ const noteLabels = {
     "Screening followed by a Q&A",
     "Special Preview",
     "Encore",
+    "Programmed by Bertha Dochouse",
   ],
 };
 

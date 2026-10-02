@@ -33,6 +33,7 @@ const noteLabels = {
     "Preview",
     "Live via Satellite",
     "Q&A",
+    "Ad and Trailer Free",
   ],
 };
 

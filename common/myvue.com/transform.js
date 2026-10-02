@@ -13,8 +13,8 @@ const { isNotSportShowing } = require("../../common/is-sport-showing");
 const { getExpectedClosure } = require("../../common/expected-closures");
 
 // Vue appends a generic description to every tag. For these labels the
-// description just restates the label, so keep the label alone; "Event" is
-// generic on both sides, so drop it entirely.
+// description just restates or markets the label, so keep the label alone;
+// "Event" is generic on both sides, so drop it entirely.
 const noteLabels = {
   strip: [
     "Ultra Lux and Lux",
@@ -31,6 +31,10 @@ const noteLabels = {
     "Big Screen Events - Music",
     "Big Screen Events - Dance",
     "Big Screen Events - Opera",
+    "Big Screen Events - Musicals",
+    "Back on the Big Screen",
+    "Infinity Vision",
+    "Strobe FX",
   ],
   drop: ["Event"],
 };
