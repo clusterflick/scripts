@@ -1,11 +1,6 @@
 const cheerio = require("cheerio");
 const { format } = require("date-fns");
-const {
-  fetchJson,
-  fetchText,
-  sleep,
-  withJitter,
-} = require("../../common/utils.js");
+const { fetchText, sleep, withJitter } = require("../../common/utils.js");
 const { dailyCache } = require("../../common/cache.js");
 const { getAllCinemaAttributes } = require("../../cinemas");
 const { findMatchingCinema } = require("../../common/source-utils");
@@ -15,7 +10,7 @@ const {
   hasFilmShapedTitle,
   normalizeOrganizerEvent,
 } = require("./organizer-events");
-const { getLineUpSeriesId } = require("./expand-series-line-ups");
+const { getSeriesId, fetchSeriesSessions } = require("./series-sessions");
 const seededOrganizerIds = require("./seeded-organizers");
 const attributes = require("./attributes");
 
@@ -203,46 +198,29 @@ async function fetchEventsFromKnownOrganizers(
   return found;
 }
 
-// A series' sessions, which its event pages don't list: each page describes
-// only its own night. The endpoint is the one Eventbrite's own date picker
-// reads, and answers a plain request.
-const SERIES_API_BASE = "https://www.eventbrite.co.uk/api/v3/series";
-
 /**
- * The sessions of each series whose line-up find-events expands, keyed by
- * series id. Only those: a series is otherwise published session by session,
- * as the search and the organiser sweep find them.
+ * The sessions of every series with an event page, keyed by series id.
+ *
+ * Only events at a venue we hold have a page, so these are exactly the series
+ * worth a request - one each per run, fifteen on the 2026-10-02 retrieve. Every
+ * session publishes from this list, so a series retrieve never asked about is
+ * one find-events refuses to publish.
  */
-async function fetchLineUpSeriesSessions(moviePages) {
+async function fetchAllSeriesSessions(moviePages) {
   const seriesIds = [
     ...new Set(
       Object.values(moviePages)
-        .map(getLineUpSeriesId)
+        .map(getSeriesId)
         .filter((id) => !!id),
     ),
   ];
 
+  console.log(` - Requesting sessions for ${seriesIds.length} series...`);
+
   const seriesEvents = {};
   for (const seriesId of seriesIds) {
-    const data = await dailyCache(`eventbrite-series-${seriesId}`, async () => {
-      await sleep(withJitter(EVENT_REQUEST_DELAY_MS));
-      return fetchJson(
-        `${SERIES_API_BASE}/${seriesId}/events/`,
-        undefined,
-        EVENT_RETRY_CONFIG,
-      );
-    });
-
-    // One page holds 50 sessions, far more than any line-up we read. Rather
-    // than page through, say so if one ever outgrows it.
-    if (data.pagination?.has_more_items) {
-      throw new Error(
-        `Series ${seriesId} has more sessions than one page holds, so its line-up would be incomplete`,
-      );
-    }
-    seriesEvents[seriesId] = data.events;
+    seriesEvents[seriesId] = await fetchSeriesSessions(seriesId);
   }
-
   return seriesEvents;
 }
 
@@ -365,7 +343,7 @@ async function retrieve() {
     .filter(({ url }) => !!moviePages[url])
     .map((event) => normalizeOrganizerEvent(event, moviePages[event.url]));
 
-  const seriesEvents = await fetchLineUpSeriesSessions(moviePages);
+  const seriesEvents = await fetchAllSeriesSessions(moviePages);
 
   return { movieListPages, moviePages, organizerEvents, seriesEvents };
 }

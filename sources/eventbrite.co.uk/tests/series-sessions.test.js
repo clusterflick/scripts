@@ -55,69 +55,87 @@ describe("eventbrite series sessions", () => {
     jest.restoreAllMocks();
   });
 
-  it("fetches the sessions of a series whose line-up is expanded", async () => {
-    const seriesFetched = [];
+  // The Griffin's page, and the same page reassigned to a series nobody has
+  // allow-listed, for a search that reached one session of each.
+  const otherDetails = JSON.parse(JSON.stringify(griffin.details));
+  otherDetails.props.pageProps.context.basicInfo.seriesId = "1234567890";
+  const otherEvent = {
+    ...searchEvent,
+    id: "1234567891",
+    url: "https://www.eventbrite.com/e/other-tickets-1234567891",
+  };
+
+  const mockFetch = (seriesResponse) => {
+    const seriesRequests = [];
     global.fetch = jest.fn(async (url) => {
       if (SEARCH_URL_PATTERN.test(url))
-        return response(200, searchPage([searchEvent]));
-      const series = url.match(SERIES_URL_PATTERN);
-      if (series) {
-        seriesFetched.push(series[1]);
-        return response(
-          200,
-          JSON.stringify({
-            pagination: { has_more_items: false },
-            events: griffin.sessions,
-          }),
-        );
+        return response(200, searchPage([searchEvent, otherEvent]));
+      if (SERIES_URL_PATTERN.test(url)) {
+        seriesRequests.push(url);
+        return response(200, JSON.stringify(seriesResponse(url)));
       }
+      if (url === otherEvent.url) return response(200, eventPage(otherDetails));
       return response(200, eventPage(griffin.details));
+    });
+    return seriesRequests;
+  };
+
+  it("fetches the current and future sessions of every series", async () => {
+    const seriesRequests = mockFetch(() => ({
+      pagination: { has_more_items: false },
+      events: griffin.sessions,
+    }));
+
+    const { value, error } = await runRetrieve();
+
+    expect(error).toBeUndefined();
+    expect(seriesRequests).toEqual([
+      "https://www.eventbrite.co.uk/api/v3/series/2002714960358/events/?time_filter=current_future&page=1",
+      "https://www.eventbrite.co.uk/api/v3/series/1234567890/events/?time_filter=current_future&page=1",
+    ]);
+    expect(value.seriesEvents).toEqual({
+      2002714960358: griffin.sessions,
+      1234567890: griffin.sessions,
+    });
+  }, 15000);
+
+  it("pages through a series longer than one page", async () => {
+    const seriesRequests = mockFetch((url) => {
+      const page = Number(new URL(url).searchParams.get("page"));
+      return {
+        pagination: { has_more_items: page < 2 },
+        events:
+          page === 1 ? griffin.sessions.slice(0, 3) : griffin.sessions.slice(3),
+      };
     });
 
     const { value, error } = await runRetrieve();
 
     expect(error).toBeUndefined();
-    expect(seriesFetched).toEqual(["2002714960358"]);
-    expect(value.seriesEvents).toEqual({ 2002714960358: griffin.sessions });
+    expect(seriesRequests).toHaveLength(4);
+    expect(value.seriesEvents[2002714960358]).toEqual(griffin.sessions);
   }, 15000);
 
-  it("leaves every other series alone", async () => {
-    const details = JSON.parse(JSON.stringify(griffin.details));
-    details.props.pageProps.context.basicInfo.seriesId = "1234567890";
-
-    global.fetch = jest.fn(async (url) => {
-      if (SEARCH_URL_PATTERN.test(url))
-        return response(200, searchPage([searchEvent]));
-      if (SERIES_URL_PATTERN.test(url))
-        throw new Error(`Unexpected series request: ${url}`);
-      return response(200, eventPage(details));
-    });
-
-    const { value, error } = await runRetrieve();
-
-    expect(error).toBeUndefined();
-    expect(value.seriesEvents).toEqual({});
-  }, 15000);
-
-  it("fails rather than read part of a series", async () => {
-    global.fetch = jest.fn(async (url) => {
-      if (SEARCH_URL_PATTERN.test(url))
-        return response(200, searchPage([searchEvent]));
-      if (SERIES_URL_PATTERN.test(url))
-        return response(
-          200,
-          JSON.stringify({
-            pagination: { has_more_items: true },
-            events: griffin.sessions,
-          }),
-        );
-      return response(200, eventPage(griffin.details));
-    });
+  it("fails rather than read part of a series that never ends", async () => {
+    mockFetch(() => ({
+      pagination: { has_more_items: true },
+      events: griffin.sessions,
+    }));
 
     const { error } = await runRetrieve();
 
     expect(error.message).toMatch(
-      /Series 2002714960358 has more sessions than one page holds/,
+      /Series 2002714960358 still reported more sessions after 20 pages/,
+    );
+  }, 15000);
+
+  it("fails when a series answers without a list of sessions", async () => {
+    mockFetch(() => ({ error: "NOT_FOUND" }));
+
+    const { error } = await runRetrieve();
+
+    expect(error.message).toMatch(
+      /Series 2002714960358 returned no list of sessions/,
     );
   }, 15000);
 });

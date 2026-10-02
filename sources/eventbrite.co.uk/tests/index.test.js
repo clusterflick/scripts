@@ -38,6 +38,17 @@ setupCacheMock(__dirname, CACHE_DATE);
 // these fixtures never captured. Seeding is organizer-sweep.test.js's business.
 jest.mock("../seeded-organizers", () => []);
 
+// The fixtures predate series expansion, so they hold no series' sessions -
+// and can't be given any: the endpoint answers with the sessions still to come
+// on the day it is asked, so a capture taken now is not what it said on the
+// fixtures' date. Each series answers with none here instead. None sits at a
+// venue asserted on below, and series-sessions.test.js and
+// series-expansion.test.js cover the fetch and what is published from it.
+jest.mock("../series-sessions", () => ({
+  ...jest.requireActual("../series-sessions"),
+  fetchSeriesSessions: async () => [],
+}));
+
 // Held to the venues we had when the fixtures were taken, for the same reason:
 // a venue added since turns events the search captured into ones at a venue we
 // hold, and retrieve then asks for their organiser's calendar and event pages,
@@ -132,7 +143,8 @@ describe(attributes.name, () => {
   jest.useFakeTimers().setSystemTime(new Date(CACHE_DATE));
 
   it("retrieve and find events", async () => {
-    const { movieListPages, moviePages, organizerEvents } = await retrieve();
+    const { movieListPages, moviePages, organizerEvents, seriesEvents } =
+      await retrieve();
 
     // Make sure the input looks roughly correct
     expect(movieListPages).toBeTruthy();
@@ -147,6 +159,7 @@ describe(attributes.name, () => {
       movieListPages,
       moviePages,
       organizerEvents,
+      seriesEvents,
     }));
 
     const output = await findEvents(cinema);
@@ -167,11 +180,13 @@ describe(attributes.name, () => {
   }, 30_000); // over HTTP needed. // under full-suite parallelism, though far short of what replaying them // Reading ~900 cache files back is still more than the default 5s allows
 
   it("reads ticket availability off the event page", async () => {
-    const { movieListPages, moviePages, organizerEvents } = await retrieve();
+    const { movieListPages, moviePages, organizerEvents, seriesEvents } =
+      await retrieve();
     readJSON.mockImplementation(() => ({
       movieListPages,
       moviePages,
       organizerEvents,
+      seriesEvents,
     }));
 
     const output = await findEvents(soldOutCinema);
@@ -187,11 +202,13 @@ describe(attributes.name, () => {
   // Window Seat Cinema Club hires Close-Up for the night; its screening there
   // is in the fixtures, recovered from the club's own calendar.
   it("notes who presents a film club's screening", async () => {
-    const { movieListPages, moviePages, organizerEvents } = await retrieve();
+    const { movieListPages, moviePages, organizerEvents, seriesEvents } =
+      await retrieve();
     readJSON.mockImplementation(() => ({
       movieListPages,
       moviePages,
       organizerEvents,
+      seriesEvents,
     }));
 
     const output = await findEvents(closeUpCinema);

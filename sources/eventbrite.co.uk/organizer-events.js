@@ -145,7 +145,7 @@ function splitLocalDateTime(local, field, url) {
   const [hours, minutes] = (time || "").split(":");
   if (!date || !hours || !minutes) {
     throw new Error(
-      `Could not read a local ${field} from the event page at ${url} (got ${JSON.stringify(local)})`,
+      `Could not read a local ${field} for ${url} (got ${JSON.stringify(local)})`,
     );
   }
   return [date, `${hours}:${minutes}`];
@@ -205,4 +205,5 @@ module.exports = {
   fetchOrganizerEvents,
   hasFilmShapedTitle,
   normalizeOrganizerEvent,
+  splitLocalDateTime,
 };
