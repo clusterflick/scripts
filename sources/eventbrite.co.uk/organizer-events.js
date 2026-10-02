@@ -201,6 +201,7 @@ function normalizeOrganizerEvent(event, details) {
 }
 
 module.exports = {
+  buildTicketsUrl,
   fetchOrganizerEvents,
   hasFilmShapedTitle,
   normalizeOrganizerEvent,
