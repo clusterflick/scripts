@@ -104,6 +104,7 @@ const forcedMatches = {
   flow: 823219, // https://www.themoviedb.org/movie/823219-straume
   goat: 1297842, // https://www.themoviedb.org/movie/1297842-goat
   grease: 621, // https://www.themoviedb.org/movie/621-grease
+  halloween: 948, // https://www.themoviedb.org/movie/948-halloween
   honey: 10028, // https://www.themoviedb.org/movie/10028-honey
   "high school musical": 10947, // https://www.themoviedb.org/movie/10947-high-school-musical
   holiday: 1581, // https://www.themoviedb.org/movie/1581-the-holiday
