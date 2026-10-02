@@ -18,10 +18,17 @@ const getUrl = (data, moviePageUrl) =>
 // `accessibilityTags` maps a lower-cased showtime tag to the accessibility
 // flags it sets. It is per chain because the chains don't tag the same way -
 // a tag one chain leaves in the notes may be a dependable marker at another.
+//
+// A tag that isn't accessibility or format goes into the notes as its
+// description. `getTagNote` lets a chain replace that with a short note of its
+// own where the description is boilerplate - the API's own `label` is no help
+// there, being shouty shorthand ("LASER", "AFS", "UNLIMITED"). Returning
+// undefined keeps the description, so a tag the chain hasn't seen still comes
+// through.
 async function transform(
   attributes,
   { movieListPage, moviePages: { movieData, movieDetails, attributeData } },
-  { accessibilityTags },
+  { accessibilityTags, getTagNote = () => undefined },
   sourcedEvents,
 ) {
   const { domain, cinemaId } = attributes;
@@ -87,7 +94,9 @@ async function transform(
           }
 
           // Any tags which aren't accessibility related can be added to notes
-          notesList = notesList.concat(tagData.localizations[0].description);
+          notesList = notesList.concat(
+            getTagNote(tag) ?? tagData.localizations[0].description,
+          );
         });
 
         return createPerformance({
