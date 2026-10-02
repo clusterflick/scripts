@@ -19,15 +19,21 @@ const attributes = require("./attributes");
  * The page carries a second block of the same rich text below it - the
  * organiser's bio - so the description is picked out by the heading of the
  * module it sits in rather than by the rich text's own markup.
+ *
+ * An organiser can add more than one module under that heading, and one
+ * holding only an embedded video has no text to read, so only modules with
+ * text count towards the one expected.
  */
 function getDescription(event, html) {
   const $ = cheerio.load(html);
   const $module = $(".EventModuleRichText").filter(
-    (i, el) => getText($(el).find("h2")) === "Description",
+    (i, el) =>
+      getText($(el).find("h2")) === "Description" &&
+      getText($(el).find(".RichContent")) !== "",
   );
   if ($module.length !== 1) {
     throw new Error(
-      `humanitix event ${event._id} has ${$module.length} "Description" modules on its page, expected 1`,
+      `humanitix event ${event._id} has ${$module.length} "Description" modules with text on its page, expected 1`,
     );
   }
 
