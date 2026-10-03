@@ -1,23 +1,16 @@
+const path = require("node:path");
 const {
   startOfYesterday,
   endOfYesterday,
   isWithinInterval,
   parseISO,
 } = require("date-fns");
-const { fetchJson, withRetry } = require("../../common/utils");
+const { fetchJson, withRetry, writeJSON } = require("../../common/utils");
 
-async function getReleaseData(location, release) {
-  if (!release) return;
-
-  const data = release.assets.find(({ name }) => name === location);
-  if (!data) return;
-
-  return await withRetry(() => fetchJson(data.browser_download_url), {
-    retries: 5,
-    delayMs: 30_000,
-    label: `Download ${location}`,
-  });
-}
+// Enough to keep a few downloads in flight without a run of 400-odd small
+// assets queueing behind one another, and few enough that the CDN has no
+// reason to start shedding us.
+const DOWNLOAD_CONCURRENCY = 10;
 
 async function getReleaseList() {
   const { Octokit } = await import("@octokit/core");
@@ -41,20 +34,43 @@ async function getReleaseList() {
   return response.data;
 }
 
-async function getYesterdaysRelease(location, releaseList) {
+// The list comes back newest first, so this is the last release published
+// yesterday - or undefined if nothing was published yesterday.
+function getYesterdaysRelease(releaseList) {
   const startYesterday = startOfYesterday();
   const endYesterday = endOfYesterday();
-  const yesterdayRelease = releaseList.find((release) => {
+  return releaseList.find((release) => {
     const releaseDate = parseISO(release.published_at);
     return isWithinInterval(releaseDate, {
       start: startYesterday,
       end: endYesterday,
     });
   });
-  return await getReleaseData(location, yesterdayRelease);
+}
+
+// Each asset is one venue's transformed output, named after the venue id, so
+// it lands at `<directory>/<venue id>` - the path a transform reads it from.
+async function downloadReleaseAssets(release, directory) {
+  const queue = [...release.assets];
+  const worker = async () => {
+    while (queue.length > 0) {
+      const { name, browser_download_url } = queue.shift();
+      const data = await withRetry(() => fetchJson(browser_download_url), {
+        retries: 5,
+        delayMs: 30_000,
+        label: `Download ${name}`,
+      });
+      await writeJSON(path.join(directory, name), data);
+    }
+  };
+  await Promise.all(
+    Array.from({ length: DOWNLOAD_CONCURRENCY }, () => worker()),
+  );
+  return release.assets.length;
 }
 
 module.exports = {
   getReleaseList,
   getYesterdaysRelease,
+  downloadReleaseAssets,
 };

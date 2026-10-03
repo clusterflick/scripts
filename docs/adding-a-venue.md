@@ -460,7 +460,7 @@ downloads:
 # ------------------------------------------------------------------------------
 transform_<group_name>:
   name: Transform <Group Name>
-  needs: [download_retrieved_data, download_historical_data]
+  needs: [download_retrieved_data, prepare_transform]
   runs-on: ubuntu-latest
   env:
     TZ: Europe/London
@@ -482,11 +482,11 @@ transform_<group_name>:
         name: retrieved-data
         path: retrieved-data/
         github-token: ${{ github.token }}
-    - name: Download Historical Data
+    - name: Download Transform Inputs
       uses: actions/download-artifact@v8
       with:
-        name: combined-data
-        path: combined-data/
+        name: transform-inputs
+        path: transform-inputs/
         github-token: ${{ github.token }}
 
     - name: <venue-id>

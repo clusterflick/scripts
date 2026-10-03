@@ -217,6 +217,16 @@ const setupDirectory = async (type) => {
     return;
   }
 
+  if (action.toLowerCase() === "transform-prepare") {
+    // Once per run, before any venue's transform: builds the inputs every
+    // venue shares so none of them has to - see scripts/transform/transform-inputs.
+    const {
+      prepareTransformInputs,
+    } = require("./scripts/transform/transform-inputs");
+    await prepareTransformInputs();
+    return;
+  }
+
   const getPath = (type) => path.join(process.cwd(), type, location);
   if (!location) throw new Error("No location provided");
 
@@ -254,24 +264,21 @@ const setupDirectory = async (type) => {
 
   if (action.toLowerCase() === "transform") {
     await setupDirectory("transformed-data");
+    // Built once per run by `transform-prepare` rather than per venue - see
+    // scripts/transform/transform-inputs.
     const {
-      getReleaseList,
-      getYesterdaysRelease,
-    } = require("./scripts/transform/get-releases");
-    const {
-      getHistoricalData,
-    } = require("./scripts/transform/get-historical-seen");
+      readTransformInputs,
+    } = require("./scripts/transform/transform-inputs");
     const transform = require("./scripts/transform");
     const input = await readJSON(getPath("retrieved-data"));
-    const releaseList = await getReleaseList();
-    const yesterdaysRelease = await getYesterdaysRelease(location, releaseList);
-    const seenMap = await getHistoricalData();
+    const { previousRelease, historicalSeen } =
+      await readTransformInputs(location);
     clearLlmUsageLog();
     const output = await transform(
       location,
       input,
-      yesterdaysRelease,
-      seenMap,
+      previousRelease,
+      historicalSeen,
       ...parameters,
     );
     await writeJSON(
