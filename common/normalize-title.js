@@ -1201,9 +1201,21 @@ function normalizeTitle(title, options) {
     // The " - " would otherwise be read as a separator and cut the title,
     // leaving the bare "Action Force" to group with anything else called that
     [
-      /^Action Force\s*-\s*A G\.I\. Joe Marathon$/i,
+      /^Action Force\s*-\s*(?:A )?G\.I\. Joe Marathon$/i,
       "Action Force: A G.I. Joe Marathon",
     ],
+    // The " - " would otherwise be read as a separator and cut the title,
+    // leaving the bare "Frankenstein" to group with the film
+    [/\bFrankenstein\s*-\s*The Radio Play\b/i, "Frankenstein: The Radio Play"],
+    // A season billing its films under the actor ("Tim Curry: The Rocky Horror
+    // Picture Show (1975)"). Anchored, so "Remembering Tim Curry: ..." keeps
+    // the name it is about.
+    [/^Tim Curry:\s*/i, ""],
+    // The billing Peppa Pig's cinema releases carry ("Festive Fun with Peppa
+    // Cinema Experience", "Peppa Meets the Baby Cinema Experience"). Scoped to
+    // Peppa, since elsewhere it is the whole description of the event ("CINEMINI:
+    // A Magical First Cinema Experience").
+    [/(?<=\bpeppa\b.*)\s+cinema experience$/i, ""],
     // The " - " would otherwise be read as a separator and cut the title
     [
       /\bErnest and Celestine\s*-\s*Winter Tales\b/i,

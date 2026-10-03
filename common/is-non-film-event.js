@@ -164,8 +164,9 @@ const nonFilmEvents = [
   // night rather than carrying a pattern per act.
   /Mixtape: More Black Excellence/i,
   // An R&B day party, billed with its theme and head count ("RNB LAND -
-  // Summer Closing RnB & Slow Jams Day Party"), never a screening.
-  /RNB LAND/i,
+  // Summer Closing RnB & Slow Jams Day Party"), never a screening. Billed
+  // with and without the space.
+  /RNB ?LAND/i,
   // A college's social for its new graduates ("Grads: Graduate Mixer"), held
   // in the theatre it screens films in.
   /Graduate Mixer/i,
@@ -176,6 +177,12 @@ const nonFilmEvents = [
   // alike ("Evening Focus Group: Share Your Thoughts on Good Shepherd Studios
   // & Beyond"), so match the session rather than carrying a pattern per slot.
   /Focus Group: Share Your Thoughts/i,
+  // A race's after party held at the venue, never a screening.
+  /ASICS LDNX 10K OFFICIAL AFTER PARTY/i,
+  // A guided walk of the Barbican's highwalks, billed in Chinese ("London's
+  // city in the air: a walk through the Barbican highwalk network").
+  /空中樓閣的倫敦城/,
+  /^Mt Skies$/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
