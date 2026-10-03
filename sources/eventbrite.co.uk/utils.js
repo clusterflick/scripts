@@ -82,9 +82,40 @@ function getEventStatus(details) {
   return { soldOut: salesStatus.messageCode === "tickets_sold_out" };
 }
 
+// "Festival" and "Fest" as a word ("DzFest - The Algerian Festival"), but not
+// "Festive", which is a Christmas season rather than an event of its own.
+const FESTIVAL_NAME_PATTERN = /festival|fest\b/i;
+
+/**
+ * Notes naming the festivals an event is listed under, from the collections on
+ * its page.
+ *
+ * Organisers group their events into collections, and a festival's organiser
+ * usually makes one named after the festival - often the only place the
+ * festival is named outside the description. Most collections are not
+ * festivals ("Leyton Library Events", "Business Networking London"), so only
+ * those named as one become notes. The name is the collection's own, so a new
+ * festival or a new edition needs nothing adding here.
+ *
+ * A festival the title already names is left out, as billing already in the
+ * title is not repeated in the notes.
+ */
+function getFestivalCollectionNotes(details, title = "") {
+  const collections = details?.props?.pageProps?.context?.collections || [];
+  const normalizedTitle = basicNormalize(title);
+
+  const names = collections
+    .map(({ name }) => (name || "").replace(/\s+/g, " ").trim())
+    .filter((name) => FESTIVAL_NAME_PATTERN.test(name))
+    .filter((name) => !normalizedTitle.includes(basicNormalize(name)));
+
+  return [...new Set(names)].map((name) => `Part of ${name}`);
+}
+
 module.exports = {
   parseDate,
   getEventVenue,
   getEventDescription,
   getEventStatus,
+  getFestivalCollectionNotes,
 };

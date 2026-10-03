@@ -6,7 +6,12 @@ const {
   createAccessibility,
   createFormat,
 } = require("../../common/utils");
-const { parseDate, getEventDescription, getEventStatus } = require("./utils");
+const {
+  parseDate,
+  getEventDescription,
+  getEventStatus,
+  getFestivalCollectionNotes,
+} = require("./utils");
 const { buildTicketsUrl } = require("./organizer-events");
 const attributes = require("./attributes");
 
@@ -194,7 +199,10 @@ function expandSeriesLineUp(event, details, sessions) {
         performances: [
           createPerformance({
             date,
-            notesList: [entry.note],
+            notesList: [
+              entry.note,
+              ...getFestivalCollectionNotes(details, entry.title),
+            ],
             url: buildTicketsUrl(session.id),
             // The series endpoint carries no availability, so only the
             // session whose page was fetched can say whether it has sold out.
