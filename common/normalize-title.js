@@ -245,6 +245,10 @@ function normalizeTitle(title, options) {
     ["Girlguiding Screening - ", "Girlguiding Screening: "],
     ["SEEN Charity Film Screening - ", "SEEN Charity Film Screening: "],
     ["Romford Horror Festival - ", "Romford Horror Festival: "],
+    ["The Funny Life Film Festival - ", "The Funny Life Film Festival: "],
+    ["The Peter Greenaway Season - ", "The Peter Greenaway Season: "],
+    // The strand is billed with "Touchstone" misspelt on some of its films.
+    [/^Touch(?:stone|tsone) Tuesdays\s*-\s*/i, "Touchstone Tuesdays: "],
     // Removed here rather than in the phrase list, which runs after the rule
     // below has turned the dash into a prefix separator and kept only "London".
     [" Special Film Screening - London", ""],
