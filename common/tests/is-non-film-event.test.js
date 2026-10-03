@@ -84,6 +84,10 @@ describe("isNonFilmEvent", () => {
     [
       "Weekend Focus Group: Share Your Thoughts on Good Shepherd Studios & Beyond",
     ],
+    ["RNBLAND - Summer Closing RnB Day Festival  (2000+ RNB LOVERS)"],
+    ["ASICS LDNX 10K OFFICIAL AFTER PARTY"],
+    ["空中樓閣的倫敦城：步遊巴比肯天橋網絡"],
+    ["Mt Skies"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });

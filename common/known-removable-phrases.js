@@ -1706,6 +1706,7 @@ const knownRemovablePhrases = [
   // middle of them.
   "A MilkTea Community Preview",
   "Special Preview of",
+  "A Preview of",
   "[Preview]",
   "preview",
   "live action",
