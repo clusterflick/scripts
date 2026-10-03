@@ -13,6 +13,7 @@ const {
   getEventVenue,
   getEventDescription,
   getEventStatus,
+  getFestivalCollectionNotes,
 } = require("./utils");
 const attributes = require("./attributes");
 const { venueMatchesCinema } = require("../../common/source-utils");
@@ -88,7 +89,7 @@ function convertEventbriteEvent(
     performances: [
       createPerformance({
         date: startDate,
-        notesList: note ? [note] : [],
+        notesList: [note, ...getFestivalCollectionNotes(details, event.name)],
         url: event.tickets_url,
         status,
         accessibility: createAccessibility(event.name, {}, overview),
