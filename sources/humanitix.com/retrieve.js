@@ -1,3 +1,4 @@
+const crypto = require("node:crypto");
 const { fetchJson, fetchText } = require("../../common/utils.js");
 const { getEventUrl } = require("./utils");
 
@@ -23,7 +24,7 @@ const GEOBOX = {
   placeId: "ChIJdd4hrwug2EcRmSrV3Vo6llI",
 };
 
-async function fetchPage(page) {
+async function fetchPage(page, stateKey) {
   return fetchJson(API_URL, {
     method: "POST",
     headers: {
@@ -47,6 +48,7 @@ async function fetchPage(page) {
       page,
       safeSearch: true,
       category: "filmMediaAndEntertainment",
+      stateKey,
       geobox: GEOBOX,
     }),
   });
@@ -55,9 +57,15 @@ async function fetchPage(page) {
 async function retrieve() {
   const allEvents = [];
   let page = 0;
+  // The API rejects a request without a stateKey. The server remembers which
+  // events it has served under a key and leaves them out of later answers -
+  // asking for page 0 twice with one key returns nothing the second time - so
+  // a fresh one is made per retrieve, as the site does per page load, and kept
+  // for the whole walk.
+  const stateKey = crypto.randomUUID();
 
   while (true) {
-    const pageEvents = await fetchPage(page);
+    const pageEvents = await fetchPage(page, stateKey);
     if (pageEvents.length === 0) break;
     allEvents.push(...pageEvents);
     page += 1;
