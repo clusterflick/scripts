@@ -1,4 +1,5 @@
 /** @jest-environment setup-polly-jest/jest-environment-node */
+const crypto = require("node:crypto");
 const {
   setupPolly,
   schemaValidate,
@@ -22,7 +23,7 @@ silenceConsoleLog();
 
 describe(attributes.name, () => {
   setupPolly(isRecording, __dirname);
-  jest.useFakeTimers().setSystemTime(new Date("2026-09-23"));
+  jest.useFakeTimers().setSystemTime(new Date("2026-10-03"));
 
   describe.each([
     {
@@ -30,7 +31,8 @@ describe(attributes.name, () => {
       alternativeNames: ["Finch Cafe/Restaurant"],
       address: "12 Sidworth Street, London, E8 3SD, UK",
       geo: { lat: 51.53977173949334, lon: -0.05752235164484993 },
-      expectedMatches: 2,
+      expectedMatches: 1,
+      stateKey: "00000000-0000-4000-8000-000000000001",
     },
     {
       name: "Rio Cinema",
@@ -38,44 +40,52 @@ describe(attributes.name, () => {
       address: "107 Kingsland High Street, London, E8 2PB, UK",
       geo: { lat: 51.54970097438604, lon: -0.07550473771574956 },
       expectedMatches: 0,
+      stateKey: "00000000-0000-4000-8000-000000000002",
     },
-  ])("$name", ({ name, alternativeNames, address, geo, expectedMatches }) => {
-    it(
-      "retrieve and find events",
-      async () => {
-        const { events, eventPages } = await retrieve();
+  ])(
+    "$name",
+    ({ name, alternativeNames, address, geo, expectedMatches, stateKey }) => {
+      it(
+        "retrieve and find events",
+        async () => {
+          // Polly matches on the request body, so the stateKey must be the
+          // recorded one. Each case needs its own: the server leaves out what it
+          // has already served under a key, so a reused one returns nothing.
+          jest.spyOn(crypto, "randomUUID").mockReturnValue(stateKey);
+          const { events, eventPages } = await retrieve();
 
-        // Make sure the input looks roughly correct
-        expect(events).toBeTruthy();
-        expect(events).toHaveLength(25);
-        expect(Object.keys(eventPages)).toHaveLength(25);
+          // Make sure the input looks roughly correct
+          expect(events).toBeTruthy();
+          expect(events).toHaveLength(28);
+          expect(Object.keys(eventPages)).toHaveLength(28);
 
-        readJSON.mockImplementation(() => ({ events, eventPages }));
+          readJSON.mockImplementation(() => ({ events, eventPages }));
 
-        const cinema = { name, alternativeNames, address, geo };
-        const output = await findEvents(cinema);
-        expect(
-          output.every((movie) =>
-            Object.prototype.hasOwnProperty.call(movie, "matchingHints"),
-          ),
-        ).toBe(true);
-        // Every event's description comes off its own page
-        expect(output.every((movie) => movie.matchingHints.overview)).toBe(
-          true,
-        );
+          const cinema = { name, alternativeNames, address, geo };
+          const output = await findEvents(cinema);
+          expect(
+            output.every((movie) =>
+              Object.prototype.hasOwnProperty.call(movie, "matchingHints"),
+            ),
+          ).toBe(true);
+          // Every event's description comes off its own page
+          expect(output.every((movie) => movie.matchingHints.overview)).toBe(
+            true,
+          );
 
-        const data = JSON.parse(JSON.stringify(output))
-          .map(removeMatchingHints)
-          .map(addTestCategory);
+          const data = JSON.parse(JSON.stringify(output))
+            .map(removeMatchingHints)
+            .map(addTestCategory);
 
-        // Make sure the data looks roughly correct
-        expect(schemaValidate(data)).toBe(true);
-        expect(data).toHaveLength(expectedMatches);
-        expect(data).toMatchSnapshot();
-      },
-      isRecording ? 600_000 : undefined,
-    );
-  });
+          // Make sure the data looks roughly correct
+          expect(schemaValidate(data)).toBe(true);
+          expect(data).toHaveLength(expectedMatches);
+          expect(data).toMatchSnapshot();
+        },
+        isRecording ? 600_000 : undefined,
+      );
+    },
+  );
 });
 
 describe(`${attributes.name} descriptions`, () => {
