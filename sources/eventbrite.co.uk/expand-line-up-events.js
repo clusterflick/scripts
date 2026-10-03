@@ -7,7 +7,12 @@ const {
   createFormat,
   convertNamesTextToList,
 } = require("../../common/utils");
-const { parseDate, getEventDescription, getEventStatus } = require("./utils");
+const {
+  parseDate,
+  getEventDescription,
+  getEventStatus,
+  getFestivalCollectionNotes,
+} = require("./utils");
 const attributes = require("./attributes");
 
 // Some organisers put a whole season behind a single Eventbrite listing: one
@@ -247,7 +252,7 @@ function expandLineUpEvent(event, details) {
       performances: [
         createPerformance({
           date,
-          notesList: [note],
+          notesList: [note, ...getFestivalCollectionNotes(details, film.title)],
           url: event.tickets_url,
           // One listing, one ticket pool, so a sold-out season is sold out on
           // every date it covers. Eventbrite reports nothing per-date here -

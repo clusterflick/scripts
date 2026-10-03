@@ -138,6 +138,17 @@ const closeUpCinema = {
   geo: { lat: 51.52363533860424, lon: -0.07204024586584808 },
 };
 
+const uclEastCinema = {
+  name: "UCL East Community Cinema",
+  alternativeNames: [
+    "UCL East Cinema",
+    "UCL East - Marshgate",
+    "UCL East - One Pool Street",
+    "UCL Community Cinema",
+  ],
+  geo: { lat: 51.53829498102827, lon: -0.009739721124983678 },
+};
+
 describe(attributes.name, () => {
   setupPolly(isRecording, __dirname);
   jest.useFakeTimers().setSystemTime(new Date(CACHE_DATE));
@@ -219,6 +230,27 @@ describe(attributes.name, () => {
     expect(windowSeat).toHaveLength(1);
     expect(windowSeat[0].performances.map(({ notes }) => notes)).toEqual([
       "Presented by Window Seat Cinema Club",
+    ]);
+  }, 30_000);
+
+  // UCL East listed the New Nordic Voices Film Festival in a collection of
+  // that name, which is the only place its event pages name the festival.
+  it("notes the festival an event is collected under", async () => {
+    const { movieListPages, moviePages, organizerEvents, seriesEvents } =
+      await retrieve();
+    readJSON.mockImplementation(() => ({
+      movieListPages,
+      moviePages,
+      organizerEvents,
+      seriesEvents,
+    }));
+
+    const output = await findEvents(uclEastCinema);
+    const armand = output.filter(({ url }) => url.endsWith("-1995948509722"));
+
+    expect(armand).toHaveLength(1);
+    expect(armand[0].performances.map(({ notes }) => notes)).toEqual([
+      "Part of New Nordic Voices Film Festival (Public Admission)",
     ]);
   }, 30_000);
 });
