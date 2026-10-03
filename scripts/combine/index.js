@@ -6,6 +6,7 @@ const {
   getMovieGenresAndCacheResults,
   getCollectionInfoAndCacheResults,
 } = require("../../common/get-movie-data");
+const { isMissingMovieDbEntry } = require("../../common/moviedb-retry");
 const {
   readJSON,
   basicNormalize,
@@ -293,8 +294,17 @@ async function combine() {
             `\t✅ Retrieved (${Math.round((Date.now() - start) / 1000)}s)`,
           );
         } catch (e) {
-          console.log(`\t❌ Error retriving`);
-          throw e;
+          // The id was deleted from TheMovieDB after transform matched it, so
+          // there is no record to build from - list it as the venue gave it,
+          // unmatched, rather than fail the release over one listing. Anything
+          // else means we could not reach the API, and must stop the job.
+          if (!isMissingMovieDbEntry(e)) {
+            console.log(`\t❌ Error retriving`);
+            throw e;
+          }
+          console.log(
+            `\t⚠️ ${themoviedb.id} missing from TheMovieDB, listing unmatched`,
+          );
         }
       }
 

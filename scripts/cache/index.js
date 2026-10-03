@@ -3,6 +3,7 @@ const {
   getMovieInfoAndCacheResults,
   getCollectionInfoAndCacheResults,
 } = require("../../common/get-movie-data");
+const { isMissingMovieDbEntry } = require("../../common/moviedb-retry");
 const { readJSON } = require("../../common/utils");
 const { getAllCinemaNames } = require("../../cinemas");
 
@@ -22,6 +23,7 @@ async function combine() {
 
   const movieInfo = {};
   const collectionInfo = {};
+  const missingIds = new Set();
 
   // A movie's TMDB details name the collection it belongs to, but not the rest
   // of its membership - that needs a second lookup per collection.
@@ -68,11 +70,26 @@ async function combine() {
           continue;
         }
 
+        if (missingIds.has(tmdbEntry.id)) {
+          console.log(`\t⚠️ Already missing from TheMovieDB`);
+          continue;
+        }
+
         try {
           try {
             movieInfo[tmdbEntry.id] =
               await getMovieInfoAndCacheResults(tmdbEntry);
-          } catch {
+          } catch (error) {
+            // TheMovieDB deletes entries - duplicates, mostly - and the id a
+            // venue was matched to can go between transform and here. That
+            // answers 404 however often it is asked, and one listing losing
+            // its match is not worth the whole day's release - combine lists
+            // it unmatched, and the summary below names the id.
+            if (isMissingMovieDbEntry(error)) {
+              missingIds.add(tmdbEntry.id);
+              console.log(`\t⚠️ Missing from TheMovieDB, skipping`);
+              continue;
+            }
             // Try again to get the data if it fails. The movie info will be
             // cached from the previous run if it was successful.
             process.stdout.write(`\\t🔄`);
@@ -145,6 +162,12 @@ async function combine() {
     }
 
     console.log(" ");
+  }
+
+  if (missingIds.size > 0) {
+    console.log(
+      `⚠️ Missing from TheMovieDB (${missingIds.size}): ${[...missingIds].join(", ")}`,
+    );
   }
 
   console.log(
