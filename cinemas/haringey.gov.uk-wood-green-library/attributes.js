@@ -9,7 +9,7 @@ module.exports = {
   },
   url: "https://haringey.gov.uk/libraries/libraries-haringey/wood-green-library",
   address: "187-197A High Road, Wood Green, London, N22 6XD, UK",
-  geo: { lat: 51.595598469962, lon: -0.10965812165977 },
+  geo: { lat: 51.595468289969375, lon: -0.10957413673866809 },
   structure: "solo",
   type: "Library & Archive",
   programming: "host",

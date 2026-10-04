@@ -9,7 +9,7 @@ module.exports = {
   },
   url: "https://haringey.gov.uk/libraries/libraries-haringey/hornsey-library",
   address: "Haringey Park, Hornsey, London, N8 9JA, UK",
-  geo: { lat: 51.578225283951, lon: -0.12205275199265 },
+  geo: { lat: 51.57815913646129, lon: -0.1221014509067981 },
   structure: "solo",
   type: "Library & Archive",
   programming: "host",

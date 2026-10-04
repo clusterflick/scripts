@@ -10,7 +10,7 @@ module.exports = {
   url: "https://haringey.gov.uk/libraries/libraries-haringey/marcus-garvey-library",
   address:
     "Tottenham Green Leisure Centre, 1 Philip Lane, Tottenham, London, N15 4JA, UK",
-  geo: { lat: 51.588632660504, lon: -0.073813077415704 },
+  geo: { lat: 51.58796287034029, lon: -0.07356697867553987 },
   structure: "solo",
   type: "Library & Archive",
   programming: "host",

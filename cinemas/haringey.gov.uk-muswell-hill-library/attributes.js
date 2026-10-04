@@ -9,7 +9,7 @@ module.exports = {
   },
   url: "https://haringey.gov.uk/libraries/libraries-haringey/muswell-hill-library",
   address: "Queens Avenue, Muswell Hill, London, N10 3PE, UK",
-  geo: { lat: 51.591113, lon: -0.143225 },
+  geo: { lat: 51.59121491236304, lon: -0.14318626550312763 },
   structure: "solo",
   type: "Library & Archive",
   programming: "host",

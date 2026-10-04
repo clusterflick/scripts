@@ -9,7 +9,7 @@ module.exports = {
   },
   url: "https://www.southwark.gov.uk/culture-and-sport/libraries/find-library/nunhead-library",
   address: "Gordon Road, London, SE15 3RW, UK",
-  geo: { lat: 51.465871364198, lon: -0.059548256912999 },
+  geo: { lat: 51.46578400849211, lon: -0.059625822946654576 },
   structure: "solo",
   type: "Library & Archive",
   programming: "host",
