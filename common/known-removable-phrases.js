@@ -529,6 +529,7 @@ const knownRemovablePhrases = [
   "Festive Films at Gunnersbury Museum",
   "Halloween Outdoor Cinema at Osterley Park and House, London",
   "at Canada Water Library",
+  "at Una Marson Library",
   "An evening of film & conversation",
   "...The movie",
 
@@ -1631,6 +1632,7 @@ const knownRemovablePhrases = [
   "Film Screening & FILM TALK",
   "Talk and film",
   "Free Film Screening",
+  "Free short film programme",
   "IWD Film Screening",
   "' Short Film Screening",
   "Short Film Screenings",

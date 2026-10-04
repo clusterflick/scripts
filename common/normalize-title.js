@@ -1121,6 +1121,10 @@ function normalizeTitle(title, options) {
     [/Raakaasaa?/i, "Rākāsā"],
     ["NAN GOLDIN - IN MY LIFE", "NAN GOLDIN: IN MY LIFE"],
     ["Anmol - Lovingly Ours", "Anmol: Lovingly Ours"],
+    [
+      "Una Marson - Our Lost Caribbean Voice",
+      "Una Marson: Our Lost Caribbean Voice",
+    ],
     ["Dacoit: A Love Story", "Dacoit"],
     ["Elvira Notari: Beyond the Silence", "Elvira Notari: Beyond Silence"],
     ["National Emergency Briefing Film", "People's Emergency Briefing"],
@@ -1131,6 +1135,12 @@ function normalizeTitle(title, options) {
     ["People's Emergency Briefing Twickenham", "People's Emergency Briefing"],
     ["People's Emergency Briefing for Business", "People's Emergency Briefing"],
     ["The The People's Emergency Briefing", "The People's Emergency Briefing"],
+    // Kingston names each screening on the tour after the venue showing it
+    [/(People[’']s Emergency Briefing) at .+$/i, "$1"],
+    [
+      /^Free film screening in Harringay [–-] (?=People[’']s Emergency Briefing)/i,
+      "",
+    ],
     ["TESTMortal Kombat IITEST", "Mortal Kombat II"],
     // TheMovieDB lists the film as "The Mandalorian and Grogu", without the
     // franchise name venues bill it under. Only this one: the saga films are
