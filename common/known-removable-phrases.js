@@ -922,6 +922,7 @@ const knownRemovablePhrases = [
   "Girlguiding Screening:",
   "Good Vibrations:",
   "Gothic Film Festival:",
+  "Gothic Victorian Film ",
   "gff:",
   "Ghibliotheque presents...",
   "Goethe Annual Lecture 2025:",
