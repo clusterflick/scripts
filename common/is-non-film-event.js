@@ -183,6 +183,15 @@ const nonFilmEvents = [
   // city in the air: a walk through the Barbican highwalk network").
   /空中樓閣的倫敦城/,
   /^Mt Skies$/i,
+  // An art series billed by the artist and gallery it covers ("Sage Art: Ana
+  // Mendieta at Tate Modern"), so match the series rather than carrying a
+  // pattern per artist. Anchored on the series' own prefix and colon.
+  /^Sage Art:/i,
+  // A small press's book launch, billed by the season or title it is
+  // launching ("Autumn Book Launch"), so match the press rather than carrying
+  // a pattern per launch - and rather than the launch itself, because a book
+  // launch elsewhere is often sold with a screening.
+  /Femmesocial Press/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>

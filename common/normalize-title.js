@@ -2070,10 +2070,13 @@ function normalizeTitle(title, options) {
     .replace(/(?:\s+|^)&\s+/gi, " ")
     .replace(/[:|&]$/, "")
     .replace(/'|`|\u200B|‘|’|"|“|”|«|»|²|®|,|ʹ|/g, "")
-    .replace(/\s+(-|–)(\s|$)/g, " ")
+    // A middle dot standing on its own is a separator ("Movie Night · OneSoul
+    // IRL") and goes the same way as a dash. Only on its own: inside a word it
+    // is the title's own spelling ("WALL·E") and stays.
+    .replace(/\s+(-|–|·)(\s|$)/g, " ")
     .replace(/\s+(-|–)\s+/g, " ")
-    .replace(/^(-|–)/g, "")
-    .replace(/(-|–|\()$/g, "")
+    .replace(/^(-|–|·)/g, "")
+    .replace(/(-|–|\(|·)$/g, "")
     .replace("?s", "s")
     .replace(/!|¡|\?|¿|:|;|\.|\*|…|—|]|<|>/g, " ")
     .replaceAll("–", "–")
