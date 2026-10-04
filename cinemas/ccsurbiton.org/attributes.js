@@ -5,13 +5,12 @@ module.exports = {
   domain: "https://www.ccsurbiton.org",
   socials: {
     letterboxd: null,
-    twitter: null,
-    instagram: null,
+    twitter: "ccsurbiton",
+    instagram: "ccsurbiton",
   },
   url: "https://www.ccsurbiton.org",
   address: "8 Christ Church Road, Surbiton, London, KT5 8JJ, UK",
-  // Coordinates are the ones Kingston Council publishes for its events here
-  geo: { lat: 51.389936664057, lon: -0.29244488749107 },
+  geo: { lat: 51.38998687633707, lon: -0.29248780173058475 },
   structure: "solo",
   type: "Place of Worship",
   programming: "host",

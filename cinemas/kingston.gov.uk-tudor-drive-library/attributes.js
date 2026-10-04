@@ -9,8 +9,7 @@ module.exports = {
   },
   url: "https://libraries.kingston.gov.uk/digital-content/libraries/library-branches/tudor-drive",
   address: "Tudor Drive, Kingston upon Thames, London, KT2 5QH, UK",
-  // Coordinates are the library service's own map of the branch
-  geo: { lat: 51.42633382444892, lon: -0.2996876846696468 },
+  geo: { lat: 51.42636740376151, lon: -0.2974594447944748 },
   structure: "solo",
   type: "Library & Archive",
   programming: "host",

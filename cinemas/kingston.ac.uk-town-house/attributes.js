@@ -9,15 +9,12 @@ module.exports = {
   domain: "https://www.kingston.ac.uk",
   socials: {
     letterboxd: null,
-    twitter: null,
-    instagram: null,
+    twitter: "KingstonUni",
+    instagram: "kingstonuniversity",
   },
   url: "https://www.kingston.ac.uk/faculties/kingston-school-of-art/about/facilities/town-house/",
-  address:
-    "Town House, Penrhyn Road, Kingston upon Thames, London, KT1 2EE, UK",
-  // Coordinates are OpenStreetMap's for the Penrhyn Road campus, which has no
-  // separate entry for the Town House within it
-  geo: { lat: 51.4030739, lon: -0.3032181 },
+  address: "Penrhyn Road, Kingston upon Thames, London, KT1 2EE, UK",
+  geo: { lat: 51.40415594403306, lon: -0.30357817289408917 },
   structure: "solo",
   type: "University & College",
   programming: "host",
