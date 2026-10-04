@@ -21,12 +21,15 @@ async function fetchPaced(url) {
 // Each council themes its listing differently, so the caller supplies the
 // selector for the listing view and for the links to event pages within it. A
 // category with nothing on legitimately lists no events, but the view itself
-// is always rendered, so its absence means the page has changed. A recurring event appears once per
-// occurrence in the listing but has a single page listing every date, so each
-// page is fetched once.
+// is always rendered, so its absence means the page has changed.
+//
+// A council without a film category is searched by keyword instead, one
+// listing per keyword, and an event found by more than one is the same page.
+// A recurring event likewise appears once per occurrence in a listing but has
+// a single page listing every date. So each event page is fetched once.
 async function retrieveEventPages({
   domain,
-  listUrl,
+  listUrls,
   listSelector,
   eventLinkSelector,
   maxPages = 20,
@@ -34,34 +37,38 @@ async function retrieveEventPages({
   const movieListPages = [];
   const moviePageUrls = [];
 
-  let pageUrl = listUrl;
-  while (pageUrl) {
-    if (movieListPages.length >= maxPages) {
-      throw new Error(
-        `Exceeded maximum page limit for ${listUrl} — stopping condition may have changed`,
-      );
+  for (const listUrl of listUrls) {
+    let pageUrl = listUrl;
+    let listPageCount = 0;
+    while (pageUrl) {
+      if (listPageCount >= maxPages) {
+        throw new Error(
+          `Exceeded maximum page limit for ${listUrl} — stopping condition may have changed`,
+        );
+      }
+
+      const movieListPage = await fetchPaced(pageUrl);
+      movieListPages.push(movieListPage);
+      listPageCount += 1;
+
+      const $ = cheerio.load(movieListPage);
+      const $list = $(listSelector);
+      if ($list.length === 0) {
+        throw new Error(
+          `Unable to find the event listing on ${pageUrl} — the page structure may have changed`,
+        );
+      }
+
+      $list.find(eventLinkSelector).each((i, link) => {
+        const href = $(link).attr("href");
+        if (!href) return;
+        const url = new URL(href, domain).href;
+        if (!moviePageUrls.includes(url)) moviePageUrls.push(url);
+      });
+
+      const nextHref = $(".pager__item--next a").attr("href");
+      pageUrl = nextHref ? new URL(nextHref, pageUrl).href : null;
     }
-
-    const movieListPage = await fetchPaced(pageUrl);
-    movieListPages.push(movieListPage);
-
-    const $ = cheerio.load(movieListPage);
-    const $list = $(listSelector);
-    if ($list.length === 0) {
-      throw new Error(
-        `Unable to find the event listing on ${pageUrl} — the page structure may have changed`,
-      );
-    }
-
-    $list.find(eventLinkSelector).each((i, link) => {
-      const href = $(link).attr("href");
-      if (!href) return;
-      const url = new URL(href, domain).href;
-      if (!moviePageUrls.includes(url)) moviePageUrls.push(url);
-    });
-
-    const nextHref = $(".pager__item--next a").attr("href");
-    pageUrl = nextHref ? new URL(nextHref, pageUrl).href : null;
   }
 
   const moviePages = {};

@@ -43,6 +43,11 @@ function parseWallClockDatetime(datetime, url) {
 // Southwark in a separate "All dates and times" list); a one-off event shows
 // its single date in the date field. Either way, the first <time> of each is
 // when it starts - the next is when it ends.
+//
+// An event with no dates left to show renders its date field empty: Kingston
+// still lists its June film festival, whose page has an empty date field and
+// no address. That gives no dates rather than an error, so it's skipped. A
+// date that is there but can't be read still fails.
 function getDates($, $event, url) {
   const $occurrences = $event
     .find("ul.date-recur-occurrences")
@@ -52,22 +57,11 @@ function getDates($, $event, url) {
     ? $occurrences
     : $event.find(".field--name-localgov-event-date").first();
 
-  const dates = $dates
+  return $dates
     .toArray()
-    .map((date) =>
-      parseWallClockDatetime(
-        $(date).find("time").first().attr("datetime"),
-        url,
-      ),
-    );
-
-  if (dates.length === 0) {
-    throw new Error(
-      `Unable to extract any dates from ${url} — the page structure may have changed`,
-    );
-  }
-
-  return dates;
+    .map((date) => $(date).find("time").first())
+    .filter(($time) => $time.length > 0)
+    .map(($time) => parseWallClockDatetime($time.attr("datetime"), url));
 }
 
 // The location is a postal address, one line per element, which postcode
@@ -108,10 +102,18 @@ function getCoordinates($, $location, url) {
 // A venue the council manages is linked from a "Venue" field. Otherwise the
 // event only has a location, whose address may lead with the venue's name
 // (Haringey's "Kurdish Community Centre") or its first line may be the venue
-// (Haringey's "The Beehive Pub") or the street address (Southwark's "21 Surrey
-// Quays Road", which venue matching recognises from the cinema's address).
+// (Haringey's "The Beehive Pub", Kingston's "The cornerHOUSE") or the street
+// address (Southwark's "21 Surrey Quays Road", which venue matching recognises
+// from the cinema's address). Kingston holds the address in a field of its
+// own rather than the content type's location.
+//
+// Kingston's events are submitted by the public, and some arrive with no
+// address at all ("United Kingdom" alone, or no address field). There's no
+// venue to match such an event against, so it gives null.
 function getVenue($, $event, url) {
-  const $location = $event.find(".field--name-localgov-event-location").first();
+  const $location = $event
+    .find(".field--name-localgov-event-location, .field--name-field-address")
+    .first();
   const { organization, addressLine1, address } = getAddressParts($, $location);
 
   const venueName =
@@ -120,11 +122,7 @@ function getVenue($, $event, url) {
     ) ||
     organization ||
     addressLine1;
-  if (!venueName) {
-    throw new Error(
-      `Unable to extract a venue from ${url} — the page structure may have changed`,
-    );
-  }
+  if (!venueName) return null;
 
   return {
     venueName,
@@ -159,8 +157,22 @@ function parseEventPage(html, url, attributes) {
     );
   }
 
+  const dates = getDates($, $event, url);
+  if (dates.length === 0) return null;
+
+  const venue = getVenue($, $event, url);
+  if (!venue) return null;
+  const { venueName, venueAddress, coordinates } = venue;
+
   const description = getDescription($event);
-  const { venueName, venueAddress, coordinates } = getVenue($, $event, url);
+
+  // Where the event links on to the venue's own booking page, that's where a
+  // performance is booked; otherwise the event page is all there is
+  const bookingUrl =
+    $event
+      .find(".field--name-localgov-event-call-to-action a")
+      .first()
+      .attr("href") || url;
 
   return {
     venueName,
@@ -174,10 +186,10 @@ function parseEventPage(html, url, attributes) {
       title,
       url,
       overview: createOverview({}),
-      performances: getDates($, $event, url).map((date) =>
+      performances: dates.map((date) =>
         createPerformance({
           date,
-          url,
+          url: bookingUrl,
           accessibility: createAccessibility(title, {}, description),
           format: createFormat(title, {}, description),
         }),
@@ -197,15 +209,22 @@ async function findEvents(cinema, attributes) {
     return [];
   }
 
+  const moviePages = Object.entries(data.moviePages ?? {});
+  const parsedPages = moviePages
+    .map(([url, html]) => parseEventPage(html, url, attributes))
+    .filter(Boolean);
+
+  // Skipping a page without a date or a venue is only safe while it's the odd
+  // one out. If every page lacks one, the field has gone rather than the data.
+  if (moviePages.length > 0 && parsedPages.length === 0) {
+    throw new Error(
+      `None of the ${moviePages.length} event pages for ${attributes.id} has both a date and a venue — the page structure may have changed`,
+    );
+  }
+
   const events = [];
 
-  for (const [url, html] of Object.entries(data.moviePages ?? {})) {
-    const { venueName, venueAddress, coordinates, event } = parseEventPage(
-      html,
-      url,
-      attributes,
-    );
-
+  for (const { venueName, venueAddress, coordinates, event } of parsedPages) {
     if (
       venueMatchesCinema(cinema, venueName, coordinates, {
         eventAddress: venueAddress,

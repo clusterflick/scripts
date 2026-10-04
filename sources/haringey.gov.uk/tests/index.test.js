@@ -147,13 +147,21 @@ describe(attributes.name, () => {
         ),
       ).rejects.toThrow(/Unexpected event datetime/);
 
-      await expect(
-        findEventsWithFirstPageEdited((page) =>
+      // A single page without a venue is skipped, as an event submitted
+      // without an address can't be placed - but every page losing it is the
+      // field gone
+      const withoutVenues = Object.fromEntries(
+        Object.entries(moviePages).map(([pageUrl, page]) => [
+          pageUrl,
           page
             .replaceAll("field--name-localgov-event-venue", "gone")
             .replaceAll("field--name-localgov-event-location", "gone"),
-        ),
-      ).rejects.toThrow(/Unable to extract a venue/);
+        ]),
+      );
+      readJSON.mockImplementation(() => ({ moviePages: withoutVenues }));
+      await expect(findEvents(cinema)).rejects.toThrow(
+        /has both a date and a venue/,
+      );
     },
     isRecording ? 600_000 : undefined,
   );

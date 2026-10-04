@@ -4,7 +4,7 @@ const { domain, url } = require("./attributes");
 async function retrieve() {
   return retrieveEventPages({
     domain,
-    listUrl: url,
+    listUrls: [url],
     listSelector: ".view-southwark-events",
     eventLinkSelector: ".views-row a.card-link",
   });
