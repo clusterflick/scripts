@@ -73,6 +73,7 @@ const mockVenuesAddedSinceFixtures = [
   "camden.gov.uk-swiss-cottage-library",
   "collage-arts.org-karamel-n22",
   "enfield.gov.uk-enfield-town-library",
+  "haringey.gov.uk-wood-green-library",
   "lambeth.gov.uk-minet-library",
   "soas.ac.uk",
 ];
