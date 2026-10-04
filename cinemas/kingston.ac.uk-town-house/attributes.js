@@ -12,7 +12,7 @@ module.exports = {
     twitter: "KingstonUni",
     instagram: "kingstonuniversity",
   },
-  url: "https://www.kingston.ac.uk/faculties/kingston-school-of-art/about/facilities/town-house/",
+  url: "https://www.kingston.ac.uk/aboutkingstonuniversity/location/penrhyn-road/town-house/",
   address: "Penrhyn Road, Kingston upon Thames, London, KT1 2EE, UK",
   geo: { lat: 51.40415594403306, lon: -0.30357817289408917 },
   structure: "solo",
