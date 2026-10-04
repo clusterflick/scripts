@@ -88,6 +88,7 @@ describe("isNonFilmEvent", () => {
     ["ASICS LDNX 10K OFFICIAL AFTER PARTY"],
     ["空中樓閣的倫敦城：步遊巴比肯天橋網絡"],
     ["Mt Skies"],
+    ["Guest Event:  Femmesocial Press: Autumn Book Launch"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });
