@@ -78,6 +78,7 @@ const ignoredIds = [
   455989, // The Witcher 3: Wild Hunt - Live Concert -- https://www.themoviedb.org/movie/455989-the-witcher-3-wild-hunt-live-concert
   1777404, // Avengers: Endgame Encore -- https://www.themoviedb.org/movie/1777404-avengers-endgame-encore
   1686620, // Legacy of Screams: The Evolution of Horror Movies -- https://www.themoviedb.org/movie/1686620-legacy-of-screams-the-evolution-of-horror-movies
+  1786333, // Mon âme soeur -- https://www.themoviedb.org/movie/1786333-mon-ame-soeur
 ];
 
 /**

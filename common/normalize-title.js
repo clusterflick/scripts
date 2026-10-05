@@ -610,11 +610,11 @@ function normalizeTitle(title, options) {
     [" - Chapter ", ": Chapter "],
     [" - Live on Stage", ": Live on Stage"],
     [" - A Sneak Peek", ": A Sneak Peek"],
-    // Venues bill these Met productions under the RBO season. Keeps the
+    // Venues bill these Met productions under the RBO season. Drops the
     // season year so they group with the listings billed as the Met's.
     [
-      /Royal Ballet & Opera (\d{4}): (La Sonnambula|Eugene Onegin|Macbeth|La Fanciulla Del West)/i,
-      "The Metropolitan Opera $1: $2",
+      /Royal Ballet & Opera \d{4}: (La Sonnambula|Eugene Onegin|Macbeth|La Fanciulla Del West)/i,
+      "The Metropolitan Opera: $1",
     ],
     ["Worlds25 - Finals in Cinema", "World Finals 2025"],
     ["Love + War", "Love+War"],
@@ -1684,6 +1684,26 @@ function normalizeTitle(title, options) {
       "Hunger Games: Ballad of Songbirds&Snakes (2026)",
       "Hunger Games: Ballad of Songbirds & Snakes (2023)",
     ],
+    // Venues bill these by a shortened or alternate title
+    [
+      /Bebefinn Sing-Along Movie(?!:? Into the Pinkfong World)/i,
+      "Bebefinn Sing-Along Movie: Into the Pinkfong World",
+    ],
+    [
+      /Little Am[eé]lie(?! or the Character of Rain)/i,
+      "Little Amélie or the Character of Rain",
+    ],
+    [/Simone Barb[eè]s(?! or Virtue| ou la vertu)/i, "Simone Barbès or Virtue"],
+    [
+      /Farewell, My Lovely \[a\.k\.a\.? Murder, My Sweet\]/i,
+      "Murder, My Sweet",
+    ],
+    [
+      "Panelstory, or How a Housing Development is Born",
+      "Panelstory or Birth of a Community",
+    ],
+    [/Momo and the Time Thieves/i, "Momo"],
+    ["Return of the Blind Dead", "Attack of the Blind Dead"],
     // The film's a mystery, but here's a hint ...
     ["FREE Kids Movie Club: A Whole New World", "aladdin"],
     ["FREE Kids Movie Club: Carnival Weekend", "princess and the frog"],
