@@ -92,47 +92,14 @@ function standardizePrefixingForMetropolitanOperaPerformances(title) {
 
   updatedPrefixTitle = updatedPrefixTitle.replace(ownerMatcher, ":");
 
-  let year = getBaselineYear();
-
-  const fullYearRangeMatch = updatedPrefixTitle.match(fullYearRangeMatcher);
-  if (fullYearRangeMatch) {
-    year = fullYearRangeMatch[1];
-    updatedPrefixTitle = updatedPrefixTitle.replace(fullYearRangeMatcher, "");
-  }
-
-  const yearRangeMatch = updatedPrefixTitle.match(yearRangeMatcher);
-  if (yearRangeMatch) {
-    year = `${yearRangeMatch[1]}${yearRangeMatch[2]}`;
-    updatedPrefixTitle = updatedPrefixTitle.replace(yearRangeMatcher, "");
-  }
-
-  const shortYearRangeMatch = updatedPrefixTitle.match(shortYearRangeMatcher);
-  if (shortYearRangeMatch) {
-    year = `20${shortYearRangeMatch[1]}`;
-    updatedPrefixTitle = updatedPrefixTitle.replace(shortYearRangeMatcher, "");
-  }
-
-  const yearSuffixMatch = updatedPrefixTitle.match(yearSuffixMatcher);
-  if (yearSuffixMatch) {
-    const yearSuffix = yearSuffixMatch[0].replaceAll(/[()]/g, "");
-    const yearNumber = parseInt(yearSuffix, 10);
-    const isFutureYear = yearNumber > getBaselineYear();
-    year = isFutureYear ? `${yearNumber - 1}` : yearSuffix;
-    updatedPrefixTitle = updatedPrefixTitle.replace(yearMatcher, "");
-  }
-
-  const yearMatch = updatedPrefixTitle.match(yearMatcher);
-  if (yearMatch) {
-    year = yearMatch[1];
-    updatedPrefixTitle = updatedPrefixTitle.replace(yearMatcher, "");
-  }
-
-  // Add the year value in (either calcualted or defaulted to this year)
-  const [before, ...after] = updatedPrefixTitle.split(":");
-  updatedPrefixTitle = `${before} ${year}:${after.join(":")}`;
-
-  // Remove any year value -- they can't be relied upon
-  updatedPrefixTitle = updatedPrefixTitle.replace(yearSuffixMatcher, "");
+  // Remove any season or year value. The Met's own listings on TheMovieDB carry
+  // neither ("The Metropolitan Opera: Così fan tutte"), so a year left in the
+  // title only stops it matching.
+  updatedPrefixTitle = updatedPrefixTitle
+    .replace(fullYearRangeMatcher, "")
+    .replace(yearRangeMatcher, "")
+    .replace(shortYearRangeMatcher, "")
+    .replace(yearMatcher, "");
 
   return updatedPrefixTitle
     .replace(/(\(\))+/, "")

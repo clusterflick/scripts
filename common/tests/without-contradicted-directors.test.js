@@ -133,7 +133,7 @@ describe("withoutContradictedDirectors", () => {
     const kept = await withoutContradictedDirectors(
       [candidate(1286766, "The Metropolitan Opera: Salome")],
       listing("The Metropolitan Opera: Salome", ["A Stage Director"]),
-      "metropolitan opera 2026 salome",
+      "metropolitan opera salome",
     );
     expect(idsOf(kept)).toEqual([1286766]);
     expect(mockMovieInfo).not.toHaveBeenCalled();
