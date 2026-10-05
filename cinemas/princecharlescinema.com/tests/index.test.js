@@ -45,24 +45,27 @@ describe(attributes.name, () => {
 // The recording above predates the BFI London Film Festival, so the festival
 // marker the venue drops into `.running-time` is exercised here with crafted
 // markup instead: "LFF" must stay out of the film's categories and appear as a
-// note on every performance.
+// note on every performance — unless the venue has tagged the festival
+// performances themselves, when only those carry it.
 describe(`${attributes.name} festival marker`, () => {
   jest.useFakeTimers().setSystemTime(new Date("2026-07-11"));
 
-  const buildPage = (propertySpans) => `
+  const defaultPerformances = `
+          <div class="heading">Saturday 12th July</div>
+          <li>
+            <span class="hover">Book</span>
+            <span class="time">6:00 pm</span>
+            <a href="/booking/1/">Book</a>
+          </li>`;
+
+  const buildPage = (propertySpans, performances = defaultPerformances) => `
     <div class="jacro-event">
       <div class="jacrofilm-list-content">
         <a class="liveeventtitle" href="/film/some-film/">Some Film</a>
         <div class="film-info"><span>Directed by A Director</span></div>
         <div class="running-time">${propertySpans}</div>
         <div class="jacro-formatted-text">A synopsis.</div>
-        <div class="performance-list-items">
-          <div class="heading">Saturday 12th July</div>
-          <li>
-            <span class="hover">Book</span>
-            <span class="time">6:00 pm</span>
-            <a href="/booking/1/">Book</a>
-          </li>
+        <div class="performance-list-items">${performances}
         </div>
       </div>
     </div>`;
@@ -86,5 +89,34 @@ describe(`${attributes.name} festival marker`, () => {
 
     expect(movie.overview.categories).toEqual(["Drama"]);
     expect(movie.performances[0].notes).toBe("");
+  });
+
+  it("limits the marker to tagged performances when the venue tags them", async () => {
+    // The Devils (October 2026): one LFF screening, then a regular run on the
+    // same listing, with only the festival screening tagged beside its time
+    const page = buildPage(
+      "<span>1971</span><span>114mins</span><span>(18)</span><span>LFF</span>",
+      `
+          <div class="heading">Saturday 12th July</div>
+          <li>
+            <span class="hover">Book</span>
+            <span class="time">6:00 pm</span>
+            <div class="movietag"><span class="tag 4k">4K</span><span class="tag lff">LFF</span></div>
+            <a href="/booking/1/">Book</a>
+          </li>
+          <div class="heading">Sunday 13th July</div>
+          <li>
+            <span class="hover">Book</span>
+            <span class="time">12:15 pm</span>
+            <div class="movietag"><span class="tag 4k">4K</span></div>
+            <a href="/booking/2/">Book</a>
+          </li>`,
+    );
+    const [movie] = await transform({ movieListPage: page }, {});
+
+    expect(movie.performances.map(({ notes }) => notes)).toEqual([
+      "Part of the LFF\n4K",
+      "4K",
+    ]);
   });
 });

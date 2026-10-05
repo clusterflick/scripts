@@ -108,6 +108,29 @@ async function transform({ movieListPage }, sourcedEvents) {
 
     const synopsis = getText($movieDetails.find(".jacro-formatted-text"));
 
+    // The film-level marker says the listing is part of a festival, not that
+    // every performance is. When the venue folds a regular run into the
+    // festival listing it tags the festival performance itself ("LFF" beside
+    // the time) — The Devils had one LFF screening on 12 October and a month
+    // of ordinary ones from 30 October. A festival tagged on any performance is
+    // therefore taken from the tags; one tagged on none applies to them all.
+    const getPerformanceTags = ($performance) =>
+      $performance
+        .find(".movietag .tag")
+        .map(function () {
+          return getText($(this));
+        })
+        .get();
+    const taggedFestivals = new Set(
+      $entry
+        .find(".performance-list-items li")
+        .map(function () {
+          return getPerformanceTags($(this));
+        })
+        .get()
+        .filter((tag) => festivals.includes(tag)),
+    );
+
     const performances = [];
     const $performanceDays = $entry.find(".performance-list-items .heading");
     $performanceDays.each(function () {
@@ -118,9 +141,14 @@ async function transform({ movieListPage }, sourcedEvents) {
       while ($currentElement.is("li")) {
         // The marker is an acronym whose trailing "F" is already "Festival"
         // (LFF), so the note says "Part of the LFF", not "... LFF festival".
-        const notesList = festivals.map(
-          (festival) => `Part of the ${festival}`,
-        );
+        const performanceTags = getPerformanceTags($currentElement);
+        const notesList = festivals
+          .filter(
+            (festival) =>
+              !taggedFestivals.has(festival) ||
+              performanceTags.includes(festival),
+          )
+          .map((festival) => `Part of the ${festival}`);
         const statusText = getText($currentElement.find(".hover"));
         const status = { soldOut: statusText.toLowerCase() === "sold out" };
         if (
@@ -140,6 +168,8 @@ async function transform({ movieListPage }, sourcedEvents) {
         const format = {};
         $currentElement.find(".movietag .tag").each(function () {
           const tag = getText($(this));
+          // Already in the notes as "Part of the …"
+          if (festivals.includes(tag)) return;
           if (tag.toLowerCase() === "hoh" || tag.toLowerCase() === "sdh") {
             accessibility.hardOfHearing = true;
             return; // this doesn't need added to the notes
