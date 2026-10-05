@@ -1746,6 +1746,7 @@ const knownRemovablePhrases = [
   "Q+A: Live Broadcast",
   "with Katja Hoyer",
   "MEMBER'S SHOW:",
+  "Mac Demarco and Ryan Paris",
 ];
 
 module.exports = knownRemovablePhrases;

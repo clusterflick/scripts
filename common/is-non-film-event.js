@@ -192,6 +192,14 @@ const nonFilmEvents = [
   // a pattern per launch - and rather than the launch itself, because a book
   // launch elsewhere is often sold with a screening.
   /Femmesocial Press/i,
+  // Listed with no film attached to it. Anchored, because the phrase could as
+  // easily be a film's own title.
+  /^A Just Transition$/i,
+  // A festschrift, an event in a person's honour, with no film attached to it.
+  /Brett Kahr: A Festschrift/i,
+  // A series numbered by season ("Lens to the runway - Season 3"), so match
+  // the series rather than carrying a pattern per season.
+  /Lens to the runway/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
