@@ -72,8 +72,18 @@ const getPageServerData = (cacheKey, url, delayMs, retryConfig) =>
       return JSON.parse(serverDataMatch[1].replace(/\t/g, " "));
     }
 
+    // A 200 carrying neither blob is not a page we can read. `JSON.parse(null)`
+    // is `null` rather than a throw, so without this check the page lands as
+    // `null` and everything downstream reads it as an event with no details -
+    // on 5th October 2026 that was 142 of 453 event pages, with nothing in the
+    // retrieve log to say so. Throwing here also keeps it out of the daily
+    // cache, so the deferred sweep and any rerun fetch it again.
     const $ = cheerio.load(html);
-    return JSON.parse($("#__NEXT_DATA__").html());
+    const nextData = $("#__NEXT_DATA__").html();
+    if (!nextData) {
+      throw new Error(`No page data found at ${url}`);
+    }
+    return JSON.parse(nextData);
   });
 
 const getSearchResultsFor = async (searchTerm) => {

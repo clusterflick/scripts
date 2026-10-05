@@ -127,6 +127,51 @@ describe("eventbrite deferred retry", () => {
   );
 
   it(
+    "recovers an event whose page first arrived without its data",
+    async () => {
+      const events = [makeEvent("1"), makeEvent("2")];
+      // A 200 with neither `__SERVER_DATA__` nor `__NEXT_DATA__` used to be
+      // stored as a `null` page. It has to be retried like any other failure.
+      let attemptsAtEvent2 = 0;
+      setupFetch(events, async (url) => {
+        if (!url.endsWith("event-2")) return response(200, eventPage("1"));
+        attemptsAtEvent2 += 1;
+        if (attemptsAtEvent2 === 1) return response(200, "<html></html>");
+        return response(200, eventPage("2"));
+      });
+
+      const { value, error } = await runRetrieve();
+
+      expect(error).toBeUndefined();
+      expect(Object.keys(value.moviePages)).toHaveLength(2);
+      expect(
+        value.moviePages["https://www.eventbrite.co.uk/e/event-2"],
+      ).toEqual({ id: "2" });
+      expect(logs).toContain(" - Retrying 1 unreachable event...");
+    },
+    TEST_TIMEOUT_MS,
+  );
+
+  it(
+    "fails loudly when an event page never carries its data",
+    async () => {
+      const events = [makeEvent("1"), makeEvent("2")];
+      setupFetch(events, async (url) =>
+        url.endsWith("event-2")
+          ? response(200, "<html></html>")
+          : response(200, eventPage("1")),
+      );
+
+      const { error } = await runRetrieve();
+
+      expect(error).toBeDefined();
+      expect(error.message).toContain("Could not reach 1 event page(s)");
+      expect(error.message).toContain("event-2");
+    },
+    TEST_TIMEOUT_MS,
+  );
+
+  it(
     "drops a removed event without deferring it",
     async () => {
       const events = [makeEvent("1"), makeEvent("2")];
