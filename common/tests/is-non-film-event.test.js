@@ -90,6 +90,9 @@ describe("isNonFilmEvent", () => {
     ["Mt Skies"],
     ["Guest Event:  Femmesocial Press: Autumn Book Launch"],
     ["Sage Art: Ana Mendieta at Tate Modern"],
+    ["A Just Transition"],
+    ["Brett Kahr: A Festschrift"],
+    ["Lens to the runway - Season 3"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });
