@@ -92,14 +92,25 @@ function standardizePrefixingForMetropolitanOperaPerformances(title) {
 
   updatedPrefixTitle = updatedPrefixTitle.replace(ownerMatcher, ":");
 
-  // Remove any season or year value. The Met's own listings on TheMovieDB carry
-  // neither ("The Metropolitan Opera: Così fan tutte"), so a year left in the
-  // title only stops it matching.
+  // A trailing "(2025)" stays, as it does on any other title: the TheMovieDB
+  // search reads it off the end as the release year.
+  const yearSuffix = updatedPrefixTitle.trim().match(yearSuffixMatcher)?.[0];
+  if (yearSuffix) {
+    updatedPrefixTitle = updatedPrefixTitle
+      .trim()
+      .replace(yearSuffixMatcher, "");
+  }
+
+  // Remove any other season or year value. The Met's own listings on
+  // TheMovieDB carry neither ("The Metropolitan Opera: Così fan tutte"), so a
+  // year left in the title only stops it matching.
   updatedPrefixTitle = updatedPrefixTitle
     .replace(fullYearRangeMatcher, "")
     .replace(yearRangeMatcher, "")
     .replace(shortYearRangeMatcher, "")
     .replace(yearMatcher, "");
+
+  if (yearSuffix) updatedPrefixTitle = `${updatedPrefixTitle} ${yearSuffix}`;
 
   return updatedPrefixTitle
     .replace(/(\(\))+/, "")
