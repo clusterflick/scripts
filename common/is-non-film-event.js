@@ -203,6 +203,14 @@ const nonFilmEvents = [
   // A comedy night, billed with whatever the night is celebrating, so match
   // the series rather than the whole billing.
   /B2B Unplugged: Comedy night/i,
+  // Talks the art school bills alongside its screenings, with no film attached.
+  // Anchored, because the phrases could as easily be a film's own title.
+  /^Creativity Craft and AI in Luxury$/i,
+  /^Innovation and the Future of Fashion Design$/i,
+  /^Innovation at CSM:/i,
+  /^Regenerative Futures$/i,
+  // A poetry collection's book launch, with no film attached to it.
+  /^Yvonne Green Collected Poems: Book Launch$/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>

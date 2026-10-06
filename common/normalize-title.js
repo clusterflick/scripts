@@ -749,6 +749,12 @@ function normalizeTitle(title, options) {
       /Marcel,? Santa and the Little Pizza Delivery Man/i,
       "Marcel, Father Christmas and the Little Pizza Delivery Boy",
     ],
+    // TheMovieDB brackets the second half of the title, which would otherwise
+    // be stripped, and one venue truncates the title instead.
+    [
+      /Marcel,? Father Christmas (?:\(and the little pizza delivery boy\)|and the Pizza Deli$)/i,
+      "Marcel, Father Christmas and the Little Pizza Delivery Boy",
+    ],
     ["Migrant Cinema - ", "Migrant Cinema: "],
     ["muppets christmas carol", "muppet christmas carol"],
     [
@@ -777,6 +783,10 @@ function normalizeTitle(title, options) {
     // The anniversary strand names the years since release after the title, so
     // the film arrives under a name it only has in this one season.
     ["Pressure at 50", "Pressure"],
+    ["Pressure at England", "Pressure"],
+    // Billed by an abbreviation and the date of the screening.
+    [/^CAT Screening London \| .*$/i, "The Cat in the Hat"],
+    ["Community Cinema - ", "Community Cinema: "],
     ["Evgenij Onegin", "Eugene Onegin"],
     ["NOVELLE VAGUE", "NOUVELLE VAGUE"],
     // One venue misspells the play in its broadcast listing, so the same
