@@ -1590,7 +1590,21 @@ function normalizeTitle(title, options) {
       "Extreme Private Eros: Love Song 1974",
     ],
     ["Pulp: What Do You Do for an ", "Pulp: What Do You Do for an encore "],
-    ["Rocky Horror 30 october", "The Rocky Horror Picture Show"],
+    // The venue bills each night of its Halloween run by date ("Rocky Horror
+    // 30 october", "Rocky Horror 31 october"), so one pattern rather than a
+    // string per night.
+    [/^Rocky Horror \d+ october$/i, "The Rocky Horror Picture Show"],
+    // A pun on the film's title, so it is put back to the film being screened.
+    ["IT's Saturday Night: Halloween at Courthouse Shoreditch", "IT (2017)"],
+    ["Haunting at the Courthouse - ", "Haunting at the Courthouse: "],
+    ["Orange Flavoured-Wedding", "Orange Flavoured Wedding"],
+    [
+      "Christmas cinema event, T1D families - ",
+      "Christmas cinema event, T1D families: ",
+    ],
+    // The festival is billed with a dash, which the separator rule would read
+    // as a separator and cut the title down to the festival alone.
+    ["LPFF - ", "LPFF: "],
     ["Bloody Marys + ", ""],
     [/^(.*): The Hunger Games Season/i, "The Hunger Games: $1"],
     ["The Hunger Games: The Hunger Games", "The Hunger Games"],
@@ -2021,6 +2035,15 @@ function normalizeTitle(title, options) {
   // abbreviation is matched with or without its full stop because a venue
   // publishes either.
   title = title.replace(/\bknitflix club vol\.?\s*[ivxlcdm]+:\s*/i, "");
+
+  // The bar numbers its milestone screenings ("Bar Trash 200: ...", "Bar
+  // Trash 250: ..."), so one pattern rather than a string per number.
+  title = title.replace(/\bbar trash \d+:\s*/i, "");
+
+  // Venues bill the strand with "and" or "&", and with or without a space
+  // before the colon ("DRINK AND DINE :Nightmare on Elm Street 4"), so one
+  // pattern rather than a string per spelling.
+  title = title.replace(/\bdrink (?:and|&) dine\s*:\s*/i, "");
 
   knownRemovablePhrases.forEach((phrase) => {
     title = title.replace(phrase.toLowerCase(), "");

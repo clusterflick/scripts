@@ -200,6 +200,9 @@ const nonFilmEvents = [
   // A series numbered by season ("Lens to the runway - Season 3"), so match
   // the series rather than carrying a pattern per season.
   /Lens to the runway/i,
+  // A comedy night, billed with whatever the night is celebrating, so match
+  // the series rather than the whole billing.
+  /B2B Unplugged: Comedy night/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
