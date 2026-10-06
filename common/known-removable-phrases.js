@@ -987,6 +987,9 @@ const knownRemovablePhrases = [
   "DIONNE EDWARDS:",
   "Hong Kong Film Festival UK:",
   "Hong Kong Film Festival UK 2025:",
+  "French Film Fest UK:",
+  "Black Is Boundless:",
+  "Film Installation:",
   "Holding Back the Years:",
   "Horror with Hitchcock:",
   "Horror for a Cause:",
@@ -1411,6 +1414,10 @@ const knownRemovablePhrases = [
   "UCL East Community Cinema:",
   "Community Cinema at UCL East:",
   "Community Cinema at UCL East ",
+  // After every "<name> Community Cinema:" entry, which would otherwise lose
+  // the series name and keep the name in front of it.
+  "Community Cinema:",
+  "The New Black Film Collective x Sky:",
   "Underseen David Lean:",
   // The season's own listings drop the colon after the year, so the generic
   // "<name> Season:" prefix never fires and every film in the strand arrives

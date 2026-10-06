@@ -93,6 +93,11 @@ describe("isNonFilmEvent", () => {
     ["A Just Transition"],
     ["Brett Kahr: A Festschrift"],
     ["Lens to the runway - Season 3"],
+    ["Creativity, Craft and AI in Luxury"],
+    ["Innovation and the Future of Fashion Design"],
+    ["Innovation at CSM: Beyond the Scroll"],
+    ["Regenerative Futures"],
+    ["Yvonne Green, Collected Poems: Book Launch"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });

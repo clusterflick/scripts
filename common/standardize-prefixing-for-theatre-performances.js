@@ -227,6 +227,13 @@ function standardizePrefixingForTheatrePerformances(
   options = { retainYear: false },
 ) {
   title = title.replace("Lower Marsh Summer Saturdays:", "");
+  // Venues bill Met productions under the RBO season name ("Royal Ballet &
+  // Opera - The Metropolitan Opera 2026-27: Macbeth"). Drop the RBO billing so
+  // it is handled as the Met production it is, rather than as an RBO one.
+  title = title.replace(
+    /^Royal Ballet (?:&|and) Opera\s*[-:]\s*(?=The Metropolitan Opera\b)/i,
+    "",
+  );
 
   const lowercaseTitle = title.toLowerCase().trim();
 
