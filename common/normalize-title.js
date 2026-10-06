@@ -402,6 +402,17 @@ function normalizeTitle(title, options) {
     // The double bill names both films either side of a slash, which the
     // separator rule would cut down to the first alone.
     ["Memorial / ", "Memorial "],
+    // The double bill is billed with a plus, which the separator rule would
+    // otherwise read as the end of the title, dropping the second film.
+    [
+      "THE LURE + PHANTOM OF THE PARADISE",
+      "THE LURE & PHANTOM OF THE PARADISE",
+    ],
+    // The club bills the film first and its season after "presents", which
+    // the presents rule would take as the title, keeping the season and
+    // losing the film. The season changes with the programme, so match the
+    // credit rather than carrying a string per season.
+    [/\s+-\s+G\.O\.A\.T\.? Film Club presents\b.*$/i, ""],
     // The festival is billed with a dash, which the separator rule would
     // otherwise read as the end of the title and leave only the festival.
     [
@@ -594,7 +605,7 @@ function normalizeTitle(title, options) {
     ["PRINCE - SIGN O'THE TIMES", "PRINCE: SIGN O THE TIMES"],
     [" 2.1 ", " 2 "],
     [
-      /Disney (?:Junior|Jr\.?) (?:Cinema )?Club(?: \d{4})?/i,
+      /Disney (?:Junior|Jr\.?) (?:Cinema )?Club(?: \d{4}| \[\d{4}\])?/i,
       "Disney Junior Cinema Club",
     ],
     ["Downtown Abbey", "Downton Abbey"],

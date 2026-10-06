@@ -553,6 +553,7 @@ const knownRemovablePhrases = [
   "25 & Under",
   "90s Nostalgia:",
   "Lights, Camera, Coffee:",
+  "Lights, Horror, Coffee:",
   "地道星期日影院:",
   "1956:",
   "1940s Noir Heroines: Talk, Film",
