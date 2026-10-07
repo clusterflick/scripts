@@ -787,6 +787,13 @@ function normalizeTitle(title, options) {
     // Billed by an abbreviation and the date of the screening.
     [/^CAT Screening London \| .*$/i, "The Cat in the Hat"],
     ["Community Cinema - ", "Community Cinema: "],
+    // TheMovieDB brackets the second half of the title, which would otherwise
+    // be stripped along with the brackets and leave only "Patience".
+    [/Patience \(After Sebald\)/i, "Patience After Sebald"],
+    ["Queens of the Deadd", "Queens of the Dead"],
+    // The venue spells out the ampersand and bills the subtitle after a dash,
+    // which the separator rule would cut, leaving only "Inside Iran".
+    [/Inside Iran - War and Revolution/i, "Inside Iran: War & Revolution"],
     ["Evgenij Onegin", "Eugene Onegin"],
     ["NOVELLE VAGUE", "NOUVELLE VAGUE"],
     // One venue misspells the play in its broadcast listing, so the same
@@ -850,7 +857,7 @@ function normalizeTitle(title, options) {
     [/^Secret Film Screenings presents:?\s+.*$/i, "mystery movie"],
     [/(\w+ Film Festival: )?Surprise Screening/i, "mystery movie"],
     [
-      /^(free |monthly )?(mystery|surprise) ([\w+]+ )?([\w+]+ )?(night|film|movie|cinema|screening|matinees?|thriller|horror):?( Nov| \d)?/i,
+      /^(free |monthly )?(mystery|surprise) ([\w+]+ )?([\w+]+ )?(night|film|movie|cinema|screening|matinees?|thriller|horror|preview):?( Nov| \d)?/i,
       "mystery movie",
     ],
     // The strand a venue puts the unnamed film in is part of the billing, not
