@@ -11,20 +11,26 @@ const {
 } = require("../../common/utils");
 const attributes = require("./attributes");
 
-// Table dates/times are given as "Wed 29 Jul" + "7 pm" (or "7.30 pm") with no
-// year. Parse them, rolling dates well in the past over to next year.
+// Table dates/times are given as "Wed 29 Jul" + "7 pm" (or "7.30 pm"), with
+// the year only added for dates outside the current year ("Wed 31 Mar 2027").
+// Without a year, roll dates well in the past over to next year.
 const parsePerformanceDate = (dateText, timeText) => {
   const now = new Date();
+  const hasYear = /\b\d{4}$/.test(dateText);
+  const dateFormat = hasYear ? "EEE d MMM yyyy" : "EEE d MMM";
   const timeFormat = /\d\.\d/.test(timeText) ? "h.mm a" : "h a";
-  let date = parse(`${dateText} ${timeText}`, `EEE d MMM ${timeFormat}`, now, {
-    locale: enGB,
-  });
+  let date = parse(
+    `${dateText} ${timeText}`,
+    `${dateFormat} ${timeFormat}`,
+    now,
+    { locale: enGB },
+  );
   if (Number.isNaN(date.getTime())) {
     throw new Error(
       `Unable to parse performance date: ${dateText} ${timeText}`,
     );
   }
-  if (date < subDays(now, 14)) {
+  if (!hasYear && date < subDays(now, 14)) {
     date = addYears(date, 1);
   }
   return date;
