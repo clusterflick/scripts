@@ -246,6 +246,8 @@ function normalizeTitle(title, options) {
     ["SEEN Charity Film Screening - ", "SEEN Charity Film Screening: "],
     ["Romford Horror Festival - ", "Romford Horror Festival: "],
     ["The Funny Life Film Festival - ", "The Funny Life Film Festival: "],
+    // One of the festival's listings drops the space after the dash.
+    [/^Turn Up Film Festival\s*-\s*/i, "Turn Up Film Festival: "],
     ["The Peter Greenaway Season - ", "The Peter Greenaway Season: "],
     // The strand is billed with "Touchstone" misspelt on some of its films.
     [/^Touch(?:stone|tsone) Tuesdays\s*-\s*/i, "Touchstone Tuesdays: "],
@@ -682,6 +684,9 @@ function normalizeTitle(title, options) {
     ["Cinema Club - ", "Cinema Club: "],
     ["Suicide Prevention Short Film Premiere", "Suicide Prevention"],
     ["Film Premiere - ", "Film Premiere: "],
+    // Anchored, because a premiere billed after the title ("TURN IT DOWN —
+    // World Premiere - An absurd neighbour story") is followed by a tagline.
+    [/^World Premiere - /i, "World Premiere: "],
     ["Karaoke, crafts + ", "Karaoke, crafts & "],
     ["FOLIES MEURTRIÈRES + ", "FOLIES MEURTRIÈRES & "],
     [/^(.+)- National Theatre Live$/i, "National Theatre Live: $1"],
@@ -1746,6 +1751,10 @@ function normalizeTitle(title, options) {
     ],
     [/Momo and the Time Thieves/i, "Momo"],
     ["Return of the Blind Dead", "Attack of the Blind Dead"],
+    ["Premada Ooralia", "Premada Oorali"],
+    ["Man With a Cinema Camera", "Man with a Movie Camera"],
+    ["Sebastiane: the Reunion!", "Sebastiane"],
+    ["Strange Case of Dr Jekyll and Mr Hyde", "Dr Jekyll and Mr Hyde"],
     // The film's a mystery, but here's a hint ...
     ["FREE Kids Movie Club: A Whole New World", "aladdin"],
     ["FREE Kids Movie Club: Carnival Weekend", "princess and the frog"],
