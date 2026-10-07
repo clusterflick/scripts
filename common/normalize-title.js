@@ -380,6 +380,8 @@ function normalizeTitle(title, options) {
     ["Badhu Alright che", "Badhu Alright chhe"],
     ["Maa Inti Bangaaram", "Maa Inti Bangaram"],
     ["Main Vaapas Aunga", "Main Vaapas Aaunga"],
+    ["Avarachan & Sons", "Avaraachan & Sons"],
+    [/вс[её] нормально/i, "It's All Right"],
     ["Frozen 2", "Frozen II"],
     ["Terminator 2 Live", " Terminator 2"],
     [/\s+terminator 2($| \()/i, " Terminator 2 Judgment Day$1"],
