@@ -1026,6 +1026,8 @@ const knownRemovablePhrases = [
   "Kaleidoscope's",
   "Karaoke, crafts &",
   "KEF Sound & Screen Presents:",
+  // The series misspells its own "Presents" in the billing.
+  "EcoDocs Presentst:",
   "Kung Fu Cinema Double Bill:",
   "Kung Fu Cinema:",
   "Land Cinema:",
@@ -1459,6 +1461,8 @@ const knownRemovablePhrases = [
   // The book club names the novel's author after the film's title.
   "by Jhumpa Lahiri",
   "and Conversation with Director Tomisin Adepeju",
+  "with Director Grant Gee",
+  "and Book Launch",
   "愛殺",
   "老虎出更",
   "リンダ リンダ リンダ",
