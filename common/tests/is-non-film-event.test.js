@@ -98,6 +98,8 @@ describe("isNonFilmEvent", () => {
     ["Innovation at CSM: Beyond the Scroll"],
     ["Regenerative Futures"],
     ["Yvonne Green, Collected Poems: Book Launch"],
+    ["Creativity, AI and Digital Craftsmanship"],
+    ["Let's Make Zines"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });

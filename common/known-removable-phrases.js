@@ -189,6 +189,10 @@ const knownRemovablePhrases = [
   " with Live Q&A at The Prince Charles Cinema",
   " with Pet Shop Boys Score",
   " x PET SHOP BOYS",
+  // Before " with Live Score", which would otherwise leave the billing
+  // in front of it.
+  " Centenary Screening with Live Score",
+  " with World Premier Live Score",
   " with Live Score",
   " w/ Live Score",
   " with live music from millie turner",
@@ -214,6 +218,7 @@ const knownRemovablePhrases = [
   ": conversation about hate and healing",
   "– 10 Year Anniversary Screening with Q&A",
   "– In Concert",
+  "Live To Film",
   " Live in Concert",
   " in concert",
   "- UK PREMIERE",
@@ -341,6 +346,8 @@ const knownRemovablePhrases = [
   "Holiday with Hitch:",
   "Hard of Hearing:",
   "Hitchcock for Halloween:",
+  // Before "Hitchcock's", which would otherwise leave the first name behind.
+  "Alfred Hitchcock's",
   "Hitchcock's",
   "Hitch-October:",
   "March To Hitchcock:",
@@ -990,6 +997,9 @@ const knownRemovablePhrases = [
   "French Film Fest UK:",
   "Black Is Boundless:",
   "Film Installation:",
+  "Derek Jarman's",
+  "Turn Up Film Festival:",
+  " with Day of the Dead workshop",
   "Holding Back the Years:",
   "Horror with Hitchcock:",
   "Horror for a Cause:",

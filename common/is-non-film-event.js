@@ -209,8 +209,12 @@ const nonFilmEvents = [
   /^Innovation and the Future of Fashion Design$/i,
   /^Innovation at CSM:/i,
   /^Regenerative Futures$/i,
+  /^Creativity AI and Digital Craftsmanship$/i,
   // A poetry collection's book launch, with no film attached to it.
   /^Yvonne Green Collected Poems: Book Launch$/i,
+  // A zine-making workshop, with no film attached to it. Anchored, because
+  // the phrase could as easily be a film's own title.
+  /^Let's Make Zines$/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
