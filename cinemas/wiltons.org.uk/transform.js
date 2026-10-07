@@ -11,16 +11,19 @@ const {
 } = require("../../common/utils");
 const attributes = require("./attributes");
 
-// Table dates/times are given as "Wed 29 Jul" + "7 pm" (or "7.30 pm"), with
-// the year only added for dates outside the current year ("Wed 31 Mar 2027").
-// Without a year, roll dates well in the past over to next year.
+// Table dates/times are given as "Wed 29 Jul" + "7 pm" (or "7.30 pm" or
+// "2:30 pm"), with the year only added for dates outside the current year
+// ("Wed 31 Mar 2027"). Without a year, roll dates well in the past over to next
+// year.
 const parsePerformanceDate = (dateText, timeText) => {
   const now = new Date();
   const hasYear = /\b\d{4}$/.test(dateText);
   const dateFormat = hasYear ? "EEE d MMM yyyy" : "EEE d MMM";
-  const timeFormat = /\d\.\d/.test(timeText) ? "h.mm a" : "h a";
+  // Minutes are separated by either "." or ":"
+  const normalisedTime = timeText.replace(/(\d):(\d)/, "$1.$2");
+  const timeFormat = /\d\.\d/.test(normalisedTime) ? "h.mm a" : "h a";
   let date = parse(
-    `${dateText} ${timeText}`,
+    `${dateText} ${normalisedTime}`,
     `${dateFormat} ${timeFormat}`,
     now,
     { locale: enGB },
