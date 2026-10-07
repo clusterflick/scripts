@@ -19,10 +19,18 @@ const episodeBlock = /\s*\((?:episodes?|eps?)\s*\d[^)]*\)/gi;
 // list - describes a sitting rather than names a film.
 const partBlock = /\s*\(parts?\s*\d+\s*(?:[-–—]|to|,|&|and)\s*\d[^)]*\)/gi;
 
+// A competition screened over several sittings is billed one part at a time,
+// with whatever the sitting adds after it: "Short Film Competition Part 1 +
+// Q&A". Unlike a film, a competition never has a part in its own name, so the
+// part and everything after it can go - the rest belongs to that one sitting.
+const competitionPart =
+  /(\bcompetition)\s*[-–—:,]?\s*\(?part\s*(?:\d+|[ivx]+)\b.*$/i;
+
 function stripSerialBlockSuffix(title = "") {
   return title
     .replace(episodeBlock, "")
     .replace(partBlock, "")
+    .replace(competitionPart, "$1")
     .replace(/\s+/g, " ")
     .replace(/\s*[-–—:+]\s*$/, "")
     .trim();

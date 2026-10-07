@@ -61,6 +61,38 @@ describe("stripSerialBlockSuffix", () => {
     );
   });
 
+  test("drops a competition part and what the sitting adds after it", () => {
+    expect(
+      stripSerialBlockSuffix(
+        "Turn Up Film Festival - Short Film Competition Part 1 + Q&A",
+      ),
+    ).toEqual("Turn Up Film Festival - Short Film Competition");
+  });
+
+  test("drops a competition part however it's set off", () => {
+    expect(stripSerialBlockSuffix("Animation Competition - Part 2")).toEqual(
+      "Animation Competition",
+    );
+    expect(stripSerialBlockSuffix("Shorts Competition (Part 3)")).toEqual(
+      "Shorts Competition",
+    );
+    expect(stripSerialBlockSuffix("Shorts Competition: Part IV")).toEqual(
+      "Shorts Competition",
+    );
+  });
+
+  test("keeps a part that isn't a competition's", () => {
+    expect(stripSerialBlockSuffix("Dune: Part Two + Q&A")).toEqual(
+      "Dune: Part Two + Q&A",
+    );
+  });
+
+  test("keeps a competition with no part", () => {
+    expect(stripSerialBlockSuffix("Short Film Competition + Q&A")).toEqual(
+      "Short Film Competition + Q&A",
+    );
+  });
+
   test("leaves a title with no block untouched", () => {
     expect(stripSerialBlockSuffix("Picnic at Hanging Rock")).toEqual(
       "Picnic at Hanging Rock",
