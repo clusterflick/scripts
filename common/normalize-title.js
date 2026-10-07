@@ -247,6 +247,12 @@ function normalizeTitle(title, options) {
     ["Romford Horror Festival - ", "Romford Horror Festival: "],
     ["The Funny Life Film Festival - ", "The Funny Life Film Festival: "],
     // One of the festival's listings drops the space after the dash.
+    // The competition is screened in numbered parts, all one programme, so the
+    // part number comes off for them to group together.
+    [
+      /^Turn Up Film Festival\s*-\s*Short Film Competition Part \d+/i,
+      "Turn Up Film Festival: Short Film Competition",
+    ],
     [/^Turn Up Film Festival\s*-\s*/i, "Turn Up Film Festival: "],
     ["The Peter Greenaway Season - ", "The Peter Greenaway Season: "],
     // The strand is billed with "Touchstone" misspelt on some of its films.
