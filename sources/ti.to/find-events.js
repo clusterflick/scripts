@@ -47,9 +47,26 @@ function parseTitoTime(text, referenceDate) {
 }
 
 /**
+ * Parse the start of an event spanning several days, which carries its own
+ * date but not the year (e.g. "4pm, October 21st"). The year is the end
+ * date's, stepping back one when the event runs over New Year.
+ */
+function parseTitoStartDateTime(text, endDate) {
+  const year = endDate.getFullYear();
+  const startDate = parseTitoDateTime(`${text}, ${year}`);
+  if (startDate > endDate) {
+    return parseTitoDateTime(`${text}, ${year - 1}`);
+  }
+  return startDate;
+}
+
+/**
  * Parse the calendar text from a Tito event page.
  * Format: "START–ENDam/pm, MONTH DAYth, YEAR"
  * e.g.    "2–4:15pm, February 21st, 2026"
+ * or, for an event spanning several days:
+ *         "START, MONTH DAYth–END, MONTH DAYth, YEAR"
+ * e.g.    "4pm, October 21st–8pm, October 22nd, 2026"
  */
 function parseCalText(calText) {
   const [startTimeStr, endTimeAndDate] = calText.split("\u2013");
@@ -59,6 +76,12 @@ function parseCalText(calText) {
 
   // Parse end time + date directly (e.g. "4:15pm, February 21st, 2026")
   const endDate = parseTitoDateTime(endTimeAndDate.trim());
+
+  // An event spanning several days gives its start a date of its own
+  if (startTimeStr.includes(",")) {
+    const startDate = parseTitoStartDateTime(startTimeStr.trim(), endDate);
+    return { startDate, endDate };
+  }
 
   // Start time omits am/pm when same as end — inherit it
   const amPm = endTimeAndDate.match(/(am|pm)/i)?.[1];
