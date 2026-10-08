@@ -44,4 +44,23 @@ describe(attributes.name, () => {
     },
     isRecording ? 240_000 : undefined,
   );
+
+  it("transforms the venue's explicit empty state to no movies", async () => {
+    const movieListPage = `
+      <div class="whats-on-grid" id="whats_on_grid">
+        <div class="empty">
+          <h2>We don’t currently have any scheduled events that match your selection.</h2>
+        </div>
+      </div>`;
+
+    expect(await transform({ movieListPage, moviePages: {} }, {})).toEqual([]);
+  });
+
+  it("throws when no movies are found without the empty state", async () => {
+    const movieListPage = `<div class="whats-on-grid" id="whats_on_grid"></div>`;
+
+    await expect(
+      transform({ movieListPage, moviePages: {} }, {}),
+    ).rejects.toThrow("No movies found - the page structure may have changed");
+  });
 });
