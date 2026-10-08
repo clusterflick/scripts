@@ -1282,6 +1282,8 @@ const knownRemovablePhrases = [
   "Screening+Karaoke",
   "Screening 流麻溝十五號放映會",
   "Screening at Close-Up",
+  // Before "Screening:", which would otherwise leave "Relaxed-" behind.
+  "Relaxed-Screening:",
   "Screening:",
   "ScreenTalk:",
   "Screening of ",

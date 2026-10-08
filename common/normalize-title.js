@@ -108,6 +108,9 @@ function normalizeTitle(title, options) {
     // pairing is spelled with an ampersand before that runs.
     ["Yellow Ribbons + ", "Yellow Ribbons & "],
     ["HALT BOOK LAUNCH + ", "HALT BOOK LAUNCH & "],
+    // A double bill billed with a plus, which the separator rule reads as a
+    // separator and drops the second film at.
+    ["Lift + Calais: The Last Border", "Lift & Calais: The Last Border"],
     ["HERO + My Dad, Guyana and Me", "HERO & My Dad, Guyana and Me"],
     ["Music with Tara Franks + ", "Music with Tara Franks & "],
     ["Storytelling + ", "Storytelling & "],

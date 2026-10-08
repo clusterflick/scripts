@@ -215,6 +215,13 @@ const nonFilmEvents = [
   // A zine-making workshop, with no film attached to it. Anchored, because
   // the phrase could as easily be a film's own title.
   /^Let's Make Zines$/i,
+  // Social nights with no film attached to them. Anchored, because the
+  // phrases could as easily be a film's own title.
+  /^LGBTQ\+ Meetup$/i,
+  /^LGBTQ\+ Speed Dating$/i,
+  /^The Ideas Open Mic$/i,
+  // A talk with no film attached to it.
+  /^Restricted View: Notes on the Human Experience$/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
