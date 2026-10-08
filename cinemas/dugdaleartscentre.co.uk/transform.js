@@ -33,7 +33,7 @@ const getMatchingDescription = ($description) => {
   return $clone.text().trim();
 };
 
-async function transform({ moviePages }, sourcedEvents) {
+async function transform({ movieListPage, moviePages }, sourcedEvents) {
   const movies = [];
 
   for (const [moviePageUrl, { moviePage, booking, eventId }] of Object.entries(
@@ -87,7 +87,14 @@ async function transform({ moviePages }, sourcedEvents) {
   }
 
   if (movies.length === 0) {
-    throw new Error("No movies found - the page structure may have changed");
+    // When the venue has no films scheduled, the listing grid holds an
+    // explicit empty state ("We don't currently have any scheduled events
+    // that match your selection") instead of events. Without that marker, no
+    // movies means our parsing has broken.
+    const $ = cheerio.load(movieListPage);
+    if ($(".whats-on-grid .empty").length === 0) {
+      throw new Error("No movies found - the page structure may have changed");
+    }
   }
 
   const listOfSourcedEvents = Object.values(sourcedEvents).flatMap(
