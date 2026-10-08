@@ -53,7 +53,7 @@ function normalizeTitle(title, options) {
 
   // Specific corrections
   const corrections = [
-    ["&amp;", "&"],
+    [/&amp;/g, "&"], // Global, as a title can carry more than one
     [/^Screening Documentary/i, ""],
     ["HANNAH MONTANA: THE MOVIE", "HANNAH MONTANA MOVIE"],
     [/F1\s?®?:? The Movie/i, "F1"],
