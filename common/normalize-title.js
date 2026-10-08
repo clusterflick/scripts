@@ -53,7 +53,7 @@ function normalizeTitle(title, options) {
 
   // Specific corrections
   const corrections = [
-    ["&amp;", "&"],
+    [/&amp;/g, "&"], // Global, as a title can carry more than one
     [/^Screening Documentary/i, ""],
     ["HANNAH MONTANA: THE MOVIE", "HANNAH MONTANA MOVIE"],
     [/F1\s?®?:? The Movie/i, "F1"],
@@ -65,6 +65,8 @@ function normalizeTitle(title, options) {
       "Birdman or (The Unexpected Virtue of Ignorance)",
       "Birdman or The Unexpected Virtue of Ignorance",
     ],
+    // Same again; the film is released here as "BPM (Beats Per Minute)".
+    [/120 BPM \(Beats Per Minute\)/i, "BPM Beats Per Minute"],
     // The venue follows the suffix with the language, so the rule below that
     // strips it from the end of the title never fires.
     [/^Mirzapur: The Movie\b/i, "Mirzapur"],
