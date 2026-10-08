@@ -1,4 +1,5 @@
 const cheerio = require("cheerio");
+const { decode } = require("html-entities");
 const {
   getText,
   generateShowingId,
@@ -32,7 +33,9 @@ async function transform({ moviePages }, sourcedEvents) {
     const $ = cheerio.load(moviePage);
     const eventData = getEventJsonLd($);
     const id = $("article.eventitem").attr("data-item-id");
-    const title = eventData.name.replace(" — The Horse Hospital", "");
+    // Squarespace writes the name into the JSON-LD HTML-escaped ("&amp;"), and
+    // JSON.parse leaves that alone.
+    const title = decode(eventData.name).replace(" — The Horse Hospital", "");
     const date = new Date(eventData.startDate);
     const description = getText($(".sqs-html-content"));
 
