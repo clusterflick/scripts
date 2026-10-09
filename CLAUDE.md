@@ -149,6 +149,15 @@ data, not a note explaining a hole in it. Only challenges are retried; a missing
 venue or a broken parse fails the same way twice. For the browser probes the
 retry recreates the session, since a challenged context stays challenged.
 
+A runner that has lost its own network gets no row at all. When a probe returns
+a `probe-error` row, `scripts/health/local-network.js` checks whether the runner
+can reach reference hosts unrelated to any cinema. If it can, the error is the
+source's and is recorded as usual. If it can't, the probe waits for the network
+to come back and runs again. If the network stays down, the step fails without
+writing rows, because the probe never reached the source and so observed nothing
+about it. The cycle shows as a gap rather than as every venue on that runner
+failing at once.
+
 Its rows are written before the job is allowed to fail. A bot challenge, a
 holding page, a source queueing its visitors, or a venue with nothing on is an
 observation about the source and the evidence the log exists to keep, so it is

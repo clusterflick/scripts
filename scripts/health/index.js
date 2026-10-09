@@ -4,6 +4,7 @@ const {
   getCinema,
 } = require("../../cinemas");
 const standDownForClosure = require("./stand-down-for-closure");
+const withLocalNetworkRetry = require("./local-network");
 
 // Chain probes are group-wide rather than per venue: one listing call answers
 // the whole estate, so batching them is the point and a venue on its own is the
@@ -83,7 +84,12 @@ async function health(location) {
   // Applied here rather than in each probe: any chain can delist a venue it has
   // shut, so the carve-out belongs beside the decision about which kinds fail
   // the job rather than repeated per chain. See stand-down-for-closure.js.
-  const rows = (await probe(venues)).map(standDownForClosure);
+  //
+  // A probe that failed because the runner was offline is run again, or
+  // produces no rows at all - see local-network.js.
+  const rows = (await withLocalNetworkRetry(() => probe(venues))).map(
+    standDownForClosure,
+  );
 
   // A probe may decline a venue the group contains - Everyman's pop-up is fed
   // from a hosted CSV, not the chain API. Say so rather than letting the row
