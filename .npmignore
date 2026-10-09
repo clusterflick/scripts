@@ -2,7 +2,8 @@
 # as a git dependency and only ever run the pipeline code. The Polly HTTP
 # recordings and snapshots under tests/ are ~1.2GB, which every CI job was
 # downloading and unpacking on every run for no reason. Excluding them takes the
-# installed package from ~1166MB to ~1MB.
+# installed package from ~1166MB to ~1MB. That trims what npm installs, not what
+# it downloads - .gitattributes keeps them out of the archive npm fetches.
 tests/
 
 # Generated output directories. LEADING SLASHES ARE REQUIRED: an unanchored

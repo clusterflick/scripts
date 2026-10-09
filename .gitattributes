@@ -1,0 +1,11 @@
+# Consumers install this repository as a git dependency, and npm fetches a git
+# dependency hosted on GitHub as the archive GitHub builds for that commit -
+# not through `npm pack`. `.npmignore` only trims the package npm repacks from
+# that archive once it has arrived, so without this every install still
+# downloaded the Polly recordings and snapshots under tests/: a 184MB archive
+# that unpacks to ~1.2GB, taking nine minutes on a self-hosted runner. GitHub
+# leaves `export-ignore` paths out of the archive, which takes it to under 1MB.
+#
+# Keep this in step with `tests/` in .npmignore. Nothing outside the tests reads
+# these files, and a clone or checkout is unaffected - only archives skip them.
+**/tests/** export-ignore
