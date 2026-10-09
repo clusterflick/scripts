@@ -10,7 +10,7 @@ module.exports = {
   },
   url: "https://anomalous.co.uk/space",
   address: "36 Pentonville Road, London, N1 9HF, UK",
-  geo: { lat: 51.5321464, lon: -0.1080259 },
+  geo: { lat: 51.53214856154855, lon: -0.10802942172000111 },
   structure: "solo",
   type: "Creative Space",
   programming: "host",
