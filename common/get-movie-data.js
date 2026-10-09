@@ -347,16 +347,12 @@ const hasCrewFor = (movie, normalizeTitle) =>
 
 const hasCrewHintsFor = (movie) => movie.matchingHints?.crew?.length > 0;
 
-// The listing's title has its year split off before the search, so a
-// candidate's comes off too ("The Metropolitan Opera 2026/27: Manon").
-const withoutYear = { retainYear: false };
-
 const matchesMovieTitle =
   (normalizedTitle) =>
   ({ title, original_title: originalTitle }) =>
     title && // Check for title - may contain TV shows which use "name"
-    (normalizeTitle(title, withoutYear) === normalizedTitle ||
-      normalizeTitle(originalTitle, withoutYear) === normalizedTitle);
+    (normalizeTitle(title) === normalizedTitle ||
+      normalizeTitle(originalTitle) === normalizedTitle);
 
 // Movies in cinemas always have a release date. Entries without one are likely
 // collections, which share a numeric ID namespace with movies but return 404
@@ -523,7 +519,7 @@ const tryFindingMatchUsingLlm = async (movie) => {
     });
 
     return await searchForBestMatch({
-      normalizedTitle: normalizeTitle(updatedMovie.title, withoutYear),
+      normalizedTitle: normalizeTitle(updatedMovie.title),
       movie: updatedMovie,
       year: matches[0].year,
       isUsingLlmData: true,

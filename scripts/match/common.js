@@ -6,8 +6,6 @@ const {
   sleep,
 } = require("../../common/utils");
 
-const withoutYear = { retainYear: false };
-
 const getNameOptions = (name) => [
   normalizeName(name),
   // Reverse order of names
@@ -29,16 +27,11 @@ const getMatchFromSearchResults = async (
   matcher,
   getDirectorsForMatch,
 ) => {
-  // Both titles lose their year: a review site's and TheMovieDB's need not
-  // agree on one ("The Metropolitan Opera 2026/27: Manon"), and the year is
-  // the matcher's to check.
-  const sameTitle = (a, b) =>
-    normalizeTitle(a, withoutYear) === normalizeTitle(b, withoutYear);
   const match = searchResults.find(
     ({ title, year }) =>
-      (sameTitle(title, movie.title) ||
-        sameTitle(title, movie.originalTitle) ||
-        sameTitle(title, movie.americanTitle)) &&
+      (normalizeTitle(title) === normalizeTitle(movie.title) ||
+        normalizeTitle(title) === normalizeTitle(movie.originalTitle) ||
+        normalizeTitle(title) === normalizeTitle(movie.americanTitle)) &&
       matcher({ title, year }, movie),
   );
   if (!match) return;

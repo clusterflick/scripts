@@ -135,13 +135,10 @@ function describeYearGap(candidateYear, listingYear) {
     : `Released ${Math.abs(gap)} ${years} before the year the listing gives.`;
 }
 
-// Without the year, the same as the listing's title it is compared against.
-const withoutYear = { retainYear: false };
-
 const sharesTitleWith = (normalizedTitle) => (result) =>
-  normalizeTitle(result.title, withoutYear) === normalizedTitle ||
+  normalizeTitle(result.title) === normalizedTitle ||
   (!!result.original_title &&
-    normalizeTitle(result.original_title, withoutYear) === normalizedTitle);
+    normalizeTitle(result.original_title) === normalizedTitle);
 
 // A label the model can read as a name rather than as a number. Jev does
 // better on semantic representations than numeric ones, and a bare
