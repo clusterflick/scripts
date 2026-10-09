@@ -91,11 +91,17 @@ on how the transform process works.
   Gemini API key (`GEMINI_API_KEY`)
 - retrieved the necessary cinema and source data using the `retrieve` script
   (above)
+- prepared the inputs every cinema shares - the first-seen history and
+  yesterday's release - with `npm run transform-prepare`. It reads the last ten
+  days of combined data from `combined-data/` if present
+  (`./helpers/get-last-10-days-combined-data.sh`), and needs `PAT` to list
+  releases. Run it once, then transform as many cinemas as you like
 
 To run this script:
 
 ```
 # Internally
+npm run transform-prepare
 npm run transform <cinema>
 
 # Externally
