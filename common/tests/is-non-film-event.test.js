@@ -45,6 +45,7 @@ describe("isNonFilmEvent", () => {
     ["Carols by Candlelight"],
     ["Autumnal Leaf Collages: COVID-Safe Social with Breathe Easy London"],
     ["Ground Level Presents: Gardening for Climate Resilience"],
+    ["Embody Wellness : Health & Wellness Day"],
     ["New Year's Eve Concert with BerlinerPhilharmoniker"],
     ["Berliner Philharmoniker LIVE: New Year’s Eve Concert 2025"],
     ["Berliner Philharmoniker Live: NYE Concert 2025"],

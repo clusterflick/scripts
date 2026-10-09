@@ -228,6 +228,8 @@ const nonFilmEvents = [
   // Listed with no film attached to it. Anchored, because the phrase could as
   // easily be a film's own title.
   /^Shared Horizons: Cuba in Suspension$/i,
+  // A wellness day the venue hosts, with no film attached to it.
+  /Embody Wellness/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
