@@ -126,6 +126,7 @@ const forcedMatches = {
   "rental family": 1208348, // https://www.themoviedb.org/movie/1208348-rental-family
   "roman holiday": 804, // https://www.themoviedb.org/movie/804-roman-holiday
   "romeo+juliet": 454, // https://www.themoviedb.org/movie/454-romeo-juliet
+  scream: 4232, // https://www.themoviedb.org/movie/4232-scream
   "seven year itch": 10653, // https://www.themoviedb.org/movie/10653-the-seven-year-itch
   "some like it hot": 239, // https://www.themoviedb.org/movie/239-some-like-it-hot
   sham: 1423983, // https://www.themoviedb.org/movie/1423983
