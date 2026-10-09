@@ -9,7 +9,7 @@ module.exports = {
   },
   url: "https://www.instagram.com/peckhamoasisgallery/",
   address: "Unit 4/5, Dovedale Trading Estate, London, SE15 4QN, UK",
-  geo: { lat: 51.4697261, lon: -0.0703382 },
+  geo: { lat: 51.46975118813526, lon: -0.07033876229956565 },
   structure: "solo",
   type: "Gallery",
   programming: "host",
