@@ -72,7 +72,10 @@ const metOperaPrefixes = [
   /(Matinee:\s+)?La Scala[:|\s]/i,
 ];
 
-function standardizePrefixingForMetropolitanOperaPerformances(title) {
+function standardizePrefixingForMetropolitanOperaPerformances(
+  title,
+  { retainYear = true } = {},
+) {
   title = title.replace(/\s+&\s+/, " and ").replace(/\s+-\s+/, ": ");
 
   // Update if "met opera" is a suffix
@@ -101,16 +104,38 @@ function standardizePrefixingForMetropolitanOperaPerformances(title) {
       .replace(yearSuffixMatcher, "");
   }
 
-  // Remove any other season or year value. The Met's own listings on
-  // TheMovieDB carry neither ("The Metropolitan Opera: Così fan tutte"), so a
-  // year left in the title only stops it matching.
+  // The season ("2026-27") is the year the production opens in. Moved to the
+  // end rather than left where it is: the Met's listings on TheMovieDB carry it
+  // inconsistently ("The Metropolitan Opera: Così fan tutte" against "The
+  // Metropolitan Opera 2026/27: Manon"), so in the title it stops a match,
+  // while as a trailing "(2026)" it is the search's release year. That is what
+  // tells a revival from the archive production it shares a title and a
+  // director with. A trailing year the venue gave wins over the season.
+  //
+  // TheMovieDB's own titles come through here too, and "2026/27: Manon" gains
+  // the same "(2026)" the listing does. The search splits the year off the
+  // listing's title before comparing, so anything comparing a title against
+  // it passes `retainYear: false` to drop the year from that side as well.
+  const fullYearRange = updatedPrefixTitle.match(fullYearRangeMatcher);
+  const yearRange = updatedPrefixTitle.match(yearRangeMatcher);
+  const shortYearRange = updatedPrefixTitle.match(shortYearRangeMatcher);
+  const year = updatedPrefixTitle.match(yearMatcher);
+  const seasonYear =
+    fullYearRange?.[1] ??
+    (yearRange && `${yearRange[1]}${yearRange[2]}`) ??
+    (shortYearRange && `20${shortYearRange[1]}`) ??
+    year?.[1];
+
   updatedPrefixTitle = updatedPrefixTitle
     .replace(fullYearRangeMatcher, "")
     .replace(yearRangeMatcher, "")
     .replace(shortYearRangeMatcher, "")
     .replace(yearMatcher, "");
 
-  if (yearSuffix) updatedPrefixTitle = `${updatedPrefixTitle} ${yearSuffix}`;
+  const trailingYear = yearSuffix ?? (seasonYear && `(${seasonYear})`);
+  if (trailingYear && retainYear) {
+    updatedPrefixTitle = `${updatedPrefixTitle} ${trailingYear}`;
+  }
 
   return updatedPrefixTitle
     .replace(/(\(\))+/, "")
@@ -222,10 +247,7 @@ function standardizePrefixingForRoyalBalletOperaPerformances(title) {
 
 // ---
 
-function standardizePrefixingForTheatrePerformances(
-  title,
-  options = { retainYear: false },
-) {
+function standardizePrefixingForTheatrePerformances(title, options = {}) {
   title = title.replace("Lower Marsh Summer Saturdays:", "");
   // Venues bill Met productions under the RBO season name ("Royal Ballet &
   // Opera - The Metropolitan Opera 2026-27: Macbeth"). Drop the RBO billing so
