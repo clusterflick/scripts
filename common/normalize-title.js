@@ -288,6 +288,10 @@ function normalizeTitle(title, options) {
     // title ("humpty dumpty x 1"), so the part is dropped before either runs.
     [/Humpty Dumpty X\s*[-–]?\s*Part 1\b/i, "Humpty Dumpty X"],
     ["- Part ", "Part "],
+    // LIAF bills its numbered programmes with the hyphen against the number
+    // ("Programme 1- Abstract Showcase"), which would otherwise survive as
+    // "1-". Spaced to match the en-dashed programmes in the same strand.
+    [/(Programme \d+)- /i, "$1 – "],
     // The double bill is billed with a plus, which the separator rule would
     // otherwise read as the end of the title, dropping the second film. Named
     // as the pairing rather than the prefix alone, because the same venue also
@@ -303,7 +307,9 @@ function normalizeTitle(title, options) {
     ["- FREE ENTRY", "FREE ENTRY"],
     ["Tour-Live", "Tour - Live"],
     ["- Live From", "Live From"],
-    ["- From", "Live From"],
+    // Only a tour's "- From <city>" is the live billing; a bare "- From" also
+    // catches a dashed subtitle ("Programme 4- From Absurd to Zany").
+    ["Tour - From", "Tour Live From"],
     ["- National Theatre", "National Theatre"],
     ["- Year of the Rabbit", "Year of the Rabbit"],
     ["- Live Arena Tour", "Live Arena Tour"],
@@ -334,6 +340,10 @@ function normalizeTitle(title, options) {
     // film actually named "Knife" is left alone.
     [/^Knife \+ /i, "Knife: The Attempted Murder of Salman Rushdie + "],
     ["Wildnerness", "Wilderness"],
+    [
+      "Ghosts: Possession of Button House",
+      "Ghosts: The Possession of Button House",
+    ],
     [/\s+dub?$/i, ""], // Dubbed
     [/\s+sub?$/i, ""], // subbed
     [/\s+(?:live\s+)?(?:in\s+)?(3|2)d$/i, ""], // 3d or 2d, with optional "live in" prefix
