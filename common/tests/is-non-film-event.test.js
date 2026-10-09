@@ -100,6 +100,9 @@ describe("isNonFilmEvent", () => {
     ["Yvonne Green, Collected Poems: Book Launch"],
     ["Creativity, AI and Digital Craftsmanship"],
     ["Let's Make Zines"],
+    ["CULTURE PRESENTS: DJ JUKESS"],
+    ["CULTURE PRESENTS: KASH & PHARXOH G"],
+    ["Shared Horizons: Cuba in Suspension"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });

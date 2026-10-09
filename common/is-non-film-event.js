@@ -222,6 +222,12 @@ const nonFilmEvents = [
   /^The Ideas Open Mic$/i,
   // A talk with no film attached to it.
   /^Restricted View: Notes on the Human Experience$/i,
+  // A DJ night promoter, billed by the act playing it ("CULTURE PRESENTS:
+  // JACINTA"), so match the promoter rather than carrying a pattern per act.
+  /^CULTURE PRESENTS:/i,
+  // Listed with no film attached to it. Anchored, because the phrase could as
+  // easily be a film's own title.
+  /^Shared Horizons: Cuba in Suspension$/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
