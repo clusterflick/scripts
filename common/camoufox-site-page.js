@@ -40,6 +40,7 @@ const requestFromPage = async (page, url, init, settle) => {
               status: 0,
               statusText: `refused before a response was readable (${error.message})`,
               cfMitigated: null,
+              sgCaptcha: null,
               body: "",
             };
           }
@@ -48,6 +49,7 @@ const requestFromPage = async (page, url, init, settle) => {
             status: response.status,
             statusText: response.statusText,
             cfMitigated: response.headers.get("cf-mitigated"),
+            sgCaptcha: response.headers.get("sg-captcha"),
             body: await response.text(),
           };
         },
@@ -65,8 +67,15 @@ const requestFromPage = async (page, url, init, settle) => {
 // Say which refusal a `requestFromPage` response was: a challenge Camoufox
 // failed to solve and an outright block need different next steps, and a bare
 // 403 says neither.
-const describeRefusal = ({ status, statusText, cfMitigated, body }) => {
+const describeRefusal = ({
+  status,
+  statusText,
+  cfMitigated,
+  sgCaptcha,
+  body,
+}) => {
   if (cfMitigated === "challenge") return `${status} challenge (cf-mitigated)`;
+  if (sgCaptcha === "challenge") return `${status} challenge (sg-captcha)`;
   if (isBotBlockText(body)) return `${status} blocked outright`;
   if (BOT_CHALLENGE_TEXT.test(body)) return `${status} challenge (page copy)`;
   return `${status} ${statusText}`;

@@ -2,10 +2,16 @@ const { silenceConsoleLog } = require("../../../common/test-utils");
 const { expectedClosures } = require("../../../common/expected-closures");
 const attributes = require("../attributes");
 
+const consoleLog = silenceConsoleLog();
+
 jest.mock("../../../common/tribe-events/retrieve");
 const {
   retrievePaginatedListView,
 } = require("../../../common/tribe-events/retrieve");
+jest.mock("../../../common/tribe-events/browser");
+const {
+  retrievePaginatedListViewWithBrowser,
+} = require("../../../common/tribe-events/browser");
 const retrieve = require("../retrieve");
 
 // The declared closure this venue's carve-out rides on. Read rather than
@@ -18,9 +24,58 @@ const closure = expectedClosures.find(({ venue }) => venue === attributes.id);
 const unreachable = () =>
   new Error(`Failed to fetch ${attributes.url} - 429 Too Many Requests`);
 
-describe("stanley arts retrieve when the site is unreachable", () => {
-  const consoleLog = silenceConsoleLog();
+// What SiteGround challenging a plain request looks like from the retrieve.
+const challenged = () =>
+  Object.assign(
+    new Error(
+      `Failed to fetch ${attributes.url} - 202  (SiteGround bot challenge)`,
+    ),
+    { status: 202, siteGroundChallenge: true },
+  );
 
+describe("stanley arts retrieve when challenged", () => {
+  beforeEach(() => {
+    retrievePaginatedListView.mockReset();
+    retrievePaginatedListViewWithBrowser.mockReset();
+  });
+
+  it("does not open a browser when a plain request gets through", async () => {
+    const retrieved = { movieListPages: ["<html></html>"] };
+    retrievePaginatedListView.mockResolvedValue(retrieved);
+    await expect(retrieve()).resolves.toEqual(retrieved);
+    expect(retrievePaginatedListViewWithBrowser).not.toHaveBeenCalled();
+  });
+
+  it("walks the same list view through the browser on a SiteGround challenge", async () => {
+    const retrieved = { movieListPages: ["<html></html>"] };
+    retrievePaginatedListView.mockRejectedValue(challenged());
+    retrievePaginatedListViewWithBrowser.mockResolvedValue(retrieved);
+
+    await expect(retrieve()).resolves.toEqual(retrieved);
+    expect(retrievePaginatedListViewWithBrowser).toHaveBeenCalledWith(
+      retrievePaginatedListView.mock.calls[0][0],
+      `${attributes.id}-browser`,
+    );
+  });
+
+  it("does not open a browser for any other failure", async () => {
+    retrievePaginatedListView.mockRejectedValue(
+      new Error(`Failed to fetch ${attributes.url} - 404 Not Found`),
+    );
+    await expect(retrieve()).rejects.toThrow("404 Not Found");
+    expect(retrievePaginatedListViewWithBrowser).not.toHaveBeenCalled();
+  });
+
+  it("fails when the browser cannot get through either", async () => {
+    retrievePaginatedListView.mockRejectedValue(challenged());
+    retrievePaginatedListViewWithBrowser.mockRejectedValue(
+      new Error("Tribe events page never loaded past the bot challenge"),
+    );
+    await expect(retrieve()).rejects.toThrow("never loaded past");
+  });
+});
+
+describe("stanley arts retrieve when the site is unreachable", () => {
   beforeEach(() => {
     retrievePaginatedListView.mockReset();
   });
