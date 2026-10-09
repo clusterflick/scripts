@@ -386,6 +386,8 @@ function normalizeTitle(title, options) {
     ["Maa Inti Bangaaram", "Maa Inti Bangaram"],
     ["Main Vaapas Aunga", "Main Vaapas Aaunga"],
     ["Avarachan & Sons", "Avaraachan & Sons"],
+    ["Matloob Aelian", "Matloub Aaeleyan"],
+    ["Matloob Aaeleyan", "Matloub Aaeleyan"],
     [/вс[её] нормально/i, "It's All Right"],
     ["Frozen 2", "Frozen II"],
     ["Terminator 2 Live", " Terminator 2"],
