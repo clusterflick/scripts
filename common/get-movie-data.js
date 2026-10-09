@@ -410,12 +410,18 @@ async function getBestMatch(titleQuery, rawResults = [], movie) {
     return hasCastCrewMatch ? result : undefined;
   }
 
-  // As we still have more than 1 result and there's crew info, use it to match the result
+  // As we still have more than 1 result and there's crew info, use it to match
+  // the result - but only when it picks out one. A revival credits the
+  // original production's director ("The Metropolitan Opera: Manon" in 2019
+  // and again in 2026/27), so a shared name can be true of several results,
+  // and taking the first would leave the choice to TheMovieDB's search order.
   if (hasCrewForMovie || hasCrewHintsForMovie) {
+    const crewMatches = [];
     for (const result of resultsWithSameTitle) {
       const hasCastCrewMatch = await matchesExpectedCastCrew(result, movie);
-      if (hasCastCrewMatch) return result;
+      if (hasCastCrewMatch) crewMatches.push(result);
     }
+    if (crewMatches.length === 1) return crewMatches[0];
   }
 
   // As we still have more than 1 result and we've been provided some additional
@@ -475,22 +481,10 @@ async function getBestMatch(titleQuery, rawResults = [], movie) {
         }
       }
 
-      // Check if there are matching crew. Most likely this will have been used
-      // as a hard coded (but time bound) hint to match a movie with
-      // insufficient data. e.g. "Close-Up on Abbas Kiarostami"
-      const hintCrew = movie.matchingHints.crew;
-      if (hintCrew && hintCrew.length > 0) {
-        const updatedMovie = updateMovie(movie, {
-          overview: { directors: hintCrew },
-        });
-        const matchesPossibleCrew = await matchesExpectedCastCrew(
-          result,
-          updatedMovie,
-        );
-        if (matchesPossibleCrew) {
-          return result;
-        }
-      }
+      // Hinted crew (e.g. "Close-Up on Abbas Kiarostami") isn't checked here:
+      // matchesExpectedCastCrew already reads matchingHints.crew, so the crew
+      // check above has tried these names. Trying them again could only take
+      // the first of the results it declined to choose between.
     }
   }
 
