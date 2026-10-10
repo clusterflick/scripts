@@ -1180,6 +1180,7 @@ const knownRemovablePhrases = [
   "Play Make Do:",
   "PNFFF'S LATENIGHTFREAKOUT2",
   "PFF 2026 Gala Opening:",
+  "WWIFF 2026 Opening Gala:",
   "Preschool Pics:",
   "Baby & 1 screen",
   "Baby & 1 ",

@@ -767,6 +767,7 @@ function normalizeTitle(title, options) {
       /All Out of Bubblegum Film Club \d+ \//i,
       "All Out of Bubblegum Film Club: ",
     ],
+    [/WWIFF (\d{4}) Opening Gala \/film /i, "WWIFF $1 Opening Gala: "],
     ["PREMIERE: SURFILMUSIC", "PREMIERE: Jack Johnson: SURFILMUSIC"],
     [/^Watch (.+) with RKG & Friends$/i, "$1"],
     ["EXPOSED aka EXPONERAD", "EXPONERAD"],
