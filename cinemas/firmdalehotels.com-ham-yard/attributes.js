@@ -10,7 +10,7 @@ module.exports = {
   },
   url: "https://www.firmdalehotels.com/hotels/ham-yard-hotel",
   address: "1 Ham Yard, London, W1D 7DY, UK",
-  geo: { lat: 51.5112782, lon: -0.1348717 },
+  geo: { lat: 51.5112748273955, lon: -0.1348212157307064 },
   structure: "group",
   groupName: "Firmdale Hotels",
   type: "Hotel",
