@@ -1011,6 +1011,8 @@ const knownRemovablePhrases = [
   "Hosted by Cinebug for International Women's Day",
   "Hosted by Cinebug & Women Without Borders Film Festival for International Women's Day",
   "Women Without Borders Film Festival 2026 —",
+  "Women and the World Festival:",
+  "WWIFF:",
   "The Woman Behind Visconti's Masterpiece",
   "Cinebug turns 1:",
   "Cinebug Summer Social and",
