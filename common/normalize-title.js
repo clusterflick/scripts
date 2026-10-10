@@ -178,6 +178,7 @@ function normalizeTitle(title, options) {
     ["CBeebies - ", "CBeebies: "],
     ["CBeebies Panto 2025", "CBeebies Panto"],
     ["Ex Libris - ", "Ex Libris: "],
+    ["Dovzhenko. The First Look", "Dovzhenko. First Sight"],
     ["Bison - ", "Bison: "],
     ["Between Two Worlds - ", "Between Two Worlds: "],
     ["COLD ISLANDERS - ", "COLD ISLANDERS: "],
