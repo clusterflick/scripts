@@ -4,8 +4,8 @@ module.exports = {
   domain: "https://www.kingstonheritage.org.uk",
   socials: {
     letterboxd: null,
-    twitter: null,
-    instagram: null,
+    twitter: "RBKheritage",
+    instagram: "rbkheritage",
   },
   url: "https://www.kingstonheritage.org.uk/visit",
   address: "Wheatfield Way, Kingston upon Thames, London, KT1 2PS, UK",
