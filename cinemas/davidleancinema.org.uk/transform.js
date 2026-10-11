@@ -85,6 +85,67 @@ function parseOverviewFromDescription(descriptionHtml) {
   };
 }
 
+function getParagraphs(html) {
+  const $ = cheerio.load(html);
+  return $("p,div")
+    .toArray()
+    .map((el) => getText($(el)).replace(/\s+/g, " "))
+    .join("\n")
+    .split("\n")
+    .map((value) => value.trim())
+    .filter((value) => !!value)
+    .join("\n");
+}
+
+const stripLabel = (text, label) =>
+  text.replace(new RegExp(`^${label}:\\s*`, "i"), "") || undefined;
+
+function parseWebsiteEventPage(html, url) {
+  const $ = cheerio.load(html);
+  const metaParts = $(".event-meta p")
+    .toArray()
+    .map((el) => getText($(el)));
+  return {
+    url,
+    year: metaParts.find((part) => /^\d{4}$/.test(part)),
+    duration: metaParts
+      .map((part) => part.match(/^(\d{2,3})\s*mins?$/i))
+      .find(Boolean)?.[1],
+    classification: $(".age-rating-icon").attr("alt"),
+    directors: stripLabel(getText($(".director-block")), "Directed by"),
+    actors: stripLabel(getText($(".stars-block")), "Stars"),
+    trailer: $(".trailer-block iframe").attr("src"),
+    overview: getParagraphs($(".entry-content").html() ?? ""),
+  };
+}
+
+// Each website page links the Ticketsolve performances it covers, which is the
+// join back to the feed. A show can have several pages (its "& Q&A" screening,
+// say) carrying the same film details. WordPress suffixes the slug of each
+// later page ("the-incomer-2"), so the shortest URL is the show's original
+// page. A past event with no booking links joins to nothing.
+const byShortestUrl = (a, b) => a.length - b.length || a.localeCompare(b);
+
+function getWebsiteDetailsByShowId(eventPages) {
+  const detailsByShowId = {};
+  for (const url of Object.keys(eventPages).sort(byShortestUrl)) {
+    const $ = cheerio.load(eventPages[url]);
+    const showIds = $(".ticket-buttons a")
+      .toArray()
+      .map(
+        (el) =>
+          $(el)
+            .attr("href")
+            ?.match(/\/shows\/(\d+)\/events\//)?.[1],
+      )
+      .filter(Boolean);
+    for (const showId of new Set(showIds)) {
+      detailsByShowId[showId] ??= parseWebsiteEventPage(eventPages[url], url);
+    }
+  }
+  return detailsByShowId;
+}
+
 // The per-event `event_attribute` is a label in the venue's own vocabulary
 // ("HoH Subtitled", "BiAs", "Dementia Friendly", "35mm"). Run it through the
 // shared label matchers as well as the venue-specific checks below, because
@@ -123,32 +184,26 @@ function getPerformanceAccessibility(title, accessibility, overview) {
   return result;
 }
 
-function toMovie($, showEl) {
+function toMovie($, showEl, websiteDetails) {
   const $show = $(showEl);
   const id = $show.attr("id");
   const showingId = generateShowingId(attributes, id);
   const title = getTextAt($show, "name");
-  const url = getTextAt($show, "url") || attributes.url;
 
   const categories = getTags($, $show);
-  const trailer = getTrailer($, $show);
-  const { year, duration, directors, actors } = parseOverviewFromDescription(
-    getTextAt($show, "description"),
-  );
+  const description = getTextAt($show, "description");
+  const fromTicketsolve = {
+    ...parseOverviewFromDescription(description),
+    trailer: getTrailer($, $show),
+    overview: getParagraphs(description),
+  };
+  const fromWebsite = websiteDetails[id] ?? {};
+  const pick = (key) => fromWebsite[key] || fromTicketsolve[key];
+
+  const url = fromWebsite.url || getTextAt($show, "url") || attributes.url;
+  const overview = pick("overview");
 
   const eventNodes = $show.find("events > event");
-
-  const overview = cheerio
-    .load(getTextAt($show, "description"))
-    .root()
-    .find("p,div")
-    .toArray()
-    .map((el) => getText($(el)).replace(/\s+/g, " "))
-    .join("\n")
-    .split("\n")
-    .map((value) => value.trim())
-    .filter((value) => !!value)
-    .join("\n");
 
   const performances = eventNodes.toArray().map((el) => {
     const $event = $(el);
@@ -184,23 +239,33 @@ function toMovie($, showEl) {
     title,
     url,
     overview: createOverview({
-      duration,
-      year,
-      directors,
-      actors,
+      duration: pick("duration"),
+      year: pick("year"),
+      directors: pick("directors"),
+      actors: pick("actors"),
+      classification: fromWebsite.classification,
       categories,
-      trailer,
+      trailer: pick("trailer"),
     }),
     performances,
     matchingHints: { overview },
   };
 }
 
-async function transform({ movieListPage }, sourcedEvents) {
+async function transform({ movieListPage, eventPages }, sourcedEvents) {
   const $ = cheerio.load(movieListPage, { xmlMode: true });
   const shows = $("venues > venue > shows > show").toArray();
+
+  const websiteDetails = getWebsiteDetailsByShowId(eventPages);
+  const showIds = shows.map((el) => $(el).attr("id"));
+  if (!showIds.some((showId) => websiteDetails[showId])) {
+    throw new Error(
+      "No website event page links to a Ticketsolve show - the page structure may have changed",
+    );
+  }
+
   const movies = shows
-    .map((el) => toMovie($, el))
+    .map((el) => toMovie($, el, websiteDetails))
     // Remove template placeholder entries (e.g. "Templates:", "Template - ")
     .filter(({ title }) => !/^Templates?\s*[:-]/i.test(title));
 
