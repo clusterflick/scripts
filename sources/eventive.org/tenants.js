@@ -18,6 +18,11 @@
  * that skips it puts the film in the event's name and description instead.
  * Declared per tenant because the film record is otherwise what separates a
  * screening from the passes and parties sold beside it - see find-events.
+ *
+ * `venue` is where a tenant's events are held when the events themselves don't
+ * say. Eventive leaves the venue optional too, and a one-venue tenant may never
+ * fill it in, leaving its events with nothing to match a cinema on. Only a
+ * fallback: an event that names its own venue is matched on that.
  */
 module.exports = [
   {
@@ -33,5 +38,14 @@ module.exports = [
     // community centre, an archive and a couple of cinemas across a season,
     // so its events land against several of our venues rather than one.
     hasFilmRecords: false,
+  },
+  {
+    id: "kiffhalloween",
+    name: "KIFF goes Halloween: A Night At The Museum",
+    url: "https://kiffhalloween.eventive.org",
+    // Kingston International Film Festival's Halloween night with Kingston
+    // Heritage Services. Its events carry an empty venue and name the place only
+    // as "the Museum" in their descriptions.
+    venue: { name: "Kingston Museum" },
   },
 ];

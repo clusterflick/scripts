@@ -101,12 +101,13 @@ async function findEvents(cinema) {
       // pass - so it opts out and takes everything it lists.
       if (tenant.hasFilmRecords !== false && !event.films?.length) continue;
 
-      const venueName = getVenueName(event.venue);
+      const venue = event.venue?.name ? event.venue : tenant.venue;
+      const venueName = getVenueName(venue);
       if (!venueName) continue;
 
       if (
         !venueMatchesCinema(cinema, venueName, null, {
-          eventAddress: event.venue.address,
+          eventAddress: venue.address,
         })
       ) {
         continue;

@@ -64,6 +64,14 @@ describe(`${attributes.name}`, () => {
       geo: { lat: 51.53867412862321, lon: -0.19566687295430385 },
       expectedMatches: 1,
     },
+    {
+      // A tenant whose events carry no venue at all, matched through the venue
+      // the tenant declares for them
+      name: "Kingston Museum",
+      address: "Wheatfield Way, Kingston upon Thames, London, KT1 2PS, UK",
+      geo: { lat: 51.4096, lon: -0.3003 },
+      expectedMatches: 3,
+    },
   ])("$name", ({ name, alternativeNames, address, geo, expectedMatches }) => {
     it(
       "retrieve and find events",
@@ -72,9 +80,10 @@ describe(`${attributes.name}`, () => {
 
         // Make sure the input looks roughly correct
         expect(tenantEvents).toBeTruthy();
-        expect(Object.keys(tenantEvents)).toHaveLength(2);
+        expect(Object.keys(tenantEvents)).toHaveLength(3);
         expect(tenantEvents.frightfest2026).toHaveLength(115);
-        expect(tenantEvents.bccwhenthestarsmeettheocean).toHaveLength(10);
+        expect(tenantEvents.bccwhenthestarsmeettheocean).toHaveLength(11);
+        expect(tenantEvents.kiffhalloween).toHaveLength(3);
 
         readJSON.mockImplementation(() => ({ tenantEvents }));
 
