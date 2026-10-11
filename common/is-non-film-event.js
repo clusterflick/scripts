@@ -230,6 +230,9 @@ const nonFilmEvents = [
   /^Shared Horizons: Cuba in Suspension$/i,
   // A wellness day the venue hosts, with no film attached to it.
   /Embody Wellness/i,
+  // A scientific society's meeting the venue hosts, with no film attached to
+  // it.
+  /Society of Electron Microscope Technology/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
