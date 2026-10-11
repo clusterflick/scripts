@@ -768,6 +768,12 @@ function normalizeTitle(title, options) {
       "All Out of Bubblegum Film Club: ",
     ],
     [/WWIFF (\d{4}) Opening Gala \/film /i, "WWIFF $1 Opening Gala: "],
+    // WWIFF prefixes some listings with the day and month ("9.11 | WWIFF |
+    // ..."), and hasSeparator would take everything before the first "|",
+    // reducing the title to the date. Rewritten to the "WWIFF:" label the
+    // removable phrases already strip. A regex because each listing carries a
+    // different date.
+    [/^\d{1,2}\.\d{1,2}\s*\|\s*WWIFF\s*\|\s*/i, "WWIFF: "],
     ["PREMIERE: SURFILMUSIC", "PREMIERE: Jack Johnson: SURFILMUSIC"],
     [/^Watch (.+) with RKG & Friends$/i, "$1"],
     ["EXPOSED aka EXPONERAD", "EXPONERAD"],

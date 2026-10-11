@@ -47,6 +47,8 @@ describe("isNonFilmEvent", () => {
     ["Ground Level Presents: Gardening for Climate Resilience"],
     ["Embody Wellness : Health & Wellness Day"],
     ["Society of Electron Microscope Technology (SEMT) meeting"],
+    ["LIVE MUSIC WITH ACTONE JAZZ QUARTET"],
+    ["ME | THE 90s AT TATE BRITAIN"],
     ["New Year's Eve Concert with BerlinerPhilharmoniker"],
     ["Berliner Philharmoniker LIVE: New Year’s Eve Concert 2025"],
     ["Berliner Philharmoniker Live: NYE Concert 2025"],

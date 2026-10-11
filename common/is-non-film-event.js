@@ -233,6 +233,11 @@ const nonFilmEvents = [
   // A scientific society's meeting the venue hosts, with no film attached to
   // it.
   /Society of Electron Microscope Technology/i,
+  // A live jazz set the venue hosts, with no film attached to it.
+  /Actone Jazz Quartet/i,
+  // A gallery event billed under the venue's own label ("ME | ..."), with no
+  // film attached to it.
+  /The 90s at Tate Britain/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
