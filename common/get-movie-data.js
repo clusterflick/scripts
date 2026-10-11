@@ -80,6 +80,7 @@ const ignoredIds = [
   1686620, // Legacy of Screams: The Evolution of Horror Movies -- https://www.themoviedb.org/movie/1686620-legacy-of-screams-the-evolution-of-horror-movies
   1786333, // Mon âme soeur -- https://www.themoviedb.org/movie/1786333-mon-ame-soeur
   1589128, // Sense & Sensibility: A Modern Retelling -- https://www.themoviedb.org/movie/1589128-sense-sensibility-a-modern-retelling
+  1793788, // Queen Budapest 4k -- https://www.themoviedb.org/movie/1793788-queen-budapest-4k
 ];
 
 /**
