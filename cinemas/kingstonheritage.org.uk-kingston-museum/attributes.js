@@ -9,7 +9,7 @@ module.exports = {
   },
   url: "https://www.kingstonheritage.org.uk/visit",
   address: "Wheatfield Way, Kingston upon Thames, London, KT1 2PS, UK",
-  geo: { lat: 51.4096, lon: -0.3003 },
+  geo: { lat: 51.40961037195623, lon: -0.30030192375174264 },
   structure: "solo",
   type: "Museum",
   programming: "host",
