@@ -31,6 +31,7 @@ const screenMapping = {
   441: "3", // chiswickcinema.co.uk
   442: "4", // chiswickcinema.co.uk
   443: "5", // chiswickcinema.co.uk
+  503: "Amani Auditorium", // ebonylifeplacelondon.com
 };
 
 const isCastPlaceholder = (value) =>
