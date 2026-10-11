@@ -109,6 +109,20 @@ function mapAccessibilityFromAttribute(attr = "", overview = "") {
   };
 }
 
+// The blurb is shared by every performance of a show, but the venue uses it to
+// signpost a single captioned one ("Our Tuesday 7:30pm screening contains
+// captioned subtitles for those with hearing loss"), so reading hard-of-hearing
+// from it tags every performance. That screening carries its own "HoH" event
+// attribute, so take hard-of-hearing from the attribute and title only.
+function getPerformanceAccessibility(title, accessibility, overview) {
+  const result = createAccessibility(title, accessibility, overview);
+  const isHardOfHearing =
+    accessibility.hardOfHearing ||
+    getTitleAccessibility(title.trim()).hardOfHearing;
+  if (!isHardOfHearing) delete result.hardOfHearing;
+  return result;
+}
+
 function toMovie($, showEl) {
   const $show = $(showEl);
   const id = $show.attr("id");
@@ -153,7 +167,11 @@ function toMovie($, showEl) {
       notesList: [comment],
       url: bookingUrl,
       status: { soldOut },
-      accessibility: createAccessibility(title, accessibility, overview),
+      accessibility: getPerformanceAccessibility(
+        title,
+        accessibility,
+        overview,
+      ),
       // The same attribute also carries the print format, spelled either
       // "35mm" or "35mm film" - so read it with the label matchers rather than
       // as an exact token, which only the first spelling would satisfy.
