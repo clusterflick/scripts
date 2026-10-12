@@ -1,5 +1,5 @@
 const path = require("node:path");
-const { parse, differenceInMinutes } = require("date-fns");
+const { parse, format, differenceInMinutes } = require("date-fns");
 const { enGB } = require("date-fns/locale/en-GB");
 const slugify = require("slugify");
 const {
@@ -8,6 +8,7 @@ const {
   createPerformance,
   generateShowingId,
   basicNormalize,
+  sanitizeRichText,
   createAccessibility,
   createFormat,
 } = require("../../common/utils");
@@ -84,6 +85,38 @@ function extractMovieTitleFromTicketName(ticketName) {
 }
 
 /**
+ * art'otel Hoxton sells each screening of its Halloween season as a ticket
+ * type named only for its date ("Saturday 24 October"), with the film in the
+ * ticket's description and the time on the ticket. Every occurrence carries
+ * every one of those tickets, so a ticket is only a screening on the
+ * occurrence whose date it names - and that occurrence supplies the year the
+ * name leaves out.
+ */
+const DATE_ONLY_TICKET_NAME =
+  /^(?:Mon|Tues|Wednes|Thurs|Fri|Satur|Sun)day\s+\d{1,2}(?:st|nd|rd|th)?\s+(?:January|February|March|April|May|June|July|August|September|October|November|December)$/i;
+
+function isTicketForOccurrenceDate(ticketName, occurrenceDate) {
+  const date = parse(occurrenceDate, "yyyy-MM-dd", new Date(), {
+    locale: enGB,
+  });
+  const ticketDate = ticketName.replace(/(\d)(?:st|nd|rd|th)\b/i, "$1");
+  return (
+    format(date, "EEEE d MMMM", { locale: enGB }).toLowerCase() ===
+    ticketDate.toLowerCase().replace(/\s+/g, " ")
+  );
+}
+
+function getMovieTitleFromTicketDescription(ticketType) {
+  const title = sanitizeRichText(ticketType.description ?? "").trim();
+  if (!title || title.includes("\n")) {
+    throw new Error(
+      `DesignMyNight ticket "${ticketType.name}" is named only for its date, but its description ${JSON.stringify(ticketType.description)} is not a single film title`,
+    );
+  }
+  return title;
+}
+
+/**
  * The key a movie title is grouped and identified by. The showing id is built
  * from this same value, so grouping on anything else lets two ticket names
  * that slugify alike claim one id as two events - which is what art'otel
@@ -113,7 +146,17 @@ function extractMovieGroupsFromOccurrences(occurrences) {
     // the key they will be identified by, so an occurrence sold under two
     // spellings of one film is added to that film's group once
     const ticketMovieTitles = new Map();
+    const datedScreenings = [];
     for (const ticketType of occurrence.ticket_types ?? []) {
+      if (DATE_ONLY_TICKET_NAME.test(ticketType.name.trim())) {
+        if (
+          isTicketForOccurrenceDate(ticketType.name.trim(), occurrence.date)
+        ) {
+          datedScreenings.push(ticketType);
+        }
+        continue;
+      }
+
       const extractedTitle = extractMovieTitleFromTicketName(ticketType.name);
       if (!extractedTitle) continue;
       const key = getMovieTitleKey(extractedTitle);
@@ -125,12 +168,26 @@ function extractMovieGroupsFromOccurrences(occurrences) {
       }
     }
 
+    // Each dated ticket is a screening of its own, at its own time, so it is
+    // grouped as an occurrence carrying that ticket alone
+    for (const ticketType of datedScreenings) {
+      const movieTitle = getMovieTitleFromTicketDescription(ticketType);
+      addToGroup(getMovieTitleKey(movieTitle), movieTitle, {
+        ...occurrence,
+        is_sold_out: occurrence.is_sold_out || ticketType.is_sold_out,
+        ticket_types: [ticketType],
+      });
+    }
+    const hasDatedTickets = (occurrence.ticket_types ?? []).some(({ name }) =>
+      DATE_ONLY_TICKET_NAME.test(name.trim()),
+    );
+
     // If we found movie titles in tickets, group this occurrence by those titles
     if (ticketMovieTitles.size > 0) {
       for (const [key, movieTitle] of ticketMovieTitles) {
         addToGroup(key, movieTitle, occurrence);
       }
-    } else {
+    } else if (!hasDatedTickets) {
       // No movie title found in tickets, use null key (will use event title)
       addToGroup(null, null, occurrence);
     }
