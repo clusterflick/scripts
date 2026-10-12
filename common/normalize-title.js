@@ -118,6 +118,7 @@ function normalizeTitle(title, options) {
     ["Storytelling + ", "Storytelling & "],
     ["Life on the Horn (2020) + ", "Life on the Horn (2020) & "],
     ["Back and Forth + ", "Back and Forth & "],
+    ["FLESH GORDON + ", "FLESH GORDON & "],
     [" + Cat", " and Cat"],
     [" + Zog", " and Zog"],
     ["Zog + ", "Zog & "],
@@ -1961,8 +1962,10 @@ function normalizeTitle(title, options) {
   // One venue draws its billing blocks with the heavy box-drawing bar
   // ("EXPOSE ┃FILM PREMIERE┃LONDON"), which is the pipe in every way that
   // matters here, so it joins the separators rather than surviving as far as
-  // the character stripping and leaving the billing behind as words.
-  const hasSeparator = title.match(/^(.*?)\s+(?:\+|-|\/|\||•|┃)\s*/);
+  // the character stripping and leaving the billing behind as words. The same
+  // venue doesn't always space it ("EXPOSE┃FILM PREMIERE"), and no title uses
+  // the bar itself, so it needs no whitespace before it to count.
+  const hasSeparator = title.match(/^(.*?)(?:\s+(?:\+|-|\/|\||•)|\s*┃)\s*/);
   if (hasSeparator) {
     title = hasSeparator[1];
   }
