@@ -194,6 +194,7 @@ function normalizeTitle(title, options) {
     ["Chainsaw Man - The Movie:", "Chainsaw Man – The Movie:"],
     ["Antarctica - ", "Antarctica: "],
     ["Rolling Stones - ", "Rolling Stones: "],
+    ["Tom Waits - ", "Tom Waits: "],
     [" - The Musical", ": The Musical"],
     ["Westlife -", "Westlife:"],
     [
