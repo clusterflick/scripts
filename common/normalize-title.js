@@ -1614,7 +1614,7 @@ function normalizeTitle(title, options) {
     [" TFFF ", " "],
     ["Harry Potter Philosopher", "Harry Potter and the Philosopher"],
     ["Maybe Tomorrow + ", "Maybe Tomorrow & "],
-    [/^Documentary (screenings? )?/i, ""],
+    [/^Documentary (screenings? |gala: )?/i, ""],
     // Billed with the word "documentary" after the title, which is not part
     // of it.
     [/^Mission Accomplished documentary$/i, "Mission Accomplished"],

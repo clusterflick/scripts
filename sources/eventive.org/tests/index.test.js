@@ -72,6 +72,20 @@ describe(`${attributes.name}`, () => {
       geo: { lat: 51.4096, lon: -0.3003 },
       expectedMatches: 3,
     },
+    {
+      // The festival bills each screen as part of the venue's name without the
+      // " - " separator ("Phoenix Cinema Screen 1"), so this proves the name
+      // still lands on the venue
+      name: "Phoenix Cinema",
+      alternativeNames: [
+        "Phoenix Cinema London",
+        "Phoenix Cinema East Finchley",
+        "Phoenix Cinema Finchley",
+      ],
+      address: "52 High Road, London, N2 9PJ, UK",
+      geo: { lat: 51.58853061979289, lon: -0.16390063689779108 },
+      expectedMatches: 12,
+    },
   ])("$name", ({ name, alternativeNames, address, geo, expectedMatches }) => {
     it(
       "retrieve and find events",
@@ -80,10 +94,11 @@ describe(`${attributes.name}`, () => {
 
         // Make sure the input looks roughly correct
         expect(tenantEvents).toBeTruthy();
-        expect(Object.keys(tenantEvents)).toHaveLength(3);
+        expect(Object.keys(tenantEvents)).toHaveLength(4);
         expect(tenantEvents.frightfest2026).toHaveLength(115);
         expect(tenantEvents.bccwhenthestarsmeettheocean).toHaveLength(11);
         expect(tenantEvents.kiffhalloween).toHaveLength(3);
+        expect(tenantEvents.ukjewishfilmfestival2026).toHaveLength(78);
 
         readJSON.mockImplementation(() => ({ tenantEvents }));
 

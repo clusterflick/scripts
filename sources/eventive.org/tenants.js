@@ -48,4 +48,12 @@ module.exports = [
     // as "the Museum" in their descriptions.
     venue: { name: "Kingston Museum" },
   },
+  {
+    id: "ukjewishfilmfestival2026",
+    name: "UK Jewish Film Festival 2026",
+    url: "https://ukjewishfilmfestival2026.eventive.org",
+    // Opens in London across a handful of cinemas, then tours the UK; the tour
+    // dates match none of our venues, and the online festival's events carry
+    // no venue at all, so both fall away without needing a filter.
+  },
 ];

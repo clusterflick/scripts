@@ -1185,6 +1185,8 @@ const knownRemovablePhrases = [
   "PNFFF'S LATENIGHTFREAKOUT2",
   "PFF 2026 Gala Opening:",
   "WWIFF 2026 Opening Gala:",
+  // UK Jewish Film Festival strand
+  "DOC DAY:",
   "Preschool Pics:",
   "Baby & 1 screen",
   "Baby & 1 ",
