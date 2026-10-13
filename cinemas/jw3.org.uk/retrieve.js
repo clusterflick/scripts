@@ -1,5 +1,5 @@
 const cheerio = require("cheerio");
-const { fetchText } = require("../../common/utils");
+const { fetchText, basicNormalize } = require("../../common/utils");
 const {
   getWebEventId,
   retrieveEventBooking,
@@ -13,6 +13,21 @@ const spektrixClient = "jw3";
 // the number. Without `list_type=events` the listing is one card per film.
 const getSearchUrl = (page) =>
   `${domain}/whats-on?genres[]=19&max=27&p54_page=${page}`;
+
+// A "Tickets" link to another site. JW3's own pages only ever link "Tickets"
+// to its relative `/tickets-...` information page.
+const getExternalBookingUrl = (listing) => {
+  const $ = cheerio.load(listing);
+  const { hostname } = new URL(domain);
+  return $("a")
+    .filter((i, el) => basicNormalize($(el).text()) === "tickets")
+    .map((i, el) => $(el).attr("href"))
+    .get()
+    .find((href) => {
+      if (!/^https?:\/\//i.test(href)) return false;
+      return new URL(href).hostname !== hostname;
+    });
+};
 
 async function retrieve() {
   const movieListPages = [];
@@ -67,6 +82,21 @@ async function retrieve() {
     const pageData = JSON.parse(pageDataLayer[1]);
     const itemProductionId = pageData[0].detail_items[0].item_production;
     const eventId = getWebEventId(itemProductionId);
+
+    // Some listings are a hub for a festival JW3 hosts but doesn't sell -
+    // the UK Jewish Film Festival's page carries "UKJF2026" in place of a
+    // Spektrix ID and sends its "Tickets" link to the festival's own site.
+    // There are no JW3 performances to retrieve, so skip it, but only when
+    // booking is plainly handed elsewhere: a missing ID on a page selling its
+    // own tickets is still a failure.
+    const externalBookingUrl = !eventId && getExternalBookingUrl(listing);
+    if (externalBookingUrl) {
+      console.log(
+        `      - ⚠️  Skipping ${domain}${url} - "${itemProductionId}" is not a Spektrix event, tickets are sold at ${externalBookingUrl}`,
+      );
+      continue;
+    }
+
     if (!eventId) {
       throw new Error(
         `No Spektrix event ID found in "${itemProductionId}" on ${domain}${url}`,
