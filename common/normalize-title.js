@@ -1105,6 +1105,12 @@ function normalizeTitle(title, options) {
     [" / Bootlickers / ", " & Bootlickers & "],
     ["Sambhavam - Adhyayam Onnu", "Sambhavam Adhyayam Onnu"],
     ["Cinebug turns 1 - ", "Cinebug turns 1: "],
+    ["Cinebug - ", "Cinebug: "],
+    ["電競女孩 Game Girls", "Gamer Girls"],
+    [
+      "'Wicker Sour' cocktails, straw man making + ",
+      "'Wicker Sour' cocktails, straw man making & ",
+    ],
     [
       "Academy Awards Best Picture Winner 2026 - ",
       "Academy Awards Best Picture Winner 2026: ",
@@ -1802,6 +1808,12 @@ function normalizeTitle(title, options) {
     ["FREE Kids Movie Club: Monsters Welcome", "monsters inc"],
     ["FREE Kids Movie Club: Halloween Morning", "nightmare before christmas"],
     ["FREE Kids Movie Club: The Haunted House", "muppets haunted mansion"],
+    ["FREE Kids Movie Club: A Christmas Tale", "muppet christmas carol"],
+    ["FREE Kids Movie Club: A sky full of lights", "tangled"],
+    ["FREE Kids Movie Club: Adventure Is Out There", "up"],
+    ["FREE Kids Movie Club: Anyone Can Be Anything", "zootopia"],
+    ["FREE Kids Movie Club: Santa Week", "santa clause"],
+    ["FREE Kids Movie Club: Winter Has Arrived", "frozen"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {

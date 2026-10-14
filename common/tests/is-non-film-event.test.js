@@ -107,6 +107,8 @@ describe("isNonFilmEvent", () => {
     ["CULTURE PRESENTS: DJ JUKESS"],
     ["CULTURE PRESENTS: KASH & PHARXOH G"],
     ["Shared Horizons: Cuba in Suspension"],
+    ["Brockwell United x Baytree Centre Pub Quiz"],
+    ["Pints Of Knowledge"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });
