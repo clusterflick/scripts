@@ -1021,6 +1021,10 @@ const isPrivateHire = (title = "") =>
   basicNormalize(title).includes("private hire") ||
   basicNormalize(title).includes("screen hire") ||
   basicNormalize(title).includes("private event") ||
+  // A venue shut for a booking - Café OTO lists "CLOSED FOR PRIVATE FUNCTION".
+  // Not "private function" alone: "A Private Function" is a 1984 film, and
+  // this runs over every venue's titles in transform.
+  basicNormalize(title).includes("closed for private") ||
   // Sometimes private screenings are advertised on an event site, but in which
   // case they'll contain more information (like the movie title)
   basicNormalize(title) === "private screening" ||
