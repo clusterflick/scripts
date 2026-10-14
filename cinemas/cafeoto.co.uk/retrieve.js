@@ -1,5 +1,5 @@
 const cheerio = require("cheerio");
-const { fetchText, getText } = require("../../common/utils");
+const { fetchText, getText, isPrivateHire } = require("../../common/utils");
 const { url, domain } = require("./attributes");
 const { isFilmEvent } = require("./utils");
 
@@ -11,12 +11,6 @@ const MAX_PAGES = 25;
 // is dated "29–31 October 2026" with no weekday, and its nights are only
 // linked from its own page.
 const isDateRange = (dateText) => /^\d/.test(dateText);
-
-// A private hire is listed like any other night - "CLOSED FOR PRIVATE
-// FUNCTION" - but with an empty link, since there is no event to open. Only
-// these are let through without a link: any other linkless event is the
-// listing changing under us, and a film among them would silently go missing.
-const isPrivateFunction = (title) => /\bprivate\b/i.test(title);
 
 const getEventUrl = (href) => (href.startsWith("http") ? href : domain + href);
 
@@ -70,7 +64,11 @@ async function retrieve() {
       const dateText = getText($headers.first());
       const $title = $headers.last();
       const href = $title.find("a[href]").attr("href");
-      if (!href && isPrivateFunction(getText($title))) {
+      // A private hire is listed like any other night - "CLOSED FOR PRIVATE
+      // FUNCTION" - but with an empty link, since there is no event to open.
+      // Only these are let through without a link: any other linkless event is
+      // the listing changing under us, and a film among them would go missing.
+      if (!href && isPrivateHire(getText($title))) {
         console.log(`      - Skipping "${getText($title)}" - no event page`);
         return;
       }

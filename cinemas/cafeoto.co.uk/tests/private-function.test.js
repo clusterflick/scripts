@@ -61,18 +61,19 @@ describe("Café OTO events without a link", () => {
     expect(moviePages).toEqual({});
   });
 
+  // A Private Function is a 1984 film - "private" alone must not be enough.
   it("fails on any other event without a link", async () => {
     serveListing([
       {
         date: "Wednesday 2 December 2026, 7pm",
-        title: "Film: Stalker",
+        title: "A Private Function",
         href: "",
       },
       concert,
     ]);
 
     await expect(retrieve()).rejects.toThrow(
-      `No event link for "Film: Stalker" on ${LISTING_URL}`,
+      `No event link for "A Private Function" on ${LISTING_URL}`,
     );
   });
 });
