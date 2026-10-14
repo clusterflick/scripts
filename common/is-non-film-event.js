@@ -241,6 +241,9 @@ const nonFilmEvents = [
   // A pub quiz and a talks night, with no film attached to them.
   /Brockwell United x Baytree Centre Pub Quiz/i,
   /^Pints Of Knowledge/i,
+  // A bake-and-drinks night and a wine night, with no film attached to them.
+  /Gingerbread House Making/i,
+  /^Pizza & Plonk$/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>

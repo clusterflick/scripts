@@ -42,6 +42,7 @@ const knownRemovablePhrases = [
   "London Gala Screening",
   "Feature Screening",
   "Repeat Screening",
+  "Advanced Screening",
   "***LONDON***",
   "***VHS***",
   "*ADVANCE*",
@@ -394,6 +395,10 @@ const knownRemovablePhrases = [
   "with Tim Robey",
   "with TOMISIN ADEPEJU",
   "with tommy wiseau live on stage",
+  // The " - Live On Stage" billing is rewritten to ": Live on Stage" by the
+  // corrections, so this is the form it reaches the phrase list in. After the
+  // longer phrase above, which also ends on it.
+  ": Live On Stage",
   "with Rebelle Voices",
   "with Rosie Turner",
   "with Sammy Baloji",
@@ -552,6 +557,7 @@ const knownRemovablePhrases = [
 
   // Prefixes
   "LFF for Free:",
+  "LEGO Friends:",
   "Violent World:",
   "Film club presents:",
   // Its "(dog-friendly movie night)" billing is already gone by the time the
@@ -657,6 +663,8 @@ const knownRemovablePhrases = [
   "Best Of X-Men:",
   "Best of 2025:",
   "Belgrade Noir:",
+  // Ahead of "Beyond:", which would otherwise leave the "Black" behind.
+  "Black Beyond:",
   "Beyond Human Time:",
   "Beyond Kino:",
   "Beyond:",
@@ -1256,6 +1264,7 @@ const knownRemovablePhrases = [
   "Q&A & After Party",
   "Red Carpet Screening",
   "Red Carpet Premiere & Film Industry Networking",
+  "world red carpet premier",
   "Rio Feminist Film Group:",
   "Rio Film Feminists:",
   "RIO FILM FEMINISTS x ",
@@ -1802,6 +1811,7 @@ const knownRemovablePhrases = [
   "with Katja Hoyer",
   "MEMBER'S SHOW:",
   "Mac Demarco and Ryan Paris",
+  "<3",
   // "A Foggy Tale"'s Chinese title, billed with "London special screening".
   "大濛 倫敦特映",
 ];

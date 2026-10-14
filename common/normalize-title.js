@@ -996,10 +996,13 @@ function normalizeTitle(title, options) {
       "Dystopia is Not The Future Panel Discussion",
     ],
     ["Wash It Film Premiere", "Wash It (2026)"],
+    // The festival bills its strands ahead of its name, and numbers the
+    // listing in some years, so the name is what groups every edition.
     [
-      "01 | A.I. | New Media | Experimental | Digital Arts Film Festival",
-      "A.I New Media Experimental Digital Arts Film Festival",
+      /^(?:\d+ \| )?A\.I\. \| New Media \| Experimental \| Digital Arts Film Festival/i,
+      "Digital Arts Film Festival",
     ],
+    ["Death Grips Live NYC 2012", "Death Grips: NPR Music Live"],
     ["A.I. - Artificial Intelligence", "A.I. Artificial Intelligence"],
     ["Journey + A Wedding Suit", "Journey & A Wedding Suit"],
     ["We Lana Fel Khayal Hob", "Wa Lana Fel Khayal Hob"],
