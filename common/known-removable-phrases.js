@@ -1078,6 +1078,7 @@ const knownRemovablePhrases = [
   "London Premiere at The Finsbury Park Picturehouse",
   "London Screening & Q&A w/ Director",
   "London Screening & Q&A w/ Artistic Team",
+  "London Screening",
   "London Short Film Festival @ GSS:",
   "LODON SCREENING",
   "LDNDOCS 2025:",
@@ -1743,6 +1744,8 @@ const knownRemovablePhrases = [
   "Short Film Premiere",
   "Film Premiere",
   " a premiere",
+  // Ahead of "premiere", which would otherwise leave the plural's "s" behind.
+  "Premieres",
   "premiere",
   "IMAX Preview",
   "IMAX exclusive previews",
@@ -1799,6 +1802,8 @@ const knownRemovablePhrases = [
   "with Katja Hoyer",
   "MEMBER'S SHOW:",
   "Mac Demarco and Ryan Paris",
+  // "A Foggy Tale"'s Chinese title, billed with "London special screening".
+  "大濛 倫敦特映",
 ];
 
 module.exports = knownRemovablePhrases;
