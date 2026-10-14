@@ -1,4 +1,12 @@
 const { disableCache } = require("../../../common/test-utils");
+const { sleep } = require("../../../common/utils");
+
+// Retrieve paces every page it fetches; resolve the pause at once so these
+// cases don't wait, while still recording each one.
+jest.mock("../../../common/utils", () => ({
+  ...jest.requireActual("../../../common/utils"),
+  sleep: jest.fn(async () => {}),
+}));
 
 // Passthrough the daily cache so each page really goes through the mocked
 // fetch and browser below, rather than reading or writing cache files on disk.
@@ -93,6 +101,7 @@ describe("JW3 behind Bunny Shield", () => {
   beforeEach(() => {
     browserVisits.length = 0;
     launches.length = 0;
+    sleep.mockClear();
     setBrowserPages();
     jest.spyOn(console, "log").mockImplementation(() => {});
   });
@@ -112,6 +121,8 @@ describe("JW3 behind Bunny Shield", () => {
     // Once challenged, every later page goes straight to the browser.
     expect(global.fetch).toHaveBeenCalledTimes(1);
     expect(browserVisits).toEqual([LISTING_PAGE_1, LISTING_PAGE_2, EVENT_PAGE]);
+    // A pause before the challenged fetch, and one after each browser page.
+    expect(sleep).toHaveBeenCalledTimes(4);
   });
 
   it("escalates to Camoufox on a redirect rather than following it", async () => {
@@ -135,6 +146,7 @@ describe("JW3 behind Bunny Shield", () => {
     expect(movieListPages).toHaveLength(1);
     expect(launches).toHaveLength(0);
     expect(global.fetch).toHaveBeenCalledTimes(3);
+    expect(sleep).toHaveBeenCalledTimes(3);
   });
 
   it("fails rather than escalating on an ordinary error", async () => {

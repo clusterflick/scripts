@@ -3,7 +3,13 @@ const { withCamoufoxSession } = require("../../common/get-page-with-camoufox");
 const {
   isBunnyShieldChallengeFetchResponse,
 } = require("../../common/bot-challenge");
-const { basicNormalize, fetchWithRetry, getId } = require("../../common/utils");
+const {
+  basicNormalize,
+  fetchWithRetry,
+  getId,
+  sleep,
+  withJitter,
+} = require("../../common/utils");
 const {
   getWebEventId,
   retrieveEventBooking,
@@ -28,6 +34,14 @@ const spektrixClient = "jw3";
 // has none.
 const PAGE_SELECTOR = "#zoekForm";
 
+// Even once Camoufox has cleared the challenge, Bunny Shield challenges the
+// session again every so many pages when they arrive back to back. Spacing
+// them out, jittered so they don't land at robotically exact intervals, keeps
+// the crawl looking less like one. The pause sits inside the cache callbacks
+// below, so it only slows a page actually fetched, never a cache hit.
+const REQUEST_DELAY_MS = 5_000;
+const pace = () => sleep(withJitter(REQUEST_DELAY_MS));
+
 // One cache entry per page, so a rerun after a failure part-way through
 // resumes rather than paying for every page again - which matters once each
 // costs a browser load. The hash keeps the key unique; the slug keeps the cache
@@ -43,6 +57,7 @@ const getCacheKey = (url) => {
 // cookie it sets, so a redirect goes to the browser too. Anything else (a 404,
 // a 500) throws, because escalating wouldn't help.
 const fetchWithoutBrowser = async (url) => {
+  await pace();
   const response = await fetchWithRetry(url, { redirect: "manual" });
   if (isBunnyShieldChallengeFetchResponse(response)) return null;
   if (response.status >= 300 && response.status < 400) return null;
@@ -54,9 +69,13 @@ const fetchWithoutBrowser = async (url) => {
   return cheerio.load(html)(PAGE_SELECTOR).length > 0 ? html : null;
 };
 
+// The browser has already navigated by the time this runs, so it paces the
+// page after this one instead.
 const readPageWithBrowser = async (page) => {
   await page.waitForSelector(PAGE_SELECTOR, { state: "attached" });
-  return page.content();
+  const content = await page.content();
+  await pace();
+  return content;
 };
 
 const getPageContent = (getPage, url) =>
