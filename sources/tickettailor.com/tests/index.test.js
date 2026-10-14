@@ -92,7 +92,7 @@ describe(`${attributes.name}`, () => {
 
         // Make sure the input looks roughly correct
         expect(clubPages).toBeTruthy();
-        expect(Object.keys(clubPages)).toHaveLength(24);
+        expect(Object.keys(clubPages)).toHaveLength(25);
         expect(eventPages).toBeTruthy();
         expect(Object.keys(eventPages)).toHaveLength(84);
 

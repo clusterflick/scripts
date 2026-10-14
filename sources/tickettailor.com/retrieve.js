@@ -29,6 +29,7 @@ const VENUE_SLUGS = [
   "palestinehouse", // Palestine House
   "passengercinema", // Passenger Cinema
   "joeallenmysteryfilms", // Joe Allen
+  "queerhub", // QUEERHUB
 ];
 
 function retrieveVenuePage(getPage, slug) {
