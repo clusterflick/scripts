@@ -12,6 +12,12 @@ const MAX_PAGES = 25;
 // linked from its own page.
 const isDateRange = (dateText) => /^\d/.test(dateText);
 
+// A private hire is listed like any other night - "CLOSED FOR PRIVATE
+// FUNCTION" - but with an empty link, since there is no event to open. Only
+// these are let through without a link: any other linkless event is the
+// listing changing under us, and a film among them would silently go missing.
+const isPrivateFunction = (title) => /\bprivate\b/i.test(title);
+
 const getEventUrl = (href) => (href.startsWith("http") ? href : domain + href);
 
 // A run's page links each of its nights, at the run's own slug with a numeric
@@ -64,6 +70,10 @@ async function retrieve() {
       const dateText = getText($headers.first());
       const $title = $headers.last();
       const href = $title.find("a[href]").attr("href");
+      if (!href && isPrivateFunction(getText($title))) {
+        console.log(`      - Skipping "${getText($title)}" - no event page`);
+        return;
+      }
       if (!href) {
         throw new Error(`No event link for "${getText($title)}" on ${pageUrl}`);
       }
