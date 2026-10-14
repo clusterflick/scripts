@@ -262,6 +262,10 @@ function normalizeTitle(title, options) {
       "Turn Up Film Festival: Short Film Competition",
     ],
     [/^Turn Up Film Festival\s*-\s*/i, "Turn Up Film Festival: "],
+    // Each night is billed by its weekday, which names the programme rather
+    // than a film - so the festival's name stays in the key instead of being
+    // stripped as a label, leaving "friday" to be searched for as a film.
+    [/^QUEERHUB Film Festival:\s*/i, "QUEERHUB Film Festival "],
     ["The Peter Greenaway Season - ", "The Peter Greenaway Season: "],
     // The strand is billed with "Touchstone" misspelt on some of its films.
     [/^Touch(?:stone|tsone) Tuesdays\s*-\s*/i, "Touchstone Tuesdays: "],

@@ -21,10 +21,20 @@ async function fetchHostedSource(name) {
 
   // GitHub answers a missing or renamed file with a JSON error body rather than
   // a failed request, which would otherwise reach the venue's transform as a
-  // listing it cannot parse.
+  // listing it cannot parse. Only an object carrying a message is that body -
+  // a hosted file can be JSON itself, and parsing is not enough to tell them
+  // apart.
   let errorResponse;
   try {
-    errorResponse = JSON.parse(text);
+    const parsed = JSON.parse(text);
+    if (
+      parsed &&
+      !Array.isArray(parsed) &&
+      typeof parsed === "object" &&
+      typeof parsed.message === "string"
+    ) {
+      errorResponse = parsed;
+    }
   } catch {
     //
   }
