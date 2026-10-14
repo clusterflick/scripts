@@ -21,6 +21,53 @@ const data = require("./fixtures/artotel-battersea.json");
 // them - so the dates were being listed as films, each at every occurrence.
 const hoxtonData = require("./fixtures/artotel-hoxton.json");
 
+// The same season as retrieved on 14th October 2026, after the venue relisted
+// it: each occurrence now carries only its own date's tickets, named for the
+// film. Every film on a date was being listed at the first ticket's time.
+const hoxtonFilmNamedData = require("./fixtures/artotel-hoxton-film-named-tickets.json");
+
+// As held in cinemas/artotel.com-hoxton/attributes.js
+const hoxtonCinema = {
+  name: "Art'otel London Hoxton",
+  address: "1-3 Rivington Street, London, EC2A 3DT, UK",
+  geo: { lat: 51.526156790963746, lon: -0.08333842748307863 },
+};
+
+// The season's screenings, which both listings of it describe
+const hoxtonScreenings = {
+  "The Nightmare Before Christmas": [
+    "2026-10-24 16:00",
+    "2026-10-27 18:30",
+    "2026-10-31 16:00",
+    "2026-11-01 18:30",
+  ],
+  Maleficent: ["2026-10-24 18:30", "2026-11-01 11:00"],
+  "The Book of Life": [
+    "2026-10-25 11:00",
+    "2026-10-30 11:00",
+    "2026-11-01 13:30",
+  ],
+  Frankenweenie: ["2026-10-25 13:30", "2026-10-27 11:00", "2026-10-28 18:30"],
+  Coco: [
+    "2026-10-27 13:30",
+    "2026-10-28 11:00",
+    "2026-10-31 11:00",
+    "2026-11-01 16:00",
+  ],
+  "Hocus Pocus 2": ["2026-10-27 16:00", "2026-10-31 18:30"],
+  "Hocus Pocus": ["2026-10-31 13:30"],
+};
+
+const getScreenings = (events) =>
+  Object.fromEntries(
+    events.map(({ title, performances }) => [
+      title,
+      performances.map(({ time }) =>
+        format(time, "yyyy-MM-dd HH:mm", { locale: enGB }),
+      ),
+    ]),
+  );
+
 // As held in cinemas/artotel.com-battersea-power-station/attributes.js -
 // DesignMyNight lists the venue under the restaurant's name
 const cinema = {
@@ -52,48 +99,20 @@ describe("findEvents", () => {
   it("takes a ticket named only for its date as one screening of the film it describes", async () => {
     readJSON.mockImplementation(() => hoxtonData);
 
-    // As held in cinemas/artotel.com-hoxton/attributes.js
-    const events = await findEvents({
-      name: "Art'otel London Hoxton",
-      address: "1-3 Rivington Street, London, EC2A 3DT, UK",
-      geo: { lat: 51.526156790963746, lon: -0.08333842748307863 },
-    });
+    const events = await findEvents(hoxtonCinema);
 
-    const screenings = Object.fromEntries(
-      events.map(({ title, performances }) => [
-        title,
-        performances.map(({ time }) =>
-          format(time, "yyyy-MM-dd HH:mm", { locale: enGB }),
-        ),
-      ]),
-    );
-    expect(screenings).toEqual({
-      "The Nightmare Before Christmas": [
-        "2026-10-24 16:00",
-        "2026-10-27 18:30",
-        "2026-10-31 16:00",
-        "2026-11-01 18:30",
-      ],
-      Maleficent: ["2026-10-24 18:30", "2026-11-01 11:00"],
-      "The Book of Life": [
-        "2026-10-25 11:00",
-        "2026-10-30 11:00",
-        "2026-11-01 13:30",
-      ],
-      Frankenweenie: [
-        "2026-10-25 13:30",
-        "2026-10-27 11:00",
-        "2026-10-28 18:30",
-      ],
-      Coco: [
-        "2026-10-27 13:30",
-        "2026-10-28 11:00",
-        "2026-10-31 11:00",
-        "2026-11-01 16:00",
-      ],
-      "Hocus Pocus 2": ["2026-10-27 16:00", "2026-10-31 18:30"],
-      "Hocus Pocus": ["2026-10-31 13:30"],
-    });
+    expect(getScreenings(events)).toEqual(hoxtonScreenings);
+
+    const showingIds = events.map(({ showingId }) => showingId);
+    expect(new Set(showingIds).size).toBe(showingIds.length);
+  });
+
+  it("times each film sharing an occurrence from its own ticket", async () => {
+    readJSON.mockImplementation(() => hoxtonFilmNamedData);
+
+    const events = await findEvents(hoxtonCinema);
+
+    expect(getScreenings(events)).toEqual(hoxtonScreenings);
 
     const showingIds = events.map(({ showingId }) => showingId);
     expect(new Set(showingIds).size).toBe(showingIds.length);

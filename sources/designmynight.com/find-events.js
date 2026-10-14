@@ -144,7 +144,9 @@ function extractMovieGroupsFromOccurrences(occurrences) {
 
     // Get all unique movie titles from this occurrence's ticket types, keyed by
     // the key they will be identified by, so an occurrence sold under two
-    // spellings of one film is added to that film's group once
+    // spellings of one film is added to that film's group once. Each title
+    // keeps its own tickets, since films sharing an occurrence each have their
+    // own time on their own ticket
     const ticketMovieTitles = new Map();
     const datedScreenings = [];
     for (const ticketType of occurrence.ticket_types ?? []) {
@@ -164,8 +166,9 @@ function extractMovieGroupsFromOccurrences(occurrences) {
       // it falls back to the event title the way a missing title does
       if (!key) continue;
       if (!ticketMovieTitles.has(key)) {
-        ticketMovieTitles.set(key, extractedTitle);
+        ticketMovieTitles.set(key, { title: extractedTitle, ticketTypes: [] });
       }
+      ticketMovieTitles.get(key).ticketTypes.push(ticketType);
     }
 
     // Each dated ticket is a screening of its own, at its own time, so it is
@@ -182,10 +185,19 @@ function extractMovieGroupsFromOccurrences(occurrences) {
       DATE_ONLY_TICKET_NAME.test(name.trim()),
     );
 
-    // If we found movie titles in tickets, group this occurrence by those titles
+    // If we found movie titles in tickets, group this occurrence by those
+    // titles, each carrying only the tickets for its film - art'otel Hoxton
+    // sells four films on one date as four tickets, and taking the first
+    // ticket's time put all four at 11:00
     if (ticketMovieTitles.size > 0) {
-      for (const [key, movieTitle] of ticketMovieTitles) {
-        addToGroup(key, movieTitle, occurrence);
+      for (const [key, { title, ticketTypes }] of ticketMovieTitles) {
+        addToGroup(key, title, {
+          ...occurrence,
+          is_sold_out:
+            occurrence.is_sold_out ||
+            ticketTypes.every(({ is_sold_out: soldOut }) => soldOut),
+          ticket_types: ticketTypes,
+        });
       }
     } else if (!hasDatedTickets) {
       // No movie title found in tickets, use null key (will use event title)
