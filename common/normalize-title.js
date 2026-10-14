@@ -1105,6 +1105,12 @@ function normalizeTitle(title, options) {
     [" / Bootlickers / ", " & Bootlickers & "],
     ["Sambhavam - Adhyayam Onnu", "Sambhavam Adhyayam Onnu"],
     ["Cinebug turns 1 - ", "Cinebug turns 1: "],
+    ["Cinebug - ", "Cinebug: "],
+    ["電競女孩 Game Girls", "Gamer Girls"],
+    [
+      "'Wicker Sour' cocktails, straw man making + ",
+      "'Wicker Sour' cocktails, straw man making & ",
+    ],
     [
       "Academy Awards Best Picture Winner 2026 - ",
       "Academy Awards Best Picture Winner 2026: ",

@@ -238,6 +238,9 @@ const nonFilmEvents = [
   // A gallery event billed under the venue's own label ("ME | ..."), with no
   // film attached to it.
   /The 90s at Tate Britain/i,
+  // A pub quiz and a talks night, with no film attached to them.
+  /Brockwell United x Baytree Centre Pub Quiz/i,
+  /^Pints Of Knowledge/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
