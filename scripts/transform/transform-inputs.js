@@ -2,7 +2,6 @@ const fs = require("node:fs").promises;
 const path = require("node:path");
 const { readJSON, writeJSON } = require("../../common/utils");
 const {
-  getReleaseList,
   getYesterdaysRelease,
   downloadReleaseAssets,
 } = require("./get-releases");
@@ -41,7 +40,7 @@ async function prepareTransformInputs() {
   );
 
   console.log("Downloading yesterday's release ...");
-  const release = getYesterdaysRelease(await getReleaseList());
+  const release = await getYesterdaysRelease();
   if (!release) {
     // Not an error: the same as before, when each venue found no release and
     // carried nothing forward. The directory is still written, empty, so a
