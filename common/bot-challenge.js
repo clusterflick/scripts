@@ -25,6 +25,13 @@ const isBotChallengeFetchResponse = (response) =>
 const isSiteGroundChallengeFetchResponse = (response) =>
   response?.headers?.get("sg-captcha") === "challenge";
 
+// Bunny Shield's equivalent, read off a `fetch` Response. Its challenge is a
+// 403 proof-of-work page ("Establishing a secure connection ...") that only a
+// browser can complete, and every challenged response carries
+// `cdn-challenge: true` - the header to trust over its copy, as above.
+const isBunnyShieldChallengeFetchResponse = (response) =>
+  response?.headers?.get("cdn-challenge") === "true";
+
 // A *block* is not a challenge: there is no puzzle being offered, the request
 // was simply refused. It carries no `cf-mitigated` header and none of the
 // challenge copy, so without this it reads as an ordinary failed page load —
@@ -44,5 +51,6 @@ module.exports = {
   isBotBlockText,
   isBotChallengeResponse,
   isBotChallengeFetchResponse,
+  isBunnyShieldChallengeFetchResponse,
   isSiteGroundChallengeFetchResponse,
 };
