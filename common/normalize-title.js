@@ -1849,8 +1849,9 @@ function normalizeTitle(title, options) {
 
   // The listing names no film, so "Movie Night" is the event itself rather
   // than a label wrapped around one - stripping it as the phrase list would
-  // leaves the bare "community".
-  if (title === "black girls in tech presents: community movie night") {
+  // leaves the bare "community". Matched on the "presents" billing rather than
+  // the club, so any club running one groups with the rest.
+  if (title.endsWith("presents: community movie night")) {
     return "community movie night";
   }
 

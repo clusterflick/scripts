@@ -1802,6 +1802,8 @@ const knownRemovablePhrases = [
   "with Katja Hoyer",
   "MEMBER'S SHOW:",
   "Mac Demarco and Ryan Paris",
+  // "A Foggy Tale"'s Chinese title, billed with "London special screening".
+  "大濛 倫敦特映",
 ];
 
 module.exports = knownRemovablePhrases;
