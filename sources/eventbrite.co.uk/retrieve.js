@@ -62,29 +62,61 @@ const EVENT_REQUEST_DELAY_MS = 2_000;
 // network, no delay) and resumes from where it stopped — instead of
 // re-hammering the same pages and keeping the block hot. The throttle lives
 // inside the cached function so it only paces real fetches, not replays.
-const getPageServerData = (cacheKey, url, delayMs, retryConfig) =>
+//
+// `assertPage` checks the page is the shape its caller reads. It runs inside
+// the cached function for the same reason the missing-data check below does: a
+// throw keeps the page out of the cache, where a malformed page would otherwise
+// be replayed by every rerun for the rest of the day.
+const getPageServerData = (
+  cacheKey,
+  url,
+  delayMs,
+  retryConfig,
+  assertPage = () => {},
+) =>
   dailyCache(cacheKey, async () => {
-    await sleep(withJitter(delayMs));
-    const html = await fetchText(url, undefined, retryConfig);
-    const serverDataMatch = html.match(/\s+window.__SERVER_DATA__ = ({.+});/i);
-    if (serverDataMatch) {
-      // Remove tabs from string the JSON parser throws on
-      return JSON.parse(serverDataMatch[1].replace(/\t/g, " "));
-    }
-
-    // A 200 carrying neither blob is not a page we can read. `JSON.parse(null)`
-    // is `null` rather than a throw, so without this check the page lands as
-    // `null` and everything downstream reads it as an event with no details -
-    // on 5th October 2026 that was 142 of 453 event pages, with nothing in the
-    // retrieve log to say so. Throwing here also keeps it out of the daily
-    // cache, so the deferred sweep and any rerun fetch it again.
-    const $ = cheerio.load(html);
-    const nextData = $("#__NEXT_DATA__").html();
-    if (!nextData) {
-      throw new Error(`No page data found at ${url}`);
-    }
-    return JSON.parse(nextData);
+    const pageData = await fetchPageServerData(url, delayMs, retryConfig);
+    assertPage(pageData);
+    return pageData;
   });
+
+const fetchPageServerData = async (url, delayMs, retryConfig) => {
+  await sleep(withJitter(delayMs));
+  const html = await fetchText(url, undefined, retryConfig);
+  const serverDataMatch = html.match(/\s+window.__SERVER_DATA__ = ({.+});/i);
+  if (serverDataMatch) {
+    // Remove tabs from string the JSON parser throws on
+    return JSON.parse(serverDataMatch[1].replace(/\t/g, " "));
+  }
+
+  // A 200 carrying neither blob is not a page we can read. `JSON.parse(null)`
+  // is `null` rather than a throw, so without this check the page lands as
+  // `null` and everything downstream reads it as an event with no details -
+  // on 5th October 2026 that was 142 of 453 event pages, with nothing in the
+  // retrieve log to say so. Throwing here also keeps it out of the daily
+  // cache, so the deferred sweep and any rerun fetch it again.
+  const $ = cheerio.load(html);
+  const nextData = $("#__NEXT_DATA__").html();
+  if (!nextData) {
+    throw new Error(`No page data found at ${url}`);
+  }
+  return JSON.parse(nextData);
+};
+
+// A search page has to carry its results and the page count. The
+// `__NEXT_DATA__` fallback above is for event pages, so a search page arriving
+// in that shape parses without complaint and has neither - on 14th October 2026
+// two did, mid-pagination. A missing `page_count` ended the page loop there, a
+// missing `search_data` crashed retrieve, and with the page cached all fourteen
+// reruns replayed it in milliseconds rather than asking again.
+const assertSearchPage = (url) => (pageData) => {
+  if (
+    !pageData?.search_data?.events?.results ||
+    !Number.isInteger(pageData.page_count)
+  ) {
+    throw new Error(`No search results found at ${url}`);
+  }
+};
 
 const getSearchResultsFor = async (searchTerm) => {
   const movieListPages = [];
@@ -97,6 +129,7 @@ const getSearchResultsFor = async (searchTerm) => {
       url,
       SEARCH_REQUEST_DELAY_MS,
       SEARCH_RETRY_CONFIG,
+      assertSearchPage(url),
     );
 
     page += 1;
