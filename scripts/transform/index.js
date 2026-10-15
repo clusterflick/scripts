@@ -10,8 +10,8 @@ const {
 const { isSportShowing } = require("../../common/is-sport-showing");
 const { isNonFilmEvent } = require("../../common/is-non-film-event");
 const {
-  BOT_CHALLENGE_TEXT,
-  isSiteGroundChallengeFetchResponse,
+  classifyFetchResponse,
+  logRefusal,
 } = require("../../common/bot-challenge");
 const { getCinema } = require("../../cinemas");
 const findMatchesOnTheMovieDb = require("./find-matches-on-the-movie-db");
@@ -224,17 +224,17 @@ async function transform(
         continue;
       }
 
-      // A bot challenge blocking our fetch is not evidence the listing was
+      // A bot refusal blocking our fetch is not evidence the listing was
       // removed. Treat it as inconclusive and keep the previously-known-good
       // event rather than dropping a still-valid one. (A proper fix would verify
       // via Playwright like the retrieve step does.)
       // SiteGround's challenge is a 202, so it would otherwise read as the
-      // listing page and be kept as though it had been checked.
-      const isBotChallenge =
-        ((response.status === 403 || response.status === 503) &&
-          BOT_CHALLENGE_TEXT.test(content)) ||
-        isSiteGroundChallengeFetchResponse(response);
-      if (isBotChallenge) {
+      // listing page and be kept as though it had been checked. Bunny Shield's
+      // is a 403 without any challenge copy, which read as the listing gone and
+      // dropped it.
+      const refusal = classifyFetchResponse(response, content);
+      if (refusal) {
+        logRefusal(refusal, movie.url);
         console.log(" - Kept (bot challenge, unverifiable):", movie.title);
         matchedData.push(withRequiredPerformanceDefaults(movie));
         continue;
