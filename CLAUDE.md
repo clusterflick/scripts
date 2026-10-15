@@ -254,8 +254,11 @@ Health probes record every refusal the classifier finds as `bot-challenge`,
 blocks included. A venue's requests go through `fetchWithRetry`, which is what
 gives them detection - and a retry after 30s on a 429, 502, 503, 504 or network
 error. A request signed with a timestamp passes its options as a function, so
-each attempt is signed afresh (`common/cinesync.io/utils.js`). Fetches made
-inside `page.evaluate` are not covered, other than `requestFromPage`'s.
+each attempt is signed afresh (`common/cinesync.io/utils.js`). A call made from
+inside a browser page goes through `requestFromPage` in
+`common/request-from-page.js`, which works on any page and hands back the
+challenge headers. dice.fm and TicketSource keep their own handling, and the Vue
+probe tallies in the page, so it brings the headers back itself.
 
 ## Testing Conventions
 
