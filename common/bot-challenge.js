@@ -65,17 +65,19 @@ const CHALLENGE_HEADERS = [
 //
 // The body is only read on a non-2xx status. The challenge copy includes phrases
 // ("Just a moment") a film title could carry, so a good page must never be
-// judged on its text - the same rule `common/health-probe.js` follows. A block
-// is checked before the challenge copy because Cloudflare's block page carries
-// "Attention Required" too.
-const classifyRefusal = ({ status, getHeader, body }) => {
+// judged on its text. `failed` lifts that for a caller that already knows the
+// body isn't what it asked for - a health probe whose 200 wasn't JSON - since
+// then there is no good page to misjudge. A block is checked before the
+// challenge copy because Cloudflare's block page carries "Attention Required"
+// too.
+const classifyRefusal = ({ status, getHeader, body, failed = false }) => {
   for (const { header, value, vendor } of CHALLENGE_HEADERS) {
     if (getHeader(header) === value) {
       return { kind: "challenge", vendor, via: header, status };
     }
   }
   const ok = status >= 200 && status < 300;
-  if (ok || !body) return null;
+  if ((ok && !failed) || !body) return null;
   if (isBotBlockText(body)) {
     return { kind: "block", vendor: null, via: "response-text", status };
   }
@@ -85,21 +87,22 @@ const classifyRefusal = ({ status, getHeader, body }) => {
   return null;
 };
 
-const classifyFetchResponse = (response, body) =>
+const classifyFetchResponse = (response, body, { failed } = {}) =>
   classifyRefusal({
     status: response.status,
     getHeader: (name) => response.headers?.get?.(name) ?? null,
     body,
+    failed,
   });
 
 // A Playwright response is null when a navigation didn't produce one, and then
-// only the page text is left to go on - judged as a failure, since that is the
-// only time it is asked.
-const classifyPlaywrightResponse = (response, body) =>
+// only the page text is left to go on.
+const classifyPlaywrightResponse = (response, body, { failed } = {}) =>
   classifyRefusal({
     status: response ? response.status() : 0,
     getHeader: (name) => response?.headers()[name] ?? null,
     body,
+    failed,
   });
 
 // For the plain fields `requestFromPage` in `common/camoufox-site-page.js` hands

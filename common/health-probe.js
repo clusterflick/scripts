@@ -1,8 +1,8 @@
 const { fetchWithRetry, sleep, withJitter } = require("./utils");
 const {
-  BOT_CHALLENGE_TEXT,
-  isBotChallengeFetchResponse,
-  isBotChallengeResponse,
+  classifyFetchResponse,
+  classifyPageRequest,
+  classifyPlaywrightResponse,
 } = require("./bot-challenge");
 const { isMaintenancePage } = require("./maintenance-page");
 const { isQueuePage, describeQueue } = require("./queue-page");
@@ -32,6 +32,12 @@ class ProbeFailure extends Error {
 const probeError = (message) =>
   new ProbeFailure({ kind: "probe-error", message });
 
+// A refusal found by `common/bot-challenge.js`, as the row records it. A block
+// is recorded as a challenge too: both are the source refusing us rather than
+// anything wrong with the probe, and a row says which signal it was read from.
+const botChallenge = ({ via, status }) =>
+  new ProbeFailure({ kind: "bot-challenge", via, status });
+
 // Fetch, and classify anything that isn't the content we asked for. Unlike
 // `fetchJson`, a non-ok response is not simply thrown: a bot challenge is an
 // observation the log exists to keep, and telling it apart from an outage needs
@@ -39,13 +45,9 @@ const probeError = (message) =>
 const probeFetch = async (url, options = {}) => {
   const response = await fetchWithRetry(url, options, PROBE_RETRY);
 
-  if (isBotChallengeFetchResponse(response)) {
-    throw new ProbeFailure({
-      kind: "bot-challenge",
-      via: "cf-mitigated",
-      status: response.status,
-    });
-  }
+  // Headers only, so a good listing is never judged on its text.
+  const refusal = classifyFetchResponse(response);
+  if (refusal) throw botChallenge(refusal);
 
   // Checked here rather than in `classifyFailure` because a waiting room is an
   // ok response: `fetch` follows the 302 and hands back the queue page with a
@@ -64,16 +66,12 @@ const probeFetch = async (url, options = {}) => {
 };
 
 // Classify a body that has already failed to be the content we wanted. Kept
-// separate because BOT_CHALLENGE_TEXT matches phrases ("Just a moment") that a
-// film title could contain, so it must never be run against a good listing.
+// separate because the challenge copy matches phrases ("Just a moment") that a
+// film title could contain, so it must never be run against a good listing -
+// which is what `failed` tells the classifier it isn't.
 const classifyFailure = (url, response, body) => {
-  if (BOT_CHALLENGE_TEXT.test(body)) {
-    return new ProbeFailure({
-      kind: "bot-challenge",
-      via: "response-text",
-      status: response.status,
-    });
-  }
+  const refusal = classifyFetchResponse(response, body, { failed: true });
+  if (refusal) return botChallenge(refusal);
   if (isMaintenancePage(body)) {
     return new ProbeFailure({
       kind: "source-maintenance",
@@ -92,16 +90,12 @@ const classifyFailure = (url, response, body) => {
 // always reach us on the navigation response - an observed Curzon challenge
 // arrived with only the interstitial's own markup to go on, and was reported as
 // a probe error, which fails the job instead of recording that we were blocked.
-// The page text is the fallback, and is why BOT_CHALLENGE_TEXT exists.
+// The page text is the fallback.
 const classifyPage = async (page, response, message) => {
   const status = response?.status() ?? null;
-  if (isBotChallengeResponse(response)) {
-    return new ProbeFailure({
-      kind: "bot-challenge",
-      via: "cf-mitigated",
-      status,
-    });
-  }
+  // Headers first, and the page text only after the queue check below.
+  const headerRefusal = classifyPlaywrightResponse(response);
+  if (headerRefusal) return botChallenge({ ...headerRefusal, status });
   // Read off the page rather than the response: a probe that navigates again
   // inside the callback (BFI loads the venue, then its calendar search) holds a
   // response for the first navigation only, and the queue is wherever we ended
@@ -114,13 +108,10 @@ const classifyPage = async (page, response, message) => {
     });
   }
   const content = await page.content().catch(() => "");
-  if (BOT_CHALLENGE_TEXT.test(content)) {
-    return new ProbeFailure({
-      kind: "bot-challenge",
-      via: "response-text",
-      status,
-    });
-  }
+  const textRefusal = classifyPlaywrightResponse(response, content, {
+    failed: true,
+  });
+  if (textRefusal) return botChallenge({ ...textRefusal, status });
   // Checked after the challenge signals and before the fallback: a holding page
   // is the source being deliberately down, not us being blocked and not the
   // probe breaking. Curzon served one for a whole cycle and every venue was
@@ -152,14 +143,9 @@ const probeJson = async (url, options) => {
 // request had to carry the browser's fingerprint to be answered at all. Takes
 // the plain fields `page.evaluate` can hand back, and classifies them the same
 // way, so a refusal is recorded as the same kind of row either way.
-const parseProbeJson = (url, { ok, status, statusText, cfMitigated, body }) => {
-  if (cfMitigated === "challenge") {
-    throw new ProbeFailure({
-      kind: "bot-challenge",
-      via: "cf-mitigated",
-      status,
-    });
-  }
+const parseProbeJson = (url, { ok, status, statusText, headers, body }) => {
+  const refusal = classifyPageRequest({ status, headers });
+  if (refusal) throw botChallenge(refusal);
   if (ok) {
     try {
       return JSON.parse(body);

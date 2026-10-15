@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const { classifyPage } = require("../health-probe");
+const { classifyPage, parseProbeJson, probeJson } = require("../health-probe");
 
 // The page Curzon actually served on 2026-08-25, captured from the probe's own
 // failure artifact. Anchoring the test to it rather than a hand-written sample
@@ -145,6 +145,64 @@ describe("classifyPage", () => {
 
     expect(failure.reason.message).toContain(
       "landed on https://login.example.com/sso?next=%2Fonline",
+    );
+  });
+});
+
+describe("probeJson bot refusals", () => {
+  const respondWith = (body, init) => {
+    global.fetch = jest.fn(async () => new Response(body, init));
+  };
+
+  const reasonFor = (promise) => promise.catch((error) => error.reason);
+
+  beforeEach(() => {
+    jest.spyOn(console, "log").mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
+  it.each([
+    ["sg-captcha", "challenge", 202],
+    ["cdn-challenge", "true", 403],
+  ])("records a %s challenge", async (header, value, status) => {
+    respondWith("", { status, headers: { [header]: value } });
+    await expect(reasonFor(probeJson("https://example.com/"))).resolves.toEqual(
+      { kind: "bot-challenge", via: header, status },
+    );
+  });
+
+  // A 200 that isn't JSON has already failed to be the listing, so its copy is
+  // judged even though the status is ok.
+  it("records challenge copy served under a 200", async () => {
+    respondWith("<title>Just a moment...</title>");
+    await expect(reasonFor(probeJson("https://example.com/"))).resolves.toEqual(
+      { kind: "bot-challenge", via: "response-text", status: 200 },
+    );
+  });
+
+  it("records a block page as a bot challenge", async () => {
+    respondWith("You are unable to access example.com", { status: 403 });
+    await expect(reasonFor(probeJson("https://example.com/"))).resolves.toEqual(
+      { kind: "bot-challenge", via: "response-text", status: 403 },
+    );
+  });
+
+  it("records a call from inside a page by its headers", () => {
+    expect(() =>
+      parseProbeJson("https://example.com/", {
+        ok: false,
+        status: 403,
+        statusText: "Forbidden",
+        headers: { "cdn-challenge": "true" },
+        body: "",
+      }),
+    ).toThrow(
+      expect.objectContaining({
+        reason: { kind: "bot-challenge", via: "cdn-challenge", status: 403 },
+      }),
     );
   });
 });
