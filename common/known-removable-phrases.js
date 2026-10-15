@@ -51,6 +51,7 @@ const knownRemovablePhrases = [
   " 35mm",
   "the imax 3d experience",
   "the IMAX experience",
+  "Experience It In IMAX",
   "(IMAX)",
   "(SRX) ",
   "(SCX) ",
@@ -1185,6 +1186,7 @@ const knownRemovablePhrases = [
   "Pavle Vujisic 100:",
   "Phoenix Classics:",
   "Phoenix Classic:",
+  "Culty Classic:",
   "PhotoMonth:",
   "Palestine Cinema Days:",
   "Palestine Solidarity Day:",
@@ -1298,6 +1300,7 @@ const knownRemovablePhrases = [
   "Sanrizuka 5:",
   "Save the Cinema Museum:",
   "Saturday Film Nights:",
+  "SLA 2026:",
   "Scared To Dance:",
   "Schools Screening IWD26:",
   "See it First:",
@@ -1812,6 +1815,8 @@ const knownRemovablePhrases = [
   "MEMBER'S SHOW:",
   "Mac Demarco and Ryan Paris",
   "<3",
+  // The tagline the release carries alongside its title.
+  "Rise of A Legend",
   // "A Foggy Tale"'s Chinese title, billed with "London special screening".
   "大濛 倫敦特映",
 ];

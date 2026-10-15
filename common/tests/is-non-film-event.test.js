@@ -109,6 +109,8 @@ describe("isNonFilmEvent", () => {
     ["Shared Horizons: Cuba in Suspension"],
     ["Brockwell United x Baytree Centre Pub Quiz"],
     ["Pints Of Knowledge"],
+    ["NHS at a Crossroads"],
+    ["Bird Spotting Strolls: Gunnersbury Park"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });
