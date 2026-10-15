@@ -964,6 +964,9 @@ const knownRemovablePhrases = [
   "Hackney Children's Film Fest:",
   "HW4P Solidarity on Screen:",
   "LIK:",
+  // LIAF's own prefix is already gone by the time the list runs, taken by the
+  // festival's correction, so only the strand name is left to strip
+  "ANIMATED FEATURE:",
   "Lina Wertmüller:",
   "Little Venice Film Festival 2026:",
   "Little White Lies:",
@@ -1640,9 +1643,11 @@ const knownRemovablePhrases = [
   "Musical Matinees:",
   "Don DeLillo at 90:",
   "with Ben Rivers",
+  ": Nicky Hopkins",
 
   // Common superfluous pieces
   "** SCREENING CANCELLED **",
+  "ALMOST SOLD OUT",
   "CANCELLED DUE TO ILLNESS:",
   "initial screening",
   "a solidarity screening",
@@ -1746,6 +1751,9 @@ const knownRemovablePhrases = [
   "UK Cinema Premiere & Q&A:",
   "UK Theatrical Premiere",
   "Exclusive UK Premiere",
+  // LIAF runs the billing straight on from the title with a slash, which the
+  // bare entry below would otherwise leave on the end of the film.
+  "/UK PREMIERE",
   "UK Premiere",
   "World Theatrical Premiere",
   "World Premiere",

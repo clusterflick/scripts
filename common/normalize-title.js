@@ -1021,6 +1021,8 @@ function normalizeTitle(title, options) {
     [/Scarecrows' Wedding \+ /i, "Scarecrows' Wedding & "],
     ["Tiddler + ", "Tiddler & "],
     ["LIAF + ", "LIAF & "],
+    ["LIAF 2026: ANIMATED FEATURE - ", "LIAF 2026: ANIMATED FEATURE: "],
+    ["O Filho da puta/Son of a Bitch", "Son of a Bitch"],
     ["Lost and Found + Shoom's Odyssey", "Lost and Found & Shoom's Odyssey"],
     ["Chico and Rita + 20 Años", "Chico and Rita & 20 Años"],
     [
