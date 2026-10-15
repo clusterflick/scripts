@@ -1,5 +1,9 @@
 const cheerio = require("cheerio");
 const getPageWithPlaywright = require("../../common/get-page-with-playwright");
+const {
+  describeRefusal,
+  requestFromPage,
+} = require("../../common/request-from-page");
 const attributes = require("./attributes");
 
 // The narrowest filter the feed offers that still holds the screenings - the
@@ -21,22 +25,15 @@ const getListingPath = (offset) =>
 // `text/html`, so the browser parses the HTML held *inside* the JSON string and
 // the source is lost. Only a fetch from page context returns the body intact.
 async function fetchFromPage(page, url) {
-  const { ok, status, body } = await page.evaluate(async (target) => {
-    const response = await fetch(target, {
-      headers: { "X-Requested-With": "XMLHttpRequest" },
-    });
-    return {
-      ok: response.ok,
-      status: response.status,
-      body: await response.text(),
-    };
-  }, url);
+  const response = await requestFromPage(page, url, {
+    headers: { "X-Requested-With": "XMLHttpRequest" },
+  });
 
-  if (!ok) {
-    throw new Error(`Request for ${url} failed with status ${status}`);
+  if (!response.ok) {
+    throw new Error(`Request for ${url} failed - ${describeRefusal(response)}`);
   }
 
-  return body;
+  return response.body;
 }
 
 // The fragment arrives as a JSON-encoded string. A body that isn't JSON means

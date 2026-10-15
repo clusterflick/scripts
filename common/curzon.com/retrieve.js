@@ -30,6 +30,25 @@ const retrieveWithBrowser = (attributes, cinemaId, api) =>
     { label: "Curzon page" },
   );
 
+// The venue's page data, from inside the Playwright page. Its body is read
+// whatever the status, as it always was. The first response is occasionally a
+// non-JSON block or error page, so a body that isn't JSON is asked for once
+// more, and a second one fails saying which refusal it was.
+const fetchPageData = async (page, url) => {
+  for (let attempt = 0; ; attempt += 1) {
+    const response = await requestFromPage(page, url);
+    try {
+      return JSON.parse(response.body);
+    } catch {
+      if (attempt >= 1) {
+        throw new Error(
+          `Curzon answered ${url} without JSON - ${describeRefusal(response)}`,
+        );
+      }
+    }
+  }
+};
+
 async function retrieve(attributes) {
   const path = attributes.url.replace(attributes.domain, "");
   const omniaUrl = `https://www.curzon.com/api/omnia/v1/page?friendly=${path}/`;
@@ -41,15 +60,7 @@ async function retrieve(attributes) {
       await page.waitForLoadState("domcontentloaded");
 
       const [workflowDataData, inititialiseData] = await Promise.all([
-        page.evaluate(async (url) => {
-          try {
-            return await fetch(url).then((r) => r.json());
-          } catch {
-            // Retry once - the first response is occasionally a non-JSON
-            // block/error page
-            return await fetch(url).then((r) => r.json());
-          }
-        }, omniaUrl),
+        fetchPageData(page, omniaUrl),
         page.evaluate(() => /* global window */ window.initialData),
       ]);
 
