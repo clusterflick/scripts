@@ -1003,6 +1003,9 @@ function normalizeTitle(title, options) {
       "Digital Arts Film Festival",
     ],
     ["Death Grips Live NYC 2012", "Death Grips: NPR Music Live"],
+    // The showcase is billed after a dash, which would otherwise come off and
+    // leave a bare "camp" to group with the feature of that name.
+    ["CAMP - A Short Film Showcase", "CAMP A Short Film Showcase"],
     ["A.I. - Artificial Intelligence", "A.I. Artificial Intelligence"],
     ["Journey + A Wedding Suit", "Journey & A Wedding Suit"],
     ["We Lana Fel Khayal Hob", "Wa Lana Fel Khayal Hob"],

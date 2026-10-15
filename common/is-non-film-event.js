@@ -244,6 +244,10 @@ const nonFilmEvents = [
   // A bake-and-drinks night and a wine night, with no film attached to them.
   /Gingerbread House Making/i,
   /^Pizza & Plonk$/i,
+  // A talk on the health service and a guided birdwatching walk, with no film
+  // attached to them.
+  /^NHS at a Crossroads$/i,
+  /^Bird Spotting Strolls/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
