@@ -38,6 +38,7 @@ jest.mock(
                 return null;
               },
               waitForSelector: async () => {},
+              waitForLoadState: async () => {},
               content: async () => browserPages[current],
               url: () => current,
               close: async () => {},

@@ -44,12 +44,18 @@ const fetchWithoutBrowser =
 
 // On a challenged navigation the first document is the interstitial and the
 // real one only replaces it once Camoufox has solved the challenge, so the
-// selector is what is waited on. The browser has already navigated by the time
-// this runs, so it paces the page after this one.
+// selector is what is waited on. Attached rather than visible: the content is
+// read as HTML, which the plain-fetch path shows is complete without any
+// script. But the selector can appear while the real document is still being
+// parsed - `goto` only waited for the interstitial to load - so the load is
+// waited for too, or a listing can be read with its later entries missing. The
+// browser has already navigated by the time this runs, so it paces the page
+// after this one.
 const readWithBrowser =
   ({ selector, pace }) =>
   async (page) => {
     await page.waitForSelector(selector, { state: "attached" });
+    await page.waitForLoadState("load");
     const content = await page.content();
     await pace();
     return content;
