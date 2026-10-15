@@ -8,6 +8,7 @@ const { isAfter, startOfDay } = require("date-fns");
 const stringify = require("json-stable-stringify");
 const diff = require("fast-diff");
 const slugify = require("slugify");
+const { classifyFetchResponse, logRefusal } = require("./bot-challenge");
 
 const readJSON = async (filePath) => {
   const data = await fs.readFile(filePath, "utf8");
@@ -331,6 +332,25 @@ const fetchError = (url, response) => {
   return error;
 };
 
+// Log a bot refusal wherever one is met, so a run that fails further on - a
+// missing selector, an empty listing - says that it was refused rather than
+// leaving that to be worked out from the symptom. Report only: the response is
+// handed back exactly as it would have been, and a failure here is swallowed,
+// because whether a refusal matters is the caller's call. The body of a refused
+// response is read from a clone, leaving the original unread for the caller.
+const reportRefusal = async (url, response) => {
+  try {
+    const body =
+      !response.ok && typeof response.clone === "function"
+        ? await response.clone().text()
+        : undefined;
+    const refusal = classifyFetchResponse(response, body);
+    if (refusal) logRefusal(refusal, url);
+  } catch {
+    // Detection is best-effort and must never change what the fetch returns.
+  }
+};
+
 const fetchWithRetry = async (
   url,
   options = {},
@@ -345,6 +365,7 @@ const fetchWithRetry = async (
   return withRetry(
     async () => {
       const response = await fetch(url, options);
+      await reportRefusal(url, response);
       // A 429/503 is a *successful* fetch with a non-ok response, so it never
       // throws on its own — surface it as an error here so withRetry backs off
       // and retries instead of passing the failure straight through.

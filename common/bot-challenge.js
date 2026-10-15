@@ -45,10 +45,94 @@ const BOT_BLOCK_TEXT =
 
 const isBotBlockText = (html) => Boolean(html) && BOT_BLOCK_TEXT.test(html);
 
+// The vendor headers above, in the order they are trusted. Each is definitive
+// for its vendor, so the first to match names the refusal.
+const CHALLENGE_HEADERS = [
+  { header: "cf-mitigated", value: "challenge", vendor: "cloudflare" },
+  { header: "sg-captcha", value: "challenge", vendor: "siteground" },
+  { header: "cdn-challenge", value: "true", vendor: "bunny-shield" },
+];
+
+// Say whether a response was a bot refusal, and which: `{ kind, vendor, via,
+// status }`, or null for anything else. `kind` is "challenge" (a puzzle a
+// browser might solve) or "block" (refused outright, where a browser on the same
+// IP will fare no better).
+//
+// Takes the parts every kind of response can hand over - a status, a header
+// getter and, when it has been read, the body - so a `fetch` Response, a
+// Playwright response and a call made from inside a page are all judged the same
+// way. See the adapters below.
+//
+// The body is only read on a non-2xx status. The challenge copy includes phrases
+// ("Just a moment") a film title could carry, so a good page must never be
+// judged on its text - the same rule `common/health-probe.js` follows. A block
+// is checked before the challenge copy because Cloudflare's block page carries
+// "Attention Required" too.
+const classifyRefusal = ({ status, getHeader, body }) => {
+  for (const { header, value, vendor } of CHALLENGE_HEADERS) {
+    if (getHeader(header) === value) {
+      return { kind: "challenge", vendor, via: header, status };
+    }
+  }
+  const ok = status >= 200 && status < 300;
+  if (ok || !body) return null;
+  if (isBotBlockText(body)) {
+    return { kind: "block", vendor: null, via: "response-text", status };
+  }
+  if (BOT_CHALLENGE_TEXT.test(body)) {
+    return { kind: "challenge", vendor: null, via: "response-text", status };
+  }
+  return null;
+};
+
+const classifyFetchResponse = (response, body) =>
+  classifyRefusal({
+    status: response.status,
+    getHeader: (name) => response.headers?.get?.(name) ?? null,
+    body,
+  });
+
+// A Playwright response is null when a navigation didn't produce one, and then
+// only the page text is left to go on - judged as a failure, since that is the
+// only time it is asked.
+const classifyPlaywrightResponse = (response, body) =>
+  classifyRefusal({
+    status: response ? response.status() : 0,
+    getHeader: (name) => response?.headers()[name] ?? null,
+    body,
+  });
+
+// For the plain fields `requestFromPage` in `common/camoufox-site-page.js` hands
+// back from inside a browser page.
+const classifyPageRequest = ({ status, headers = {}, body }) =>
+  classifyRefusal({
+    status,
+    getHeader: (name) => headers[name] ?? null,
+    body,
+  });
+
+const describeClassification = ({ kind, vendor, via, status }) =>
+  `${status} ${kind === "block" ? "block" : "challenge"} (${vendor ?? "unknown vendor"}, via ${via})`;
+
+// The one line every detection writes, wherever it was made, so a single search
+// of a run's log finds every refusal in it. It only reports: whether a refusal
+// fails the run, escalates or is shrugged off is the caller's call.
+const logRefusal = (classification, url) => {
+  console.log(
+    `      - 🤖 Bot ${describeClassification(classification)} at ${url}`,
+  );
+};
+
 module.exports = {
   BOT_CHALLENGE_TEXT,
   BOT_BLOCK_TEXT,
+  classifyFetchResponse,
+  classifyPageRequest,
+  classifyPlaywrightResponse,
+  classifyRefusal,
+  describeClassification,
   isBotBlockText,
+  logRefusal,
   isBotChallengeResponse,
   isBotChallengeFetchResponse,
   isBunnyShieldChallengeFetchResponse,

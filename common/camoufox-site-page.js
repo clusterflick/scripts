@@ -1,8 +1,8 @@
 const { withCamoufoxSession } = require("./get-page-with-camoufox");
 const {
-  BOT_CHALLENGE_TEXT,
-  isBotBlockText,
-  isBotChallengeResponse,
+  classifyPageRequest,
+  describeClassification,
+  logRefusal,
 } = require("./bot-challenge");
 
 // For a site whose pages still load but whose API refuses anything that isn't
@@ -20,16 +20,28 @@ const EVALUATE_RETRIES = 2;
 
 // The raw response, unclassified: a retrieve and a health probe need different
 // errors out of the same failure. `body` is read in full either way, since on a
-// failure it is the evidence of what refused us.
+// failure it is the evidence of what refused us. A refusal is logged here all
+// the same, so one made from inside a page shows up beside the rest.
+//
+// `headers` carries the vendor challenge headers `classifyPageRequest` reads;
+// `cfMitigated` and `sgCaptcha` are the same values, kept for the callers that
+// read them directly.
 //
 // A cross-origin call that is refused without CORS headers never produces a
 // readable response - only an opaque "Failed to fetch" - so that comes back as
 // `status: 0` with the message, rather than as a thrown network error that
 // would read as the API being down.
 const requestFromPage = async (page, url, init, settle) => {
+  const response = await evaluateRequest(page, url, init, settle);
+  const refusal = classifyPageRequest(response);
+  if (refusal) logRefusal(refusal, url);
+  return response;
+};
+
+const evaluateRequest = async (page, url, init, settle) => {
   for (let attempt = 0; ; attempt += 1) {
     try {
-      return await page.evaluate(
+      const { headers, ...response } = await page.evaluate(
         async ({ url, init }) => {
           let response;
           try {
@@ -39,8 +51,7 @@ const requestFromPage = async (page, url, init, settle) => {
               ok: false,
               status: 0,
               statusText: `refused before a response was readable (${error.message})`,
-              cfMitigated: null,
-              sgCaptcha: null,
+              headers: {},
               body: "",
             };
           }
@@ -48,13 +59,23 @@ const requestFromPage = async (page, url, init, settle) => {
             ok: response.ok,
             status: response.status,
             statusText: response.statusText,
-            cfMitigated: response.headers.get("cf-mitigated"),
-            sgCaptcha: response.headers.get("sg-captcha"),
+            headers: Object.fromEntries(
+              ["cf-mitigated", "sg-captcha", "cdn-challenge"].map((name) => [
+                name,
+                response.headers.get(name),
+              ]),
+            ),
             body: await response.text(),
           };
         },
         { url, init },
       );
+      return {
+        ...response,
+        headers,
+        cfMitigated: headers["cf-mitigated"] ?? null,
+        sgCaptcha: headers["sg-captcha"] ?? null,
+      };
     } catch (error) {
       if (attempt >= EVALUATE_RETRIES || !CONTEXT_LOST.test(error.message)) {
         throw error;
@@ -67,18 +88,11 @@ const requestFromPage = async (page, url, init, settle) => {
 // Say which refusal a `requestFromPage` response was: a challenge Camoufox
 // failed to solve and an outright block need different next steps, and a bare
 // 403 says neither.
-const describeRefusal = ({
-  status,
-  statusText,
-  cfMitigated,
-  sgCaptcha,
-  body,
-}) => {
-  if (cfMitigated === "challenge") return `${status} challenge (cf-mitigated)`;
-  if (sgCaptcha === "challenge") return `${status} challenge (sg-captcha)`;
-  if (isBotBlockText(body)) return `${status} blocked outright`;
-  if (BOT_CHALLENGE_TEXT.test(body)) return `${status} challenge (page copy)`;
-  return `${status} ${statusText}`;
+const describeRefusal = (response) => {
+  const refusal = classifyPageRequest(response);
+  return refusal
+    ? describeClassification(refusal)
+    : `${response.status} ${response.statusText}`;
 };
 
 // Open `url` in Camoufox and hand `fn` the page once `settle` says it is the
@@ -89,12 +103,9 @@ const withSitePage = (url, cacheKey, { settle, onUnsettled, ...options }, fn) =>
     getPage(
       url,
       cacheKey,
+      // A challenge on the navigation is logged by the session; `settle` is
+      // what waits for Camoufox to solve it.
       async (page, response) => {
-        if (isBotChallengeResponse(response)) {
-          console.log(
-            "      - Challenge served; waiting for Camoufox to solve it",
-          );
-        }
         try {
           await settle(page);
         } catch (error) {

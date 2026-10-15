@@ -190,3 +190,72 @@ describe("fetchWithRetry retryStatuses", () => {
     expect(global.fetch).toHaveBeenCalledTimes(2);
   });
 });
+
+describe("fetchWithRetry bot refusals", () => {
+  let logs;
+
+  beforeEach(() => {
+    logs = [];
+    jest.spyOn(console, "log").mockImplementation((line) => logs.push(line));
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
+  it("logs a challenge and still hands back the response unread", async () => {
+    const challenge = new Response("<title>Just a moment...</title>", {
+      status: 403,
+      headers: { "cf-mitigated": "challenge" },
+    });
+    global.fetch = jest.fn(async () => challenge);
+
+    const response = await fetchWithRetry("https://example.com/");
+
+    expect(response).toBe(challenge);
+    expect(await response.text()).toBe("<title>Just a moment...</title>");
+    expect(logs).toEqual([
+      "      - 🤖 Bot 403 challenge (cloudflare, via cf-mitigated) at https://example.com/",
+    ]);
+  });
+
+  it("reads a refused body from a clone to spot a block", async () => {
+    global.fetch = jest.fn(
+      async () => new Response("Sorry, you have been blocked", { status: 403 }),
+    );
+
+    const response = await fetchWithRetry("https://example.com/");
+
+    expect(await response.text()).toBe("Sorry, you have been blocked");
+    expect(logs).toEqual([
+      "      - 🤖 Bot 403 block (unknown vendor, via response-text) at https://example.com/",
+    ]);
+  });
+
+  it("logs nothing for an ordinary page or error", async () => {
+    global.fetch = jest
+      .fn()
+      .mockResolvedValueOnce(new Response("<h1>Just a Moment</h1>"))
+      .mockResolvedValueOnce(new Response("Not found", { status: 404 }));
+
+    await fetchWithRetry("https://example.com/a");
+    await fetchWithRetry("https://example.com/b");
+
+    expect(logs).toEqual([]);
+  });
+
+  it("never lets detection change the result", async () => {
+    // A stand-in whose body can't be cloned or read for detection.
+    const response = {
+      ...htmlResponse(403),
+      clone: () => {
+        throw new Error("unclonable");
+      },
+    };
+    global.fetch = jest.fn(async () => response);
+
+    await expect(fetchWithRetry("https://example.com/")).resolves.toBe(
+      response,
+    );
+  });
+});
