@@ -1,3 +1,5 @@
+const { fetchWithRetry } = require("../utils");
+
 const variables = {
   limit: 1000,
   orderBy: "magic",
@@ -53,7 +55,7 @@ query ($limit: Int, $orderBy: String, $type: String) {
 `;
 
 async function retrieve({ siteId, domain }) {
-  const response = await fetch(`${domain}/graphql`, {
+  const response = await fetchWithRetry(`${domain}/graphql`, {
     method: "POST",
     body: JSON.stringify({ query, variables }),
     headers: {

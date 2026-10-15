@@ -1,4 +1,5 @@
 const crypto = require("crypto");
+const { fetchWithRetry } = require("../utils");
 
 /**
  * Generates a signature for the API request
@@ -43,24 +44,28 @@ function generateSignature(body, apiKey, timestamp) {
  * @returns {Promise<Object>} API response
  */
 async function fetchSignedJson(apiKey, url, body, options = {}) {
-  const timestamp = Math.floor(Date.now() / 1000).toString();
-  const signature = generateSignature(body, apiKey, timestamp);
-  const headers = {
-    "Content-Type": "application/json",
-    ...options.headers,
-    signature,
-    timestamp,
-  };
+  // Signed per attempt: the signature covers a timestamp, so a retry has to
+  // carry a fresh one rather than resend the first.
+  const buildFetchOptions = () => {
+    const timestamp = Math.floor(Date.now() / 1000).toString();
+    const signature = generateSignature(body, apiKey, timestamp);
+    const headers = {
+      "Content-Type": "application/json",
+      ...options.headers,
+      signature,
+      timestamp,
+    };
 
-  const fetchOptions = {
-    method: options.method || "POST",
-    headers,
-    body: JSON.stringify(body),
-    ...options,
+    return {
+      method: options.method || "POST",
+      headers,
+      body: JSON.stringify(body),
+      ...options,
+    };
   };
 
   try {
-    const response = await fetch(url, fetchOptions);
+    const response = await fetchWithRetry(url, buildFetchOptions);
     const data = await response.json();
 
     if (!response.ok) {

@@ -251,8 +251,11 @@ satisfies. An interstitial served with a 200 can only be told apart from the
 content by what it lacks.
 
 Health probes record every refusal the classifier finds as `bot-challenge`,
-blocks included. Calls made with a bare `fetch` are not covered, nor are
-`page.evaluate` fetches other than `requestFromPage`'s.
+blocks included. A venue's requests go through `fetchWithRetry`, which is what
+gives them detection - and a retry after 30s on a 429, 502, 503, 504 or network
+error. A request signed with a timestamp passes its options as a function, so
+each attempt is signed afresh (`common/cinesync.io/utils.js`). Fetches made
+inside `page.evaluate` are not covered, other than `requestFromPage`'s.
 
 ## Testing Conventions
 

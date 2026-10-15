@@ -1,12 +1,16 @@
 const cheerio = require("cheerio");
-const { fetchText, assertSelector } = require("../../common/utils");
+const {
+  fetchText,
+  fetchWithRetry,
+  assertSelector,
+} = require("../../common/utils");
 const { url, domain } = require("./attributes");
 
 async function retrieve() {
   // The ICA's /upcoming page returns a 404 status but still serves valid HTML
   // with all the film listings — this appears to be a server misconfiguration.
   // We accept 404 here but still throw on other error statuses (e.g. 500).
-  const movieListResponse = await fetch(url);
+  const movieListResponse = await fetchWithRetry(url);
   if (!movieListResponse.ok && movieListResponse.status !== 404) {
     throw new Error(
       `Failed to fetch ${url} - ${movieListResponse.status} ${movieListResponse.statusText}`,

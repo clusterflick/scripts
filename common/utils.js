@@ -364,7 +364,13 @@ const fetchWithRetry = async (
     : RETRYABLE_STATUSES;
   return withRetry(
     async () => {
-      const response = await fetch(url, options);
+      // A function is called afresh for each attempt, for a request that must
+      // be rebuilt to be resent - one signed with a timestamp, say, which would
+      // otherwise go out again stale.
+      const response = await fetch(
+        url,
+        typeof options === "function" ? options() : options,
+      );
       await reportRefusal(url, response);
       // A 429/503 is a *successful* fetch with a non-ok response, so it never
       // throws on its own — surface it as an error here so withRetry backs off

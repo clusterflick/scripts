@@ -1,4 +1,4 @@
-const { fetchText } = require("../../common/utils");
+const { fetchText, fetchWithRetry } = require("../../common/utils");
 
 async function retrieve({ domain, cinemaId }) {
   const variables = {
@@ -6,7 +6,7 @@ async function retrieve({ domain, cinemaId }) {
     cinema_id: cinemaId,
   };
 
-  const moviesResponse = await fetch(`${domain}/api/get-movies-ajax`, {
+  const moviesResponse = await fetchWithRetry(`${domain}/api/get-movies-ajax`, {
     method: "POST",
     body: new URLSearchParams(variables).toString(),
     headers: {

@@ -259,3 +259,36 @@ describe("fetchWithRetry bot refusals", () => {
     );
   });
 });
+
+describe("fetchWithRetry options built per attempt", () => {
+  beforeEach(() => {
+    jest.useFakeTimers();
+    jest.spyOn(console, "log").mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    jest.useRealTimers();
+    jest.restoreAllMocks();
+  });
+
+  it("builds the options afresh for each attempt", async () => {
+    global.fetch = jest
+      .fn()
+      .mockResolvedValueOnce(htmlResponse(503))
+      .mockResolvedValueOnce(htmlResponse(200, "ok"));
+    let attempt = 0;
+    const buildOptions = () => ({
+      headers: { timestamp: String((attempt += 1)) },
+    });
+
+    const { value: response } = await settleWithTimers(
+      fetchWithRetry("https://example.com", buildOptions, { delayMs: 10 }),
+    );
+
+    expect(response.status).toBe(200);
+    expect(global.fetch.mock.calls.map(([, options]) => options)).toEqual([
+      { headers: { timestamp: "1" } },
+      { headers: { timestamp: "2" } },
+    ]);
+  });
+});

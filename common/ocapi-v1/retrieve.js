@@ -1,4 +1,4 @@
-const { fetchError } = require("../utils");
+const { fetchError, fetchWithRetry } = require("../utils");
 
 // How the calls are made. Direct by default; a chain whose API only answers a
 // browser passes one that makes them from inside a page instead, so both paths
@@ -6,10 +6,12 @@ const { fetchError } = require("../utils");
 //
 // A 403 is thrown with its status so a caller can tell a refusal apart and
 // escalate. Anything else is read as before: an error body is still JSON here,
-// and the 404 check below depends on reading it.
+// and the 404 check below depends on reading it. A rate limit or a transient
+// upstream failure is retried, since one request is made per published date
+// and any one of them failing would fail the whole venue.
 const directTransport = {
   json: async (url, init) => {
-    const response = await fetch(url, init);
+    const response = await fetchWithRetry(url, init);
     if (response.status === 403) throw fetchError(url, response);
     return response.json();
   },
