@@ -4,6 +4,7 @@ const {
 const {
   retrievePaginatedListViewWithBrowser,
 } = require("../../common/tribe-events/browser");
+const { retryThroughCamoufox } = require("../../common/camoufox-escalation");
 const { getExpectedClosure } = require("../../common/expected-closures");
 const { id, domain, url } = require("./attributes");
 
@@ -16,21 +17,12 @@ const listView = { domain, initialPageUrl: url, buildParams, maxPages: 10 };
 // the same IP through, so a challenge escalates to Camoufox - see
 // `common/tribe-events/browser.js`. Only the challenge: anything else would
 // fail the same way in a browser.
-async function retrieveListView() {
-  try {
-    return await retrievePaginatedListView(listView);
-  } catch (error) {
-    if (!error.siteGroundChallenge) throw error;
-
-    console.log(
-      "    - Challenged by SiteGround; retrying through Camoufox, which carries a browser fingerprint and can solve a challenge",
-    );
-    return await retrievePaginatedListViewWithBrowser(
-      listView,
-      `${id}-browser`,
-    );
-  }
-}
+const retrieveListView = () =>
+  retryThroughCamoufox(
+    () => retrievePaginatedListView(listView),
+    () => retrievePaginatedListViewWithBrowser(listView, `${id}-browser`),
+    { isRefusal: (error) => error.siteGroundChallenge },
+  );
 
 async function retrieve() {
   try {

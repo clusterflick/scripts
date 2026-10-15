@@ -1,6 +1,6 @@
 const ocapiv1Retrieve = require("../ocapi-v1/retrieve");
 const getPageWithPlaywright = require("../get-page-with-playwright");
-const { isBotBlockText } = require("../bot-challenge");
+const { retryThroughCamoufox } = require("../camoufox-escalation");
 const { describeRefusal } = require("../camoufox-site-page");
 const { requestFromPage, withCurzonPage } = require("./browser");
 
@@ -27,14 +27,7 @@ const retrieveWithBrowser = (attributes, cinemaId, api) =>
     `curzon.com-browser-${attributes.id}`,
     (page) =>
       ocapiv1Retrieve({ ...attributes, cinemaId }, api, overBrowser(page)),
-    {
-      onUnsettled: async (page, response, error) =>
-        new Error(
-          isBotBlockText(await page.content().catch(() => null))
-            ? `Blocked outright (not challenged) at ${page.url()} - the request was refused, not scored`
-            : `Curzon page never loaded past Cloudflare (${error.message})`,
-        ),
-    },
+    { label: "Curzon page" },
   );
 
 async function retrieve(attributes) {
@@ -67,18 +60,13 @@ async function retrieve(attributes) {
     },
   );
 
-  try {
-    return await ocapiv1Retrieve({ ...attributes, cinemaId }, api);
-  } catch (error) {
-    // Escalate on a 403 only, as Cineworld does - see `browser.js` for what
-    // the refusal looks like and why it can't be told apart from here.
-    if (error.status !== 403) throw error;
-
-    console.log(
-      "    - Refused with a 403; retrying through Camoufox, which carries a browser fingerprint and can solve a challenge",
-    );
-    return await retrieveWithBrowser(attributes, cinemaId, api);
-  }
+  // Escalate on a 403 only, as Cineworld does - see `browser.js` for what the
+  // refusal looks like and why it can't be told apart from here.
+  return retryThroughCamoufox(
+    () => ocapiv1Retrieve({ ...attributes, cinemaId }, api),
+    () => retrieveWithBrowser(attributes, cinemaId, api),
+    { isRefusal: (error) => error.status === 403 },
+  );
 }
 
 module.exports = retrieve;

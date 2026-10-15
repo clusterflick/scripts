@@ -38,13 +38,7 @@ const retrievePaginatedListViewWithBrowser = (options, cacheKey) =>
   withSitePage(
     options.initialPageUrl,
     cacheKey,
-    {
-      settle: settleOnSite,
-      onUnsettled: async (page, response, error) =>
-        new Error(
-          `Tribe events page never loaded past the bot challenge at ${page.url()} (${error.message})`,
-        ),
-    },
+    { settle: settleOnSite, label: "Tribe events page" },
     (page) =>
       retrievePaginatedListView({ ...options, transport: overBrowser(page) }),
   );

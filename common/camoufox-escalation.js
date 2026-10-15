@@ -71,4 +71,23 @@ const getPageEscalating = (
   });
 };
 
-module.exports = { getPageEscalating };
+// Run `direct`, and `throughBrowser` instead when it fails with an error
+// `isRefusal` recognises. Only a refusal: any other failure would fail the same
+// way in a browser, so it is thrown as it is.
+//
+// The retry restarts rather than resumes. Whatever the direct attempt already
+// fetched is in the day cache, so the restart only repeats what failed.
+const retryThroughCamoufox = async (direct, throughBrowser, { isRefusal }) => {
+  try {
+    return await direct();
+  } catch (error) {
+    if (!isRefusal(error)) throw error;
+
+    console.log(
+      `    - ${error.message}; retrying through Camoufox, which carries a browser fingerprint and can solve a challenge`,
+    );
+    return await throughBrowser();
+  }
+};
+
+module.exports = { getPageEscalating, retryThroughCamoufox };

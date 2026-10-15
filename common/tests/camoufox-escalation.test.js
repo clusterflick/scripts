@@ -1,4 +1,7 @@
-const { getPageEscalating } = require("../camoufox-escalation");
+const {
+  getPageEscalating,
+  retryThroughCamoufox,
+} = require("../camoufox-escalation");
 
 // Stands in for a session's `getPage`: tries `withoutBrowser` and reports
 // "escalated" where the session would hand the page to the browser.
@@ -57,5 +60,56 @@ describe("getPageEscalating", () => {
     await expect(fetchPage()).rejects.toThrow(
       "Unexpected 404 response for https://example.com/",
     );
+  });
+});
+
+describe("retryThroughCamoufox", () => {
+  const refused = () =>
+    Object.assign(new Error("403 Forbidden"), { status: 403 });
+  const isRefusal = (error) => error.status === 403;
+
+  beforeEach(() => {
+    jest.spyOn(console, "log").mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
+  it("does not open the browser when the direct attempt succeeds", async () => {
+    const throughBrowser = jest.fn();
+    await expect(
+      retryThroughCamoufox(async () => "direct", throughBrowser, { isRefusal }),
+    ).resolves.toBe("direct");
+    expect(throughBrowser).not.toHaveBeenCalled();
+  });
+
+  it("retries through the browser on a refusal, saying why", async () => {
+    await expect(
+      retryThroughCamoufox(
+        async () => {
+          throw refused();
+        },
+        async () => "browser",
+        { isRefusal },
+      ),
+    ).resolves.toBe("browser");
+    expect(console.log).toHaveBeenCalledWith(
+      expect.stringContaining("403 Forbidden; retrying through Camoufox"),
+    );
+  });
+
+  it("throws any other failure as it is", async () => {
+    const throughBrowser = jest.fn();
+    await expect(
+      retryThroughCamoufox(
+        async () => {
+          throw new Error("404 Not Found");
+        },
+        throughBrowser,
+        { isRefusal },
+      ),
+    ).rejects.toThrow("404 Not Found");
+    expect(throughBrowser).not.toHaveBeenCalled();
   });
 });
