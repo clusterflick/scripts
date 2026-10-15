@@ -1,5 +1,7 @@
 const { withPlaywrightSession } = require("../get-page-with-playwright");
+const { classifyPageRequest, logRefusal } = require("../bot-challenge");
 const {
+  botChallengeReason,
   probeJson,
   probeError,
   classifyPage,
@@ -40,6 +42,10 @@ const getKnownCinemaIds = async () => {
 // Tallied inside the page rather than out. Fifteen venues of full film data is
 // several megabytes to serialise back across the bridge, and all that is wanted
 // from it is counts per date.
+//
+// A failed call brings back what `refusalFor` needs to say whether it was a bot
+// refusal: its status, the vendor challenge headers, and - only when it wasn't
+// JSON, so never a listing - its body.
 const tallyInPage = async (page, cinemaIds) =>
   page.evaluate(
     async ({ cinemaIds, urlTemplate }) => {
@@ -48,11 +54,33 @@ const tallyInPage = async (page, cinemaIds) =>
         const url = urlTemplate.replace("CINEMA_ID", cinemaId);
         try {
           const response = await fetch(url);
-          const data = await response.json();
-          if (!response.ok || data.responseCode !== 0 || !data.result) {
+          const body = await response.text();
+          let data = null;
+          try {
+            data = JSON.parse(body);
+          } catch {
+            // Reported below as a response without JSON.
+          }
+          if (
+            !response.ok ||
+            !data ||
+            data.responseCode !== 0 ||
+            !data.result
+          ) {
             results.push({
               cinemaId,
-              error: `responded ${response.status} with responseCode ${data?.responseCode}`,
+              url,
+              error: data
+                ? `responded ${response.status} with responseCode ${data.responseCode}`
+                : `responded ${response.status} without JSON`,
+              status: response.status,
+              headers: Object.fromEntries(
+                ["cf-mitigated", "sg-captcha", "cdn-challenge"].map((name) => [
+                  name,
+                  response.headers.get(name),
+                ]),
+              ),
+              body: data ? "" : body,
             });
             continue;
           }
@@ -76,6 +104,16 @@ const tallyInPage = async (page, cinemaIds) =>
     },
     { cinemaIds, urlTemplate: filmsUrl("CINEMA_ID") },
   );
+
+// A per-venue call the page made and failed, as the row records it: a bot
+// refusal by what refused us, anything else as the probe's own error. A call
+// that threw before answering brings back no status, and is the latter.
+const refusalFor = (tally) => {
+  if (tally.status === undefined) return null;
+  const refusal = classifyPageRequest(tally, { failed: true });
+  if (refusal) logRefusal(refusal, tally.url);
+  return refusal;
+};
 
 async function health(venues) {
   const { countRequest, reasonFor, finalise } = startObservation(GRANULARITY);
@@ -157,9 +195,12 @@ async function health(venues) {
 
       const tally = tallies.get(cinemaId);
       if (tally?.error) {
+        const refusal = refusalFor(tally);
         return {
           venue: id,
-          reason: { kind: "probe-error", message: tally.error },
+          reason: refusal
+            ? botChallengeReason(refusal)
+            : { kind: "probe-error", message: tally.error },
         };
       }
 

@@ -107,11 +107,12 @@ const classifyPlaywrightResponse = (response, body, { failed } = {}) =>
 
 // For the plain fields `requestFromPage` in `common/camoufox-site-page.js` hands
 // back from inside a browser page.
-const classifyPageRequest = ({ status, headers = {}, body }) =>
+const classifyPageRequest = ({ status, headers = {}, body }, { failed } = {}) =>
   classifyRefusal({
     status,
     getHeader: (name) => headers[name] ?? null,
     body,
+    failed,
   });
 
 const describeClassification = ({ kind, vendor, via, status }) =>

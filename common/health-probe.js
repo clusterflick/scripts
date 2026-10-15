@@ -35,8 +35,13 @@ const probeError = (message) =>
 // A refusal found by `common/bot-challenge.js`, as the row records it. A block
 // is recorded as a challenge too: both are the source refusing us rather than
 // anything wrong with the probe, and a row says which signal it was read from.
-const botChallenge = ({ via, status }) =>
-  new ProbeFailure({ kind: "bot-challenge", via, status });
+const botChallengeReason = ({ via, status }) => ({
+  kind: "bot-challenge",
+  via,
+  status,
+});
+
+const botChallenge = (refusal) => new ProbeFailure(botChallengeReason(refusal));
 
 // Fetch, and classify anything that isn't the content we asked for. Unlike
 // `fetchJson`, a non-ok response is not simply thrown: a bot challenge is an
@@ -236,6 +241,7 @@ const startObservation = (granularity) => {
 
 module.exports = {
   ProbeFailure,
+  botChallengeReason,
   probeError,
   probeJson,
   parseProbeJson,
