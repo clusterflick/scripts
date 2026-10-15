@@ -112,3 +112,38 @@ describe("getPageWithCamoufox bot refusals", () => {
     expect(refusalLogs()).toEqual([]);
   });
 });
+
+describe("getPageWithCamoufox when detection itself fails", () => {
+  beforeEach(() => {
+    jest.spyOn(console, "log").mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
+  // A response whose headers can't be read stands in for any fault in the
+  // classifier: neither a loaded page nor the reported error may depend on it.
+  const unreadable = {
+    status: () => 403,
+    headers: () => {
+      throw new Error("detection broke");
+    },
+  };
+
+  it("still returns a page that loaded", async () => {
+    mockNavigation = { response: unreadable, content: "<main>listings</main>" };
+    await expect(
+      getPageWithCamoufox("https://example.com/", "key", (page) =>
+        page.content(),
+      ),
+    ).resolves.toBe("<main>listings</main>");
+  });
+
+  it("still throws the error the load failed with", async () => {
+    mockNavigation = { response: unreadable, content: "" };
+    await expect(
+      getPageWithCamoufox("https://example.com/", "key", selectorTimeout),
+    ).rejects.toThrow("waiting for selector `#content` timed out");
+  });
+});

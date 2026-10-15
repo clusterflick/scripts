@@ -1,7 +1,10 @@
 const fs = require("node:fs").promises;
 const path = require("node:path");
 const { dailyCache } = require("./cache");
-const { classifyPlaywrightResponse, logRefusal } = require("./bot-challenge");
+const {
+  reportNavigationRefusal,
+  reportPageRefusal,
+} = require("./report-page-refusal");
 
 // Sibling of `get-page-with-playwright.js` for venues behind a Cloudflare
 // Managed Challenge, which the stealth-plugin Chromium there cannot solve.
@@ -110,11 +113,8 @@ async function withCamoufoxSession(fn, sessionOptions = {}) {
         // response headers carry signals the rendered page doesn't, such as
         // Cloudflare's `cf-mitigated: challenge` on a blocked request.
         response = await page.goto(url, options.goto);
-        // Logged even when the callback goes on to get past it, so a challenge
-        // the browser solved still shows in the run's log. Headers only: the
-        // page text is judged further down, and only once the load has failed.
-        const refusal = classifyPlaywrightResponse(response);
-        if (refusal) logRefusal(refusal, url);
+        // A refused navigation is logged even if the callback gets past it.
+        reportNavigationRefusal(response, url);
         const result = await callback(page, response);
         // Don't return Error objects - throw them so they don't get cached
         // (Error objects serialize to {} and lose their error nature)
@@ -177,13 +177,9 @@ async function withCamoufoxSession(fn, sessionOptions = {}) {
             );
           }
         }
-        // Say whether the page we were left on was a bot refusal. A timed out
-        // selector reads the same whether the site changed or a challenge never
-        // cleared, and only one of those is fixed by editing the selector. A
-        // refused navigation was already logged above, so this only adds one
-        // the page itself shows.
-        const refusal = classifyPlaywrightResponse(response, content);
-        if (refusal?.via === "response-text") logRefusal(refusal, page.url());
+        // Say whether the page we were left on was a bot refusal, which a timed
+        // out selector can't tell apart from the site changing.
+        reportPageRefusal(response, content, page);
         throw error;
       } finally {
         // Close the page but keep the browser + context for the next call - and
