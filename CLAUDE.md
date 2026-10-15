@@ -224,6 +224,36 @@ module.exports = {
 };
 ```
 
+## Bot Challenges
+
+Deciding whether a response was a bot refusal happens in one place:
+`classifyRefusal` in `common/bot-challenge.js`. It trusts each vendor's own
+header first (Cloudflare `cf-mitigated`, SiteGround `sg-captcha`, Bunny Shield
+`cdn-challenge`), and only falls back on challenge or block copy under a non-2xx
+status, because the copy includes phrases a film title could carry.
+`fetchWithRetry`, both browser sessions and `requestFromPage` log every refusal
+they meet as one `🤖 Bot ...` line, and change nothing else. So a retrieve that
+fails on a missing selector says whether it was refused. When a vendor turns up
+that it doesn't recognise, teach the classifier rather than checking for it in
+the venue.
+
+Escalating to Camoufox is opt-in, and only for a venue that has actually refused
+us. Use `common/camoufox-escalation.js` rather than writing the try/catch again:
+
+- `getPageEscalating`, for a retrieve that reads pages: a plain fetch until the
+  first refusal, the browser from then on (Close-Up, JW3).
+- `retryThroughCamoufox`, for a retrieve built on a transport: the whole
+  retrieve again, with its calls made from inside a site page (Cineworld,
+  Curzon, Stanley Arts).
+
+Either way the venue supplies a selector or `settle` that only its real page
+satisfies. An interstitial served with a 200 can only be told apart from the
+content by what it lacks.
+
+Health probes record every refusal the classifier finds as `bot-challenge`,
+blocks included. Calls made with a bare `fetch` are not covered, nor are
+`page.evaluate` fetches other than `requestFromPage`'s.
+
 ## Testing Conventions
 
 - Each cinema module has `tests/index.test.js` with HTTP recordings in
