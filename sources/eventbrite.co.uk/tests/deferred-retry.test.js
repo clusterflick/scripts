@@ -40,6 +40,17 @@ const makeEvent = (id) => ({
   },
 });
 
+// The one allow-listed line-up event in expand-line-up-events.js, whose
+// screenings are read out of its description and nowhere else.
+const LINE_UP_EVENT_ID = "1996329278612";
+
+const describedEventPage = (modules) =>
+  `<script> window.__SERVER_DATA__ = ${JSON.stringify({
+    props: { pageProps: { context: { structuredContent: { modules } } } },
+  })};</script>`;
+
+const lineUpModules = [{ type: "text", text: "<p>Here is the line up!</p>" }];
+
 const response = (status, body) => ({
   ok: status >= 200 && status < 300,
   status,
@@ -210,6 +221,78 @@ describe("eventbrite deferred retry", () => {
       expect(error).toBeDefined();
       expect(error.message).toContain("Could not reach 1 event page(s)");
       expect(error.message).toContain("event-2");
+    },
+    TEST_TIMEOUT_MS,
+  );
+
+  it(
+    "recovers a line-up event whose page first arrived without its description",
+    async () => {
+      const events = [makeEvent("1"), makeEvent(LINE_UP_EVENT_ID)];
+      // The shape seen on 15th October 2026: the page parses, but its
+      // description modules are empty.
+      let attemptsAtLineUp = 0;
+      setupFetch(events, async (url) => {
+        if (!url.endsWith(LINE_UP_EVENT_ID))
+          return response(200, eventPage("1"));
+        attemptsAtLineUp += 1;
+        return response(
+          200,
+          describedEventPage(attemptsAtLineUp === 1 ? [] : lineUpModules),
+        );
+      });
+
+      const { value, error } = await runRetrieve();
+
+      expect(error).toBeUndefined();
+      expect(Object.keys(value.moviePages)).toHaveLength(2);
+      expect(
+        value.moviePages[
+          `https://www.eventbrite.co.uk/e/event-${LINE_UP_EVENT_ID}`
+        ].props.pageProps.context.structuredContent.modules,
+      ).toEqual(lineUpModules);
+      expect(logs).toContain(" - Retrying 1 unreachable event...");
+    },
+    TEST_TIMEOUT_MS,
+  );
+
+  it(
+    "fails loudly when a line-up event never carries its description",
+    async () => {
+      const events = [makeEvent("1"), makeEvent(LINE_UP_EVENT_ID)];
+      setupFetch(events, async (url) =>
+        url.endsWith(LINE_UP_EVENT_ID)
+          ? response(200, describedEventPage([]))
+          : response(200, eventPage("1")),
+      );
+
+      const { error } = await runRetrieve();
+
+      expect(error).toBeDefined();
+      expect(error.message).toContain("Could not reach 1 event page(s)");
+      expect(error.message).toContain(`event-${LINE_UP_EVENT_ID}`);
+    },
+    TEST_TIMEOUT_MS,
+  );
+
+  it(
+    "accepts an empty description on an event that is not a line-up",
+    async () => {
+      const events = [makeEvent("1"), makeEvent("2")];
+      // Plenty of listings have no description, and nothing reads one from
+      // them, so they must not be retried for it.
+      setupFetch(events, async (url) =>
+        response(
+          200,
+          url.endsWith("event-2") ? describedEventPage([]) : eventPage("1"),
+        ),
+      );
+
+      const { value, error } = await runRetrieve();
+
+      expect(error).toBeUndefined();
+      expect(Object.keys(value.moviePages)).toHaveLength(2);
+      expect(logs.some((line) => line.includes("Retrying"))).toBe(false);
     },
     TEST_TIMEOUT_MS,
   );

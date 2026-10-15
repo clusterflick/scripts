@@ -4,13 +4,15 @@ const { fetchText, sleep, withJitter } = require("../../common/utils.js");
 const { dailyCache } = require("../../common/cache.js");
 const { getAllCinemaAttributes } = require("../../cinemas");
 const { findMatchingCinema } = require("../../common/source-utils");
-const { getEventVenue } = require("./utils");
+const { getEventVenue, getEventDescription } = require("./utils");
 const {
   fetchOrganizerEvents,
   hasFilmShapedTitle,
   normalizeOrganizerEvent,
 } = require("./organizer-events");
 const { getSeriesId, fetchSeriesSessions } = require("./series-sessions");
+const { isLineUpEvent } = require("./expand-line-up-events");
+const { getLineUpSeriesId } = require("./expand-series-line-ups");
 const seededOrganizerIds = require("./seeded-organizers");
 const attributes = require("./attributes");
 
@@ -115,6 +117,21 @@ const assertSearchPage = (url) => (pageData) => {
     !Number.isInteger(pageData.page_count)
   ) {
     throw new Error(`No search results found at ${url}`);
+  }
+};
+
+// A line-up event or series is read entirely from its description, so for
+// those pages the description is the page. On 15th October 2026 the Rebel
+// Party season came back with no description at all - `structuredContent`
+// present but its modules empty - while the morning's retrieve and the live
+// page both had the full line-up. Shipped, that fails every transform that
+// reads the source, hours after the retrieve that could have asked again.
+// Throwing here keeps the page out of the cache and sends it to the deferred
+// sweep, and a page still empty after that fails the retrieve.
+const assertLineUpDescription = (event) => (pageData) => {
+  if (!isLineUpEvent(event) && !getLineUpSeriesId(pageData)) return;
+  if (getEventDescription(pageData).trim() === "") {
+    throw new Error(`No description found for line-up event at ${event.url}`);
   }
 };
 
@@ -309,6 +326,7 @@ async function retrieve() {
       event.url,
       EVENT_REQUEST_DELAY_MS,
       EVENT_RETRY_CONFIG,
+      assertLineUpDescription(event),
     );
   };
 
