@@ -1,11 +1,8 @@
 const cheerio = require("cheerio");
 const { withCamoufoxSession } = require("../../common/get-page-with-camoufox");
-const {
-  isBunnyShieldChallengeFetchResponse,
-} = require("../../common/bot-challenge");
+const { getPageEscalating } = require("../../common/camoufox-escalation");
 const {
   basicNormalize,
-  fetchWithRetry,
   getId,
   sleep,
   withJitter,
@@ -23,8 +20,8 @@ const spektrixClient = "jw3";
 // plain fetch either got the challenge or, following its redirects without
 // keeping the cookie they set, gave up with "redirect count exceeded". So each
 // page is tried cheaply first and the session escalates to Camoufox at the
-// first challenge, as Close-Up's does - see `withoutBrowser` in
-// `common/get-page-with-camoufox.js`. The Spektrix calls are another host and
+// first challenge, as Close-Up's does - see
+// `common/camoufox-escalation.js`. The Spektrix calls are another host and
 // stay on fetch.
 //
 // The site search form is in the header of every JW3 page, listing and event
@@ -51,36 +48,14 @@ const getCacheKey = (url) => {
   return `${id}-${getId(url)}-${slug}`;
 };
 
-// Returns the page HTML, or null when the request was challenged - which tells
-// the session to escalate to the browser. Redirects aren't followed: JW3's own
-// pages don't redirect, and following the challenge's would loop without the
-// cookie it sets, so a redirect goes to the browser too. Anything else (a 404,
-// a 500) throws, because escalating wouldn't help.
-const fetchWithoutBrowser = async (url) => {
-  await pace();
-  const response = await fetchWithRetry(url, { redirect: "manual" });
-  if (isBunnyShieldChallengeFetchResponse(response)) return null;
-  if (response.status >= 300 && response.status < 400) return null;
-  if (!response.ok) {
-    throw new Error(`Unexpected ${response.status} response for ${url}`);
-  }
-
-  const html = await response.text();
-  return cheerio.load(html)(PAGE_SELECTOR).length > 0 ? html : null;
-};
-
-// The browser has already navigated by the time this runs, so it paces the
-// page after this one instead.
-const readPageWithBrowser = async (page) => {
-  await page.waitForSelector(PAGE_SELECTOR, { state: "attached" });
-  const content = await page.content();
-  await pace();
-  return content;
-};
-
+// Redirects aren't followed: JW3's own pages don't redirect, and following the
+// challenge's would loop without the cookie it sets, so a redirect goes to the
+// browser too.
 const getPageContent = (getPage, url) =>
-  getPage(url, getCacheKey(url), readPageWithBrowser, {
-    withoutBrowser: fetchWithoutBrowser,
+  getPageEscalating(getPage, url, getCacheKey(url), {
+    selector: PAGE_SELECTOR,
+    fetchOptions: { redirect: "manual" },
+    pace,
   });
 
 // JW3 pages its listing with `p54_page` - the 54 is the id of the page part
