@@ -225,4 +225,43 @@ describe("BFI transform", () => {
     );
     expect(performance.notes).toBe("");
   });
+
+  describe("title", () => {
+    const transformTitle = async (linkTitle, heading) => {
+      const html = `<html><body><h1>${heading}</h1>
+        <div class="main-article-body"><div class="Rich-text">A film.</div></div>
+        <ul class="Film-info__information"></ul>
+      </body></html>`;
+      const articleContext = { searchNames: SEARCH_NAMES };
+      const moviePages = {
+        [showPath]: { title: linkTitle, html, articleContext },
+      };
+      const [show] = await transform(attributes, { moviePages }, {});
+      return show.title;
+    };
+
+    it("keeps the link text, which carries the billing the heading leaves out", async () => {
+      expect(
+        await transformTitle(
+          "Mona Lisa + Q&A with Lola Young and actor Cathy Tyson",
+          "Mona Lisa",
+        ),
+      ).toBe("Mona Lisa + Q&A with Lola Young and actor Cathy Tyson");
+    });
+
+    it("keeps the link text when the heading is a different title", async () => {
+      expect(
+        await transformTitle("Library Research Session", "BFI Reuben Library"),
+      ).toBe("Library Research Session");
+    });
+
+    it("takes the heading when the link text is a truncated copy of it", async () => {
+      expect(
+        await transformTitle(
+          "Gillian Anderson in conversatio",
+          "Gillian Anderson in conversation",
+        ),
+      ).toBe("Gillian Anderson in conversation");
+    });
+  });
 });

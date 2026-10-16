@@ -126,9 +126,26 @@ function getKeywordFormat(keywords) {
   }, {});
 }
 
-function getPerformancesFor($, url, show, venueFormat, season) {
-  const { title, articleContext } = show;
+// The title is the link text BFI's index or calendar gave the show, because it
+// carries the billing ("Preview:", "+ Q&A with ...") the article's own <h1>
+// leaves out. The index has been seen to truncate it ("Gillian Anderson in
+// conversatio"), so when the <h1> is that same text and more, the link was cut
+// short and the <h1> is the whole title.
+function getTitleFor($, linkTitle) {
+  const heading = getText($("h1").first());
+  return heading.length > linkTitle.length && heading.startsWith(linkTitle)
+    ? heading
+    : linkTitle;
+}
 
+function getPerformancesFor(
+  $,
+  url,
+  title,
+  articleContext,
+  venueFormat,
+  season,
+) {
   // Performances arrive as raw `searchResults` rows - positional arrays whose
   // fields are named by `searchNames`. Resolve the columns we need by name so
   // we're resilient to BFI reordering them. An article with no performances
@@ -218,8 +235,16 @@ async function transform(attributes, { moviePages }, sourcedEvents) {
       .get()
       .join("\n");
 
+    const title = getTitleFor($, show.title);
     const showingId = generateShowingId(attributes, articleId);
-    const performances = getPerformancesFor($, url, show, venueFormat, season);
+    const performances = getPerformancesFor(
+      $,
+      url,
+      title,
+      show.articleContext,
+      venueFormat,
+      season,
+    );
 
     // Sometimes the same show can be on different URLs with the same ID.
     // Detect this by finding existing showings and adding performances instead
@@ -233,7 +258,7 @@ async function transform(attributes, { moviePages }, sourcedEvents) {
 
     shows.push({
       showingId,
-      title: show.title,
+      title,
       url,
       overview: getOverviewFor($, overview),
       performances,
