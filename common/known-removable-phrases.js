@@ -148,6 +148,8 @@ const knownRemovablePhrases = [
   ": BNW",
   ": black & neurodiverse movie club launch",
   ": ANI DiFRANCO",
+  // Before " Watch Party", which would otherwise leave "London" behind.
+  "London Watch Party",
   " Watch Party",
   ": Live Q&A with Director Kevin Macdonald",
   ": LIVE VIEWING",
@@ -1644,6 +1646,12 @@ const knownRemovablePhrases = [
   "Don DeLillo at 90:",
   "with Ben Rivers",
   ": Nicky Hopkins",
+  "with film historian Kim Luperi, author of Pre-Code Essentials",
+  "the battle for Lagos",
+  "Honouring the Legacy of Horace Ové",
+  "Blue Monday: Screening",
+  "with Mobeen Azhar",
+  "Interactive Screening with Pixie Polite",
 
   // Common superfluous pieces
   "** SCREENING CANCELLED **",

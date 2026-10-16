@@ -831,6 +831,7 @@ function normalizeTitle(title, options) {
     ["Pressure at England", "Pressure"],
     // Billed by an abbreviation and the date of the screening.
     [/^CAT Screening London \| .*$/i, "The Cat in the Hat"],
+    [/^AB3 Screening London \| .*$/i, "The Angry Birds Movie 3"],
     ["Community Cinema - ", "Community Cinema: "],
     // TheMovieDB brackets the second half of the title, which would otherwise
     // be stripped along with the brackets and leave only "Patience".
