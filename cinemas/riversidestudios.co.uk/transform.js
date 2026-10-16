@@ -25,6 +25,14 @@ function formatTable($, $el) {
     .join("\n");
 }
 
+const detailFields = {
+  "year of release:": "year",
+  "director:": "directors",
+  "cast:": "actors",
+  "age rating:": "classification",
+  "language:": "language",
+};
+
 function getOverviewData(pageData) {
   const $ = cheerio.load(pageData);
   const data = {};
@@ -49,34 +57,22 @@ function getOverviewData(pageData) {
     }
   });
 
-  // Also try .te figure table (newer format)
+  // Newer pages list the details in .te, either as a figure table or as
+  // paragraphs of the form "Language: <strong>German with subtitles</strong>"
+  const assignDetail = (label, value) => {
+    const field = detailFields[basicNormalize(label)];
+    if (field && value) data[field] = value;
+  };
+  $(".te p").each(function () {
+    const $strong = $(this).find("strong").first();
+    const label = getText($(this)).split(":")[0];
+    if (!$strong.length || label === getText($(this))) return;
+    assignDetail(`${label}:`, getText($strong));
+  });
   $(".te figure table tr").each(function () {
     const cells = $(this).find("td");
     if (cells.length < 2) return;
-    const key = basicNormalize(getText(cells.eq(0)));
-    const value = getText(cells.eq(1));
-    switch (key) {
-      case "year of release:": {
-        data.year = value;
-        break;
-      }
-      case "director:": {
-        data.directors = value;
-        break;
-      }
-      case "cast:": {
-        data.actors = value;
-        break;
-      }
-      case "age rating:": {
-        data.classification = value;
-        break;
-      }
-      case "language:": {
-        data.language = value;
-        break;
-      }
-    }
+    assignDetail(getText(cells.eq(0)), getText(cells.eq(1)));
   });
 
   return data;
@@ -138,10 +134,13 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
                 babyFriendly: tags.includes("80996"),
                 hardOfHearing: tags.includes("80832"),
                 relaxed: tags.includes("80881"),
+                // The language line has been published misspelt as "German
+                // with subtiles", so the "t" is optional.
                 subtitled:
                   tags.includes("80883") ||
-                  basicNormalize(language).includes("with subtitles") ||
-                  basicNormalize(language).includes("with english subtitles"),
+                  /\bwith (?:english )?subtit?les\b/.test(
+                    basicNormalize(language),
+                  ),
               },
               synopsis,
             );
