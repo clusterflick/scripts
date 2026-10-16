@@ -113,6 +113,7 @@ function normalizeTitle(title, options) {
     // A double bill billed with a plus, which the separator rule reads as a
     // separator and drops the second film at.
     ["Lift + Calais: The Last Border", "Lift & Calais: The Last Border"],
+    ["Minotaur + My Skin, Luminous", "Minotaur & My Skin, Luminous"],
     ["HERO + My Dad, Guyana and Me", "HERO & My Dad, Guyana and Me"],
     ["Music with Tara Franks + ", "Music with Tara Franks & "],
     ["Storytelling + ", "Storytelling & "],
@@ -900,8 +901,11 @@ function normalizeTitle(title, options) {
     [/Surprise Film( \d{1,2}\.\d{1,2}\.\d{1,2})?/i, "mystery movie"],
     [/^Secret Film Screenings presents:?\s+.*$/i, "mystery movie"],
     [/(\w+ Film Festival: )?Surprise Screening/i, "mystery movie"],
+    // A rerun of the strand is the same unnamed film, so the venue's "Rerun:"
+    // comes off with the billing rather than leaving the strand for the
+    // looser rule below, which doesn't take "preview".
     [
-      /^(free |monthly )?(mystery|surprise) ([\w+]+ )?([\w+]+ )?(night|film|movie|cinema|screening|matinees?|thriller|horror|preview):?( Nov| \d)?/i,
+      /^(Rerun: )?(free |monthly )?(mystery|surprise) ([\w+]+ )?([\w+]+ )?(night|film|movie|cinema|screening|matinees?|thriller|horror|preview):?( Nov| \d)?/i,
       "mystery movie",
     ],
     // The strand a venue puts the unnamed film in is part of the billing, not
