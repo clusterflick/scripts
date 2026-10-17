@@ -942,6 +942,11 @@ function normalizeTitle(title, options) {
     // same unnamed film its other strands sell. Without this the strand name
     // survives on its own and the screening is grouped as "blue monday".
     [/^Blue Monday\s*[-–—]\s*mystery.*$/i, "mystery movie"],
+    // The strand is billed with the date of the night on the front, and only
+    // the part after the dash is the film, so drop everything up to it rather
+    // than carry a phrase per date. The dash isn't always spaced ("November
+    // 19th- Love Actually"), so match up to the first one however it sits.
+    [/^1 sofa,? 2 persons\b[^-–—]*[-–—]\s*/i, ""],
     [/scre(e|a)(n|m) unseen/i, "mystery movie"],
     [
       /(Orange Box )?Secret Film Screenings?(:? Summer Series)?/i,

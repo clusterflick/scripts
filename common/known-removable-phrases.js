@@ -1310,6 +1310,7 @@ const knownRemovablePhrases = [
   "Save the Cinema Museum:",
   "Saturday Film Nights:",
   "SLA 2026:",
+  "SIFFA 2026:",
   "Scared To Dance:",
   "Schools Screening IWD26:",
   "See it First:",
