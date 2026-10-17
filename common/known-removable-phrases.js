@@ -1040,6 +1040,7 @@ const knownRemovablePhrases = [
   "Hussein Kamal's",
   "I Am Furious Black:",
   "Arrows of Desire Book Launch",
+  "Éric Rohmer's Élisabeth Book Launch &",
   "'Wicker Sour' cocktails, straw man making &",
   "Ido Fluk:",
   "IWD2026:",
@@ -1168,6 +1169,9 @@ const knownRemovablePhrases = [
   "Off-Circuit Repeat",
   "Official Selection:",
   "Oscars Lunch:",
+  // Ahead of "OUT:", which would otherwise take the end of "There Is A Light
+  // That Never Goes Out" along with the colon.
+  ": The Lost Film of the UK AIDS Memorial Quilt at Hyde Park, 1994",
   "OUT at Clapham:",
   "OUT @ Clapham:",
   "OUT:",
@@ -1652,6 +1656,7 @@ const knownRemovablePhrases = [
   "Blue Monday: Screening",
   "with Mobeen Azhar",
   "Interactive Screening with Pixie Polite",
+  "at Anomalous Space",
 
   // Common superfluous pieces
   "** SCREENING CANCELLED **",
@@ -1721,6 +1726,10 @@ const knownRemovablePhrases = [
   "Film Screening",
   "Film premiere and",
   "Film Premiere:",
+  // Ahead of "Fundraising Screening", which would otherwise leave "Halloween"
+  // behind.
+  "HalloweenFundraising Screening",
+  "Halloween Fundraising Screening",
   "Fundraising Screening",
   "Fundraiser Q&A:",
   "London Premier Screening of:",

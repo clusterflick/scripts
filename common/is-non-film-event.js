@@ -248,6 +248,9 @@ const nonFilmEvents = [
   // attached to them.
   /^NHS at a Crossroads$/i,
   /^Bird Spotting Strolls/i,
+  // A dance workshop and a beauty evening, with no film attached to them.
+  /^SinoUK - Dance & Light:/i,
+  /^Deep Beauty: An Evening to Reclaim Beauty/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
