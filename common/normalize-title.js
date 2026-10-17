@@ -443,6 +443,12 @@ function normalizeTitle(title, options) {
       "THE LURE + PHANTOM OF THE PARADISE",
       "THE LURE & PHANTOM OF THE PARADISE",
     ],
+    // A triple bill, billed with a plus between each film, which the
+    // separator rule would cut down to the first alone.
+    [
+      "My Shimokita + The Pirates of Bubuan + Outlaw-Matsu Returns Home",
+      "My Shimokita & The Pirates of Bubuan & Outlaw-Matsu Returns Home",
+    ],
     // The club bills the film first and its season after "presents", which
     // the presents rule would take as the title, keeping the season and
     // losing the film. The season changes with the programme, so match the
@@ -1620,6 +1626,10 @@ function normalizeTitle(title, options) {
     // entirely. Joined here and the launch taken off as a phrase, which leaves
     // the film the evening is built around.
     ["Arrows of Desire Book Launch + ", "Arrows of Desire Book Launch & "],
+    [
+      "Éric Rohmer's Élisabeth Book Launch + ",
+      "Éric Rohmer's Élisabeth Book Launch & ",
+    ],
     [
       "The Edges of Cinema: Book Launch +",
       "The Edges of Cinema: Book Launch &",
