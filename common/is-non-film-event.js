@@ -251,6 +251,9 @@ const nonFilmEvents = [
   // A dance workshop and a beauty evening, with no film attached to them.
   /^SinoUK - Dance & Light:/i,
   /^Deep Beauty: An Evening to Reclaim Beauty/i,
+  // A design conference the venue hosts, numbered by year ("DDX'26"), with no
+  // film attached to it.
+  /^DDX.?\d+ London/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>

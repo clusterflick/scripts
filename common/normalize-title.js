@@ -2173,6 +2173,11 @@ function normalizeTitle(title, options) {
   // pattern rather than a string per spelling.
   title = title.replace(/\bdrink (?:and|&) dine\s*:\s*/i, "");
 
+  // A venue flags a sold-out showing by leading the title with it ("SOLD OUT!
+  // Rocky Horror Picture Show"). Anchored rather than a phrase-list entry,
+  // because "Nirvana: Live! Tonight! Sold Out!!" is a film's own title.
+  title = title.replace(/^sold out!\s*/i, "");
+
   knownRemovablePhrases.forEach((phrase) => {
     title = title.replace(phrase.toLowerCase(), "");
   });
