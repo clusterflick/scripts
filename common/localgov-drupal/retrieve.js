@@ -71,9 +71,22 @@ async function retrieveEventPages({
     }
   }
 
+  // An event page is checked for its event before it's kept, as the listing is
+  // for its view. Kingston once answered one event page with Drupal's own error
+  // page (a PHP deprecation trace in the core theme) under a 200, while the
+  // other pages and the same page minutes later were fine. Kept, it failed
+  // every venue's transform; failing here lets the retrieve's retry fetch it
+  // again.
   const moviePages = {};
   for (const moviePageUrl of moviePageUrls) {
-    moviePages[moviePageUrl] = await fetchPaced(moviePageUrl);
+    const moviePage = await fetchPaced(moviePageUrl);
+    const $ = cheerio.load(moviePage);
+    if ($(".node--type-localgov-event.node--view-mode-full").length === 0) {
+      throw new Error(
+        `Unable to find the event on ${moviePageUrl} — the page structure may have changed`,
+      );
+    }
+    moviePages[moviePageUrl] = moviePage;
   }
 
   return { movieListPages, moviePages };
