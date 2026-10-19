@@ -30,6 +30,7 @@ const VENUE_SLUGS = [
   "passengercinema", // Passenger Cinema
   "joeallenmysteryfilms", // Joe Allen
   "queerhub", // QUEERHUB
+  "koreanfilmclub", // Korean Film Club
 ];
 
 function retrieveVenuePage(getPage, slug) {

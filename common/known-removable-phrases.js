@@ -1846,6 +1846,8 @@ const knownRemovablePhrases = [
   "Rise of A Legend",
   // "A Foggy Tale"'s Chinese title, billed with "London special screening".
   "大濛 倫敦特映",
+  // Korean Film Club's Halloween night, billed after the film's title.
+  ": KFC Halloween Party",
 ];
 
 module.exports = knownRemovablePhrases;
