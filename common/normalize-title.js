@@ -2116,9 +2116,14 @@ function normalizeTitle(title, options) {
   title = title.replace(/\bfinal shows?:\s*/i, "");
 
   // Venues bill the strand with and without the year it ran in ("Black History
-  // Month: Alain Gomis' DAO", "Black History Month 2026: Sugarcane"), so one
-  // pattern rather than a string per year.
-  title = title.replace(/\bblack history month(?:\s+\d{4})?:\s*/i, "");
+  // Month: Alain Gomis' DAO", "Black History Month 2026: Sugarcane"), and some
+  // lead it with "Film" ("Film Black History Month: Hidden Figures"), so one
+  // pattern rather than a string per spelling. The "Film" has to come off here
+  // with the rest: once the strand is gone it is left on the front of the film.
+  title = title.replace(
+    /\b(?:film\s+)?black history month(?:\s+\d{4})?:\s*/i,
+    "",
+  );
 
   // The Jewish film festival bills its strand with and without the year it
   // runs in ("UKJFF: Pink Lady", "UKJFF 2026: Shana"), so one pattern rather

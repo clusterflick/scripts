@@ -256,6 +256,9 @@ const nonFilmEvents = [
   /^DDX.?\d+ London/i,
   // An event the venue lists with no film attached to it.
   /^Flock: In Formation$/i,
+  // A symposium the venue hosts, numbered by edition, with no film attached
+  // to it.
+  /^Manifold \d+(?:\.\d+)? Symposium$/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>

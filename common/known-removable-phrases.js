@@ -1659,6 +1659,8 @@ const knownRemovablePhrases = [
   "with Mobeen Azhar",
   "Interactive Screening with Pixie Polite",
   "at Anomalous Space",
+  "AN EVENING TO REMEMBER with Smut Press",
+  "microbudget workshop",
 
   // Common superfluous pieces
   "** SCREENING CANCELLED **",
