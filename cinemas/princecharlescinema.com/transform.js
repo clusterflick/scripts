@@ -113,7 +113,22 @@ async function transform({ movieListPage }, sourcedEvents) {
     // festival listing it tags the festival performance itself ("LFF" beside
     // the time) — The Devils had one LFF screening on 12 October and a month
     // of ordinary ones from 30 October. A festival tagged on any performance is
-    // therefore taken from the tags; one tagged on none applies to them all.
+    // therefore taken from the tags. Once that screening has played its tag goes
+    // with it, so a festival tagged on none is read from the booking links: a
+    // listing with any performance the venue sells itself ("booknow") is the
+    // venue's own run, and only performances booked on another site - the
+    // festival's - are part of it. A sold-out performance has no link at all,
+    // so a listing without venue sales still applies the festival to them all.
+    const getBookingUrl = ($performance) => $performance.find("a").attr("href");
+    const isSoldByVenue = (bookingUrl) =>
+      /\/booknow\/\d+/i.test(bookingUrl || "");
+    const isSoldElsewhere = (bookingUrl) =>
+      !!bookingUrl &&
+      new URL(bookingUrl, attributes.url).origin !== attributes.domain;
+    const isVenueRun = $entry
+      .find(".performance-list-items li")
+      .toArray()
+      .some((performance) => isSoldByVenue(getBookingUrl($(performance))));
     const getPerformanceTags = ($performance) =>
       $performance
         .find(".movietag .tag")
@@ -142,12 +157,14 @@ async function transform({ movieListPage }, sourcedEvents) {
         // The marker is an acronym whose trailing "F" is already "Festival"
         // (LFF), so the note says "Part of the LFF", not "... LFF festival".
         const performanceTags = getPerformanceTags($currentElement);
+        const bookingUrl = getBookingUrl($currentElement);
         const notesList = festivals
-          .filter(
-            (festival) =>
-              !taggedFestivals.has(festival) ||
-              performanceTags.includes(festival),
-          )
+          .filter((festival) => {
+            if (taggedFestivals.has(festival)) {
+              return performanceTags.includes(festival);
+            }
+            return !isVenueRun || isSoldElsewhere(bookingUrl);
+          })
           .map((festival) => `Part of the ${festival}`);
         const statusText = getText($currentElement.find(".hover"));
         const status = { soldOut: statusText.toLowerCase() === "sold out" };
@@ -203,8 +220,6 @@ async function transform({ movieListPage }, sourcedEvents) {
           setMinutes(date, parseInt(minutes, 10)),
           calculate24Hours(hours, suffix),
         );
-
-        const bookingUrl = $currentElement.find("a").attr("href");
 
         performances.push(
           createPerformance({

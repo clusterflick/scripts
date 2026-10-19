@@ -46,7 +46,8 @@ describe(attributes.name, () => {
 // marker the venue drops into `.running-time` is exercised here with crafted
 // markup instead: "LFF" must stay out of the film's categories and appear as a
 // note on every performance — unless the venue has tagged the festival
-// performances themselves, when only those carry it.
+// performances themselves, when only those carry it, or the listing is the
+// venue's own run, when only performances booked on the festival's site do.
 describe(`${attributes.name} festival marker`, () => {
   jest.useFakeTimers().setSystemTime(new Date("2026-07-11"));
 
@@ -117,6 +118,42 @@ describe(`${attributes.name} festival marker`, () => {
     expect(movie.performances.map(({ notes }) => notes)).toEqual([
       "Part of the LFF\n4K",
       "4K",
+    ]);
+  });
+
+  it("leaves the marker off untagged performances the venue sells itself", async () => {
+    // The Devils (October 2026) once its LFF screening had played: the
+    // film-level marker stayed, but only the regular run was left, booked
+    // through the venue's own links and tagged with nothing festival
+    const page = buildPage(
+      "<span>1971</span><span>114mins</span><span>(18)</span><span>LFF</span>",
+      `
+          <div class="heading">Saturday 12th July</div>
+          <li>
+            <span class="hover">Book</span>
+            <span class="time">12:15 pm</span>
+            <div class="movietag"><span class="tag 4k">4K</span></div>
+            <a href="https://princecharlescinema.com/prince-charles-cinema/booknow/31628200">Book</a>
+          </li>
+          <li>
+            <span class="hover">Book</span>
+            <span class="time">5:45 pm</span>
+            <a href="https://princecharlescinema.com/prince-charles-cinema/booknow/31628201">Book</a>
+          </li>
+          <li>
+            <a class="soldfilm_book_button">
+              <span class="hover">Sold Out</span>
+              <span class="time">8:00 pm</span>
+            </a>
+            <div class="movietag"><span class="tag 35mm">35mm</span></div>
+          </li>`,
+    );
+    const [movie] = await transform({ movieListPage: page }, {});
+
+    expect(movie.performances.map(({ notes }) => notes)).toEqual([
+      "4K",
+      "",
+      "",
     ]);
   });
 });
