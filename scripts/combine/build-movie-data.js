@@ -36,15 +36,41 @@ const getClassification = (movie) => {
 const getPopularity = ({ popularity }) =>
   typeof popularity === "number" ? popularity : undefined;
 
+/**
+ * Directors in a fixed order, independent of how TheMovieDB happened to list
+ * the crew.
+ *
+ * `credits.crew` comes back in a different order between fetches, and unlike
+ * cast it carries no `order` to sort on - so the same directors would be
+ * published in a new order, changing the film's JSON (and the website's
+ * content-hashed chunks) when nothing about it had changed.
+ *
+ * The order is shown on the website (the movie page's director pills and its
+ * structured data), so the key should read sensibly as well as being stable.
+ * `credit_id` is a MongoDB ObjectId, which leads with its creation time: sorting
+ * on it lists directors in the order their credits were added to TheMovieDB,
+ * usually the principal director first. Person id breaks any tie.
+ */
 const getDirectors = (movie) => {
   const crew = movie.credits?.crew ?? [];
-  return crew
-    .filter(({ job }) => basicNormalize(job) === "director")
-    .map((person) => ({
-      id: `${person.id}`,
-      name: person.name,
-      popularity: getPopularity(person),
-    }));
+  return Array.from(
+    crew
+      .filter(({ job }) => basicNormalize(job) === "director")
+      .sort(
+        (a, b) =>
+          `${a.credit_id}`.localeCompare(`${b.credit_id}`) || a.id - b.id,
+      )
+      .reduce((directors, person) => {
+        if (directors.has(person.id)) return directors;
+        directors.set(person.id, {
+          id: `${person.id}`,
+          name: person.name,
+          popularity: getPopularity(person),
+        });
+        return directors;
+      }, new Map())
+      .values(),
+  );
 };
 
 const getActors = (movie) => {
