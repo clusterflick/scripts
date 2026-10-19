@@ -1,14 +1,14 @@
 module.exports = {
-  id: "larc.org.uk",
+  id: "larc.noblogs.org",
   name: "London Action Resource Centre",
   alternativeNames: ["LARC"],
-  domain: "https://www.larc.org.uk",
+  domain: "https://larc.noblogs.org",
   socials: {
     letterboxd: null,
     twitter: null,
     instagram: null,
   },
-  url: "https://www.larc.org.uk",
+  url: "https://larc.noblogs.org",
   address: "62 Fieldgate Street, London, E1 1ES, UK",
   geo: { lat: 51.5170347, lon: -0.0639271 },
   structure: "solo",
