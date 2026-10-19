@@ -454,6 +454,11 @@ function normalizeTitle(title, options) {
     // losing the film. The season changes with the programme, so match the
     // credit rather than carrying a string per season.
     [/\s+-\s+G\.O\.A\.T\.? Film Club presents\b.*$/i, ""],
+    // The club bills itself ahead of the film, often with whoever it is
+    // co-hosting with ("& London Trans Pride", "& Cine Brazil"). The partner
+    // changes from screening to screening, so match the club's own name and
+    // take whatever partner follows it up to the colon.
+    [/^Feminist Fightback Film ?Club(?:\s*&\s*[^:]+)?:\s*/i, ""],
     // The festival is billed with a dash, which the separator rule would
     // otherwise read as the end of the title and leave only the festival.
     [
