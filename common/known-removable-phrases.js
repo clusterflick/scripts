@@ -1337,6 +1337,7 @@ const knownRemovablePhrases = [
   "ScreenX Fest ",
   "Scorsese/De Niro:",
   "Scottish Ballet:",
+  "Scottish Ballet's ",
   "Season 2 Premiere & Q&A:",
   "Secret Cinema:",
   "See Film First (SFF):",
