@@ -67,6 +67,64 @@ describe("buildMovieData", () => {
   });
 });
 
+describe("directors", () => {
+  // TheMovieDB returns `credits.crew` in an unstable order between fetches.
+  const crew = [
+    {
+      id: 7,
+      credit_id: "52fe4229c3a36847f800a3b5",
+      name: "Joel Coen",
+      job: "Director",
+    },
+    {
+      id: 8,
+      credit_id: "52fe4229c3a36847f800a3bb",
+      name: "Ethan Coen",
+      job: "Director",
+    },
+    {
+      id: 9,
+      credit_id: "52fe4229c3a36847f800a3c1",
+      name: "Roger Deakins",
+      job: "Director of Photography",
+    },
+    {
+      id: 7,
+      credit_id: "52fe4229c3a36847f800a3c7",
+      name: "Joel Coen",
+      job: "Writer",
+    },
+  ];
+
+  it("produces the same directors whatever order the crew arrives in", async () => {
+    const forwards = await buildMovieData(
+      movieInfo({ credits: { crew: [...crew] } }),
+      context(),
+    );
+    const backwards = await buildMovieData(
+      movieInfo({ credits: { crew: [...crew].reverse() } }),
+      context(),
+    );
+    expect(forwards.directors).toEqual(["7", "8"]);
+    expect(backwards.directors).toEqual(forwards.directors);
+  });
+
+  it("lists a director credited twice once", async () => {
+    const movie = await buildMovieData(
+      movieInfo({
+        credits: {
+          crew: [
+            ...crew,
+            { ...crew[0], credit_id: "52fe4229c3a36847f800a3cd" },
+          ],
+        },
+      }),
+      context(),
+    );
+    expect(movie.directors).toEqual(["7", "8"]);
+  });
+});
+
 describe("people popularity", () => {
   const credits = (popularity) => ({
     crew: [{ id: 1, name: "Jean-Pierre Jeunet", job: "Director", popularity }],
