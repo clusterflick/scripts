@@ -254,6 +254,8 @@ const nonFilmEvents = [
   // A design conference the venue hosts, numbered by year ("DDX'26"), with no
   // film attached to it.
   /^DDX.?\d+ London/i,
+  // An event the venue lists with no film attached to it.
+  /^Flock: In Formation$/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>

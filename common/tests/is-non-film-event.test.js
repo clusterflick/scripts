@@ -112,6 +112,7 @@ describe("isNonFilmEvent", () => {
     ["NHS at a Crossroads"],
     ["Bird Spotting Strolls: Gunnersbury Park"],
     ["DDX'26 London - UX & Innovation - Conference"],
+    ["Flock: In Formation"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });
