@@ -459,6 +459,27 @@ function normalizeTitle(title, options) {
     // changes from screening to screening, so match the club's own name and
     // take whatever partner follows it up to the colon.
     [/^Feminist Fightback Film ?Club(?:\s*&\s*[^:]+)?:\s*/i, ""],
+    // Unrestricted View bills its programme slots by where and when they run -
+    // "Day 6 (Curzon Hoxton)", "27th Oct - Odeon Luxe & Dine (Screen 1) -
+    // SHORTS 2" - so without the festival the date or venue is all that is
+    // left, and two programmes on one night would fold together. The slot's
+    // own name stays, with the festival kept in front of it.
+    [
+      /^(Unrestricted View (?:Horror )?Film Festival \d{4}):\s*(Day \d+)\b.*$/i,
+      "$1 $2",
+    ],
+    [
+      /^(Unrestricted View (?:Horror )?Film Festival \d{4}):\s*.+?\s+-\s+(SHORTS \d+|Opening Night Gala)\s*$/i,
+      "$1 $2",
+    ],
+    // Otherwise the festival, spring and horror alike, is billed with the year
+    // ahead of the colon, which keeps the general festival prefix rule from
+    // seeing it - and sometimes with a partner ("X BIFA") as well. An opening
+    // night is left to the festival rule further down.
+    [
+      /^Unrestricted View (?:Horror )?Film Festival(?:\s+\d{4})?(?:\s+x\s+[^:]+)?:(?!\s*Opening Night\b)\s*/i,
+      "",
+    ],
     // The festival is billed with a dash, which the separator rule would
     // otherwise read as the end of the title and leave only the festival.
     [
