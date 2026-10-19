@@ -98,6 +98,10 @@ async function transform({ moviePages }, sourcedEvents) {
       .map(({ date, url }) =>
         createPerformance({
           date,
+          // The subheading is the venue's billing for the evening, e.g. "Film
+          // screening with new score performed live by the Royal Philharmonic
+          // Orchestra", kept out of the title.
+          notesList: [subheading],
           url: url || moviePageUrl,
           accessibility: createAccessibility(title, {}, overviewText),
           format: createFormat(title, {}, overviewText),
