@@ -86,4 +86,13 @@ describe(attributes.name, () => {
       isRecording ? 600_000 : undefined,
     );
   });
+
+  it("skips a festival once its last day has passed", async () => {
+    jest.setSystemTime(new Date("2026-10-19"));
+    try {
+      expect(await retrieve()).toEqual({ movieListPages: {}, moviePages: {} });
+    } finally {
+      jest.setSystemTime(new Date("2026-09-28"));
+    }
+  });
 });

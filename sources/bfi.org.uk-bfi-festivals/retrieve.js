@@ -1,4 +1,5 @@
 const cheerio = require("cheerio");
+const { format } = require("date-fns");
 const {
   withPlaywrightSession,
 } = require("../../common/get-page-with-playwright");
@@ -6,9 +7,12 @@ const { loadShowInto } = require("../../common/bfi.org.uk/load-shows");
 const { jitteredDelay } = require("../../common/bfi.org.uk/request-delay");
 const { sleep } = require("../../common/utils");
 
-// Festivals are opted in while their programme is on sale, and taken out again
-// once it has finished - a festival's site stays up all year, and retrieving a
-// finished programme costs a few hundred paced page loads for nothing.
+// Festivals are opted in while their programme is on sale, and skipped once
+// their last day has passed - a festival's site stays up all year, and
+// retrieving a finished programme costs a few hundred paced page loads for
+// nothing. `ends` is the festival's last day, inclusive `yyyy-MM-dd` read in
+// the pipeline's timezone (Europe/London); move it to next year's dates when
+// the new programme goes on sale.
 //
 // Each festival site works like BFI Southbank's: an index page lists the films,
 // but it's curated and leaves things out - at the 2026 London Film Festival, the
@@ -24,6 +28,8 @@ const FESTIVALS = [
     note: "Part of the BFI London Film Festival",
     domain: "https://whatson.bfi.org.uk/lff/Online/",
     indexPermalink: "films-az",
+    // "BFI London Film Festival - 7 to 18 October 2026"
+    ends: "2026-10-18",
   },
 ];
 
@@ -214,7 +220,19 @@ async function retrieve() {
     const movieListPages = {};
     const moviePages = {};
 
+    const today = format(new Date(), "yyyy-MM-dd");
     for (const festival of FESTIVALS) {
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(festival.ends ?? "")) {
+        throw new Error(
+          `${festival.name} has no end date - without one it would be retrieved forever`,
+        );
+      }
+      if (festival.ends < today) {
+        console.log(
+          `    - Skipping ${festival.name}, which ended ${festival.ends}`,
+        );
+        continue;
+      }
       const festivalData = await retrieveFestival(getPage, festival);
       movieListPages[festival.id] = festivalData.movieListPage;
       for (const [showPath, moviePage] of Object.entries(
