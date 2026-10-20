@@ -7,6 +7,7 @@ const {
   createOverview,
   generateShowingId,
   readJSON,
+  memoiseOnData,
   createAccessibility,
   createFormat,
   getText,
@@ -136,6 +137,24 @@ function parseVenueAddress($, venuePage) {
     .trim();
 }
 
+// The same for every cinema asked about, so built once per retrieved file -
+// see memoiseOnData. Each performance is paired with its venue's address.
+const parseMovies = memoiseOnData((data) => {
+  const venuePages = data.venuePages || {};
+  return Object.entries(data.moviePages || {}).map(([url, moviePage]) => {
+    const movie = parseMovie(cheerio, moviePage, url);
+    const performances = movie.performances.map((performance) => {
+      const venuePage =
+        performance.venueUrl && venuePages[performance.venueUrl];
+      const eventAddress = venuePage
+        ? parseVenueAddress(cheerio, venuePage)
+        : undefined;
+      return { performance, eventAddress };
+    });
+    return { url, movie, performances };
+  });
+});
+
 async function findEvents(cinema) {
   const dataSrc = path.join(
     process.cwd(),
@@ -150,22 +169,16 @@ async function findEvents(cinema) {
     return [];
   }
 
-  const venuePages = data.venuePages || {};
   const events = [];
 
-  for (const [url, moviePage] of Object.entries(data.moviePages || {})) {
-    const movie = parseMovie(cheerio, moviePage, url);
-
-    const matchingPerformances = movie.performances.filter((performance) => {
-      const venuePage =
-        performance.venueUrl && venuePages[performance.venueUrl];
-      const eventAddress = venuePage
-        ? parseVenueAddress(cheerio, venuePage)
-        : undefined;
-      return venueMatchesCinema(cinema, performance.venueName, null, {
-        eventAddress,
-      });
-    });
+  for (const { url, movie, performances } of parseMovies(data)) {
+    const matchingPerformances = performances
+      .filter(({ performance, eventAddress }) =>
+        venueMatchesCinema(cinema, performance.venueName, null, {
+          eventAddress,
+        }),
+      )
+      .map(({ performance }) => performance);
 
     if (matchingPerformances.length === 0) continue;
 
