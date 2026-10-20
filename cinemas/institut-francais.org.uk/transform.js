@@ -43,6 +43,61 @@ const getMoreInformation = (details) =>
   details["more information"]?.replace(/bookings? opening soon/gi, "").trim() ||
   undefined;
 
+const getSeriesPath = (href) => new URL(href, attributes.url).pathname;
+
+// The listing page's "Festivals & Series" tab has a card for every series the
+// venue is running, and each card carries the venue's own terms. A festival or
+// a programmed season - "Film Africa 2026", "Nathalie Baye: A Hundred Lives" -
+// is filed under "Festivals & Series". The venue's standing shelves are not:
+// "Highlights of the Month", "Relaxed Screenings", and cross-arts themes such
+// as "Women Shaping the World". Returns each series' path mapped to whether
+// it is one of the former.
+const getSeriesKinds = (movieListPage) => {
+  const $ = cheerio.load(movieListPage);
+  const kinds = new Map();
+  $("#tab-festivals .card--festival").each((_index, element) => {
+    const href = $(element).find("a").first().attr("href");
+    if (!href) return;
+    const terms = $(element)
+      .find(".card__terms .tag")
+      .map((_termIndex, term) => getText($(term)))
+      .get();
+    kinds.set(getSeriesPath(href), terms.includes("Festivals & Series"));
+  });
+  return kinds;
+};
+
+// The film's own series are the tags under its title that link to a
+// "festivals-and-series" page; the other tags ("Films", "New Releases") link
+// nowhere, and the related-films cards further down the page link to series
+// too, which is why only the title block is read.
+//
+// Only a festival or programmed season earns a note. A shelf would be wrong as
+// one, not merely noisy: a series tag belongs to the film, so its note lands on
+// every performance - "Relaxed Screenings" marked all three of a film's
+// showings as relaxed when one was, and "Highlights of the Month" was still on
+// screenings two months out.
+//
+// A tag with no card in the listing means the two have stopped lining up, so
+// it throws rather than guess which kind of series it is.
+const getSeries = ($, seriesKinds, title) =>
+  $(".film-introduction .title-dates .tags .tags__tag a")
+    .map((_index, element) => {
+      const href = $(element).attr("href");
+      if (!href) return null;
+      const path = getSeriesPath(href);
+      if (!path.startsWith("/festivals-and-series/")) return null;
+      if (!seriesKinds.has(path)) {
+        throw new Error(
+          `"${title}" is tagged with a series the listing has no card for: ${path}`,
+        );
+      }
+      return seriesKinds.get(path) ? getText($(element)) : null;
+    })
+    .get()
+    .filter(Boolean)
+    .map((name) => `Part of ${name}`);
+
 const getOverview = (details) => {
   const duration = details.duration
     ? details.duration.replace("mins", "").trim()
@@ -63,6 +118,7 @@ const getMultiplePerformances = (
   moviePageUrl,
   title,
   overview,
+  series,
 ) => {
   return $multiple
     .find("tbody tr")
@@ -82,6 +138,7 @@ const getMultiplePerformances = (
           basicNormalize(moreInformation) === basicNormalize(calendarNote)
             ? undefined
             : moreInformation,
+          ...series,
         ],
         url: performanceUrl ?? moviePageUrl,
         screen: getText($single.find("td").eq(2)),
@@ -107,6 +164,7 @@ const getSinglePerformance = (
   moviePageUrl,
   title,
   overview,
+  series,
 ) => {
   const day = $single.find(".timetable .date time").attr("datetime");
   const time = $single.find(".timetable time.time").attr("datetime");
@@ -129,6 +187,7 @@ const getSinglePerformance = (
         basicNormalize(moreInformation) === basicNormalize(calendarNote)
           ? undefined
           : moreInformation,
+        ...series,
       ],
       url: performanceUrl ?? moviePageUrl,
       screen: getText($single.find(".timetable .location")),
@@ -162,8 +221,9 @@ const getProgramme = ($) => {
   return heading.length > 0 ? getText(heading.parent()) : "";
 };
 
-async function transform({ moviePages }, sourcedEvents) {
+async function transform({ movieListPage, moviePages }, sourcedEvents) {
   const movies = [];
+  const seriesKinds = getSeriesKinds(movieListPage);
 
   for (const moviePageUrl in moviePages) {
     const moviePage = moviePages[moviePageUrl];
@@ -175,6 +235,7 @@ async function transform({ moviePages }, sourcedEvents) {
     const id = new URLSearchParams(new URL(shortLinkUrl).search).get("p");
     const title = getText($title);
     const overview = getText($(".definition"));
+    const series = getSeries($, seriesKinds, title);
 
     movies.push({
       showingId: generateShowingId(attributes, id),
@@ -190,6 +251,7 @@ async function transform({ moviePages }, sourcedEvents) {
               moviePageUrl,
               title,
               overview,
+              series,
             )
           : getSinglePerformance(
               $,
@@ -198,6 +260,7 @@ async function transform({ moviePages }, sourcedEvents) {
               moviePageUrl,
               title,
               overview,
+              series,
             ),
       matchingHints: {
         overview: [overview, getProgramme($)].filter(Boolean).join("\n\n"),
