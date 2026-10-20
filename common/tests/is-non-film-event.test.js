@@ -114,6 +114,7 @@ describe("isNonFilmEvent", () => {
     ["DDX'26 London - UX & Innovation - Conference"],
     ["Flock: In Formation"],
     ["Manifold 3.0 Symposium"],
+    ["Stand Up Comedy | New Talent Showcase"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });

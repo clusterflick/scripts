@@ -259,6 +259,8 @@ const nonFilmEvents = [
   // A symposium the venue hosts, numbered by edition, with no film attached
   // to it.
   /^Manifold \d+(?:\.\d+)? Symposium$/i,
+  // A stand-up comedy showcase, with no film attached to it.
+  /^Stand Up Comedy \| New Talent Showcase$/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
