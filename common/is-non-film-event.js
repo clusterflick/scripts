@@ -261,6 +261,8 @@ const nonFilmEvents = [
   /^Manifold \d+(?:\.\d+)? Symposium$/i,
   // A stand-up comedy showcase, with no film attached to it.
   /^Stand Up Comedy \| New Talent Showcase$/i,
+  // An electronics workshop, with no film attached to it.
+  /^Lamp Making! KCL Electronics x IC Robotics$/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
