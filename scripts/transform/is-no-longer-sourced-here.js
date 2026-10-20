@@ -1,11 +1,6 @@
 const fs = require("node:fs");
 const path = require("node:path");
-const {
-  getAllSourceNames,
-  getSourceAttributes,
-  getSourceFindEvents,
-} = require("../../sources");
-const { getAllCinemaAttributes } = require("../../cinemas");
+const { getAllSourceNames, getSourceAttributes } = require("../../sources");
 
 // Sources are matched to venues by name and location, so a screening one of
 // them lists can move: an organiser books a festival at one cinema, changes it
@@ -33,6 +28,10 @@ const { getAllCinemaAttributes } = require("../../cinemas");
 // results somewhere. An omission leaves it in no venue's results at all, and
 // there the previous release still gets a say: the URL check downstream can
 // look at the listing and decide on evidence.
+//
+// Where each source places its events is the same for every venue, and costs a
+// findEvents call per source per cinema, so `transform-prepare` builds it once
+// a run - see sourced-events.js.
 const RETRIEVED_DATA_DIRECTORY = "retrieved-data";
 
 let sources = null;
@@ -48,27 +47,6 @@ const getSources = () => {
   return sources;
 };
 
-// Every showing id a source places at a venue we hold, this run. Building it
-// costs a findEvents pass over every cinema, so it is memoised: transform runs
-// as one process per venue, and a venue that drops one sourced showing usually
-// drops several. It is only ever built on the drop path - a run where nothing
-// went missing never pays for it.
-const placedShowingIds = new Map();
-
-async function getShowingIdsPlacedAnywhere(sourceName) {
-  if (!placedShowingIds.has(sourceName)) {
-    const findEvents = getSourceFindEvents(sourceName);
-    const showingIds = new Set();
-    for (const cinema of getAllCinemaAttributes()) {
-      for (const event of (await findEvents(cinema)) ?? []) {
-        showingIds.add(event.showingId);
-      }
-    }
-    placedShowingIds.set(sourceName, showingIds);
-  }
-  return placedShowingIds.get(sourceName);
-}
-
 /**
  * Did a movie from the previous release come from a source that now places it
  * at a different venue?
@@ -76,9 +54,16 @@ async function getShowingIdsPlacedAnywhere(sourceName) {
  * @param {Object} movie - Movie from the previous release
  * @param {Object} attributes - Attributes of the venue being transformed
  * @param {Object} sourcedEvents - This run's source results, keyed by source
- * @returns {Promise<boolean>} True if the source has moved it to another venue
+ * @param {Map<string, Set<string>>} placedShowingIds - Showing ids each source
+ *   places at any venue this run, from `transform-prepare`
+ * @returns {boolean} True if the source has moved it to another venue
  */
-async function isNoLongerSourcedHere(movie, attributes, sourcedEvents) {
+function isNoLongerSourcedHere(
+  movie,
+  attributes,
+  sourcedEvents,
+  placedShowingIds,
+) {
   const { showingId } = movie;
   if (typeof showingId !== "string") return false;
 
@@ -111,7 +96,15 @@ async function isNoLongerSourcedHere(movie, attributes, sourcedEvents) {
   }
 
   // Gone from this venue: a move only if the source has put it somewhere else.
-  return (await getShowingIdsPlacedAnywhere(source.name)).has(showingId);
+  // The source has data, so the sweep must have covered it; prepared without
+  // it means prepared from different retrieved data than this run's.
+  const placed = placedShowingIds.get(source.name);
+  if (!placed) {
+    throw new Error(
+      `No placed showing ids for ${source.name}, which has retrieved data; was \`transform-prepare\` run against this run's retrieved data?`,
+    );
+  }
+  return placed.has(showingId);
 }
 
 module.exports = isNoLongerSourcedHere;
