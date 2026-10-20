@@ -463,13 +463,15 @@ function normalizeTitle(title, options) {
     // "Day 6 (Curzon Hoxton)", "27th Oct - Odeon Luxe & Dine (Screen 1) -
     // SHORTS 2" - so without the festival the date or venue is all that is
     // left, and two programmes on one night would fold together. The slot's
-    // own name stays, with the festival kept in front of it.
+    // own name stays, with the festival kept in front of it. The opening night
+    // is billed both bare and as a venue's "Opening Night Gala", so the gala
+    // drops to match the bare billing.
     [
       /^(Unrestricted View (?:Horror )?Film Festival \d{4}):\s*(Day \d+)\b.*$/i,
       "$1 $2",
     ],
     [
-      /^(Unrestricted View (?:Horror )?Film Festival \d{4}):\s*.+?\s+-\s+(SHORTS \d+|Opening Night Gala)\s*$/i,
+      /^(Unrestricted View (?:Horror )?Film Festival \d{4}):\s*.+?\s+-\s+(SHORTS \d+|Opening Night)(?:\s+Gala)?\s*$/i,
       "$1 $2",
     ],
     // Otherwise the festival, spring and horror alike, is billed with the year
