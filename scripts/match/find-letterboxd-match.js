@@ -11,7 +11,10 @@ const getMovieRatings = async (match, getPageWithPlaywright) => {
     url,
     cacheKey,
     async (page) => {
-      await page.waitForLoadState();
+      // No `waitForLoadState()` here: the `load` event waits on the page's
+      // third-party ad and tracking requests, which can hold it for 20s+ and
+      // carry nothing we read. The film page and its stats/ratings fragments
+      // are awaited by selector below.
 
       // Race between the film page loading and the "not imported" page
       // .first() handles Letterboxd's Tenet easter egg, which injects a
