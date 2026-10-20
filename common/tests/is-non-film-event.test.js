@@ -115,6 +115,7 @@ describe("isNonFilmEvent", () => {
     ["Flock: In Formation"],
     ["Manifold 3.0 Symposium"],
     ["Stand Up Comedy | New Talent Showcase"],
+    ["Lamp Making! KCL Electronics x IC Robotics"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });

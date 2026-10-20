@@ -1850,6 +1850,13 @@ const knownRemovablePhrases = [
   "大濛 倫敦特映",
   // Korean Film Club's Halloween night, billed after the film's title.
   ": KFC Halloween Party",
+  "& Halloween Party",
+  "Italian cocktails, Morricone musical intro &",
+  "by Lee Chang Dong",
+  "Scandi Women's Cinema:",
+  "Livestream Q+A",
+  "& Midrashic intro by Prof. Nathan Abrams",
+  "Rosa von Praunheim:",
 ];
 
 module.exports = knownRemovablePhrases;

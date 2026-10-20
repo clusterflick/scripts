@@ -1634,6 +1634,13 @@ function normalizeTitle(title, options) {
     ["Metropolis at 100", "Metropolis"],
     ["Halloween (1978) + ", "Halloween (1978) & "],
     ["Nishi Ginza Station + ", "Nishi Ginza Station & "],
+    ["Vampires Surf + ", "Vampires Surf & "],
+    ["Guts + ", "Guts & "],
+    ["Fault Lines + ", "Fault Lines & "],
+    [
+      "Italian cocktails, Morricone musical intro + ",
+      "Italian cocktails, Morricone musical intro & ",
+    ],
     // The shorts and the feature are one event, so the plus is not a separator
     ["Big Screen Hack: AI Shorts + ", "Big Screen Hack: AI Shorts & "],
     // One venue adds an "All" the book's title doesn't have. Runs before the
