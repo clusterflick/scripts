@@ -41,6 +41,7 @@ async function transform(
   input,
   previousRelease = [],
   historicalSeen = new Map(),
+  placedShowingIds = new Map(),
 ) {
   const { transform, attributes } = getCinema(location);
   const sourcedEvents = await getSourcedEventsFor(attributes);
@@ -195,7 +196,14 @@ async function transform(
       // running it, and two venues would claim the same showingId. An event the
       // source has simply stopped mentioning is not this case: it falls through
       // to the URL check, which is what recovery is for.
-      if (await isNoLongerSourcedHere(movie, attributes, sourcedEvents)) {
+      if (
+        isNoLongerSourcedHere(
+          movie,
+          attributes,
+          sourcedEvents,
+          placedShowingIds,
+        )
+      ) {
         console.log(" - Dropped (moved to another venue):", movie.title);
         continue;
       }

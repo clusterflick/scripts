@@ -10,9 +10,38 @@ const diff = require("fast-diff");
 const slugify = require("slugify");
 const { classifyFetchResponse, logRefusal } = require("./bot-challenge");
 
+// Set only inside withReadCache - see there.
+let readCache = null;
+
 const readJSON = async (filePath) => {
+  if (readCache) {
+    if (!readCache.has(filePath)) {
+      readCache.set(
+        filePath,
+        fs.readFile(filePath, "utf8").then((data) => JSON.parse(data)),
+      );
+    }
+    return readCache.get(filePath);
+  }
   const data = await fs.readFile(filePath, "utf8");
   return JSON.parse(data);
+};
+
+// Every readJSON inside `fn` parses each file once and hands every caller the
+// same object. A source's findEvents reads its whole retrieved file on every
+// call, which is nothing for a transform asking about one venue and most of
+// the cost of asking about all of them: Eventbrite's is ~58MB, ~0.6s to parse,
+// 474 times over. It is opt-in and scoped because the object is shared - a
+// caller that mutated what it was given would change it for the next - so it
+// belongs only around code shown to leave its data alone.
+const withReadCache = async (fn) => {
+  if (readCache) throw new Error("withReadCache does not nest");
+  readCache = new Map();
+  try {
+    return await fn();
+  } finally {
+    readCache = null;
+  }
 };
 
 // Write via a temporary file and rename into place. Renaming is atomic, so a
@@ -1176,6 +1205,7 @@ async function runLlmFunction(llmFunction, options = { run: 0 }) {
 
 module.exports = {
   readJSON,
+  withReadCache,
   writeJSON,
   basicNormalize,
   sanitizePathSegment,

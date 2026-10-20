@@ -271,7 +271,7 @@ const setupDirectory = async (type) => {
     } = require("./scripts/transform/transform-inputs");
     const transform = require("./scripts/transform");
     const input = await readJSON(getPath("retrieved-data"));
-    const { previousRelease, historicalSeen } =
+    const { previousRelease, historicalSeen, placedShowingIds } =
       await readTransformInputs(location);
     clearLlmUsageLog();
     const output = await transform(
@@ -279,6 +279,7 @@ const setupDirectory = async (type) => {
       input,
       previousRelease,
       historicalSeen,
+      placedShowingIds,
       ...parameters,
     );
     await writeJSON(

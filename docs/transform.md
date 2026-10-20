@@ -22,9 +22,11 @@ high-level steps:
    trilogies
 7. **Validate Output** - Ensure data conforms to the JSON schema
 
-Two inputs are the same for every location in a run: the first-seen timestamps
-from the last ten days of combined data (step 4), and yesterday's transformed
-release (step 5). Each location is transformed in its own process, so rather
+Three inputs are the same for every location in a run: the first-seen
+timestamps from the last ten days of combined data (step 4), yesterday's
+transformed release (step 5), and where each source places its showings across
+every venue (step 5, telling a screening that moved venue from one a source
+stopped mentioning). Each location is transformed in its own process, so rather
 than every one of them rebuilding these, `transform-prepare` builds them once
 into `transform-inputs/` and every `transform` reads them from there:
 
@@ -32,6 +34,10 @@ into `transform-inputs/` and every `transform` reads them from there:
 - `transform-inputs/previous-release/<location>` - that location's output from
   the last release published yesterday (absent if it had none, and the directory
   empty if nothing was published yesterday)
+- `transform-inputs/placed-showing-ids.json` - source → every `showingId` its
+  `findEvents` places at any cinema, for each source with retrieved data. This
+  calls every source's `findEvents` for every cinema, so it reads this run's
+  `retrieved-data/`, which must be in place before `transform-prepare` runs.
 
 `transform` fails if `transform-inputs/` has not been prepared.
 

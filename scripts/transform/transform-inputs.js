@@ -6,13 +6,17 @@ const {
   downloadReleaseAssets,
 } = require("./get-releases");
 const { getHistoricalData } = require("./get-historical-seen");
+const getPlacedShowingIds = require("./placed-showing-ids");
 
 // Everything a transform needs besides its own venue's retrieved data is the
 // same for every venue in a run: the first-seen map folded from the last ten
-// days of combined data, and yesterday's transformed release. Each venue is its
-// own process, so building those per venue meant parsing ~175MB of combined
-// data and asking the GitHub API for the release list 400-odd times a run.
-// They are built once here instead, and every venue reads the result.
+// days of combined data, yesterday's transformed release, and where each
+// source places its showings across every venue. Each venue is its own
+// process, so building those per venue meant parsing ~175MB of combined data
+// and asking the GitHub API for the release list 400-odd times a run - and
+// sweeping every source over every cinema, minutes apiece, for each venue that
+// had dropped a sourced showing. They are built once here instead, and every
+// venue reads the result.
 //
 // Building them once also means every venue in a run is judged against the
 // same previous release - per venue, a run straddling midnight could compare
@@ -20,6 +24,7 @@ const { getHistoricalData } = require("./get-historical-seen");
 // next.
 const INPUTS_DIRECTORY = "transform-inputs";
 const HISTORICAL_SEEN_FILE = "historical-seen.json";
+const PLACED_SHOWING_IDS_FILE = "placed-showing-ids.json";
 const PREVIOUS_RELEASE_DIRECTORY = "previous-release";
 
 const getInputsPath = (...segments) =>
@@ -37,6 +42,16 @@ async function prepareTransformInputs() {
   await writeJSON(
     getInputsPath(HISTORICAL_SEEN_FILE),
     Object.fromEntries(seenMap),
+  );
+
+  // Reads this run's retrieved data, which must be in place before this runs:
+  // a source missing here is read as having nothing retrieved.
+  console.log("Finding where each source places its showings ...");
+  const start = Date.now();
+  const placedShowingIds = await getPlacedShowingIds();
+  await writeJSON(getInputsPath(PLACED_SHOWING_IDS_FILE), placedShowingIds);
+  console.log(
+    ` - Swept ${Object.keys(placedShowingIds).length} sources (${Math.round((Date.now() - start) / 1000)}s)`,
   );
 
   console.log("Downloading yesterday's release ...");
@@ -57,8 +72,10 @@ async function readTransformInputs(location) {
   const previousReleasePath = getInputsPath(PREVIOUS_RELEASE_DIRECTORY);
 
   let historicalSeen;
+  let placedShowingIds;
   try {
     historicalSeen = await readJSON(historicalSeenPath);
+    placedShowingIds = await readJSON(getInputsPath(PLACED_SHOWING_IDS_FILE));
     await fs.access(previousReleasePath);
   } catch (e) {
     if (e.code !== "ENOENT") throw e;
@@ -80,6 +97,12 @@ async function readTransformInputs(location) {
   return {
     previousRelease,
     historicalSeen: new Map(Object.entries(historicalSeen)),
+    placedShowingIds: new Map(
+      Object.entries(placedShowingIds).map(([source, ids]) => [
+        source,
+        new Set(ids),
+      ]),
+    ),
   };
 }
 

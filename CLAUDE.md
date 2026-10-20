@@ -70,10 +70,19 @@ All pipeline commands run with `TZ=Europe/London`.
 
 `transform-prepare` runs once per run, before any venue's `transform`. Each
 venue is its own process, and the first-seen history (ten days of combined data,
-~175MB to parse) and yesterday's transformed release are the same for all of
-them, so it builds both into `transform-inputs/` and every `transform` reads
-them from there - see `scripts/transform/transform-inputs.js`. `transform`
-throws if they have not been prepared rather than rebuilding them itself.
+~175MB to parse), yesterday's transformed release and where each source places
+its showings across every venue are the same for all of them, so it builds them
+into `transform-inputs/` and every `transform` reads them from there - see
+`scripts/transform/transform-inputs.js`. `transform` throws if they have not
+been prepared rather than rebuilding them itself.
+
+The placement sweep calls every source's `findEvents` for every cinema, so it
+needs this run's `retrieved-data/` and is the one input on the critical path
+worth watching. Built per venue it cost 200-330s for each venue that dropped a
+sourced showing; built once it runs a worker thread per core, and each worker
+parses each source's file once (`withReadCache` in `common/utils.js`) rather
+than once per cinema. That cache hands every caller the same parsed object, so a
+`findEvents` must not mutate what `readJSON` gives it.
 
 `combine` publishes each person in `people` with TheMovieDB's `popularity`
 alongside their name. It is a rolling trending score, recomputed daily from page
