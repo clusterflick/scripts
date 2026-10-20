@@ -1856,6 +1856,11 @@ function normalizeTitle(title, options) {
     ["Man With a Cinema Camera", "Man with a Movie Camera"],
     ["Sebastiane: the Reunion!", "Sebastiane"],
     ["Strange Case of Dr Jekyll and Mr Hyde", "Dr Jekyll and Mr Hyde"],
+    ["Bohurupi - The Golden Daku", "Bohurupi: The Golden Daku"],
+    [
+      "Army of Lovers (or Revolt of the Perverts)",
+      "Army of Lovers or Revolt of the Perverts",
+    ],
     // The film's a mystery, but here's a hint ...
     ["FREE Kids Movie Club: A Whole New World", "aladdin"],
     ["FREE Kids Movie Club: Carnival Weekend", "princess and the frog"],
