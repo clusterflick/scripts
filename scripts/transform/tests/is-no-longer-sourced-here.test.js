@@ -2,41 +2,29 @@ const fs = require("node:fs");
 const os = require("node:os");
 const path = require("node:path");
 
-// The cross-venue lookup asks each source where it places its events this run.
-// Stubbing the source and cinema registries keeps that answer in the test
-// rather than in whatever happens to be on disk under retrieved-data/.
-// Prefixed `mock` so jest's hoisting lets the factories below close over it.
-const mockFindEvents = jest.fn();
-
+// Stubbing the source registry keeps which sources exist in the test rather
+// than in whatever is under sources/.
 jest.mock("../../../sources", () => ({
   getAllSourceNames: () => ["bbk.ac.uk", "eventbrite.co.uk"],
   getSourceAttributes: (name) => ({ id: name }),
-  getSourceFindEvents: () => mockFindEvents,
 }));
 
-jest.mock("../../../cinemas", () => ({
-  getAllCinemaAttributes: () => [
-    { id: "picturehouses.com-ealing" },
-    { id: "actonecinema.co.uk" },
-  ],
-}));
+const isNoLongerSourcedHere = require("../is-no-longer-sourced-here");
 
 describe("isNoLongerSourcedHere", () => {
   const ealing = { id: "picturehouses.com-ealing" };
-  const acton = { id: "actonecinema.co.uk" };
   const blacklifted = "eventbrite.co.uk-1998360243282";
   const movie = (showingId, title = "BlackLifted Film Festival") => ({
     showingId,
     title,
   });
 
-  // Where the source places its events, keyed by venue id, as findEvents would
-  // report it for each cinema in turn.
-  const placedAt = (byVenue) => {
-    mockFindEvents.mockImplementation(async ({ id }) =>
-      (byVenue[id] ?? []).map((showingId) => ({ showingId })),
+  // Every showing id each source places at any venue this run, as
+  // `transform-prepare` builds it.
+  const placed = (bySource) =>
+    new Map(
+      Object.entries(bySource).map(([source, ids]) => [source, new Set(ids)]),
     );
-  };
 
   // Whether a source spoke this run is read off the retrieved data on disk, so
   // the tests run from a directory holding the sources they talk about.
@@ -69,99 +57,118 @@ describe("isNoLongerSourcedHere", () => {
     process.chdir(originalCwd);
   });
 
-  beforeEach(() => {
-    mockFindEvents.mockReset();
-    // The union is memoised per source for the life of the process, so each
-    // test needs its own module registry to be answered by its own stub.
-    jest.resetModules();
-  });
-
-  const subject = () => require("../is-no-longer-sourced-here");
-
   // The BlackLifted Film Festival was listed on Eventbrite at Ealing
   // Picturehouse and then moved to ActOne Cinema, keeping its event id. Ealing
   // stopped matching it, but the Eventbrite page stayed up.
-  it("drops a sourced event the source now places at another venue", async () => {
-    placedAt({ "actonecinema.co.uk": [blacklifted] });
-    await expect(
-      subject()(movie(blacklifted), ealing, { "eventbrite.co.uk": [] }),
-    ).resolves.toBe(true);
+  it("drops a sourced event the source now places at another venue", () => {
+    expect(
+      isNoLongerSourcedHere(
+        movie(blacklifted),
+        ealing,
+        { "eventbrite.co.uk": [] },
+        placed({ "eventbrite.co.uk": [blacklifted], "bbk.ac.uk": [] }),
+      ),
+    ).toBe(true);
   });
 
   // The case the guard used to get wrong: a source can run to completion and
   // still omit a venue, and an event that has gone from every venue's results
   // has not been shown to have moved anywhere.
-  it("keeps a sourced event the source no longer places anywhere", async () => {
-    placedAt({ "actonecinema.co.uk": ["eventbrite.co.uk-1996329278612"] });
-    await expect(
-      subject()(movie(blacklifted), ealing, { "eventbrite.co.uk": [] }),
-    ).resolves.toBe(false);
+  it("keeps a sourced event the source no longer places anywhere", () => {
+    expect(
+      isNoLongerSourcedHere(
+        movie(blacklifted),
+        ealing,
+        { "eventbrite.co.uk": [] },
+        placed({
+          "eventbrite.co.uk": ["eventbrite.co.uk-1996329278612"],
+          "bbk.ac.uk": [],
+        }),
+      ),
+    ).toBe(false);
   });
 
-  it("keeps a sourced event the source still places at this venue", async () => {
-    placedAt({ "picturehouses.com-ealing": [blacklifted] });
-    await expect(
-      subject()(movie(blacklifted), ealing, {
-        "eventbrite.co.uk": [
-          { showingId: blacklifted },
-          { showingId: "eventbrite.co.uk-1996329278612" },
-        ],
-      }),
-    ).resolves.toBe(false);
+  it("keeps a sourced event the source still places at this venue", () => {
+    expect(
+      isNoLongerSourcedHere(
+        movie(blacklifted),
+        ealing,
+        {
+          "eventbrite.co.uk": [
+            { showingId: blacklifted },
+            { showingId: "eventbrite.co.uk-1996329278612" },
+          ],
+        },
+        placed({ "eventbrite.co.uk": [blacklifted], "bbk.ac.uk": [] }),
+      ),
+    ).toBe(false);
   });
 
   // A source that produced nothing has said nothing about where its screenings
-  // are, so the previous release keeps its say.
-  it("keeps a sourced event when the source has no data this run", async () => {
-    placedAt({ "actonecinema.co.uk": [blacklifted] });
+  // are, so the previous release keeps its say. Prepared from the same data,
+  // it has no placed ids either, and that is not an error.
+  it("keeps a sourced event when the source has no data this run", () => {
     process.chdir(withoutRetrievedData);
     try {
-      await expect(
-        subject()(movie(blacklifted), ealing, { "eventbrite.co.uk": [] }),
-      ).resolves.toBe(false);
+      expect(
+        isNoLongerSourcedHere(
+          movie(blacklifted),
+          ealing,
+          { "eventbrite.co.uk": [] },
+          placed({}),
+        ),
+      ).toBe(false);
     } finally {
       process.chdir(withRetrievedData);
     }
   });
 
+  // A source with data this run is always swept, so a missing entry means the
+  // inputs were prepared from different retrieved data. Reading that as "not
+  // placed anywhere" would quietly bring back a screening that had moved.
+  it("throws when a source with data this run has no placed ids", () => {
+    expect(() =>
+      isNoLongerSourcedHere(
+        movie(blacklifted),
+        ealing,
+        { "eventbrite.co.uk": [] },
+        placed({ "bbk.ac.uk": [] }),
+      ),
+    ).toThrow(/No placed showing ids for eventbrite.co.uk/);
+  });
+
   // "bbk.ac.uk-central" starts with the "bbk.ac.uk" source's id, so its own
   // showings would otherwise read as sourced ones the source had dropped.
-  it("keeps a venue's own showing when the venue id starts with a source id", async () => {
-    placedAt({});
-    await expect(
-      subject()(
+  it("keeps a venue's own showing when the venue id starts with a source id", () => {
+    expect(
+      isNoLongerSourcedHere(
         movie("bbk.ac.uk-central-12345"),
         { id: "bbk.ac.uk-central" },
-        {
-          "bbk.ac.uk": [],
-        },
+        { "bbk.ac.uk": [] },
+        placed({ "bbk.ac.uk": ["bbk.ac.uk-central-12345"] }),
       ),
-    ).resolves.toBe(false);
+    ).toBe(false);
   });
 
-  it("keeps a venue's own showing", async () => {
-    placedAt({});
-    await expect(
-      subject()(movie("picturehouses.com-ealing-HO00012345"), ealing, {
-        "eventbrite.co.uk": [],
-      }),
-    ).resolves.toBe(false);
+  it("keeps a venue's own showing", () => {
+    expect(
+      isNoLongerSourcedHere(
+        movie("picturehouses.com-ealing-HO00012345"),
+        ealing,
+        { "eventbrite.co.uk": [] },
+        placed({}),
+      ),
+    ).toBe(false);
   });
 
-  it("keeps a showing whose id belongs to no source", async () => {
-    placedAt({});
-    await expect(
-      subject()(movie("somewhere.else-12345"), ealing, {
-        "eventbrite.co.uk": [],
-      }),
-    ).resolves.toBe(false);
-  });
-
-  it("does not consult the source registry when nothing was dropped here", async () => {
-    placedAt({ "actonecinema.co.uk": [blacklifted] });
-    await subject()(movie(blacklifted), acton, {
-      "eventbrite.co.uk": [{ showingId: blacklifted }],
-    });
-    expect(mockFindEvents).not.toHaveBeenCalled();
+  it("keeps a showing whose id belongs to no source", () => {
+    expect(
+      isNoLongerSourcedHere(
+        movie("somewhere.else-12345"),
+        ealing,
+        { "eventbrite.co.uk": [] },
+        placed({}),
+      ),
+    ).toBe(false);
   });
 });

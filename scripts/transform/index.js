@@ -15,7 +15,6 @@ const {
 } = require("../../common/bot-challenge");
 const { getCinema } = require("../../cinemas");
 const findMatchesOnTheMovieDb = require("./find-matches-on-the-movie-db");
-const getSourcedEventsFor = require("./get-sourced-events-for");
 const validateAgainstSchema = require("./validate-against-schema");
 const categoriseEntries = require("./categorise-entries");
 const matchIdentifiedMovies = require("./match-identified-movies");
@@ -41,9 +40,16 @@ async function transform(
   input,
   previousRelease = [],
   historicalSeen = new Map(),
+  // Built once per run by `transform-prepare` - see sourced-events.js.
+  sourcedEvents,
+  placedShowingIds,
 ) {
   const { transform, attributes } = getCinema(location);
-  const sourcedEvents = await getSourcedEventsFor(attributes);
+  if (!sourcedEvents || !placedShowingIds) {
+    throw new Error(
+      `No sourced events for ${location}; they come from \`transform-prepare\``,
+    );
+  }
 
   console.log(`[🎞️  Location: ${location}]`);
 
@@ -195,7 +201,14 @@ async function transform(
       // running it, and two venues would claim the same showingId. An event the
       // source has simply stopped mentioning is not this case: it falls through
       // to the URL check, which is what recovery is for.
-      if (await isNoLongerSourcedHere(movie, attributes, sourcedEvents)) {
+      if (
+        isNoLongerSourcedHere(
+          movie,
+          attributes,
+          sourcedEvents,
+          placedShowingIds,
+        )
+      ) {
         console.log(" - Dropped (moved to another venue):", movie.title);
         continue;
       }

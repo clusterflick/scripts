@@ -2,6 +2,7 @@ const path = require("node:path");
 const cheerio = require("cheerio");
 const {
   readJSON,
+  memoiseOnData,
   generateShowingId,
   getText,
   createOverview,
@@ -105,6 +106,15 @@ function convertWeGotTicketsEvent(url, event, date) {
 /**
  * Find events matching a specific cinema
  */
+// The same for every cinema asked about, so built once per retrieved file -
+// see memoiseOnData.
+const extractEvents = memoiseOnData((moviePages) =>
+  Object.entries(moviePages).map(([url, html]) => [
+    url,
+    extractEventDetails(html),
+  ]),
+);
+
 async function findEvents(cinema) {
   const dataSrc = path.join(
     process.cwd(),
@@ -121,9 +131,7 @@ async function findEvents(cinema) {
   }
 
   const events = [];
-  for (const [url, html] of Object.entries(moviePages)) {
-    const event = extractEventDetails(html);
-
+  for (const [url, event] of extractEvents(moviePages)) {
     if (!event.dateText || !event.timeText) {
       throw new Error(`No date or time found on ${url}`);
     }

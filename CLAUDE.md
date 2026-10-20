@@ -70,10 +70,33 @@ All pipeline commands run with `TZ=Europe/London`.
 
 `transform-prepare` runs once per run, before any venue's `transform`. Each
 venue is its own process, and the first-seen history (ten days of combined data,
-~175MB to parse) and yesterday's transformed release are the same for all of
-them, so it builds both into `transform-inputs/` and every `transform` reads
-them from there - see `scripts/transform/transform-inputs.js`. `transform`
-throws if they have not been prepared rather than rebuilding them itself.
+~175MB to parse), yesterday's transformed release and what every source finds at
+every venue are the same for all of them, so it builds them into
+`transform-inputs/` and every `transform` reads them from there - see
+`scripts/transform/transform-inputs.js`. `transform` throws if they have not
+been prepared rather than rebuilding them itself.
+
+The sources are the one input that runs code: `transform-prepare` calls every
+source's `findEvents` for every cinema (`scripts/transform/sourced-events.js`)
+and writes each venue's result to `transform-inputs/sourced-events/<location>`,
+so a venue's `transform` runs no source code at all. That needs this run's
+`retrieved-data/`, and it sits on the critical path ahead of every transform, so
+it is kept cheap: a worker thread per core, each parsing a source's file once
+(`withReadCache` in `common/utils.js`) rather than once per cinema. That cache
+hands every caller the same parsed object, so a `findEvents` must not mutate
+what `readJSON` gives it. Sharing the parse is not enough for a source that
+keeps raw HTML - running Cheerio over every stored page on every call cost
+OutSavvy ~0.8s a cinema with the parse shared - so a `findEvents` that parses
+pages wraps that in `memoiseOnData`, keyed on the parsed object: reused within
+the sweep, inert anywhere else, where each read is a fresh object. Its result is
+shared too and must not be mutated either. A new source that parses pages in
+`findEvents` should do the same.
+
+The files are written with `v8.serialize`, not JSON: sources set keys to
+`undefined`, which JSON drops, and a venue should be handed exactly what
+`findEvents` returned. A `findEvents` that throws for any cinema now fails
+`transform-prepare`, and so the run, before any venue starts - the same outcome
+as before, when that venue's own transform failed, only earlier.
 
 `combine` publishes each person in `people` with TheMovieDB's `popularity`
 alongside their name. It is a rolling trending score, recomputed daily from page

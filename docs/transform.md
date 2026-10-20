@@ -22,16 +22,26 @@ high-level steps:
    trilogies
 7. **Validate Output** - Ensure data conforms to the JSON schema
 
-Two inputs are the same for every location in a run: the first-seen timestamps
-from the last ten days of combined data (step 4), and yesterday's transformed
-release (step 5). Each location is transformed in its own process, so rather
-than every one of them rebuilding these, `transform-prepare` builds them once
-into `transform-inputs/` and every `transform` reads them from there:
+Three inputs are the same for every location in a run: the first-seen
+timestamps from the last ten days of combined data (step 4), yesterday's
+transformed release (step 4), and what every source finds at every location
+(steps 1 and 4). Each location is transformed in its own process, so rather than
+every one of them rebuilding these, `transform-prepare` builds them once into
+`transform-inputs/` and every `transform` reads them from there:
 
 - `transform-inputs/historical-seen.json` - `showingId` → earliest `seen`
 - `transform-inputs/previous-release/<location>` - that location's output from
   the last release published yesterday (absent if it had none, and the directory
   empty if nothing was published yesterday)
+- `transform-inputs/sourced-events/<location>` - every source's `findEvents`
+  result for that location, keyed by source, written with `v8.serialize`. One
+  file per location, even with nothing found
+- `transform-inputs/placed-showing-ids.json` - source → every `showingId` it
+  places at any location, for each source with retrieved data, used in step 4
+  to tell a screening that moved venue from one a source stopped mentioning
+
+The sourced events are built from this run's `retrieved-data/`, which must be in
+place before `transform-prepare` runs.
 
 `transform` fails if `transform-inputs/` has not been prepared.
 
@@ -88,7 +98,9 @@ from external ticketing platforms. This includes:
 
 Each source's `findEvents` function is called with the cinema's attributes
 (coordinates, name, etc.) to find matching events that can supplement the main
-cinema data.
+cinema data. It is called by `transform-prepare`, for every cinema at once, and
+`transform` reads the result for its location from
+`transform-inputs/sourced-events/<location>` - see above.
 
 ### 2. Location-Specific Transform
 

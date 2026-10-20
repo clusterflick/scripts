@@ -8,6 +8,7 @@ const {
   createFormat,
   generateShowingId,
   readJSON,
+  memoiseOnData,
   getText,
 } = require("../utils");
 const { venueMatchesCinema } = require("../source-utils");
@@ -199,6 +200,14 @@ function parseEventPage(html, url, attributes) {
   };
 }
 
+// The same for every cinema asked about, so built once per retrieved file -
+// see memoiseOnData.
+const parseEventPages = memoiseOnData((data, attributes) =>
+  Object.entries(data.moviePages ?? {})
+    .map(([url, html]) => parseEventPage(html, url, attributes))
+    .filter(Boolean),
+);
+
 async function findEvents(cinema, attributes) {
   const dataSrc = path.join(process.cwd(), "retrieved-data", attributes.id);
 
@@ -210,9 +219,7 @@ async function findEvents(cinema, attributes) {
   }
 
   const moviePages = Object.entries(data.moviePages ?? {});
-  const parsedPages = moviePages
-    .map(([url, html]) => parseEventPage(html, url, attributes))
-    .filter(Boolean);
+  const parsedPages = parseEventPages(data, attributes);
 
   // Skipping a page without a date or a venue is only safe while it's the odd
   // one out. If every page lacks one, the field has gone rather than the data.

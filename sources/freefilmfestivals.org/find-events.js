@@ -7,6 +7,7 @@ const {
   createFormat,
   generateShowingId,
   readJSON,
+  memoiseOnData,
   getText,
   basicNormalize,
 } = require("../../common/utils");
@@ -172,6 +173,14 @@ function parseEvent(html, url, festival) {
   };
 }
 
+// The same for every cinema asked about, so built once per retrieved file -
+// see memoiseOnData.
+const parseEvents = memoiseOnData((data) =>
+  Object.entries(data.moviePages ?? {}).map(([url, moviePage]) =>
+    parseEvent(moviePage.html, url, moviePage.festival),
+  ),
+);
+
 async function findEvents(cinema) {
   const dataSrc = path.join(
     process.cwd(),
@@ -188,13 +197,9 @@ async function findEvents(cinema) {
 
   const events = [];
 
-  for (const [url, moviePage] of Object.entries(data.moviePages ?? {})) {
-    const { venueName, venueAddress, coordinates, event } = parseEvent(
-      moviePage.html,
-      url,
-      moviePage.festival,
-    );
-
+  for (const { venueName, venueAddress, coordinates, event } of parseEvents(
+    data,
+  )) {
     if (
       venueMatchesCinema(cinema, venueName, coordinates, {
         eventAddress: venueAddress,
