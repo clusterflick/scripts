@@ -40,17 +40,27 @@ const getMovieRatings = async (match, getPageWithPlaywright) => {
         .locator('[property="og:url"]')
         .getAttribute("content");
 
+      // The ratings section is server-rendered as an empty shell. The histogram
+      // is fetched into it afterwards by Letterboxd's CSI loader, which replaces
+      // the section's `.loading-csi` div once the fragment arrives and leaves it
+      // in place if the request fails. Reading the section before then records
+      // the film as having no reviews, so wait for the fragment itself.
       let ratings = "";
-      try {
-        await page
-          .locator("section.ratings-histogram-chart")
-          .waitFor({ state: "attached", timeout: 10000 });
-
-        ratings = await page
-          .locator("section.ratings-histogram-chart")
-          .evaluate((el) => el.outerHTML);
-      } catch {
-        // Assume the movie doesn't have any ratings
+      const ratingsSection = page
+        .locator("section.ratings-histogram-chart")
+        .first();
+      // The DOM is parsed by now, so a missing section means no ratings.
+      if (await ratingsSection.count()) {
+        try {
+          await ratingsSection
+            .locator(".loading-csi")
+            .waitFor({ state: "detached", timeout: 30000 });
+        } catch {
+          throw new Error(
+            `Ratings histogram did not load for Letterboxd TMDB/${match.id}`,
+          );
+        }
+        ratings = await ratingsSection.evaluate((el) => el.outerHTML);
       }
 
       let stats = "";
