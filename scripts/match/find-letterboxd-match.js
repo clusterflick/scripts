@@ -1,7 +1,7 @@
 const cheerio = require("cheerio");
 const { normaliseAndParseInt } = require("./common");
 const getPageWithPlaywright = require("../../common/get-page-with-playwright");
-const { basicNormalize } = require("../../common/utils");
+const { basicNormalize, withRetry } = require("../../common/utils");
 
 const getMovieRatings = async (match, getPageWithPlaywright) => {
   const url = `https://letterboxd.com/tmdb/${match.id}`;
@@ -129,16 +129,28 @@ const getScore = async (match, getPage) => {
   return { id: match.id, ...parseScore(data) };
 };
 
+const isTooManyRedirects = (error) =>
+  Boolean(error.message && error.message.includes("ERR_TOO_MANY_REDIRECTS"));
+
 // `getPage` comes from a `withPlaywrightSession` wrapped around the whole match
 // run, so every movie shares one browser - reusing the Cloudflare clearance
 // cookie and the asset cache instead of launching Chromium per film. Defaults to
 // the single-page helper so a standalone call still works.
+//
+// A film is retried on its own before failing the run. Over ~2,000 uncached
+// pages even a 1% rate of blips (a fragment challenged or slow to arrive) is
+// ~20 failures, while the workflow step allows 9 restarts for the whole run.
 async function findLetterboxdMatch(movie, getPage = getPageWithPlaywright) {
   try {
-    const score = await getScore(movie, getPage);
-    return score;
+    return await withRetry(() => getScore(movie, getPage), {
+      retries: 2,
+      delayMs: 10_000,
+      label: `Letterboxd TMDB/${movie.id}`,
+      // A redirect loop is the film's page, not a blip, and is skipped below
+      shouldRetry: (error) => !isTooManyRedirects(error),
+    });
   } catch (error) {
-    if (error.message && error.message.includes("ERR_TOO_MANY_REDIRECTS")) {
+    if (isTooManyRedirects(error)) {
       console.log(
         `\nWARN: Too many redirects for Letterboxd TMDB/${movie.id}, skipping`,
       );
