@@ -84,6 +84,14 @@ parses each source's file once (`withReadCache` in `common/utils.js`) rather
 than once per cinema. That cache hands every caller the same parsed object, so a
 `findEvents` must not mutate what `readJSON` gives it.
 
+Sharing the parse is not enough for a source that keeps raw HTML: running
+Cheerio over every stored page on every call cost OutSavvy ~0.8s a cinema with
+the parse already shared. That work doesn't depend on the cinema, so a
+`findEvents` that does it wraps it in `memoiseOnData`, which keys the result on
+the parsed object - reused within the sweep, inert in a transform, where each
+read is a fresh object. The result is shared too, so it must not be mutated
+either. A new source that parses pages in `findEvents` should do the same.
+
 `combine` publishes each person in `people` with TheMovieDB's `popularity`
 alongside their name. It is a rolling trending score, recomputed daily from page
 views and searches, so it is only ever a tie-break between people who are

@@ -11,6 +11,7 @@ const {
   createAccessibility,
   createFormat,
   readJSON,
+  memoiseOnData,
   getPresenterNote,
 } = require("../../common/utils");
 const attributes = require("./attributes");
@@ -174,6 +175,14 @@ function convertTicketTailorEvent(event, description) {
 /**
  * Find events matching a specific cinema
  */
+// The same for every cinema asked about, so built once per retrieved file -
+// see memoiseOnData.
+const parseAllEvents = memoiseOnData((clubPages) =>
+  Object.entries(clubPages).flatMap(([slug, html]) =>
+    parseEventsFromPage(html, slug),
+  ),
+);
+
 async function findEvents(cinema) {
   const dataSrc = path.join(
     process.cwd(),
@@ -192,11 +201,7 @@ async function findEvents(cinema) {
   }
 
   // Parse all events from all club pages
-  const allEvents = [];
-  for (const [slug, html] of Object.entries(clubPages)) {
-    const events = parseEventsFromPage(html, slug);
-    allEvents.push(...events);
-  }
+  const allEvents = parseAllEvents(clubPages);
 
   // Match events to the cinema on venue name plus postcode. Ticket Tailor gives
   // no coordinates, only a location string like "Good Shepherd Studios,

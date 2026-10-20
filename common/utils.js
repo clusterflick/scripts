@@ -44,6 +44,24 @@ const withReadCache = async (fn) => {
   }
 };
 
+// Wraps a function of something readJSON returned so it runs once per object.
+// withReadCache spares a findEvents the parse, but most sources keep raw HTML
+// and then run Cheerio over every stored page on every call - work that
+// doesn't depend on the cinema asked about, and OutSavvy's ~0.8s of it per
+// call is what remained of its sweep once the parse was shared. Keyed on the
+// object itself: outside withReadCache each read hands back a fresh one, so
+// nothing is ever reused and a transform behaves exactly as without this.
+// The result is shared as the parsed data is, and the same rule holds - it
+// must not be mutated. Only `data` is the key, so anything else passed must be
+// fixed for a given `data` (the attributes that chose which file to read).
+const memoiseOnData = (fn) => {
+  const results = new WeakMap();
+  return (data, ...rest) => {
+    if (!results.has(data)) results.set(data, fn(data, ...rest));
+    return results.get(data);
+  };
+};
+
 // Write via a temporary file and rename into place. Renaming is atomic, so a
 // reader never sees a half-written file - which matters because a timed-out
 // pipeline step can leave an orphaned process still writing to the same path
@@ -1206,6 +1224,7 @@ async function runLlmFunction(llmFunction, options = { run: 0 }) {
 module.exports = {
   readJSON,
   withReadCache,
+  memoiseOnData,
   writeJSON,
   basicNormalize,
   sanitizePathSegment,

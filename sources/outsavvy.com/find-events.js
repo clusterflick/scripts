@@ -2,6 +2,7 @@ const path = require("node:path");
 const cheerio = require("cheerio");
 const {
   readJSON,
+  memoiseOnData,
   generateShowingId,
   getText,
   createAccessibility,
@@ -73,6 +74,15 @@ function extractEventDetails(html) {
   };
 }
 
+// The same for every cinema asked about, so built once per retrieved file -
+// see memoiseOnData.
+const extractEvents = memoiseOnData((moviePages) =>
+  Object.entries(moviePages).map(([url, html]) => ({
+    url,
+    ...extractEventDetails(html),
+  })),
+);
+
 function convertOutsavvyEvent(event, cinema) {
   // Extract event ID from URL (e.g., /event/31052/palestine-cinema-days-when-i-saw-you)
   const eventId = event.url.match(/\/event\/(\d+)\//)?.[1] || event.url;
@@ -113,11 +123,7 @@ async function findEvents(cinema) {
     // Source data may not always be available or required
   }
 
-  const events = [];
-  for (const [url, html] of Object.entries(moviePages)) {
-    const eventDetails = extractEventDetails(html);
-    events.push({ url, ...eventDetails });
-  }
+  const events = extractEvents(moviePages);
 
   // OutSavvy is UK-wide, so a name needs pinning to a place - the Duke of
   // York's it lists is the Brighton one. The address stands in where the
