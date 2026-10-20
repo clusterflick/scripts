@@ -263,7 +263,25 @@ async function transform(
         continue;
       }
 
-      if (!response.ok || response.url.includes("/not-found")) continue;
+      // Every drop below is logged with its reason. This is a live fetch, so the
+      // same listing can be kept on one run and dropped on the next, and the
+      // log is the only record of which way a run went and why.
+      if (!response.ok) {
+        console.log(
+          ` - Dropped (page responded ${response.status}):`,
+          movie.title,
+          movie.url,
+        );
+        continue;
+      }
+      if (response.url.includes("/not-found")) {
+        console.log(
+          " - Dropped (redirected to not found):",
+          movie.title,
+          response.url,
+        );
+        continue;
+      }
 
       // Parse the HTML and extract visible text (excluding scripts and
       // styles) for content checks. Raw HTML can contain UI strings inside
@@ -280,7 +298,15 @@ async function transform(
         "cancelled event",
         "there are currently no performance scheduled for this event",
       ];
-      if (removedPhrases.some((p) => visibleText.includes(basicNormalize(p)))) {
+      const removedPhrase = removedPhrases.find((p) =>
+        visibleText.includes(basicNormalize(p)),
+      );
+      if (removedPhrase) {
+        console.log(
+          ` - Dropped (page says "${removedPhrase}"):`,
+          movie.title,
+          movie.url,
+        );
         continue;
       }
 
@@ -291,7 +317,15 @@ async function transform(
       const redirectMatch = matchedData.find(
         ({ url }) => basicNormalize(url) === basicNormalize(response.url),
       );
-      if (redirectMatch) continue;
+      if (redirectMatch) {
+        console.log(
+          " - Dropped (redirects to a listing we have):",
+          movie.title,
+          "->",
+          redirectMatch.title,
+        );
+        continue;
+      }
 
       // The movie may have been renamed, which would cause the title and URL to
       // change. If the old URL doesn't redirect to the new URL, it may have an
@@ -302,7 +336,15 @@ async function transform(
         ({ url }) =>
           canonicalUrl && basicNormalize(url) === basicNormalize(canonicalUrl),
       );
-      if (canonicalMatch) continue;
+      if (canonicalMatch) {
+        console.log(
+          " - Dropped (canonical URL is a listing we have):",
+          movie.title,
+          "->",
+          canonicalMatch.title,
+        );
+        continue;
+      }
 
       // Otherwise, add the movie into the transformed data
       console.log(" - Found missing movie:", movie.title, movie.url);
