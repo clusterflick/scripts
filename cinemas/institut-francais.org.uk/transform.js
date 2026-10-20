@@ -43,6 +43,27 @@ const getMoreInformation = (details) =>
   details["more information"]?.replace(/bookings? opening soon/gi, "").trim() ||
   undefined;
 
+// The film's own seasons and festivals are the tags under its title that link
+// to a "festivals-and-series" page - "London Korean Film Festival", "Film
+// Africa 2026", "French Film Festival London". The other tags ("Films", "New
+// Releases") are the venue's own shelves and link nowhere. Nothing in the markup
+// tells a festival from one of the venue's seasons, so all of them become notes,
+// as the ICA's do; the related-films cards further down the page link to
+// seasons too, which is why only the title block is read.
+const getSeries = ($) =>
+  $(".film-introduction .title-dates .tags .tags__tag a")
+    .filter((_index, element) => {
+      const href = $(element).attr("href");
+      if (!href) return false;
+      return new URL(href, attributes.url).pathname.startsWith(
+        "/festivals-and-series/",
+      );
+    })
+    .map((_index, element) => getText($(element)))
+    .get()
+    .filter(Boolean)
+    .map((name) => `Part of ${name}`);
+
 const getOverview = (details) => {
   const duration = details.duration
     ? details.duration.replace("mins", "").trim()
@@ -63,6 +84,7 @@ const getMultiplePerformances = (
   moviePageUrl,
   title,
   overview,
+  series,
 ) => {
   return $multiple
     .find("tbody tr")
@@ -82,6 +104,7 @@ const getMultiplePerformances = (
           basicNormalize(moreInformation) === basicNormalize(calendarNote)
             ? undefined
             : moreInformation,
+          ...series,
         ],
         url: performanceUrl ?? moviePageUrl,
         screen: getText($single.find("td").eq(2)),
@@ -107,6 +130,7 @@ const getSinglePerformance = (
   moviePageUrl,
   title,
   overview,
+  series,
 ) => {
   const day = $single.find(".timetable .date time").attr("datetime");
   const time = $single.find(".timetable time.time").attr("datetime");
@@ -129,6 +153,7 @@ const getSinglePerformance = (
         basicNormalize(moreInformation) === basicNormalize(calendarNote)
           ? undefined
           : moreInformation,
+        ...series,
       ],
       url: performanceUrl ?? moviePageUrl,
       screen: getText($single.find(".timetable .location")),
@@ -175,6 +200,7 @@ async function transform({ moviePages }, sourcedEvents) {
     const id = new URLSearchParams(new URL(shortLinkUrl).search).get("p");
     const title = getText($title);
     const overview = getText($(".definition"));
+    const series = getSeries($);
 
     movies.push({
       showingId: generateShowingId(attributes, id),
@@ -190,6 +216,7 @@ async function transform({ moviePages }, sourcedEvents) {
               moviePageUrl,
               title,
               overview,
+              series,
             )
           : getSinglePerformance(
               $,
@@ -198,6 +225,7 @@ async function transform({ moviePages }, sourcedEvents) {
               moviePageUrl,
               title,
               overview,
+              series,
             ),
       matchingHints: {
         overview: [overview, getProgramme($)].filter(Boolean).join("\n\n"),
