@@ -574,6 +574,17 @@ const getBookingHost = (bookingUrl = "") => {
 // about who is running the night, and a venue can genuinely have two of them at
 // the same time across screens (the Phoenix opens Con Air and As Good as It Gets
 // together). Those still have to match exactly to be dropped.
+//
+// Exactly is up to an empty fragment: gel.now lists the Cinema Museum's
+// ticketlab links with a trailing "#/", which only addresses the page's own
+// client-side router. And a sourced event can link to the venue's own page for
+// the screening rather than its booking - gel.now again, for the Cinema
+// Museum's Dyn Amo - which identifies the screening as well as a booking URL
+// does, once the time agrees too. The time matters there because a venue's
+// listing page can be shared by every date of a run, or by every film.
+const getBookingUrlKey = (bookingUrl = "") =>
+  basicNormalize(bookingUrl).replace(/#\/?$/, "");
+
 const removeAlreadyListedPerformances = (
   movies,
   listOfSourcedEvents,
@@ -590,10 +601,18 @@ const removeAlreadyListedPerformances = (
 
   const venueBookingUrls = new Set(
     venuePerformances
-      .map(({ bookingUrl }) => basicNormalize(bookingUrl))
+      .map(({ bookingUrl }) => getBookingUrlKey(bookingUrl))
       // A performance without a booking URL identifies nothing, so it must not
       // become a key that matches other performances lacking one too.
       .filter((bookingUrl) => bookingUrl !== ""),
+  );
+
+  const venueListedPageSlots = new Set(
+    movies.flatMap(({ url, performances }) => {
+      const page = getBookingUrlKey(url);
+      if (page === "") return [];
+      return performances.map(({ time }) => `${time}|${page}`);
+    }),
   );
 
   const venueHandedOverSlots = new Set(
@@ -609,7 +628,9 @@ const removeAlreadyListedPerformances = (
   return listOfSourcedEvents.map((event) => ({
     ...event,
     performances: event.performances.filter(({ time, bookingUrl }) => {
-      if (venueBookingUrls.has(basicNormalize(bookingUrl))) return false;
+      const bookingUrlKey = getBookingUrlKey(bookingUrl);
+      if (venueBookingUrls.has(bookingUrlKey)) return false;
+      if (venueListedPageSlots.has(`${time}|${bookingUrlKey}`)) return false;
       const host = getBookingHost(bookingUrl);
       return !(host && venueHandedOverSlots.has(`${time}|${host}`));
     }),

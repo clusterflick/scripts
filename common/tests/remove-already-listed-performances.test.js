@@ -111,6 +111,58 @@ describe("removeAlreadyListedPerformances", () => {
     ).toEqual([{ title: "Point Break", performances: [] }]);
   });
 
+  // gel.now lists the Cinema Museum's ticketlab link with a trailing "#/".
+  // Its time is the doors (19:30 for a 20:30 start), so only the link can
+  // tell it's the same screening.
+  test("matches a booking URL regardless of an empty fragment", () => {
+    const url =
+      "https://ticketlab.app/event/39463-Dog-Star-Man-1964-on-16mm-tickets";
+    expect(
+      removeAlreadyListedPerformances(
+        [venueMovie(url)],
+        [sourcedEvent(`${url}#/`, { time: time - 3600000 })],
+        { venueDomain },
+      ),
+    ).toEqual([{ title: "Point Break", performances: [] }]);
+  });
+
+  // gel.now links the Cinema Museum's own page for Dyn Amo, while the museum's
+  // listing books through ticketlab.
+  test("removes a sourced performance linking the venue's page for the same screening", () => {
+    const page = "https://cinemamuseum.org.uk/scheduled/dyn-amo-1973-on-16mm/";
+    expect(
+      removeAlreadyListedPerformances(
+        [
+          {
+            ...venueMovie("https://ticketlab.app/event/39823-Dyn-Amo-tickets"),
+            url: page,
+          },
+        ],
+        [sourcedEvent(page)],
+        { venueDomain },
+      ),
+    ).toEqual([{ title: "Point Break", performances: [] }]);
+  });
+
+  // A venue's page can be shared by every date of a run, so the page alone
+  // doesn't say which screening was meant.
+  test("keeps a sourced performance linking the venue's page at another time", () => {
+    const page = "https://cinemamuseum.org.uk/scheduled/dyn-amo-1973-on-16mm/";
+    const sourced = sourcedEvent(page, { time: time + 3600000 });
+    expect(
+      removeAlreadyListedPerformances(
+        [
+          {
+            ...venueMovie("https://ticketlab.app/event/39823-Dyn-Amo-tickets"),
+            url: page,
+          },
+        ],
+        [sourced],
+        { venueDomain },
+      ),
+    ).toEqual([sourced]);
+  });
+
   test("throws when no venue domain is given", () => {
     expect(() =>
       removeAlreadyListedPerformances(

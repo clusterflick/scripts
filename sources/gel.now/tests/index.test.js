@@ -80,3 +80,39 @@ describe(attributes.name, () => {
     );
   });
 });
+
+describe(`${attributes.name} start times`, () => {
+  const cinema = {
+    name: "The Cinema Museum",
+    address: "2 Dugard Way, Renfrew Road, London, SE11 4TH, UK",
+  };
+  const findEventAt = async (startTime) => {
+    readJSON.mockImplementation(() => ({
+      events: [
+        {
+          id: 1110,
+          name: "The Cinema Museum presents... Dyn Amo on 16mm",
+          start_time: startTime,
+          venues: [{ id: 1, name: "The Cinema Museum" }],
+        },
+      ],
+      venues: [],
+    }));
+    const [event] = await findEvents(cinema);
+    return new Date(event.performances[0].time);
+  };
+
+  // gel.now stamps the advertised London time with a "Z". Through BST that
+  // reads an hour late if taken as UTC: Dyn Amo starts at 19:30 at the museum.
+  it("reads a BST start time as London wall-clock time", async () => {
+    expect((await findEventAt("2026-10-07T19:30:00Z")).toISOString()).toBe(
+      "2026-10-07T18:30:00.000Z",
+    );
+  });
+
+  it("reads a GMT start time as London wall-clock time", async () => {
+    expect((await findEventAt("2026-11-04T19:30:00Z")).toISOString()).toBe(
+      "2026-11-04T19:30:00.000Z",
+    );
+  });
+});
