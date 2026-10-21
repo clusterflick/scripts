@@ -111,6 +111,40 @@ describe("removeAlreadyListedPerformances", () => {
     ).toEqual([{ title: "Point Break", performances: [] }]);
   });
 
+  // gel.now gives doors opening as the start (19:30 for a 20:30 screening), so
+  // only the link can match these, and one side ends in an empty "#/".
+  test("matches a booking link that differs only by an empty fragment", () => {
+    const ticketlab =
+      "https://ticketlab.app/event/39463-Dog-Star-Man-1964-on-16mm-tickets";
+    expect(
+      removeAlreadyListedPerformances(
+        [venueMovie(ticketlab)],
+        [sourcedEvent(`${ticketlab}#/`, { time: time - 3600000 })],
+        { venueDomain },
+      ),
+    ).toEqual([{ title: "Point Break", performances: [] }]);
+    expect(
+      removeAlreadyListedPerformances(
+        [venueMovie(`${ticketlab}#/`)],
+        [sourcedEvent(`${ticketlab}#`, { time: time - 3600000 })],
+        { venueDomain },
+      ),
+    ).toEqual([{ title: "Point Break", performances: [] }]);
+  });
+
+  test("keeps booking links whose fragments name different events", () => {
+    const sourced = sourcedEvent("https://tickets.example.com/#/event/2", {
+      time: time + 3600000,
+    });
+    expect(
+      removeAlreadyListedPerformances(
+        [venueMovie("https://tickets.example.com/#/event/1")],
+        [sourced],
+        { venueDomain },
+      ),
+    ).toEqual([sourced]);
+  });
+
   test("throws when no venue domain is given", () => {
     expect(() =>
       removeAlreadyListedPerformances(

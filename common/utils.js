@@ -574,6 +574,16 @@ const getBookingHost = (bookingUrl = "") => {
 // about who is running the night, and a venue can genuinely have two of them at
 // the same time across screens (the Phoenix opens Con Air and As Good as It Gets
 // together). Those still have to match exactly to be dropped.
+//
+// An exact match ignores an empty fragment. The Cinema Museum and gel.now both
+// link Ticketlab, and one or other adds a bare "#/" ("...-tickets#/"), which
+// left both copies of a screening standing. Time plus host can't catch that one:
+// gel.now gives doors opening as the start, an hour early on some nights. A
+// fragment with a route in it can name the event itself (a booking app's
+// "#/event/123"), so only an empty one is dropped.
+const getBookingKey = (bookingUrl) =>
+  basicNormalize(bookingUrl).replace(/#\/?$/, "");
+
 const removeAlreadyListedPerformances = (
   movies,
   listOfSourcedEvents,
@@ -590,7 +600,7 @@ const removeAlreadyListedPerformances = (
 
   const venueBookingUrls = new Set(
     venuePerformances
-      .map(({ bookingUrl }) => basicNormalize(bookingUrl))
+      .map(({ bookingUrl }) => getBookingKey(bookingUrl))
       // A performance without a booking URL identifies nothing, so it must not
       // become a key that matches other performances lacking one too.
       .filter((bookingUrl) => bookingUrl !== ""),
@@ -609,7 +619,7 @@ const removeAlreadyListedPerformances = (
   return listOfSourcedEvents.map((event) => ({
     ...event,
     performances: event.performances.filter(({ time, bookingUrl }) => {
-      if (venueBookingUrls.has(basicNormalize(bookingUrl))) return false;
+      if (venueBookingUrls.has(getBookingKey(bookingUrl))) return false;
       const host = getBookingHost(bookingUrl);
       return !(host && venueHandedOverSlots.has(`${time}|${host}`));
     }),
