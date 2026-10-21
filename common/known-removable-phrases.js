@@ -1857,6 +1857,7 @@ const knownRemovablePhrases = [
   "Livestream Q+A",
   "& Midrashic intro by Prof. Nathan Abrams",
   "Rosa von Praunheim:",
+  "by Andrei Tarkovsky",
 ];
 
 module.exports = knownRemovablePhrases;

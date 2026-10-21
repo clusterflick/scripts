@@ -1741,6 +1741,7 @@ function normalizeTitle(title, options) {
     ["IT's Saturday Night: Halloween at Courthouse Shoreditch", "IT (2017)"],
     ["Haunting at the Courthouse - ", "Haunting at the Courthouse: "],
     ["Orange Flavoured-Wedding", "Orange Flavoured Wedding"],
+    ["Flavour of Green Tea", "Flavor of Green Tea"],
     [
       "Christmas cinema event, T1D families - ",
       "Christmas cinema event, T1D families: ",
