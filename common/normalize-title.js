@@ -1392,10 +1392,10 @@ function normalizeTitle(title, options) {
     ["Orange Flavoured-Wedding", "Orange-Flavoured Wedding"],
     [/\bShe Devils on Wheels\b/i, "She-Devils on Wheels"],
     // The year stops the trailing "The Movie" from coming off, where every
-    // other listing of the film loses it
+    // other listing of the film loses it. The year itself stays.
     [
       "Nirvanna the Band the Show the Movie (2026)",
-      "Nirvanna the Band the Show",
+      "Nirvanna the Band the Show (2026)",
     ],
     // The band presents the film, and TheMovieDB bills it that way, which the
     // presenter rule strips to the film alone
