@@ -14,7 +14,7 @@ module.exports = {
   },
   url: "https://www.kccontinentalstores.co.uk",
   address: "26 Caledonian Road, London, N1 9DT, UK",
-  geo: { lat: 51.5316796, lon: -0.1207279 },
+  geo: { lat: 51.53170303541763, lon: -0.12064724453887309 },
   structure: "solo",
   type: "Pub & Bar",
   programming: "host",
