@@ -21,8 +21,6 @@ const { basicNormalize } = require("./utils");
 // nothing downstream to catch it.
 const FILM_KEYWORDS = [
   "film club",
-  // The same thing by its other name - Friday Knights bills its film nights
-  // "Movie Club" and describes the films as "features", never a "screening".
   "movie club",
   "film screening",
   "screening",
