@@ -10,7 +10,7 @@ module.exports = {
   },
   url: "https://www.bridgerenewaltrust.org.uk/chestnuts-community-centre",
   address: "280 St Ann's Road, Tottenham, London, N15 5BN, UK",
-  geo: { lat: 51.5818882, lon: -0.0886086 },
+  geo: { lat: 51.58178760810454, lon: -0.08874647422157385 },
   structure: "solo",
   type: "Community Centre",
   programming: "host",
