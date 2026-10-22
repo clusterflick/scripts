@@ -116,6 +116,9 @@ describe("isNonFilmEvent", () => {
     ["Manifold 3.0 Symposium"],
     ["Stand Up Comedy | New Talent Showcase"],
     ["Lamp Making! KCL Electronics x IC Robotics"],
+    ["United States Grand Prix - Race | F1 Live Screening"],
+    ["Lunchtime Talk: What is design for now?"],
+    ["The Pioneers live in London"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });

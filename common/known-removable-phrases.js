@@ -1133,6 +1133,7 @@ const knownRemovablePhrases = [
   "movie screening — Q&A with Moritz Krause",
   "Mother's Day:",
   "Mother's Day Special",
+  "MUBI FEST LIVE:",
   "MUBI FEST:",
   "MUBI ",
   "Music with Tara Franks",
@@ -1858,6 +1859,11 @@ const knownRemovablePhrases = [
   "& Midrashic intro by Prof. Nathan Abrams",
   "Rosa von Praunheim:",
   "by Andrei Tarkovsky",
+  "Close-Up Cinema:",
+  "Curzon Camden:",
+  "plus Q and A after the film",
+  "film, London",
+  "by Kathy Wazana",
 ];
 
 module.exports = knownRemovablePhrases;

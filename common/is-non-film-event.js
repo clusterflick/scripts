@@ -263,6 +263,12 @@ const nonFilmEvents = [
   /^Stand Up Comedy \| New Talent Showcase$/i,
   // An electronics workshop, with no film attached to it.
   /^Lamp Making! KCL Electronics x IC Robotics$/i,
+  // A Formula 1 race broadcast live, with no film attached to it.
+  /F1 Live Screening/i,
+  // A lunchtime talk and a live music performance, with no film attached to
+  // them.
+  /^Lunchtime Talk:/i,
+  /^The Pioneers live in London$/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
