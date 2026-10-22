@@ -3,6 +3,7 @@ const {
   describeClassification,
   logRefusal,
 } = require("./bot-challenge");
+const { sleep, withJitter } = require("./utils");
 
 // A `fetch` made from inside a browser page, for an API that only answers a
 // browser - it carries the page's fingerprint and cookies, as the site's own
@@ -30,10 +31,28 @@ const EVALUATE_RETRIES = 2;
 // readable response - only an opaque "Failed to fetch" - so that comes back as
 // `status: 0` with the message, rather than as a thrown network error that
 // would read as the API being down.
+//
+// That same `status: 0` is also what a dropped connection looks like, and
+// `fetchWithRetry` gives a direct request one retry after ~30s for exactly
+// that. A call made from a page gets the same single retry, or a connection
+// reset on the browser path fails what it would have recovered from directly:
+// Cineworld's health probe lost ten venues to one "NetworkError" while the
+// next call, a second later, came back whole. A refusal is the same answer
+// twice, so it costs one wait and is then reported as before.
 const settleOnLoad = (page) => page.waitForLoadState();
 
+const UNREADABLE_RETRY_MS = 30_000;
+
 const requestFromPage = async (page, url, init, settle = settleOnLoad) => {
-  const response = await evaluateRequest(page, url, init, settle);
+  let response = await evaluateRequest(page, url, init, settle);
+  if (response.status === 0) {
+    const wait = withJitter(UNREADABLE_RETRY_MS);
+    console.log(
+      ` ! - No readable response from ${url} (${response.statusText}), retrying in ${Math.round(wait / 1000)}s ...`,
+    );
+    await sleep(wait);
+    response = await evaluateRequest(page, url, init, settle);
+  }
   const refusal = classifyPageRequest(response);
   if (refusal) logRefusal(refusal, url);
   return response;
