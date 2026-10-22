@@ -1637,6 +1637,10 @@ function normalizeTitle(title, options) {
     ["Vampires Surf + ", "Vampires Surf & "],
     ["Guts + ", "Guts & "],
     ["Fault Lines + ", "Fault Lines & "],
+    ["Thunderbirds 4K Double Bill - ", "Thunderbirds 4K Double Bill: "],
+    // A billing that leads the title, so the separator rule would otherwise
+    // cut at its plus and keep the billing rather than the film
+    ["Film Screening + Q&A - ", ""],
     [
       "Italian cocktails, Morricone musical intro + ",
       "Italian cocktails, Morricone musical intro & ",
