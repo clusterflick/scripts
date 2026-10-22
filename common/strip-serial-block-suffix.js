@@ -14,6 +14,14 @@
 // never part of what the thing is called, so any of them can go.
 const episodeBlock = /\s*\((?:episodes?|eps?)\s*\d[^)]*\)/gi;
 
+// Some venues set the block off with a separator instead of brackets:
+// "Heated Rivalry: Season 01 - Epi 01 & 02", "Amadeus: Episodes 1 & 2". Only
+// a run of numbered episodes ending the title goes, so a Roman-numeralled
+// "Star Wars: Episode III" stays, as does "Bookish Series 2: Episode 1 + Q&A",
+// where the episode is what that one screening is.
+const separatedEpisodeBlock =
+  /\s*[-–—:]\s*(?:episodes?|epi|eps?)\.?\s*\d+(?:\s*(?:[-–—,&]|to|and)\s*\d+)*\s*$/i;
+
 // Parts are different: "(Part 1)" can be the film's actual title, as in
 // "Kaamelott: The Second Chapter (Part 1)". Only a run of them - a range or a
 // list - describes a sitting rather than names a film.
@@ -29,6 +37,7 @@ const competitionPart =
 function stripSerialBlockSuffix(title = "") {
   return title
     .replace(episodeBlock, "")
+    .replace(separatedEpisodeBlock, "")
     .replace(partBlock, "")
     .replace(competitionPart, "$1")
     .replace(/\s+/g, " ")
