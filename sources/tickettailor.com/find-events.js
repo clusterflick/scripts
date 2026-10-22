@@ -129,6 +129,7 @@ const SLUG_NOTES = {
   colfilmslimited: "Part of the London Colombian Film Festival",
   eastlondonexperimentalfilmclub:
     "Presented by East London Experimental Film Club",
+  fridayknights: "Presented by Friday Knights",
   koreanfilmclub: "Presented by Korean Film Club",
   maghrebcine: "Presented by Maghreb Ciné",
   midweekcinema: "Presented by Midweek Cinema",

@@ -7,6 +7,7 @@ describe("isFilmEvent", () => {
     ["A screening of Nosferatu with live score"],
     ["An evening of short films from the archive"],
     ["Open air cinema in the park"],
+    ["Friday Knights Presents: Movie Club - Horror Marathon"],
   ])("flags '%s' as a film event", (text) => {
     expect(isFilmEvent(text)).toBe(true);
   });
@@ -18,6 +19,8 @@ describe("isFilmEvent", () => {
     ["London Squash Classic"],
     ["Crafternoon"],
     ["Petit Pierre From Transylvania (Ages 3 to 103)"],
+    ["Karaoke Knights by Friday Knights"],
+    ["Mario Kart Night by Friday Knights"],
   ])("does not flag '%s'", (text) => {
     expect(isFilmEvent(text)).toBe(false);
   });

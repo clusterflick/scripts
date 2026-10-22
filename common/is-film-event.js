@@ -21,6 +21,7 @@ const { basicNormalize } = require("./utils");
 // nothing downstream to catch it.
 const FILM_KEYWORDS = [
   "film club",
+  "movie club",
   "film screening",
   "screening",
   // Singular, so it covers "short films" too - matching is a substring test.
