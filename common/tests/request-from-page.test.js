@@ -52,14 +52,56 @@ describe("requestFromPage", () => {
     ]);
   });
 
-  it("reports a call refused before a response was readable as status 0", async () => {
-    global.fetch = jest.fn(async () => {
-      throw new TypeError("Failed to fetch");
+  describe("a call with no readable response", () => {
+    beforeEach(() => {
+      jest.useFakeTimers();
     });
 
-    const response = await requestFromPage(fakePage(), "https://example.com/");
+    afterEach(() => {
+      jest.useRealTimers();
+    });
 
-    expect(response).toMatchObject({ ok: false, status: 0, body: "" });
+    it("is retried once, after a wait", async () => {
+      global.fetch = jest
+        .fn()
+        .mockRejectedValueOnce(
+          new TypeError("NetworkError when attempting to fetch resource."),
+        )
+        .mockResolvedValueOnce(new Response('{"ok":true}'));
+
+      const pending = requestFromPage(fakePage(), "https://example.com/");
+      await jest.advanceTimersByTimeAsync(0);
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+      await jest.advanceTimersByTimeAsync(40_000);
+
+      await expect(pending).resolves.toMatchObject({
+        ok: true,
+        status: 200,
+        body: '{"ok":true}',
+      });
+      expect(global.fetch).toHaveBeenCalledTimes(2);
+      expect(logs).toEqual([
+        expect.stringMatching(
+          /^ ! - No readable response from https:\/\/example\.com\/ \(refused before a response was readable \(NetworkError when attempting to fetch resource\.\)\), retrying in \d+s \.\.\.$/,
+        ),
+      ]);
+    });
+
+    it("is reported as status 0 when the retry fails too", async () => {
+      global.fetch = jest.fn(async () => {
+        throw new TypeError("Failed to fetch");
+      });
+
+      const pending = requestFromPage(fakePage(), "https://example.com/");
+      await jest.advanceTimersByTimeAsync(40_000);
+
+      await expect(pending).resolves.toMatchObject({
+        ok: false,
+        status: 0,
+        body: "",
+      });
+      expect(global.fetch).toHaveBeenCalledTimes(2);
+    });
   });
 
   it("waits for the page to load again when a re-check destroys the context", async () => {
