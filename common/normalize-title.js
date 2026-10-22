@@ -119,6 +119,7 @@ function normalizeTitle(title, options) {
     ["Storytelling + ", "Storytelling & "],
     ["Life on the Horn (2020) + ", "Life on the Horn (2020) & "],
     ["Back and Forth + ", "Back and Forth & "],
+    ["FILM + ALBUM:", "FILM & ALBUM:"],
     ["FLESH GORDON + ", "FLESH GORDON & "],
     [" + Cat", " and Cat"],
     [" + Zog", " and Zog"],
