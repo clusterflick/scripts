@@ -25,6 +25,36 @@ describe("stripSerialBlockSuffix", () => {
     );
   });
 
+  test("drops an episode run set off by a separator", () => {
+    expect(
+      stripSerialBlockSuffix("Heated Rivalry: Season 01 - Epi 01 & 02"),
+    ).toEqual("Heated Rivalry: Season 01");
+    expect(stripSerialBlockSuffix("Amadeus: Episodes 1 & 2")).toEqual(
+      "Amadeus",
+    );
+    expect(stripSerialBlockSuffix("Under Salt Marsh: Episodes 1&2")).toEqual(
+      "Under Salt Marsh",
+    );
+  });
+
+  test("keeps a separated episode that doesn't end the title", () => {
+    expect(
+      stripSerialBlockSuffix("TV Preview: Bookish Series 2: Episode 1 + Q&A"),
+    ).toEqual("TV Preview: Bookish Series 2: Episode 1 + Q&A");
+    expect(
+      stripSerialBlockSuffix("Channel 4 presents: Pierre - Ep 1 preview + Q&A"),
+    ).toEqual("Channel 4 presents: Pierre - Ep 1 preview + Q&A");
+  });
+
+  test("keeps a Roman-numeralled episode, which is the film's own title", () => {
+    expect(
+      stripSerialBlockSuffix("Star Wars: Episode III - Revenge of the Sith"),
+    ).toEqual("Star Wars: Episode III - Revenge of the Sith");
+    expect(stripSerialBlockSuffix("Star Wars Sundays: Ep III")).toEqual(
+      "Star Wars Sundays: Ep III",
+    );
+  });
+
   test("drops a range of parts", () => {
     expect(stripSerialBlockSuffix("The Journey (Parts 17 to 19)")).toEqual(
       "The Journey",
