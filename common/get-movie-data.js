@@ -82,6 +82,7 @@ const ignoredIds = [
   1589128, // Sense & Sensibility: A Modern Retelling -- https://www.themoviedb.org/movie/1589128-sense-sensibility-a-modern-retelling
   1793788, // Queen Budapest 4k -- https://www.themoviedb.org/movie/1793788-queen-budapest-4k
   1648597, // Obsession -- https://www.themoviedb.org/movie/1648597-obsession
+  267721, // Her Mother's Daughters -- https://www.themoviedb.org/movie/267721-her-mother-s-daughters
 ];
 
 /**

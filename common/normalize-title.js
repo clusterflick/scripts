@@ -65,8 +65,13 @@ function normalizeTitle(title, options) {
       "Birdman or (The Unexpected Virtue of Ignorance)",
       "Birdman or The Unexpected Virtue of Ignorance",
     ],
-    // Same again; the film is released here as "BPM (Beats Per Minute)".
-    [/120 BPM \(Beats Per Minute\)/i, "BPM Beats Per Minute"],
+    // Same again; the film is released here as "BPM (Beats Per Minute)", and
+    // TheMovieDB bills it without the "120" some venues lead with. Others bill
+    // the "120" without the subtitle, which is the film's French title.
+    [
+      /\b120 BPM\b(?: \(Beats Per Minute\))?|\bBPM \(Beats Per Minute\)/i,
+      "BPM Beats Per Minute",
+    ],
     // The venue follows the suffix with the language, so the rule below that
     // strips it from the end of the title never fires.
     [/^Mirzapur: The Movie\b/i, "Mirzapur"],
@@ -1377,6 +1382,43 @@ function normalizeTitle(title, options) {
       "Deep Focus: Forces of Attraction: ",
     ],
     ["NOT YET CERTIFIED -", "NOT YET CERTIFIED:"],
+    // The " - " would otherwise be read as a separator and cut the title,
+    // leaving the band's name to group with anything else they release
+    [
+      /\bRammstein\s*-\s*Live in Mexico City\b/i,
+      "Rammstein: Live in Mexico City",
+    ],
+    // Venues misplace or drop the hyphen TheMovieDB spells the title with
+    ["Orange Flavoured-Wedding", "Orange-Flavoured Wedding"],
+    [/\bShe Devils on Wheels\b/i, "She-Devils on Wheels"],
+    // The year stops the trailing "The Movie" from coming off, where every
+    // other listing of the film loses it. The year itself stays.
+    [
+      "Nirvanna the Band the Show the Movie (2026)",
+      "Nirvanna the Band the Show (2026)",
+    ],
+    // The band presents the film, and TheMovieDB bills it that way, which the
+    // presenter rule strips to the film alone
+    ["Amyl and The Sniffers Truth or Consequence", "Truth or Consequence"],
+    // Venues bill these without the part of the title TheMovieDB carries
+    [
+      /^Breaking Barriers London Screening$/i,
+      "Breaking Barriers: The Paula Dunn Story",
+    ],
+    [/^Carl Sagan: (?=We Are Made of Star Stuff)/i, ""],
+    [/^Fire Walk With Me\b/i, "Twin Peaks: Fire Walk With Me"],
+    [
+      /\bNightmare on Elm Street 4(?=$|\s*\()/i,
+      "Nightmare on Elm Street 4: The Dream Master",
+    ],
+    [/\b(?<!the )Motive and the Cue\b/i, "The Motive and the Cue"],
+    [
+      /\bMaverick: Epic Adventures of David Lean\b/i,
+      "Maverick: The Epic Adventures of David Lean",
+    ],
+    // "eta" is Basque for "and", which TheMovieDB keeps and the venue
+    // translates
+    [/\bAnder (?:&|and) Yul\b/i, "Ander eta Yul"],
     [/\b(?:De La )?Com[eé]die Fran[cç]aise\b/i, "Comédie-Française"],
     // Venues bill these under their UK or alternate title and TheMovieDB has
     // another
@@ -1791,6 +1833,10 @@ function normalizeTitle(title, options) {
     // title because a listing that is only a party has no film to fall back
     // to once the word comes off.
     [/^Queen Budapest Party$/i, "Queen Budapest"],
+    // Venues bill the concert film without the "Live in" TheMovieDB gives it,
+    // so the listings and the film arrive under two names. Spelled out in full
+    // because "Queen Budapest" alone searches up a duplicate entry.
+    [/\bQueen:? Budapest\b/i, "Queen: Live in Budapest"],
     // The gallery bills each night of the season as "Four Windows and a Room:
     // <that night's programme>", so every showing of the same season arrives
     // under a name of its own. The season name is the title here rather than a
