@@ -1,6 +1,7 @@
 const cheerio = require("cheerio");
 const slugify = require("slugify");
 const getPageWithPlaywright = require("../../common/get-page-with-playwright");
+const { sleep, withJitter } = require("../../common/utils");
 const { domain } = require("./attributes");
 
 // Safety cap on pagination - the events list runs to around five pages, so this
@@ -8,6 +9,17 @@ const { domain } = require("./attributes");
 // challenges the crawl, which is what a page the site answers with a listing it
 // has already served looks like.
 const MAX_PAGES = 25;
+
+// The site is on SiteGround, which on 22nd October 2026 started challenging the
+// runner part-way through the crawl. The browser clears the first challenge,
+// but a second one seconds later escalates to an image captcha that nothing
+// clears - so it is the crawl's pace being challenged, pages arriving back to
+// back, not the browser. Spacing them out, jittered so they don't land at
+// robotically exact intervals, keeps it looking less like one. The pause sits
+// inside the cache callbacks below, after the page is read, so it only slows a
+// page actually fetched, never a cache hit.
+const REQUEST_DELAY_MS = 5_000;
+const pace = () => sleep(withJitter(REQUEST_DELAY_MS));
 
 async function retrieve() {
   let page = 1;
@@ -24,7 +36,9 @@ async function retrieve() {
         await page
           .locator(".tribe-events-header__title-text")
           .waitFor({ strict: false });
-        return await page.content();
+        const content = await page.content();
+        await pace();
+        return content;
       },
     );
     const $ = cheerio.load(movieListPage);
@@ -64,7 +78,9 @@ async function retrieve() {
       async (page) => {
         await page.waitForLoadState();
         await page.locator("#tribe-events-content").waitFor({ strict: false });
-        return await page.content();
+        const content = await page.content();
+        await pace();
+        return content;
       },
     );
   }
