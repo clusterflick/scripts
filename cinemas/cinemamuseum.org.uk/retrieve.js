@@ -1,6 +1,7 @@
 const cheerio = require("cheerio");
 const slugify = require("slugify");
-const getPageWithPlaywright = require("../../common/get-page-with-playwright");
+const { withCamoufoxSession } = require("../../common/get-page-with-camoufox");
+const { getPageEscalating } = require("../../common/camoufox-escalation");
 const { sleep, withJitter } = require("../../common/utils");
 const { domain } = require("./attributes");
 
@@ -11,35 +12,39 @@ const { domain } = require("./attributes");
 const MAX_PAGES = 25;
 
 // The site is on SiteGround, which on 22nd October 2026 started challenging the
-// runner part-way through the crawl. The browser clears the first challenge,
-// but a second one seconds later escalates to an image captcha that nothing
-// clears - so it is the crawl's pace being challenged, pages arriving back to
-// back, not the browser. Spacing them out, jittered so they don't land at
-// robotically exact intervals, keeps it looking less like one. The pause sits
-// inside the cache callbacks below, after the page is read, so it only slows a
-// page actually fetched, never a cache hit.
+// runner part-way through the crawl. Stealth Chromium cleared the first
+// challenge, but a second one seconds later escalated to an image captcha that
+// nothing clears, and spacing the pages out didn't stop it. So each page is
+// tried with a plain fetch first and the session escalates to Camoufox at the
+// first challenge, as Stanley Arts', also on SiteGround, does - see
+// `common/camoufox-escalation.js`.
+//
+// The pages are still spaced out, jittered so they don't land at robotically
+// exact intervals, since it was the crawl arriving back to back that SiteGround
+// picked on. The pause only slows a page actually fetched, never a cache hit.
 const REQUEST_DELAY_MS = 5_000;
 const pace = () => sleep(withJitter(REQUEST_DELAY_MS));
 
-async function retrieve() {
+// Each page type has a selector only the real page carries, so SiteGround's
+// interstitial - served with a 202 - can't be mistaken for content.
+const MOVIE_LIST_PAGE_SELECTOR = ".tribe-events-header__title-text";
+const MOVIE_PAGE_SELECTOR = "#tribe-events-content";
+
+const getPageContent = (getPage, url, cacheKey, selector) =>
+  getPageEscalating(getPage, url, cacheKey, { selector, pace });
+
+async function retrieveListings(getPage) {
   let page = 1;
   const moviePageUrls = new Set();
 
   while (page <= MAX_PAGES) {
     const movieListPageUrl = `${domain}/schedule/category/events/page/${page}/`;
     const cacheKey = `cinemamuseum-page-${page}`;
-    const movieListPage = await getPageWithPlaywright(
+    const movieListPage = await getPageContent(
+      getPage,
       movieListPageUrl,
       cacheKey,
-      async (page) => {
-        await page.waitForLoadState();
-        await page
-          .locator(".tribe-events-header__title-text")
-          .waitFor({ strict: false });
-        const content = await page.content();
-        await pace();
-        return content;
-      },
+      MOVIE_LIST_PAGE_SELECTOR,
     );
     const $ = cheerio.load(movieListPage);
     const $entries = $("ul.tribe-events-calendar-list article");
@@ -85,20 +90,17 @@ async function retrieve() {
   for (const moviePageUrl of [...moviePageUrls]) {
     const moviePath = moviePageUrl.split("cinemamuseum.org.uk")[1];
     const cacheKey = `cinemamuseum-${slugify(moviePath)}`;
-    moviePages[moviePageUrl] = await getPageWithPlaywright(
+    moviePages[moviePageUrl] = await getPageContent(
+      getPage,
       moviePageUrl,
       cacheKey,
-      async (page) => {
-        await page.waitForLoadState();
-        await page.locator("#tribe-events-content").waitFor({ strict: false });
-        const content = await page.content();
-        await pace();
-        return content;
-      },
+      MOVIE_PAGE_SELECTOR,
     );
   }
 
   return { moviePages };
 }
+
+const retrieve = () => withCamoufoxSession(retrieveListings);
 
 module.exports = retrieve;
