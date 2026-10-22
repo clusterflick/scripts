@@ -184,7 +184,9 @@ function normalizeTitle(title, options) {
     ["Roger Waters -", "Roger Waters:"],
     ["CBeebies Musical - ", "CBeebies Musical: "],
     ["CBeebies - ", "CBeebies: "],
-    ["CBeebies Panto 2025", "CBeebies Panto"],
+    // The panto is billed with the year it runs, so one pattern rather than a
+    // string per year
+    [/\bCBeebies Panto \d{4}\b/i, "CBeebies Panto"],
     ["Ex Libris - ", "Ex Libris: "],
     ["Dovzhenko. The First Look", "Dovzhenko. First Sight"],
     ["Bison - ", "Bison: "],
@@ -1419,6 +1421,12 @@ function normalizeTitle(title, options) {
     // "eta" is Basque for "and", which TheMovieDB keeps and the venue
     // translates
     [/\bAnder (?:&|and) Yul\b/i, "Ander eta Yul"],
+    [/\bThappi\b/i, "Thaapi"],
+    // Prefixed by the time the corrections run, so the lookbehind reads the
+    // standardised "National Theatre Live" rather than the venue's "NT Live"
+    [/(?<=national theatre live:?\s*)Hayfever\b/i, "Hay Fever"],
+    // The festival bills its closing film under its English title
+    ["Closing Night Gala: The Last Concert", "Closing Night Gala: Fausse note"],
     [/\b(?:De La )?Com[eé]die Fran[cç]aise\b/i, "Comédie-Française"],
     // Venues bill these under their UK or alternate title and TheMovieDB has
     // another
@@ -2264,6 +2272,10 @@ function normalizeTitle(title, options) {
   // The bar numbers its milestone screenings ("Bar Trash 200: ...", "Bar
   // Trash 250: ..."), so one pattern rather than a string per number.
   title = title.replace(/\bbar trash \d+:\s*/i, "");
+
+  // Venues bill the strand with and without a colon after "Black Is" ("Black
+  // Is: Boundless: Seeds"), so one pattern rather than a string per spelling.
+  title = title.replace(/\bblack is:? boundless:\s*/i, "");
 
   // Venues bill the strand with "and" or "&", and with or without a space
   // before the colon ("DRINK AND DINE :Nightmare on Elm Street 4"), so one

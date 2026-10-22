@@ -1023,7 +1023,6 @@ const knownRemovablePhrases = [
   "Hong Kong Film Festival UK:",
   "Hong Kong Film Festival UK 2025:",
   "French Film Fest UK:",
-  "Black Is Boundless:",
   "Film Installation:",
   "Derek Jarman's",
   "Turn Up Film Festival:",
