@@ -53,13 +53,26 @@ async function retrieve() {
     }
     if ($entries.length === 0) break;
 
-    page += 1;
     $entries.each(function () {
       const url = $(this)
         .find("a.tribe-events-calendar-list__event-title-link")
         .attr("href");
       moviePageUrls.add(url);
     });
+
+    // The last page says it is the last: its "Next Events" control is a
+    // disabled button rather than a link. Stopping there saves asking for a
+    // page past the end just to find it empty - one more request for SiteGround
+    // to challenge, and the one it was challenging on 22nd October 2026. A page
+    // carrying neither is markup we don't recognise, and guessing would either
+    // drop the pages after it or page on until the cap.
+    if ($("button.tribe-events-c-nav__next[disabled]").length > 0) break;
+    if ($("a.tribe-events-c-nav__next[rel='next']").length === 0) {
+      throw new Error(
+        `No "Next Events" link or disabled button on ${movieListPageUrl}`,
+      );
+    }
+    page += 1;
   }
 
   if (page > MAX_PAGES) {
