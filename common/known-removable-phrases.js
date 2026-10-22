@@ -464,6 +464,7 @@ const knownRemovablePhrases = [
   // the mystery-movie correction's, so the season's billing is all that is
   // left to strip.
   "Spooky Edition",
+  ": Festive Edition",
   "Spooky Screenings",
   "Marcin Wierzchowski:",
   "Mexican Melodrama:",
@@ -1864,6 +1865,7 @@ const knownRemovablePhrases = [
   "plus Q and A after the film",
   "film, London",
   "by Kathy Wazana",
+  "FILM & ALBUM:",
 ];
 
 module.exports = knownRemovablePhrases;
