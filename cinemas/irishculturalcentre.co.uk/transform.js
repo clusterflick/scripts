@@ -11,7 +11,22 @@ const { parse } = require("date-fns");
 const { enGB } = require("date-fns/locale/en-GB");
 const attributes = require("./attributes");
 
-async function transform({ movieListPage }, sourcedEvents) {
+// The event page's whole description: the tagline and body in the content
+// column, then the coloured boxes below it ("About the Film", "About the Cast").
+// The listing card's excerpt can stop before anything that identifies the film.
+function getEventDescription(eventPage) {
+  const $ = cheerio.load(eventPage);
+  const sections = [
+    ...$(".back-link").parent().children().not("h1, .back-link").toArray(),
+    ...$(".event_content_box").toArray(),
+  ];
+  return sections
+    .map((section) => getText($(section)))
+    .filter(Boolean)
+    .join("\n\n");
+}
+
+async function transform({ movieListPage, eventPages }, sourcedEvents) {
   const $ = cheerio.load(movieListPage);
   const movies = [];
 
@@ -61,6 +76,9 @@ async function transform({ movieListPage }, sourcedEvents) {
 
     const description = getText($post.find(".project-bottom > div p"));
 
+    const eventPage = eventPages[url];
+    if (!eventPage) throw new Error(`No event page retrieved for ${url}`);
+
     const performance = createPerformance({
       date,
       url,
@@ -75,7 +93,7 @@ async function transform({ movieListPage }, sourcedEvents) {
       url,
       overview: createOverview({}),
       performances: [performance],
-      matchingHints: { overview: description },
+      matchingHints: { overview: getEventDescription(eventPage) },
     });
   });
 
