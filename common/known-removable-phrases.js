@@ -275,6 +275,8 @@ const knownRemovablePhrases = [
   " Xmas Disco",
   " in Seoul",
   " in cinemas",
+  // Before " in cinema", which would otherwise leave "A Life:" behind.
+  "A Life in Cinema:",
   " in cinema",
   " and Creating Survivor",
   " plus 1 hour Q&A. Ticket giveaway",
@@ -370,6 +372,7 @@ const knownRemovablePhrases = [
   "with an Introduction, Prologue, and a mark of respect by the Monks",
   "with a live Q&A with The Cast",
   "with a Talk by Paul Merton",
+  "with Paul Merton and Live Organ Accompaniment by Donald MacKenzie",
   "With Bonus Footage",
   "w/ Bonus Footage",
   "W/ Bonus Features",

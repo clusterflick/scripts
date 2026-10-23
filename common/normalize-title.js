@@ -1798,9 +1798,9 @@ function normalizeTitle(title, options) {
     ],
     ["Pulp: What Do You Do for an ", "Pulp: What Do You Do for an encore "],
     // The venue bills each night of its Halloween run by date ("Rocky Horror
-    // 30 october", "Rocky Horror 31 october"), so one pattern rather than a
+    // 30 october", "Rocky Horror 1 November"), so one pattern rather than a
     // string per night.
-    [/^Rocky Horror \d+ october$/i, "The Rocky Horror Picture Show"],
+    [/^Rocky Horror \d+ (october|november)$/i, "The Rocky Horror Picture Show"],
     // A pun on the film's title, so it is put back to the film being screened.
     ["IT's Saturday Night: Halloween at Courthouse Shoreditch", "IT (2017)"],
     ["Haunting at the Courthouse - ", "Haunting at the Courthouse: "],
