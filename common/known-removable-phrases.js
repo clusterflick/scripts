@@ -1815,6 +1815,7 @@ const knownRemovablePhrases = [
   "Special Preview of",
   "A Preview of",
   "[Preview]",
+  "Preview with Q & A with Filmmakers and Special Guest Israa",
   "preview",
   "live action",
   "Re-Edit",

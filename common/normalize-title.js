@@ -264,6 +264,7 @@ function normalizeTitle(title, options) {
     ["Crafty Movie Night - ", "Crafty Movie Night: "],
     ["Girlguiding Screening - ", "Girlguiding Screening: "],
     ["SEEN Charity Film Screening - ", "SEEN Charity Film Screening: "],
+    ["Charity Screening - ", "Charity Screening: "],
     ["Romford Horror Festival - ", "Romford Horror Festival: "],
     ["The Funny Life Film Festival - ", "The Funny Life Film Festival: "],
     // One of the festival's listings drops the space after the dash.
