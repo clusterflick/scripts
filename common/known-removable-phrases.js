@@ -1566,6 +1566,7 @@ const knownRemovablePhrases = [
   "AKA CITY OF THE WALKING DEAD",
   "AKA TURKISH E.T.",
   "AKA TURKISH EXORCIST",
+  "AKA KIDNAPPED COED",
   "Darling Craft Social: Zine Making &",
   "Zine workshop &",
   "David Tennant & Cush Jumbo",

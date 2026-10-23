@@ -75,7 +75,10 @@ function normalizeTitle(title, options) {
     // The venue follows the suffix with the language, so the rule below that
     // strips it from the end of the title never fires.
     [/^Mirzapur: The Movie\b/i, "Mirzapur"],
-    [/:? The Movie$/i, ""],
+    // A festival bills its strand after a pipe ("A Vast Algorithm of Humanity:
+    // The Movie | In Competition"), which ends the title just as well as the
+    // end of the string does.
+    [/:? The Movie(?=\s*\||$)/i, ""],
     // Venues spell the stage-production suffix with a dash or a colon, so
     // match the separator rather than carrying a phrase per spelling.
     [/\s*(?:[-–]\s*)?:?\s*The Play\.?\s*$/i, ""],
@@ -652,10 +655,17 @@ function normalizeTitle(title, options) {
     // Venues bill the Doctor Who Day double bill by its second episode alone,
     // with a colon or a dash and with or without the "Day", so it would arrive
     // under a name per spelling - and the dash would lose the episode to the
-    // separator rule. One pattern rather than a string per spelling.
+    // separator rule. One pattern rather than a string per spelling. The encore
+    // and the drag-hosted screening carry their own billing either side of it.
     [
-      /^Doctor Who(?: Day)?(?::| -) The Satan Pit$/i,
+      /^(?:Encore:\s*)?Doctor Who(?: Day)?(?::| -) The Satan Pit(?:\s*\+\s*Intro from .+)?$/i,
       "Doctor Who Day: The Impossible Planet & The Satan Pit",
+    ],
+    // The showcase bills the serial after "+ Q&A" or "+ Discussion", which the
+    // separator rule reads as the end of the title and drops the serial with it.
+    [
+      /^Doctor Who Episode Showcase \+ (?:Q&A|Discussion)\s*[-:]\s*/i,
+      "Doctor Who: ",
     ],
     ["H I / P D", "Hidden Inventory/Premature Death"], // Fixes Jujutsu Kaisen: H I / P D
     [
@@ -791,7 +801,8 @@ function normalizeTitle(title, options) {
     ["Bar Trash: Queer Horror / ", "Bar Trash: Queer Horror & "],
     ["Bar Trash: Silent Horror / ", "Bar Trash: Silent Horror & "],
     [/^BAR TRASH: (.+) \+ (.+)$/i, "BAR TRASH: $1 & $2"],
-    ["Final Shows - ", "Final Shows: "],
+    [/\bFinal Shows? - /i, "Final Shows: "],
+    [/^Cineworld Screening - /i, ""],
     ["Guest Event - ", "Guest Event: "],
     ["Throwback - ", "Throwback: "],
     ["Toddler - ", "Toddler: "],
@@ -1154,6 +1165,12 @@ function normalizeTitle(title, options) {
     // carry it must not have it prefixed a second time.
     [/^BTS '?Arirang'?/i, "BTS World Tour 'Arirang'"],
     ["BTS World Tour - ", "BTS World Tour: "],
+    // TheMovieDB brackets the tour name and leaves the city on without the
+    // ": Live" the city rule above anchors on.
+    [
+      /^BTS World Tour \[Arirang\] in [\p{L}\s'-]+$/iu,
+      "BTS World Tour 'Arirang'",
+    ],
     ["Records, cocktails + ", "Records, cocktails: "],
     ["Roman party, divine chorals + ", "Roman party, divine chorals: "],
     ["SPICE WORLD MOVIE", "SPICE WORLD"],
@@ -1892,6 +1909,20 @@ function normalizeTitle(title, options) {
     // that ends on a closing bracket, because plenty of films end on the words
     // themselves - "An American Werewolf in London", "A Year in London".
     [/\)\s+in London$/i, ")"],
+    [
+      /(?<!\ban )American Werewolf in London/i,
+      "An American Werewolf in London",
+    ],
+    // TheMovieDB carries the subtitle that venues leave off
+    [/^Prahaar: The Untold Story of Ujjwal Nikam$/i, "Prahaar"],
+    [/^(The Einstein of Sex): Life and Work of Dr\.? M\.? Hirschfeld$/i, "$1"],
+    [/^Bob Dylan\s*[-–]\s*(?=Don'?t Look Back$)/i, ""],
+    [
+      "Freeway: Confessions of a Trickbaby",
+      "Freeway II: Confessions of a Trickbaby",
+    ],
+    ["In a Year of 13 Moons", "In a Year with 13 Moons"],
+    [/(Sirocco (?:&|and) the Kingdom of) the Winds/i, "$1 Winds"],
     // ODEON are idiots -- correct their years
     ["THE HUNGER GAMES (2026)", "THE HUNGER GAMES (2012)"],
     [
