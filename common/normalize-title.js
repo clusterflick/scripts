@@ -1922,6 +1922,7 @@ function normalizeTitle(title, options) {
       "Freeway II: Confessions of a Trickbaby",
     ],
     ["In a Year of 13 Moons", "In a Year with 13 Moons"],
+    [/\bSex World\b/i, "SexWorld"],
     [/(Sirocco (?:&|and) the Kingdom of) the Winds/i, "$1 Winds"],
     // ODEON are idiots -- correct their years
     ["THE HUNGER GAMES (2026)", "THE HUNGER GAMES (2012)"],
