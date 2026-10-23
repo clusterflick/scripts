@@ -1390,6 +1390,14 @@ function normalizeTitle(title, options) {
       /\bRammstein\s*-\s*Live in Mexico City\b/i,
       "Rammstein: Live in Mexico City",
     ],
+    // The " - " would otherwise be read as a separator and cut the subtitle
+    [
+      /\bThe Magic of It All\s*-\s*The Story of Strawbs\b/i,
+      "The Magic of It All: The Story of Strawbs",
+    ],
+    // The billing carries the title of another film, which would otherwise stay
+    // on the key
+    [/\bRosenthal: The Great Showman\b/i, "Rosenthal"],
     // Venues misplace or drop the hyphen TheMovieDB spells the title with
     ["Orange Flavoured-Wedding", "Orange-Flavoured Wedding"],
     [/\bShe Devils on Wheels\b/i, "She-Devils on Wheels"],
