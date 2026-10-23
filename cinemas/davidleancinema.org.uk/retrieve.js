@@ -3,8 +3,20 @@ const {
   fetchWithRetry,
   fetchError,
   assertSelector,
+  sleep,
+  withJitter,
 } = require("../../common/utils");
 const { domain } = require("./attributes");
+
+// The site is a small WordPress install on LiteSpeed, whose host firewall on
+// 23rd October 2026 started dropping the runner's connections outright - every
+// request timing out, the site's own pages included - for hours at a time.
+// Until then a retrieve fetched every event page back to back, ~48 requests in
+// 16 seconds, which is the kind of burst that firewall acts on. So the event
+// pages are spaced out, jittered so they don't land at robotically exact
+// intervals.
+const REQUEST_DELAY_MS = 5_000;
+const pace = () => sleep(withJitter(REQUEST_DELAY_MS));
 
 // The Ticketsolve feed is the authority on performances, but the venue writes
 // films up on its WordPress site first and its Ticketsolve descriptions can lag
@@ -43,6 +55,7 @@ async function retrieve() {
 
   const eventPages = {};
   for (const eventPageUrl of eventPageUrls) {
+    await pace();
     eventPages[eventPageUrl] = await fetchText(eventPageUrl);
   }
 

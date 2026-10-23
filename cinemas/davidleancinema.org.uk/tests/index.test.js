@@ -7,6 +7,11 @@ const {
 } = require("../../../common/utils");
 const { retrieve, transform, attributes } = require("..");
 
+jest.mock("../../../common/utils", () => ({
+  ...jest.requireActual("../../../common/utils"),
+  sleep: jest.fn(),
+}));
+
 const isRecording = false;
 
 describe(attributes.name, () => {
