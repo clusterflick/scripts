@@ -1474,6 +1474,7 @@ function normalizeTitle(title, options) {
     [/\s*-\s*2 Documentaries\s*$/i, " Double Bill"],
     // Venue misspellings
     [/\bA Quite Place\b/i, "A Quiet Place"],
+    [/\bMountan\b/i, "Mountain"],
     [/^All the Beauty and Bloodshed/i, "All the Beauty and the Bloodshed"],
     [/ [+&] Iggy Pop [–\-�] Lust for life/i, " & Lust for life"],
     [
