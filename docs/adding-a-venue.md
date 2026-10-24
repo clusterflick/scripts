@@ -326,7 +326,7 @@ group needs a browser.
 | What you're adding                                | Retrieve job group             | Transform job group              |
 | ------------------------------------------------- | ------------------------------ | -------------------------------- |
 | Source (ticketing platform)                       | `retrieve_sources`             | N/A (sources aren't transformed) |
-| Source-only venue (no website, relies on sources) | `retrieve_source_only_*`       | `transform_external_events_*`    |
+| Source-only venue (no website, relies on sources) | `retrieve_source_only`         | `transform_external_events_*`    |
 | Venue belonging to an existing chain              | The chain's existing job group | The chain's existing job group   |
 | Standalone venue with its own retriever           | `retrieve_remaining_cinemas_*` | `transform_remaining_*`          |
 
@@ -340,15 +340,20 @@ awk '/^  retrieve_/{g=$1} /npm run retrieve --/{c[g]++} END{for(k in c) print c[
   .github/workflows/retrieve.yml | sort -n
 ```
 
-The numbered retrieve and transform groups are **not** paired one-to-one — there
-are more `transform_external_events_*` groups than `retrieve_source_only_*` ones
-— so pick the smallest group on each side independently.
+A standalone venue goes in a numbered `retrieve_remaining_cinemas_*` group,
+which run on `ubuntu-latest`, once a run of data-retrieved's `experiment.yml`
+there has shown it retrieves cleanly. One that needs Camoufox, or that GitHub's
+IPs are refused by, goes in `retrieve_remaining_cinemas_self_hosted` instead. See
+"Runner selection" in data-retrieved's CLAUDE.md.
+
+The numbered retrieve and transform groups are **not** paired one-to-one, so
+pick the smallest group on each side independently.
 
 **Playwright dependency:** Check whether the venue's retriever uses Playwright
 (browser automation). If it does, it must go in a group whose setup step passes
-`playwright: true`. The `retrieve_remaining_cinemas_*` groups (which run on
-`self-hosted`) and most chain groups have it; the `retrieve_source_only_*`
-groups do not.
+`playwright: true`. Only the groups with a venue that needs a browser pass it,
+so check the group you pick and add it if needed; `retrieve_source_only` never
+has it.
 
 ### Adding the Step
 
@@ -440,8 +445,8 @@ array so the release waits for it to complete.
 Add a new step to the matching job group. Chain venues should go in the
 corresponding transform group — if the venue is in the BFI retrieve group, add
 it to the BFI transform group. Source-only venues go in the smallest
-`transform_external_events_*` group; these don't line up one-to-one with the
-`retrieve_source_only_*` groups, so choose by size rather than by number.
+`transform_external_events_*` group; there is a single `retrieve_source_only`
+group, so choose by size.
 
 ```yaml
 - name: <venue-id>
