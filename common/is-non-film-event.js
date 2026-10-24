@@ -269,6 +269,14 @@ const nonFilmEvents = [
   // them.
   /^Lunchtime Talk:/i,
   /^The Pioneers live in London$/i,
+  // A charity fundraiser's quiz and music night, with no film attached to it.
+  /^Fundraiser for National AIDS Trust/i,
+  // The meetup above, billed with the party it runs that night. Anchored for
+  // the same reason.
+  /^LGBTQ\+ Meetup and Halloween Party$/i,
+  // A slideshow night, billed by its theme ("2026 in Review"), so match the
+  // series rather than carrying a pattern per theme.
+  /^PowerPoint Night:/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>

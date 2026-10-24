@@ -119,6 +119,9 @@ describe("isNonFilmEvent", () => {
     ["United States Grand Prix - Race | F1 Live Screening"],
     ["Lunchtime Talk: What is design for now?"],
     ["The Pioneers live in London"],
+    ["Fundraiser for National AIDS Trust | Quiz & Music"],
+    ["LGBTQ+ Meetup and Halloween Party"],
+    ["PowerPoint Night: 2026 in Review"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });
