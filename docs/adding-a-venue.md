@@ -343,7 +343,7 @@ awk '/^  retrieve_/{g=$1} /npm run retrieve --/{c[g]++} END{for(k in c) print c[
 A standalone venue goes in one of `retrieve_remaining_cinemas_1` to `_6`, which
 run on `ubuntu-latest`, once a run of data-retrieved's `experiment.yml` there
 has shown it retrieves cleanly. One that needs Camoufox, or that GitHub's
-IPs are refused by, goes in `retrieve_remaining_cinemas_self_hosted` instead. See
+IPs are refused by, goes in `retrieve_remaining_cinemas_9` instead. See
 "Runner selection" in data-retrieved's CLAUDE.md.
 
 The numbered retrieve and transform groups are **not** paired one-to-one, so
