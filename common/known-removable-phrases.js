@@ -1870,6 +1870,7 @@ const knownRemovablePhrases = [
   "film, London",
   "by Kathy Wazana",
   "FILM & ALBUM:",
+  "The Cinema of Too-Late Capitalism #2:",
 ];
 
 module.exports = knownRemovablePhrases;
