@@ -325,7 +325,7 @@ group needs a browser.
 
 | What you're adding                                | Retrieve job group             | Transform job group              |
 | ------------------------------------------------- | ------------------------------ | -------------------------------- |
-| Source (ticketing platform)                       | `retrieve_sources`             | N/A (sources aren't transformed) |
+| Source (ticketing platform)                       | `retrieve_sources_*`           | N/A (sources aren't transformed) |
 | Source-only venue (no website, relies on sources) | `retrieve_source_only`         | `transform_external_events_*`    |
 | Venue belonging to an existing chain              | The chain's existing job group | The chain's existing job group   |
 | Standalone venue with its own retriever           | `retrieve_remaining_cinemas_*` | `transform_remaining_*`          |
@@ -340,9 +340,9 @@ awk '/^  retrieve_/{g=$1} /npm run retrieve --/{c[g]++} END{for(k in c) print c[
   .github/workflows/retrieve.yml | sort -n
 ```
 
-A standalone venue goes in a numbered `retrieve_remaining_cinemas_*` group,
-which run on `ubuntu-latest`, once a run of data-retrieved's `experiment.yml`
-there has shown it retrieves cleanly. One that needs Camoufox, or that GitHub's
+A standalone venue goes in one of `retrieve_remaining_cinemas_1` to `_6`, which
+run on `ubuntu-latest`, once a run of data-retrieved's `experiment.yml` there
+has shown it retrieves cleanly. One that needs Camoufox, or that GitHub's
 IPs are refused by, goes in `retrieve_remaining_cinemas_self_hosted` instead. See
 "Runner selection" in data-retrieved's CLAUDE.md.
 
