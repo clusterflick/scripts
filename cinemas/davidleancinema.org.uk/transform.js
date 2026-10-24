@@ -200,7 +200,13 @@ function toMovie($, showEl, websiteDetails) {
   const fromWebsite = websiteDetails[id] ?? {};
   const pick = (key) => fromWebsite[key] || fromTicketsolve[key];
 
-  const url = fromWebsite.url || getTextAt($show, "url") || attributes.url;
+  // A show the venue hasn't written a page for yet (or ever) links to its
+  // Ticketsolve page instead. The feed's own show `<url>` is no use here: it's
+  // a venue-wide setting, the same "#whatson" link on the old domain for every
+  // show, which lands on the homepage.
+  const url =
+    fromWebsite.url ||
+    `https://davidleancinema.ticketsolve.com/ticketbooth/shows/${id}`;
   const overview = pick("overview");
 
   const eventNodes = $show.find("events > event");
