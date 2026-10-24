@@ -219,6 +219,7 @@ const nonFilmEvents = [
   // phrases could as easily be a film's own title.
   /^LGBTQ\+ Meetup$/i,
   /^LGBTQ\+ Speed Dating$/i,
+  /^Sapphic Speed Mixer$/i,
   /^The Ideas Open Mic$/i,
   // A talk with no film attached to it.
   /^Restricted View: Notes on the Human Experience$/i,

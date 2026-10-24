@@ -1440,6 +1440,7 @@ function normalizeTitle(title, options) {
       "Nightmare on Elm Street 4: The Dream Master",
     ],
     [/\b(?<!the )Motive and the Cue\b/i, "The Motive and the Cue"],
+    ["of David Leam", "of David Lean"],
     [
       /\bMaverick: Epic Adventures of David Lean\b/i,
       "Maverick: The Epic Adventures of David Lean",

@@ -122,6 +122,7 @@ describe("isNonFilmEvent", () => {
     ["Fundraiser for National AIDS Trust | Quiz & Music"],
     ["LGBTQ+ Meetup and Halloween Party"],
     ["PowerPoint Night: 2026 in Review"],
+    ["Sapphic Speed Mixer"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });
