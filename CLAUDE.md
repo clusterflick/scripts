@@ -328,6 +328,8 @@ Defined in `.env.example`:
 - `GEMINI_API_KEY` - Google Gemini API key
 - `OPENAI_API_KEY` - OpenAI API key
 - `TYPESAFE_API_KEY` - TypeSafe API key, used by the Jev arms below
+- `CINEBUR_EMAIL` / `CINEBUR_PASSWORD` - a dedicated Cinebur account; the app's
+  Firestore refuses anyone not signed in
 - `PAT` - GitHub personal access token
 
 Three toggles pick between interchangeable implementations. Each defaults to the
