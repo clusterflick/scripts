@@ -37,6 +37,26 @@ describe(attributes.name, () => {
 
       expect(schemaValidate(data)).toBe(true);
       expect(data).toMatchSnapshot();
+
+      // Undated events (merchandise sold through Eventive) have no start time
+      // and are dropped rather than failing the transform
+      const [event] = retrieved.movieListPage.events.filter(
+        ({ is_virtual }) => !is_virtual,
+      );
+      // eslint-disable-next-line no-unused-vars
+      const { start_time, end_time, ...undatedEvent } = event;
+      const withUndated = {
+        movieListPage: {
+          ...retrieved.movieListPage,
+          events: [
+            ...retrieved.movieListPage.events,
+            { ...undatedEvent, id: "undated-event", is_dated: false },
+          ],
+        },
+      };
+      expect(sortAndFilterMovies(await transform(withUndated, {}))).toEqual(
+        output,
+      );
     },
     isRecording ? 240_000 : undefined,
   );
