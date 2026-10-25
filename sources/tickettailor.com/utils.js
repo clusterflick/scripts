@@ -1,5 +1,14 @@
 const cheerio = require("cheerio");
 
+// A promoter can lock an event behind an access code while still listing it on
+// their public page. Its event page is then a code form in place of the event
+// details, and nobody without the code can book it.
+const ACCESS_CODE_SELECTOR = "main.password_protected";
+
+function isAccessCodePage(html) {
+  return cheerio.load(html)(ACCESS_CODE_SELECTOR).length > 0;
+}
+
 function extractEventIdFromUrl(url) {
   // Event hrefs look like "/events/{slug}/{id}?date=..." - drop any query
   // string or fragment so the same event doesn't produce different showing ids
@@ -33,6 +42,8 @@ function extractEventLinks(html) {
 }
 
 module.exports = {
+  ACCESS_CODE_SELECTOR,
+  isAccessCodePage,
   extractEventIdFromUrl,
   extractEventLinks,
 };

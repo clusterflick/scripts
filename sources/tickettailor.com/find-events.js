@@ -16,7 +16,7 @@ const {
 } = require("../../common/utils");
 const attributes = require("./attributes");
 const { venueMatchesCinema } = require("../../common/source-utils");
-const { extractEventIdFromUrl } = require("./utils");
+const { extractEventIdFromUrl, isAccessCodePage } = require("./utils");
 
 // A full date-and-time chunk, e.g. "Mon 3 Aug 2026 19:00" or "Mon 20 Jul 2026 1:00 PM"
 const DATE_FORMATS = ["EEE d MMM yyyy h:mm a", "EEE d MMM yyyy HH:mm"];
@@ -233,14 +233,16 @@ async function findEvents(cinema) {
       );
   });
 
-  return matchingEvents.map((event) => {
+  return matchingEvents.flatMap((event) => {
     const eventPage = eventPages[event.eventId];
     if (!eventPage) {
       throw new Error(
         `No event page retrieved for ${event.fullUrl} - the retrieved data is incomplete`,
       );
     }
-    return convertTicketTailorEvent(event, parseEventDescription(eventPage));
+    // Only those holding the code can book it, so it is not a public showing.
+    if (isAccessCodePage(eventPage)) return [];
+    return [convertTicketTailorEvent(event, parseEventDescription(eventPage))];
   });
 }
 
