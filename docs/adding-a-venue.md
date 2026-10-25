@@ -525,10 +525,12 @@ their calendar files. Add a row in alphabetical order by venue name and update
 the "There are currently N supported venues" count above the table:
 
 ```markdown
-| <Venue Name> |
-[`<venue-id>`](https://github.com/clusterflick/data-calendar/releases/latest/download/<venue-id>)
-|
+| <Venue Name> | [`<venue-id>`](https://clusterflick.com/datasets/calendars/<venue-id>.ics) |
 ```
+
+Link to the feed hosted on clusterflick.com, not the `data-calendar` release
+asset. The release asset still exists (the site is built from it), but the
+hosted URL is the one we give out.
 
 Sort by the displayed venue name exactly as written, leading `The` included. The
 table is in `localeCompare` order — case-insensitive and accent-folded — which
@@ -706,4 +708,7 @@ After merging all changes:
 2. Verify the venue appears in the `data-retrieved` release artifacts
 3. Confirm the `data-transformed` workflow picks it up and produces valid output
 4. Check the venue page generates at `clusterflick.com/venues/<slugified-name>`
-5. Verify the calendar feed is accessible at the `data-calendar` release URL
+5. Verify the calendar feed is accessible at
+   `clusterflick.com/datasets/calendars/<venue-id>.ics` (it appears there on the
+   first `clusterflick.com` deploy after the venue reaches a `data-calendar`
+   release)
