@@ -458,9 +458,36 @@ const fetchJson = async (url, options, retryConfig) => {
 
 const getText = ($el) => $el.text().trim();
 
+// What a page that failed a selector check actually was. The opening bytes of
+// the HTML are usually <head> boilerplate, so name the page and quote its text
+// instead - enough to tell an error, holding or refusal page from a redesign.
+const describePageContent = ($, html) => {
+  const limit = 500;
+  const truncate = (text) =>
+    text.length > limit ? `${text.slice(0, limit)}\n... [truncated]` : text;
+
+  const $body = $("body");
+  const $visible = $body.clone();
+  $visible.find("script, style, noscript, template, svg").remove();
+  const text = $visible.text().replace(/\s+/g, " ").trim();
+  if (!text) return truncate(html);
+
+  const bodyTag = `<body${Object.entries($body.attr() || {})
+    .map(([name, value]) => ` ${name}="${value.replace(/\s+/g, " ").trim()}"`)
+    .join("")}>`;
+  return [
+    `Title: ${$("title").first().text().trim() || "(none)"}`,
+    `Body: ${bodyTag}`,
+    `Text: ${truncate(text)}`,
+  ].join("\n");
+};
+
 const assertSelector = (html, selector, message) => {
   const $ = cheerio.load(html);
   if ($(selector).length === 0) {
+    console.log(
+      `Page content at failure (${html.length} characters), snippet:\n\n-----\n${describePageContent($, html)}\n-----`,
+    );
     throw new Error(
       message ||
         `Expected "${selector}" not found — the page structure may have changed`,
