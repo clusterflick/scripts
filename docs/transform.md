@@ -22,11 +22,11 @@ high-level steps:
    trilogies
 7. **Validate Output** - Ensure data conforms to the JSON schema
 
-Three inputs are the same for every location in a run: the first-seen
-timestamps from the last ten days of combined data (step 4), yesterday's
-transformed release (step 4), and what every source finds at every location
-(steps 1 and 4). Each location is transformed in its own process, so rather than
-every one of them rebuilding these, `transform-prepare` builds them once into
+Three inputs are the same for every location in a run: the first-seen timestamps
+from the last ten days of combined data (step 4), yesterday's transformed
+release (step 4), and what every source finds at every location (steps 1 and 4).
+Each location is transformed in its own process, so rather than every one of
+them rebuilding these, `transform-prepare` builds them once into
 `transform-inputs/` and every `transform` reads them from there:
 
 - `transform-inputs/historical-seen.json` - `showingId` → earliest `seen`
@@ -37,8 +37,8 @@ every one of them rebuilding these, `transform-prepare` builds them once into
   result for that location, keyed by source, written with `v8.serialize`. One
   file per location, even with nothing found
 - `transform-inputs/placed-showing-ids.json` - source → every `showingId` it
-  places at any location, for each source with retrieved data, used in step 4
-  to tell a screening that moved venue from one a source stopped mentioning
+  places at any location, for each source with retrieved data, used in step 4 to
+  tell a screening that moved venue from one a source stopped mentioning
 
 The sourced events are built from this run's `retrieved-data/`, which must be in
 place before `transform-prepare` runs.

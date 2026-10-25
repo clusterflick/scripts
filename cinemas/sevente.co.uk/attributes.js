@@ -10,7 +10,7 @@ module.exports = {
   },
   url: "https://sevente.co.uk",
   address: "283 Hackney Road, London, E2 8NA, UK",
-  geo: { lat: 51.5311805, lon: -0.0677719 },
+  geo: { lat: 51.531190235337206, lon: -0.06771783934821089 },
   structure: "solo",
   type: "Café & Restaurant",
   programming: "host",

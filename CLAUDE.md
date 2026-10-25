@@ -281,8 +281,9 @@ each attempt is signed afresh (`common/cinesync.io/utils.js`). A call made from
 inside a browser page goes through `requestFromPage` in
 `common/request-from-page.js`, which works on any page and hands back the
 challenge headers. It gives a call with no readable response (a dropped
-connection, `status: 0`) the same one retry after 30s. dice.fm and TicketSource keep their own handling, and the Vue
-probe tallies in the page, so it brings the headers back itself.
+connection, `status: 0`) the same one retry after 30s. dice.fm and TicketSource
+keep their own handling, and the Vue probe tallies in the page, so it brings the
+headers back itself.
 
 ## Testing Conventions
 
