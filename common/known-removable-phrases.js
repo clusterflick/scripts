@@ -1405,6 +1405,7 @@ const knownRemovablePhrases = [
   "RELAXED screen",
   "RELAXED: ",
   "RFF 2025:",
+  "RFF 2026:",
   "Team Picks:",
   "TALENTED U:",
   "Tate Collective Moments",
@@ -1871,6 +1872,7 @@ const knownRemovablePhrases = [
   "by Kathy Wazana",
   "FILM & ALBUM:",
   "The Cinema of Too-Late Capitalism #2:",
+  "GREATEST FILMS OF ALL TIME:",
 ];
 
 module.exports = knownRemovablePhrases;

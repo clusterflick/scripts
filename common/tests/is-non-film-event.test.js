@@ -130,6 +130,10 @@ describe("isNonFilmEvent", () => {
     ["MIXTAPE: MISTER S, A VIBE CALLED B & MASTAQUE"],
     ["MIXTAPE: MISTER S, SHAANI & LEVELS"],
     ["MIXTAPE: MISTER S, SHORTY BLESS & PURE VIBES ENT"],
+    ["Casting Call & After Dark - Sevente × WESTINSIGHT"],
+    ["Lighter Within : Winter Wellbeing Workshop"],
+    ["Mario Kart Tuesdays"],
+    ["Meet the Women Behind The Blueprint: Spatial & Set Designers"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });

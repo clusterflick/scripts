@@ -289,6 +289,15 @@ const nonFilmEvents = [
   // MISTER S, SHAANI & LEVELS"), so match the night and resident rather than
   // carrying a pattern per line-up.
   /^Mixtape: Mister S\b/i,
+  // A casting call and party, billed with its host and collaborator, with no
+  // film attached to it.
+  /^Casting Call & After Dark - Sevente/i,
+  // A wellbeing workshop, with no film attached to it.
+  /^Lighter Within : Winter Wellbeing Workshop$/i,
+  // A weekly video game night, with no film attached to it.
+  /^Mario Kart Tuesdays$/i,
+  // A panel with production designers, with no film attached to it.
+  /^Meet the Women Behind The Blueprint:/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>

@@ -84,6 +84,7 @@ const ignoredIds = [
   1648597, // Obsession -- https://www.themoviedb.org/movie/1648597-obsession
   267721, // Her Mother's Daughters -- https://www.themoviedb.org/movie/267721-her-mother-s-daughters
   1636666, // Romeo + Juliet -- https://www.themoviedb.org/movie/1636666-romeo-juliet
+  1703923, // Peanut Head -- https://www.themoviedb.org/movie/1703923-peanut-head
 ];
 
 /**
