@@ -15,7 +15,11 @@ const {
 const attributes = require("./attributes");
 
 async function transform({ movieListPage }, sourcedEvents) {
-  const events = movieListPage.events.filter((event) => !event.is_virtual);
+  // Undated events have no start time and aren't screenings - Eventive uses
+  // them for things sold through the box office, like a book posted out
+  const events = movieListPage.events.filter(
+    (event) => !event.is_virtual && event.is_dated,
+  );
 
   const movies = events.map((event) => {
     const { films = [] } = event;
