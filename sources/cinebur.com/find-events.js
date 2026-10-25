@@ -83,12 +83,19 @@ async function findEvents(cinema) {
       // placeholders do carry one - "Unique Locations", at "London, UK" - and
       // are left out by matching no venue of ours.
       .filter(({ venue }) => venue)
-      .filter(({ venue }) =>
-        venueMatchesCinema(
-          cinema,
-          venue.name,
-          { lat: venue.location.latitude, lon: venue.location.longitude },
-          { eventAddress: venue.address },
+      // Cinebur names the room - "The Cinema" at Shoreditch Arts Club, "The
+      // Café" at BeauBeaus - and keeps the business as the host, so either
+      // name can be the one we know the venue by.
+      .filter(({ venue, host_name: hostName }) =>
+        [venue.name, hostName].some(
+          (name) =>
+            name &&
+            venueMatchesCinema(
+              cinema,
+              name,
+              { lat: venue.location.latitude, lon: venue.location.longitude },
+              { eventAddress: venue.address },
+            ),
         ),
       )
       .map(convertCineburEvent)
