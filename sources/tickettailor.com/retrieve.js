@@ -1,7 +1,7 @@
 const {
   withPlaywrightSession,
 } = require("../../common/get-page-with-playwright");
-const { extractEventLinks } = require("./utils");
+const { extractEventLinks, ACCESS_CODE_SELECTOR } = require("./utils");
 
 // Each venue/organization has its own Ticket Tailor page - add new slugs here
 const VENUE_SLUGS = [
@@ -53,8 +53,13 @@ function retrieveEventPage(getPage, { eventId, url }) {
   return getPage(url, cacheKey, async (page) => {
     await page.waitForLoadState();
     // Wait on the detail wrapper rather than the description itself - a
-    // promoter who left the description blank still renders the wrapper.
-    await page.locator(".detail-content").waitFor({ strict: false });
+    // promoter who left the description blank still renders the wrapper. An
+    // event behind an access code renders the code form in its place, which
+    // findEvents drops, so that page is a complete answer too.
+    await page
+      .locator(`.detail-content, ${ACCESS_CODE_SELECTOR}`)
+      .first()
+      .waitFor({ strict: false });
     return await page.content();
   });
 }
