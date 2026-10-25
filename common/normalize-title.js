@@ -471,6 +471,14 @@ function normalizeTitle(title, options) {
     // changes from screening to screening, so match the club's own name and
     // take whatever partner follows it up to the colon.
     [/^Feminist Fightback Film ?Club(?:\s*&\s*[^:]+)?:\s*/i, ""],
+    // Shoreditch Arts Club bills each night of its artist series as "A—Z
+    // Artist Focus Act II: <programme> - <artist>" - the act numbered, once
+    // as "Act Act III" - so the leading "A" reads as an article and the
+    // artist's name stays on. The programme is what is being shown.
+    [
+      /^A\s*[—–-]\s*Z Artist Focus(?:\s+Act)+\s+[IVX]+:\s*(.+?)\s+[-–]\s+.+$/i,
+      "$1",
+    ],
     // Unrestricted View bills its programme slots by where and when they run -
     // "Day 6 (Curzon Hoxton)", "27th Oct - Odeon Luxe & Dine (Screen 1) -
     // SHORTS 2" - so without the festival the date or venue is all that is
