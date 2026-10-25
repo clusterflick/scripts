@@ -32,6 +32,7 @@ const VENUE_SLUGS = [
   "queerhub", // QUEERHUB
   "koreanfilmclub", // Korean Film Club
   "fridayknights", // Friday Knights
+  "cinreal", // Ciné-Real
 ];
 
 function retrieveVenuePage(getPage, slug) {
@@ -58,6 +59,22 @@ function retrieveEventPage(getPage, { eventId, url }) {
     // findEvents drops, so that page is a complete answer too.
     await page
       .locator(`.detail-content, ${ACCESS_CODE_SELECTOR}`)
+      .first()
+      .waitFor({ strict: false });
+    return await page.content();
+  });
+}
+
+// An event running on several dates names none of them on its listing or event
+// page - the occurrences are only on its date picker. An event behind an access
+// code renders the code form there too, which findEvents drops.
+function retrieveDatePage(getPage, { eventId, url }) {
+  const cacheKey = `tickettailor-dates-${eventId}`;
+
+  return getPage(`${url}/select-date`, cacheKey, async (page) => {
+    await page.waitForLoadState();
+    await page
+      .locator(`.select_date_wrapper, ${ACCESS_CODE_SELECTOR}`)
       .first()
       .waitFor({ strict: false });
     return await page.content();
@@ -92,7 +109,13 @@ async function retrieve() {
       eventPages[link.eventId] = await retrieveEventPage(getPage, link);
     }
 
-    return { clubPages, eventPages };
+    const datePages = {};
+    for (const link of eventLinks.values()) {
+      if (!link.hasMultipleDates) continue;
+      datePages[link.eventId] = await retrieveDatePage(getPage, link);
+    }
+
+    return { clubPages, eventPages, datePages };
   });
 }
 

@@ -7,7 +7,6 @@ const {
   createOverview,
   generateShowingId,
   getText,
-  basicNormalize,
   createAccessibility,
   createFormat,
   readJSON,
@@ -16,7 +15,11 @@ const {
 } = require("../../common/utils");
 const attributes = require("./attributes");
 const { venueMatchesCinema } = require("../../common/source-utils");
-const { extractEventIdFromUrl, isAccessCodePage } = require("./utils");
+const {
+  extractEventIdFromUrl,
+  isAccessCodePage,
+  isMultipleDates,
+} = require("./utils");
 
 // A full date-and-time chunk, e.g. "Mon 3 Aug 2026 19:00" or "Mon 20 Jul 2026 1:00 PM"
 const DATE_FORMATS = ["EEE d MMM yyyy h:mm a", "EEE d MMM yyyy HH:mm"];
@@ -35,9 +38,6 @@ function parseWithFormats(text, formats, reference) {
 }
 
 function parseDateText(dateText) {
-  if (basicNormalize(dateText).includes("multiple dates")) {
-    return null;
-  }
   // Strip a trailing timezone token (e.g. "... 3:00 PM BST").
   const normalized = dateText.replace(/\s+(BST|GMT|UTC)$/i, "").trim();
   const [startText, endText] = normalized.split(" - ");
@@ -84,19 +84,19 @@ function parseEventsFromPage(html, slug) {
     const locationText = getText($event.find(".event-meta__location"));
     const fullUrl = `https://www.tickettailor.com${eventUrl}`;
     const eventId = extractEventIdFromUrl(eventUrl);
-    const parsedDate = parseDateText(dateText);
+    const event = { slug, title, fullUrl, eventId, locationText };
 
-    // Skip events with multiple dates or unparseable dates for now
+    // The occurrences of a multi-date event are read off its date picker
+    if (isMultipleDates(dateText)) {
+      events.push({ ...event, hasMultipleDates: true });
+      return;
+    }
+
+    // Skip listings spanning several days
+    const parsedDate = parseDateText(dateText);
     if (!parsedDate) return;
 
-    events.push({
-      slug,
-      title,
-      fullUrl,
-      eventId,
-      parsedDate,
-      locationText,
-    });
+    events.push({ ...event, parsedDate });
   });
 
   return events;
@@ -119,6 +119,75 @@ function parseEventDescription(html) {
   return parts.join("\n\n");
 }
 
+// Ticket Tailor's escapes for the strings in its inline script, e.g. "\x2F"
+function unescapeScriptString(text) {
+  return text
+    .replace(/\\x([0-9a-f]{2})/gi, (match, hex) =>
+      String.fromCharCode(parseInt(hex, 16)),
+    )
+    .replace(/\\(["'\\/])/g, "$1");
+}
+
+// The date picker builds its calendar from an inline script, a block per date
+// holding each of that day's times, e.g.
+//   var thisDate = { available: true, sold_out: false, ... };
+//   var time = { id: "9340678", url: "\x2Fcheckout...", date_string: "..." }
+//   times.push(time);
+//   selectableDates["2026\x2D11\x2D20"] = thisDate;
+// The markup only lists a date's times when it has a single one, so read the
+// script instead.
+function parseDatePage(html, fullUrl) {
+  if (!html.includes("var selectableDates = {}")) {
+    throw new Error(`No date picker found on the date page for ${fullUrl}`);
+  }
+
+  const occurrences = [];
+  const dateBlocks = html.matchAll(
+    /var thisDate = \{([^}]*)\};([\s\S]*?)selectableDates\["([^"]+)"\] = thisDate;/g,
+  );
+  for (const [, dateFields, dateBody, dateKey] of dateBlocks) {
+    const day = parse(unescapeScriptString(dateKey), "yyyy-MM-dd", new Date());
+    if (!isValid(day)) {
+      throw new Error(`Unable to parse date "${dateKey}" for ${fullUrl}`);
+    }
+    const soldOut = /sold_out:\s*true/.test(dateFields);
+
+    for (const [, timeFields] of dateBody.matchAll(
+      /var time = \{([\s\S]*?)\}\s*times\.push\(time\);/g,
+    )) {
+      const field = (name) => {
+        const match = timeFields.match(new RegExp(`${name}: "([^"]*)"`));
+        if (!match) {
+          throw new Error(
+            `No ${name} for an occurrence on ${dateKey} for ${fullUrl}`,
+          );
+        }
+        return unescapeScriptString(match[1]);
+      };
+
+      // e.g. "<var>7:30 PM</var> - <var>10:00 PM</var>"
+      const timeText = cheerio.load(field("date_string")).text().trim();
+      const [startText, endText] = timeText.split(" - ");
+      const start = parseWithFormats(startText, TIME_FORMATS, day);
+      if (!start) {
+        throw new Error(
+          `Unable to parse time "${timeText}" on ${dateKey} for ${fullUrl}`,
+        );
+      }
+      const end = endText ? parseWithFormats(endText, TIME_FORMATS, day) : null;
+
+      occurrences.push({
+        start,
+        end,
+        url: `https://www.tickettailor.com${field("url")}`,
+        status: { soldOut },
+      });
+    }
+  }
+
+  return occurrences;
+}
+
 // Some Ticket Tailor slugs aren't venues but festivals, film clubs or other
 // organisers who hire out real venues for their screenings. For those, note the
 // provenance on each performance so consumers can see who is putting the
@@ -139,8 +208,8 @@ const SLUG_NOTES = {
   wimbledonfilmclub: "Presented by Wimbledon Film Club",
 };
 
-function convertTicketTailorEvent(event, description) {
-  const { title, fullUrl, eventId, parsedDate, slug } = event;
+function convertTicketTailorEvent(event, occurrences, description) {
+  const { title, fullUrl, eventId, slug } = event;
 
   // An organiser slug is the authoritative attribution, so only fall back to
   // the description's opening line for plain venue slugs - where the club
@@ -148,25 +217,30 @@ function convertTicketTailorEvent(event, description) {
   // the description with prose, so only that opening line is offered.
   const note = SLUG_NOTES[slug] || getPresenterNote(description);
 
+  // Only give a duration when every occurrence agrees on it
+  const durations = new Set(
+    occurrences.map(({ start, end }) =>
+      end ? differenceInMinutes(end, start) : undefined,
+    ),
+  );
+
   return {
     showingId: generateShowingId(attributes, eventId),
     title,
     url: fullUrl,
     overview: createOverview({
-      duration: parsedDate.end
-        ? differenceInMinutes(parsedDate.end, parsedDate.start)
-        : undefined,
+      duration: durations.size === 1 ? [...durations][0] : undefined,
     }),
-    performances: [
+    performances: occurrences.map(({ start, url, status }) =>
       createPerformance({
-        date: parsedDate.start,
-        url: fullUrl,
-        status: {},
+        date: start,
+        url,
+        status,
         accessibility: createAccessibility(title, {}, description),
         format: createFormat(title, {}, description),
         notesList: note ? [note] : [],
       }),
-    ],
+    ),
     // Fall back to the title when a promoter left the description empty - an
     // empty overview makes the matching LLM discard the event outright.
     matchingHints: { overview: description || title },
@@ -193,10 +267,12 @@ async function findEvents(cinema) {
 
   let clubPages = {};
   let eventPages = {};
+  let datePages = {};
   try {
     const data = await readJSON(dataSrc);
     clubPages = data.clubPages || {};
     eventPages = data.eventPages || {};
+    datePages = data.datePages || {};
   } catch {
     // Source data may not always be available or required
   }
@@ -242,7 +318,29 @@ async function findEvents(cinema) {
     }
     // Only those holding the code can book it, so it is not a public showing.
     if (isAccessCodePage(eventPage)) return [];
-    return [convertTicketTailorEvent(event, parseEventDescription(eventPage))];
+
+    let occurrences;
+    if (event.hasMultipleDates) {
+      const datePage = datePages[event.eventId];
+      if (!datePage) {
+        throw new Error(
+          `No date page retrieved for ${event.fullUrl} - the retrieved data is incomplete`,
+        );
+      }
+      occurrences = parseDatePage(datePage, event.fullUrl);
+    } else {
+      const { start, end } = event.parsedDate;
+      occurrences = [{ start, end, url: event.fullUrl, status: {} }];
+    }
+    if (occurrences.length === 0) return [];
+
+    return [
+      convertTicketTailorEvent(
+        event,
+        occurrences,
+        parseEventDescription(eventPage),
+      ),
+    ];
   });
 }
 

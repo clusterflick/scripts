@@ -9,6 +9,12 @@ function isAccessCodePage(html) {
   return cheerio.load(html)(ACCESS_CODE_SELECTOR).length > 0;
 }
 
+// An event running on several dates is listed once, with "Multiple dates and
+// times" in place of a date - the occurrences only appear on its date picker.
+function isMultipleDates(dateText) {
+  return /multiple dates/i.test(dateText);
+}
+
 function extractEventIdFromUrl(url) {
   // Event hrefs look like "/events/{slug}/{id}?date=..." - drop any query
   // string or fragment so the same event doesn't produce different showing ids
@@ -25,8 +31,9 @@ function extractEventLinks(html) {
   const $ = cheerio.load(html);
   const links = new Map();
 
-  $(".events-listing__item .event__title a").each((index, element) => {
-    const href = $(element).attr("href");
+  $(".events-listing__item").each((index, element) => {
+    const $event = $(element);
+    const href = $event.find(".event__title a").attr("href");
     if (!href) return;
 
     const eventId = extractEventIdFromUrl(href);
@@ -35,6 +42,9 @@ function extractEventLinks(html) {
     links.set(eventId, {
       eventId,
       url: `https://www.tickettailor.com${href.split(/[?#]/)[0]}`,
+      hasMultipleDates: isMultipleDates(
+        $event.find(".event-meta__date").text(),
+      ),
     });
   });
 
@@ -44,6 +54,7 @@ function extractEventLinks(html) {
 module.exports = {
   ACCESS_CODE_SELECTOR,
   isAccessCodePage,
+  isMultipleDates,
   extractEventIdFromUrl,
   extractEventLinks,
 };

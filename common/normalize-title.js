@@ -998,6 +998,10 @@ function normalizeTitle(title, options) {
     // same unnamed film its other strands sell. Without this the strand name
     // survives on its own and the screening is grouped as "blue monday".
     [/^Blue Monday\s*[-–—]\s*mystery.*$/i, "mystery movie"],
+    // Ciné-Real bills its unnamed archive print under its Cinémathèque strand,
+    // with where the print comes from after it - "Mystery Movie from Our
+    // Archive" - which would otherwise survive around the standard title.
+    [/^Cinémathèque\s*[-–—]\s*mystery.*$/i, "mystery movie"],
     // The venue bills each seat type ("1 sofa, 2 persons", "1 chair, 1
     // person") with the date of the night on the front, and only the part
     // after the dash is the film, so drop everything up to it rather than
