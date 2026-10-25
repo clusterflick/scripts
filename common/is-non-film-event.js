@@ -278,6 +278,17 @@ const nonFilmEvents = [
   // A slideshow night, billed by its theme ("2026 in Review"), so match the
   // series rather than carrying a pattern per theme.
   /^PowerPoint Night:/i,
+  // An art-and-drinks social, billed by the season and the session's theme
+  // ("Festive Art + Drinks wIth Well Social - Being Creative with Other
+  // People"), so match the host rather than carrying a pattern per session.
+  /Drinks with Well Social/i,
+  // A spoken word and music night, with no film attached to it. Anchored,
+  // because the phrase could as easily be a film's own title.
+  /^Mastering the Mic \+ Sounds of SE15$/i,
+  // A DJ night, billed by the acts playing alongside its resident ("MIXTAPE:
+  // MISTER S, SHAANI & LEVELS"), so match the night and resident rather than
+  // carrying a pattern per line-up.
+  /^Mixtape: Mister S\b/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>

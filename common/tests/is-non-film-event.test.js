@@ -123,6 +123,13 @@ describe("isNonFilmEvent", () => {
     ["LGBTQ+ Meetup and Halloween Party"],
     ["PowerPoint Night: 2026 in Review"],
     ["Sapphic Speed Mixer"],
+    [
+      "Festive Art + Drinks wIth Well Social - Being Creative with Other People",
+    ],
+    ["MASTERING THE MIC + SOUNDS OF SE15"],
+    ["MIXTAPE: MISTER S, A VIBE CALLED B & MASTAQUE"],
+    ["MIXTAPE: MISTER S, SHAANI & LEVELS"],
+    ["MIXTAPE: MISTER S, SHORTY BLESS & PURE VIBES ENT"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });
