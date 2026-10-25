@@ -1453,6 +1453,9 @@ function normalizeTitle(title, options) {
       /\bMaverick: Epic Adventures of David Lean\b/i,
       "Maverick: The Epic Adventures of David Lean",
     ],
+    // The speaker is billed after a pipe here, where the talk's other listings
+    // bill "Kreative Talk with" them, so the split would leave the series alone
+    ["Kreative Talk |", "Kreative Talk with"],
     // "eta" is Basque for "and", which TheMovieDB keeps and the venue
     // translates
     [/\bAnder (?:&|and) Yul\b/i, "Ander eta Yul"],
