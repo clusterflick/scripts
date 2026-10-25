@@ -20,13 +20,13 @@ jest.mock("../../../common/utils", () => ({
 const isRecording = false;
 
 jest.mock("../../../common/cache");
-setupCacheMock(__dirname, "2026-10-22");
+setupCacheMock(__dirname, "2026-10-25");
 
 silenceConsoleLog();
 
 describe(`${attributes.name}`, () => {
   setupPolly(isRecording, __dirname);
-  jest.useFakeTimers().setSystemTime(new Date("2026-10-22"));
+  jest.useFakeTimers().setSystemTime(new Date("2026-10-25"));
 
   describe.each([
     {
@@ -40,7 +40,7 @@ describe(`${attributes.name}`, () => {
       name: "Good Shepherd Studios",
       alternativeNames: ["We Flock CIC"],
       address: "15A Davies Lane, Leytonstone, London, E11 3DR, UK",
-      expectedMatches: 4,
+      expectedMatches: 5,
     },
     {
       name: "Siobhan Davies Studios",
@@ -70,7 +70,7 @@ describe(`${attributes.name}`, () => {
       name: "Staffordshire St",
       alternativeNames: ["Staffordshire Street", "STST"],
       address: "49 Staffordshire St, London, SE15 5TJ, UK",
-      expectedMatches: 5,
+      expectedMatches: 7,
     },
     {
       name: "The Mall Tavern",
@@ -98,21 +98,33 @@ describe(`${attributes.name}`, () => {
         "KCCS",
       ],
       address: "26 Caledonian Road, London, N1 9DT, UK",
-      expectedMatches: 5,
+      expectedMatches: 4,
+    },
+    {
+      name: "Ciné-Real",
+      alternativeNames: ["Ciné Real", "Ciné Real Cinémathèque", "Umit & Son"],
+      address: "35 Lower Clapton Road, London E5 0NS, UK",
+      expectedMatches: 1,
     },
   ])("$name", ({ name, alternativeNames, address, expectedMatches }) => {
     it(
       "retrieve and find events",
       async () => {
-        const { clubPages, eventPages } = await retrieve();
+        const { clubPages, eventPages, datePages } = await retrieve();
 
         // Make sure the input looks roughly correct
         expect(clubPages).toBeTruthy();
-        expect(Object.keys(clubPages)).toHaveLength(27);
+        expect(Object.keys(clubPages)).toHaveLength(28);
         expect(eventPages).toBeTruthy();
-        expect(Object.keys(eventPages)).toHaveLength(75);
+        expect(Object.keys(eventPages)).toHaveLength(79);
+        expect(datePages).toBeTruthy();
+        expect(Object.keys(datePages)).toHaveLength(13);
 
-        readJSON.mockImplementation(() => ({ clubPages, eventPages }));
+        readJSON.mockImplementation(() => ({
+          clubPages,
+          eventPages,
+          datePages,
+        }));
 
         const cinema = { name, alternativeNames, address };
         const output = await findEvents(cinema);

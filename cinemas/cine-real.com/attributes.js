@@ -1,7 +1,7 @@
 module.exports = {
   id: "cine-real.com",
   name: "Ciné-Real",
-  alternativeNames: ["Ciné Real", "Umit & Son"],
+  alternativeNames: ["Ciné Real", "Ciné Real Cinémathèque", "Umit & Son"],
   domain: "https://www.cine-real.com",
   socials: {
     letterboxd: null,
