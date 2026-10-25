@@ -189,11 +189,11 @@ function getPerformanceAccessibility(title, accessibility, overview) {
 // every such performance - has no seats left.
 function isSoldOut($event, eventFeeds) {
   if (basicNormalize(getTextAt($event, "status")) !== "sold out") return false;
-  // TEMPORARY: data from a retrieve that predates the event feeds has no
-  // `eventFeeds`. Every "sold out" in the release that first hit this (25th
-  // October 2026) was a performance not yet on sale, so read it as not sold
-  // out. Replace with a throw once a retrieve with event feeds has run.
-  if (!eventFeeds) return false;
+  if (!eventFeeds) {
+    throw new Error(
+      "No event feeds in the retrieved data - it may predate the retrieve that fetches them",
+    );
+  }
   const eventId = $event.attr("id");
   const eventFeed = eventFeeds[eventId];
   if (!eventFeed) {
