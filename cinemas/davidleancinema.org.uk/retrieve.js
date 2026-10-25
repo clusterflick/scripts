@@ -1,4 +1,6 @@
+const cheerio = require("cheerio");
 const {
+  basicNormalize,
   fetchText,
   fetchWithRetry,
   fetchError,
@@ -42,11 +44,36 @@ async function getEventPageUrls() {
   return urls;
 }
 
+// The shows feed says "sold out" for a performance that hasn't gone on sale
+// yet as well as for one that has sold every seat - the venue holds a whole
+// month's programme back until a set on-sale date, and on 25th October 2026
+// all twelve December performances read "sold out" with every seat free. Only
+// the event's own feed tells them apart, with its seat count, so it is fetched
+// for each performance the shows feed calls sold out. It's served by
+// Ticketsolve, not the venue's firewalled host, so it isn't paced.
+async function getSoldOutEventFeeds(movieListPage) {
+  const $ = cheerio.load(movieListPage, { xmlMode: true });
+  const eventFeeds = {};
+  for (const el of $("venues > venue > shows > show > events > event")) {
+    const $event = $(el);
+    if (basicNormalize($event.children("status").text()) !== "sold out") {
+      continue;
+    }
+    const feedUrl = $event.find("feed > url").text().trim();
+    if (!feedUrl) {
+      throw new Error(`No feed URL for sold out event ${$event.attr("id")}`);
+    }
+    eventFeeds[$event.attr("id")] = await fetchText(feedUrl);
+  }
+  return eventFeeds;
+}
+
 async function retrieve() {
   const movieListPage = await fetchText(
     "https://davidleancinema.ticketsolve.com/shows.xml",
   );
   assertSelector(movieListPage, "venues > venue > shows > show");
+  const eventFeeds = await getSoldOutEventFeeds(movieListPage);
 
   const eventPageUrls = await getEventPageUrls();
   if (eventPageUrls.length === 0) {
@@ -59,7 +86,7 @@ async function retrieve() {
     eventPages[eventPageUrl] = await fetchText(eventPageUrl);
   }
 
-  return { movieListPage, eventPages };
+  return { movieListPage, eventFeeds, eventPages };
 }
 
 module.exports = retrieve;

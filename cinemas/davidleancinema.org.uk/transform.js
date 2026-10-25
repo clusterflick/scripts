@@ -184,7 +184,28 @@ function getPerformanceAccessibility(title, accessibility, overview) {
   return result;
 }
 
-function toMovie($, showEl, websiteDetails) {
+// A "sold out" in the shows feed is also how a performance that hasn't gone on
+// sale yet reads, so it only counts once the event's own feed - fetched for
+// every such performance - has no seats left.
+function isSoldOut($event, eventFeeds) {
+  if (basicNormalize(getTextAt($event, "status")) !== "sold out") return false;
+  const eventId = $event.attr("id");
+  const eventFeed = eventFeeds[eventId];
+  if (!eventFeed) {
+    throw new Error(`No event feed retrieved for sold out event ${eventId}`);
+  }
+  const available = getText(
+    cheerio.load(eventFeed, { xmlMode: true })("event > available"),
+  );
+  if (!/^\d+$/.test(available)) {
+    throw new Error(
+      `Unexpected available seat count "${available}" for event ${eventId}`,
+    );
+  }
+  return Number(available) === 0;
+}
+
+function toMovie($, showEl, websiteDetails, eventFeeds) {
   const $show = $(showEl);
   const id = $show.attr("id");
   const showingId = generateShowingId(attributes, id);
@@ -215,7 +236,7 @@ function toMovie($, showEl, websiteDetails) {
     const $event = $(el);
     const rawDate = getTextAt($event, "date_time_iso");
     const bookingUrl = getTextAt($event, "url") || url;
-    const soldOut = basicNormalize(getTextAt($event, "status")) === "sold out";
+    const soldOut = isSoldOut($event, eventFeeds);
     const eventAttribute = getTextAt($event, "event_attribute");
     const accessibility = mapAccessibilityFromAttribute(
       eventAttribute,
@@ -258,7 +279,10 @@ function toMovie($, showEl, websiteDetails) {
   };
 }
 
-async function transform({ movieListPage, eventPages }, sourcedEvents) {
+async function transform(
+  { movieListPage, eventFeeds, eventPages },
+  sourcedEvents,
+) {
   const $ = cheerio.load(movieListPage, { xmlMode: true });
   const shows = $("venues > venue > shows > show").toArray();
 
@@ -271,7 +295,7 @@ async function transform({ movieListPage, eventPages }, sourcedEvents) {
   }
 
   const movies = shows
-    .map((el) => toMovie($, el, websiteDetails))
+    .map((el) => toMovie($, el, websiteDetails, eventFeeds))
     // Remove template placeholder entries (e.g. "Templates:", "Template - ")
     .filter(({ title }) => !/^Templates?\s*[:-]/i.test(title));
 

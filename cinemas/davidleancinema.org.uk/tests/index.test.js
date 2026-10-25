@@ -21,14 +21,14 @@ describe(attributes.name, () => {
   it(
     "retrieve and transform",
     async () => {
-      const { movieListPage, eventPages } = await retrieve();
+      const { movieListPage, eventFeeds, eventPages } = await retrieve();
 
       // Make sure the input looks roughly correct
       expect(movieListPage).toBeTruthy();
       expect(Object.keys(eventPages)).toHaveLength(46);
 
       const output = sortAndFilterMovies(
-        await transform({ movieListPage, eventPages }, {}),
+        await transform({ movieListPage, eventFeeds, eventPages }, {}),
       );
       expect(
         output.every((movie) =>
