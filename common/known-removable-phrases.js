@@ -1885,6 +1885,8 @@ const knownRemovablePhrases = [
   "at Plaza Camden",
   "Interactive Memory Workshop",
   "Vampire Ball: Live Viola, Cocktails &",
+  "Central Saint Martins",
+  "Girl, So Cinema:",
 ];
 
 module.exports = knownRemovablePhrases;

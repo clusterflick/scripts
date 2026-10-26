@@ -1150,6 +1150,10 @@ const isPrivateHire = (title = "") =>
   // case they'll contain more information (like the movie title)
   basicNormalize(title) === "private screening" ||
   basicNormalize(title) === "cleaning screen placeholder" ||
+  // A screen held for the projection booth rather than an audience. Exact, as
+  // the cleaning placeholder is, so a film with "projection" in its title is
+  // left alone.
+  basicNormalize(title) === "projection hold" ||
   basicNormalize(title).includes("events placeholder") ||
   // Venue hire is listed as one bookable slot per duration - "Conferencing 2
   // Hour", "Conferencing 4 Hour", "Conferencing 6 Hour" - so match the family

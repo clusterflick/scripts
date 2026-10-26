@@ -137,6 +137,7 @@ describe("isNonFilmEvent", () => {
     ["AL-RAZI'S  PROOFS FOR GOD’S EXISTENCE"],
     ["Community Groove Dance Class"],
     ["Community Theatre Company"],
+    ["INTERSECTION 2026 - THE EXCHANGE"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });
