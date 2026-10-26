@@ -702,7 +702,9 @@ function normalizeTitle(title, options) {
     ["X-Men 2", "X2"], // The title of the second X-men movie is X2
     ["The Rise and Fall of The Clash Redux", "The Rise and Fall of The Clash"],
     [/\(?with subtitles for.*$/i, ""],
-    [/ a$/i, ""], // Remove strange trailing "A"
+    // Remove strange trailing "A", but not the end of a "with Q and A", which
+    // the phrase list strips whole
+    [/(?<!\bwith q and) a$/i, ""],
     ["Extended Trilogy", "Trilogy"],
     ["Oslo Stories Trilogy:", "Oslo Stories:"],
     [
@@ -2007,6 +2009,14 @@ function normalizeTitle(title, options) {
     [
       "Army of Lovers (or Revolt of the Perverts)",
       "Army of Lovers or Revolt of the Perverts",
+    ],
+    ["Yalda, a Night for Forgiveness", "Yalda"],
+    // The colon would otherwise read as the "OUT:" series label and take the
+    // film's own "Out" with it, and the other billings are the same film
+    [/^Rooted Out(?:: Chapter One| \+ Q&A)?$/i, "Rooted Out Chapter One"],
+    [
+      "Vampire Ball: Live Viola, Cocktails +",
+      "Vampire Ball: Live Viola, Cocktails &",
     ],
     // The film's a mystery, but here's a hint ...
     ["FREE Kids Movie Club: A Whole New World", "aladdin"],
