@@ -691,8 +691,18 @@ const stripNoteLabels = (notesList, { strip = [], drop = [] } = {}) => {
 // The lead-in and the "to you" are optional because a credit is as often
 // written out as a sentence ("This event is presented to you by The Witch Of
 // Popcorn") as it is stated flat.
+//
+// A joint credit ("Waltham Forest Cinema Project in collaboration with Queer
+// East showcase ...") names both and is followed by any verb, so the second
+// name is bounded by its own capitalised words instead. It comes before
+// "presents" so a joint credit isn't read as one long name.
+const ORGANISATION_NAME =
+  "[A-Z0-9][^\\s.,;:!?]*(?:\\s+(?:(?:of|the|and|for|&)\\s+)*[A-Z0-9][^\\s.,;:!?]*)*";
 const PRESENTER_PATTERNS = [
   /^(?:this (?:event|screening|film) is )?presented (?:to you )?by\s+([^.,;:!?\n]{3,80})/i,
+  new RegExp(
+    `^([^.!?\\n]{3,80}?)\\s+in collaboration with\\s+(${ORGANISATION_NAME})`,
+  ),
   /^([^.!?\n]{3,80}?)\s+presents?\s/i,
 ];
 
@@ -709,10 +719,10 @@ const getPresenterNote = (text) => {
     const match = text.match(pattern);
     if (!match) continue;
 
-    const presenter = match[1].trim();
-    if (!looksLikeOrganisation(presenter)) continue;
+    const presenters = match.slice(1).map((name) => name.trim());
+    if (!presenters.every(looksLikeOrganisation)) continue;
 
-    return `Presented by ${presenter}`;
+    return `Presented by ${presenters.join(" and ")}`;
   }
   return null;
 };
