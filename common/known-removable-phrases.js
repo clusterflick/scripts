@@ -1312,6 +1312,7 @@ const knownRemovablePhrases = [
   "Sake, onigiri +",
   "Sam Neill Tribute:",
   "Samosa Haus x Lumiere:",
+  "Lumière Noire:",
   "Sanrizuka 5:",
   "Save the Cinema Museum:",
   "Saturday Film Nights:",
