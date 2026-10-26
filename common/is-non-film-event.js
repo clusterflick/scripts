@@ -305,6 +305,8 @@ const nonFilmEvents = [
   // either. Anchored, because "Community" alone could open a film's title.
   /^Community Groove Dance Class$/i,
   /^Community Theatre Company$/i,
+  // A session of the INTERSECTION 2026 programme, with no film attached to it.
+  /^INTERSECTION 2026 - THE EXCHANGE$/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>

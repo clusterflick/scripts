@@ -2013,11 +2013,20 @@ function normalizeTitle(title, options) {
     ["Yalda, a Night for Forgiveness", "Yalda"],
     // The colon would otherwise read as the "OUT:" series label and take the
     // film's own "Out" with it, and the other billings are the same film
-    [/^Rooted Out(?:: Chapter One| \+ Q&A)?$/i, "Rooted Out Chapter One"],
+    [/^Rooted Out(?:: Chapter (?:One|1)| \+ Q&A)?$/i, "Rooted Out Chapter One"],
     [
       "Vampire Ball: Live Viola, Cocktails +",
       "Vampire Ball: Live Viola, Cocktails &",
     ],
+    ["Phoenix For Nature - ", "Phoenix For Nature: "],
+    ["Jean Michel-Basquiat", "Jean-Michel Basquiat"],
+    // The Mongolian screenings set the year between slashes ("The Pasture
+    // /2022/ - Horror, thriller"), so bracket it the way the year is read
+    // everywhere else. Bounded by a space and a slash, so a range already in
+    // brackets ("(2001/2002)") is left alone.
+    [/\s\/(\d{4})\/(?=\s|$)/, " ($1)"],
+    // Runs after the year is bracketed, so only this film loses its "The"
+    ["The Pasture (2022)", "Pasture (2022)"],
     // The film's a mystery, but here's a hint ...
     ["FREE Kids Movie Club: A Whole New World", "aladdin"],
     ["FREE Kids Movie Club: Carnival Weekend", "princess and the frog"],
