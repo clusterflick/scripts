@@ -134,6 +134,9 @@ describe("isNonFilmEvent", () => {
     ["Lighter Within : Winter Wellbeing Workshop"],
     ["Mario Kart Tuesdays"],
     ["Meet the Women Behind The Blueprint: Spatial & Set Designers"],
+    ["AL-RAZI'S  PROOFS FOR GOD’S EXISTENCE"],
+    ["Community Groove Dance Class"],
+    ["Community Theatre Company"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });

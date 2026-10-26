@@ -298,6 +298,13 @@ const nonFilmEvents = [
   /^Mario Kart Tuesdays$/i,
   // A panel with production designers, with no film attached to it.
   /^Meet the Women Behind The Blueprint:/i,
+  // A talk on a philosopher's arguments, with no film attached to it. The
+  // venue mixes straight and curly apostrophes.
+  /^Al-Razi['’]s Proofs for God['’]s Existence$/i,
+  // A dance class and a theatre company's sessions, with no film attached to
+  // either. Anchored, because "Community" alone could open a film's title.
+  /^Community Groove Dance Class$/i,
+  /^Community Theatre Company$/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
