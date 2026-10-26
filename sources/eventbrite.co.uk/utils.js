@@ -8,6 +8,51 @@ function parseDate(date) {
   });
 }
 
+// Parts of a venue name that place the event inside a building rather than
+// name the venue - "Room 201", "Richard Hoggart Building (RHB) 142", "Brunei
+// Gallery Lecture Theatre (BGLT)", "E002", "SE 1.05". A room code is a single
+// letter and three or more digits, or a dotted number, which keeps venues
+// named like codes - 229, JW3, LEX2 - out of it.
+const ROOM_PARTS = [
+  /^room\b/i,
+  /\bbuilding\b/i,
+  /\blecture theatre\b/i,
+  /\bfloor\b/i,
+  /^level\b/i,
+  /\bwing\b/i,
+  /^basement$/i,
+  /^(?:[A-Z]\d{3,}|[A-Z]{0,2}\s?\d+\.\d+)$/i,
+];
+
+/**
+ * The part of an Eventbrite venue name that names the venue.
+ *
+ * Split on commas and pipes ("BFI Southbank, London" -> "BFI Southbank", "The
+ * Beehive Pub | Tottenham" -> "The Beehive Pub"), deliberately not on a dash:
+ * it's as likely to precede the part that identifies the venue as to follow
+ * it, and "Vue Cinema London - Westfield Stratford" truncated to "Vue Cinema
+ * London" matches nothing.
+ *
+ * The first part is usually the venue, unless it is a room inside one - "Room
+ * 201, Main Building, SOAS University of London" - so leading room parts are
+ * skipped. Only those: a later part is as likely to be the area as the venue,
+ * and "St John's Church, Hyde Park" is a church, not the park. The last part
+ * is never skipped, so there is always a name to match - and a trailing comma
+ * doesn't leave an empty one to fall back on: "Lecture Theatre B304,
+ * Basement, Cruciform Building," is the Cruciform Building.
+ * @param {string} name - The venue name as Eventbrite gives it
+ * @returns {string} The name to match against the venues we hold
+ */
+function getVenueName(name) {
+  const parts = (name || "").split(/[,|]/).filter((part) => part.trim());
+  const venuePart = parts.findIndex(
+    (part, index) =>
+      index === parts.length - 1 ||
+      !ROOM_PARTS.some((pattern) => pattern.test(part.trim())),
+  );
+  return parts[venuePart] ?? "";
+}
+
 /**
  * The venue fields an event is matched on, or null if it carries no venue.
  *
@@ -30,16 +75,12 @@ function getEventVenue(event) {
     },
   } = venue;
 
-  // Split venue name before matching (e.g., "BFI Southbank, London" -> "BFI
-  // Southbank", "The Beehive Pub | Tottenham" -> "The Beehive Pub").
-  // Deliberately not splitting on a dash: it's as likely to precede the part
-  // that identifies the venue as to follow it, and "Vue Cinema London -
-  // Westfield Stratford" truncated to "Vue Cinema London" matches nothing.
-  // Must stay in step with discover-venues.js, which reports on the same names.
-  const [venueName] = (name || "").split(/[,|]/);
-
   // localized_address_display is like "265 Lavender Hill, London, SW11 1JB"
-  return { venueName, coordinates: { lat, lon }, eventAddress };
+  return {
+    venueName: getVenueName(name),
+    coordinates: { lat, lon },
+    eventAddress,
+  };
 }
 
 function getEventDescription(details) {
@@ -114,6 +155,7 @@ function getFestivalCollectionNotes(details, title = "") {
 
 module.exports = {
   parseDate,
+  getVenueName,
   getEventVenue,
   getEventDescription,
   getEventStatus,

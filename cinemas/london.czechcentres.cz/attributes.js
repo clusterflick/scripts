@@ -5,6 +5,8 @@ module.exports = {
     "Czech Centre London",
     "Czech Centre at the Czech Embassy Cinema",
     "Czech Embassy Cinema",
+    "Embassy of the Czech Republic",
+    "26-30 Kensington Palace Gardens",
   ],
   domain: "https://london.czechcentres.cz",
   socials: {
