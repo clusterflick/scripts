@@ -1,4 +1,8 @@
-const { getEventStatus, getFestivalCollectionNotes } = require("../utils");
+const {
+  getEventStatus,
+  getFestivalCollectionNotes,
+  getVenueName,
+} = require("../utils");
 
 // The shapes below are `props.pageProps.context.salesStatus` as the event pages
 // in __manual-recordings__ carry it, trimmed to the two fields read here.
@@ -119,5 +123,56 @@ describe("getFestivalCollectionNotes", () => {
     ["a page with an empty list", pageWithCollections()],
   ])("adds nothing for %s", (_, details) => {
     expect(getFestivalCollectionNotes(details, "Some Film")).toEqual([]);
+  });
+});
+
+// Venue names as Eventbrite gives them in `primary_venue.name`
+describe("getVenueName", () => {
+  it.each([
+    ["BFI Southbank, London", "BFI Southbank"],
+    ["The Beehive Pub | Tottenham", "The Beehive Pub "],
+    [
+      "Room 201, Main Building, SOAS University of London",
+      " SOAS University of London",
+    ],
+    [
+      "Richard Hoggart Building (RHB) 142, Goldsmiths, University of London",
+      " Goldsmiths",
+    ],
+    [
+      "Brunei Gallery Lecture Theatre (BGLT), SOAS University of London",
+      " SOAS University of London",
+    ],
+    ["Bush House North Wing, King's College London", " King's College London"],
+    ["E002, Central Saint Martins", " Central Saint Martins"],
+    ["Room 201, 2nd Floor, Central House", " Central House"],
+  ])("reads %p as %p", (name, venueName) => {
+    expect(getVenueName(name)).toBe(venueName);
+  });
+
+  // A later part is as likely to be the area as the venue
+  it.each([
+    ["St John's Church, Hyde Park", "St John's Church"],
+    ["TOCA Social, The O2", "TOCA Social"],
+  ])("keeps %p as %p rather than reach for the area", (name, venueName) => {
+    expect(getVenueName(name)).toBe(venueName);
+  });
+
+  // Venues we hold whose own names look like numbers or codes
+  it.each([
+    ["229, 229 Great Portland Street", "229"],
+    ["JW3, 341-351 Finchley Road", "JW3"],
+    ["LEX2, Livesey Exchange", "LEX2"],
+  ])("doesn't take %p for a room code", (name, venueName) => {
+    expect(getVenueName(name)).toBe(venueName);
+  });
+
+  it("keeps the last part even when it looks like a room", () => {
+    expect(getVenueName("Room 201")).toBe("Room 201");
+    expect(getVenueName("Vijay Patel Building, Room 4.05")).toBe(" Room 4.05");
+  });
+
+  it("is empty for a venue with no name", () => {
+    expect(getVenueName(undefined)).toBe("");
   });
 });

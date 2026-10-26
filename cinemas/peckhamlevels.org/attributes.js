@@ -1,7 +1,7 @@
 module.exports = {
   id: "peckhamlevels.org",
   name: "Peckham Levels",
-  alternativeNames: ["Multi Story at Peckham Levels"],
+  alternativeNames: ["Multi Story at Peckham Levels", "Old Village Hall"],
   domain: "https://peckhamlevels.org",
   socials: {
     letterboxd: null,

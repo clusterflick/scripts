@@ -6,6 +6,7 @@ const {
   findMatchingCinema,
 } = require("../../common/source-utils");
 const { getAllCinemaAttributes } = require("../../cinemas");
+const { getVenueName } = require("./utils");
 
 function uniqueEvents(events) {
   const ids = {};
@@ -62,8 +63,8 @@ async function discoverVenues() {
 
   const results = [];
   for (const [, venue] of venueMap.entries()) {
-    // Split venue name before matching (e.g., "BFI Southbank, London" -> "BFI Southbank")
-    const [venueName] = venue.name.split(/[,|]/);
+    // The name find-events matches on, so discovery reports the same venue
+    const venueName = getVenueName(venue.name);
     // Passing the address keeps discovery in step with find-events.js, which
     // matches on the same postcode fallback. Without it a venue whose pin sits
     // just outside the distance limit is reported as one we don't know about,
