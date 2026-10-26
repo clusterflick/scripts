@@ -10,7 +10,7 @@ module.exports = {
   },
   url: "https://hartshoreditch.com/whats-on/",
   address: "61-67 Great Eastern Street, London, EC2A 3HU, UK",
-  geo: { lat: 51.5248857, lon: -0.0815446 },
+  geo: { lat: 51.52490342778331, lon: -0.08154112409788357 },
   structure: "solo",
   type: "Hotel",
   programming: "host",

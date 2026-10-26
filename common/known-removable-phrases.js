@@ -550,6 +550,7 @@ const knownRemovablePhrases = [
   " on The Big Screen at The Griffin",
   "at Livesey Exchange",
   "at Coven Soho",
+  "Self Defence is no Offence",
   "with Bookish Besties",
   "with Special Introduction",
   "screening and live Q+A",

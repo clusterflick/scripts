@@ -10,7 +10,7 @@ module.exports = {
   },
   url: "https://www.instagram.com/ahouseforartists/",
   address: "36 Linton Road, Barking, IG11 8SE, UK",
-  geo: { lat: 51.5396777, lon: 0.0777671 },
+  geo: { lat: 51.53972301324098, lon: 0.07791420275943066 },
   structure: "solo",
   type: "Creative Space",
   programming: "host",

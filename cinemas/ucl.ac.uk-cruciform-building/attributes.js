@@ -10,7 +10,7 @@ module.exports = {
   },
   url: "https://www.ucl.ac.uk/library/using-library/libraries-and-study-spaces/cruciform-hub",
   address: "Cruciform Building, Gower Street, London, WC1E 6BT, UK",
-  geo: { lat: 51.5245592, lon: -0.1340401 },
+  geo: { lat: 51.52420627820357, lon: -0.13510364413898324 },
   structure: "group",
   groupName: "University College London",
   type: "University & College",

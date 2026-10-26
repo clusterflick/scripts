@@ -1,7 +1,7 @@
 module.exports = {
   id: "stmarybarnes.org",
   name: "St Mary's Barnes",
-  alternativeNames: ["St Mary's"],
+  alternativeNames: ["St Mary's", "St Mary's Church"],
   domain: "https://www.stmarybarnes.org",
   socials: {
     letterboxd: null,
@@ -10,7 +10,7 @@ module.exports = {
   },
   url: "https://www.stmarybarnes.org",
   address: "Church Road, Barnes, London, SW13 9HL, UK",
-  geo: { lat: 51.4750314, lon: -0.2418683 },
+  geo: { lat: 51.47508483190324, lon: -0.2418468441406683 },
   structure: "solo",
   type: "Place of Worship",
   programming: "host",

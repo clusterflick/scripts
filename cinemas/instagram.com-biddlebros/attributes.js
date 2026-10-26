@@ -10,7 +10,7 @@ module.exports = {
   },
   url: "https://www.instagram.com/biddlebros/",
   address: "88 Lower Clapton Road, London, E5 0QR, UK",
-  geo: { lat: 51.5531499, lon: -0.0529972 },
+  geo: { lat: 51.553177451235534, lon: -0.05298037524137466 },
   structure: "solo",
   type: "Pub & Bar",
   programming: "host",
