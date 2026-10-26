@@ -109,6 +109,11 @@ function normalizeTitle(title, options) {
     // the same film arrives under two names and only the other one matches.
     // NOTE: This can be removed once the misnamed screening has passed
     ["Rubberhead: The Life & Times", "Rubberhead: The Life & Monsters"],
+    // A venue bills the film without the plural TheMovieDB and every other
+    // listing give it, so the same film arrives under a second name. The word
+    // boundary stops it firing on the correct spelling.
+    // NOTE: This can be removed once the misnamed screening has passed
+    [/\bAsh and Crayon\b/i, "Ash and Crayons"],
     // The shorts programme is billed with a slash where every other listing
     // uses an ampersand, so the same programme arrives under a second name.
     ["Life / Drawing", "Life & Drawing"],
@@ -296,6 +301,19 @@ function normalizeTitle(title, options) {
     ["CELLULOID JAM! –", "CELLULOID JAM! "],
     ["Saturday night at the movies -", "Saturday night at the movies:"],
     ["Pierre Boulez - Boulez", "Pierre Boulez "],
+    // The feature-length pilot has its own entry on TheMovieDB, billed as
+    // plain "Twin Peaks", so a listing of the pilot alone lines up with that
+    // rather than with the series. The episode title and the "original US"
+    // qualifier come off with it, since the entry doesn't split the cuts.
+    // Before the dash rule below, which would otherwise keep the episode.
+    [/\bTwin Peaks : Pilot - Northwest Passage\b/i, "Twin Peaks"],
+    [/\bTwin Peaks [-–] Original US pilot episode\b/i, "Twin Peaks"],
+    // The double episode is billed after a plus, which the separator rule
+    // reads as a separator and drops the second half at.
+    [
+      "Pilot Episode + Coffee & Cherry Pie",
+      "Pilot Episode & Coffee & Cherry Pie",
+    ],
     ["twin peaks - ", "twin peaks "],
     // TheMovieDB numbers the trilogy's instalments with Roman numerals and a
     // colon ("The Human Condition I: No Greater Love"), where the venue bills
