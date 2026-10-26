@@ -20,6 +20,7 @@ const ROOM_PARTS = [
   /\bfloor\b/i,
   /^level\b/i,
   /\bwing\b/i,
+  /^basement$/i,
   /^(?:[A-Z]\d{3,}|[A-Z]{0,2}\s?\d+\.\d+)$/i,
 ];
 
@@ -36,18 +37,20 @@ const ROOM_PARTS = [
  * 201, Main Building, SOAS University of London" - so leading room parts are
  * skipped. Only those: a later part is as likely to be the area as the venue,
  * and "St John's Church, Hyde Park" is a church, not the park. The last part
- * is never skipped, so there is always a name to match.
+ * is never skipped, so there is always a name to match - and a trailing comma
+ * doesn't leave an empty one to fall back on: "Lecture Theatre B304,
+ * Basement, Cruciform Building," is the Cruciform Building.
  * @param {string} name - The venue name as Eventbrite gives it
  * @returns {string} The name to match against the venues we hold
  */
 function getVenueName(name) {
-  const parts = (name || "").split(/[,|]/);
+  const parts = (name || "").split(/[,|]/).filter((part) => part.trim());
   const venuePart = parts.findIndex(
     (part, index) =>
       index === parts.length - 1 ||
       !ROOM_PARTS.some((pattern) => pattern.test(part.trim())),
   );
-  return parts[venuePart];
+  return parts[venuePart] ?? "";
 }
 
 /**

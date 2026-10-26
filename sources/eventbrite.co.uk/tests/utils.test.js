@@ -146,6 +146,10 @@ describe("getVenueName", () => {
     ["Bush House North Wing, King's College London", " King's College London"],
     ["E002, Central Saint Martins", " Central Saint Martins"],
     ["Room 201, 2nd Floor, Central House", " Central House"],
+    [
+      "Lecture Theatre B304, Basement, Cruciform Building,",
+      " Cruciform Building",
+    ],
   ])("reads %p as %p", (name, venueName) => {
     expect(getVenueName(name)).toBe(venueName);
   });
