@@ -1873,6 +1873,7 @@ const knownRemovablePhrases = [
   "FILM & ALBUM:",
   "The Cinema of Too-Late Capitalism #2:",
   "GREATEST FILMS OF ALL TIME:",
+  "LOST FUTURES:",
 ];
 
 module.exports = knownRemovablePhrases;
