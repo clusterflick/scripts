@@ -2010,8 +2010,8 @@ function normalizeTitle(title, options) {
     ],
     ["Yalda, a Night for Forgiveness", "Yalda"],
     // The colon would otherwise read as the "OUT:" series label and take the
-    // film's own "Out" with it, and the Q&A screening is the same film
-    [/^Rooted Out(?:: Chapter One| \+ Q&A)$/i, "Rooted Out Chapter One"],
+    // film's own "Out" with it, and the other billings are the same film
+    [/^Rooted Out(?:: Chapter One| \+ Q&A)?$/i, "Rooted Out Chapter One"],
     [
       "Vampire Ball: Live Viola, Cocktails +",
       "Vampire Ball: Live Viola, Cocktails &",
