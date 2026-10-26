@@ -5,6 +5,7 @@ module.exports = {
     "King's College London",
     "King's Building - King's College London",
     "Strand Building - King's College London",
+    "Bush House",
   ],
   domain: "https://www.kcl.ac.uk",
   socials: {

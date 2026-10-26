@@ -81,17 +81,24 @@ const mockVenuesAddedSinceFixtures = [
   "soas.ac.uk",
   "spaces.townhall.co.uk",
   "firmdalehotels.com-ham-yard",
+  "hartshoreditch.com",
+  "stpaulswesthackney.org",
+  "ucl.ac.uk-cruciform-building",
+  // Held, not added: its only events in the fixtures are at "Gorvy Lecture
+  // Theatre, Royal College of Art", which it was found under neither by name
+  // nor, before leading room parts were skipped, by "Royal College of Art".
+  "rca.ac.uk-battersea",
 ];
 // A name added to a venue we already held does the same thing to the events
 // listed under it, so those names are held back too - by venue, as the venue
 // itself stays. Empty this alongside the list above.
 const mockAlternativeNamesAddedSinceFixtures = {
   "arthub.org.uk": ["Art Hub Studios CIC"],
+  "kcl.ac.uk-strand": ["Bush House"],
   "kilntheatre.com": ["Kiln Cinema"],
   "myvue.com-leicester-square": ["Vue Leicester Square"],
   "otterchaos.co.uk": ["Otter Chaos Brixton"],
   "oxfordhouse.org.uk": ["Oxford House in Bethnal Green"],
-  "rca.ac.uk-battersea": ["Gorvy Lecture Theatre"],
   "regentstreetcinema.com": [
     "University of Westminster - Regent Street",
     "UG05 - University of Westminster",
