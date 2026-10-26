@@ -1213,7 +1213,9 @@ function normalizeTitle(title, options) {
     ["ADA - My Mother Architect", "ADA: My Mother the Architect"],
     ["B-Movie Women / ", "B-Movie Women: "],
     ["UK Cinema Premiere + Q&A: ", "UK Cinema Premiere & Q&A: "],
-    ["LONDON | ", ""],
+    // A prefix only, so a title ending in the city keeps it - "A Year in
+    // London | PREMIERE + Q&A"
+    [/^LONDON \| /i, ""],
     ["BLOC CINEMA | ", "BLOC CINEMA: "],
     ["Faith Walk Film Premiere | ", "Faith Walk Film Premiere: "],
     [" / Bootlickers / ", " & Bootlickers & "],
