@@ -31,6 +31,30 @@ describe("getPresenterNote", () => {
     ).toEqual("Presented by The Witch Of Popcorn");
   });
 
+  test("reads both names from a joint 'X in collaboration with Y' credit", () => {
+    expect(
+      getPresenterNote(
+        "Waltham Forest Cinema Project in collaboration with Queer East showcase a decadent Taiwanese queer fantasy from 1961.",
+      ),
+    ).toEqual("Presented by Waltham Forest Cinema Project and Queer East");
+  });
+
+  test("keeps connecting words inside a collaborator's name", () => {
+    expect(
+      getPresenterNote(
+        "Midweek Cinema in collaboration with The Museum of the Home bring a night of shorts.",
+      ),
+    ).toEqual("Presented by Midweek Cinema and The Museum of the Home");
+  });
+
+  test("ignores a collaboration credit that isn't between organisations", () => {
+    expect(
+      getPresenterNote(
+        "Made in collaboration with local residents, the film follows a year on the estate.",
+      ),
+    ).toBeNull();
+  });
+
   test("ignores a credit that isn't at the start of the text", () => {
     expect(
       getPresenterNote(
