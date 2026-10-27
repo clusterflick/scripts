@@ -2029,6 +2029,7 @@ function normalizeTitle(title, options) {
     [/^American Psycho 2$/i, "American Psycho II: All American Girl"],
     [/\bBeing Huemann\b/i, "Being Heumann"],
     [/\bHaispray\b/i, "Hairspray"],
+    [/Illusions Of An Everlasting$/i, "The Illusion of an Everlasting Summer"],
     // Runs after the year is bracketed, so only this film loses its "The"
     ["The Pasture (2022)", "Pasture (2022)"],
     // The film's a mystery, but here's a hint ...
