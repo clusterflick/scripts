@@ -1881,6 +1881,7 @@ const knownRemovablePhrases = [
   "LOST FUTURES:",
   "Sir Ernest Shackleton's Glorious Epic of the Antarctic",
   "LDNDOCS 2026:",
+  "LDNDOCS2026:",
   "with Q and A",
   "at Plaza Camden",
   "Interactive Memory Workshop",
