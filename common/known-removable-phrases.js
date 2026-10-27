@@ -1334,6 +1334,7 @@ const knownRemovablePhrases = [
   "Screening+ Q&A:",
   "Screening and Q and",
   "screening/Q&A",
+  "+ QA session",
   "Screening+Karaoke",
   "Screening 流麻溝十五號放映會",
   "Screening at Close-Up",
