@@ -2025,6 +2025,10 @@ function normalizeTitle(title, options) {
     // everywhere else. Bounded by a space and a slash, so a range already in
     // brackets ("(2001/2002)") is left alone.
     [/\s\/(\d{4})\/(?=\s|$)/, " ($1)"],
+    [/\bBasketcase\b/i, "Basket Case"],
+    [/^American Psycho 2$/i, "American Psycho II: All American Girl"],
+    [/\bBeing Huemann\b/i, "Being Heumann"],
+    [/\bHaispray\b/i, "Hairspray"],
     // Runs after the year is bracketed, so only this film loses its "The"
     ["The Pasture (2022)", "Pasture (2022)"],
     // The film's a mystery, but here's a hint ...
