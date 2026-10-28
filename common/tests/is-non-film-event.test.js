@@ -138,6 +138,7 @@ describe("isNonFilmEvent", () => {
     ["Community Groove Dance Class"],
     ["Community Theatre Company"],
     ["INTERSECTION 2026 - THE EXCHANGE"],
+    ["Lord Blunkett Lecture"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });

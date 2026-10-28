@@ -86,6 +86,7 @@ const ignoredIds = [
   1636666, // Romeo + Juliet -- https://www.themoviedb.org/movie/1636666-romeo-juliet
   1703923, // Peanut Head -- https://www.themoviedb.org/movie/1703923-peanut-head
   64180, // I Dream of You... -- https://www.themoviedb.org/movie/64180
+  1377955, // Why So Serious -- https://www.themoviedb.org/movie/1377955-why-so-serious
 ];
 
 /**

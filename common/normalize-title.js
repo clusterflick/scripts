@@ -2030,6 +2030,8 @@ function normalizeTitle(title, options) {
     [/\bBeing Huemann\b/i, "Being Heumann"],
     [/\bHaispray\b/i, "Hairspray"],
     [/Illusions Of An Everlasting$/i, "The Illusion of an Everlasting Summer"],
+    [/R\. W\. Fassbinder\s+-\s+/i, "R. W. Fassbinder: "],
+    ["One Hundred Faces for a Single Day", "Hundred Faces for a Single Day"],
     // Runs after the year is bracketed, so only this film loses its "The"
     ["The Pasture (2022)", "Pasture (2022)"],
     // The film's a mystery, but here's a hint ...
