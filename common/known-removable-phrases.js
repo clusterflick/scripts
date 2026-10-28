@@ -901,6 +901,7 @@ const knownRemovablePhrases = [
   "Family Films:",
   "Family Film Week:",
   "Fashion & Cinema:",
+  "R. W. Fassbinder:",
   "Fassbinder:",
   "Father's Day:",
   "FFC x The Old Ways:",
@@ -1888,6 +1889,7 @@ const knownRemovablePhrases = [
   "Vampire Ball: Live Viola, Cocktails &",
   "Central Saint Martins",
   "Girl, So Cinema:",
+  "Birkbeck Climate Action Network:",
 ];
 
 module.exports = knownRemovablePhrases;
