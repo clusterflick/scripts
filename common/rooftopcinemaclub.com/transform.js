@@ -21,6 +21,19 @@ function parseDurationToMins(value) {
   return parseInt(match[1] || 0, 10) * 60 + parseInt(match[2] || 0, 10);
 }
 
+function parseYear(value) {
+  if (value === undefined) return undefined;
+
+  // Structured data dates were a bare year ("1999") and are now a full release
+  // date ("1999-05-21"), sometimes with trailing whitespace
+  const match = /^(\d{4})(?:-\d{2}-\d{2})?$/.exec(String(value).trim());
+  if (!match) {
+    throw new Error(`Unable to parse film release date: "${value}"`);
+  }
+
+  return match[1];
+}
+
 function getFilmDetails(html, filmSlug) {
   if (!html) {
     throw new Error(`Missing screening page for film "${filmSlug}"`);
@@ -44,7 +57,7 @@ function getFilmDetails(html, filmSlug) {
   // events don't have one
   return {
     duration: parseDurationToMins(film.duration),
-    year: film.dateCreated,
+    year: parseYear(film.dateCreated),
   };
 }
 
