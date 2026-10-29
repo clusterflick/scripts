@@ -315,6 +315,8 @@ const nonFilmEvents = [
   /^Film Editing 101 powered by CapCut$/i,
   // A Christmas dinner, with no film attached to it.
   /^Pizza & Plonk: A Rustic Christmas Feast$/i,
+  // A charity auction, with no film attached to it.
+  /^Charity Auction$/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
