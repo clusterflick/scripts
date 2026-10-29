@@ -139,6 +139,8 @@ describe("isNonFilmEvent", () => {
     ["Community Theatre Company"],
     ["INTERSECTION 2026 - THE EXCHANGE"],
     ["Lord Blunkett Lecture"],
+    ["Film Editing 101 powered by CapCut"],
+    ["Pizza & Plonk: A Rustic Christmas Feast"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });
