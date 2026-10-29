@@ -829,6 +829,7 @@ function normalizeTitle(title, options) {
     ],
     ["Bar Trash: Queer Horror / ", "Bar Trash: Queer Horror & "],
     ["Bar Trash: Silent Horror / ", "Bar Trash: Silent Horror & "],
+    ["Bar Trash: Zero Budget / ", "Bar Trash: Zero Budget & "],
     [/^BAR TRASH: (.+) \+ (.+)$/i, "BAR TRASH: $1 & $2"],
     [/\bFinal Shows? - /i, "Final Shows: "],
     [/^Cineworld Screening - /i, ""],
@@ -2032,6 +2033,8 @@ function normalizeTitle(title, options) {
     [/Illusions Of An Everlasting$/i, "The Illusion of an Everlasting Summer"],
     [/R\. W\. Fassbinder\s+-\s+/i, "R. W. Fassbinder: "],
     ["One Hundred Faces for a Single Day", "Hundred Faces for a Single Day"],
+    ["Sunrise Event Screening - ", "Sunrise Event Screening: "],
+    [/Jean-Michel$/i, "Jean-Michel Basquiat"],
     // Runs after the year is bracketed, so only this film loses its "The"
     ["The Pasture (2022)", "Pasture (2022)"],
     // The film's a mystery, but here's a hint ...

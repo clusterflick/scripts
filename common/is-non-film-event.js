@@ -309,6 +309,8 @@ const nonFilmEvents = [
   /^INTERSECTION 2026 - THE EXCHANGE$/i,
   // A lecture, with no film attached to it.
   /^Lord Blunkett Lecture$/i,
+  // A wellbeing session, with no film attached to it.
+  /^Lighter Within: Winter Wellbeing$/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
