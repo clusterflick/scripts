@@ -141,6 +141,7 @@ describe("isNonFilmEvent", () => {
     ["Lord Blunkett Lecture"],
     ["Film Editing 101 powered by CapCut"],
     ["Pizza & Plonk: A Rustic Christmas Feast"],
+    ["CHARITY AUCTION"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });

@@ -323,6 +323,10 @@ const knownRemovablePhrases = [
   // Ahead of "special screening", which would otherwise take the end of it
   // and leave the strand name on the title
   "Black History Month special screening",
+  // Both ahead of "special screening" and "preview", which would otherwise
+  // take the middle of each and leave the rest of the billing on the title
+  "Documentary special screening and talk by Jo Berry.",
+  "Special Preview and Broadcast Q&A",
   "special screening",
   "Special Presentation:",
   "Spielberg Sci-Fi Week:",
@@ -1704,6 +1708,8 @@ const knownRemovablePhrases = [
   "4K Restoration",
   "4K Resoration",
   "4K Re-Issue",
+  // Ahead of "4K", which would otherwise leave the "in" behind
+  "in 4K",
   "4K",
   "Re-Issue",
   "Live UK Tour",
@@ -1895,6 +1901,8 @@ const knownRemovablePhrases = [
   "Sunrise Event Screening:",
   "- Maha Sakthi",
   "The Chosen Ones:",
+  "Relaxed:",
+  "prefaced by DARK SIDE OF THE MOON on VINYL",
 ];
 
 module.exports = knownRemovablePhrases;

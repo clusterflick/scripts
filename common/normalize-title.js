@@ -801,6 +801,13 @@ function normalizeTitle(title, options) {
     // Anchored, because a premiere billed after the title ("TURN IT DOWN —
     // World Premiere - An absurd neighbour story") is followed by a tagline.
     [/^World Premiere - /i, "World Premiere: "],
+    // The film comes first and the billing after the colon describes the
+    // restoration, so the generic "screening of" rule would keep the billing
+    // and lose the film.
+    [/:\s*first[- ]time screening of .*$/i, ""],
+    // Each block is its own programme, so the bracketed number is kept rather
+    // than stripped as a qualifier, the way other festivals' blocks read.
+    [/\bBritish Shorts \(Block (\d+)\)/i, "British Shorts Block $1"],
     ["Karaoke, crafts + ", "Karaoke, crafts & "],
     ["FOLIES MEURTRIÈRES + ", "FOLIES MEURTRIÈRES & "],
     [/^(.+)- National Theatre Live$/i, "National Theatre Live: $1"],
