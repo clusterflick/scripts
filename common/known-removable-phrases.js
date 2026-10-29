@@ -305,6 +305,7 @@ const knownRemovablePhrases = [
   "Screening and Q&A",
   ": screening and discussion",
   "Screening, Director Q&A, and Meet and Greet",
+  "Screening, Panel Discussion and Q&A",
   "Q&A and Networking",
   "Screening Without Ads or Trailers",
   "screening @ Rivoli Ballroom",
@@ -658,6 +659,7 @@ const knownRemovablePhrases = [
   "Bar Screening x Muse:",
   "Bar Trash: Queer Horror & Double Bill",
   "Bar Trash: Silent Horror & Double Bill",
+  "Bar Trash: Zero Budget & Double Bill",
   "BAR TRASH Positive East Fundraiser:",
   "Bar Trash: A toast to David Lynch:",
   "Bar Trash: Season Launch:",
@@ -1890,6 +1892,8 @@ const knownRemovablePhrases = [
   "Central Saint Martins",
   "Girl, So Cinema:",
   "Birkbeck Climate Action Network:",
+  "Sunrise Event Screening:",
+  "- Maha Sakthi",
 ];
 
 module.exports = knownRemovablePhrases;
