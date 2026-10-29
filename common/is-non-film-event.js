@@ -311,6 +311,10 @@ const nonFilmEvents = [
   /^Lord Blunkett Lecture$/i,
   // A wellbeing session, with no film attached to it.
   /^Lighter Within: Winter Wellbeing$/i,
+  // A short-form video editing workshop, with no film attached to it.
+  /^Film Editing 101 powered by CapCut$/i,
+  // A Christmas dinner, with no film attached to it.
+  /^Pizza & Plonk: A Rustic Christmas Feast$/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>

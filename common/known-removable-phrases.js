@@ -1894,6 +1894,7 @@ const knownRemovablePhrases = [
   "Birkbeck Climate Action Network:",
   "Sunrise Event Screening:",
   "- Maha Sakthi",
+  "The Chosen Ones:",
 ];
 
 module.exports = knownRemovablePhrases;
