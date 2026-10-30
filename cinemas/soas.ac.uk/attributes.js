@@ -6,6 +6,7 @@ module.exports = {
     "Khalili Lecture Theatre",
     "Room RG01",
     "Paul Webley Wing (Senate House)",
+    "SOAS Centre For Taiwan Studies (SWLT)",
   ],
   domain: "https://www.soas.ac.uk",
   socials: {

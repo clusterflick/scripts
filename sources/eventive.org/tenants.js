@@ -56,4 +56,15 @@ module.exports = [
     // dates match none of our venues, and the online festival's events carry
     // no venue at all, so both fall away without needing a filter.
   },
+  {
+    id: "nativespiritfestival",
+    name: "Native Spirit Festival",
+    url: "https://nativespiritfestival.eventive.org",
+    // The subdomain is not versioned and its site still titles itself the 17th
+    // edition, so the name carries no edition. Its venues are spread across
+    // London (IALS, the Horse Hospital, SOAS) plus the Polar Museum in
+    // Cambridge, which matches nothing. An event with no venue is left
+    // unmatched rather than given a fallback, since the tenant has no one venue
+    // - the Horse Hospital lists the one we've seen itself.
+  },
 ];
