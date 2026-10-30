@@ -1714,6 +1714,8 @@ const knownRemovablePhrases = [
   "Re-Issue",
   "Live UK Tour",
   "UK tour",
+  // Ahead of " dubbed", which would otherwise leave the "English" behind
+  "English Dubbed",
   " dubbed",
   " subbed",
   " subtitled",
@@ -1903,6 +1905,10 @@ const knownRemovablePhrases = [
   "The Chosen Ones:",
   "Relaxed:",
   "prefaced by DARK SIDE OF THE MOON on VINYL",
+  "DocDays:",
+  "Regina Schilling:",
+  "special Halloween showing",
+  "Super-Homo: Homicidal Divas:",
 ];
 
 module.exports = knownRemovablePhrases;
