@@ -86,6 +86,32 @@ describe(`${attributes.name}`, () => {
       geo: { lat: 51.58853061979289, lon: -0.16390063689779108 },
       expectedMatches: 12,
     },
+    {
+      name: "Institute of Advanced Legal Studies",
+      alternativeNames: ["IALS", "IALS Council Chamber Theatre"],
+      address: "Charles Clore House, 17 Russell Square, London, WC1B 5DR, UK",
+      geo: { lat: 51.522610909571256, lon: -0.12725657288969164 },
+      expectedMatches: 2,
+    },
+    {
+      name: "The Horse Hospital",
+      address: "Colonnade, Bloomsbury, London, WC1N 1JD, UK",
+      geo: { lat: 51.52278577182352, lon: -0.12441771517528585 },
+      expectedMatches: 1,
+    },
+    {
+      name: "SOAS University of London",
+      alternativeNames: [
+        "SOAS",
+        "Khalili Lecture Theatre",
+        "Room RG01",
+        "Paul Webley Wing (Senate House)",
+        "SOAS Centre For Taiwan Studies (SWLT)",
+      ],
+      address: "10 Thornhaugh Street, Russell Square, London, WC1H 0XG, UK",
+      geo: { lat: 51.52251686104954, lon: -0.12923754405371127 },
+      expectedMatches: 1,
+    },
   ])("$name", ({ name, alternativeNames, address, geo, expectedMatches }) => {
     it(
       "retrieve and find events",
@@ -94,11 +120,12 @@ describe(`${attributes.name}`, () => {
 
         // Make sure the input looks roughly correct
         expect(tenantEvents).toBeTruthy();
-        expect(Object.keys(tenantEvents)).toHaveLength(4);
+        expect(Object.keys(tenantEvents)).toHaveLength(5);
         expect(tenantEvents.frightfest2026).toHaveLength(115);
         expect(tenantEvents.bccwhenthestarsmeettheocean).toHaveLength(11);
         expect(tenantEvents.kiffhalloween).toHaveLength(3);
         expect(tenantEvents.ukjewishfilmfestival2026).toHaveLength(78);
+        expect(tenantEvents.nativespiritfestival).toHaveLength(6);
 
         readJSON.mockImplementation(() => ({ tenantEvents }));
 

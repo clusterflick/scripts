@@ -1,7 +1,7 @@
 module.exports = {
   id: "ials.sas.ac.uk",
   name: "Institute of Advanced Legal Studies",
-  alternativeNames: ["IALS"],
+  alternativeNames: ["IALS", "IALS Council Chamber Theatre"],
   domain: "https://ials.sas.ac.uk",
   socials: {
     letterboxd: null,
