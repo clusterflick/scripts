@@ -294,8 +294,9 @@ const nonFilmEvents = [
   /^Casting Call & After Dark - Sevente/i,
   // A wellbeing workshop, with no film attached to it.
   /^Lighter Within : Winter Wellbeing Workshop$/i,
-  // A weekly video game night, with no film attached to it.
-  /^Mario Kart Tuesdays$/i,
+  // A weekly video game night, with no film attached to it. The venue has also
+  // billed it misspelt ("Mario Kart Tueasdays").
+  /^Mario Kart Tuea?sdays$/i,
   // A panel with production designers, with no film attached to it.
   /^Meet the Women Behind The Blueprint:/i,
   // A talk on a philosopher's arguments, with no film attached to it. The
@@ -317,6 +318,12 @@ const nonFilmEvents = [
   /^Pizza & Plonk: A Rustic Christmas Feast$/i,
   // A charity auction, with no film attached to it.
   /^Charity Auction$/i,
+  // A printmaking course, with no film attached to it.
+  /^Introduction to Screen Printing Course$/i,
+  // The O2's roof climb, billed by the view from the top ("Up at The O2:
+  // stunning views of London's skyline"), so match the attraction rather than
+  // the strapline.
+  /^Up at The O2\b/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>

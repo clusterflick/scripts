@@ -133,6 +133,7 @@ describe("isNonFilmEvent", () => {
     ["Casting Call & After Dark - Sevente × WESTINSIGHT"],
     ["Lighter Within : Winter Wellbeing Workshop"],
     ["Mario Kart Tuesdays"],
+    ["Mario Kart Tueasdays"],
     ["Meet the Women Behind The Blueprint: Spatial & Set Designers"],
     ["AL-RAZI'S  PROOFS FOR GOD’S EXISTENCE"],
     ["Community Groove Dance Class"],
@@ -142,6 +143,8 @@ describe("isNonFilmEvent", () => {
     ["Film Editing 101 powered by CapCut"],
     ["Pizza & Plonk: A Rustic Christmas Feast"],
     ["CHARITY AUCTION"],
+    ["Introduction to Screen Printing Course"],
+    ["Up at The O2: stunning views of London's skyline"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });
