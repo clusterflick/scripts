@@ -64,8 +64,15 @@ async function transform({ moviePages }, sourcedEvents) {
     const details = getText($("#colophon"));
     const id = moviePageUrl.replace(`${attributes.domain}/films/`, "");
     const trailer = $("#films-trailer iframe").attr("src");
-    const bookingUrl = $("#detail-body .row.select")
-      .attr("onclick")
+    const bookingRow = $("#detail-body .row.select").attr("onclick");
+    const hasPerformances = $(".performance-list .performance").length > 0;
+    // Season landing pages (e.g. a festival's introduction) are listed under
+    // /films/ too, but carry neither performances nor a booking row
+    if (!bookingRow && !hasPerformances) continue;
+    if (!bookingRow) {
+      throw new Error(`No booking row found for ${moviePageUrl}`);
+    }
+    const bookingUrl = bookingRow
       .replace('location.href="', "")
       .replace('";', "");
     const seasons = Array.from($(".season-item"))
