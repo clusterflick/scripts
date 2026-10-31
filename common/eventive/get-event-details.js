@@ -38,7 +38,30 @@ function extractCategories(event) {
   }, []);
 }
 
+/**
+ * A tenant can sell an event's tickets on another site - Eventbrite, or the
+ * box office of the cinema screening it - and Eventive then shows an "Order
+ * Tickets" button that sends the visitor there. Such an event has no ticket
+ * buckets of its own, so there is nothing to count seats in.
+ */
+function getExternalTicketsUrl(event) {
+  return event.external_tickets_url || null;
+}
+
+/**
+ * Where a performance is booked: the other site when tickets are sold there,
+ * otherwise the event's own Eventive page.
+ */
+function getBookingUrl(event, eventUrl) {
+  return getExternalTicketsUrl(event) || eventUrl;
+}
+
 function getTicketStatus(event) {
+  // Tickets sold on another site have no buckets here, which would otherwise
+  // read as every seat gone. Their availability is unknown to us, and unknown
+  // is not the same claim as available, so no status is given at all.
+  if (getExternalTicketsUrl(event)) return {};
+
   // Check if any public ticket bucket has seats remaining
   const publicBuckets = event.ticket_buckets?.filter((b) => b.public) || [];
   const hasSeatsAvailable = publicBuckets.some(
@@ -54,4 +77,5 @@ module.exports = {
   getFilmMetadata,
   extractCategories,
   getTicketStatus,
+  getBookingUrl,
 };

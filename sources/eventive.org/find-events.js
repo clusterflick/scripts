@@ -14,6 +14,7 @@ const {
   getFilmMetadata,
   extractCategories,
   getTicketStatus,
+  getBookingUrl,
 } = require("../../common/eventive/get-event-details");
 const attributes = require("./attributes");
 const tenants = require("./tenants");
@@ -63,7 +64,7 @@ function parseEvent(event, tenant) {
     performances: [
       createPerformance({
         date: parseISO(event.start_time),
-        url: eventUrl,
+        url: getBookingUrl(event, eventUrl),
         // Every event on a tenant belongs to that tenant's programme, so the
         // note is the tenant rather than anything read off the event. Without
         // it a festival screening is indistinguishable from the venue's own
