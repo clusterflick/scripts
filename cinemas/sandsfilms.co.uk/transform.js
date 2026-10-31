@@ -11,6 +11,7 @@ const {
   getFilmMetadata,
   extractCategories,
   getTicketStatus,
+  getBookingUrl,
 } = require("../../common/eventive/get-event-details");
 const attributes = require("./attributes");
 
@@ -37,7 +38,7 @@ async function transform({ movieListPage }, sourcedEvents) {
 
     const performance = createPerformance({
       date: parseISO(event.start_time),
-      url: eventUrl,
+      url: getBookingUrl(event, eventUrl),
       status: getTicketStatus(event),
       accessibility: createAccessibility(event.name, {}, matchingHintsText),
       format: createFormat(event.name, {}, matchingHintsText),
