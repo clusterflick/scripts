@@ -303,9 +303,11 @@ const nonFilmEvents = [
   // venue mixes straight and curly apostrophes.
   /^Al-Razi['’]s Proofs for God['’]s Existence$/i,
   // A dance class and a theatre company's sessions, with no film attached to
-  // either. Anchored, because "Community" alone could open a film's title.
-  /^Community Groove Dance Class$/i,
-  /^Community Theatre Company$/i,
+  // either, billed bare or with the session's day and time ("Community Groove
+  // Dance Class - Weds, 10.30-11.30"). Anchored at the start, because
+  // "Community" alone could open a film's title.
+  /^Community Groove Dance Class\b/i,
+  /^Community Theatre Company\b/i,
   // A session of the INTERSECTION 2026 programme, with no film attached to it.
   /^INTERSECTION 2026 - THE EXCHANGE$/i,
   // A lecture, with no film attached to it.
@@ -324,6 +326,8 @@ const nonFilmEvents = [
   // stunning views of London's skyline"), so match the attraction rather than
   // the strapline.
   /^Up at The O2\b/i,
+  // A craft workshop, with no film attached to it.
+  /^Silk Bonnet Making Workshop$/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>

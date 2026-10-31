@@ -145,6 +145,9 @@ describe("isNonFilmEvent", () => {
     ["CHARITY AUCTION"],
     ["Introduction to Screen Printing Course"],
     ["Up at The O2: stunning views of London's skyline"],
+    ["Community Groove Dance Class - Weds, 10.30-11.30"],
+    ["Community Theatre Company - Weds, 6pm-7.45pm"],
+    ["Silk Bonnet Making Workshop"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });
