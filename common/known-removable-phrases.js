@@ -1906,6 +1906,7 @@ const knownRemovablePhrases = [
   "Birkbeck Climate Action Network:",
   "Sunrise Event Screening:",
   "- Maha Sakthi",
+  ": Maha Sakthi",
   "The Chosen Ones:",
   "Relaxed:",
   "prefaced by DARK SIDE OF THE MOON on VINYL",
@@ -1913,6 +1914,7 @@ const knownRemovablePhrases = [
   "Regina Schilling:",
   "special Halloween showing",
   "Super-Homo: Homicidal Divas:",
+  "A Black British Zombie Thriller",
 ];
 
 module.exports = knownRemovablePhrases;
