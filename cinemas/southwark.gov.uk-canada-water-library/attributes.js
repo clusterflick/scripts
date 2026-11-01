@@ -1,6 +1,7 @@
 module.exports = {
   id: "southwark.gov.uk-canada-water-library",
   name: "Canada Water Library",
+  alternativeNames: ["Canada Water Theatre"],
   domain: "https://www.southwark.gov.uk",
   socials: {
     letterboxd: null,

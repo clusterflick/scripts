@@ -1,6 +1,7 @@
 module.exports = {
   id: "goodenough.ac.uk",
   name: "Goodenough College",
+  alternativeNames: ["Goodenough House"],
   domain: "https://www.goodenough.ac.uk",
   socials: {
     letterboxd: null,

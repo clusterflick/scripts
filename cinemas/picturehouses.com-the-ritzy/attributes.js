@@ -1,7 +1,7 @@
 module.exports = {
   id: "picturehouses.com-the-ritzy",
   name: "The Ritzy Picturehouse",
-  alternativeNames: ["The Ritzy"],
+  alternativeNames: ["The Ritzy", "Ritzy Cinema and Cafe"],
   domain: "https://www.picturehouses.com",
   socials: {
     letterboxd: "picturehouses",

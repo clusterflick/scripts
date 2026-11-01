@@ -1,7 +1,7 @@
 module.exports = {
   id: "arts.ac.uk-central-saint-martins",
   name: "Central Saint Martins",
-  alternativeNames: ["Platform Theatre"],
+  alternativeNames: ["Platform Theatre", "Lethaby Gallery"],
   domain: "https://www.arts.ac.uk",
   socials: {
     letterboxd: null,

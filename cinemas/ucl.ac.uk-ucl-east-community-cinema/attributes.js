@@ -6,6 +6,7 @@ module.exports = {
     "UCL East - Marshgate",
     "UCL East - One Pool Street",
     "UCL Community Cinema",
+    "UCL East Campus: Pool Street Cinema",
   ],
   domain:
     "https://www.ucl.ac.uk/creative-cultural-industries/ucl-east-community-cinema",

@@ -6,6 +6,7 @@ module.exports = {
     "UAL London College of Communication - Lecture Theatre A",
     "UAL London College of Communication - MLG06 and Well Gallery",
     "University of Arts London (Elephant & Castle)",
+    "UAL London College of Communication - Lecture Theatre C",
   ],
   domain: "https://www.arts.ac.uk",
   socials: {

@@ -6,7 +6,11 @@ module.exports = {
   // lists it under the members' club rather than the cinema. findMatchingCinema
   // requires the name to match before it will look at the location, so without
   // this an exact address and coordinate pair still fails to match.
-  alternativeNames: ["White City House", "Soho House White City"],
+  alternativeNames: [
+    "White City House",
+    "Soho House White City",
+    "Electric Cinema White City House",
+  ],
   domain: "https://www.electriccinema.co.uk",
   socials: {
     letterboxd: "electriccinemas",

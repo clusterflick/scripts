@@ -1,6 +1,10 @@
 module.exports = {
   id: "bfi.org.uk-stephen-street",
   name: "BFI Stephen Street",
+  alternativeNames: [
+    "BFI Screening Room",
+    "British Film Institute (BFI), Screening Room 2",
+  ],
   domain: "https://www.bfi.org.uk",
   socials: {
     letterboxd: "bfi",

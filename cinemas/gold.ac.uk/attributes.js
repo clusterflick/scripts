@@ -7,6 +7,7 @@ module.exports = {
     "Professor Stuart Hall Building",
     "Professor Stuart Hall Building LG01 (Linton)",
     "RHB Cinema, Goldsmiths, University of London",
+    "Goldsmiths College",
   ],
   domain: "https://www.gold.ac.uk",
   socials: null,

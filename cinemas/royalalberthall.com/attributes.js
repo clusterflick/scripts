@@ -1,6 +1,7 @@
 module.exports = {
   id: "royalalberthall.com",
   name: "Royal Albert Hall",
+  alternativeNames: ["Elgar Room at Royal Albert Hall"],
   domain: "https://www.royalalberthall.com",
   socials: {
     letterboxd: null,

@@ -1,6 +1,7 @@
 module.exports = {
   id: "bfi.org.uk-southbank",
   name: "BFI Southbank",
+  alternativeNames: ["BFI Riverfront"],
   domain: "https://whatson.bfi.org.uk/Online/",
   socials: {
     letterboxd: "bfi",
