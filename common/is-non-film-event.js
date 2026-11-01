@@ -328,6 +328,12 @@ const nonFilmEvents = [
   /^Up at The O2\b/i,
   // A craft workshop, with no film attached to it.
   /^Silk Bonnet Making Workshop$/i,
+  // A symposium and book launch, with no film attached to it.
+  /^IN PERSON – Symposium & Book Launch of ‘Psychoanalysis Otherwise’$/i,
+  // A youth climate summit, with no film attached to it.
+  /^International Climate & Sustainability Youth Summit 2026 - COP31$/i,
+  // A music session, with no film attached to it.
+  /^FREE EVENT: London Scandi Session led by Chris Dyer$/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
