@@ -147,6 +147,9 @@ describe("isNonFilmEvent", () => {
     ["Up at The O2: stunning views of London's skyline"],
     ["Community Groove Dance Class - Weds, 10.30-11.30"],
     ["Community Theatre Company - Weds, 6pm-7.45pm"],
+    ["IN PERSON – Symposium & Book Launch of ‘Psychoanalysis Otherwise’"],
+    ["International Climate & Sustainability Youth Summit 2026 - COP31"],
+    ["FREE EVENT: London Scandi Session led by Chris Dyer"],
     ["Silk Bonnet Making Workshop"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);

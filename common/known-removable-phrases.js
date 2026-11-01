@@ -723,6 +723,7 @@ const knownRemovablePhrases = [
   "by Folu Odimayo",
   "by Rebecca Salvadori",
   "by Louisa May Alcott",
+  "by Marc Hardman",
   "by Myrid Carten",
   "by Nathaniel Dorsky",
   "by Noël Coward",
@@ -856,6 +857,7 @@ const knownRemovablePhrases = [
   "Director Q&A",
   "Director Talanoa",
   "directed by Philippe Lacôte",
+  "directed by Arabella Burfitt-Dons",
   "DocHouse:",
   "Dirty Weekend:",
   "Disabled People's Empowerment Month:",
@@ -1533,6 +1535,8 @@ const knownRemovablePhrases = [
   // where that cut does rather than carrying the tail it can never match.
   "ft Scorcher: Screening, Q&A",
   "with Peter Suschitzky",
+  // The cause the screening is held for, billed after the film's name.
+  "Save Soil",
   // Film clubs on Luma bill themselves ahead of the film they are showing,
   // and each spells its own name its own way.
   "AI Movie Club x",
