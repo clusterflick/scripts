@@ -135,6 +135,24 @@ const assertLineUpDescription = (event) => (pageData) => {
   }
 };
 
+// A series is published from its sessions, each checked against the venue its
+// page names, so for a series page the venue is part of the page. On 1st
+// November 2026 one session page of Perivale Library's Silver Screenings came
+// back with `venue: null` - its five siblings, the previous day's retrieve and
+// the live page all named Perivale Library - and transform-prepare failed on
+// it, voiding the run. Throwing here sends it to the deferred sweep instead.
+const assertSeriesVenue = (event) => (pageData) => {
+  if (!getSeriesId(pageData)) return;
+  if (!pageData.props.pageProps.context.basicInfo.venue?.id) {
+    throw new Error(`No venue found for series event at ${event.url}`);
+  }
+};
+
+const assertEventPage = (event) => (pageData) => {
+  assertLineUpDescription(event)(pageData);
+  assertSeriesVenue(event)(pageData);
+};
+
 const getSearchResultsFor = async (searchTerm) => {
   const movieListPages = [];
   let page = 1;
@@ -326,7 +344,7 @@ async function retrieve() {
       event.url,
       EVENT_REQUEST_DELAY_MS,
       EVENT_RETRY_CONFIG,
-      assertLineUpDescription(event),
+      assertEventPage(event),
     );
   };
 
