@@ -49,6 +49,19 @@ const describedEventPage = (modules) =>
     props: { pageProps: { context: { structuredContent: { modules } } } },
   })};</script>`;
 
+const seriesEventPage = (venue) =>
+  `<script> window.__SERVER_DATA__ = ${JSON.stringify({
+    props: {
+      pageProps: {
+        context: {
+          basicInfo: { id: "2", isSeries: true, seriesId: "20", venue },
+        },
+      },
+    },
+  })};</script>`;
+
+const seriesVenue = { id: "279577003", name: "Genesis Cinema" };
+
 const lineUpModules = [{ type: "text", text: "<p>Here is the line up!</p>" }];
 
 const response = (status, body) => ({
@@ -271,6 +284,60 @@ describe("eventbrite deferred retry", () => {
       expect(error).toBeDefined();
       expect(error.message).toContain("Could not reach 1 event page(s)");
       expect(error.message).toContain(`event-${LINE_UP_EVENT_ID}`);
+    },
+    TEST_TIMEOUT_MS,
+  );
+
+  it(
+    "recovers a series event whose page first arrived without its venue",
+    async () => {
+      const events = [makeEvent("1"), makeEvent("2")];
+      // The shape seen on 1st November 2026: a series session page whose
+      // `basicInfo.venue` is null, named again on the next fetch.
+      let attemptsAtSeries = 0;
+      setupFetch(events, async (url) => {
+        if (url.includes("/e/")) {
+          if (!url.endsWith("event-2")) return response(200, eventPage("1"));
+          attemptsAtSeries += 1;
+          return response(
+            200,
+            seriesEventPage(attemptsAtSeries === 1 ? null : seriesVenue),
+          );
+        }
+        // The series' sessions, which retrieve fetches for every series page.
+        return {
+          ...response(200, ""),
+          json: async () => ({ events: [], pagination: {} }),
+        };
+      });
+
+      const { value, error } = await runRetrieve();
+
+      expect(error).toBeUndefined();
+      expect(
+        value.moviePages["https://www.eventbrite.co.uk/e/event-2"].props
+          .pageProps.context.basicInfo.venue,
+      ).toEqual(seriesVenue);
+      expect(logs).toContain(" - Retrying 1 unreachable event...");
+    },
+    TEST_TIMEOUT_MS,
+  );
+
+  it(
+    "fails loudly when a series event never names its venue",
+    async () => {
+      const events = [makeEvent("1"), makeEvent("2")];
+      setupFetch(events, async (url) =>
+        url.endsWith("event-2")
+          ? response(200, seriesEventPage(null))
+          : response(200, eventPage("1")),
+      );
+
+      const { error } = await runRetrieve();
+
+      expect(error).toBeDefined();
+      expect(error.message).toContain("Could not reach 1 event page(s)");
+      expect(error.message).toContain("event-2");
     },
     TEST_TIMEOUT_MS,
   );
