@@ -8,6 +8,7 @@ const {
   expandSeriesLineUp,
 } = require("../expand-series-line-ups");
 const griffin = require("./fixtures/griffin-halloween.json");
+const diasporic = require("./fixtures/ual-diasporic-films.json");
 
 // As with expand-line-up-events.test.js, the parser is exercised directly
 // against a captured event page and the series' sessions rather than through
@@ -16,8 +17,8 @@ const griffin = require("./fixtures/griffin-halloween.json");
 const clone = (value) => JSON.parse(JSON.stringify(value));
 
 // The fixture's description, with one line swapped for another.
-const withDescription = (replace) => {
-  const details = clone(griffin.details);
+const withDescription = (replace, fixture = griffin) => {
+  const details = clone(fixture.details);
   const module = details.props.pageProps.context.structuredContent.modules.find(
     ({ type }) => type === "text",
   );
@@ -41,6 +42,10 @@ describe("expand-series-line-ups", () => {
       const details = clone(griffin.details);
       details.props.pageProps.context.basicInfo.isSeries = false;
       expect(getLineUpSeriesId(details)).toBeNull();
+    });
+
+    it("recognises a session of UAL's Diasporic Films series", () => {
+      expect(getLineUpSeriesId(diasporic.details)).toBe("2002518087506");
     });
 
     it("copes with an event whose page could not be read", () => {
@@ -223,6 +228,92 @@ describe("expand-series-line-ups", () => {
       expect(() =>
         expandSeriesLineUp(griffin.event, details, griffin.sessions),
       ).toThrow(/Expected a line-up in the description/);
+    });
+  });
+  describe("expandSeriesLineUp with a dated list", () => {
+    const expand = (
+      details = diasporic.details,
+      sessions = diasporic.sessions,
+    ) => expandSeriesLineUp(diasporic.event, details, sessions);
+
+    it("expands UAL's Diasporic Films series into one showing per night", () => {
+      const output = expand();
+
+      // The October nights have passed and dropped out of the series, though
+      // the description still lists them.
+      expect(output).toHaveLength(4);
+      expect(output.map(({ title }) => title)).toEqual([
+        "SURPRISE STUDENT SCREENING PICK + INTRO.",
+        "SURPRISE STUDENT SCREENING PICK + INTRO.",
+        "NEWS FROM HOME",
+        "QUEEN OF MY DREAMS",
+      ]);
+      expect(
+        output.map(({ showingId, performances: [performance] }) => ({
+          showingId,
+          time: new Date(performance.time).toISOString(),
+        })),
+      ).toEqual(
+        [
+          ["2002518246983", "2026-11-04T18:00:00.000Z"],
+          ["2002518247986", "2026-11-11T18:00:00.000Z"],
+          ["2002518248989", "2026-11-18T18:00:00.000Z"],
+          ["2002518249992", "2026-11-25T18:00:00.000Z"],
+        ].map(([id, time]) => ({
+          showingId: `eventbrite.co.uk-${id}`,
+          time,
+        })),
+      );
+
+      const data = clone(output).map(removeMatchingHints).map(addTestCategory);
+      expect(schemaValidate(data)).toBe(true);
+      expect(data).toMatchSnapshot();
+    });
+
+    it("takes the year from the list, and leaves it off a night without one", () => {
+      const output = expand();
+
+      expect(output.map(({ overview }) => overview.year)).toEqual([
+        undefined,
+        undefined,
+        "1976",
+        "2023",
+      ]);
+    });
+
+    it("gives each night only its own synopsis", () => {
+      const newsFromHome = expand().at(-2);
+
+      expect(newsFromHome.matchingHints.overview).toMatch(/Chantal Akerman/);
+      expect(newsFromHome.matchingHints.overview).not.toMatch(/Bollywood/);
+      // A synopsis is not billing for the night.
+      expect(newsFromHome.performances[0].notes).not.toMatch(/Akerman/);
+    });
+
+    it("picks up a film once the organiser names it", () => {
+      const details = withDescription(
+        (text) =>
+          text.replace(
+            "<li>04/11, *SURPRISE STUDENT SCREENING PICK + INTRO.* - Announced week of event.</li>",
+            '<li>04/11, <a href="https://example.com">LA HAINE</a> (1995) - Three friends.</li>',
+          ),
+        diasporic,
+      );
+
+      const [first] = expand(details);
+      expect(first.title).toBe("LA HAINE");
+      expect(first.overview.year).toBe("1995");
+    });
+
+    it("throws when a list entry's month doesn't match its session", () => {
+      const details = withDescription(
+        (text) => text.replace("<li>18/11,", "<li>18/12,"),
+        diasporic,
+      );
+
+      expect(() => expand(details)).toThrow(
+        /Expected one line-up entry for the Wed Nov 18 2026 session/,
+      );
     });
   });
 });
