@@ -1,5 +1,6 @@
 const {
   basicNormalize,
+  sanitizeRichText,
   generateShowingId,
   createOverview,
   createPerformance,
@@ -35,6 +36,11 @@ const LINE_UP_SERIES_IDS = [
   // nights, 26th to 30th October 2026.
   // https://www.eventbrite.co.uk/e/halloween-on-the-screen-at-the-griffin-tickets-2002715002484
   "2002714960358",
+  // UAL London College of Communication - Diasporic Films, a film each
+  // Wednesday from 7th October to 25th November 2026, listed as "07/10, Title
+  // (Year) - synopsis".
+  // https://www.eventbrite.co.uk/e/diasporic-films-tickets-2002518246983
+  "2002518087506",
 ];
 
 const DAY_NAMES = [
@@ -56,6 +62,19 @@ const LINE_UP_LINE =
 // billing for that night rather than part of the film's name.
 const TITLE_WITH_NOTE = /^(.+?)\s*\(([^()]+)\)\s*$/;
 
+// "07/10, <a href="...">MISSISSIPPI MASALA</a> (1991) - The vibrant cultures
+// of India...", one list item per night, with no day name or year, since the
+// sessions supply them. The items run together once the description is
+// flattened to text, so they are read from the list markup itself.
+const LIST_ITEM = /<li>(.*?)<\/li>/gis;
+const LIST_LINE_UP_ITEM = /^(\d{1,2})\/(\d{1,2}),\s*(.+)$/s;
+
+// "MISSISSIPPI MASALA (1991) - The vibrant cultures..." - the year and the
+// synopsis are optional, as a night whose film is still to be announced reads
+// "*SURPRISE STUDENT SCREENING PICK + INTRO.* - Announced week of event."
+const TITLE_WITH_YEAR = /^(.+?)\s*\((\d{4})\)\s*(?:[-–—]\s*(.*))?$/s;
+const TITLE_WITH_SYNOPSIS = /^(.+?)\s+[-–—]\s+(.*)$/s;
+
 /**
  * The series id of an event page, if it is one whose line-up we read.
  */
@@ -66,7 +85,7 @@ function getLineUpSeriesId(details) {
   return LINE_UP_SERIES_IDS.includes(seriesId) ? seriesId : null;
 }
 
-function parseLineUp(description) {
+function parseDayNameLineUp(description) {
   return description.split("\n").reduce((lineUp, line) => {
     const match = line.trim().match(LINE_UP_LINE);
     if (!match) return lineUp;
@@ -89,6 +108,56 @@ function parseLineUp(description) {
   }, []);
 }
 
+function getDescriptionMarkup(details) {
+  return (
+    details.props.pageProps.context.structuredContent?.modules
+      .filter(({ type }) => basicNormalize(type) === "text")
+      .map(({ text }) => text)
+      .join("\n") || ""
+  );
+}
+
+function parseListLineUp(markup) {
+  return [...markup.matchAll(LIST_ITEM)].reduce((lineUp, [, item]) => {
+    const line = sanitizeRichText(item.replace(/<[^>]+>/g, ""))
+      .replace(/\s+/g, " ")
+      .trim();
+    const match = line.match(LIST_LINE_UP_ITEM);
+    if (!match) return lineUp;
+
+    const [, day, month, remainder] = match;
+    const withYear = remainder.match(TITLE_WITH_YEAR);
+    const withSynopsis = remainder.match(TITLE_WITH_SYNOPSIS);
+    const [title, year, synopsis] = withYear
+      ? [withYear[1], withYear[2], withYear[3]]
+      : withSynopsis
+        ? [withSynopsis[1], undefined, withSynopsis[2]]
+        : [remainder, undefined, undefined];
+
+    return lineUp.concat({
+      line,
+      day: parseInt(day, 10),
+      month: parseInt(month, 10) - 1,
+      // Asterisks are the organiser's emphasis, not part of what the night is
+      // called.
+      title: title.replace(/^\*+|\*+$/g, "").trim(),
+      year,
+      synopsis: synopsis?.trim() || undefined,
+    });
+  }, []);
+}
+
+/**
+ * The line-up the description gives, in whichever of the two forms it is
+ * written: a line per night naming its day ("Monday 26th: The Craft"), or a
+ * list item per night naming its date ("07/10, Mississippi Masala (1991)").
+ */
+function parseLineUp(details) {
+  const dayNameLineUp = parseDayNameLineUp(getEventDescription(details));
+  if (dayNameLineUp.length > 0) return dayNameLineUp;
+  return parseListLineUp(getDescriptionMarkup(details));
+}
+
 /**
  * Pair each session of the series with the line-up entry naming its date.
  *
@@ -100,7 +169,11 @@ function parseLineUp(description) {
 function pairSessions(seriesId, lineUp, sessions) {
   const pairs = sessions.map((session) => {
     const date = parseDate(session.start.local.slice(0, 16));
-    const entries = lineUp.filter(({ day }) => day === date.getDate());
+    const entries = lineUp.filter(
+      ({ day, month }) =>
+        day === date.getDate() &&
+        (month === undefined || month === date.getMonth()),
+    );
     if (entries.length !== 1) {
       throw new Error(
         `Expected one line-up entry for the ${date.toDateString()} session ` +
@@ -110,7 +183,7 @@ function pairSessions(seriesId, lineUp, sessions) {
 
     const [entry] = entries;
     const expectedDayName = DAY_NAMES[date.getDay()];
-    if (entry.dayName !== expectedDayName) {
+    if (entry.dayName && entry.dayName !== expectedDayName) {
       throw new Error(
         `Line-up entry "${entry.line}" in series ${seriesId} says ${entry.dayName} ` +
           `but ${date.toDateString()} is a ${expectedDayName}`,
@@ -159,7 +232,7 @@ function expandSeriesLineUp(event, details, sessions) {
     );
   }
 
-  const lineUp = parseLineUp(getEventDescription(details));
+  const lineUp = parseLineUp(details);
   if (lineUp.length === 0) {
     throw new Error(
       `Expected a line-up in the description of series ${seriesId} but found none`,
@@ -186,7 +259,7 @@ function expandSeriesLineUp(event, details, sessions) {
       // Only this night's film, never the description as a whole: that names
       // all of them, and is what had the season categorised as one showing of
       // several films.
-      const overview = [entry.title, event.summary, entry.note]
+      const overview = [entry.title, event.summary, entry.synopsis, entry.note]
         .filter(Boolean)
         .join("\n\n");
       const isFetchedSession = `${session.id}` === `${fetchedSessionId}`;
@@ -195,7 +268,7 @@ function expandSeriesLineUp(event, details, sessions) {
         showingId: generateShowingId(attributes, session.id),
         title: entry.title,
         url: session.url,
-        overview: createOverview({ duration }),
+        overview: createOverview({ duration, year: entry.year }),
         performances: [
           createPerformance({
             date,

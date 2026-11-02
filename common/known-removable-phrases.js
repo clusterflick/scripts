@@ -1916,6 +1916,10 @@ const knownRemovablePhrases = [
   "special Halloween showing",
   "Super-Homo: Homicidal Divas:",
   "A Black British Zombie Thriller",
+  "AIA UK Movie Night:",
+  "@Bonny Downs Community Association",
+  "@Red Door Studios",
+  ": Community Screening",
 ];
 
 module.exports = knownRemovablePhrases;

@@ -337,6 +337,13 @@ const nonFilmEvents = [
   // A live music session by the collective RITO at Mosaic Rooms, which Luma
   // lists under Arts & Culture.
   /^RITO\b.*Islands Above.*Roots Below/i,
+  // A fan convention for the Arknights games, with no film attached to it.
+  /^2026 Arknights and Endfield Only UK$/i,
+  // A youth club session at the Museum of Youth Culture, with no film
+  // attached to it.
+  /^Relaxed Youth Club at The Museum of Youth Culture\b/i,
+  // A jazz concert of film and Christmas songs, with no film attached to it.
+  /^Jazz at the Movies: A Swingin['’] Christmas$/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
