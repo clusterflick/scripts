@@ -84,6 +84,7 @@ const mockVenuesAddedSinceFixtures = [
   "hartshoreditch.com",
   "stpaulswesthackney.org",
   "ucl.ac.uk-cruciform-building",
+  "thearthouse.live",
   // Held, not added: its only events in the fixtures are at "Gorvy Lecture
   // Theatre, Royal College of Art", which it was found under neither by name
   // nor, before leading room parts were skipped, by "Royal College of Art".
