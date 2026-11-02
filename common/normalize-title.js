@@ -53,6 +53,8 @@ function normalizeTitle(title, options) {
 
   // Specific corrections
   const corrections = [
+    [/^Palestine Cinema Days(?: Around the World)?:/i, ""],
+    ["She-Punks", "She Punks"],
     // Museum of Youth Culture bills the night and names the film only in its text
     ["an evening with the slits", "here to be heard the story of the slits"],
     [/&amp;/g, "&"], // Global, as a title can carry more than one

@@ -3,6 +3,7 @@ const { isNonFilmEvent, isNotNonFilmEvent } = require("../is-non-film-event");
 describe("isNonFilmEvent", () => {
   test.each([
     ["Community Pilates"],
+    ["RITO — Islands Above, Roots Below"],
     ["Bearpit Karaoke"],
     ["Paint your own Carafe or  Shot Glasses"],
     ["Sip and Paint Experience"],

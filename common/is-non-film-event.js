@@ -334,6 +334,9 @@ const nonFilmEvents = [
   /^International Climate & Sustainability Youth Summit 2026 - COP31$/i,
   // A music session, with no film attached to it.
   /^FREE EVENT: London Scandi Session led by Chris Dyer$/i,
+  // A live music session by the collective RITO at Mosaic Rooms, which Luma
+  // lists under Arts & Culture.
+  /^RITO\b.*Islands Above.*Roots Below/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
