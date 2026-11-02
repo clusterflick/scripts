@@ -1920,6 +1920,9 @@ const knownRemovablePhrases = [
   "@Bonny Downs Community Association",
   "@Red Door Studios",
   ": Community Screening",
+  "Women and the World:",
+  "with Pink Palace",
+  "25 Years Anniversary",
 ];
 
 module.exports = knownRemovablePhrases;

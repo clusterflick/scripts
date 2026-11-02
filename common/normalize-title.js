@@ -201,6 +201,7 @@ function normalizeTitle(title, options) {
     [/\bCBeebies Panto \d{4}\b/i, "CBeebies Panto"],
     ["Ex Libris - ", "Ex Libris: "],
     ["Dovzhenko. The First Look", "Dovzhenko. First Sight"],
+    ["Dovzhenko. First Look", "Dovzhenko. First Sight"],
     ["Bison - ", "Bison: "],
     ["Between Two Worlds - ", "Between Two Worlds: "],
     ["COLD ISLANDERS - ", "COLD ISLANDERS: "],
@@ -1012,9 +1013,10 @@ function normalizeTitle(title, options) {
     // on the front of the standard title. A venue billing the strand as a day
     // out sells the same unnamed film, so the word goes with the billing
     // rather than being left on the end as "mystery movie day". Only the
-    // singular: "mystery movie days" is a season rather than one screening.
+    // singular: "mystery movie days" is a season rather than one screening. A
+    // "pick" is the same unnamed film, so it goes with the billing too.
     [
-      /(free |monthly )?(late night )?(mystery|surprise) ((?!short )[\w+]+ )?((?!short )[\w+]+ )?(night|film|movie|cinema|screening|matinees?):?( Nov| \d| day\b)?/i,
+      /(free |monthly )?(late night )?(mystery|surprise) ((?!short )[\w+]+ )?((?!short )[\w+]+ )?(night|film|movie|cinema|screening|matinees?):?( Nov| \d| day\b| pick\b)?/i,
       "mystery movie",
     ],
     // The strand is billed with the year it runs in on the front, so the
