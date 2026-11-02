@@ -342,9 +342,9 @@ awk '/^  retrieve_/{g=$1} /npm run retrieve --/{c[g]++} END{for(k in c) print c[
 
 A standalone venue goes in one of `retrieve_remaining_cinemas_1` to `_6`, which
 run on `ubuntu-latest`, once a run of data-retrieved's `experiment.yml` there
-has shown it retrieves cleanly. One that needs Camoufox, or that GitHub's
-IPs are refused by, goes in `retrieve_remaining_cinemas_9` instead. See
-"Runner selection" in data-retrieved's CLAUDE.md.
+has shown it retrieves cleanly. One that needs Camoufox, or that GitHub's IPs
+are refused by, goes in `retrieve_remaining_cinemas_9` instead. See "Runner
+selection" in data-retrieved's CLAUDE.md.
 
 The numbered retrieve and transform groups are **not** paired one-to-one, so
 pick the smallest group on each side independently.
@@ -525,7 +525,8 @@ their calendar files. Add a row in alphabetical order by venue name and update
 the "There are currently N supported venues" count above the table:
 
 ```markdown
-| <Venue Name> | [`<venue-id>`](https://clusterflick.com/datasets/calendars/<venue-id>.ics) |
+| <Venue Name> |
+[`<venue-id>`](https://clusterflick.com/datasets/calendars/<venue-id>.ics) |
 ```
 
 Link to the feed hosted on clusterflick.com, not the `data-calendar` release
