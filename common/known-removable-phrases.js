@@ -587,6 +587,7 @@ const knownRemovablePhrases = [
   "(ScreenX) ",
   "(SS) ",
   "007:",
+  "James Bond:",
   "25 and Under",
   "25 & Under",
   "90s Nostalgia:",
