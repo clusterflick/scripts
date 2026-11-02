@@ -1,7 +1,6 @@
 const path = require("node:path");
 const cheerio = require("cheerio");
 const { parse, differenceInMinutes, isValid } = require("date-fns");
-const { enGB } = require("date-fns/locale/en-GB");
 const {
   createPerformance,
   createOverview,
@@ -19,55 +18,10 @@ const {
   extractEventIdFromUrl,
   isAccessCodePage,
   isMultipleDates,
+  parseDateText,
+  parseWithFormats,
+  TIME_FORMATS,
 } = require("./utils");
-
-// A full date-and-time chunk, e.g. "Mon 3 Aug 2026 19:00" or "Mon 20 Jul 2026 1:00 PM"
-const DATE_FORMATS = ["EEE d MMM yyyy h:mm a", "EEE d MMM yyyy HH:mm"];
-// A bare time chunk on the start's day, e.g. "22:30" or "10:30 PM"
-const TIME_FORMATS = ["h:mm a", "HH:mm"];
-// A full date with no time, e.g. "Sun 26 Jul 2026"
-const DATE_ONLY_FORMATS = ["EEE d MMM yyyy"];
-
-// Try each format in turn and return the first valid parse, or null if none match.
-function parseWithFormats(text, formats, reference) {
-  for (const format of formats) {
-    const parsed = parse(text, format, reference, { locale: enGB });
-    if (isValid(parsed)) return parsed;
-  }
-  return null;
-}
-
-function parseDateText(dateText) {
-  // Strip a trailing timezone token (e.g. "... 3:00 PM BST").
-  const normalized = dateText.replace(/\s+(BST|GMT|UTC)$/i, "").trim();
-  const [startText, endText] = normalized.split(" - ");
-
-  const start = parseWithFormats(startText, DATE_FORMATS, new Date());
-  if (!start) {
-    throw new Error(`Unable to parse start date from date text: "${dateText}"`);
-  }
-
-  if (endText && parseWithFormats(endText, DATE_ONLY_FORMATS, new Date())) {
-    // A bare end date with no time (e.g. "Sun 26 Jul 2026") means the listing
-    // spans multiple days — a festival/discovery pass rather than a single movie
-    // showing — so drop it.
-    return null;
-  }
-
-  let end = null;
-  if (endText && !parseWithFormats(endText, DATE_FORMATS, new Date())) {
-    // A full date in the end chunk (rather than a bare time) means the source
-    // has crammed two separate events into one listing — a misconfiguration on
-    // their part. In that case leave the end null; otherwise the end chunk is a
-    // bare time anchored to the start's day.
-    end = parseWithFormats(endText, TIME_FORMATS, start);
-    if (!end) {
-      throw new Error(`Unable to parse end time from date text: "${dateText}"`);
-    }
-  }
-
-  return { start, end };
-}
 
 function parseEventsFromPage(html, slug) {
   const $ = cheerio.load(html);
@@ -92,7 +46,7 @@ function parseEventsFromPage(html, slug) {
       return;
     }
 
-    // Skip listings spanning several days
+    // Skip listings that are not a single timed showing
     const parsedDate = parseDateText(dateText);
     if (!parsedDate) return;
 
