@@ -152,6 +152,11 @@ describe("isNonFilmEvent", () => {
     ["International Climate & Sustainability Youth Summit 2026 - COP31"],
     ["FREE EVENT: London Scandi Session led by Chris Dyer"],
     ["Silk Bonnet Making Workshop"],
+    ["2026 Arknights and Endfield Only UK"],
+    [
+      "Relaxed Youth Club at The Museum of Youth Culture for 13-17 year olds. A new space for young people.",
+    ],
+    ["Jazz at the Movies: A Swingin' Christmas"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });

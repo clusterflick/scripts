@@ -271,6 +271,9 @@ function normalizeTitle(title, options) {
     [/ - free screening( - \w+)?$/i, ""],
     ["FREE Screening - ", "Free Screening: "],
     ["Crafty Movie Night - ", "Crafty Movie Night: "],
+    ["AIA UK Movie Night - ", "AIA UK Movie Night: "],
+    // The bracket is part of the title, not a note to cut it at
+    ["Being [More Than] Human", "Being More Than Human"],
     ["Girlguiding Screening - ", "Girlguiding Screening: "],
     ["SEEN Charity Film Screening - ", "SEEN Charity Film Screening: "],
     ["Charity Screening - ", "Charity Screening: "],
