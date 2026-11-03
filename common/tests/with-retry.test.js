@@ -189,6 +189,34 @@ describe("fetchWithRetry retryStatuses", () => {
     expect(response.status).toBe(200);
     expect(global.fetch).toHaveBeenCalledTimes(2);
   });
+
+  it.each([520, 521, 522, 523, 524])(
+    "retries Cloudflare's origin error %i without any opt-in",
+    async (status) => {
+      global.fetch = jest
+        .fn()
+        .mockResolvedValueOnce(htmlResponse(status))
+        .mockResolvedValueOnce(htmlResponse(200, "ok"));
+
+      const { value: response } = await settleWithTimers(
+        fetchWithRetry("https://example.com", {}, { retries: 3, delayMs: 10 }),
+      );
+
+      expect(response.status).toBe(200);
+      expect(global.fetch).toHaveBeenCalledTimes(2);
+    },
+  );
+
+  it("does not retry a 525 TLS handshake failure", async () => {
+    global.fetch = jest.fn().mockResolvedValue(htmlResponse(525));
+
+    const { value: response } = await settleWithTimers(
+      fetchWithRetry("https://example.com", {}, { retries: 3, delayMs: 10 }),
+    );
+
+    expect(response.status).toBe(525);
+    expect(global.fetch).toHaveBeenCalledTimes(1);
+  });
 });
 
 describe("fetchWithRetry bot refusals", () => {

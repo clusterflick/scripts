@@ -355,7 +355,18 @@ const withRetry = async (
 // HTTP statuses worth retrying: 429 (rate limited) and transient upstream
 // failures. Other non-ok statuses (404, 401, etc.) are not transient and
 // should fail immediately rather than burning the retry budget.
-const RETRYABLE_STATUSES = new Set([429, 502, 503, 504]);
+//
+// 520-524 are Cloudflare's own answers for an origin that misbehaved behind it
+// (an empty or unreadable reply, a refused or timed-out connection, a reply
+// that took too long) - the same transient upstream failures as 502/504, worn
+// under Cloudflare's codes. Wilton's voided a retrieve on a 520 from one of its
+// event pages, a different page on each of three attempts: a per-request retry
+// would have carried it, while re-running the whole venue just drew another
+// page into the same lottery. 525/526 (TLS handshake, invalid certificate) are
+// left out, being configuration rather than load.
+const RETRYABLE_STATUSES = new Set([
+  429, 502, 503, 504, 520, 521, 522, 523, 524,
+]);
 
 // Retry-After is either a number of seconds or an HTTP date. Returns ms, or
 // undefined when absent/unparseable so the caller falls back to its own delay.
