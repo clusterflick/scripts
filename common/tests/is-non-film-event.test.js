@@ -157,6 +157,13 @@ describe("isNonFilmEvent", () => {
       "Relaxed Youth Club at The Museum of Youth Culture for 13-17 year olds. A new space for young people.",
     ],
     ["Jazz at the Movies: A Swingin' Christmas"],
+    ["You been writing?"],
+    ["Art as a Living Entity"],
+    ["Beyond the Canvas"],
+    ["Fictional Self: How Best I Could Be"],
+    ["Pulling at Threads"],
+    ["UnWorlding: Grand designs for a breaking point"],
+    ["v=d/t (me/here)"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });

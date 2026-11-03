@@ -209,6 +209,7 @@ const knownRemovablePhrases = [
   " with Avery McNeilly",
   " with Pen Farthing",
   " with Inna Shevchenko",
+  " and Maryam Namazie",
   "with DJ Fraggle",
   " with Shadow Cast",
   // A touring programme credits the collective it co-presented each screening
@@ -1215,6 +1216,8 @@ const knownRemovablePhrases = [
   "Phoenix Classic:",
   "Culty Classic:",
   "PhotoMonth:",
+  "WCD:",
+  " event in the House of Parliament",
   "Palestine Solidarity Day:",
   "PRIFF 2026:",
   "Part I: Hridayam",
