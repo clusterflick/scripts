@@ -359,6 +359,25 @@ draw rather than a fixed result - and since `cache-llm` is keyed by day, a
 near-tie listing gets a fresh draw each morning. Thirteen rows drawn from the
 known-hard tail is not a mandate, which is why the default has not moved.
 
+## Helper Scripts
+
+`helpers/` scripts that run long jobs - model comparisons, sweeps over many
+venues - are run by a person who wants to know how far along it is, and who
+then has to share the result. Write new ones to that, rather than copying the
+older `compare-*` helpers, which do none of it:
+
+- **Say the size of the job up front, then count through it.** Print what will
+  run before starting (e.g. "9 models x 140 rows x 3 draws = 3,780 calls") and
+  show progress against that total on one updating line, with an estimate of
+  time remaining once there's a rate to go on.
+- **Keep the terminal quiet.** Progress and a short summary only; silence what
+  the pipeline code logs per call (`callLlm` prints every uncached request).
+  Detail belongs in the file, not in scrollback someone has to search.
+- **Write results to a file per unit of work** (per model, per venue) as each
+  one finishes, and print where they went. The person reading them should be
+  able to upload the files, not copy them out of a terminal - and a run that
+  dies halfway keeps what it finished.
+
 ## CI/CD
 
 GitHub Actions (`.github/workflows/ci.yml`):
