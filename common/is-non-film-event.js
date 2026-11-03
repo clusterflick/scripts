@@ -344,6 +344,14 @@ const nonFilmEvents = [
   /^Relaxed Youth Club at The Museum of Youth Culture\b/i,
   // A jazz concert of film and Christmas songs, with no film attached to it.
   /^Jazz at the Movies: A Swingin['’] Christmas$/i,
+  // Events with no film attached to them, listed alongside screenings.
+  /^You been writing\?$/i,
+  /^Art as a Living Entity$/i,
+  /^Beyond the Canvas$/i,
+  /^Fictional Self: How Best I Could Be$/i,
+  /^Pulling at Threads$/i,
+  /^UnWorlding: Grand designs for a breaking point$/i,
+  /^v=d\/t \(me\/here\)$/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
