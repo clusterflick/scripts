@@ -20,11 +20,13 @@ const MODEL = "gpt-6-luna";
 const CAPABLE_MODEL = "gpt-6.1-terra";
 
 // Both are reasoning models, whose effort defaults to medium and is billed
-// as output. "none" keeps the default model where gpt-4.1-nano was - no
-// reasoning, temperature 0 - while the capable model reasons a little, as its
-// Gemini counterpart thinks a little. OpenAI accepts temperature only at
-// "none", so it is sent only there.
-const REASONING_EFFORT = { [MODEL]: "none", [CAPABLE_MODEL]: "low" };
+// as output. Both run at "none" - no reasoning, temperature 0. For the
+// capable model that was measured rather than assumed: naming the films in
+// multi-film listings, reasoning at "low" found nothing more and named ten
+// times as many films the listing didn't screen, and answered no more
+// steadily. OpenAI accepts temperature only at "none", so it is sent only
+// there.
+const REASONING_EFFORT = { [MODEL]: "none", [CAPABLE_MODEL]: "none" };
 
 let client = null;
 

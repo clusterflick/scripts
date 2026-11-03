@@ -34,12 +34,16 @@ const MODEL = "gemini-2.5-flash-lite";
 // step up from.
 const CAPABLE_MODEL = "gemini-3.8-flash";
 
-// Gemini 3 models think at a model-dependent default (medium for 3.8 Flash),
-// billed as output. Recalling a franchise's films needs knowledge rather than
-// deliberation, so "LOW" - the lowest 3.8 Flash accepts, as MINIMAL is an
-// error there. Set per model because thinkingLevel is an error on 2.5 models,
-// which MODEL still is.
-const THINKING_LEVEL = { [CAPABLE_MODEL]: "LOW" };
+// Gemini 3 models think at a model-dependent default, billed as output. For
+// 3.8 Flash that is "MEDIUM", and it is set explicitly because it was measured
+// against "LOW" on multi-film listings: both recalled the same films, but
+// MEDIUM named under half as many films the listing didn't screen and changed
+// answer between identical calls half as often. Set per model because
+// thinkingLevel is an error on 2.5 models, which MODEL still is.
+//
+// The pipeline's capable tier is OpenAI's by default (CAPABLE_LLM_PROVIDER in
+// ./llm-client.js); this is what it gets when that is set to "gemini".
+const THINKING_LEVEL = { [CAPABLE_MODEL]: "MEDIUM" };
 
 /**
  * Call Gemini with caching and standard configuration. See ./llm-client.js for

@@ -135,7 +135,7 @@ describe("llm-client-gemini", () => {
       "thinkingConfig",
     );
     expect(capableCall[0].generationConfig.thinkingConfig).toEqual({
-      thinkingLevel: "LOW",
+      thinkingLevel: "MEDIUM",
     });
   });
 
