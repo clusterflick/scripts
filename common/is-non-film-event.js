@@ -352,6 +352,9 @@ const nonFilmEvents = [
   /^Pulling at Threads$/i,
   /^UnWorlding: Grand designs for a breaking point$/i,
   /^v=d\/t \(me\/here\)$/i,
+  /^Breaking the silence: From the Streets to the Screen$/i,
+  /^Book your ticket to the Media Mind 2026 Final!$/i,
+  /^Wreath making with Bloomsbury Flowers$/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>

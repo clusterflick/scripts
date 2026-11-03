@@ -950,6 +950,11 @@ function normalizeTitle(title, options) {
     // alone: "The Santa Claus" on its own is another venue's listing, and
     // correcting every venue's spelling from here would reach the films that
     // really are about Santa Claus.
+    // JOIA also bills some dinner tickets with the dinner first and the film
+    // last ("DINNER IN TOZI 1 sofa, 2 people - Tuesday 15th December - Love
+    // Actually"), which would keep the seating as the title. Put the film
+    // first, the way its other dinner tickets read.
+    [/^(DINNER IN TOZI)\b.*\s-\s(.+)$/i, "$2 - $1"],
     [/The Santa Claus(?=\s*-\s*DINNER IN TOZI)/i, "The Santa Clause"],
     // The same venue bills the 2000 film the way the rhyme runs rather than
     // the way it is titled, so it arrives under a second name. Corrected for
@@ -969,6 +974,7 @@ function normalizeTitle(title, options) {
     ["And Life Goes On", "Life, and Nothing More…"],
     ["Sumud / Life endures", "Sumud: Life endures"],
     ["Romeo + Juliet", "Romeo+Juliet"],
+    ["Ghost stories, cocktails + ", "Ghost stories, cocktails & "],
     ["PEFF26 |", "PEFF26: "],
     [
       /^Buster Keaton's Sherlock Jr\. with R\.E\.M\..*/i,
