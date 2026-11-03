@@ -28,7 +28,22 @@ const MODEL = "gemini-2.5-flash-lite";
 // world knowledge Flash-Lite unreliably recalls. Callers request it with
 // `preferCapableModel` rather than a raw model name, since that name is
 // Gemini-specific and callLlm also has an OpenAI implementation.
-const CAPABLE_MODEL = "gemini-2.5-flash";
+//
+// Not a Lite model: gemini-2.5-flash, which this was, shuts down on 2026-12-01
+// and Google redirects it to gemini-3.5-flash-lite - the tier this exists to
+// step up from.
+const CAPABLE_MODEL = "gemini-3.8-flash";
+
+// Gemini 3 models think at a model-dependent default, billed as output. For
+// 3.8 Flash that is "MEDIUM", and it is set explicitly because it was measured
+// against "LOW" on multi-film listings: both recalled the same films, but
+// MEDIUM named under half as many films the listing didn't screen and changed
+// answer between identical calls half as often. Set per model because
+// thinkingLevel is an error on 2.5 models, which MODEL still is.
+//
+// The pipeline's capable tier is OpenAI's by default (CAPABLE_LLM_PROVIDER in
+// ./llm-client.js); this is what it gets when that is set to "gemini".
+const THINKING_LEVEL = { [CAPABLE_MODEL]: "MEDIUM" };
 
 /**
  * Call Gemini with caching and standard configuration. See ./llm-client.js for
@@ -63,6 +78,9 @@ async function callLlm({
 
     const config = { ...generationConfig };
     if (maxOutputTokens) config.maxOutputTokens = maxOutputTokens;
+    if (THINKING_LEVEL[model]) {
+      config.thinkingConfig = { thinkingLevel: THINKING_LEVEL[model] };
+    }
     if (responseSchema) {
       config.responseMimeType = "application/json";
       config.responseSchema = responseSchema;
@@ -87,7 +105,10 @@ async function callLlm({
     promptChars: prompt.length,
     ...(usage && {
       promptTokens: usage.promptTokenCount,
-      candidatesTokens: usage.candidatesTokenCount,
+      // Thinking is billed as output but reported apart from the response
+      // candidates, so the usage report counts it with them.
+      candidatesTokens:
+        usage.candidatesTokenCount + (usage.thoughtsTokenCount ?? 0),
     }),
   });
 

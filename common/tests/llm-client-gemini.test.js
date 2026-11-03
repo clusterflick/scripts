@@ -9,9 +9,8 @@ const { getLlmUsageLog, clearLlmUsageLog } = require("../llm-usage-log");
 // singleton, so the mock instance (and these spies) has to be fixed up front
 // rather than reconfigured per test.
 const sendMessage = jest.fn();
-const getGenerativeModel = jest.fn(() => ({
-  startChat: () => ({ sendMessage }),
-}));
+const startChat = jest.fn(() => ({ sendMessage }));
+const getGenerativeModel = jest.fn(() => ({ startChat }));
 GoogleGenerativeAI.mockImplementation(() => ({ getGenerativeModel }));
 
 const { callLlm } = require("../llm-client-gemini");
@@ -25,6 +24,7 @@ describe("llm-client-gemini", () => {
     dailyLlmCache.mockReset();
     sendMessage.mockReset();
     getGenerativeModel.mockClear();
+    startChat.mockClear();
   });
 
   it("records an uncached call's token usage against its cacheKeyPrefix", async () => {
@@ -82,6 +82,63 @@ describe("llm-client-gemini", () => {
     ]);
   });
 
+  it("counts thinking tokens with the candidates, since both are billed as output", async () => {
+    dailyLlmCache.mockImplementation((key, retrieve) => retrieve());
+    sendMessage.mockResolvedValue({
+      response: {
+        text: () => "{}",
+        usageMetadata: {
+          promptTokenCount: 42,
+          candidatesTokenCount: 7,
+          thoughtsTokenCount: 30,
+        },
+      },
+    });
+
+    await callLlm({
+      systemInstruction: "system",
+      prompt: "prompt",
+      cacheKeyPrefix: "identify-multiple-movies",
+      logMessage: "Identifying",
+      preferCapableModel: true,
+    });
+
+    expect(getLlmUsageLog()).toEqual([
+      expect.objectContaining({ promptTokens: 42, candidatesTokens: 37 }),
+    ]);
+  });
+
+  it("sets a thinking level only for the capable model", async () => {
+    dailyLlmCache.mockImplementation((key, retrieve) => retrieve());
+    sendMessage.mockResolvedValue({
+      response: {
+        text: () => "{}",
+        usageMetadata: { promptTokenCount: 1, candidatesTokenCount: 1 },
+      },
+    });
+    await callLlm({
+      systemInstruction: "system",
+      prompt: "prompt",
+      cacheKeyPrefix: "ask-llm",
+      logMessage: "Asking",
+    });
+    await callLlm({
+      systemInstruction: "system",
+      prompt: "prompt",
+      cacheKeyPrefix: "identify-multiple-movies",
+      logMessage: "Identifying",
+      preferCapableModel: true,
+    });
+
+    const [defaultCall, capableCall] = startChat.mock.calls;
+    expect(defaultCall[0].generationConfig).not.toHaveProperty(
+      "thinkingConfig",
+    );
+    expect(capableCall[0].generationConfig.thinkingConfig).toEqual({
+      thinkingLevel: "MEDIUM",
+    });
+  });
+
   it("uses the capable model and a distinct cache key when preferCapableModel is set", async () => {
     dailyLlmCache.mockImplementation((key, retrieve) => retrieve());
     sendMessage.mockResolvedValue({
@@ -100,10 +157,10 @@ describe("llm-client-gemini", () => {
     });
 
     expect(getGenerativeModel).toHaveBeenCalledWith(
-      expect.objectContaining({ model: "gemini-2.5-flash" }),
+      expect.objectContaining({ model: "gemini-3.8-flash" }),
     );
     expect(getLlmUsageLog()).toEqual([
-      expect.objectContaining({ model: "gemini-2.5-flash" }),
+      expect.objectContaining({ model: "gemini-3.8-flash" }),
     ]);
   });
 });

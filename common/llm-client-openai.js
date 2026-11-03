@@ -5,16 +5,28 @@ const { parseLlmJson } = require("./parse-llm-json");
 const { recordLlmUsage } = require("./llm-usage-log");
 require("dotenv").config();
 
-// "gpt-4.1-nano" for price parity with Gemini Flash-Lite. The cache key
+// "gpt-6-luna" for near price parity with Gemini Flash-Lite. gpt-4.1-nano,
+// which this was, was scheduled to shut down on 2026-10-23; OpenAI named
+// gpt-5.6-luna as its substitute, but at twice the input price of the newer
+// gpt-6-luna, its pick for the rest of the GPT-4 series. The cache key
 // includes the model name, so switching here never reuses another model's
 // cached answers.
-const MODEL = "gpt-4.1-nano";
+const MODEL = "gpt-6-luna";
 
 // A capability step up over the default - see CAPABLE_MODEL in
 // llm-client-gemini.js for what it's for. Callers request it with
 // `preferCapableModel` rather than a raw model name, since that name is
-// provider-specific.
-const CAPABLE_MODEL = "gpt-4.1-mini";
+// provider-specific. Replaces gpt-4.1-mini, shutting down 2027-01-14.
+const CAPABLE_MODEL = "gpt-6.1-terra";
+
+// Both are reasoning models, whose effort defaults to medium and is billed
+// as output. Both run at "none" - no reasoning, temperature 0. For the
+// capable model that was measured rather than assumed: naming the films in
+// multi-film listings, reasoning at "low" found nothing more and named ten
+// times as many films the listing didn't screen, and answered no more
+// steadily. OpenAI accepts temperature only at "none", so it is sent only
+// there.
+const REASONING_EFFORT = { [MODEL]: "none", [CAPABLE_MODEL]: "none" };
 
 let client = null;
 
@@ -63,9 +75,11 @@ async function callLlm({
     // explicit instruction so it's guaranteed regardless of the caller's prompt.
     const jsonSystemInstruction = `${systemInstruction}\n\nRespond with a single valid JSON object and nothing else.`;
 
+    const reasoningEffort = REASONING_EFFORT[model];
     const completion = await getClient().chat.completions.create({
       model,
-      temperature: 0,
+      reasoning_effort: reasoningEffort,
+      ...(reasoningEffort === "none" && { temperature: 0 }),
       max_completion_tokens: maxOutputTokens || 2048,
       response_format: { type: "json_object" },
       messages: [
