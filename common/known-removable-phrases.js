@@ -1929,6 +1929,8 @@ const knownRemovablePhrases = [
   "Women and the World:",
   "with Pink Palace",
   "25 Years Anniversary",
+  " by Leethal Reppin",
+  ": A Hundred Voices Through the Moon's Eyes",
 ];
 
 module.exports = knownRemovablePhrases;
