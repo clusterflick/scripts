@@ -164,6 +164,13 @@ describe("isNonFilmEvent", () => {
     ["Pulling at Threads"],
     ["UnWorlding: Grand designs for a breaking point"],
     ["v=d/t (me/here)"],
+    [
+      "Rhythm Race Revolution | Sounding Towards: Trumpets of Collective Liberation",
+    ],
+    [
+      "Rhythm Race Revolution | Sounding Towards: Trumpets of Collective Liberation Day 2",
+    ],
+    ["Performance | Hoda Siahtiri"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });
