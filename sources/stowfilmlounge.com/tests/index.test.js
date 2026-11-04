@@ -131,6 +131,41 @@ describe(`${attributes.name}`, () => {
     );
   });
 
+  // Markup trimmed from the live page, where the film time was followed by
+  // "& Close" rather than a comma, and one was typed with a semicolon
+  it.each([
+    ["Doors Open 16:30, Film 17:00 & Close 18:30", "2026-12-19T17:00:00Z"],
+    ["Doors Open 19:15, Film 19;45 & Close 21:30", "2026-12-19T19:45:00Z"],
+  ])("reads the film time from %p", async (timesText, expected) => {
+    const movieListPage = `
+      <section>
+        <div class="sqs-html-content">
+          <h3>STOW FILM LOUNGE @ ST. MARY’S CHURCH</h3>
+          <h4>SATURDAY 19TH DECEMBER</h4>
+        </div>
+        <figure>
+          <figcaption>
+            <p>THE MUPPETS CHRISTMAS CAROL (Brian Henson, 1992, Cert U, 85mins)</p>
+            <p>${timesText.replace("&", "&amp;")}</p>
+          </figcaption>
+        </figure>
+        <div class="sqs-block-button-container">
+          <a href="/buytickets/p/muppets-christmas-carol">BOOK NOW</a>
+        </div>
+      </section>
+    `;
+
+    readJSON.mockImplementation(() => ({ movieListPage }));
+
+    const output = await findEvents(stMarysChurchCinema);
+
+    expect(output).toHaveLength(1);
+    expect(new Date(output[0].performances[0].time)).toEqual(
+      new Date(expected),
+    );
+    expect(output[0].performances[0].notes).toBe("");
+  });
+
   it("throws when neither a film nor a doors time is published", async () => {
     const movieListPage = `
       <section>

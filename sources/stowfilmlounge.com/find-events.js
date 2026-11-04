@@ -46,8 +46,12 @@ function parseFilmInfo(filmText) {
   };
 }
 
-const filmTimeMatcher = /Films?\s+([^,]+)/i;
-const doorsTimeMatcher = /Doors:?\s+(?:open\s+)?(\d{1,2}:\d{2})/i;
+// Times are matched as a time rather than as everything up to the next comma:
+// the separators between doors, film and close vary ("Film 17:00 & Close
+// 18:30"). A semicolon is taken as a typo for the colon ("Film 19;45").
+const filmTimeMatcher = /Films?\s+(\d{1,2}[:;]\d{2})/i;
+const doorsTimeMatcher = /Doors:?\s+(?:open\s+)?(\d{1,2}[:;]\d{2})/i;
+const normaliseTime = (time) => time.replace(";", ":");
 
 /**
  * Most screenings give a film time ("Doors 19:00, Film 19:45, Close 22:30"),
@@ -58,10 +62,13 @@ const doorsTimeMatcher = /Doors:?\s+(?:open\s+)?(\d{1,2}:\d{2})/i;
  */
 function getEventTime(timesText) {
   const filmMatch = timesText.match(filmTimeMatcher);
-  if (filmMatch) return { time: filmMatch[1].trim(), isDoorsTime: false };
+  if (filmMatch)
+    return { time: normaliseTime(filmMatch[1]), isDoorsTime: false };
 
   const doorsMatch = timesText.match(doorsTimeMatcher);
-  if (doorsMatch) return { time: doorsMatch[1], isDoorsTime: true };
+  if (doorsMatch) {
+    return { time: normaliseTime(doorsMatch[1]), isDoorsTime: true };
+  }
 
   throw new Error(`Could not extract film or doors time from "${timesText}"`);
 }
