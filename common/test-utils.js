@@ -50,8 +50,13 @@ const SENSITIVE_BODY_PATTERNS = [
 // Keyed by host, because these are ordinary words: a `members` or `email` field
 // on some other source may be exactly what that source is read for, and this
 // must not quietly delete it.
+//
+// Tzkrti embeds the organiser's whole account in every event as `user` -
+// their email address and phone number among it. Retrieve drops it before it
+// reaches retrieved data, and this keeps it out of the recordings too.
 const SENSITIVE_BODY_FIELDS = {
   "app.clyx.com": ["members", "email", "stripeConnectId"],
+  "tzkrti.com": ["user"],
 };
 
 // Delete the named keys wherever they appear, at any depth - an event record
