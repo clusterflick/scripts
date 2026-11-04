@@ -1225,10 +1225,10 @@ function normalizeTitle(title, options) {
     // carry it must not have it prefixed a second time.
     [/^BTS '?Arirang'?/i, "BTS World Tour 'Arirang'"],
     ["BTS World Tour - ", "BTS World Tour: "],
-    // TheMovieDB brackets the tour name and leaves the city on without the
-    // ": Live" the city rule above anchors on.
+    // TheMovieDB brackets the tour name, and some venues quote it, leaving
+    // the city on without the ": Live" the city rule above anchors on.
     [
-      /^BTS World Tour \[Arirang\] in [\p{L}\s'-]+$/iu,
+      /^BTS World Tour [['‘’]?Arirang[\]'‘’]? in [\p{L}\s'-]+$/iu,
       "BTS World Tour 'Arirang'",
     ],
     ["Records, cocktails + ", "Records, cocktails: "],

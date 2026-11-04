@@ -363,6 +363,10 @@ const nonFilmEvents = [
   /^Rhythm Race Revolution \| Sounding Towards: Trumpets of Collective Liberation\b/i,
   // A voice performance at Mosaic Rooms, listed on Tzkrti.
   /^Performance \| Hoda Siahtiri$/i,
+  // A performance at Mosaic Rooms, listed on Tzkrti.
+  /^Performance \| In the Presence of the Absent Bird$/i,
+  // A collage-making workshop, with no film attached to it.
+  /^Autumn Magic: Collaging Workshop$/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>

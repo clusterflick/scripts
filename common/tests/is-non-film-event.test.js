@@ -171,6 +171,8 @@ describe("isNonFilmEvent", () => {
       "Rhythm Race Revolution | Sounding Towards: Trumpets of Collective Liberation Day 2",
     ],
     ["Performance | Hoda Siahtiri"],
+    ["Performance | In the Presence of the Absent Bird"],
+    ["Autumn Magic: Collaging Workshop"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });
