@@ -51,6 +51,43 @@ function parseListingEventUrls(html) {
     .get();
 }
 
+// The upcoming events on an organiser's page. The page also lists the
+// organiser's past events, in a tab of their own, and those are left alone:
+// a past event can no longer be booked, and its page may not say when it was.
+// Unlike a hashtag listing the cards link with an absolute URL, on the www
+// host, so the path is read out and put on our own domain - the same event
+// found through a hashtag and an organiser is then one URL, not two.
+const ORGANISER_UPCOMING = "#live_events";
+const ORGANISER_EVENT_LINKS = `${ORGANISER_UPCOMING} a[href*='/event/']`;
+
+/**
+ * Read the upcoming event URLs out of an organiser's page.
+ *
+ * An organiser with nothing on is ordinary, so an empty answer is not an
+ * error. A page without the upcoming tab at all is, because then the markup
+ * has moved on and every organiser would read as having nothing on.
+ *
+ * @param {string} html - HTML of an organiser page
+ * @param {string} url - Where the page was fetched from, for the error
+ * @returns {string[]} URLs of the organiser's upcoming events
+ * @throws {Error} When the page carries no upcoming events tab
+ */
+function parseOrganiserEventUrls(html, url) {
+  const $ = cheerio.load(html);
+  if ($(ORGANISER_UPCOMING).length === 0) {
+    throw new Error(
+      `No upcoming events tab (${ORGANISER_UPCOMING}) found on ${url} - the OutSavvy organiser page markup may have changed`,
+    );
+  }
+
+  return $(ORGANISER_EVENT_LINKS)
+    .map((i, elem) => {
+      const { pathname } = new URL($(elem).attr("href"), attributes.domain);
+      return `${attributes.domain}${pathname}`;
+    })
+    .get();
+}
+
 /**
  * Read the coordinates an event page publishes its venue at.
  *
@@ -190,6 +227,7 @@ function parseEventDates(dateText, scriptText) {
 
 module.exports = {
   parseListingEventUrls,
+  parseOrganiserEventUrls,
   parseVenueCoordinates,
   parseVenueAddress,
   assertEventsAreLocatable,
