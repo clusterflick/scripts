@@ -170,10 +170,12 @@ function parseEventSection($, section) {
   // Venue info is in the first html block's sqs-html-content
   // - h3: "STOW FILM LOUNGE @ VENUE NAME"
   // - h4: "FRIDAY 16th JANUARY"
+  // - p: "8 CHURCH END, WALTHAMSTSOW, LONDON E17 9RJ"
   const $headerHtmlContent = section.find(".sqs-html-content").eq(0);
   const venueText = getText($headerHtmlContent.find("h3"));
   const venueName = extractVenueName(venueText);
   const dateText = getText($headerHtmlContent.find("h4"));
+  const venueAddress = getText($headerHtmlContent.find("p").first());
 
   // Booking link is in the button container
   const $bookingLink = section.find(".sqs-block-button-container a").first();
@@ -187,7 +189,7 @@ function parseEventSection($, section) {
     console.log(
       `! No ticket link or free entry label for ${filmText} at ${venueName} - skipping`,
     );
-    return { venueName: "", event: {} };
+    return { venueName: "", venueAddress: "", event: {} };
   }
 
   const bookingUrl = bookingPath.startsWith("/")
@@ -218,6 +220,7 @@ function parseEventSection($, section) {
 
   return {
     venueName,
+    venueAddress,
     event: {
       showingId: generateShowingId(attributes, eventId),
       title,
@@ -280,10 +283,16 @@ async function findEvents(cinema) {
     if (!isEventSection($section)) return;
 
     try {
-      const { venueName, event } = parseEventSection($, $section);
+      const { venueName, venueAddress, event } = parseEventSection($, $section);
 
-      // Check if this venue matches the cinema we're looking for
-      if (venueMatchesCinema(cinema, venueName)) {
+      // The venue's name alone is not enough: "St. Mary's Church" is also a
+      // name for St Mary's Barnes, across London. The address under it is
+      // what places it in Walthamstow.
+      if (
+        venueMatchesCinema(cinema, venueName, undefined, {
+          eventAddress: venueAddress,
+        })
+      ) {
         events.push(event);
       }
     } catch (error) {
