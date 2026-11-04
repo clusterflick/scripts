@@ -16,15 +16,25 @@ jest.mock("../../../common/utils", () => ({
 
 const langthorneParkCinema = {
   name: "Langthorne Park",
+  address: "Birch Grove, Leytonstone, London, E11 4YG, UK",
 };
 
 const stoneydownParkCinema = {
   name: "Stoneydown Park",
+  address: "Pretoria Avenue, Walthamstow, London, E17 6JY, UK",
 };
 
 const stMarysChurchCinema = {
   name: "St Mary's Church Walthamstow",
   alternativeNames: ["St Mary's Church"],
+  address: "8 Church End, London, E17 9RJ, UK",
+};
+
+// Shares the name "St Mary's Church" with the Walthamstow church
+const stMaryBarnesCinema = {
+  name: "St Mary's Barnes",
+  alternativeNames: ["St Mary's", "St Mary's Church"],
+  address: "Church Road, Barnes, London, SW13 9HL, UK",
 };
 
 describe(`${attributes.name}`, () => {
@@ -164,6 +174,35 @@ describe(`${attributes.name}`, () => {
       new Date(expected),
     );
     expect(output[0].performances[0].notes).toBe("");
+  });
+
+  // Markup trimmed from the live page. The heading names only "St. Mary's
+  // Church", which St Mary's Barnes also goes by, so the address under it is
+  // what decides which church the screening is at.
+  it("places a screening by the address under its venue name", async () => {
+    const movieListPage = `
+      <section>
+        <div class="sqs-html-content">
+          <h3>STOW FILM LOUNGE @ ST. MARY’S CHURCH</h3>
+          <h4>SATURDAY 19TH DECEMBER</h4>
+          <p>8 CHURCH END, WALTHAMSTSOW, LONDON E17 9RJ</p>
+        </div>
+        <figure>
+          <figcaption>
+            <p>THE MUPPETS CHRISTMAS CAROL (Brian Henson, 1992, Cert U, 85mins)</p>
+            <p>Doors Open 16:30, Film 17:00 &amp; Close 18:30</p>
+          </figcaption>
+        </figure>
+        <div class="sqs-block-button-container">
+          <a href="/buytickets/p/themuppetschristmascarol">BOOK NOW</a>
+        </div>
+      </section>
+    `;
+
+    readJSON.mockImplementation(() => ({ movieListPage }));
+
+    expect(await findEvents(stMarysChurchCinema)).toHaveLength(1);
+    expect(await findEvents(stMaryBarnesCinema)).toHaveLength(0);
   });
 
   it("throws when neither a film nor a doors time is published", async () => {
