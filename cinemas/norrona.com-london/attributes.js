@@ -12,7 +12,7 @@ module.exports = {
   domain: "https://www.norrona.com",
   socials: {
     letterboxd: null,
-    twitter: null,
+    twitter: "norrona",
     instagram: "norrona",
   },
   url: "https://www.norrona.com/gb/en/store/norrona-flagship-store-london",
