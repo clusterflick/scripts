@@ -355,6 +355,10 @@ const nonFilmEvents = [
   /^Breaking the silence: From the Streets to the Screen$/i,
   /^Book your ticket to the Media Mind 2026 Final!$/i,
   /^Wreath making with Bloomsbury Flowers$/i,
+  /^Bloody Bones$/i,
+  /^LAUNCH EVENT: Decolonising the Page: A Forgotten Golden Age of Arabic Book Arts \(1950s-80s\)$/i,
+  /^A Taste of Memory$/i,
+  /^Seeing in your own lense and expanding the story$/i,
   // A two-day ritual and sound workshop at Mosaic Rooms, listed on Tzkrti.
   // Matches both days ("... Liberation" and "... Liberation Day 2").
   /^Rhythm Race Revolution \| Sounding Towards: Trumpets of Collective Liberation\b/i,
