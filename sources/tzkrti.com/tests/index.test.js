@@ -29,7 +29,9 @@ describe(`${attributes.name}`, () => {
       name: "Mosaic Rooms",
       address: "226 Cromwell Road, London, SW5 0SW, UK",
       geo: { lat: 51.49489161176316, lon: -0.19535549193482035 },
-      expectedMatches: 4,
+      // Four events, three of which are on the non-film list. What's left is
+      // the book arts launch, which screens a short.
+      expectedMatches: 1,
     },
     {
       // Not a venue we hold yet. Its details are Tzkrti's own, so this only
