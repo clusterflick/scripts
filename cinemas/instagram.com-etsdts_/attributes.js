@@ -15,7 +15,7 @@ module.exports = {
   },
   url: "https://www.instagram.com/etsdts_/",
   address: "303 Kennington Road, London, SE11 4QE, UK",
-  geo: { lat: 51.4883169, lon: -0.111049 },
+  geo: { lat: 51.48836732259257, lon: -0.11096781697907868 },
   structure: "solo",
   type: "Café & Restaurant",
   programming: "host",

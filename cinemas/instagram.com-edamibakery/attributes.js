@@ -10,7 +10,7 @@ module.exports = {
   },
   url: "https://www.instagram.com/edamibakery/",
   address: "73-75 Shacklewell Lane, London, E8 2EB, UK",
-  geo: { lat: 51.5525048, lon: -0.0712408 },
+  geo: { lat: 51.55255211428202, lon: -0.071366312363557 },
   structure: "solo",
   type: "Café & Restaurant",
   programming: "host",
