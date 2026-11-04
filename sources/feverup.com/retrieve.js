@@ -9,7 +9,11 @@ const { dailyCache } = require("../../common/cache.js");
 const { getAllCinemaAttributes } = require("../../cinemas");
 const { findMatchingCinema } = require("../../common/source-utils");
 const attributes = require("./attributes");
-const { extractTransferState, extractPlanGrid } = require("./utils");
+const {
+  extractTransferState,
+  extractPlanGrid,
+  isFallbackListing,
+} = require("./utils");
 
 // Fever files a city's plans under "what plan filters" (its categories), and
 // its Cinema filter can't be relied on to hold the screenings: a dinner served
@@ -63,6 +67,44 @@ const fetchCached = (cacheKey, fetcher, url) =>
     await sleep(withJitter(REQUEST_DELAY_MS));
     return fetcher(url, { headers: REQUEST_HEADERS });
   });
+
+// The catalogue page is rendered from Fever's fallback often enough to matter -
+// one fetch in four, in one sitting - and fetched again seconds later it
+// usually has its grid. A few more tries spread over half a minute ride that
+// out; one that keeps failing still fails the retrieve.
+const FALLBACK_LISTING_ATTEMPTS = 4;
+const FALLBACK_LISTING_DELAY_MS = 10_000;
+
+/**
+ * The catalogue's listing page, checked before it is cached. A fallback render
+ * written to the daily cache would be replayed by every retry for the rest of
+ * the day, so a page without its grid is fetched again, and if it never comes
+ * back with one, throws before anything is stored.
+ */
+function fetchCatalogueListingPage() {
+  return dailyCache("feverup-catalogue-page-1", async () => {
+    for (let attempt = 1; ; attempt++) {
+      await sleep(withJitter(REQUEST_DELAY_MS));
+      const page = await fetchText(attributes.url, {
+        headers: REQUEST_HEADERS,
+      });
+      const transferState = extractTransferState(page, attributes.url);
+      if (
+        attempt < FALLBACK_LISTING_ATTEMPTS &&
+        isFallbackListing(transferState, attributes.url)
+      ) {
+        console.log(
+          ` - Fever served its fallback listing (attempt ${attempt} of ${FALLBACK_LISTING_ATTEMPTS}), fetching again...`,
+        );
+        await sleep(withJitter(FALLBACK_LISTING_DELAY_MS));
+        continue;
+      }
+      // Throws on a page without its grid, so it never reaches the cache.
+      extractPlanGrid(transferState, attributes.url);
+      return page;
+    }
+  });
+}
 
 function getPlanGridApiUrl(trackerId, page) {
   return `${attributes.domain}/api/4.4/category/plan_grid/?wpf_id=${CATALOGUE_WPF_ID}&city_code=${CITY_CODE}&page=${page}&recommendation_tracker_id=${trackerId}&items_per_page=${PLANS_PER_PAGE}&sorting_type=relevance`;
@@ -194,11 +236,7 @@ async function fetchSessionsForPlan(planId, places, from, to) {
 }
 
 async function retrieve() {
-  const movieListPage = await fetchCached(
-    "feverup-catalogue-page-1",
-    fetchText,
-    attributes.url,
-  );
+  const movieListPage = await fetchCatalogueListingPage();
 
   const planIds = await fetchCataloguePlanIds(movieListPage);
   if (planIds.length === 0) {
