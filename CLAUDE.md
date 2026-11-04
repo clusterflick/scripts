@@ -327,8 +327,8 @@ Defined in `.env.example`:
 
 - `MOVIEDB_API_KEY` - The Movie Database API key
 - `GEMINI_API_KEY` - Google Gemini API key
-- `OPENAI_API_KEY` - OpenAI API key, needed by default: the capable LLM tier
-  is OpenAI's (`CAPABLE_LLM_PROVIDER` below)
+- `OPENAI_API_KEY` - OpenAI API key, needed by default: the capable LLM tier is
+  OpenAI's (`CAPABLE_LLM_PROVIDER` below)
 - `TYPESAFE_API_KEY` - TypeSafe API key, used by the Jev arms below
 - `CINEBUR_EMAIL` / `CINEBUR_PASSWORD` - a dedicated Cinebur account; the app's
   Firestore refuses anyone not signed in
@@ -340,8 +340,8 @@ swap that has to be reversible by an env var rather than a revert:
 
 - `LLM_PROVIDER` - `gemini` (default) or `openai`, in `common/llm-client.js`,
   for ordinary LLM calls
-- `CAPABLE_LLM_PROVIDER` - `openai` (default) or `gemini`, in the same file,
-  for calls made with `preferCapableModel`: naming every film in a marathon or
+- `CAPABLE_LLM_PROVIDER` - `openai` (default) or `gemini`, in the same file, for
+  calls made with `preferCapableModel`: naming every film in a marathon or
   franchise event, which is knowledge recall rather than reading
 - `CATEGORISER` - `llm` (default) or `jev`, in `common/categorise.js`
 - `MATCHER` - `llm` (default) or `jev`, in `common/review-results.js`, for the
@@ -352,13 +352,12 @@ gemini-2.5-flash about to be redirected to gemini-3.5-flash-lite, nine setups
 named the films in 140 hand-labelled multi-film listings, three draws each.
 gpt-6.1-terra with reasoning off and gpt-6-sol tied for best (every film found,
 none invented); Terra was chosen at under half Sol's cost and changed answer
-between identical calls on 4 of 136 rows to Sol's 10. gemini-3.8-flash at
-MEDIUM thinking was as good bar one or two extra films, at three times Terra's
-cost. The redirect target missed films the capable tier exists to recall. More
+between identical calls on 4 of 136 rows to Sol's 10. gemini-3.8-flash at MEDIUM
+thinking was as good bar one or two extra films, at three times Terra's cost.
+The redirect target missed films the capable tier exists to recall. More
 reasoning was not reliably better: Terra at "low" named ten times as many films
-the listing didn't screen. The OpenAI client asks for JSON rather than
-enforcing the schema Gemini enforces; 420 Terra calls returned no unreadable
-answer.
+the listing didn't screen. The OpenAI client asks for JSON rather than enforcing
+the schema Gemini enforces; 420 Terra calls returned no unreadable answer.
 
 The two Jev arms are not interchangeable with a second vendor the way the LLM
 providers are, so when either is selected the LLM stays wired up behind it and a
@@ -380,9 +379,9 @@ known-hard tail is not a mandate, which is why the default has not moved.
 ## Helper Scripts
 
 `helpers/` scripts that run long jobs - model comparisons, sweeps over many
-venues - are run by a person who wants to know how far along it is, and who
-then has to share the result. Write new ones to that, rather than copying the
-older `compare-*` helpers, which do none of it:
+venues - are run by a person who wants to know how far along it is, and who then
+has to share the result. Write new ones to that, rather than copying the older
+`compare-*` helpers, which do none of it:
 
 - **Say the size of the job up front, then count through it.** Print what will
   run before starting (e.g. "9 models x 140 rows x 3 draws = 3,780 calls") and
