@@ -200,6 +200,7 @@ function normalizeTitle(title, options) {
     // string per year
     [/\bCBeebies Panto \d{4}\b/i, "CBeebies Panto"],
     ["Ex Libris - ", "Ex Libris: "],
+    ["Phoenix Classics - ", "Phoenix Classics: "],
     ["Dovzhenko. The First Look", "Dovzhenko. First Sight"],
     ["Dovzhenko. First Look", "Dovzhenko. First Sight"],
     ["Bison - ", "Bison: "],
@@ -390,7 +391,10 @@ function normalizeTitle(title, options) {
       "Ghosts: Possession of Button House",
       "Ghosts: The Possession of Button House",
     ],
-    [/\s+dub?$/i, ""], // Dubbed
+    // Dubbed, with the language it was dubbed into ("Ramayana: English Dub").
+    // The language goes here rather than in the phrase list, which runs after
+    // this has already taken "Dub" and would leave "English" behind.
+    [/\s+(?:english\s+)?dub?$/i, ""],
     [/\s+sub?$/i, ""], // subbed
     [/\s+(?:live\s+)?(?:in\s+)?(3|2)d$/i, ""], // 3d or 2d, with optional "live in" prefix
     // Year - except CatVideoFest's, which is part of the title: TheMovieDB
