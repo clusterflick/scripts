@@ -23,6 +23,30 @@ function extractTransferState(html, url) {
   );
 }
 
+function getSkeleton(transferState, url) {
+  const skeletonKey = Object.keys(transferState).find((key) =>
+    key.startsWith("WhatPlanFilterService.getWPFSkeleton."),
+  );
+  if (!skeletonKey) {
+    throw new Error(`Missing what plan filter skeleton in page: ${url}`);
+  }
+  return transferState[skeletonKey];
+}
+
+/**
+ * Whether the listing was rendered from Fever's fallback rather than its
+ * recommendations. When the recommender doesn't answer in time, the page is
+ * served with an empty skeleton, `show_empty_error` set and a tracker id
+ * prefixed `fallback_` - the page's "nothing to show" state, not a city with
+ * nothing on. It is transient: the same URL fetched again seconds later
+ * usually comes back with its grid.
+ */
+function isFallbackListing(transferState, url) {
+  const { recommendation_tracker_id: trackerId, show_empty_error: isEmpty } =
+    getSkeleton(transferState, url);
+  return isEmpty === true || String(trackerId).startsWith("fallback_");
+}
+
 /**
  * Extract the grid of plans from a listing page's transfer state. Fever calls a
  * listing a "what plan filter", and renders the first page of its grid into the
@@ -30,18 +54,16 @@ function extractTransferState(html, url) {
  * issued alongside it.
  */
 function extractPlanGrid(transferState, url) {
-  const skeletonKey = Object.keys(transferState).find((key) =>
-    key.startsWith("WhatPlanFilterService.getWPFSkeleton."),
+  const { recommendation_tracker_id: trackerId, skeleton } = getSkeleton(
+    transferState,
+    url,
   );
-  if (!skeletonKey) {
-    throw new Error(`Missing what plan filter skeleton in page: ${url}`);
-  }
-
-  const { recommendation_tracker_id: trackerId, skeleton } =
-    transferState[skeletonKey];
   const grid = (skeleton || []).find(({ type }) => type === "plan_grid");
   if (!grid) {
-    throw new Error(`Missing plan grid in page: ${url}`);
+    const fallback = isFallbackListing(transferState, url)
+      ? " (Fever served its fallback listing)"
+      : "";
+    throw new Error(`Missing plan grid in page: ${url}${fallback}`);
   }
 
   const { plans, has_multiple_pages: hasMultiplePages } = grid.content;
@@ -80,5 +102,6 @@ function extractSessionTimes(sessionResponses) {
 module.exports = {
   extractTransferState,
   extractPlanGrid,
+  isFallbackListing,
   extractSessionTimes,
 };
