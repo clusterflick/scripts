@@ -1,3 +1,8 @@
+// categorise and the LLM client announce their configuration as they load, and
+// a held category is logged, so silence it for the whole file - the spy has to
+// be in place before the require.
+jest.spyOn(console, "log").mockImplementation(() => {});
+
 const { holdYesterdaysCategory } = require("../categorise");
 
 // What askJevToCategorise hands back: the category it picked, plus the
