@@ -20,46 +20,58 @@ jest.mock("../../../common/utils", () => ({
 
 silenceConsoleLog();
 
-// The Vagina Museum reaches us through the "screening" hashtag rather than
-// "film" - its events are never tagged film - so matching against it is what
-// holds the second listing sweep in place.
-const cinema = {
-  name: "Vagina Museum",
-  geo: { lat: 51.53040329879552, lon: -0.05685235988623171 },
-};
-
 describe(attributes.name, () => {
   setupPolly(isRecording, __dirname);
-  jest.useFakeTimers().setSystemTime(new Date("2025-10-28"));
+  jest.useFakeTimers().setSystemTime(new Date("2026-11-04"));
 
-  it(
-    "retrieve and find events",
-    async () => {
-      const { movieListPages, moviePages } = await retrieve();
-
-      // Make sure the input looks roughly correct
-      expect(movieListPages).toHaveLength(2);
-      expect(moviePages).toBeTruthy();
-      expect(Object.keys(moviePages)).toHaveLength(30);
-
-      readJSON.mockImplementation(() => ({ movieListPages, moviePages }));
-
-      const output = await findEvents(cinema);
-      expect(
-        output.every((movie) =>
-          Object.prototype.hasOwnProperty.call(movie, "matchingHints"),
-        ),
-      ).toBe(true);
-
-      const data = JSON.parse(JSON.stringify(output))
-        .map(removeMatchingHints)
-        .map(addTestCategory);
-
-      // Make sure the data looks roughly correct
-      expect(schemaValidate(data)).toBe(true);
-      expect(data).toHaveLength(1);
-      expect(data).toMatchSnapshot();
+  describe.each([
+    // The Divine's Big Brother final screening is tagged screening and never
+    // film, so it is what holds the second hashtag sweep in place.
+    {
+      cinema: require("../../../cinemas/thedivine.co.uk/attributes"),
+      expectedMatches: 4,
     },
-    isRecording ? 600_000 : undefined,
-  );
+    // Spectra's Annette Kennerley screening is in no hashtag listing, and only
+    // reaches us through the organiser's own page.
+    {
+      cinema: require("../../../cinemas/ucl.ac.uk-ucl-east-community-cinema/attributes"),
+      expectedMatches: 1,
+    },
+  ])("$cinema.name", ({ cinema, expectedMatches }) => {
+    it(
+      "retrieve and find events",
+      async () => {
+        const { movieListPages, organiserPages, moviePages } = await retrieve();
+
+        // Make sure the input looks roughly correct
+        expect(movieListPages).toHaveLength(2);
+        expect(organiserPages).toHaveLength(1);
+        expect(moviePages).toBeTruthy();
+        expect(Object.keys(moviePages)).toHaveLength(26);
+
+        readJSON.mockImplementation(() => ({
+          movieListPages,
+          organiserPages,
+          moviePages,
+        }));
+
+        const output = await findEvents(cinema);
+        expect(
+          output.every((movie) =>
+            Object.prototype.hasOwnProperty.call(movie, "matchingHints"),
+          ),
+        ).toBe(true);
+
+        const data = JSON.parse(JSON.stringify(output))
+          .map(removeMatchingHints)
+          .map(addTestCategory);
+
+        // Make sure the data looks roughly correct
+        expect(schemaValidate(data)).toBe(true);
+        expect(data).toHaveLength(expectedMatches);
+        expect(data).toMatchSnapshot();
+      },
+      isRecording ? 600_000 : undefined,
+    );
+  });
 });

@@ -3,6 +3,7 @@ const path = require("node:path");
 const cheerio = require("cheerio");
 const {
   parseListingEventUrls,
+  parseOrganiserEventUrls,
   parseVenueCoordinates,
   parseVenueAddress,
   assertEventsAreLocatable,
@@ -21,6 +22,14 @@ const widgetScript = (dates) => `var jsonDates = ${JSON.stringify(dates)}`;
 // trimmed to two event cards and the promotional panel that follows them.
 const listingWithPromoPanel = fs.readFileSync(
   path.join(__dirname, "fixtures", "listing-with-promo-panel.html"),
+  "utf8",
+);
+
+// Spectra's organiser page as served on 2026-11-04, trimmed to its upcoming
+// and past events tabs: one event coming up, which no hashtag listing carried,
+// and three that have been.
+const organiserPage = fs.readFileSync(
+  path.join(__dirname, "fixtures", "organiser-page.html"),
   "utf8",
 );
 
@@ -49,6 +58,37 @@ describe("parseListingEventUrls", () => {
 
   it("reads nothing out of a listing that has stopped carrying events", () => {
     expect(parseListingEventUrls('<div id="eventscontent"></div>')).toEqual([]);
+  });
+});
+
+describe("parseOrganiserEventUrls", () => {
+  const url = "https://outsavvy.com/organiser/spectra";
+
+  // On our own domain, as the hashtag listings put them, so an event found
+  // both ways is fetched once
+  it("reads the organiser's upcoming events", () => {
+    expect(parseOrganiserEventUrls(organiserPage, url)).toEqual([
+      "https://outsavvy.com/event/40685/the-films-of-annette-kennerley",
+    ]);
+  });
+
+  // They sit in a grid with the same id as a hashtag listing's
+  it("leaves the organiser's past events", () => {
+    expect(parseOrganiserEventUrls(organiserPage, url).join(" ")).not.toMatch(
+      /39086|39087|38027/,
+    );
+  });
+
+  it("reads nothing from an organiser with nothing on", () => {
+    expect(
+      parseOrganiserEventUrls('<div id="live_events"></div>', url),
+    ).toEqual([]);
+  });
+
+  it("throws when the page has no upcoming events tab", () => {
+    expect(() => parseOrganiserEventUrls("<div></div>", url)).toThrow(
+      "No upcoming events tab (#live_events) found on https://outsavvy.com/organiser/spectra",
+    );
   });
 });
 

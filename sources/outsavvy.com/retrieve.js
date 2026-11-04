@@ -1,6 +1,10 @@
 const { fetchText } = require("../../common/utils.js");
 const attributes = require("./attributes");
-const { parseListingEventUrls, assertEventsAreLocatable } = require("./utils");
+const {
+  parseListingEventUrls,
+  parseOrganiserEventUrls,
+  assertEventsAreLocatable,
+} = require("./utils");
 
 // OutSavvy has no film category - an event carries whatever hashtags its
 // organiser typed - so the listing is swept a tag at a time. "screening" is not
@@ -22,7 +26,17 @@ const LISTING_TAGS = ["film", "screening"];
 // come back sparse, so asserting on them would cry wolf.
 const REQUIRED_TAG = "film";
 
+// Organisers whose events don't reach the hashtag listings. An organiser can
+// keep an event out of OutSavvy's browse pages while it stays bookable from
+// its own page: Spectra's "The films of Annette Kennerley" at UCL East
+// (/event/40685) was tagged film and screening, but on 2026-11-04 it was in
+// neither listing, nor in "londonevents" or the search page - only on
+// Spectra's page. Add an organiser here when one of its events goes missing
+// the same way.
+const ORGANISERS = ["spectra-queer-non-fiction-films-at-ucl-east"];
+
 const listingUrl = (tag) => `${attributes.domain}/hashtag/${tag}`;
+const organiserUrl = (slug) => `${attributes.domain}/organiser/${slug}`;
 
 async function retrieve() {
   const movieListPages = [];
@@ -45,6 +59,17 @@ async function retrieve() {
     for (const url of tagUrls) filmUrls.add(url);
   }
 
+  const organiserPages = [];
+  for (const slug of ORGANISERS) {
+    const url = organiserUrl(slug);
+    const organiserPage = await fetchText(url);
+    organiserPages.push(organiserPage);
+
+    for (const eventUrl of parseOrganiserEventUrls(organiserPage, url)) {
+      filmUrls.add(eventUrl);
+    }
+  }
+
   const moviePages = {};
   for (const url of filmUrls) {
     const html = await fetchText(url);
@@ -53,7 +78,7 @@ async function retrieve() {
 
   assertEventsAreLocatable(moviePages);
 
-  return { movieListPages, moviePages };
+  return { movieListPages, organiserPages, moviePages };
 }
 
 module.exports = retrieve;
