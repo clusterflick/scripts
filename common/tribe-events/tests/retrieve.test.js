@@ -24,8 +24,12 @@ const challenge = () =>
 
 describe("retrievePaginatedListView", () => {
   const originalFetch = global.fetch;
+  beforeEach(() => {
+    jest.spyOn(console, "log").mockImplementation(() => {});
+  });
   afterEach(() => {
     global.fetch = originalFetch;
+    jest.restoreAllMocks();
   });
 
   it("walks the list view until a page has no events", async () => {
