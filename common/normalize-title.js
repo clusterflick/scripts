@@ -2081,6 +2081,15 @@ function normalizeTitle(title, options) {
     ["FREE Kids Movie Club: Anyone Can Be Anything", "zootopia"],
     ["FREE Kids Movie Club: Santa Week", "santa clause"],
     ["FREE Kids Movie Club: Winter Has Arrived", "frozen"],
+    [
+      "London's Burning 40th Anniversary Celebration",
+      "London's Burning Pilot 40th Anniversary",
+    ],
+    // Only where the billing leaves "People's" off, or it is doubled
+    [
+      /(?<!people['’]?s )\bEmergency Briefing film\b/i,
+      "People's Emergency Briefing",
+    ],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
