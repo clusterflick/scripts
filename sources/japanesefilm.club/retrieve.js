@@ -2,27 +2,22 @@ const cheerio = require("cheerio");
 const { fetchText } = require("../../common/utils");
 const attributes = require("./attributes");
 
-// The homepage lists films under a "Now Showing" heading followed by a
-// "Past Shows" heading. We only want the events between those two markers.
+// The homepage lists the current programme in a ".event_list.now_showing"
+// container. Past shows used to follow it on the same page under a "Past
+// Shows" heading, but now live on their own page (/past-shows/), so everything
+// in this container is current.
 function getNowShowingMoviePageUrls(movieListPage) {
   const $ = cheerio.load(movieListPage);
 
-  const nowTitle = $(".home_titles").filter(
-    (i, el) => $(el).text().trim() === "Now Showing",
-  );
-  const pastTitle = $(".home_titles.past").filter(
-    (i, el) => $(el).text().trim() === "Past Shows",
-  );
-
-  if (nowTitle.length === 0 || pastTitle.length === 0) {
+  const nowShowing = $(".event_list.now_showing");
+  if (nowShowing.length !== 1) {
     throw new Error(
-      `Unable to locate the "Now Showing" / "Past Shows" section markers on ${attributes.url} — the page structure may have changed`,
+      `Unable to locate the "Now Showing" section on ${attributes.url} — the page structure may have changed`,
     );
   }
 
   const moviePageUrls = [];
-  nowTitle
-    .nextUntil(pastTitle)
+  nowShowing
     .find(".event_text")
     .filter((i, el) => !$(el).hasClass("merch_strip"))
     .each((i, el) => {

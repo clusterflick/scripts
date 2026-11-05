@@ -26,15 +26,11 @@ describe(`${attributes.name}`, () => {
 
   describe.each([
     {
-      id: "phoenixcinema.co.uk",
-      name: "Phoenix Cinema",
-      alternativeNames: [
-        "Phoenix Cinema London",
-        "Phoenix Cinema East Finchley",
-        "Phoenix Cinema Finchley",
-      ],
-      address: "52 High Road, London, N2 9PJ, UK",
-      geo: { lat: 51.58853061979289, lon: -0.16390063689779108 },
+      id: "thelexicinema.co.uk",
+      name: "The Lexi Cinema",
+      alternativeNames: [],
+      address: "194b Chamberlayne Roadd, London, NW10 3JU, UK",
+      geo: { lat: 51.537776385097956, lon: -0.22250680213596027 },
       expectedMatches: 1,
     },
     {
@@ -43,7 +39,7 @@ describe(`${attributes.name}`, () => {
       alternativeNames: ["The Rio", "Rio Cinema Dalston"],
       address: "107 Kingsland High Street, London, E8 2PB, UK",
       geo: { lat: 51.54970097438604, lon: -0.07550473771574956 },
-      expectedMatches: 1,
+      expectedMatches: 2,
     },
   ])(
     "$name",
@@ -57,8 +53,8 @@ describe(`${attributes.name}`, () => {
           expect(movieListPage).toBeTruthy();
           expect(movieListPage).toContain("Now Showing");
           expect(moviePages).toBeTruthy();
-          expect(Object.keys(moviePages)).toHaveLength(3);
-          expect(Object.keys(venuePages)).toHaveLength(5);
+          expect(Object.keys(moviePages)).toHaveLength(5);
+          expect(Object.keys(venuePages)).toHaveLength(8);
 
           readJSON.mockImplementation(() => ({
             movieListPage,
@@ -88,66 +84,78 @@ describe(`${attributes.name}`, () => {
     },
   );
 
-  it("returns no events for unrelated cinema", async () => {
-    const { movieListPage, moviePages, venuePages } = await retrieve();
+  it(
+    "returns no events for unrelated cinema",
+    async () => {
+      const { movieListPage, moviePages, venuePages } = await retrieve();
 
-    readJSON.mockImplementation(() => ({
-      movieListPage,
-      moviePages,
-      venuePages,
-    }));
+      readJSON.mockImplementation(() => ({
+        movieListPage,
+        moviePages,
+        venuePages,
+      }));
 
-    const unrelatedCinema = {
-      name: "Some Other Cinema",
-      alternativeNames: [],
-    };
-    expect(await findEvents(unrelatedCinema)).toHaveLength(0);
+      const unrelatedCinema = {
+        name: "Some Other Cinema",
+        alternativeNames: [],
+      };
+      expect(await findEvents(unrelatedCinema)).toHaveLength(0);
 
-    // "Showroom, Sheffield" (S1 2BX) shares a normalized name with the London
-    // venue "The Showroom" (NW8 8PQ). Matching on the venue page's postcode
-    // keeps them apart where a name-only match would wrongly collide them.
-    const theShowroomLondon = {
-      name: "The Showroom",
-      alternativeNames: ["The Showroom Gallery"],
-      address: "63 Penfold Street, London, NW8 8PQ, UK",
-      geo: { lat: 51.52570188553431, lon: -0.17261733935585413 },
-    };
-    expect(await findEvents(theShowroomLondon)).toHaveLength(0);
-  });
+      // "Showroom, Sheffield" (S1 2BX) shares a normalized name with the London
+      // venue "The Showroom" (NW8 8PQ). Matching on the venue page's postcode
+      // keeps them apart where a name-only match would wrongly collide them.
+      const theShowroomLondon = {
+        name: "The Showroom",
+        alternativeNames: ["The Showroom Gallery"],
+        address: "63 Penfold Street, London, NW8 8PQ, UK",
+        geo: { lat: 51.52570188553431, lon: -0.17261733935585413 },
+      };
+      expect(await findEvents(theShowroomLondon)).toHaveLength(0);
+    },
+    isRecording ? 600_000 : undefined,
+  );
 
   describe("fails loudly when the page structure changes", () => {
-    const cinema = { name: "Phoenix Cinema" };
+    const cinema = { name: "Rio Cinema" };
 
-    it("throws when a film title cannot be extracted", async () => {
-      const { movieListPage, moviePages } = await retrieve();
-      const [url, page] = Object.entries(moviePages)[0];
-      const broken = {
-        ...moviePages,
-        [url]: page.replace(/(<h1[^>]*>)[\s\S]*?(<\/h1>)/g, "$1$2"),
-      };
+    it(
+      "throws when a film title cannot be extracted",
+      async () => {
+        const { movieListPage, moviePages } = await retrieve();
+        const [url, page] = Object.entries(moviePages)[0];
+        const broken = {
+          ...moviePages,
+          [url]: page.replace(/(<h1[^>]*>)[\s\S]*?(<\/h1>)/g, "$1$2"),
+        };
 
-      readJSON.mockImplementation(() => ({
-        movieListPage,
-        moviePages: broken,
-      }));
+        readJSON.mockImplementation(() => ({
+          movieListPage,
+          moviePages: broken,
+        }));
 
-      await expect(findEvents(cinema)).rejects.toThrow(/film title/);
-    });
+        await expect(findEvents(cinema)).rejects.toThrow(/film title/);
+      },
+      isRecording ? 600_000 : undefined,
+    );
 
-    it("throws when a venue name cannot be extracted", async () => {
-      const { movieListPage, moviePages } = await retrieve();
-      const [url, page] = Object.entries(moviePages)[0];
-      const broken = {
-        ...moviePages,
-        [url]: page.replace(/cinema_title/g, "cinema_removed"),
-      };
+    it(
+      "throws when a venue name cannot be extracted",
+      async () => {
+        const { movieListPage, moviePages } = await retrieve();
+        const [url, page] = Object.entries(moviePages)[0];
+        const broken = {
+          ...moviePages,
+          [url]: page.replace(/cinema_title/g, "cinema_removed"),
+        };
 
-      readJSON.mockImplementation(() => ({
-        movieListPage,
-        moviePages: broken,
-      }));
+        readJSON.mockImplementation(() => ({
+          movieListPage,
+          moviePages: broken,
+        }));
 
-      await expect(findEvents(cinema)).rejects.toThrow(/venue name/);
-    });
+        await expect(findEvents(cinema)).rejects.toThrow(/venue name/);
+      },
+      isRecording ? 600_000 : undefined,
+    );
   });
 });

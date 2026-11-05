@@ -15,11 +15,12 @@ const {
 const { venueMatchesCinema } = require("../../common/source-utils");
 const attributes = require("./attributes");
 
-// ".director_country_release" reads like "Suo Masayuki、Japan、1996", using a
-// fullwidth comma as the separator.
+// ".director_country_release" reads like "Suo Masayuki, Japan, 1996", and
+// previously like "Suo Masayuki、Japan、1996" with a fullwidth comma as the
+// separator.
 function parseDirectorCountryRelease(text) {
   const parts = text
-    .split("、")
+    .split(/[、,]/)
     .map((part) => part.trim())
     .filter(Boolean);
 
