@@ -22,7 +22,7 @@ silenceConsoleLog();
 
 describe(`${attributes.name}`, () => {
   setupPolly(isRecording, __dirname);
-  jest.useFakeTimers().setSystemTime(new Date("2026-11-04"));
+  jest.useFakeTimers().setSystemTime(new Date("2026-11-05"));
 
   describe.each([
     {
@@ -56,7 +56,12 @@ describe(`${attributes.name}`, () => {
 
         // Make sure the input looks roughly correct
         expect(events).toBeTruthy();
-        expect(Object.keys(events)).toHaveLength(12);
+        // London runs to two pages: twelve events on the first, and one on
+        // the last, which the listing tops up with past events of its own.
+        expect(Object.keys(events)).toHaveLength(13);
+        expect(Object.values(events).some((event) => event.is_past)).toBe(
+          false,
+        );
         // The organiser's account carries personal details, and never
         // reaches retrieved data.
         expect(
