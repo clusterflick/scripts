@@ -367,6 +367,10 @@ const nonFilmEvents = [
   /^Performance \| In the Presence of the Absent Bird$/i,
   // A collage-making workshop, with no film attached to it.
   /^Autumn Magic: Collaging Workshop$/i,
+  // The White Hart's comedy nights, billed by whichever night is on
+  // ("LOLipops Comedy at the White Hart Southwark - Early Show"), so match how
+  // they name the venue rather than carrying a pattern per night.
+  /Comedy (Live )?at The White Hart Southwark/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>

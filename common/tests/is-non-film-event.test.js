@@ -173,6 +173,8 @@ describe("isNonFilmEvent", () => {
     ["Performance | Hoda Siahtiri"],
     ["Performance | In the Presence of the Absent Bird"],
     ["Autumn Magic: Collaging Workshop"],
+    ["Comedy Live at The White Hart Southwark"],
+    ["LOLipops Comedy at the White Hart Southwark - Early Show"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });
