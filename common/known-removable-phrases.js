@@ -1931,6 +1931,10 @@ const knownRemovablePhrases = [
   "25 Years Anniversary",
   " by Leethal Reppin",
   ": A Hundred Voices Through the Moon's Eyes",
+  " – Mahasakthi",
+  "Taskforce Launch and",
+  "FREE MISSED",
+  "Voices Through the Moon's Eyes",
 ];
 
 module.exports = knownRemovablePhrases;
