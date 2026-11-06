@@ -16,6 +16,13 @@ describe("createAccessibility", () => {
       ["Relaxed Preview: The Wild Robot", { relaxed: true }],
       ["Relaxed The Wild Robot", { relaxed: true }],
       ["The Wild Robot (Relaxed)", { relaxed: true }],
+      ["HAIRSPRAY - Dementia Friendly", { relaxed: true }],
+      ["DEMENTIA FILM CLUB (FREE)", { relaxed: true }],
+      [
+        "Afro Sci-Fi Film Club 4 the Global Majority [queer & neurodivergent friendly]",
+        { relaxed: true },
+      ],
+      ["Neurodiverse-Friendly Screening: The Wild Robot", { relaxed: true }],
     ])("detects relaxed from title '%s'", (title, expected) => {
       expect(createAccessibility(title, {})).toEqual(expected);
     });
@@ -59,6 +66,13 @@ describe("createAccessibility", () => {
     test("returns empty object for regular titles", () => {
       expect(createAccessibility("The Wild Robot", {})).toEqual({});
     });
+
+    test.each([["Dementia 13"], ["Dementia (1955)"]])(
+      "does not detect relaxed from film title '%s'",
+      (title) => {
+        expect(createAccessibility(title, {})).toEqual({});
+      },
+    );
 
     test("detects multiple accessibility features from one title", () => {
       expect(
