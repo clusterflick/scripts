@@ -149,6 +149,14 @@ function normalizeTitle(title, options) {
       /\bThe Gruffalo\s*\+\s*(?:The )?Gruffalo's Child(?:\s+Double[\s-]Bill)?/i,
       "The Gruffalo and The Gruffalo's Child Double Bill",
     ],
+    // The double bill names the sequel in full, and TheMovieDB has no entry for
+    // the pair, so the search lands on the sequel alone and the listing is
+    // published as that one film. Name it as the double bill it is, as the
+    // Gruffalo pair above is, so it reaches the multiple-movies stage instead.
+    [
+      /\bThe Snowman™?\s*(?:&|\+|and)\s*The Snowman™?\s+(?:and|&)\s+The Snowdog\b(?:\s+Double[\s-]Bill)?/i,
+      "The Snowman and The Snowman and The Snowdog Double Bill",
+    ],
     // The double bill is billed with and without the definite article, and one
     // venue closes the gap around the separator, so the separator rule would
     // otherwise drop the second film from some of them.
