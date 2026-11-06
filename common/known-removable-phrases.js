@@ -1935,6 +1935,11 @@ const knownRemovablePhrases = [
   "Taskforce Launch and",
   "FREE MISSED",
   "Voices Through the Moon's Eyes",
+  "Fellowship Cinema:",
+  "at Vue West End, Leicester Square",
+  "Ken Russel's",
+  "Rated 18",
+  "Super-Homo:",
 ];
 
 module.exports = knownRemovablePhrases;
