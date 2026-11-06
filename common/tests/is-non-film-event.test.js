@@ -26,6 +26,8 @@ describe("isNonFilmEvent", () => {
     ["Smithsonian Starstruck: An Immersive Experience"],
     ["Neon Naked Life Drawing"],
     ["Wine Tasting Night (Tuesday 9th February)"],
+    ["Publications Tour"],
+    ["Community Linkup: Light and Magic"],
     ["Tate Modern: Official Discovery Tour"],
     ["Advanced Photography Workshop + Photoshoot | London"],
     ["AdTech Networking Social for CEOs & Entrepreneurs Meetup"],

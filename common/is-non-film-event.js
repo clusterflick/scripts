@@ -372,6 +372,8 @@ const nonFilmEvents = [
   // ("LOLipops Comedy at the White Hart Southwark - Early Show"), so match how
   // they name the venue rather than carrying a pattern per night.
   /Comedy (Live )?at The White Hart Southwark/i,
+  /^Publications Tour$/i,
+  /^Community Linkup: Light and Magic$/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>

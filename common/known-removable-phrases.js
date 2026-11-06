@@ -1940,6 +1940,10 @@ const knownRemovablePhrases = [
   "Ken Russel's",
   "Rated 18",
   "Super-Homo:",
+  "LDNDOCS:",
+  "in conversation with Jesse Armstrong",
+  "SCUP 3: Film & Collage:",
+  "Trans Matters Worldwide:",
 ];
 
 module.exports = knownRemovablePhrases;
