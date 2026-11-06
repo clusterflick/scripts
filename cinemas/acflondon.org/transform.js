@@ -34,13 +34,28 @@ const extractOverviewFromDescription = (description) => {
 };
 
 async function transform({ moviePages }, sourcedEvents) {
+  // The listing is ACF's film tag, which also carries partner events held
+  // elsewhere, so a run where every event is somewhere else is a real listing
+  // with nothing on here - only finding no event pages at all means the parse
+  // broke.
+  if (Object.keys(moviePages).length === 0) {
+    throw new Error("No movies found - the page structure may have changed");
+  }
+
   const movies = [];
 
   for (const [moviePageUrl, moviePage] of Object.entries(moviePages)) {
     const $ = cheerio.load(moviePage);
 
-    // Skip events not at ACF London
-    const location = basicNormalize(getText($(".location-block")));
+    // Skip events not at ACF London. A page without a location at all can't
+    // be told apart from one at ACF, so that is a changed page, not a skip.
+    const locationBlock = $(".location-block");
+    if (locationBlock.length === 0) {
+      throw new Error(
+        `No location found on ${moviePageUrl} - the page structure may have changed`,
+      );
+    }
+    const location = basicNormalize(getText(locationBlock));
     if (!location.includes(basicNormalize("Austrian Cultural Forum London"))) {
       continue;
     }
@@ -79,10 +94,6 @@ async function transform({ moviePages }, sourcedEvents) {
         overview: description,
       },
     });
-  }
-
-  if (movies.length === 0) {
-    throw new Error("No movies found - the page structure may have changed");
   }
 
   const listOfSourcedEvents = Object.values(sourcedEvents).flatMap(
