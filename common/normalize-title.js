@@ -299,6 +299,11 @@ function normalizeTitle(title, options) {
     // Removed here rather than in the phrase list, which runs after the rule
     // below has turned the dash into a prefix separator and kept only "London".
     [" Special Film Screening - London", ""],
+    // Before the rule below too, which would keep only the venue after the dash
+    [
+      "People's Emergency Briefing Film Screening",
+      "People's Emergency Briefing Film",
+    ],
     ["Film Screening - ", "Film Screening: "],
     ["Limited Run - ", "Limited Run: "],
     ["Community Cinema Screening - ", "Community Cinema Screening: "],
@@ -2090,6 +2095,10 @@ function normalizeTitle(title, options) {
       /(?<!people['’]?s )\bEmergency Briefing film\b/i,
       "People's Emergency Briefing",
     ],
+    // What "People's Emergency Briefing Film Screening" is corrected to above,
+    // with any venue billed after a dash, brought back in with the rest of the
+    // tour's screenings
+    [/(People['’]s Emergency Briefing) Film(?: [-–] .+)?$/i, "$1"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
@@ -2529,6 +2538,7 @@ function normalizeTitle(title, options) {
     .replace(/^a (?=\S+\s+(?![[(]))/i, "") // Venues drop "a" as readily as "the"
     .replace(/([a-z])-([a-z])/gi, "$1$2")
     .replace(/\s+q&a$/i, "")
+    .replace(/\s+q\+a$/i, "")
     .replace(/\s3d$/i, "")
     .replace(/[+?]$/, "")
     .replace(/\(\d{4}-[^)]+\)$/, "") // Remove any date range suffixes

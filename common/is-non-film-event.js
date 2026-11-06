@@ -149,10 +149,11 @@ const nonFilmEvents = [
   // A guided tour of the gallery, beside the discovery tour above.
   /Semi-Private Tour/i,
   // A wine tasting billed on its own ("CHATTY PATTY X JUDICIOUS POURS: WINE
-  // TASTING", "Wine Tasting Night"). Anchored to the end, and not after
+  // TASTING", "Wine Tasting Night", "Wine Tasting Night (Tuesday 9th
+  // February)"). Anchored to the end, bar a bracketed date, and not after
   // "with", so a screening sold with a tasting ("Downton Abbey: Grand Finale
   // with Wine Tasting") still reaches the listings.
-  /(?<!with )Wine Tasting(?: Night)?$/i,
+  /(?<!with )Wine Tasting(?: Night)?(?: \([^)]*\))?$/i,
   // A wellbeing evening of yoga and a photography talk ("An Evening of Slowing
   // Down | Yoga, Travel Photography & Connection"), never a screening.
   /An Evening of Slowing Down/i,

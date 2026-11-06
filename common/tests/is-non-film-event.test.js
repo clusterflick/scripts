@@ -25,6 +25,7 @@ describe("isNonFilmEvent", () => {
     ["BSNM Annual Meeting 2026"],
     ["Smithsonian Starstruck: An Immersive Experience"],
     ["Neon Naked Life Drawing"],
+    ["Wine Tasting Night (Tuesday 9th February)"],
     ["Tate Modern: Official Discovery Tour"],
     ["Advanced Photography Workshop + Photoshoot | London"],
     ["AdTech Networking Social for CEOs & Entrepreneurs Meetup"],
