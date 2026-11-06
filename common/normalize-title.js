@@ -266,6 +266,7 @@ function normalizeTitle(title, options) {
     ["Green Screen -", "Green Screen "],
     [/Film Club\s*\d*\s*-\s*/i, "Film Club: "],
     ["Film Club: Rebels:", "Film Club: "],
+    ["Film + Collage:", "Film & Collage:"],
     [/^Film\s+- /i, "Film: "],
     [/Film\s+- /i, "Film "],
     ["FREE screening - at ", "FREE screening at "],
