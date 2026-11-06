@@ -132,6 +132,11 @@ async function transform(
               accessibility.relaxed = true;
               return;
             }
+            // Dementia screenings are relaxed screenings, but "relaxed" alone
+            // doesn't say who they're for, so the note is kept as well.
+            if (attributeName === "dementia") {
+              accessibility.relaxed = true;
+            }
             if (
               attributeName === "baby club" ||
               attributeName === "kids club" ||

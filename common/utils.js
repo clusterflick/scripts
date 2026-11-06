@@ -797,6 +797,8 @@ const relaxedMatchers = [
   /^Relaxed /i,
   /\(Relaxed\)/i,
   /Dementia[-\s]Friendly/i,
+  /Dementia Film Club/i,
+  /Neurodiver(?:gent|se)[-\s]Friendly/i,
   /SEND[-\s]Friendly/i,
 ];
 
