@@ -39,6 +39,24 @@ otherwise be disruptive in a standard screening.
 detected from description text containing phrases like "parent and baby" or
 "baby friendly".
 
+### `dogFriendly`
+
+Audiences are welcome to bring their dogs into the screening. Nobody needs a dog
+to attend: Curzon's Dog Days say dog lovers without one of their own are welcome
+too, so this is permission to bring one rather than a condition of entry. It is
+also worth knowing for anyone with a dog allergy or a fear of dogs.
+
+Venues sometimes adjust the screening for the dogs (Curzon lowers the sound),
+but that isn't part of the tag; it stays in the performance notes.
+
+**How venues label it:** "Dog Friendly", "Dog-Friendly Screening", "Dog Days"
+
+**Detection:** Set from structured venue data or from title patterns like
+`Dog Friendly Screening:` or `Dog-Friendly -`. Also detected from description
+text describing the screening ("this screening is dog friendly", "welcome to
+bring their dogs") — never from a bare mention of dogs, which a synopsis can
+easily contain.
+
 ### `hardOfHearing`
 
 The screening includes captions or other support for deaf or hard-of-hearing

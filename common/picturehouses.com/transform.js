@@ -127,6 +127,7 @@ async function transform(
                 hasAttribute("watch baby") ||
                 hasAttribute("toddler ti") ||
                 hasAttribute("kids' club"),
+              dogFriendly: hasAttribute("dogfriend"),
               hardOfHearing: hasAttribute("hohsub"),
               subtitled: hasAttribute("sub cinema"),
             },
@@ -149,9 +150,14 @@ async function transform(
               showingAttributes
                 .filter(
                   (attribute) =>
-                    !["audio d", "relaxed", "hohsub", "sub cinema"].includes(
-                      attribute.attribute.toLowerCase(),
-                    ) && !isFormatAttribute(attribute),
+                    ![
+                      "audio d",
+                      "relaxed",
+                      "hohsub",
+                      "sub cinema",
+                      "dogfriend",
+                    ].includes(attribute.attribute.toLowerCase()) &&
+                    !isFormatAttribute(attribute),
                 )
                 .map(({ attribute_full: title, description }) =>
                   description ? `${title}: ${description}` : title,
