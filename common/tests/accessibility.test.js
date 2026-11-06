@@ -167,6 +167,10 @@ describe("createAccessibility", () => {
       [
         "Customers are welcome to bring their well behaved dogs into the cinema for this special screening.",
       ],
+      [
+        "Doors 6pm | Intro + Film + Intermission 6:30pm to 9:00pm | Adults 18+ only | Dogs welcome. Cult film night",
+      ],
+      ["Dogs are very welcome at this screening."],
     ])("detects dogFriendly from description '%s'", (description) => {
       expect(createAccessibility("The Wild Robot", {}, description)).toEqual({
         dogFriendly: true,
@@ -177,6 +181,11 @@ describe("createAccessibility", () => {
       ["A boy and his dog set out across the moors."],
       ["Her dog-friendly neighbours never suspect a thing."],
       ["Sadly this is not a dog-friendly screening."],
+      ["Guide dogs are welcome."],
+      ["Carers free, service dogs welcome."],
+      ["Assistance dogs are welcome in the auditorium."],
+      ["Guide dogs and service dogs are very welcome."],
+      ["No dogs welcome, sorry."],
     ])("does not detect dogFriendly from description '%s'", (description) => {
       expect(createAccessibility("The Wild Robot", {}, description)).toEqual(
         {},

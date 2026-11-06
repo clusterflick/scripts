@@ -872,6 +872,9 @@ const descriptionAccessibilityMatchers = {
     /\bdog[-\s]friendly (?:screening|cinema|film)/i,
     /\b(?:this|the) screening is dog[-\s]friendly/i,
     /\bwelcome to bring (?:their|your) (?:[\w-]+ )*dogs?\b/i,
+    // "Dogs welcome", but not the guide and assistance dogs that venues'
+    // access information welcomes to every screening
+    /(?<!\b(?:guide|assistance|service|support|hearing|working)\s)\bdogs (?:are )?(?:also |very |always )?welcome\b/i,
   ],
   subtitled: [
     /with (?:english )?(?:and \w+ )?subtitles/i,

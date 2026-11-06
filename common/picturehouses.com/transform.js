@@ -127,7 +127,7 @@ async function transform(
                 hasAttribute("watch baby") ||
                 hasAttribute("toddler ti") ||
                 hasAttribute("kids' club"),
-              dogFriendly: hasAttribute("dogfriend"),
+              dogFriendly: hasAttribute("dogfriend") || hasAttribute("dog fri"),
               hardOfHearing: hasAttribute("hohsub"),
               subtitled: hasAttribute("sub cinema"),
             },
@@ -156,6 +156,7 @@ async function transform(
                       "hohsub",
                       "sub cinema",
                       "dogfriend",
+                      "dog fri",
                     ].includes(attribute.attribute.toLowerCase()) &&
                     !isFormatAttribute(attribute),
                 )
