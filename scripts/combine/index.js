@@ -16,6 +16,7 @@ const {
 const standardizePrefixingForTheatrePerformances = require("../../common/standardize-prefixing-for-theatre-performances");
 const stripSerialBlockSuffix = require("../../common/strip-serial-block-suffix");
 const stripDateSuffix = require("../../common/strip-date-suffix");
+const stripSharedPartSuffix = require("../../common/strip-shared-part-suffix");
 const assertUniqueShowingIds = require("./assert-unique-showing-ids");
 const selectDisplayMovie = require("./select-display-movie");
 const { buildMovieData } = require("./build-movie-data");
@@ -463,7 +464,12 @@ async function combine() {
     const originalTitle = container.title;
     container.title = stripDateSuffix(
       stripSerialBlockSuffix(
-        standardizePrefixingForTheatrePerformances(container.title),
+        standardizePrefixingForTheatrePerformances(
+          stripSharedPartSuffix(
+            container.title,
+            group.map(({ title }) => title),
+          ),
+        ),
       ),
     );
 
