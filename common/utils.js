@@ -409,6 +409,40 @@ const reportRefusal = async (url, response) => {
   }
 };
 
+// Who to contact about the bot, sent as a `From` header (RFC 9110 10.1.2, the
+// mailbox of the person responsible for an automated agent) so a site owner
+// who finds it in their logs can reach us, and search their way to
+// clusterflick.com/bot. Only on our direct requests: those already announce
+// themselves as `User-Agent: node`, so naming who sent them costs nothing a
+// detector couldn't already see. Browser sessions and the sources that send a
+// browser's user agent are left alone, since an extra header on a browser
+// fingerprint is itself a sign it isn't one.
+//
+// Off unless IDENTIFY_BOT is "true", so it can be turned on a workflow at a
+// time and turned back off with an env var rather than a revert. A caller's
+// own `From` wins, and one setting its own `User-Agent` gets nothing added.
+const BOT_CONTACT = "hello@clusterflick.com";
+
+const shouldIdentifyBot = () => {
+  const value = basicNormalize(process.env.IDENTIFY_BOT || "false");
+  if (!["true", "false"].includes(value)) {
+    throw new Error(
+      `Unknown IDENTIFY_BOT "${process.env.IDENTIFY_BOT}". Use "true" or "false".`,
+    );
+  }
+  return value === "true";
+};
+
+const withBotContact = (options, identify) => {
+  if (!identify) return options;
+  const headers = new Headers(options.headers);
+  // A caller that sets its own user agent is sending a browser's (Fever,
+  // Humanitix), and that request has to stay looking like one.
+  if (headers.has("user-agent")) return options;
+  if (!headers.has("from")) headers.set("From", BOT_CONTACT);
+  return { ...options, headers };
+};
+
 const fetchWithRetry = async (
   url,
   options = {},
@@ -420,6 +454,9 @@ const fetchWithRetry = async (
   const retryable = retryStatuses.length
     ? new Set([...RETRYABLE_STATUSES, ...retryStatuses])
     : RETRYABLE_STATUSES;
+  // Read before the first attempt, so a misconfigured toggle fails the request
+  // outright rather than being retried like a network error.
+  const identifyBot = shouldIdentifyBot();
   return withRetry(
     async () => {
       // A function is called afresh for each attempt, for a request that must
@@ -427,7 +464,10 @@ const fetchWithRetry = async (
       // otherwise go out again stale.
       const response = await fetch(
         url,
-        typeof options === "function" ? options() : options,
+        withBotContact(
+          typeof options === "function" ? options() : options,
+          identifyBot,
+        ),
       );
       await reportRefusal(url, response);
       // A 429/503 is a *successful* fetch with a non-ok response, so it never

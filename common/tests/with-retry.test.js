@@ -320,3 +320,90 @@ describe("fetchWithRetry options built per attempt", () => {
     ]);
   });
 });
+
+describe("fetchWithRetry bot contact", () => {
+  const originalValue = process.env.IDENTIFY_BOT;
+
+  beforeEach(() => {
+    global.fetch = jest.fn().mockResolvedValue(htmlResponse(200, "ok"));
+  });
+
+  afterEach(() => {
+    if (originalValue === undefined) delete process.env.IDENTIFY_BOT;
+    else process.env.IDENTIFY_BOT = originalValue;
+    jest.restoreAllMocks();
+  });
+
+  const sentOptions = () => global.fetch.mock.calls[0][1];
+
+  it("leaves the request untouched while the toggle is unset", async () => {
+    delete process.env.IDENTIFY_BOT;
+    const options = { headers: { Accept: "text/html" } };
+
+    await fetchWithRetry("https://example.com", options);
+
+    expect(sentOptions()).toBe(options);
+  });
+
+  it("sends a From header naming who to contact when turned on", async () => {
+    process.env.IDENTIFY_BOT = "true";
+
+    await fetchWithRetry("https://example.com");
+
+    expect(sentOptions().headers.get("from")).toBe("hello@clusterflick.com");
+  });
+
+  it("keeps the caller's own headers alongside it", async () => {
+    process.env.IDENTIFY_BOT = "true";
+
+    await fetchWithRetry("https://example.com", {
+      method: "POST",
+      headers: { Accept: "application/json" },
+    });
+
+    expect(sentOptions().method).toBe("POST");
+    expect(sentOptions().headers.get("accept")).toBe("application/json");
+    expect(sentOptions().headers.get("from")).toBe("hello@clusterflick.com");
+  });
+
+  it("lets a caller's own From win", async () => {
+    process.env.IDENTIFY_BOT = "true";
+
+    await fetchWithRetry("https://example.com", {
+      headers: { from: "someone@example.com" },
+    });
+
+    expect(sentOptions().headers.get("from")).toBe("someone@example.com");
+  });
+
+  it("leaves a request sending its own user agent alone", async () => {
+    // Fever and Humanitix send a browser's user agent through here, and an
+    // extra header would give away that it isn't one.
+    process.env.IDENTIFY_BOT = "true";
+    const options = { headers: { "User-Agent": "Mozilla/5.0" } };
+
+    await fetchWithRetry("https://example.com", options);
+
+    expect(sentOptions()).toBe(options);
+  });
+
+  it("adds it to options built afresh for each attempt", async () => {
+    process.env.IDENTIFY_BOT = "true";
+
+    await fetchWithRetry("https://example.com", () => ({
+      headers: { timestamp: "1" },
+    }));
+
+    expect(sentOptions().headers.get("timestamp")).toBe("1");
+    expect(sentOptions().headers.get("from")).toBe("hello@clusterflick.com");
+  });
+
+  it("throws on a value it doesn't recognise rather than guessing", async () => {
+    process.env.IDENTIFY_BOT = "yes";
+
+    await expect(fetchWithRetry("https://example.com")).rejects.toThrow(
+      'Unknown IDENTIFY_BOT "yes"',
+    );
+    expect(global.fetch).not.toHaveBeenCalled();
+  });
+});
