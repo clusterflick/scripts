@@ -347,6 +347,20 @@ swap that has to be reversible by an env var rather than a revert:
 - `MATCHER` - `llm` (default) or `jev`, in `common/review-results.js`, for the
   step that chooses between TheMovieDB search results
 
+`IDENTIFY_BOT` - `false` (default) or `true`, in `common/utils.js` - is a
+toggle of another kind: it changes what we send rather than which implementation
+runs, and is an env var for the same reason. Turned on, every request through
+`fetchWithRetry` carries `From: hello@clusterflick.com`, so a site owner reading
+their logs can reach us and find clusterflick.com/bot. It is only on direct
+fetches, which already announce themselves as `User-Agent: node`. Browser
+sessions, `requestFromPage`, and any request setting its own `User-Agent` (Fever
+and Humanitix send a browser's) are left alone: an extra header on a browser
+fingerprint is itself a sign it isn't one. A caller's own `From` wins. It is
+turned on a workflow at a time - health probes first, then the `ubuntu-latest`
+retrieve groups, then the self-hosted ones - with the `🤖 Bot` lines and the
+health rows' `bot-challenge` counts watched for a change. A venue that reacts to
+it is taken out of it by sending its own `User-Agent`, as Fever does.
+
 The capable tier is OpenAI's because it was measured. In November 2026, with
 gemini-2.5-flash about to be redirected to gemini-3.5-flash-lite, nine setups
 named the films in 140 hand-labelled multi-film listings, three draws each.

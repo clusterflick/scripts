@@ -18,7 +18,7 @@ const YEAR_PAGE_SIZE = 200;
 // The site blocks a handful of named crawlers via robots.txt, so identify
 // ourselves rather than fetching as bare Node.
 const HEADERS = {
-  "User-Agent": "clusterflick.com (+https://github.com/clusterflick)",
+  "User-Agent": "clusterflick.com (+https://clusterflick.com/bot)",
 };
 
 // Being a slow, once-a-day crawl of ~160 pages, there's no reason to hurry.
