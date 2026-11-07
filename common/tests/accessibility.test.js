@@ -40,6 +40,27 @@ describe("createAccessibility", () => {
     });
 
     test.each([
+      ["Dog Friendly Screening: The Wild Robot", { dogFriendly: true }],
+      ["Dog-Friendly Screening: The Wild Robot", { dogFriendly: true }],
+      ["Dog-Friendly - The Wild Robot", { dogFriendly: true }],
+      ["Dog Friendly Cinema Screening: The Wild Robot", { dogFriendly: true }],
+      [
+        "Pooches & Popcorn (dog-friendly movie night): The Wild Robot",
+        { dogFriendly: true },
+      ],
+    ])("detects dogFriendly from title '%s'", (title, expected) => {
+      expect(createAccessibility(title, {})).toEqual(expected);
+    });
+
+    test.each([
+      ["Dog Day Afternoon"],
+      ["The Mad Dog of Europe"],
+      ["Isle of Dogs"],
+    ])("does not detect dogFriendly from film title '%s'", (title) => {
+      expect(createAccessibility(title, {})).toEqual({});
+    });
+
+    test.each([
       ["The Wild Robot - Subtitled", { subtitled: true }],
       ["Subtitled: The Wild Robot", { subtitled: true }],
       ["The Wild Robot (Subbed)", { subtitled: true }],
@@ -138,6 +159,37 @@ describe("createAccessibility", () => {
           "this film screening does not have closed captions or audio description available",
         ),
       ).toEqual({});
+    });
+
+    test.each([
+      ["This screening is dog friendly"],
+      ["Join us for a dog-friendly screening of this festive classic."],
+      [
+        "Customers are welcome to bring their well behaved dogs into the cinema for this special screening.",
+      ],
+      [
+        "Doors 6pm | Intro + Film + Intermission 6:30pm to 9:00pm | Adults 18+ only | Dogs welcome. Cult film night",
+      ],
+      ["Dogs are very welcome at this screening."],
+    ])("detects dogFriendly from description '%s'", (description) => {
+      expect(createAccessibility("The Wild Robot", {}, description)).toEqual({
+        dogFriendly: true,
+      });
+    });
+
+    test.each([
+      ["A boy and his dog set out across the moors."],
+      ["Her dog-friendly neighbours never suspect a thing."],
+      ["Sadly this is not a dog-friendly screening."],
+      ["Guide dogs are welcome."],
+      ["Carers free, service dogs welcome."],
+      ["Assistance dogs are welcome in the auditorium."],
+      ["Guide dogs and service dogs are very welcome."],
+      ["No dogs welcome, sorry."],
+    ])("does not detect dogFriendly from description '%s'", (description) => {
+      expect(createAccessibility("The Wild Robot", {}, description)).toEqual(
+        {},
+      );
     });
 
     test("detects relaxed from description", () => {

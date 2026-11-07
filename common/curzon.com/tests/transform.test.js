@@ -57,6 +57,19 @@ describe("curzon transform performance attributes", () => {
     expect(performance.notes).toBe(`Dementia: ${description}`);
   });
 
+  it("flags a Dog Days screening as dog friendly and keeps its note", async () => {
+    const description =
+      "On Sundays, we host one weekly dog-friendly screening at participating cinemas with lowered sound. (Dog lovers without one of their own are also welcome.)";
+    const performance = await transformWith({
+      id: "A1",
+      name: { text: "Dog Days" },
+      description: { text: description },
+    });
+
+    expect(performance.accessibility).toEqual({ dogFriendly: true });
+    expect(performance.notes).toBe(`Dog Days: ${description}`);
+  });
+
   it("flags a relaxed screening without repeating it in the notes", async () => {
     const performance = await transformWith({
       id: "A1",

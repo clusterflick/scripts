@@ -852,6 +852,9 @@ const babyFriendlyMatchers = [
   /Family Film Club/i,
 ];
 
+// "Dog Friendly Screening:", "Dog-Friendly - ...", "(dog-friendly movie night)"
+const dogFriendlyMatchers = [/\bDog[-\s]?Friendly\b/i];
+
 const subtitledMatchers = [
   /Subtitl?e[ds]/i,
   /Subbed/i,
@@ -882,6 +885,9 @@ const getTitleAccessibility = (title) => {
   if (babyFriendlyMatchers.some((matcher) => !!title.match(matcher))) {
     titleAccessibility.babyFriendly = true;
   }
+  if (dogFriendlyMatchers.some((matcher) => !!title.match(matcher))) {
+    titleAccessibility.dogFriendly = true;
+  }
   if (subtitledMatchers.some((matcher) => !!title.match(matcher))) {
     titleAccessibility.subtitled = true;
   }
@@ -901,6 +907,15 @@ const descriptionAccessibilityMatchers = {
     /neurodiversity-friendly (?:film )?screening/i,
   ],
   babyFriendly: [/parent and baby/i, /parent & baby/i, /baby friendly/i],
+  // A synopsis can be about a dog, so only phrases describing the screening
+  dogFriendly: [
+    /\bdog[-\s]friendly (?:screening|cinema|film)/i,
+    /\b(?:this|the) screening is dog[-\s]friendly/i,
+    /\bwelcome to bring (?:their|your) (?:[\w-]+ )*dogs?\b/i,
+    // "Dogs welcome", but not the guide and assistance dogs that venues'
+    // access information welcomes to every screening
+    /(?<!\b(?:guide|assistance|service|support|hearing|working)\s)\bdogs (?:are )?(?:also |very |always )?welcome\b/i,
+  ],
   subtitled: [
     /with (?:english )?(?:and \w+ )?subtitles/i,
     /english subtitles/i,

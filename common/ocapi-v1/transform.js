@@ -137,6 +137,11 @@ async function transform(
             if (attributeName === "dementia") {
               accessibility.relaxed = true;
             }
+            // Curzon's Dog Days note says more than the flag can - the sound
+            // is lowered, and you don't need a dog to go - so it's kept too.
+            if (attributeName === "dog days") {
+              accessibility.dogFriendly = true;
+            }
             if (
               attributeName === "baby club" ||
               attributeName === "kids club" ||
