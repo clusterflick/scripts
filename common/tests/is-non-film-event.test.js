@@ -178,6 +178,7 @@ describe("isNonFilmEvent", () => {
     ["Autumn Magic: Collaging Workshop"],
     ["Comedy Live at The White Hart Southwark"],
     ["LOLipops Comedy at the White Hart Southwark - Early Show"],
+    ["Do We Have Your Attention?"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });

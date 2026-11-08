@@ -374,6 +374,9 @@ const nonFilmEvents = [
   /Comedy (Live )?at The White Hart Southwark/i,
   /^Publications Tour$/i,
   /^Community Linkup: Light and Magic$/i,
+  // Listed with no film attached to it. Anchored, because the phrase could as
+  // easily be a film's own title.
+  /^Do We Have Your Attention\?$/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
