@@ -179,6 +179,8 @@ describe("isNonFilmEvent", () => {
     ["Comedy Live at The White Hart Southwark"],
     ["LOLipops Comedy at the White Hart Southwark - Early Show"],
     ["Do We Have Your Attention?"],
+    ["Scenes of Home under Gender Apartheid"],
+    ["Uppity: The Intellectual Playground (The Year End Christmas Special)"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });

@@ -377,6 +377,11 @@ const nonFilmEvents = [
   // Listed with no film attached to it. Anchored, because the phrase could as
   // easily be a film's own title.
   /^Do We Have Your Attention\?$/i,
+  /^Scenes of Home under Gender Apartheid$/i,
+  // A talks night billed with the edition it is running in brackets ("(The
+  // Year End Christmas Special)"), so match the series rather than carrying a
+  // pattern per edition.
+  /^Uppity: The Intellectual Playground\b/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
