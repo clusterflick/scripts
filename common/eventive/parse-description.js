@@ -18,7 +18,16 @@ function parseDescription(htmlDescription) {
       $(this).remove();
     }
   });
-  return getText($.root()).replace(/\s+/g, " ").trim();
+  // Each block ends its line. Collapsing all whitespace ran a heading into the
+  // paragraph after it - "<h3>+ Q&A with director Alexandre Arcady</h3><p>
+  // <strong>PRICES:</strong>" read "Alexandre ArcadyPRICES:" - so the reader
+  // of the text couldn't tell where one thing stopped and the next began.
+  $("br").replaceWith("\n");
+  $("p, div, li, h1, h2, h3, h4, h5, h6").after("\n");
+  return getText($.root())
+    .replace(/[^\S\n]+/g, " ")
+    .replace(/ *\n[\s]*/g, "\n")
+    .trim();
 }
 
 module.exports = parseDescription;
