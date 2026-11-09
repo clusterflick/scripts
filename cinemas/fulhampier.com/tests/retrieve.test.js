@@ -69,6 +69,7 @@ describe("fulham pier retrieve when the site is unreachable", () => {
         </div></div>`;
       const getPage = (pageUrl, cacheKey, callback) =>
         callback({
+          locator: () => ({ waitFor: async () => {} }),
           content: async () =>
             pageUrl.includes("event_no=") ? eventPage : listingPage,
         });

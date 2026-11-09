@@ -3,12 +3,7 @@ const {
 } = require("../../common/get-page-with-playwright");
 const { getExpectedClosure } = require("../../common/expected-closures");
 const { id, url } = require("./attributes");
-const {
-  getEventUrl,
-  getListedEvents,
-  isFilmTitle,
-  parseEventPage,
-} = require("./utils");
+const { getEventUrl, getListedEvents, isFilmTitle } = require("./utils");
 
 // Through a browser rather than `fetchText`, though the pages are rendered on
 // the server: every response sets ~18KB of cookies, over Node's 16KB header
@@ -33,11 +28,10 @@ const retrievePages = () =>
         eventUrl,
         `${id}-event-${eventNo}`,
         async (page) => {
-          const content = await page.content();
-          // Parsed here too, so a page that has changed shape fails at
-          // retrieve rather than saving something the transform can't read.
-          parseEventPage(content);
-          return content;
+          // The event's details sit in this section, so its absence means we
+          // landed somewhere other than an event page.
+          await page.locator(".fpr-section-eventdetail h1").waitFor();
+          return page.content();
         },
       );
     }
