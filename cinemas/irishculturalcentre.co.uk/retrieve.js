@@ -2,6 +2,7 @@ const cheerio = require("cheerio");
 const { withCamoufoxSession } = require("../../common/get-page-with-camoufox");
 const { getPageEscalating } = require("../../common/camoufox-escalation");
 const { assertSelector, sleep, withJitter } = require("../../common/utils");
+const { checkListingDates } = require("./utils");
 const { id, url } = require("./attributes");
 
 // The site sits behind a bot check that on 23rd October 2026 began answering
@@ -38,6 +39,7 @@ const pace = () => sleep(withJitter(REQUEST_DELAY_MS));
 async function retrieveListing(getPage) {
   const movieListPage = await getPageEscalating(getPage, url, `${id}-listing`, {
     selector: PAGE_SELECTOR,
+    check: checkListingDates,
   });
   assertSelector(movieListPage, ".project-post");
 
