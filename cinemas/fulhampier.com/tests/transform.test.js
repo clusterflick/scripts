@@ -10,7 +10,7 @@ const closure = expectedClosures.find(({ venue }) => venue === attributes.id);
 
 // What the retrieve hands over once it has stood down for the closure: the
 // venue's domain does not resolve, so there is no page to read events off.
-const noEvents = { eventsData: [] };
+const noEvents = { eventPages: {} };
 
 describe("fulham pier transform with no listings", () => {
   const consoleLog = silenceConsoleLog();

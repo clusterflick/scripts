@@ -1,24 +1,47 @@
-const getPageWithPlaywright = require("../../common/get-page-with-playwright");
+const {
+  withPlaywrightSession,
+} = require("../../common/get-page-with-playwright");
 const { getExpectedClosure } = require("../../common/expected-closures");
 const { id, url } = require("./attributes");
+const { getEventUrl, getListedEvents, isFilmTitle } = require("./utils");
+
+// Through a browser rather than `fetchText`, though the pages are rendered on
+// the server: every response sets ~18KB of cookies, over Node's 16KB header
+// limit, so `fetch` fails with UND_ERR_HEADERS_OVERFLOW before reading a byte.
+const retrievePages = () =>
+  withPlaywrightSession(async (getPage) => {
+    const listingPage = await getPage(url, `${id}-whats-on`, async (page) => {
+      const content = await page.content();
+      // Every listing has something on - markets, yoga, the pub quiz - so an
+      // empty grid is a page that has changed shape, not a quiet week.
+      if (getListedEvents(content).length === 0) {
+        throw new Error("No events found on the what's on page");
+      }
+      return content;
+    });
+
+    const eventPages = {};
+    for (const { eventNo, title } of getListedEvents(listingPage)) {
+      if (!isFilmTitle(title)) continue;
+      const eventUrl = getEventUrl(eventNo);
+      eventPages[eventUrl] = await getPage(
+        eventUrl,
+        `${id}-event-${eventNo}`,
+        async (page) => {
+          // The event's details sit in this section, so its absence means we
+          // landed somewhere other than an event page.
+          await page.locator(".fpr-section-eventdetail h1").waitFor();
+          return page.content();
+        },
+      );
+    }
+
+    return { eventPages };
+  });
 
 async function retrieve() {
   try {
-    const eventsData = await getPageWithPlaywright(url, id, async (page) => {
-      await page.waitForLoadState();
-
-      // Extract the eventobj variable from the page
-      const content = await page.content();
-      const match = content.match(/eventobj\s*=\s*(\[.*?\]);/s);
-
-      if (!match) {
-        throw new Error("Could not find eventobj data on page");
-      }
-
-      return JSON.parse(match[1]);
-    });
-
-    return { eventsData };
+    return await retrievePages();
   } catch (error) {
     // The first venue to stand down at retrieve rather than at transform, and
     // it has to be here: the closure this rides on is a dead domain, so the
@@ -38,7 +61,7 @@ async function retrieve() {
     console.log(
       `      - ⚠️  Unable to retrieve ${id} - closed until ${closure.until} for ${closure.reason}: ${error.message}`,
     );
-    return { eventsData: [] };
+    return { eventPages: {} };
   }
 }
 
