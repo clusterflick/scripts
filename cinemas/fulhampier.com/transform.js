@@ -9,86 +9,45 @@ const {
 } = require("../../common/utils");
 const { getExpectedClosure } = require("../../common/expected-closures");
 const attributes = require("./attributes");
+const { isFilmTitle, parseEventPage } = require("./utils");
 
-/**
- * Parse the PeopleVine date format: /Date(timestamp)/
- */
-function parseDate(dateString) {
-  const match = dateString.match(/\/Date\((\d+)\)\//);
-  if (!match) return null;
-  return new Date(parseInt(match[1], 10));
-}
+const getDurationMins = (startDate, endDate) =>
+  endDate ? (endDate.getTime() - startDate.getTime()) / 1000 / 60 : undefined;
 
-function isFilmEvent(event) {
-  const keywords = (event.meta_keywords || "").toLowerCase();
-  if (keywords.includes("cinema") || keywords.includes("film")) {
-    return true;
-  }
-
-  const title = event.event_title.toLowerCase();
-  if (title.includes("screening") || title.includes("film club")) {
-    return true;
-  }
-
-  return false;
-}
-
-// event_date_end closes the event, which for a recurring strand is the last
-// date it runs rather than the end of one sitting: "Family Film Club - Tuesday
-// and Thursday" spans two days and subtracts out to 2,970 minutes. A figure
-// like that is not a long film, it is the wrong quantity, so report nothing
-// rather than a runtime no screening could have.
-const LONGEST_PLAUSIBLE_SITTING_MINS = 8 * 60;
-
-function getDurationMins(startDate, endDate) {
-  if (!startDate || !endDate) return undefined;
-  const durationMins = (endDate.getTime() - startDate.getTime()) / 1000 / 60;
-  if (durationMins <= 0 || durationMins > LONGEST_PLAUSIBLE_SITTING_MINS) {
-    return undefined;
-  }
-  return durationMins;
-}
-
-async function transform({ eventsData }, sourcedEvents) {
+async function transform({ eventPages }, sourcedEvents) {
   const movies = [];
 
-  const filmEvents = eventsData.filter(isFilmEvent);
+  for (const [eventUrl, html] of Object.entries(eventPages)) {
+    const { title, description, startDate, endDate, location, isSoldOut } =
+      parseEventPage(html);
+    // The retrieve picks events by the title on their card; the page's own
+    // title has the last word.
+    if (!isFilmTitle(title)) continue;
 
-  for (const event of filmEvents) {
-    const showingId = generateShowingId(attributes, event.event_no);
-    const startDate = parseDate(event.event_date);
-    const endDate = parseDate(event.event_date_end);
-    if (!startDate) throw new Error("No valid start date");
-    const eventUrl = `${attributes.domain}/whats-on/event?event_no=${event.event_no}`;
-    const duration = getDurationMins(startDate, endDate);
-
+    const eventNo = new URL(eventUrl).searchParams.get("event_no");
     movies.push({
-      showingId,
-      title: event.event_title.trim(),
+      showingId: generateShowingId(attributes, eventNo),
+      title,
       url: eventUrl,
-      overview: createOverview({ duration }),
+      overview: createOverview({
+        duration: getDurationMins(startDate, endDate),
+      }),
       performances: [
         createPerformance({
           date: startDate,
           url: eventUrl,
-          screen: event.event_venue,
-          status: event.isSoldOut ? { soldOut: true } : {},
-          accessibility: createAccessibility(
-            event.event_title,
-            {},
-            event.event_description,
-          ),
-          format: createFormat(event.event_title, {}, event.event_description),
+          screen: location,
+          status: isSoldOut ? { soldOut: true } : {},
+          accessibility: createAccessibility(title, {}, description),
+          format: createFormat(title, {}, description),
         }),
       ],
-      matchingHints: {
-        overview: event.event_summary || event.event_description || "",
-      },
+      matchingHints: { overview: description },
     });
   }
 
   if (movies.length === 0) {
-    // The retrieve stands down to an empty `eventsData` while the venue's
+    // The retrieve stands down to an empty `eventPages` while the venue's
     // domain is unreachable, which arrives here as the same empty output a
     // changed page would give. Stand down only for a declared closure, and say
     // which one, so the empty output is explained in the log rather than
