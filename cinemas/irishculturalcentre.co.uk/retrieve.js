@@ -36,6 +36,24 @@ const EVENT_PAGE_SELECTOR = ".back-link";
 const REQUEST_DELAY_MS = 5_000;
 const pace = () => sleep(withJitter(REQUEST_DELAY_MS));
 
+// The full listing is only served from the host's page cache to a navigation:
+// a request with `Sec-Fetch-Mode: cors` or `no-cors` is rendered fresh, with
+// the dates blank, and Node's `fetch` sends `cors` on every request and won't
+// let it be changed. Measured on 9th November 2026: curl and a browser got the
+// cached copy, `fetchWithRetry` the fresh one. So it is read through the
+// session's browser, never `getPageEscalating`'s plain fetch.
+//
+// The backfill runs inside the callback, so a full listing that can't date
+// every film throws before it is cached and a retry fetches it again.
+const readFullListing = (listingPage) => async (page) => {
+  await page.waitForSelector(PAGE_SELECTOR, { state: "attached" });
+  await page.waitForLoadState("load");
+  const content = await page.content();
+  backfillListingDates(listingPage, content);
+  await pace();
+  return content;
+};
+
 // The listing card only carries an excerpt of the event's description, which
 // can stop before anything that tells one same-titled film from another - All
 // That Glitters' card never mentions the Shakespeare plot TheMovieDB describes.
@@ -46,23 +64,16 @@ async function retrieveListing(getPage) {
   });
   assertSelector(listingPage, ".project-post");
 
-  // The backfill runs as the full listing's `check`, so a full listing that
-  // can't date every film is never cached and a retry fetches it again.
   let movieListPage = listingPage;
   const undated = getUndatedEvents(listingPage);
   if (undated.length > 0) {
     console.log(
       `      - ${undated.length} event(s) listed without a date; backfilling from ${FULL_LISTING_URL}`,
     );
-    const fullListingPage = await getPageEscalating(
-      getPage,
+    const fullListingPage = await getPage(
       FULL_LISTING_URL,
       `${id}-full-listing`,
-      {
-        selector: PAGE_SELECTOR,
-        pace,
-        check: (html) => backfillListingDates(listingPage, html),
-      },
+      readFullListing(listingPage),
     );
     movieListPage = backfillListingDates(listingPage, fullListingPage);
   }
