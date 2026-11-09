@@ -5,6 +5,7 @@ const {
   createPerformance,
   createOverview,
   createAccessibility,
+  createOccasions,
   createFormat,
   getId,
   basicNormalize,
@@ -78,6 +79,7 @@ async function transform({ moviePages }, sourcedEvents) {
         url: bookingUrl || moviePageUrl,
         accessibility: createAccessibility(title, {}, overview),
         format: createFormat(title, {}, overview),
+        occasions: createOccasions(title, {}, overview, { date }),
       }),
     ];
 

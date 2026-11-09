@@ -3,6 +3,7 @@ const {
   createPerformance,
   createOverview,
   createAccessibility,
+  createOccasions,
   createFormat,
   generateShowingId,
   readJSON,
@@ -63,14 +64,16 @@ function parseEvent(slug, story) {
       // The listing tags accessibility at event level ("Captioned",
       // "British sign language interpreted"), which doesn't say which
       // performance it applies to, so it isn't carried over
-      performances: content.occurrences.map(({ start_at: startAt }) =>
-        createPerformance({
-          date: new Date(startAt),
+      performances: content.occurrences.map(({ start_at: startAt }) => {
+        const date = new Date(startAt);
+        return createPerformance({
+          date,
           url: content.booking_url || url,
           accessibility: createAccessibility(name, {}, description),
           format: createFormat(name, {}, description),
-        }),
-      ),
+          occasions: createOccasions(name, {}, description, { date }),
+        });
+      }),
       matchingHints: { overview: description },
     },
   };

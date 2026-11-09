@@ -4,6 +4,7 @@ const {
   readJSON,
   generateShowingId,
   createAccessibility,
+  createOccasions,
   createFormat,
   createOverview,
   createPerformance,
@@ -32,9 +33,10 @@ function convertFeverEvent(url, planDetail, sessions) {
     title: planDetail.name,
     url,
     overview: createOverview({ duration }),
-    performances: sessions.map(({ startsAt }) =>
-      createPerformance({
-        date: parseISO(startsAt),
+    performances: sessions.map(({ startsAt }) => {
+      const date = parseISO(startsAt);
+      return createPerformance({
+        date,
         url,
         accessibility: createAccessibility(
           planDetail.name,
@@ -42,8 +44,14 @@ function convertFeverEvent(url, planDetail, sessions) {
           planDetail.description,
         ),
         format: createFormat(planDetail.name, {}, planDetail.description),
-      }),
-    ),
+        occasions: createOccasions(
+          planDetail.name,
+          {},
+          planDetail.description,
+          { date },
+        ),
+      });
+    }),
     matchingHints: { overview: planDetail.description },
   };
 }

@@ -2,6 +2,7 @@ const cheerio = require("cheerio");
 const { parse, startOfDay } = require("date-fns");
 const {
   createAccessibility,
+  createOccasions,
   createFormat,
   createOverview,
   createPerformance,
@@ -65,6 +66,7 @@ async function transform(attributes, { events }, sourcedEvents) {
             url,
             accessibility: createAccessibility(title, {}, overview),
             format: createFormat(title, {}, overview),
+            occasions: createOccasions(title, {}, overview, { date }),
           }),
         ],
         matchingHints: { overview },

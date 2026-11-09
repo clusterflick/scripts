@@ -6,6 +6,7 @@ const {
   createPerformance,
   stripNoteLabels,
   createAccessibility,
+  createOccasions,
   createFormat,
   getValidFormat,
   generateShowingId,
@@ -143,8 +144,9 @@ async function transform(
             ...(showing.SessionAttributesNames || []),
           ].reduce((acc, token) => ({ ...acc, ...getValidFormat(token) }), {});
 
+          const date = parseDate(showing.Showtime);
           return createPerformance({
-            date: parseDate(showing.Showtime),
+            date,
             screen: showing.ScreenName,
             notesList: stripNoteLabels(
               showingAttributes
@@ -169,6 +171,7 @@ async function transform(
             status,
             accessibility,
             format: createFormat(movie.Title, format, synopsis),
+            occasions: createOccasions(movie.Title, {}, synopsis, { date }),
           });
         }),
         matchingHints: {

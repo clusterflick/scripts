@@ -6,6 +6,7 @@ const {
   createPerformance,
   createOverview,
   createAccessibility,
+  createOccasions,
   createFormat,
   generateShowingId,
 } = require("../../common/utils");
@@ -118,6 +119,9 @@ function parseMovieCard($card, $, dateStr) {
         screen,
         accessibility: createAccessibility(title, {}, synopsis),
         format: createFormat(title, {}, synopsis),
+        occasions: createOccasions(title, {}, synopsis, {
+          date: performanceDate,
+        }),
       }),
     );
   });

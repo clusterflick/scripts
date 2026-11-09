@@ -5,6 +5,7 @@ const {
   createOverview,
   createPerformance,
   createAccessibility,
+  createOccasions,
   createFormat,
   readJSON,
 } = require("../../common/utils");
@@ -46,6 +47,7 @@ function parseEvent(event, tenant) {
     .filter((value) => !!value)
     .join("\n");
 
+  const date = parseISO(event.start_time);
   return {
     showingId: generateShowingId(attributes, event.id),
     title: event.name,
@@ -63,7 +65,7 @@ function parseEvent(event, tenant) {
     }),
     performances: [
       createPerformance({
-        date: parseISO(event.start_time),
+        date,
         url: getBookingUrl(event, eventUrl),
         // Every event on a tenant belongs to that tenant's programme, so the
         // note is the tenant rather than anything read off the event. Without
@@ -74,6 +76,7 @@ function parseEvent(event, tenant) {
         status: getTicketStatus(event),
         accessibility: createAccessibility(event.name, {}, matchingHintsText),
         format: createFormat(event.name, {}, matchingHintsText),
+        occasions: createOccasions(event.name, {}, matchingHintsText, { date }),
       }),
     ],
     matchingHints: { overview: matchingHintsText },

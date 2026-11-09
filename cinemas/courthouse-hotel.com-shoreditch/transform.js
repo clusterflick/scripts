@@ -5,6 +5,7 @@ const {
   createOverview,
   createPerformance,
   createAccessibility,
+  createOccasions,
   createFormat,
   basicNormalize,
 } = require("../../common/utils");
@@ -54,6 +55,7 @@ async function transform({ csvText }, sourcedEvents) {
         url: attributes.url,
         accessibility: createAccessibility(title, {}),
         format: createFormat(title, {}, ""),
+        occasions: createOccasions(title),
       }),
     );
   }

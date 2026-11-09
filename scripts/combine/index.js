@@ -404,6 +404,7 @@ async function combine() {
             status = {},
             accessibility = {},
             format = {},
+            occasions = {},
           }) => ({
             showingId,
             time,
@@ -414,6 +415,8 @@ async function combine() {
             accessibility:
               Object.keys(accessibility).length > 0 ? accessibility : undefined,
             format: Object.keys(format).length > 0 ? format : undefined,
+            occasions:
+              Object.keys(occasions).length > 0 ? occasions : undefined,
           }),
         ),
       );

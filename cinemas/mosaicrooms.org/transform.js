@@ -3,6 +3,7 @@ const { differenceInDays, getDay, parse } = require("date-fns");
 const { enGB } = require("date-fns/locale/en-GB");
 const {
   createAccessibility,
+  createOccasions,
   createFormat,
   createOverview,
   createPerformance,
@@ -107,6 +108,7 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
             url: bookingUrl ? $(bookingUrl).attr("href") : url,
             accessibility: createAccessibility(title, {}, overview),
             format: createFormat(title, {}, overview),
+            occasions: createOccasions(title, {}, overview, { date }),
           }),
         ],
         matchingHints: { overview },

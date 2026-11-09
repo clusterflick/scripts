@@ -4,6 +4,7 @@ const {
   createPerformance,
   createOverview,
   createAccessibility,
+  createOccasions,
   createFormat,
   generateShowingId,
   readJSON,
@@ -142,6 +143,7 @@ function parseEvent(html, url, festival) {
   const meta = getMeta($);
   const description = getDescription($);
 
+  const date = new Date(eventData.startDate);
   return {
     venueName,
     venueAddress,
@@ -161,11 +163,12 @@ function parseEvent(html, url, festival) {
       }),
       performances: [
         createPerformance({
-          date: new Date(eventData.startDate),
+          date,
           url,
           notesList: [getFestivalNote(festival)],
           accessibility: createAccessibility(title, {}, description),
           format: createFormat(title, {}, description),
+          occasions: createOccasions(title, {}, description, { date }),
         }),
       ],
       matchingHints: { overview: description },

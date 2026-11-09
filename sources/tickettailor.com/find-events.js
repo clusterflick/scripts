@@ -7,6 +7,7 @@ const {
   generateShowingId,
   getText,
   createAccessibility,
+  createOccasions,
   createFormat,
   readJSON,
   memoiseOnData,
@@ -192,6 +193,9 @@ function convertTicketTailorEvent(event, occurrences, description) {
         status,
         accessibility: createAccessibility(title, {}, description),
         format: createFormat(title, {}, description),
+        occasions: createOccasions(title, {}, description, {
+          date: start,
+        }),
         notesList: note ? [note] : [],
       }),
     ),

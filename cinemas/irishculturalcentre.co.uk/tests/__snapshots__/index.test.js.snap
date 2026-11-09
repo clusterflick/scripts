@@ -15,6 +15,11 @@ exports[`Irish Cultural Centre retrieve and transform 1`] = `
         "bookingUrl": "https://irishculturalcentre.co.uk/event/all-our-yesterdays-uk-premiere-film-screening/",
         "format": {},
         "notes": "",
+        "occasions": {
+          "premiere": {
+            "region": "uk",
+          },
+        },
         "status": {},
         "time": 1795980600000,
       },
@@ -36,6 +41,9 @@ exports[`Irish Cultural Centre retrieve and transform 1`] = `
         "bookingUrl": "https://irishculturalcentre.co.uk/event/all-that-glitters-community-screening-and-qa/",
         "format": {},
         "notes": "",
+        "occasions": {
+          "qAndA": true,
+        },
         "status": {},
         "time": 1796239800000,
       },
@@ -57,6 +65,12 @@ exports[`Irish Cultural Centre retrieve and transform 1`] = `
         "bookingUrl": "https://irishculturalcentre.co.uk/event/baite-london-premier-screening/",
         "format": {},
         "notes": "",
+        "occasions": {
+          "premiere": {
+            "region": "london",
+          },
+          "qAndA": true,
+        },
         "status": {},
         "time": 1797019200000,
       },
@@ -78,6 +92,13 @@ exports[`Irish Cultural Centre retrieve and transform 1`] = `
         "bookingUrl": "https://irishculturalcentre.co.uk/event/bram-stoker-father-of-dracula-documentary-qa/",
         "format": {},
         "notes": "",
+        "occasions": {
+          "qAndA": {
+            "guests": [
+              "Anna Emm",
+            ],
+          },
+        },
         "status": {},
         "time": 1793215800000,
       },
@@ -99,6 +120,12 @@ exports[`Irish Cultural Centre retrieve and transform 1`] = `
         "bookingUrl": "https://irishculturalcentre.co.uk/event/london-premiere-screening-q-a-a-quiet-love/",
         "format": {},
         "notes": "",
+        "occasions": {
+          "premiere": {
+            "region": "london",
+          },
+          "qAndA": true,
+        },
         "status": {},
         "time": 1795204800000,
       },
@@ -120,6 +147,13 @@ exports[`Irish Cultural Centre retrieve and transform 1`] = `
         "bookingUrl": "https://irishculturalcentre.co.uk/event/film-screening-mrs-robinson-followed-by-an-in-conversation-event-with-irelands-former-president-mary-robinson/",
         "format": {},
         "notes": "",
+        "occasions": {
+          "qAndA": {
+            "guests": [
+              "Mary Robinson",
+            ],
+          },
+        },
         "status": {},
         "time": 1793271600000,
       },
@@ -141,6 +175,7 @@ exports[`Irish Cultural Centre retrieve and transform 1`] = `
         "bookingUrl": "https://irishculturalcentre.co.uk/event/storm-an-irish-nigerian-family-story/",
         "format": {},
         "notes": "",
+        "occasions": {},
         "status": {},
         "time": 1794511800000,
       },
@@ -162,6 +197,13 @@ exports[`Irish Cultural Centre retrieve and transform 1`] = `
         "bookingUrl": "https://irishculturalcentre.co.uk/event/uk-premiere-screening-panel-discussion-the-geography-of-violence-by-award-winning-maeve-murphy/",
         "format": {},
         "notes": "",
+        "occasions": {
+          "panel": true,
+          "premiere": {
+            "region": "uk",
+          },
+          "qAndA": true,
+        },
         "status": {},
         "time": 1794942000000,
       },
@@ -183,6 +225,13 @@ exports[`Irish Cultural Centre retrieve and transform 1`] = `
         "bookingUrl": "https://irishculturalcentre.co.uk/event/trojan-eddie-film-screening/",
         "format": {},
         "notes": "",
+        "occasions": {
+          "qAndA": {
+            "guests": [
+              "Gillies MacKinnon",
+            ],
+          },
+        },
         "status": {},
         "time": 1796500800000,
       },

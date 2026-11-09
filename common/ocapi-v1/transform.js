@@ -5,6 +5,7 @@ const {
   stripNoteLabels,
   createOverview,
   createAccessibility,
+  createOccasions,
   createFormat,
   getTitleFormat,
   generateShowingId,
@@ -185,9 +186,10 @@ async function transform(
           }
         });
 
+        const date = parseISO(schedule.startsAt);
         movie.performances = movie.performances.concat(
           createPerformance({
-            date: parseISO(schedule.startsAt),
+            date,
             screen: findFor(screens, screenId).name.text,
             notesList: stripNoteLabels(notesList, noteLabels),
             url: getBookingUrl(performance),
@@ -201,6 +203,12 @@ async function transform(
               movie.title,
               format,
               movie.matchingHints.overview,
+            ),
+            occasions: createOccasions(
+              movie.title,
+              {},
+              movie.matchingHints.overview,
+              { date },
             ),
           }),
         );

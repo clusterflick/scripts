@@ -5,6 +5,7 @@ const {
   createPerformance,
   createOverview,
   createAccessibility,
+  createOccasions,
   createFormat,
   getValidFormat,
   generateShowingId,
@@ -229,6 +230,9 @@ async function transform({ movieListPage }, sourcedEvents) {
             status,
             accessibility: createAccessibility(title, accessibility, synopsis),
             format: createFormat(title, format, synopsis),
+            occasions: createOccasions(title, {}, synopsis, {
+              date: performanceTime,
+            }),
           }),
         );
         $currentElement = $currentElement.next();

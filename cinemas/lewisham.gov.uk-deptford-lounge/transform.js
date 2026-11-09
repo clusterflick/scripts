@@ -5,6 +5,7 @@ const {
   createOverview,
   createPerformance,
   createAccessibility,
+  createOccasions,
   createFormat,
   getValidClassification,
   basicNormalize,
@@ -96,6 +97,7 @@ function transformFormat1(emailText) {
             description,
           ),
           format: createFormat(title, {}, description),
+          occasions: createOccasions(title, {}, description, { date }),
         }),
       ],
       matchingHints: {
@@ -188,6 +190,7 @@ function transformFormat3(emailText) {
             description,
           ),
           format: createFormat(title, {}, description),
+          occasions: createOccasions(title, {}, description, { date }),
         }),
       ],
       matchingHints: {
@@ -244,6 +247,7 @@ function transformFormat2(emailText) {
           url,
           accessibility: createAccessibility(title, {}, description),
           format: createFormat(title, {}, description),
+          occasions: createOccasions(title, {}, description, { date }),
         }),
       ],
       matchingHints: {

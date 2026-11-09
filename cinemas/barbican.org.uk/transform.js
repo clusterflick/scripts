@@ -5,6 +5,7 @@ const {
   createOverview,
   createPerformance,
   createAccessibility,
+  createOccasions,
   createFormat,
   basicNormalize,
   generateShowingId,
@@ -193,6 +194,10 @@ function processPerformancePage(
 
     const $timeEl = $(this).find(".instance-time__time time");
     const dateTime = sanitizeDatetime($timeEl);
+    const date = parseISO(dateTime);
+    const occasions = createOccasions(title, {}, getDescription(listingPage), {
+      date,
+    });
     const screen = getText($(this).find(".instance-listing__venue"));
     const notesList = listingTags.filter(
       (tag) =>
@@ -201,13 +206,14 @@ function processPerformancePage(
     );
     performances.push(
       createPerformance({
-        date: parseISO(dateTime),
+        date,
         notesList,
         url: $bookingButton.attr("href") || fallbackUrl,
         screen: screen || fallbackScreen,
         status,
         accessibility,
         format,
+        occasions,
       }),
     );
   });

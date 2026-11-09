@@ -7,6 +7,7 @@ const {
   createPerformance,
   createOverview,
   createAccessibility,
+  createOccasions,
   createFormat,
 } = require("../../common/utils");
 const attributes = require("./attributes");
@@ -82,11 +83,15 @@ async function transform({ moviePages }, sourcedEvents) {
         const bookingUrl =
           $(tr).find("a[href*='booking']").attr("href") || moviePageUrl;
 
+        const performanceDate = parsePerformanceDate(dateText, timeText);
         return createPerformance({
-          date: parsePerformanceDate(dateText, timeText),
+          date: performanceDate,
           url: bookingUrl,
           accessibility: createAccessibility(title, {}, description),
           format: createFormat(title, {}, description),
+          occasions: createOccasions(title, {}, description, {
+            date: performanceDate,
+          }),
         });
       })
       .get()

@@ -5,6 +5,7 @@ const {
   sanitizeRichText,
   isPrivateHire,
   createAccessibility,
+  createOccasions,
   createFormat,
   getValidFormat,
   basicNormalize,
@@ -180,11 +181,12 @@ async function transform(attributes, { movieListPage }, sourcedEvents) {
           notesList.push(tag.name);
         });
 
+        const date = parseDateTime(
+          showTime.session_start_date,
+          showTime.show_time_slots,
+        );
         const performance = createPerformance({
-          date: parseDateTime(
-            showTime.session_start_date,
-            showTime.show_time_slots,
-          ),
+          date,
           notesList,
           url: `${attributes.domain}/movies/${movie.url_key}/showtimes/${showTime.session_start_date}/${attributes.location}/seat-plan?showtime=${showTime.show_time_uuid}`,
           screen: showTime.screen_name,
@@ -194,6 +196,9 @@ async function transform(attributes, { movieListPage }, sourcedEvents) {
             movie.synopsis,
           ),
           format: createFormat(movie.movie_name, format, movie.synopsis),
+          occasions: createOccasions(movie.movie_name, {}, movie.synopsis, {
+            date,
+          }),
         });
 
         movieEntry.performances.push(performance);

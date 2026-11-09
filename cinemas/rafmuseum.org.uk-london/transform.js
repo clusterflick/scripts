@@ -7,6 +7,7 @@ const {
   createPerformance,
   createOverview,
   createAccessibility,
+  createOccasions,
   createFormat,
   getMovieTitleAndYearFrom,
   getId,
@@ -82,6 +83,7 @@ async function transform({ movieListPage }, sourcedEvents) {
           url: bookingUrl || attributes.url,
           accessibility: createAccessibility(title, {}, description),
           format: createFormat(title, {}, description),
+          occasions: createOccasions(title, {}, description, { date }),
         }),
       ],
       matchingHints: {

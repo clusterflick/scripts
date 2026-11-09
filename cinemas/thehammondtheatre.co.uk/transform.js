@@ -9,6 +9,7 @@ const {
   getText,
   basicNormalize,
   createAccessibility,
+  createOccasions,
 } = require("../../common/utils");
 const attributes = require("./attributes");
 
@@ -56,6 +57,7 @@ async function transform({ moviePages }, sourcedEvents) {
     }
 
     const title = getText($("h1").eq(0));
+    const date = parseDateTime(dateStr, startingTime);
     movies.push({
       showingId: generateShowingId(attributes, id),
       title,
@@ -63,11 +65,12 @@ async function transform({ moviePages }, sourcedEvents) {
       overview: createOverview({}),
       performances: [
         createPerformance({
-          date: parseDateTime(dateStr, startingTime),
+          date,
           notesList: doorsOpen ? [`Doors open: ${doorsOpen}`] : [],
           url: $bookNowButton.attr("href"),
           accessibility: createAccessibility(title, {}, description),
           format: createFormat(getText($("h1").eq(0)), {}, description),
+          occasions: createOccasions(title, {}, description, { date }),
         }),
       ],
       matchingHints: {

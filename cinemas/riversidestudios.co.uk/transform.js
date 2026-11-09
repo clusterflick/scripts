@@ -3,6 +3,7 @@ const {
   createOverview,
   createPerformance,
   createAccessibility,
+  createOccasions,
   createFormat,
   basicNormalize,
   getText,
@@ -145,6 +146,13 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
               synopsis,
             );
             const format = createFormat(title, {}, synopsis);
+            const date = new Date(parseInt(timestamp, 10) * 1000);
+            const occasions = createOccasions(
+              title,
+              { qAndA: tags.includes("80811") },
+              synopsis,
+              { date },
+            );
 
             const notesList = [];
             if (tags.includes("224")) {
@@ -160,11 +168,12 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
               notesList.push("British Sign Language");
             }
             return createPerformance({
-              date: new Date(parseInt(timestamp, 10) * 1000),
+              date,
               notesList,
               url,
               accessibility,
               format,
+              occasions,
             });
           });
       },

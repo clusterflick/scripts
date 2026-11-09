@@ -5,6 +5,7 @@ const {
   createPerformance,
   stripNoteLabels,
   createAccessibility,
+  createOccasions,
   createFormat,
   getValidFormat,
   generateShowingId,
@@ -107,8 +108,9 @@ async function transform(attributes, { result: movieData }, sourcedEvents) {
           soldOut: showing.isSoldOut,
         };
 
+        const date = parseISO(showing.showTimeWithTimeZone);
         return createPerformance({
-          date: parseISO(showing.showTimeWithTimeZone),
+          date,
           screen: showing.screenName,
           notesList: stripNoteLabels(notesList, noteLabels),
           url: `${domain}${showing.bookingUrl}`,
@@ -118,6 +120,9 @@ async function transform(attributes, { result: movieData }, sourcedEvents) {
             movie.synopsisShort,
           ),
           format: createFormat(movie.filmTitle, format, movie.synopsisShort),
+          occasions: createOccasions(movie.filmTitle, {}, movie.synopsisShort, {
+            date,
+          }),
           status,
         });
       }),

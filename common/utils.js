@@ -9,6 +9,11 @@ const stringify = require("json-stable-stringify");
 const diff = require("fast-diff");
 const slugify = require("slugify");
 const { classifyFetchResponse, logRefusal } = require("./bot-challenge");
+const {
+  createOccasions,
+  getTextOccasions,
+  mergeOccasions,
+} = require("./occasions");
 
 // Set only inside withReadCache - see there.
 let readCache = null;
@@ -594,23 +599,46 @@ const createPerformance = ({
   status = {},
   accessibility,
   format,
+  occasions,
 }) => {
   if (!(date instanceof Date) || Number.isNaN(date.getTime())) {
     throw new Error(`createPerformance: invalid date (received ${date})`);
   }
+  // Checked here rather than left to the schema, because a missing value
+  // would otherwise be filled from the notes alone and pass validation -
+  // silently skipping the title and description the venue should have read.
+  if (!occasions) {
+    throw new Error(
+      "createPerformance: occasions is required (use createOccasions)",
+    );
+  }
+
+  const notes = notesList
+    .map((value) => value?.trim())
+    .filter((value) => !!value)
+    .join("\n")
+    .trim();
 
   return {
     time: date.getTime(),
-    notes: notesList
-      .map((value) => value?.trim())
-      .filter((value) => !!value)
-      .join("\n")
-      .trim(),
+    notes,
     bookingUrl: typeof url === "function" ? url() : encodeURI(url),
     screen: getScreen(screen),
     status,
     accessibility,
     format,
+    // The notes are this performance's own text, like its title, but they
+    // only exist once joined here - so they are read here, for every venue,
+    // rather than at each call site.
+    // Each note is read on its own, so one note's "pre-recorded" can't cancel
+    // another's Q&A.
+    occasions: notes
+      .split("\n")
+      .map((note) => getTextOccasions(note))
+      .reduceRight(
+        (merged, noteOccasions) => mergeOccasions(noteOccasions, merged),
+        occasions,
+      ),
   };
 };
 
@@ -1373,6 +1401,7 @@ module.exports = {
   createOverview,
   createAccessibility,
   createFormat,
+  createOccasions,
   getValidFormat,
   getTitleFormat,
   removeMatchingHints,

@@ -9,6 +9,7 @@ const {
   getText,
   readJSON,
   createAccessibility,
+  createOccasions,
   createFormat,
 } = require("../../common/utils");
 const attributes = require("./attributes");
@@ -192,6 +193,9 @@ function convertTitoEvent(url, eventDetails) {
         url,
         accessibility: createAccessibility(title, {}, description),
         format: createFormat(title, {}, description),
+        occasions: createOccasions(title, {}, description, {
+          date: parsedDate.startDate,
+        }),
       }),
     ],
     matchingHints: { overview: description },

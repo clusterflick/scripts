@@ -9,6 +9,7 @@ const {
   generateShowingId,
   basicNormalize,
   createAccessibility,
+  createOccasions,
   createFormat,
   removeAlreadyListedPerformances,
 } = require("../../common/utils");
@@ -128,6 +129,12 @@ async function transform({ moviePages }, sourcedEvents) {
           movies[showingId].title,
           {},
           movies[showingId].matchingHints?.overview,
+        ),
+        occasions: createOccasions(
+          movies[showingId].title,
+          {},
+          movies[showingId].matchingHints?.overview,
+          { date },
         ),
       }),
     );

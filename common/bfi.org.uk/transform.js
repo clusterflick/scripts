@@ -4,6 +4,7 @@ const {
   getText,
   createPerformance,
   createAccessibility,
+  createOccasions,
   createFormat,
   getValidFormat,
   generateShowingId,
@@ -201,6 +202,7 @@ function getPerformancesFor(
         ...venueFormat,
         ...getKeywordFormat(keywords),
       }),
+      occasions: createOccasions(title),
     });
   });
 }

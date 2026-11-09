@@ -5,6 +5,7 @@ const {
   createPerformance,
   createOverview,
   createAccessibility,
+  createOccasions,
   createFormat,
   getId,
 } = require("../../common/utils");
@@ -51,6 +52,7 @@ async function transform({ moviePages }, sourcedEvents) {
 
     const overview = getDescription($);
 
+    const date = parseEventDate(dateText);
     movies.push({
       showingId: generateShowingId(attributes, getEventIdFromUrl(moviePageUrl)),
       title,
@@ -58,10 +60,11 @@ async function transform({ moviePages }, sourcedEvents) {
       overview: createOverview({}),
       performances: [
         createPerformance({
-          date: parseEventDate(dateText),
+          date,
           url: moviePageUrl,
           accessibility: createAccessibility(title, {}, overview),
           format: createFormat(title, {}, overview),
+          occasions: createOccasions(title, {}, overview, { date }),
         }),
       ],
       matchingHints: { overview },

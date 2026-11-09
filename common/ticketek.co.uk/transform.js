@@ -3,6 +3,7 @@ const {
   createPerformance,
   generateShowingId,
   createAccessibility,
+  createOccasions,
   createFormat,
 } = require("../utils");
 
@@ -33,6 +34,7 @@ async function transform(attributes, { moviePages }, sourcedEvents) {
             url: performance.Url || movieUrl,
             accessibility: createAccessibility(data.Show.Name, {}),
             format: createFormat(data.Show.Name, {}, ""),
+            occasions: createOccasions(data.Show.Name),
           }),
         );
       }

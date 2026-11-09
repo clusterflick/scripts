@@ -6,6 +6,7 @@ const {
   createPerformance,
   generateShowingId,
   createAccessibility,
+  createOccasions,
   createFormat,
   getTitleAccessibility,
   getTitleFormat,
@@ -263,6 +264,7 @@ function toMovie($, showEl, websiteDetails, eventFeeds) {
       // "35mm" or "35mm film" - so read it with the label matchers rather than
       // as an exact token, which only the first spelling would satisfy.
       format: createFormat(title, getTitleFormat(eventAttribute), overview),
+      occasions: createOccasions(title, {}, overview, { date }),
     });
   });
 

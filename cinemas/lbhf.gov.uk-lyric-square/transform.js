@@ -5,6 +5,7 @@ const {
   createPerformance,
   createOverview,
   createAccessibility,
+  createOccasions,
   createFormat,
 } = require("../../common/utils");
 const { extractJsonLdEvents } = require("../../common/tribe-events/transform");
@@ -52,6 +53,9 @@ async function transform({ movieListPages }, sourcedEvents) {
             url: event.url,
             accessibility: createAccessibility(title, {}, synopsis),
             format: createFormat(title, {}, synopsis),
+            occasions: createOccasions(title, {}, synopsis, {
+              date: startDate,
+            }),
           }),
         ],
         matchingHints: {

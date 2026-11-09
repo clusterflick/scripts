@@ -7,6 +7,7 @@ const {
   basicNormalize,
   createPerformance,
   createAccessibility,
+  createOccasions,
   createFormat,
   isPrivateHire,
 } = require("../../common/utils");
@@ -80,9 +81,10 @@ async function transform({ moviePages }, sourcedEvents) {
         $(this).find(".prog-notes").remove();
         $(this).find(".OpenForSale").remove();
         const time = getText($(this).find(".prog-times"));
+        const date = parseDate(`${day} ${time}`);
         performances.push(
           createPerformance({
-            date: parseDate(`${day} ${time}`),
+            date,
             notesList: [
               ...commonPerformanceNotes,
               accessibilityFromPerformanceNote ? undefined : performanceNote,
@@ -97,6 +99,7 @@ async function transform({ moviePages }, sourcedEvents) {
               synopsis,
             ),
             format: createFormat(title, {}, synopsis),
+            occasions: createOccasions(title, {}, synopsis, { date }),
           }),
         );
       });

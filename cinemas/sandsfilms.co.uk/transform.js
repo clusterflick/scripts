@@ -4,6 +4,7 @@ const {
   createPerformance,
   generateShowingId,
   createAccessibility,
+  createOccasions,
   createFormat,
 } = require("../../common/utils");
 const parseDescription = require("../../common/eventive/parse-description");
@@ -36,12 +37,14 @@ async function transform({ movieListPage }, sourcedEvents) {
       .filter((value) => !!value)
       .join("\n");
 
+    const date = parseISO(event.start_time);
     const performance = createPerformance({
-      date: parseISO(event.start_time),
+      date,
       url: getBookingUrl(event, eventUrl),
       status: getTicketStatus(event),
       accessibility: createAccessibility(event.name, {}, matchingHintsText),
       format: createFormat(event.name, {}, matchingHintsText),
+      occasions: createOccasions(event.name, {}, matchingHintsText, { date }),
     });
 
     return {

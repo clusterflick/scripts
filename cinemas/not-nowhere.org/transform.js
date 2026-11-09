@@ -5,6 +5,7 @@ const {
   createOverview,
   createPerformance,
   createAccessibility,
+  createOccasions,
   createFormat,
   generateShowingId,
   getText,
@@ -80,6 +81,7 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
             url: moviePageUrl,
             accessibility: createAccessibility(title, {}, description),
             format: createFormat(title, {}, description),
+            occasions: createOccasions(title, {}, description, { date }),
           }),
         );
       }

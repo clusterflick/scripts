@@ -3,6 +3,7 @@ const {
   createOverview,
   createPerformance,
   createAccessibility,
+  createOccasions,
   createFormat,
   generateShowingId,
   readJSON,
@@ -52,6 +53,7 @@ function convertTzkrtiEvent(event) {
     .filter(Boolean)
     .join("\n");
 
+  const date = getStartDate(event);
   return {
     showingId: generateShowingId(attributes, event.id),
     title,
@@ -59,11 +61,12 @@ function convertTzkrtiEvent(event) {
     overview: createOverview({ duration: getDurationInMinutes(event) }),
     performances: [
       createPerformance({
-        date: getStartDate(event),
+        date,
         url,
         status: getStatus(event),
         accessibility: createAccessibility(title, {}, overview),
         format: createFormat(title, {}, overview),
+        occasions: createOccasions(title, {}, overview, { date }),
       }),
     ],
     matchingHints: { overview },

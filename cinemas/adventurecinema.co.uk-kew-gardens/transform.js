@@ -7,6 +7,7 @@ const {
   createPerformance,
   createOverview,
   createAccessibility,
+  createOccasions,
   createFormat,
   basicNormalize,
 } = require("../../common/utils");
@@ -100,6 +101,7 @@ async function transform({ moviePages }, sourcedEvents) {
     const slug = url.split("/event/")[1].replace(/\/$/, "");
     const synopsis = getSynopsis($);
 
+    const date = parseShowtime(rawDate, showtimeSpan);
     movies.push({
       showingId: generateShowingId(attributes, slug),
       title,
@@ -111,12 +113,13 @@ async function transform({ moviePages }, sourcedEvents) {
       }),
       performances: [
         createPerformance({
-          date: parseShowtime(rawDate, showtimeSpan),
+          date,
           notesList: [infoSpans.find((s) => s.startsWith("Gates:"))],
           url: getBookingUrl(mainSection),
           status: isSoldOut(mainSection) ? { soldOut: true } : {},
           accessibility: createAccessibility(title, {}, synopsis),
           format: createFormat(title, {}, synopsis),
+          occasions: createOccasions(title, {}, synopsis, { date }),
         }),
       ],
       matchingHints: {

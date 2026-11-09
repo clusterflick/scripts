@@ -5,6 +5,7 @@ const {
   createOverview,
   generateShowingId,
   createAccessibility,
+  createOccasions,
   createFormat,
 } = require("../../common/utils");
 const { getExpectedClosure } = require("../../common/expected-closures");
@@ -79,6 +80,12 @@ async function transform({ eventsData }, sourcedEvents) {
             event.event_description,
           ),
           format: createFormat(event.event_title, {}, event.event_description),
+          occasions: createOccasions(
+            event.event_title,
+            {},
+            event.event_description,
+            { date: startDate },
+          ),
         }),
       ],
       matchingHints: {

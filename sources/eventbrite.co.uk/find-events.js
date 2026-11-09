@@ -4,6 +4,7 @@ const {
   basicNormalize,
   generateShowingId,
   createAccessibility,
+  createOccasions,
   createFormat,
   convertNamesTextToList,
 } = require("../../common/utils");
@@ -94,6 +95,9 @@ function convertEventbriteEvent(
         status,
         accessibility: createAccessibility(event.name, {}, overview),
         format: createFormat(event.name, {}, overview),
+        occasions: createOccasions(event.name, {}, overview, {
+          date: startDate,
+        }),
       }),
     ],
     matchingHints: {

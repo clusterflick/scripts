@@ -6,6 +6,7 @@ const {
   generateShowingId,
   getText,
   createAccessibility,
+  createOccasions,
   createFormat,
   getPresenterNote,
 } = require("../../common/utils");
@@ -106,6 +107,9 @@ function convertOutsavvyEvent(event, cinema) {
         url: event.url,
         accessibility: createAccessibility(event.title, {}, event.description),
         format: createFormat(event.title, {}, event.description),
+        occasions: createOccasions(event.title, {}, event.description, {
+          date,
+        }),
       }),
     ),
     matchingHints: { overview: event.description },

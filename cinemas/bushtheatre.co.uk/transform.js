@@ -5,6 +5,7 @@ const {
   createPerformance,
   createOverview,
   createAccessibility,
+  createOccasions,
   createFormat,
   generateShowingId,
   basicNormalize,
@@ -44,6 +45,7 @@ function getPerformances($, title, overview) {
         status: getStatus($bookCol),
         accessibility: createAccessibility(title, {}, overview),
         format: createFormat(title, {}, overview),
+        occasions: createOccasions(title, {}, overview, { date }),
       }),
     );
   });

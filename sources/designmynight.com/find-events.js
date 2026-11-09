@@ -10,6 +10,7 @@ const {
   basicNormalize,
   sanitizeRichText,
   createAccessibility,
+  createOccasions,
   createFormat,
 } = require("../../common/utils");
 const { venueMatchesCinema } = require("../../common/source-utils");
@@ -267,6 +268,7 @@ function convertDesignMyNightEvent(
         status: { soldOut },
         accessibility: createAccessibility(title, {}, listingData?.excerpt),
         format: createFormat(title, {}, listingData?.excerpt),
+        occasions: createOccasions(title, {}, listingData?.excerpt, { date }),
       });
     });
 

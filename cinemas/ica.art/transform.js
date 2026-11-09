@@ -6,6 +6,7 @@ const {
   createOverview,
   createPerformance,
   createAccessibility,
+  createOccasions,
   createFormat,
   basicNormalize,
 } = require("../../common/utils");
@@ -124,8 +125,9 @@ async function transform({ moviePages }, sourcedEvents) {
           return uniquePerformances;
         }, [])
         .map(({ screen, dateTime, url }) => {
+          const performanceDate = parseDate(dateTime);
           return createPerformance({
-            date: parseDate(dateTime),
+            date: performanceDate,
             notesList: seasons.map((season) => `Part of ${season}`),
             url,
             screen,
@@ -139,6 +141,9 @@ async function transform({ moviePages }, sourcedEvents) {
               overview,
             ),
             format: createFormat(title, {}, overview),
+            occasions: createOccasions(title, {}, overview, {
+              date: performanceDate,
+            }),
           });
         }),
       matchingHints: { overview },

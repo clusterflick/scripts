@@ -4,6 +4,7 @@ const {
   createOverview,
   createPerformance,
   createAccessibility,
+  createOccasions,
   createFormat,
   convertNamesTextToList,
 } = require("../../common/utils");
@@ -260,6 +261,7 @@ function expandLineUpEvent(event, details) {
           status: getEventStatus(details),
           accessibility: createAccessibility(film.title, {}, overview),
           format: createFormat(film.title, {}, overview),
+          occasions: createOccasions(film.title, {}, overview, { date }),
         }),
       ],
       matchingHints: {

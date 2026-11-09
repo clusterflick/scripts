@@ -5,6 +5,7 @@ const {
   removeAlreadyListedPerformances,
   createOverview,
   createAccessibility,
+  createOccasions,
   createFormat,
   basicNormalize,
   generateShowingId,
@@ -138,9 +139,10 @@ async function transform(attributes, config, movieData, sourcedEvents) {
         directors: namesJoinedByPlus(movie.Director),
         actors: namesJoinedByPlus(movie.Cast),
       }),
-      performances: movie.Performances.map((performance) =>
-        createPerformance({
-          date: parseDate(performance),
+      performances: movie.Performances.map((performance) => {
+        const date = parseDate(performance);
+        return createPerformance({
+          date,
           notesList: getNotesList(performance, tags.notes),
           url: performance.URL.toLowerCase().startsWith("http")
             ? performance.URL
@@ -153,8 +155,9 @@ async function transform(attributes, config, movieData, sourcedEvents) {
             overview,
           ),
           format: createFormat(title, {}, overview),
-        }),
-      ),
+          occasions: createOccasions(title, {}, overview, { date }),
+        });
+      }),
       matchingHints: {
         overview,
         characters: extractPeopleNames(overview),

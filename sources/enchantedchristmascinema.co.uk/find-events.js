@@ -7,6 +7,7 @@ const {
   generateShowingId,
   readJSON,
   createAccessibility,
+  createOccasions,
   createFormat,
 } = require("../../common/utils");
 const { venueMatchesCinema } = require("../../common/source-utils");
@@ -118,6 +119,7 @@ function getEvents(venuePath, tree) {
           status: {},
           accessibility: createAccessibility(film, {}, ""),
           format: createFormat(film, {}, ""),
+          occasions: createOccasions(film, {}, "", { date }),
         }),
       );
     }

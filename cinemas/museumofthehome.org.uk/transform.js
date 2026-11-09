@@ -5,6 +5,7 @@ const {
   createPerformance,
   createOverview,
   createAccessibility,
+  createOccasions,
   createFormat,
   parseTitleAndClassification,
 } = require("../../common/utils");
@@ -38,6 +39,7 @@ async function transform(data, sourcedEvents) {
         event.title,
       );
 
+      const date = parseDate(event.start_date);
       return {
         showingId: generateShowingId(attributes, event.ID),
         title,
@@ -45,11 +47,12 @@ async function transform(data, sourcedEvents) {
         overview: createOverview({ classification }),
         performances: [
           createPerformance({
-            date: parseDate(event.start_date),
+            date,
             url: event.link,
             status: { soldOut: !!event.event_sold_out },
             accessibility: createAccessibility(title, {}, event.summary),
             format: createFormat(title, {}, event.summary),
+            occasions: createOccasions(title, {}, event.summary, { date }),
           }),
         ],
         matchingHints: {
