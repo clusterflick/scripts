@@ -91,6 +91,16 @@ describe("createOccasions", () => {
         { intro: { guests: ["Robert Eggers"] } },
       ],
       [
+        "a name followed by where they're from",
+        "This screening will include an intro by Vivien Halas and Jez Stewart of the BFI National Archive.",
+        { intro: { guests: ["Vivien Halas", "Jez Stewart"] } },
+      ],
+      [
+        "an organisation after an article",
+        "The screening will be followed by a Q&A with the editor of the Guardian, Katharine Viner.",
+        { qAndA: { guests: ["Katharine Viner"] } },
+      ],
+      [
         "a work named before the guest",
         "This screening will be introduced by the editor of Terminus, Hugh Raggett.",
         { intro: { guests: ["Hugh Raggett"] } },

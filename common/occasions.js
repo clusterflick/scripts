@@ -65,7 +65,7 @@ const nameParticle =
 // means the run was describing the person, not naming them ("Hitchcock
 // *expert* Gary Lewis").
 const nameTerminator =
-  /^(?:who|from|on|at|in|for|after|before|following|to|will|is|are|about|as|plus|followed|discussing|tonight|today|live|via|whose|where|when|this|that|which|then|also)$/;
+  /^(?:who|from|of|on|at|in|for|after|before|following|to|will|is|are|about|as|plus|followed|discussing|tonight|today|live|via|whose|where|when|this|that|which|then|also)$/;
 
 // After one of these, a capitalised run is a work or an organisation rather
 // than a person: "editor *of* Terminus", "composer *for* Two Times João
@@ -195,7 +195,11 @@ const getNames = (text) => {
     if (afterComma) break;
     descriptors++;
     if (descriptors > MAX_DESCRIPTOR_WORDS) break;
-    afterPreposition = namePreposition.test(token);
+    // "editor of *the* Guardian" - an article doesn't end the preposition's
+    // hold on what follows.
+    if (!(afterPreposition && /^(?:the|a|an)$/.test(token))) {
+      afterPreposition = namePreposition.test(token);
+    }
   }
   endRun();
 
