@@ -17,7 +17,6 @@ const { fetchWithRetry } = require("./utils");
 // interstitial served with a 200 apart from the content.
 
 const noPause = async () => {};
-const noCheck = () => {};
 
 // Returns the page HTML, or null to escalate the session to the browser - see
 // `withoutBrowser` in `common/get-page-with-camoufox.js`.
@@ -29,7 +28,7 @@ const noCheck = () => {};
 // failure (a 404, a 500) throws, because the browser would get the same answer
 // and a quiet failure would look like a venue with nothing on.
 const fetchWithoutBrowser =
-  ({ selector, fetchOptions, pace, check }) =>
+  ({ selector, fetchOptions, pace }) =>
   async (url) => {
     await pace();
     const response = await fetchWithRetry(url, fetchOptions);
@@ -40,9 +39,7 @@ const fetchWithoutBrowser =
     if (!response.ok) {
       throw new Error(`Unexpected ${response.status} response for ${url}`);
     }
-    if (cheerio.load(html)(selector).length === 0) return null;
-    check(html);
-    return html;
+    return cheerio.load(html)(selector).length > 0 ? html : null;
   };
 
 // On a challenged navigation the first document is the interstitial and the
@@ -55,12 +52,11 @@ const fetchWithoutBrowser =
 // browser has already navigated by the time this runs, so it paces the page
 // after this one.
 const readWithBrowser =
-  ({ selector, pace, check }) =>
+  ({ selector, pace }) =>
   async (page) => {
     await page.waitForSelector(selector, { state: "attached" });
     await page.waitForLoadState("load");
     const content = await page.content();
-    check(content);
     await pace();
     return content;
   };
@@ -69,19 +65,13 @@ const readWithBrowser =
 // first refuses and through the browser from then on. `selector` is something
 // only the real page carries; `pace` is an optional pause before each page
 // fetched, for a site that challenges a crawl arriving back to back.
-//
-// `check` is an optional assertion on the real page, for a page that can come
-// back without what it was fetched for - the Irish Cultural Centre's full
-// listing, read for dates its film listing is missing. It runs before the page is returned, so a page it throws on is never
-// written to the day's cache and a retry fetches it again rather than reading
-// the broken copy back. It is not a refusal, so it fails rather than escalating.
 const getPageEscalating = (
   getPage,
   url,
   cacheKey,
-  { selector, fetchOptions, pace = noPause, check = noCheck },
+  { selector, fetchOptions, pace = noPause },
 ) => {
-  const options = { selector, fetchOptions, pace, check };
+  const options = { selector, fetchOptions, pace };
   return getPage(url, cacheKey, readWithBrowser(options), {
     withoutBrowser: fetchWithoutBrowser(options),
   });
