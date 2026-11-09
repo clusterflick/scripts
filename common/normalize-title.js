@@ -831,6 +831,9 @@ function normalizeTitle(title, options) {
     // restoration, so the generic "screening of" rule would keep the billing
     // and lose the film.
     [/:\s*first[- ]time screening of .*$/i, ""],
+    // The same shape: the film is named before the colon, and the generic
+    // "screening of" rule would keep the billing after it instead.
+    [": film screening of The Most Important Art", ""],
     // Each block is its own programme, so the bracketed number is kept rather
     // than stripped as a qualifier, the way other festivals' blocks read.
     [/\bBritish Shorts \(Block (\d+)\)/i, "British Shorts Block $1"],
@@ -991,6 +994,7 @@ function normalizeTitle(title, options) {
     ["Happy Feet 2", "Happy Feet Two"],
     ["And Life Goes On", "Life, and Nothing More…"],
     ["Sumud / Life endures", "Sumud: Life endures"],
+    ["HOMEMADE / A GOOD QUESTION", "HOMEMADE and A GOOD QUESTION"],
     ["Romeo + Juliet", "Romeo+Juliet"],
     ["Ghost stories, cocktails + ", "Ghost stories, cocktails & "],
     ["PEFF26 |", "PEFF26: "],

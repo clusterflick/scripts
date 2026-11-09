@@ -181,6 +181,8 @@ describe("isNonFilmEvent", () => {
     ["Do We Have Your Attention?"],
     ["Scenes of Home under Gender Apartheid"],
     ["Uppity: The Intellectual Playground (The Year End Christmas Special)"],
+    ["NEW CURRENCY ISSUE 04 LAUNCH."],
+    ["Experiments with... Chalks & Charcoal"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });

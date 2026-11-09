@@ -382,6 +382,8 @@ const nonFilmEvents = [
   // Year End Christmas Special)"), so match the series rather than carrying a
   // pattern per edition.
   /^Uppity: The Intellectual Playground\b/i,
+  /^NEW CURRENCY ISSUE 04 LAUNCH\.?$/i,
+  /^Experiments with\.\.\. Chalks & Charcoal$/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
