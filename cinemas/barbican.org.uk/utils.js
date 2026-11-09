@@ -123,7 +123,16 @@ const getDirectorDuration = (value) => {
   return { director: match[1], duration: match[2] };
 };
 
+// Each performance is an `.instance-listing`, but not every `.instance-listing`
+// is a performance. The LSO's concerts list "Book wildcards" beneath each
+// showing as an `.additional-instance`: a cheaper ticket type for the showing
+// above it, with a booking link of its own and no time. Read as a performance
+// it has no date, and it would duplicate the showing it belongs to.
+const getPerformanceInstances = ($) =>
+  $(".instance-listing").not(".additional-instance");
+
 module.exports = {
+  getPerformanceInstances,
   getParams,
   convertDurationStringToMinutes,
   getYear,
