@@ -16,6 +16,7 @@ const {
   getYear,
   getDirectorDuration,
   sanitizeDatetime,
+  getPerformanceInstances,
   isOneOffEventByline,
   getTicketProductNames,
 } = require("./utils");
@@ -154,7 +155,7 @@ function processPerformancePage(
 ) {
   const $ = cheerio.load(data);
   const listingTags = getListingTags(listingPage);
-  const $instances = $(".instance-listing");
+  const $instances = getPerformanceInstances($);
   const eventAccessibility = getOneOffEventAccessibility(
     listingPage,
     $instances.length,
@@ -194,6 +195,11 @@ function processPerformancePage(
 
     const $timeEl = $(this).find(".instance-time__time time");
     const dateTime = sanitizeDatetime($timeEl);
+    if (!dateTime) {
+      throw new Error(
+        `No performance time for "${title}" (${$bookingButton.attr("href")})`,
+      );
+    }
     const date = parseISO(dateTime);
     const occasions = createOccasions(title, {}, getDescription(listingPage), {
       date,
