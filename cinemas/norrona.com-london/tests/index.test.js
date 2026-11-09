@@ -14,20 +14,17 @@ const titles = (movies) => movies.map(({ title }) => title).sort();
 
 describe(attributes.name, () => {
   setupPolly(isRecording, __dirname);
-  jest.useFakeTimers().setSystemTime(new Date("2026-11-04"));
+  jest.useFakeTimers().setSystemTime(new Date("2026-11-09"));
 
   it(
     "retrieve and transform",
     async () => {
-      const { storePage, eventPages } = await retrieve();
+      const { eventPages } = await retrieve();
 
       // Make sure the input looks roughly correct
-      expect(storePage).toBeTruthy();
       expect(Object.keys(eventPages)).toHaveLength(4);
 
-      const output = sortAndFilterMovies(
-        await transform({ storePage, eventPages }, {}),
-      );
+      const output = sortAndFilterMovies(await transform({ eventPages }, {}));
       expect(
         output.every((movie) =>
           Object.prototype.hasOwnProperty.call(movie, "matchingHints"),
@@ -59,9 +56,9 @@ describe(attributes.name, () => {
       expect(parseEventPage(elsewhere).store).toBe(
         "Norrøna Concept Store Zurich",
       );
-      expect(
-        await transform({ storePage, eventPages: { [url]: elsewhere } }, {}),
-      ).toEqual([]);
+      expect(await transform({ eventPages: { [url]: elsewhere } }, {})).toEqual(
+        [],
+      );
     },
     isRecording ? 240_000 : undefined,
   );

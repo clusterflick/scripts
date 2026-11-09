@@ -1,29 +1,32 @@
 const cheerio = require("cheerio");
 const { fetchText } = require("../../common/utils");
-const { url, domain, name } = require("./attributes");
-const { getJsonLd, getEventPaths, parseEventPage } = require("./utils");
+const { domain } = require("./attributes");
+const { eventsUrl, isFilteredToLondon, getEventPaths } = require("./utils");
 
+// From the event index rather than the store page, whose "Upcoming Events"
+// cards link the same events: in November 2026 every store page began
+// answering 500 with the site's 404 page, while the index and the event pages
+// carried on.
 async function retrieve() {
-  const storePage = await fetchText(url);
-  // The store's own LocalBusiness record, so a redirect to the store finder or
-  // a holding page fails here rather than reading as nothing on.
-  const store = getJsonLd(cheerio.load(storePage), "LocalBusiness");
-  if (store?.name !== name) {
-    throw new Error(
-      `Expected the ${name} store page, found ${store?.name || "no store"}`,
-    );
+  const $ = cheerio.load(await fetchText(eventsUrl));
+  if (!isFilteredToLondon($)) {
+    throw new Error(`The event index did not recognise London: ${eventsUrl}`);
   }
 
   const eventPages = {};
-  for (const path of getEventPaths(storePage)) {
+  for (const path of getEventPaths($)) {
     const eventUrl = `${domain}${path}`;
     eventPages[eventUrl] = await fetchText(eventUrl);
-    // Parsed here too, so a page that has changed shape fails at retrieve
-    // rather than saving something the transform can't read.
-    parseEventPage(eventPages[eventUrl]);
+    // The byline names the event's store, which the transform needs to
+    // decide whether it is London's. Without it this is not an event page.
+    if (
+      !cheerio.load(eventPages[eventUrl])(".event-location-byline-name").length
+    ) {
+      throw new Error(`No event location on ${eventUrl}`);
+    }
   }
 
-  return { storePage, eventPages };
+  return { eventPages };
 }
 
 module.exports = retrieve;
