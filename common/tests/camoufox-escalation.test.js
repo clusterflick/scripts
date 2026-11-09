@@ -55,6 +55,19 @@ describe("getPageEscalating", () => {
     await expect(fetchPage()).resolves.toBe("escalated");
   });
 
+  it("fails on a real page its check refuses, rather than escalating", async () => {
+    respondWith('<main id="content">broken</main>');
+    const check = (html) => {
+      if (html.includes("broken")) throw new Error("Page is broken");
+    };
+    await expect(
+      getPageEscalating(getPage, "https://example.com/", "key", {
+        selector: "#content",
+        check,
+      }),
+    ).rejects.toThrow("Page is broken");
+  });
+
   it("fails rather than escalating on an ordinary error", async () => {
     respondWith("Not found", { status: 404 });
     await expect(fetchPage()).rejects.toThrow(
