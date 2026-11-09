@@ -76,7 +76,7 @@ const namePreposition = /^(?:of|for|at|from|with|in|on|to)$/;
 // and one with a job inside it names the person after it ("Award Winning
 // Director Gillies MacKinnon", "Writer/Director Robert Eggers").
 const roleWord =
-  /^(?:co-)?(?:directors?|writers?|producers?|filmmakers?|film-makers?|curators?|composers?|actors?|actress(?:es)?|authors?|artists?|editors?|cinematographers?|programmers?|hosts?|stars?|presenters?|critics?|lecturers?|managers?|chair(?:man|woman|person)?|founders?|presidents?|journalists?|historians?|academics?|researchers?|scholars?|organi[sz]ers?|creators?|ceo)$/i;
+  /^(?:co-)?(?:directors?|writers?|producers?|filmmakers?|film-makers?|curators?|composers?|actors?|actress(?:es)?|authors?|artists?|editors?|cinematographers?|programmers?|hosts?|stars?|presenters?|critics?|lecturers?|managers?|chair(?:man|woman|person)?|founders?|presidents?|journalists?|historians?|academics?|researchers?|scholars?|organi[sz]ers?|creators?|ceo|dop|dops)$/i;
 
 const isRole = (word) =>
   word.split("/").some((part) => roleWord.test(part.replace(/[,'’]+$/, "")));
@@ -95,8 +95,12 @@ const MAX_NAME_WORDS = 5;
 // Text after a trigger ("Q&A with ") is cut at the first thing that ends the
 // phrase - and a parenthesis, so "James Wilson (producer) and Harry Davies"
 // keeps only the name the phrase is sure of.
+//
+// A "+" ends the phrase only where it starts a word ("Film + Q&A"), so "London
+// Trans+ Pride" stays one name; an en or em dash ends it with or without
+// spaces around it ("Silvia Demetilla—founder of ...").
 const phraseEnd = new RegExp(
-  String.raw`${abbreviation}|[;:!?\n|+()[\]{}"“”]|\s[-–—]\s|\s[–—]|[–—]\s|\s['‘]`,
+  String.raw`${abbreviation}|[;:!?\n|()[\]{}"“”–—]|(?:^|\s)\+|\s-\s|\s['‘]`,
   "u",
 );
 
@@ -123,6 +127,12 @@ const getNames = (text) => {
     .split(phraseEnd)[0]
     .replace(/,/g, " , ")
     .split(/\s+/)
+    // A missing space between a role and a name - "co-producerJustin Cohen",
+    // "shot byJavier Palicio" - puts the name inside a lower-case word, where
+    // it would be read as a description. Split the word where the name starts.
+    .flatMap((word) =>
+      word.replace(/^(\p{Ll}[\p{Ll}-]+)(\p{Lu})/u, "$1 $2").split(" "),
+    )
     .filter(Boolean);
 
   const names = [];
@@ -295,16 +305,26 @@ const rules = [
     unless: notInTheRoom,
   },
 
+  // "Special guest" is read in titles and notes only. In a description it is
+  // as often someone on screen: event cinema's "a brand-new interview with a
+  // special guest" (Doctor Who: The Satan Pit) and "tenors and special
+  // guests" (André Rieu's Christmas Concert) screen at every multiplex.
   {
     key: "guestAppearance",
     pattern: /\bspecial guests?\s+(?:appearance\s+)?(?:from\s+|by\s+)?/i,
     names: "guests",
     unless: notInTheRoom,
+    titleOnly: true,
   },
   {
     key: "guestAppearance",
-    pattern:
-      /\bin (?:person|attendance)\b|\bspecial guests?\b|\bmasterclass\b/i,
+    pattern: /\bspecial guests?\b/i,
+    unless: notInTheRoom,
+    titleOnly: true,
+  },
+  {
+    key: "guestAppearance",
+    pattern: /\bin (?:person|attendance)\b|\bmasterclass\b/i,
     unless: notInTheRoom,
   },
 
@@ -330,12 +350,15 @@ const rules = [
 const anySignal =
   /q\s*&\s*a|q\s*and\s*a|screen\s?talk|intro|live|premi[eè]re|preview|conversation|in person|attendance|panel|masterclass|special guest/i;
 
-// The occasions one piece of text describes, as an occasions object.
-const getTitleOccasions = (text = "") => {
+// The occasions one piece of text describes, as an occasions object. A
+// sentence of a description is read with `fromDescription`, which leaves out
+// the rules only a title or a note can be trusted with.
+const getTitleOccasions = (text = "", { fromDescription = false } = {}) => {
   if (!text || !anySignal.test(text)) return {};
 
   const occasions = {};
   for (const rule of rules) {
+    if (fromDescription && rule.titleOnly) continue;
     if (occasions[rule.key]) continue;
     if (rule.unless?.test(text)) continue;
     const match = text.match(rule.pattern);
@@ -380,6 +403,9 @@ const screeningCue = new RegExp(
     String.raw`\b(?:post|pre)[- ]?screening\b`,
     String.raw`\bscreen\s?talk\b`,
     String.raw`\bafter the (?:screening|film)\b`,
+    // Billing added to the film, as a festival heads its page: "+ Q&A with
+    // director Alexandre Arcady".
+    String.raw`^\s*\+\s`,
   ].join("|"),
   "iu",
 );
@@ -495,7 +521,7 @@ const getDescriptionOccasions = (description, context) => {
     .filter((sentence) => !negation.test(sentence))
     .filter((sentence) => !pastTense.test(sentence))
     .filter((sentence) => isAboutPerformance(sentence, context))
-    .map((sentence) => getTitleOccasions(sentence))
+    .map((sentence) => getTitleOccasions(sentence, { fromDescription: true }))
     .reduce((merged, occasions) => mergeOccasions(merged, occasions), {});
 };
 
