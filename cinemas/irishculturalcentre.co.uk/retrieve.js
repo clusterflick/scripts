@@ -2,8 +2,12 @@ const cheerio = require("cheerio");
 const { withCamoufoxSession } = require("../../common/get-page-with-camoufox");
 const { getPageEscalating } = require("../../common/camoufox-escalation");
 const { assertSelector, sleep, withJitter } = require("../../common/utils");
-const { checkListingDates } = require("./utils");
-const { id, url } = require("./attributes");
+const { getUndatedEvents, backfillListingDates } = require("./utils");
+const { id, url, domain } = require("./attributes");
+
+// The unfiltered listing, read only to backfill dates the film listing is
+// missing - see `backfillListingDates` in `./utils.js`.
+const FULL_LISTING_URL = `${domain}/whats-on/`;
 
 // The site sits behind a bot check that on 23rd October 2026 began answering
 // the runner with a "verifying your connection" page under a 200, which carries
@@ -37,11 +41,31 @@ const pace = () => sleep(withJitter(REQUEST_DELAY_MS));
 // That Glitters' card never mentions the Shakespeare plot TheMovieDB describes.
 // So each event page is fetched for the full description.
 async function retrieveListing(getPage) {
-  const movieListPage = await getPageEscalating(getPage, url, `${id}-listing`, {
+  const listingPage = await getPageEscalating(getPage, url, `${id}-listing`, {
     selector: PAGE_SELECTOR,
-    check: checkListingDates,
   });
-  assertSelector(movieListPage, ".project-post");
+  assertSelector(listingPage, ".project-post");
+
+  // The backfill runs as the full listing's `check`, so a full listing that
+  // can't date every film is never cached and a retry fetches it again.
+  let movieListPage = listingPage;
+  const undated = getUndatedEvents(listingPage);
+  if (undated.length > 0) {
+    console.log(
+      `      - ${undated.length} event(s) listed without a date; backfilling from ${FULL_LISTING_URL}`,
+    );
+    const fullListingPage = await getPageEscalating(
+      getPage,
+      FULL_LISTING_URL,
+      `${id}-full-listing`,
+      {
+        selector: PAGE_SELECTOR,
+        pace,
+        check: (html) => backfillListingDates(listingPage, html),
+      },
+    );
+    movieListPage = backfillListingDates(listingPage, fullListingPage);
+  }
 
   const $ = cheerio.load(movieListPage);
   const eventUrls = $(".project-post a.project-link")

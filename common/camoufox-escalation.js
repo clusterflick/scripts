@@ -70,9 +70,9 @@ const readWithBrowser =
 // only the real page carries; `pace` is an optional pause before each page
 // fetched, for a site that challenges a crawl arriving back to back.
 //
-// `check` is an optional assertion on the real page, for a site that can serve
-// its own page broken - the Irish Cultural Centre's listing with every date
-// blanked. It runs before the page is returned, so a page it throws on is never
+// `check` is an optional assertion on the real page, for a page that can come
+// back without what it was fetched for - the Irish Cultural Centre's full
+// listing, read for dates its film listing is missing. It runs before the page is returned, so a page it throws on is never
 // written to the day's cache and a retry fetches it again rather than reading
 // the broken copy back. It is not a refusal, so it fails rather than escalating.
 const getPageEscalating = (
