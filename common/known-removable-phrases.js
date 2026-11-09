@@ -462,6 +462,7 @@ const knownRemovablePhrases = [
   "@leyton library",
   "@BiddleBros",
   "@ London Film School",
+  "@ TRADES",
   "Sapphic Cinema and BFI Melodrama",
   "Free BFI Melodrama",
   'Free: BFI "Rip it Up" Late Night',
@@ -571,12 +572,17 @@ const knownRemovablePhrases = [
   "at Una Marson Library",
   "An evening of film & conversation",
   "...The movie",
+  // The screening series' name, billed after the venue's own "~" separator.
+  "~ London Experimental Film",
+  ": A Christmas Carol",
 
   // Prefixes
   "LFF for Free:",
   "LEGO Friends:",
   "Violent World:",
   "Film club presents:",
+  "December's",
+  "20th Birthday Weekender:",
   // Its "(dog-friendly movie night)" billing is already gone by the time the
   // list runs, colon and all, so only the series name is left to strip
   "Pooches & Popcorn",
