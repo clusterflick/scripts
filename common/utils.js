@@ -11,7 +11,7 @@ const slugify = require("slugify");
 const { classifyFetchResponse, logRefusal } = require("./bot-challenge");
 const {
   createOccasions,
-  getTextOccasions,
+  getTitleOccasions,
   mergeOccasions,
 } = require("./occasions");
 
@@ -634,7 +634,7 @@ const createPerformance = ({
     // another's Q&A.
     occasions: notes
       .split("\n")
-      .map((note) => getTextOccasions(note))
+      .map((note) => getTitleOccasions(note))
       .reduceRight(
         (merged, noteOccasions) => mergeOccasions(noteOccasions, merged),
         occasions,
@@ -1402,6 +1402,7 @@ module.exports = {
   createAccessibility,
   createFormat,
   createOccasions,
+  getTitleOccasions,
   getValidFormat,
   getTitleFormat,
   removeMatchingHints,

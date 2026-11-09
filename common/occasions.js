@@ -327,7 +327,7 @@ const anySignal =
   /q\s*&\s*a|q\s*and\s*a|screen\s?talk|intro|live|premi[eè]re|preview|conversation|in person|attendance|panel|masterclass|special guest/i;
 
 // The occasions one piece of text describes, as an occasions object.
-const getTextOccasions = (text = "") => {
+const getTitleOccasions = (text = "") => {
   if (!text || !anySignal.test(text)) return {};
 
   const occasions = {};
@@ -491,7 +491,7 @@ const getDescriptionOccasions = (description, context) => {
     .filter((sentence) => !negation.test(sentence))
     .filter((sentence) => !pastTense.test(sentence))
     .filter((sentence) => isAboutPerformance(sentence, context))
-    .map((sentence) => getTextOccasions(sentence))
+    .map((sentence) => getTitleOccasions(sentence))
     .reduce((merged, occasions) => mergeOccasions(merged, occasions), {});
 };
 
@@ -598,7 +598,7 @@ const createOccasions = (
 
   return [
     hasDescription ? getDescriptionOccasions(description, context) : {},
-    getTextOccasions(title.trim()),
+    getTitleOccasions(title.trim()),
     getValidOccasions(occasions),
   ].reduce((merged, next) => mergeOccasions(merged, next), {});
 };
@@ -607,7 +607,7 @@ module.exports = {
   occasionDetails,
   premiereRegions,
   getNames,
-  getTextOccasions,
+  getTitleOccasions,
   mergeOccasions,
   createOccasions,
 };

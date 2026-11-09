@@ -25,6 +25,10 @@ describe("createOccasions", () => {
       ["UK PREMIERE Passe Montagne", { premiere: { region: "uk" } }],
       ["The Dull Ice Flower [UK Premiere]", { premiere: { region: "uk" } }],
       ["PREVIEW - Dune: Part Three", { preview: true }],
+      // David Lean Cinema's event attributes
+      ["+Q&A", { qAndA: true }],
+      ["+ Q&A", { qAndA: true }],
+      ["& Q&A", { qAndA: true }],
       ["UK PREMIERE Mirage + Q&A", { premiere: { region: "uk" }, qAndA: true }],
     ])("reads '%s'", (title, expected) => {
       expect(createOccasions(title)).toEqual(expected);

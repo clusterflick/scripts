@@ -24,7 +24,7 @@ const isAlreadyListed = require("./is-already-listed");
 const isNoLongerSourcedHere = require("./is-no-longer-sourced-here");
 const {
   createOccasions,
-  getTextOccasions,
+  getTitleOccasions,
   mergeOccasions,
 } = require("../../common/occasions");
 
@@ -44,7 +44,7 @@ const withRequiredPerformanceDefaults = (movie) => ({
       (performance.notes ?? "")
         .split("\n")
         .reduce(
-          (merged, note) => mergeOccasions(getTextOccasions(note), merged),
+          (merged, note) => mergeOccasions(getTitleOccasions(note), merged),
           createOccasions(movie.title),
         ),
     ...performance,

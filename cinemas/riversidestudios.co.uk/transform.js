@@ -161,9 +161,6 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
             if (tags.includes("80787")) {
               notesList.push("Silver Screen");
             }
-            if (tags.includes("80811")) {
-              notesList.push("Q&A");
-            }
             if (tags.includes("259")) {
               notesList.push("British Sign Language");
             }
