@@ -5,6 +5,7 @@ const {
   createOverview,
   createPerformance,
   createAccessibility,
+  createOccasions,
   createFormat,
   generateShowingId,
 } = require("../utils");
@@ -167,6 +168,7 @@ async function transform(
 
       const accessibility = createAccessibility(title, {}, overviewText);
       const format = createFormat(title, {}, overviewText);
+      const occasions = createOccasions(title, {}, overviewText, { date });
       const performance = createPerformance({
         date,
         notesList,
@@ -174,6 +176,7 @@ async function transform(
         status: isSoldOut ? { soldOut: true } : {},
         accessibility,
         format,
+        occasions,
       });
 
       if (!moviesBySlug[filmSlug]) {

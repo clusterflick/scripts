@@ -5,6 +5,7 @@ const {
   createOverview,
   createPerformance,
   createAccessibility,
+  createOccasions,
   createFormat,
 } = require("../../common/utils");
 const {
@@ -282,6 +283,7 @@ function expandSeriesLineUp(event, details, sessions) {
             status: isFetchedSession ? getEventStatus(details) : {},
             accessibility: createAccessibility(entry.title, {}, overview),
             format: createFormat(entry.title, {}, overview),
+            occasions: createOccasions(entry.title, {}, overview, { date }),
           }),
         ],
         matchingHints: { overview },

@@ -4,6 +4,7 @@ const {
   getText,
   createPerformance,
   createAccessibility,
+  createOccasions,
   createFormat,
   basicNormalize,
   generateShowingId,
@@ -131,8 +132,9 @@ const getMultiplePerformances = (
       const moreInformation = getMoreInformation(details);
       const languageDetails = basicNormalize(details.language);
 
+      const date = parseDate(`${day} ${time}`);
       return createPerformance({
-        date: parseDate(`${day} ${time}`),
+        date,
         notesList: [
           calendarNote,
           basicNormalize(moreInformation) === basicNormalize(calendarNote)
@@ -152,6 +154,7 @@ const getMultiplePerformances = (
           overview,
         ),
         format: createFormat(title, {}, overview),
+        occasions: createOccasions(title, {}, overview, { date }),
       });
     })
     .get();
@@ -179,9 +182,10 @@ const getSinglePerformance = (
   // Sometimes we get listing pages without an actual performance date / time
   if (!day || !time) return [];
 
+  const performanceDate = parseDate(`${day} ${time}`);
   return [
     createPerformance({
-      date: parseDate(`${day} ${time}`),
+      date: performanceDate,
       notesList: [
         calendarNote,
         basicNormalize(moreInformation) === basicNormalize(calendarNote)
@@ -201,6 +205,9 @@ const getSinglePerformance = (
         overview,
       ),
       format: createFormat(title, {}, overview),
+      occasions: createOccasions(title, {}, overview, {
+        date: performanceDate,
+      }),
     }),
   ];
 };

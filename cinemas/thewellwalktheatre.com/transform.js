@@ -5,6 +5,7 @@ const {
   createPerformance,
   createOverview,
   createAccessibility,
+  createOccasions,
   createFormat,
 } = require("../../common/utils");
 const { extractPeopleNames } = require("../../common/extract-people");
@@ -56,6 +57,7 @@ async function transform({ experiences }, sourcedEvents) {
           url,
           accessibility: createAccessibility(title, {}, overview),
           format: createFormat(title, {}, overview),
+          occasions: createOccasions(title, {}, overview, { date }),
           status: { soldOut: isSoldOut(slot) },
         });
       });

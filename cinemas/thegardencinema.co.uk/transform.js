@@ -5,6 +5,7 @@ const {
   createPerformance,
   createOverview,
   createAccessibility,
+  createOccasions,
   createFormat,
   generateShowingId,
 } = require("../../common/utils");
@@ -140,6 +141,7 @@ function getPerformances($, $filmScreenings, title, overview, festivals) {
           overview,
         ),
         format: createFormat(title, {}, overview),
+        occasions: createOccasions(title, {}, overview, { date }),
       }),
     );
   });

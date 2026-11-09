@@ -7,6 +7,7 @@ const {
   generateShowingId,
   readJSON,
   createAccessibility,
+  createOccasions,
   createFormat,
   getText,
 } = require("../../common/utils");
@@ -107,6 +108,7 @@ function parseEvent($, article) {
           url: eventUrl,
           accessibility: createAccessibility(title, {}, notes),
           format: createFormat(title, {}, notes),
+          occasions: createOccasions(title, {}, notes, { date }),
         }),
       ],
       matchingHints: { overview: notes },

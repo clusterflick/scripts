@@ -4,6 +4,7 @@ const {
   createPerformance,
   createOverview,
   createAccessibility,
+  createOccasions,
   createFormat,
   generateShowingId,
   readJSON,
@@ -47,6 +48,7 @@ function parseEvent(event) {
     sanitizeRichText(event.description || ""),
   );
 
+  const date = new Date(event.startDate);
   return {
     venueName,
     venueAddress,
@@ -59,10 +61,11 @@ function parseEvent(event) {
       overview: createOverview({}),
       performances: [
         createPerformance({
-          date: new Date(event.startDate),
+          date,
           url: event.url,
           accessibility: createAccessibility(title, {}, description),
           format: createFormat(title, {}, description),
+          occasions: createOccasions(title, {}, description, { date }),
         }),
       ],
       matchingHints: { overview: description },

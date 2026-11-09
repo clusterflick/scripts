@@ -5,6 +5,7 @@ const {
   createOverview,
   createPerformance,
   createAccessibility,
+  createOccasions,
   createFormat,
 } = require("../../common/utils");
 const { venueMatchesCinema } = require("../../common/source-utils");
@@ -37,6 +38,7 @@ function buildEvent(event) {
   const url = `${attributes.domain}/events/${event.id}`;
   const bookingUrl = event.external_url || url;
 
+  const performanceDate = parseStartTime(event.start_time);
   return {
     showingId: generateShowingId(attributes, event.id),
     title: event.name,
@@ -44,11 +46,14 @@ function buildEvent(event) {
     overview: createOverview({}),
     performances: [
       createPerformance({
-        date: parseStartTime(event.start_time),
+        date: performanceDate,
         url: bookingUrl,
         notesList: [],
         accessibility: createAccessibility(event.name, {}, event.description),
         format: createFormat(event.name, {}, event.description),
+        occasions: createOccasions(event.name, {}, event.description, {
+          date: performanceDate,
+        }),
       }),
     ],
     matchingHints: { overview: event.description },

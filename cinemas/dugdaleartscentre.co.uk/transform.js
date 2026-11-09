@@ -6,6 +6,7 @@ const {
   createPerformance,
   createOverview,
   createAccessibility,
+  createOccasions,
   createFormat,
 } = require("../../common/utils");
 const { extractPeopleNames } = require("../../common/extract-people");
@@ -50,17 +51,19 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
     const overview = getMatchingDescription($description);
 
     // Extract showtimes from the Spektrix instances
-    const performances = getBookableInstances(booking).map((instance) =>
-      createPerformance({
-        date: parseISO(instance.start),
+    const performances = getBookableInstances(booking).map((instance) => {
+      const date = parseISO(instance.start);
+      return createPerformance({
+        date,
         url: moviePageUrl,
         accessibility: createAccessibility(title, {}, overview),
         format: createFormat(title, {}, overview),
+        occasions: createOccasions(title, {}, overview, { date }),
         status: {
           soldOut: isSoldOut(instance),
         },
-      }),
-    );
+      });
+    });
 
     if (performances.length === 0) {
       // It's possible for an entry to be added which doesn't yet have any

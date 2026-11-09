@@ -5,6 +5,7 @@ const {
   createOverview,
   createPerformance,
   createAccessibility,
+  createOccasions,
   createFormat,
   isPrivateHire,
   basicNormalize,
@@ -56,6 +57,7 @@ async function transform({ csvText }, sourcedEvents) {
         url: attributes.url,
         accessibility: createAccessibility(title, {}),
         format: createFormat(title, {}, ""),
+        occasions: createOccasions(title),
       }),
     );
   }

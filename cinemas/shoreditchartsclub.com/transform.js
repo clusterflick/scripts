@@ -7,6 +7,7 @@ const {
   createPerformance,
   createOverview,
   createAccessibility,
+  createOccasions,
   createFormat,
 } = require("../../common/utils");
 const { extractPeopleNames } = require("../../common/extract-people");
@@ -50,6 +51,7 @@ async function transform({ events }, sourcedEvents) {
     const overview = getDescription(event.body);
     if (!isFilmEvent(`${title} ${overview}`)) continue;
 
+    const date = startOfMinute(new Date(event.startDate));
     movies.push({
       showingId: generateShowingId(attributes, event.id),
       title,
@@ -58,10 +60,11 @@ async function transform({ events }, sourcedEvents) {
       performances: [
         createPerformance({
           // Epoch milliseconds with a stray remainder - "...600671"
-          date: startOfMinute(new Date(event.startDate)),
+          date,
           url: moviePageUrl,
           accessibility: createAccessibility(title, {}, overview),
           format: createFormat(title, {}, overview),
+          occasions: createOccasions(title, {}, overview, { date }),
         }),
       ],
       matchingHints: {

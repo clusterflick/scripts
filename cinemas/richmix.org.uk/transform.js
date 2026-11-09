@@ -6,6 +6,7 @@ const {
   createPerformance,
   generateShowingId,
   createAccessibility,
+  createOccasions,
   createFormat,
 } = require("../../common/utils");
 const { parseDate } = require("./utils");
@@ -95,14 +96,16 @@ async function transform({ moviePages }, sourcedEvents) {
           classification: details.certificate,
           directors: details.director || "",
         }),
-        performances: events.map((event, index) =>
-          createPerformance({
-            date: parseDate(event.startDate),
+        performances: events.map((event, index) => {
+          const date = parseDate(event.startDate);
+          return createPerformance({
+            date,
             url: bookingUrls[index],
             accessibility: createAccessibility(title, {}, overview),
             format: createFormat(title, {}, overview),
-          }),
-        ),
+            occasions: createOccasions(title, {}, overview, { date }),
+          });
+        }),
         matchingHints: { overview },
       });
     },

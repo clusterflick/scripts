@@ -3,6 +3,7 @@ const {
   createOverview,
   createPerformance,
   createAccessibility,
+  createOccasions,
   createFormat,
   getValidFormat,
   generateShowingId,
@@ -115,14 +116,6 @@ async function transform(
         ) {
           notesList.push("No adverts or trailers");
         }
-        if (tags.includes("intro")) {
-          notesList.push("This screening features a specialist introduction");
-        }
-        if (tags.includes("qa")) {
-          notesList.push(
-            "This screening features a special in person Q&A appearance",
-          );
-        }
 
         const status = {
           soldOut: showing.seatsRemaining === 0,
@@ -160,8 +153,9 @@ async function transform(
           sanitizeRichText(movie.synopsis ?? ""),
         );
 
+        const date = parseISO(showing.time);
         return createPerformance({
-          date: parseISO(showing.time),
+          date,
           screen: screenMapping[showing.screenId] || showing.screenId,
           notesList,
           url: `${domain}/checkout/showing/${movie.urlSlug}/${showing.id}`,
@@ -171,6 +165,12 @@ async function transform(
             movie.name,
             format,
             sanitizeRichText(movie.synopsis ?? ""),
+          ),
+          occasions: createOccasions(
+            movie.name,
+            { intro: tags.includes("intro"), qAndA: tags.includes("qa") },
+            sanitizeRichText(movie.synopsis ?? ""),
+            { date },
           ),
         });
       }),

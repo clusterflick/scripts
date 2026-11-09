@@ -6,6 +6,7 @@ const {
   createPerformance,
   createOverview,
   createAccessibility,
+  createOccasions,
   createFormat,
   removeAlreadyListedPerformances,
 } = require("../../common/utils");
@@ -56,6 +57,7 @@ async function transform({ moviePages }, sourcedEvents) {
           url: bookingUrl,
           accessibility: createAccessibility(title, {}, description),
           format: createFormat(title, {}, description),
+          occasions: createOccasions(title, {}, description, { date }),
         }),
       ],
       matchingHints: { overview: description },

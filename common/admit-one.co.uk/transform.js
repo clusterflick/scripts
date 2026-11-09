@@ -4,6 +4,7 @@ const {
   createOverview,
   createPerformance,
   createAccessibility,
+  createOccasions,
   createFormat,
   getValidFormat,
   generateShowingId,
@@ -202,9 +203,10 @@ async function transform(
           }
         });
 
+        const date = parseDate(`${year}-${month}-${day} ${hours}:${minutes}`);
         movies[id].performances = movies[id].performances.concat(
           createPerformance({
-            date: parseDate(`${year}-${month}-${day} ${hours}:${minutes}`),
+            date,
             notesList,
             url: $performance.attr("href") || movies[id].url,
             screen,
@@ -218,6 +220,12 @@ async function transform(
               title,
               format,
               movies[id].matchingHints.overview,
+            ),
+            occasions: createOccasions(
+              title,
+              {},
+              movies[id].matchingHints.overview,
+              { date },
             ),
           }),
         );

@@ -7,6 +7,7 @@ const {
   basicNormalize,
   getId,
   createAccessibility,
+  createOccasions,
   createFormat,
 } = require("../../common/utils");
 const { parseDate } = require("./utils");
@@ -99,8 +100,15 @@ async function transform(attributes, { movieListPage }, sourcedEvents) {
         const date = parseDate(basicNormalize(dateMatch[1]));
         const accessibility = createAccessibility(title, {}, details);
         const format = createFormat(title, {}, details);
+        const occasions = createOccasions(title, {}, details, { date });
         performances.push(
-          createPerformance({ url: bookingUrl, date, accessibility, format }),
+          createPerformance({
+            url: bookingUrl,
+            date,
+            accessibility,
+            format,
+            occasions,
+          }),
         );
       }
     });

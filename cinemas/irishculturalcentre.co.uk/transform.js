@@ -5,6 +5,7 @@ const {
   createPerformance,
   getText,
   createAccessibility,
+  createOccasions,
   createFormat,
 } = require("../../common/utils");
 const { parse } = require("date-fns");
@@ -85,6 +86,7 @@ async function transform({ movieListPage, eventPages }, sourcedEvents) {
       notesList: [],
       accessibility: createAccessibility(title, {}, description),
       format: createFormat(title, {}, description),
+      occasions: createOccasions(title, {}, description, { date }),
     });
 
     movies.push({

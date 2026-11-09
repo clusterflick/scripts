@@ -235,6 +235,25 @@ a question about a trend is answered there, and a question about which venue
 drove one run's number is answered by that run's report, for the fortnight its
 artifact survives. Nothing in this repo reads either back.
 
+## Occasions
+
+Each performance carries `occasions`: what makes it more than a screening - an
+intro, a Q&A, a live score, a premiere. It mirrors accessibility and format,
+read from structured listing data, then the title and notes, then the
+description, with one difference: a key is `true` when that is all that is
+known, or an object of details when there are some (`{ intro: { guests:
+["Benjamin Crais"] } }`). Never `false`, and never `{}` as a value.
+
+It is recorded here rather than on the website because the description is
+here. The ICA's "The Eel" says nothing in its title; its page says "This
+screening will be introduced by Benjamin Crais". Deciding which occasions are
+rare enough to promote stays on the website, which can see the whole city.
+
+Descriptions are read only a sentence at a time, and only sentences about the
+screening itself that aren't negated or in the past; a sentence naming a date
+applies only to the performance on it. See `docs/occasions.md` before changing
+a rule, and add the venue's own words to `common/tests/occasions.test.js`.
+
 ## Module Pattern
 
 Every cinema/source module exports the same interface:

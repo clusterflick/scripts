@@ -4,6 +4,7 @@ const {
   createPerformance,
   createOverview,
   createAccessibility,
+  createOccasions,
   createFormat,
   generateShowingId,
   removeAlreadyListedPerformances,
@@ -85,6 +86,7 @@ function parseMovie(url, moviePage) {
         url: bookingUrl,
         accessibility: createAccessibility(title, {}, description),
         format: createFormat(title, {}, description),
+        occasions: createOccasions(title, {}, description, { date }),
       }),
     );
   });

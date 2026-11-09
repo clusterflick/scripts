@@ -9,6 +9,7 @@ const {
   readJSON,
   memoiseOnData,
   createAccessibility,
+  createOccasions,
   createFormat,
   getText,
 } = require("../../common/utils");
@@ -216,6 +217,9 @@ async function findEvents(cinema) {
             movie.description,
           ),
           format: createFormat(movie.title, {}, movie.metaText),
+          occasions: createOccasions(movie.title, {}, movie.description, {
+            date: performance.date,
+          }),
         }),
       ),
       matchingHints: { overview: movie.description },

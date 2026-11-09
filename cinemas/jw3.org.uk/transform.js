@@ -6,6 +6,7 @@ const {
   getText,
   createPerformance,
   createAccessibility,
+  createOccasions,
   createFormat,
   generateShowingId,
 } = require("../../common/utils");
@@ -45,8 +46,9 @@ const getPerformances = ($, bookingInformation, title, overview) => {
     description.includes("with english subtitles") ||
     basicNormalize(details.subtitles || "").includes("english");
   return getBookableInstances(bookingInformation).map((instance) => {
+    const date = parseISO(instance.start);
     return createPerformance({
-      date: parseISO(instance.start),
+      date,
       notesList: [],
       url: `${attributes.domain}/spektrix/ChooseSeats?EventInstanceId=${instance.id}`,
       status: {
@@ -54,6 +56,7 @@ const getPerformances = ($, bookingInformation, title, overview) => {
       },
       accessibility: createAccessibility(title, { subtitled }, overview),
       format: createFormat(title, {}, overview),
+      occasions: createOccasions(title, {}, overview, { date }),
     });
   });
 };

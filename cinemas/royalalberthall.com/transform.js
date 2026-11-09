@@ -5,6 +5,7 @@ const {
   generateShowingId,
   getValidClassification,
   createAccessibility,
+  createOccasions,
   createFormat,
 } = require("../../common/utils");
 const { extractPeopleNames } = require("../../common/extract-people");
@@ -36,6 +37,9 @@ function parsePerformances(event) {
       screen: event.Venue,
       accessibility: createAccessibility(event.Title, {}, event.Summary),
       format: createFormat(event.Title, {}, event.Summary),
+      occasions: createOccasions(event.Title, {}, event.Summary, {
+        date: performanceDate,
+      }),
     });
   });
 }

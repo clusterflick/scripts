@@ -3,6 +3,7 @@ const {
   createOverview,
   createPerformance,
   createAccessibility,
+  createOccasions,
   createFormat,
   generateShowingId,
   readJSON,
@@ -63,6 +64,9 @@ function convertLumaEvent(event, cinema) {
         status: { soldOut: !!event.ticket_info?.is_sold_out },
         accessibility: createAccessibility(details.name, {}, overview),
         format: createFormat(details.name, {}, overview),
+        occasions: createOccasions(details.name, {}, overview, {
+          date: startDate,
+        }),
       }),
     ],
     matchingHints: { overview },

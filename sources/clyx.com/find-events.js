@@ -4,6 +4,7 @@ const {
   createOverview,
   createPerformance,
   createAccessibility,
+  createOccasions,
   createFormat,
   generateShowingId,
   readJSON,
@@ -85,6 +86,9 @@ function convertClyxEvent(event, cinema) {
         status: { soldOut: isSoldOut(event.tiers) },
         accessibility: createAccessibility(name, {}, overview),
         format: createFormat(name, {}, overview),
+        occasions: createOccasions(name, {}, overview, {
+          date: start,
+        }),
         notesList: [getPresentedByNote(event.company, cinema)],
       }),
     ],

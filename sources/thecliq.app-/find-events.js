@@ -5,6 +5,7 @@ const {
   createOverview,
   createPerformance,
   createAccessibility,
+  createOccasions,
   createFormat,
 } = require("../../common/utils");
 const { venueMatchesCinema } = require("../../common/source-utils");
@@ -42,6 +43,9 @@ function convertEvent(event, club) {
         status: { soldOut: event.status === "SOLD_OUT" },
         accessibility: createAccessibility(event.name, {}, event.description),
         format: createFormat(event.name, {}, event.description),
+        occasions: createOccasions(event.name, {}, event.description, {
+          date: startDate,
+        }),
       }),
     ],
     matchingHints: { overview: event.description },

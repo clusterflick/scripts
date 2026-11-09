@@ -6,6 +6,7 @@ const {
   createPerformance,
   basicNormalize,
   createAccessibility,
+  createOccasions,
   createFormat,
   getTitleFormat,
   generateShowingId,
@@ -82,9 +83,10 @@ const getPerformances = ($, attributes, performanceData, title, overview) => {
       }
     }
 
+    const date = parseISO(data.startDate);
     return performances.concat(
       createPerformance({
-        date: parseISO(data.startDate),
+        date,
         notesList,
         url: data.offers.url,
         status: { soldOut: tags.includes("Sold Out") },
@@ -101,6 +103,7 @@ const getPerformances = ($, attributes, performanceData, title, overview) => {
           overview,
         ),
         format: createFormat(title, format, overview),
+        occasions: createOccasions(title, {}, overview, { date }),
       }),
     );
   }, []);

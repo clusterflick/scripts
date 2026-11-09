@@ -8,6 +8,7 @@ const {
   createOverview,
   generateShowingId,
   createAccessibility,
+  createOccasions,
   createFormat,
 } = require("../../common/utils");
 const { extractJsonLdEvents } = require("../../common/tribe-events/transform");
@@ -93,6 +94,9 @@ async function transform({ monthPages, eventPages }, sourcedEvents) {
             status: { soldOut },
             accessibility: createAccessibility(title, {}, event.description),
             format: createFormat(title, {}, event.description),
+            occasions: createOccasions(title, {}, event.description, {
+              date: startDate,
+            }),
           }),
         ],
         matchingHints: {

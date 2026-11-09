@@ -22,15 +22,31 @@ const identifyMultipleMovies = require("./identify-multiple-movies");
 const identifyShorts = require("./identify-shorts");
 const isAlreadyListed = require("./is-already-listed");
 const isNoLongerSourcedHere = require("./is-no-longer-sourced-here");
+const {
+  createOccasions,
+  getTitleOccasions,
+  mergeOccasions,
+} = require("../../common/occasions");
 
 // A movie carried forward from a previous release may predate the required
-// per-performance `accessibility` / `format` objects. Backfill empty objects
-// where missing so the delisted-but-still-valid movie satisfies the schema.
+// per-performance `accessibility` / `format` / `occasions` objects. Backfill
+// them where missing so the delisted-but-still-valid movie satisfies the
+// schema. Occasions are read from the title and notes the release kept, rather
+// than left empty, so a carried-forward "+ Q&A" still says so; the description
+// they would also have been read from isn't published.
 const withRequiredPerformanceDefaults = (movie) => ({
   ...movie,
   performances: movie.performances.map((performance) => ({
     accessibility: {},
     format: {},
+    occasions:
+      performance.occasions ??
+      (performance.notes ?? "")
+        .split("\n")
+        .reduce(
+          (merged, note) => mergeOccasions(getTitleOccasions(note), merged),
+          createOccasions(movie.title),
+        ),
     ...performance,
   })),
 });

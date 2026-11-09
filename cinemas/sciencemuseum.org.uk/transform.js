@@ -7,6 +7,7 @@ const {
   createPerformance,
   getValidClassification,
   createAccessibility,
+  createOccasions,
   createFormat,
 } = require("../../common/utils");
 const attributes = require("./attributes");
@@ -132,8 +133,9 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
           performanceStatusMessage,
           hasLimitedSeatingAvailable,
         }) => {
+          const date = parseISO(iso8601DateString);
           return createPerformance({
-            date: parseISO(iso8601DateString),
+            date,
             notesList: hasLimitedSeatingAvailable
               ? ["Limited seating available"]
               : [],
@@ -144,6 +146,7 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
             },
             accessibility: createAccessibility(title, {}, overview),
             format: createFormat(title, format, formatDescription),
+            occasions: createOccasions(title, {}, overview, { date }),
           });
         },
       ),

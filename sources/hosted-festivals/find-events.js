@@ -6,6 +6,7 @@ const {
   createOverview,
   createPerformance,
   createAccessibility,
+  createOccasions,
   createFormat,
 } = require("../../common/utils");
 const validateFestivals = require("./validate-festivals");
@@ -46,6 +47,7 @@ function convertEvent(event) {
         notesList: [notes],
         accessibility: createAccessibility(title, {}, overview),
         format: createFormat(title, {}, overview),
+        occasions: createOccasions(title, {}, overview, { date }),
       }),
     ],
     matchingHints: { overview },

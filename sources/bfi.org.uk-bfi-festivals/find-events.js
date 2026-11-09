@@ -7,6 +7,7 @@ const {
   createPerformance,
   getText,
   createAccessibility,
+  createOccasions,
   createFormat,
   readJSON,
 } = require("../../common/utils");
@@ -247,6 +248,7 @@ async function findEvents(cinema) {
             overviewText,
           ),
           format: createFormat(title, {}, overviewText),
+          occasions: createOccasions(title, {}, overviewText, { date }),
         }),
       );
     }

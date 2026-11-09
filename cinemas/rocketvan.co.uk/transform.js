@@ -4,6 +4,7 @@ const {
   createPerformance,
   createOverview,
   createAccessibility,
+  createOccasions,
   createFormat,
 } = require("../../common/utils");
 const { isFilmEvent } = require("../../common/is-film-event");
@@ -36,6 +37,7 @@ async function transform({ events }, sourcedEvents) {
     const url = `${attributes.domain}/event-details-registration/${slug}`;
     const overview = description.replace(/\s+/g, " ").trim();
 
+    const date = getStartDate(event);
     return {
       showingId: generateShowingId(attributes, id),
       title,
@@ -45,10 +47,11 @@ async function transform({ events }, sourcedEvents) {
       overview: createOverview({}),
       performances: [
         createPerformance({
-          date: getStartDate(event),
+          date,
           url,
           accessibility: createAccessibility(title, {}, overview),
           format: createFormat(title, {}, overview),
+          occasions: createOccasions(title, {}, overview, { date }),
           status: { soldOut: registration?.ticketing?.soldOut === true },
         }),
       ],

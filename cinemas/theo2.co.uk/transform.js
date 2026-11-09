@@ -5,6 +5,7 @@ const {
   createPerformance,
   generateShowingId,
   createAccessibility,
+  createOccasions,
   createFormat,
   sanitizeRichText,
 } = require("../../common/utils");
@@ -103,18 +104,22 @@ function parsePerformances($, event, eventUrl) {
 
       const bookingUrl = $showing.find("a.tickets").attr("href");
 
+      const date = parse(
+        `${day} ${month} ${year} ${time}`,
+        "d MMM yyyy h:mm a",
+        new Date(),
+      );
       return createPerformance({
-        date: parse(
-          `${day} ${month} ${year} ${time}`,
-          "d MMM yyyy h:mm a",
-          new Date(),
-        ),
+        date,
         url: bookingUrl || eventUrl,
         // The JSON-LD `location.name` is hardcoded to "The O2 arena" on every
         // page, including the indigo ones; the sidebar has the real room.
         screen: $(".sidebar_event_venue span").first().text().trim(),
         accessibility: createAccessibility(event.title, {}, event.description),
         format: createFormat(event.title, {}, event.description),
+        occasions: createOccasions(event.title, {}, event.description, {
+          date,
+        }),
       });
     })
     .get();

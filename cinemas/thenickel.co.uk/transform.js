@@ -3,6 +3,7 @@ const {
   createOverview,
   generateShowingId,
   createAccessibility,
+  createOccasions,
   createFormat,
 } = require("../../common/utils");
 const attributes = require("./attributes");
@@ -23,6 +24,7 @@ async function transform({ screenings }, sourcedEvents) {
       notesList.push(`Doors ${screening.doorsTime}`);
     }
 
+    const date = new Date(screening.screeningDate);
     movies.push({
       showingId,
       title: film.title,
@@ -35,12 +37,15 @@ async function transform({ screenings }, sourcedEvents) {
       }),
       performances: [
         createPerformance({
-          date: new Date(screening.screeningDate),
+          date,
           notesList,
           url: bookingUrl,
           status: soldOut ? { soldOut } : undefined,
           accessibility: createAccessibility(film.title, {}, film.description),
           format: createFormat(film.title, {}, film.description),
+          occasions: createOccasions(film.title, {}, film.description, {
+            date,
+          }),
         }),
       ],
       matchingHints: { overview: film.description },

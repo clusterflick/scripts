@@ -6,6 +6,7 @@ const {
   createOverview,
   createPerformance,
   createAccessibility,
+  createOccasions,
   createFormat,
 } = require("../../common/utils");
 const { venueMatchesCinema } = require("../../common/source-utils");
@@ -55,6 +56,7 @@ function convertCineburEvent(event) {
         status: getStatus(event),
         accessibility: createAccessibility(title, {}, event.description),
         format: createFormat(title, {}, event.description),
+        occasions: createOccasions(title, {}, event.description, { date }),
       }),
     ],
     // The event's description is the app's boilerplate welcome, so the film's

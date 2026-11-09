@@ -1,5 +1,6 @@
 const {
   createAccessibility,
+  createOccasions,
   createFormat,
   createOverview,
   createPerformance,
@@ -26,6 +27,7 @@ async function transform({ eventPages }, sourcedEvents) {
     .filter(isFilmEvent)
     .map(({ url, title, description, text, startDate }) => {
       const overview = [description, text].filter(Boolean).join("\n");
+      const date = new Date(startDate);
       return {
         showingId: generateShowingId(attributes, url.split("/").pop()),
         title,
@@ -33,10 +35,11 @@ async function transform({ eventPages }, sourcedEvents) {
         overview: createOverview({}),
         performances: [
           createPerformance({
-            date: new Date(startDate),
+            date,
             url,
             accessibility: createAccessibility(title, {}, overview),
             format: createFormat(title, {}, overview),
+            occasions: createOccasions(title, {}, overview, { date }),
           }),
         ],
         matchingHints: { overview },

@@ -5,6 +5,7 @@ const {
   createOverview,
   generateShowingId,
   createAccessibility,
+  createOccasions,
   createFormat,
 } = require("../../common/utils");
 const { getExpectedClosure } = require("../../common/expected-closures");
@@ -40,6 +41,9 @@ async function transform({ eventPages }, sourcedEvents) {
           status: isSoldOut ? { soldOut: true } : {},
           accessibility: createAccessibility(title, {}, description),
           format: createFormat(title, {}, description),
+          occasions: createOccasions(title, {}, description, {
+            date: startDate,
+          }),
         }),
       ],
       matchingHints: { overview: description },

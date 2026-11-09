@@ -5,6 +5,7 @@ const {
   createPerformance,
   getText,
   createAccessibility,
+  createOccasions,
   createFormat,
 } = require("../../common/utils");
 const { parse } = require("date-fns");
@@ -43,6 +44,7 @@ async function transform({ moviePages }, sourcedEvents) {
           notesList: showtimeType ? [showtimeType] : [],
           accessibility: createAccessibility(title, {}, overview),
           format: createFormat(title, {}, overview),
+          occasions: createOccasions(title, {}, overview, { date }),
         }),
       );
     });

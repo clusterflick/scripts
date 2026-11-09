@@ -5,6 +5,7 @@ const {
   createPerformance,
   createOverview,
   createAccessibility,
+  createOccasions,
   createFormat,
   generateShowingId,
   getValidClassification,
@@ -34,9 +35,10 @@ function extractPerformances($, title, overview) {
         return $link.find(`.icon[title="${title}"]`).length > 0 || undefined;
       };
 
+      const date = parseISO($timeElement.attr("datetime"));
       performances.push(
         createPerformance({
-          date: parseISO($timeElement.attr("datetime")),
+          date,
           url: () => $link.attr("href"),
           accessibility: createAccessibility(
             title,
@@ -48,6 +50,7 @@ function extractPerformances($, title, overview) {
             overview,
           ),
           format: createFormat(title, {}, overview),
+          occasions: createOccasions(title, {}, overview, { date }),
         }),
       );
     });

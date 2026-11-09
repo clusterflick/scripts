@@ -8,6 +8,7 @@ const {
   createPerformance,
   createOverview,
   createAccessibility,
+  createOccasions,
   createFormat,
 } = require("../../common/utils");
 const { extractPeopleNames } = require("../../common/extract-people");
@@ -116,6 +117,7 @@ const getSchemaPerformance = (event, moviePageUrl, title, overview) => {
       url: moviePageUrl,
       accessibility: createAccessibility(title, {}, overview),
       format: createFormat(title, {}, overview),
+      occasions: createOccasions(title, {}, overview, { date }),
     }),
   ];
 };
@@ -152,6 +154,7 @@ const getPerformances = ($, event, moviePageUrl, title, overview) => {
           overview,
         ),
         format: createFormat(title, {}, overview),
+        occasions: createOccasions(title, {}, overview, { date }),
       });
     })
     .get()

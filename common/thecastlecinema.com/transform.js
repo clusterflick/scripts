@@ -5,6 +5,7 @@ const {
   createPerformance,
   createOverview,
   createAccessibility,
+  createOccasions,
   createFormat,
   convertToList,
   generateShowingId,
@@ -171,9 +172,10 @@ async function transform(
         subtitled: filters.includes("hard-of-hearing"),
       };
 
+      const date = parseISO($link.attr("data-start-time"));
       movies[id].performances = movies[id].performances.concat(
         createPerformance({
-          date: parseISO($link.attr("data-start-time")),
+          date,
           notesList,
           url: `${attributes.domain}${$link.attr("href")}`,
           screen: getText($link.find(".screen")),
@@ -187,6 +189,12 @@ async function transform(
             movies[id].title,
             formatFromNotes,
             movies[id].matchingHints.overview,
+          ),
+          occasions: createOccasions(
+            movies[id].title,
+            {},
+            movies[id].matchingHints.overview,
+            { date },
           ),
         }),
       );

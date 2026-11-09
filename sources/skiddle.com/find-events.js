@@ -8,6 +8,7 @@ const {
   createOverview,
   createPerformance,
   createAccessibility,
+  createOccasions,
   createFormat,
 } = require("../../common/utils");
 const { venueMatchesCinema } = require("../../common/source-utils");
@@ -39,6 +40,7 @@ function convertSkiddleEvent(event) {
         url,
         accessibility: createAccessibility(title, {}, description),
         format: createFormat(title, {}, description),
+        occasions: createOccasions(title, {}, description, { date }),
       }),
     ],
     matchingHints: { overview: description },

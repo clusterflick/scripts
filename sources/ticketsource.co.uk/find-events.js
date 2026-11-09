@@ -7,6 +7,7 @@ const {
   readJSON,
   generateShowingId,
   createAccessibility,
+  createOccasions,
   createFormat,
   basicNormalize,
   getText,
@@ -37,12 +38,18 @@ function createPerformanceFromHit(
 ) {
   const note = PROMOTER_NOTES[promoterNameURL];
 
+  const date = parse(
+    dateTimeString,
+    "EEEE do MMMM yyyy hh:mm:ss aa",
+    new Date(),
+    {
+      locale: enGB,
+    },
+  );
   return createPerformance({
     // `timestamp` is also available on the hit, but TicketSource encodes local
     // UK time as if it were UTC, making it wrong by 1 hour during BST.
-    date: parse(dateTimeString, "EEEE do MMMM yyyy hh:mm:ss aa", new Date(), {
-      locale: enGB,
-    }),
+    date,
     url: `${attributes.domain}/${venueSlug}/${timeHash}`,
     accessibility: createAccessibility(
       title,
@@ -54,6 +61,7 @@ function createPerformanceFromHit(
       overview,
     ),
     format: createFormat(title, {}, overview),
+    occasions: createOccasions(title, {}, overview, { date }),
     notesList: note ? [note] : [],
   });
 }

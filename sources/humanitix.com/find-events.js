@@ -7,6 +7,7 @@ const {
   createOverview,
   createPerformance,
   createAccessibility,
+  createOccasions,
   createFormat,
 } = require("../../common/utils");
 const { venueMatchesCinema } = require("../../common/source-utils");
@@ -74,6 +75,7 @@ function convertHumanitixEvent(event, eventPages) {
       url,
       accessibility: createAccessibility(event.name, {}),
       format: createFormat(event.name, {}, ""),
+      occasions: createOccasions(event.name),
     });
   });
 

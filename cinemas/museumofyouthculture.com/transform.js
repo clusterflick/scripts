@@ -1,6 +1,7 @@
 const { format } = require("date-fns");
 const {
   createAccessibility,
+  createOccasions,
   createFormat,
   createOverview,
   createPerformance,
@@ -41,6 +42,7 @@ async function transform({ movieListPage }, sourcedEvents) {
           status: { soldOut },
           accessibility: createAccessibility(title, {}, text),
           format: createFormat(title, {}, text),
+          occasions: createOccasions(title, {}, text, { date }),
         }),
       ],
       matchingHints: { overview: text },

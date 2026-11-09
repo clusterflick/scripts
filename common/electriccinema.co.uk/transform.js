@@ -2,6 +2,7 @@ const {
   createOverview,
   createPerformance,
   createAccessibility,
+  createOccasions,
   createFormat,
   generateShowingId,
 } = require("../utils");
@@ -57,8 +58,9 @@ async function transform(
           screeningType === "electric kids club",
       };
 
+      const date = parseDate(`${screening.d}T${screening.t}`);
       return createPerformance({
-        date: parseDate(`${screening.d}T${screening.t}`),
+        date,
         screen: screening.sn,
         notesList:
           screeningType !== "main feature" &&
@@ -73,6 +75,9 @@ async function transform(
           movie.short_synopsis,
         ),
         format: createFormat(movie.title, {}, movie.short_synopsis),
+        occasions: createOccasions(movie.title, {}, movie.short_synopsis, {
+          date,
+        }),
       });
     });
 

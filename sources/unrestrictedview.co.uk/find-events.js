@@ -3,6 +3,7 @@ const {
   createPerformance,
   createOverview,
   createAccessibility,
+  createOccasions,
   createFormat,
   generateShowingId,
   readJSON,
@@ -45,15 +46,19 @@ function parseEvent(event, performances) {
     // The performance's end time is the slot's, which takes in introductions
     // and Q&As, so it is not the film's length and is left off.
     overview: createOverview({}),
-    performances: performances.map((performance) =>
-      createPerformance({
-        date: parsePerformanceDate(performance),
+    performances: performances.map((performance) => {
+      const performanceDate = parsePerformanceDate(performance);
+      return createPerformance({
+        date: performanceDate,
         url,
         status: { soldOut: performance.available_tickets <= 0 },
         accessibility: createAccessibility(title, {}, description),
         format: createFormat(title, {}, description),
-      }),
-    ),
+        occasions: createOccasions(title, {}, description, {
+          date: performanceDate,
+        }),
+      });
+    }),
     matchingHints: { overview: description },
   };
 }

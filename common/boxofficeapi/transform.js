@@ -3,6 +3,7 @@ const {
   createOverview,
   createPerformance,
   createAccessibility,
+  createOccasions,
   createFormat,
   getValidFormat,
   generateShowingId,
@@ -99,8 +100,9 @@ async function transform(
           );
         });
 
+        const date = parseISO(performance.startsAt);
         return createPerformance({
-          date: parseISO(performance.startsAt),
+          date,
           notesList,
           url: getUrl(performance.data, moviePageUrl),
           status: { soldOut: performance.occupancy.rate === 100 },
@@ -110,6 +112,7 @@ async function transform(
             synopsis,
           ),
           format: createFormat(movie.title, format, synopsis),
+          occasions: createOccasions(movie.title, {}, synopsis, { date }),
         });
       });
 

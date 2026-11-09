@@ -6,9 +6,11 @@ const {
   createPerformance,
   generateShowingId,
   createAccessibility,
+  createOccasions,
   createFormat,
   getTitleAccessibility,
   getTitleFormat,
+  getTitleOccasions,
   getText,
 } = require("../../common/utils");
 const attributes = require("./attributes");
@@ -263,6 +265,14 @@ function toMovie($, showEl, websiteDetails, eventFeeds) {
       // "35mm" or "35mm film" - so read it with the label matchers rather than
       // as an exact token, which only the first spelling would satisfy.
       format: createFormat(title, getTitleFormat(eventAttribute), overview),
+      // The attribute carries a Q&A too ("+Q&A", "& Q&A") - none in the
+      // current recordings, 97 performances across a year of releases.
+      occasions: createOccasions(
+        title,
+        getTitleOccasions(eventAttribute),
+        overview,
+        { date },
+      ),
     });
   });
 

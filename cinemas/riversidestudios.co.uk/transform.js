@@ -3,6 +3,7 @@ const {
   createOverview,
   createPerformance,
   createAccessibility,
+  createOccasions,
   createFormat,
   basicNormalize,
   getText,
@@ -145,6 +146,13 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
               synopsis,
             );
             const format = createFormat(title, {}, synopsis);
+            const date = new Date(parseInt(timestamp, 10) * 1000);
+            const occasions = createOccasions(
+              title,
+              { qAndA: tags.includes("80811") },
+              synopsis,
+              { date },
+            );
 
             const notesList = [];
             if (tags.includes("224")) {
@@ -153,18 +161,16 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
             if (tags.includes("80787")) {
               notesList.push("Silver Screen");
             }
-            if (tags.includes("80811")) {
-              notesList.push("Q&A");
-            }
             if (tags.includes("259")) {
               notesList.push("British Sign Language");
             }
             return createPerformance({
-              date: new Date(parseInt(timestamp, 10) * 1000),
+              date,
               notesList,
               url,
               accessibility,
               format,
+              occasions,
             });
           });
       },

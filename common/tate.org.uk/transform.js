@@ -7,6 +7,7 @@ const {
   createOverview,
   generateShowingId,
   createAccessibility,
+  createOccasions,
 } = require("../utils");
 
 // "7 August 2026 at 19.00–21.00" — a single screening, end time ignored.
@@ -191,6 +192,7 @@ async function transform(attributes, { moviePages }, sourcedEvents) {
           status,
           accessibility: createAccessibility(title, {}, overview),
           format: createFormat(title, {}, description),
+          occasions: createOccasions(title, {}, overview, { date }),
         }),
       ),
       matchingHints: { overview: matchingOverview },

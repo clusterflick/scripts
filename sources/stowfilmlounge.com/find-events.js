@@ -8,6 +8,7 @@ const {
   generateShowingId,
   readJSON,
   createAccessibility,
+  createOccasions,
   createFormat,
   getText,
 } = require("../../common/utils");
@@ -234,6 +235,9 @@ function parseEventSection($, section) {
           status: {},
           accessibility: createAccessibility(title, {}, synopsis),
           format: createFormat(title, {}, synopsis),
+          occasions: createOccasions(title, {}, synopsis, {
+            date: eventDate,
+          }),
         }),
       ],
       matchingHints: { overview: synopsis },
