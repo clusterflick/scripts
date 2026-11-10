@@ -91,6 +91,26 @@ describe("createOccasions", () => {
         { intro: { guests: ["Robert Eggers"] } },
       ],
       [
+        "a name missing the space after its role",
+        "+ Q&A with Vanessa Roth and co-producerJustin Cohen MBE",
+        { qAndA: { guests: ["Vanessa Roth", "Justin Cohen MBE"] } },
+      ],
+      [
+        "a director of photography",
+        "Followed by a Q&A with director Ana-Felicia Scutelnicu and DoP Javier Palicio",
+        { qAndA: { guests: ["Ana-Felicia Scutelnicu", "Javier Palicio"] } },
+      ],
+      [
+        "a plus sign inside a name",
+        "The screening will be followed by a Q&A with London Trans+ Pride.",
+        { qAndA: { guests: ["London Trans+ Pride"] } },
+      ],
+      [
+        "an em dash with no spaces around it",
+        "The screening will be introduced by Silvia Demetilla—founder of the collective.",
+        { intro: { guests: ["Silvia Demetilla"] } },
+      ],
+      [
         "a name followed by where they're from",
         "This screening will include an intro by Vivien Halas and Jez Stewart of the BFI National Archive.",
         { intro: { guests: ["Vivien Halas", "Jez Stewart"] } },
@@ -191,6 +211,14 @@ describe("createOccasions", () => {
       [
         "a video introduction",
         "This screening will feature a video introduction by Indigenous Caribbean Filmmaker Akley Olten.",
+      ],
+      [
+        "a filmed interview with a special guest",
+        "This special Doctor Who Day screening also includes exclusive bonus material, featuring previously unseen content and a brand-new interview with a special guest.",
+      ],
+      [
+        "special guests in a filmed concert",
+        "Featuring the extraordinary voice of Emma Kok, renowned tenors and special guests, this production is designed to delight audiences.",
       ],
       [
         "a film's history",
@@ -349,5 +377,23 @@ describe("createPerformance occasions", () => {
     expect(performance.occasions).toEqual({
       qAndA: { guests: ["Mike Leigh"] },
     });
+  });
+});
+
+describe("Eventive descriptions", () => {
+  const parseDescription = require("../eventive/parse-description");
+
+  test("keep each block on its own line, so a name doesn't run into a heading", () => {
+    const description = parseDescription(
+      "<h1>CLOSING NIGHT GALA</h1><h3>+ Q&amp;A with director Alexandre Arcady</h3><p><strong>PRICES:</strong></p>",
+    );
+    expect(description).toBe(
+      "CLOSING NIGHT GALA\n+ Q&A with director Alexandre Arcady\nPRICES:",
+    );
+    expect(
+      createOccasions("The Last Concert", {}, description, {
+        date: new Date("2026-11-22T19:00Z"),
+      }),
+    ).toEqual({ qAndA: { guests: ["Alexandre Arcady"] } });
   });
 });
