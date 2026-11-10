@@ -30,6 +30,7 @@ function getEventDescription(eventPage) {
 async function transform({ movieListPage, eventPages }, sourcedEvents) {
   const $ = cheerio.load(movieListPage);
   const movies = [];
+  let undated = 0;
 
   $(".project-post").each((_, element) => {
     const $post = $(element);
@@ -41,6 +42,19 @@ async function transform({ movieListPage, eventPages }, sourcedEvents) {
     const paragraphs = $post.find(".project-bottom > p");
     const dateText = getText(paragraphs.eq(0)).trim(); // e.g., "Wed 18 February 2026"
     const timeText = getText(paragraphs.eq(1)); // e.g., "Doors: 7.30pm; Starts: 8pm"
+
+    // Since 9th November 2026 the site has rendered every event's date and
+    // time blank - on the listing, on the event pages ("Thu 01 January 1970")
+    // and in its REST API, whose `acf` fields come back empty - so there is no
+    // date to read anywhere. Rather than fail the run, the card is skipped and
+    // logged, and recovery in `scripts/transform` carries the event forward
+    // from the previous release while its page is still up: the date it had
+    // before the site broke, not one made up here.
+    if (!dateText) {
+      console.log(` - Skipped (no date on the listing): ${title} ${url}`);
+      undated++;
+      return;
+    }
 
     // Multi-session runs (courses, workshop series) give a date range instead
     // of a date, e.g. "Mon 05 October 2026 - Mon 09 November 2026". The listing
@@ -99,7 +113,9 @@ async function transform({ movieListPage, eventPages }, sourcedEvents) {
     });
   });
 
-  if (movies.length === 0) {
+  // A listing whose every card lost its date is the breakage above, not a
+  // changed page structure, so it isn't a reason to fail.
+  if (movies.length === 0 && undated === 0) {
     throw new Error("No movies found - the page structure may have changed");
   }
 
