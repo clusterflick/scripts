@@ -1944,6 +1944,9 @@ function normalizeTitle(title, options) {
     // Friendly Screening: 9 to 5" still carries its label here. Only the
     // worded separator is safe unanchored; "9 - 5" reads as a range anywhere
     // else in a title, so that spelling stays pinned to the whole of it.
+    // Billed as a double bill with the concert film, so spell out both
+    // titles in full before the numerals are folded below
+    ["9 to 5 & Live in London", "Nine to Five & Dolly: Live from London"],
     [/^9\s*[-–—]\s*5$/i, "Nine to Five"],
     [/\b9\s*to\s*5\b/i, "Nine to Five"],
     // One venue bills the concert film with the party it is screened at,
@@ -2112,6 +2115,8 @@ function normalizeTitle(title, options) {
     // with any venue billed after a dash, brought back in with the rest of the
     // tour's screenings
     [/(People['’]s Emergency Briefing) Film(?: [-–] .+)?$/i, "$1"],
+    ["Hadoota", "Hadota"],
+    ["Aakasamlo Oka Tara", "Aakasam Lo Oka Tara"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
