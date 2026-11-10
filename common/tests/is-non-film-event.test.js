@@ -184,6 +184,16 @@ describe("isNonFilmEvent", () => {
     ["NEW CURRENCY ISSUE 04 LAUNCH."],
     ["Experiments with... Chalks & Charcoal"],
     ["Making the Clinic: Spatial and Material Investigations"],
+    ["AI Hackathon, powered by CapCut"],
+    ["Secrets of the Brain"],
+    ["A Taste of Memory [workshop]"],
+    ["Art as a Living Entity [talk]"],
+    ["Beyond the Canvas [talk]"],
+    ["Fictional Self: How Best I Could Be [workshop]"],
+    ["Photographing the Invisible [workshop]"],
+    ["Reflections Issue 5 Launch [panel]"],
+    ["Seeing in your own lense and expanding the story [workshop]"],
+    ["v=d/t (me/here) [performance]"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });

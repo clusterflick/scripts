@@ -328,6 +328,7 @@ const knownRemovablePhrases = [
   // take the middle of each and leave the rest of the billing on the title
   "Documentary special screening and talk by Jo Berry.",
   "Special Preview and Broadcast Q&A",
+  "Visionaries Film Club Special Preview and Q&A:",
   "special screening",
   "Special Presentation:",
   "Spielberg Sci-Fi Week:",
@@ -1953,6 +1954,10 @@ const knownRemovablePhrases = [
   "in conversation with Jesse Armstrong",
   "SCUP 3: Film & Collage:",
   "Trans Matters Worldwide:",
+  "Esther Anderson Retrospective:",
+  "Best of 2026:",
+  "New Year's Eve Party Screening",
+  "at Selfridges",
 ];
 
 module.exports = knownRemovablePhrases;

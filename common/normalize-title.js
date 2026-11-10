@@ -143,6 +143,7 @@ function normalizeTitle(title, options) {
     ["Zog + ", "Zog & "],
     [" + Superworm", " and Superworm"],
     ["Superworm + ", "Superworm & "],
+    ["Before Sunset (2004) + ", "Before Sunset (2004) & "],
     // TheMovieDB has no entry for the pair, so it matches the sequel on its
     // own. Name it as the double bill it is, which one venue already does.
     [
@@ -2117,6 +2118,8 @@ function normalizeTitle(title, options) {
     [/(People['’]s Emergency Briefing) Film(?: [-–] .+)?$/i, "$1"],
     ["Hadoota", "Hadota"],
     ["Aakasamlo Oka Tara", "Aakasam Lo Oka Tara"],
+    // The venue bills the film by its initials, run into the venue's name
+    ["LBN at The Cinema", "La Bola Negra"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
