@@ -2118,6 +2118,8 @@ function normalizeTitle(title, options) {
     [/(People['’]s Emergency Briefing) Film(?: [-–] .+)?$/i, "$1"],
     ["Hadoota", "Hadota"],
     ["Aakasamlo Oka Tara", "Aakasam Lo Oka Tara"],
+    // The venue bills the film by its initials, run into the venue's name
+    ["LBN at The Cinema", "La Bola Negra"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {

@@ -386,6 +386,15 @@ const nonFilmEvents = [
   /^Experiments with\.\.\. Chalks & Charcoal$/i,
   /^Making the Clinic: Spatial and Material Investigations$/i,
   /^AI Hackathon powered by CapCut$/i,
+  /^Secrets of the Brain$/i,
+  /^A Taste of Memory \[workshop\]$/i,
+  /^Art as a Living Entity \[talk\]$/i,
+  /^Beyond the Canvas \[talk\]$/i,
+  /^Fictional Self: How Best I Could Be \[workshop\]$/i,
+  /^Photographing the Invisible \[workshop\]$/i,
+  /^Reflections Issue 5 Launch \[panel\]$/i,
+  /^Seeing in your own lense and expanding the story \[workshop\]$/i,
+  /^v=d\/t \(me\/here\) \[performance\]$/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
