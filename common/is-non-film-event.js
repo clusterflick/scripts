@@ -385,6 +385,7 @@ const nonFilmEvents = [
   /^NEW CURRENCY ISSUE 04 LAUNCH\.?$/i,
   /^Experiments with\.\.\. Chalks & Charcoal$/i,
   /^Making the Clinic: Spatial and Material Investigations$/i,
+  /^AI Hackathon powered by CapCut$/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>

@@ -184,6 +184,7 @@ describe("isNonFilmEvent", () => {
     ["NEW CURRENCY ISSUE 04 LAUNCH."],
     ["Experiments with... Chalks & Charcoal"],
     ["Making the Clinic: Spatial and Material Investigations"],
+    ["AI Hackathon, powered by CapCut"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });

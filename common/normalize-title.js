@@ -143,6 +143,7 @@ function normalizeTitle(title, options) {
     ["Zog + ", "Zog & "],
     [" + Superworm", " and Superworm"],
     ["Superworm + ", "Superworm & "],
+    ["Before Sunset (2004) + ", "Before Sunset (2004) & "],
     // TheMovieDB has no entry for the pair, so it matches the sequel on its
     // own. Name it as the double bill it is, which one venue already does.
     [
