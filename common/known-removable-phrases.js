@@ -583,6 +583,7 @@ const knownRemovablePhrases = [
   "Film club presents:",
   "December's",
   "20th Birthday Weekender:",
+  "20th Birthday Weekender –",
   // Its "(dog-friendly movie night)" billing is already gone by the time the
   // list runs, colon and all, so only the series name is left to strip
   "Pooches & Popcorn",

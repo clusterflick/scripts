@@ -183,6 +183,7 @@ describe("isNonFilmEvent", () => {
     ["Uppity: The Intellectual Playground (The Year End Christmas Special)"],
     ["NEW CURRENCY ISSUE 04 LAUNCH."],
     ["Experiments with... Chalks & Charcoal"],
+    ["Making the Clinic: Spatial and Material Investigations"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });

@@ -384,6 +384,7 @@ const nonFilmEvents = [
   /^Uppity: The Intellectual Playground\b/i,
   /^NEW CURRENCY ISSUE 04 LAUNCH\.?$/i,
   /^Experiments with\.\.\. Chalks & Charcoal$/i,
+  /^Making the Clinic: Spatial and Material Investigations$/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
