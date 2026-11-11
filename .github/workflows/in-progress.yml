@@ -1,0 +1,32 @@
+name: Mark issue in progress
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  move:
+    if: >
+      github.event.comment.user.login == 'alistairjcbrown' &&
+      startsWith(github.event.comment.body, 'Picked up in Claude Code:')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Move card to In progress
+        env:
+          GH_TOKEN: ${{ secrets.PROJECT_TOKEN }}
+          ISSUE_NODE_ID: ${{ github.event.issue.node_id }}
+        run: |
+          set -euo pipefail
+          read -r PROJECT_ID FIELD_ID OPTION_ID < <(gh api graphql \
+            -f query='query($org:String!,$num:Int!){organization(login:$org){projectV2(number:$num){id field(name:"Status"){... on ProjectV2SingleSelectField{id options{id name}}}}}}' \
+            -f org=clusterflick -F num=10 \
+            --jq '.data.organization.projectV2 | [.id, .field.id, (.field.options[] | select(.name=="In progress") | .id)] | @tsv')
+
+          # Adds the issue if it isn't on the board; returns the existing item if it is
+          ITEM_ID=$(gh api graphql \
+            -f query='mutation($p:ID!,$c:ID!){addProjectV2ItemById(input:{projectId:$p,contentId:$c}){item{id}}}' \
+            -f p="$PROJECT_ID" -f c="$ISSUE_NODE_ID" \
+            --jq '.data.addProjectV2ItemById.item.id')
+
+          gh api graphql \
+            -f query='mutation($p:ID!,$i:ID!,$f:ID!,$o:String!){updateProjectV2ItemFieldValue(input:{projectId:$p,itemId:$i,fieldId:$f,value:{singleSelectOptionId:$o}}){projectV2Item{id}}}' \
+            -f p="$PROJECT_ID" -f i="$ITEM_ID" -f f="$FIELD_ID" -f o="$OPTION_ID"
