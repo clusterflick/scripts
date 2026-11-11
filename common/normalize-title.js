@@ -412,6 +412,17 @@ function normalizeTitle(title, options) {
     [/\s+(?:english\s+)?dub?$/i, ""],
     [/\s+sub?$/i, ""], // subbed
     [/\s+(?:live\s+)?(?:in\s+)?(3|2)d$/i, ""], // 3d or 2d, with optional "live in" prefix
+    // Ahead of the year rule below, which would otherwise take the "2026" this
+    // matches on. Billed without its episodes, so it is given the title the
+    // same double bill carries elsewhere.
+    [
+      "Thunderbirds 4k Restoration Double Bill 2026",
+      "Thunderbirds 4K Double Bill - Atlantic Inferno / Attack of the Alligators!",
+    ],
+    // The series' name, billed ahead of a dash. Removed here rather than in the
+    // phrase list, which runs after the separator rule has already cut the
+    // title at the dash and kept the series name instead of the film.
+    [/^Soft Limit Cinema - /i, ""],
     // Year - except CatVideoFest's, which is part of the title: TheMovieDB
     // has a film per year ("CatVideoFest 2026"). Anchored to the end, this
     // also misses a year followed by a subtitle ("CatVideoFest 2026 -
@@ -2120,6 +2131,8 @@ function normalizeTitle(title, options) {
     ["Aakasamlo Oka Tara", "Aakasam Lo Oka Tara"],
     // The venue bills the film by its initials, run into the venue's name
     ["LBN at The Cinema", "La Bola Negra"],
+    [/THE THREE DUMAS$/i, "The Three Dumas (2007)"],
+    ["Two Gentleman Sharing", "Two Gentlemen Sharing"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
