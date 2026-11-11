@@ -159,4 +159,59 @@ describe(`${attributes.name}`, () => {
       expect(output).toHaveLength(0);
     });
   });
+
+  // Markup from https://ti.to/queereast/girlfriends_uok_2026, which gives a
+  // date and no time
+  describe("an event with a date and no time", () => {
+    const html = `
+      <h1 class="event-title">Girlfriends (University of Kent)</h1>
+      <div class="tito-event-homepage--basic-info tito-event-homepage--basic-info-cal">
+        <a href="https://checkout.tito.io/queereast/girlfriends_uok_2026?format=ics">
+          November 16th, 2026
+        </a>
+      </div>
+      <div class="tito-event-homepage--basic-info tito-event-homepage--basic-info-location">
+        <a href="https://maps.google.com/maps?q=51.2967395%2C1.0630042+%28Lupino+Cinema+at+the+University+of+Kent%2C+Grimond+Building%2C+University+of+Kent%2C+Canterbury%2C+CT2+7NG%29">
+          Lupino Cinema at the University of Kent
+        </a>
+      </div>
+      <ul class="tito-venues"><li><a href="#"><span>
+        Lupino Cinema at the University of Kent, Grimond Building, University of Kent, Canterbury, CT2 7NG
+      </span></a></li></ul>`;
+    const venues = {
+      queereast: {
+        moviePages: {
+          "https://ti.to/queereast/girlfriends_uok_2026": html,
+        },
+      },
+    };
+
+    it("is passed over for a cinema it isn't at", async () => {
+      readJSON.mockImplementation(() => venues);
+
+      const output = await findEvents({
+        name: "The Garden Cinema",
+        alternativeNames: [],
+        address: "39-41 Parker St, London WC2B 5PQ, UK",
+        geo: { lat: 51.5162287, lon: -0.1213371 },
+      });
+
+      expect(output).toHaveLength(0);
+    });
+
+    it("throws for the cinema it is at", async () => {
+      readJSON.mockImplementation(() => venues);
+
+      await expect(
+        findEvents({
+          name: "Lupino Cinema at the University of Kent",
+          alternativeNames: [],
+          address: "Grimond Building, University of Kent, Canterbury, CT2 7NG",
+          geo: { lat: 51.2967395, lon: 1.0630042 },
+        }),
+      ).rejects.toThrow(
+        'Expected en-dash in calendar text: "November 16th, 2026"',
+      );
+    });
+  });
 });

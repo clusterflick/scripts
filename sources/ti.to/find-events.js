@@ -166,7 +166,7 @@ function extractEventDetails(html, url) {
       venueName: locationText,
       venueAddress: locationText,
       coordinates: null,
-      parsedDate: parseCalText(calText),
+      calText,
       description,
     };
   }
@@ -176,20 +176,24 @@ function extractEventDetails(html, url) {
   // First segment of venue address is the venue name
   const venueName = venueAddress.split(",")[0].trim();
 
-  const parsedDate = parseCalText(calText);
-
   return {
     title,
     venueName,
     venueAddress,
     coordinates,
-    parsedDate,
+    calText,
     description,
   };
 }
 
 function convertTitoEvent(url, eventDetails) {
-  const { title, parsedDate, description } = eventDetails;
+  const { title, calText, description } = eventDetails;
+  // Parsed only once the event is known to be at one of our venues. Tito
+  // lists every event an organiser runs, and one elsewhere in the country
+  // with a date and no time ("November 16th, 2026") has no performance to
+  // give - which should stop the run for a venue we carry, and not for one
+  // we don't.
+  const parsedDate = parseCalText(calText);
   const eventPath = extractEventPath(url);
   const duration = differenceInMinutes(
     parsedDate.endDate,
