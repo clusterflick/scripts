@@ -87,6 +87,19 @@ const getRottenTomatoesMatch = async (movie) => {
   return getMatch(movie, getSearchResults, getDirectorsForMatch);
 };
 
+// The scorecard gives the Tomatometer and Popcornmeter as `scorePercent`
+// ("100%"). It used to be a bare `score`, and when RT renamed it in November
+// 2026 every film's score read as missing without anything failing, so a value
+// that is present but not a percentage throws rather than parsing to NaN.
+const parseScorePercent = (scorePercent) => {
+  if (scorePercent === undefined) return undefined;
+  const match = /^(\d{1,3})%$/.exec(scorePercent);
+  if (!match) {
+    throw new Error(`Unrecognised Rotten Tomatoes score "${scorePercent}"`);
+  }
+  return parseInt(match[1], 10);
+};
+
 const getScoresFor = (group) =>
   group
     ? {
@@ -94,18 +107,17 @@ const getScoresFor = (group) =>
         dislikes: group.notLikedCount,
         reviews: group.reviewCount,
         rating: parseFloat(group.averageRating),
-        score: parseInt(group.score, 10),
+        score: parseScorePercent(group.scorePercent),
       }
     : undefined;
 
-const getScore = async (match) => {
-  const rottenTomatoesGet = await getMoviePage(match);
-  const $ = cheerio.load(rottenTomatoesGet);
+const parseMoviePage = (moviePage, url) => {
+  const $ = cheerio.load(moviePage);
   const id = $("watchlist-button").attr("ems-id");
   const scorecard = JSON.parse(getText($("#media-scorecard-json")));
   return {
     id,
-    url: match.url,
+    url,
     audience: {
       all: getScoresFor(scorecard.overlay.audienceAll),
       verified: getScoresFor(scorecard.overlay.audienceVerified),
@@ -117,6 +129,9 @@ const getScore = async (match) => {
   };
 };
 
+const getScore = async (match) =>
+  parseMoviePage(await getMoviePage(match), match.url);
+
 async function findRottenTomatoesMatch(movie) {
   return findSourceMatch(movie, {
     getMatch: getRottenTomatoesMatch,
@@ -127,3 +142,4 @@ async function findRottenTomatoesMatch(movie) {
 }
 
 module.exports = findRottenTomatoesMatch;
+module.exports.parseMoviePage = parseMoviePage;
