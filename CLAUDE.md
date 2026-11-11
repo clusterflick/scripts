@@ -115,6 +115,15 @@ several films arrives once per film with a different cached snapshot each time,
 and the highest is kept - the maximum is order-independent, so re-running a
 release reproduces it.
 
+`match` checks its own output before writing it (`scripts/match/check-matched-data.js`):
+a source that matched nothing, or whose matches carry no score, throws. A
+source can break without failing - Rotten Tomatoes renamed its score field in
+November 2026 and every match went out with a null score for days - and since
+the release needs every source, a throw keeps yesterday's good scores live
+rather than publishing empty ones. A partial fall is not thrown on; it is a
+trend, followed on manage.clusterflick.com. A new source needs its score added
+to `SCORE_OF` there.
+
 `diff` runs between `transform` and `combine`, comparing two `transform`
 releases (`transformed-data/current` vs `transformed-data/previous`) to write
 the change set published by `data-diffed`. `data-analysed`'s `compare:releases`
