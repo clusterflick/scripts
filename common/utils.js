@@ -798,7 +798,24 @@ const looksLikeOrganisation = (name) => {
   return /^[A-Z0-9]/.test(words[0]) && /^[A-Z0-9]/.test(words.at(-1));
 };
 
+// A venue presenting with someone else names only its partner - "Presented in
+// collaboration with Cine Brazil" (the Lexi). Read as the joint credit below,
+// "Presented" would be taken for the first presenter. The partner didn't
+// present it alone, so the note keeps the venue's own words.
+const PRESENTED_WITH_PATTERN = new RegExp(
+  `^(?:(?:this (?:event|screening|film) is|these screenings are) )?presented (in (?:collaboration|partnership|association)) with\\s+(${ORGANISATION_NAME})`,
+  "i",
+);
+
 const getPresenterNote = (text) => {
+  const presentedWith = text.match(PRESENTED_WITH_PATTERN);
+  if (presentedWith) {
+    const [, connection, partner] = presentedWith;
+    return looksLikeOrganisation(partner)
+      ? `Presented ${connection.toLowerCase()} with ${partner.trim()}`
+      : null;
+  }
+
   for (const pattern of PRESENTER_PATTERNS) {
     const match = text.match(pattern);
     if (!match) continue;
@@ -1433,6 +1450,7 @@ module.exports = {
   createFormat,
   createOccasions,
   getTitleOccasions,
+  mergeOccasions,
   getValidFormat,
   getTitleFormat,
   removeMatchingHints,

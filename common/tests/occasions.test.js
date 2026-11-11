@@ -30,6 +30,11 @@ describe("createOccasions", () => {
       ["+ Q&A", { qAndA: true }],
       ["& Q&A", { qAndA: true }],
       ["UK PREMIERE Mirage + Q&A", { premiere: { region: "uk" }, qAndA: true }],
+      // Hart Shoreditch, through Eventbrite
+      [
+        "Switches Screening + Director Conversation | Lumière Noire",
+        { inConversation: true },
+      ],
     ])("reads '%s'", (title, expected) => {
       expect(createOccasions(title)).toEqual(expected);
     });
@@ -39,6 +44,8 @@ describe("createOccasions", () => {
       ["Interstellar"],
       ["Introducing the Dwights"],
       ["Members' Preview Screening: Wicked"],
+      // The Lexi's note for its seniors' group: the audience talking
+      ["Talking Pictures: A friendly film discussion group for seniors"],
     ])("finds nothing in '%s'", (title) => {
       expect(createOccasions(title)).toEqual({});
     });
@@ -173,6 +180,35 @@ describe("createOccasions", () => {
         },
       ],
       [
+        // The Lexi, Black History Studies: Barrel Children. The introducer is
+        // named before the verb, where no name is read.
+        "an introduction of the films, and a discussion with a named guest",
+        "Charmaine Simpson, founder and CEO of Black History Studies , will introduce the films and lead a discussion following this screening with director Nadine White.",
+        { intro: true, inConversation: { guests: ["Nadine White"] } },
+      ],
+      [
+        // The Rio
+        "a Q&A discussion",
+        "The screening is followed by a Q&A discussion with Rabbi Herschel Gluck and filmmakers Winstan Whitter & Elin Moe.",
+        {
+          qAndA: {
+            guests: ["Rabbi Herschel Gluck", "Winstan Whitter", "Elin Moe"],
+          },
+        },
+      ],
+      [
+        // Birkbeck
+        "a discussion panel",
+        "The programme will feature a post-screening discussion panel with Michal Oleszczyk following the documentary We Film the People (2013) by Ania Szczepanska.",
+        { panel: { guests: ["Michal Oleszczyk"] } },
+      ],
+      [
+        // The Phoenix
+        "an introduction of the film by someone named before it",
+        "Writer and researcher Manishita Dass will introduce the film, its themes and place within Ray’s oeuvre.",
+        { intro: true },
+      ],
+      [
         "a live score",
         "This performance will feature a live score performed by Hugo Max.",
         { liveScore: { performers: ["Hugo Max"] } },
@@ -221,6 +257,20 @@ describe("createOccasions", () => {
         "Featuring the extraordinary voice of Emma Kok, renowned tenors and special guests, this production is designed to delight audiences.",
       ],
       [
+        // Hart Shoreditch's Lumière Noire, through Eventbrite
+        "a discussion among the audience",
+        "💬 A post-film discussion where every voice is welcome",
+      ],
+      [
+        // Sands Films
+        "a programme that will introduce films",
+        "The second selection of films will introduce films about the war made in Spain under Franco.",
+      ],
+      [
+        "programme copy introducing audiences to something",
+        "This season introduces audiences to the cinema of Iran.",
+      ],
+      [
         "a film's history",
         "The film premiered (and won the Special Jury Prize) at the Venice Film Festival.",
       ],
@@ -228,6 +278,15 @@ describe("createOccasions", () => {
       expect(
         createOccasions("Film", {}, description, at("2026-11-11T19:00Z")),
       ).toEqual({});
+    });
+
+    test("a work put in conversation with the film isn't a guest (Ibraaz, Turang)", () => {
+      // The second sentence names the performance's own date, so it is read.
+      const description =
+        "With an introduction from Bunga Siagian, cultural producer, researcher, and daughter of Bachtiar Siagian, the screening presents the restored film as an act of narrative reclamation and an archive of decolonisation, created at a time of radical political upheaval in the country of its creation. This screening of Turang is curated by May Adadol Ingawanij with Ibraaz in conversation with the final chapter of Taring Padi’s Rakyat Pasti Menang at Ibraaz London, which runs until 22 November, 2026.";
+      expect(
+        createOccasions("Turang", {}, description, at("2026-11-22T15:00Z")),
+      ).toEqual({ intro: { guests: ["Bunga Siagian"] } });
     });
 
     describe("a sentence naming a date", () => {

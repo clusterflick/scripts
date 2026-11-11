@@ -1,7 +1,7 @@
 # Occasions
 
-Clusterflick records what makes a performance more than a screening - someone
-in the room, a live score, a premiere - on each performance, as
+Clusterflick records what makes a performance more than a screening - someone in
+the room, a live score, a premiere - on each performance, as
 `performances[].occasions`. The website decides which of them are worth
 promoting (a Q&A is a one-off at one venue and house style at another, which
 only the whole city can tell you); the transform only records what the venue
@@ -29,20 +29,30 @@ it.
 | ----------------- | ------------------------------------------------------------------ | -------------------------------------------------------------- |
 | `intro`           | Someone introduces the film                                        | `guests`                                                       |
 | `qAndA`           | A Q&A after the film (Barbican's "ScreenTalk" included)            | `guests`                                                       |
-| `inConversation`  | An "in conversation"                                               | `guests`                                                       |
+| `inConversation`  | An "in conversation", a "Director Conversation", or a discussion   | `guests`                                                       |
 | `panel`           | A panel discussion                                                 | `guests`                                                       |
 | `guestAppearance` | Someone appears, but not in a stated form ("in person", "special") | `guests`                                                       |
 | `liveScore`       | Musicians play along with the film                                 | `performers`                                                   |
 | `premiere`        | A premiere                                                         | `region`: `uk`, `london`, `european`, `world`, `international` |
 | `preview`         | Showing ahead of release                                           | -                                                              |
 
-`guestAppearance` is dropped whenever one of `intro`, `qAndA`,
-`inConversation` or `panel` is found, since it then adds nothing.
+`guestAppearance` is dropped whenever one of `intro`, `qAndA`, `inConversation`
+or `panel` is found, since it then adds nothing.
+
+A discussion is only an `inConversation` when it names someone: "a discussion
+with director Nadine White". An unnamed one is as often the audience talking ("A
+post-film discussion where every voice is welcome"), and a "panel discussion" or
+"Q&A discussion" is a panel or a Q&A. Equally, "in conversation with" a work -
+"in conversation with the final chapter of Taring Padi's Rakyat Pasti Menang",
+an exhibition - is a curator's phrase, not a guest.
+
+"Introduce" counts only with the film or the screening as its object ("will
+introduce the films"), since programme copy introduces audiences to things.
 
 Names are as the venue wrote them, without the role around them: "a Q&A with
-director Poh Si Teng" gives `["Poh Si Teng"]`. A name the rules can't be sure
-of is left out rather than guessed - a single word ("Joel"), a run ending in a
-job title ("BFI TV Programmer"), or anything after "of" or "for" ("editor of
+director Poh Si Teng" gives `["Poh Si Teng"]`. A name the rules can't be sure of
+is left out rather than guessed - a single word ("Joel"), a run ending in a job
+title ("BFI TV Programmer"), or anything after "of" or "for" ("editor of
 Terminus") - so a list can be shorter than the venue's, but shouldn't hold
 anything that isn't a person or a group the venue named.
 
@@ -52,8 +62,8 @@ Like accessibility and format, from three places, most reliable first:
 
 1. **Structured listing data.** A venue that tags performances passes the tags
    as the second argument, as Indy Cinema Group does with its `intro` and `qa`
-   tags. `false` and `undefined` are dropped, so `{ qAndA: tags.includes("qa") }`
-   is fine; an unknown key or detail throws.
+   tags. `false` and `undefined` are dropped, so
+   `{ qAndA: tags.includes("qa") }` is fine; an unknown key or detail throws.
 2. **The title and the performance notes.** `createOccasions` reads the title;
    `createPerformance` reads each note, since notes only exist once it has
    joined them.
@@ -89,10 +99,10 @@ title it finds an introduction in a synopsis ("Keating is introduced to an
 all-boys school") and a guest in a booking footer ("no fee when tickets are
 booked in person"). So a sentence of the description only counts when:
 
-- it is about the screening: "this screening", "will be followed by", "join
-  us", "post-screening" and the like;
-- it isn't negated ("will NOT be in attendance") or in the past ("was
-  introduced by Tony Rayns"), and doesn't describe a recording;
+- it is about the screening: "this screening", "will be followed by", "join us",
+  "post-screening" and the like;
+- it isn't negated ("will NOT be in attendance") or in the past ("was introduced
+  by Tony Rayns"), and doesn't describe a recording;
 - if it names a date ("The screening on 11 November will be introduced by ..."),
   the performance is on that date, in London. A sentence naming no date applies
   to every performance of the showing: venues name the night when only one is

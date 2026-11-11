@@ -196,4 +196,43 @@ describe("Savoy Systems transform", () => {
 
     expect(movies[0].overview.directors).toEqual(["Hazel M", "Mae M"]);
   });
+
+  const transformSynopsis = (Synopsis) =>
+    transform(
+      attributes,
+      { urlSlug: "TheLexiCinema.dll", tags: { notes: {} } },
+      {
+        movieListPage: {
+          Events: [{ ...venueEvent(VENUE_BOOKING_URL), Synopsis }],
+        },
+        moviePages: {},
+      },
+      {},
+    );
+
+  // The Lexi's Gugu's World, its description's lines as the ld+json splits
+  // them
+  it("notes a partner the description credits", async () => {
+    const movies = await transformSynopsis(
+      "Presented in collaboration with Cine Brazil .\nThese screenings mark the UK premiere of Brazil's submission to next year's Academy Awards, following in the footsteps of The Secret Agent and I'm Still Here !",
+    );
+
+    expect(movies[0].performances[0].notes).toEqual(
+      "Presented in collaboration with Cine Brazil",
+    );
+  });
+
+  it("doesn't note a synopsis in which someone presents something", async () => {
+    const movies = await transformSynopsis(
+      "Director Céline Sciamma presents a tender portrait of childhood.",
+    );
+
+    expect(movies[0].performances[0].notes).toEqual("");
+  });
+
+  it("doesn't note the venue crediting itself", async () => {
+    const movies = await transformSynopsis("Presented by The Lexi Cinema.");
+
+    expect(movies[0].performances[0].notes).toEqual("");
+  });
 });

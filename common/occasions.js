@@ -232,6 +232,23 @@ const routinePreview =
 
 const qAndA = String.raw`(?:q\s*&\s*a|q\s*and\s*a|screen\s?talk)`;
 
+// "Switches Screening + Director Conversation" - a conversation billed by who
+// is in it rather than with "in". Only the roles that are someone in the room
+// for the film, so a "Film Conversation" (a strand name) isn't read as one.
+const conversationRole = String.raw`(?:director|filmmaker|film-maker|writer|actor|actress|producer|artist|curator|composer|author|cast|creator)s?(?:['’]s?)?`;
+
+// Curators put works "in conversation with" one another: Ibraaz's Turang "is
+// curated by May Adadol Ingawanij with Ibraaz in conversation with the final
+// chapter of Taring Padi's Rakyat Pasti Menang", an exhibition. That is a
+// dialogue between artworks, not someone in the room.
+const conversationWithWork =
+  /\bin conversation with\s+(?:(?:the|an?|our|its|their|this|these)\s+)?(?:[\p{L}'’-]+\s+){0,3}?(?:exhibitions?|chapters?|installations?|works?|programmes?|seasons?|series|collections?|archives?|shows?)(?![\p{L}'’])/iu;
+
+const notInTheRoomOrAWork = new RegExp(
+  `${notInTheRoom.source}|${conversationWithWork.source}`,
+  "iu",
+);
+
 // Each rule finds one key. `names` names the detail its trailing phrase fills;
 // rules for the same key are tried in order and the first to match wins, so a
 // named rule is listed before the bare one it refines.
@@ -257,7 +274,8 @@ const rules = [
   {
     key: "qAndA",
     pattern: new RegExp(
-      String.raw`\b${qAndA}\s+(?:with|w\/|from|featuring|by)\s+`,
+      // "a Q&A discussion with Rabbi Herschel Gluck" (the Rio) is a Q&A
+      String.raw`\b${qAndA}(?:\s+(?:discussion|session))?\s+(?:with|w\/|from|featuring|by)\s+`,
       "i",
     ),
     names: "guests",
@@ -271,14 +289,35 @@ const rules = [
 
   {
     key: "inConversation",
-    pattern: /\bin conversation with\s+/i,
+    pattern: new RegExp(
+      String.raw`\b(?:in|${conversationRole})\s+conversation\s+with\s+`,
+      "i",
+    ),
+    names: "guests",
+    unless: notInTheRoomOrAWork,
+  },
+  // A discussion only counts with someone named in it: "lead a discussion
+  // following this screening with director Nadine White" (the Lexi). A bare
+  // one is as often the audience talking - "A post-film discussion where every
+  // voice is welcome", the Lexi's "friendly film discussion group for
+  // seniors" - and a panel or Q&A discussion is a panel or a Q&A, as is
+  // Birkbeck's "post-screening discussion panel with Michal Oleszczyk".
+  {
+    key: "inConversation",
+    pattern: new RegExp(
+      String.raw`(?<!\b(?:panel|${qAndA})\s)\bdiscussion\s+(?:(?!panel\b)[\p{L}'’-]+\s+){0,4}?with\s+`,
+      "iu",
+    ),
     names: "guests",
     unless: notInTheRoom,
   },
   {
     key: "inConversation",
-    pattern: /\bin conversation\b/i,
-    unless: notInTheRoom,
+    pattern: new RegExp(
+      String.raw`\bin conversation\b|\b${conversationRole}\s+conversation\b|(?:^|\s)\+\s*conversation\b`,
+      "i",
+    ),
+    unless: notInTheRoomOrAWork,
   },
 
   {
@@ -301,7 +340,14 @@ const rules = [
   },
   {
     key: "intro",
-    pattern: /\bintroduc(?:tion|tions|ed)\b|(?:^|[^\p{L}])intros?(?![\p{L}])/iu,
+    // "introduce" only with the film or the screening as its object -
+    // "Charmaine Simpson ... will introduce the films" (the Lexi) - since
+    // programme copy introduces audiences to things ("This season introduces
+    // audiences to ...", "The second selection of films will introduce films
+    // about the war"). Not "introducing", which is as often a title -
+    // "Introducing the Dwights".
+    pattern:
+      /\bintroduc(?:tion|tions|ed)\b|\bintroduces?\s+(?:the|this|these|each|tonight's|tonight’s)\s+(?:films?|screenings?|evening|night|programme|feature|double bill)\b|(?:^|[^\p{L}])intros?(?![\p{L}])/iu,
     unless: notInTheRoom,
   },
 
@@ -348,7 +394,7 @@ const rules = [
 // One cheap test every rule implies, so text that says nothing but a film's
 // name costs one pass rather than a dozen.
 const anySignal =
-  /q\s*&\s*a|q\s*and\s*a|screen\s?talk|intro|live|premi[eè]re|preview|conversation|in person|attendance|panel|masterclass|special guest/i;
+  /q\s*&\s*a|q\s*and\s*a|screen\s?talk|intro|live|premi[eè]re|preview|conversation|discussion|in person|attendance|panel|masterclass|special guest/i;
 
 // The occasions one piece of text describes, as an occasions object. A
 // sentence of a description is read with `fromDescription`, which leaves out

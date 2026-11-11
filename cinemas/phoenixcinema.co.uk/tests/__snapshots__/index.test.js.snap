@@ -69,6 +69,7 @@ exports[`Phoenix Cinema retrieve and transform 1`] = `
         "format": {},
         "notes": "This screening will be followed by a Q&A",
         "occasions": {
+          "intro": true,
           "qAndA": true,
         },
         "screen": "1",
@@ -107,6 +108,7 @@ exports[`Phoenix Cinema retrieve and transform 1`] = `
         "format": {},
         "notes": "This screening will be followed by a Q&A",
         "occasions": {
+          "intro": true,
           "qAndA": true,
         },
         "screen": "1",
@@ -789,7 +791,11 @@ exports[`Phoenix Cinema retrieve and transform 1`] = `
         "format": {},
         "notes": "This screening will be followed by a Q&A",
         "occasions": {
-          "qAndA": true,
+          "qAndA": {
+            "guests": [
+              "Aengus Collins O'Malley",
+            ],
+          },
         },
         "screen": "1",
         "status": {

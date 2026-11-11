@@ -63,6 +63,21 @@ const divine = {
   geo: { lat: 51.55190978261229, lon: -0.07543040185169653 },
 };
 
+// An event crediting its organiser only in the "Hosted By" panel
+const hostedUrl = "https://outsavvy.com/event/41392/secretary-2002-screening";
+const hostedPage = fs.readFileSync(
+  path.join(__dirname, "fixtures", "hosted-by.html"),
+  "utf8",
+);
+
+// As held in cinemas/instagram.com-rhizomatic.ldn/attributes.js
+const rhizomatic = {
+  name: "Rhizomatic!",
+  alternativeNames: ["Rhizomatic CIC"],
+  address: "1st Floor, Algha Works, 83 Smeed Road, London, E3 2NR, UK",
+  geo: { lat: 51.53826174740846, lon: -0.02342173129653179 },
+};
+
 describe("findEvents", () => {
   it("takes the start time from the booking widget when the header has none", async () => {
     readJSON.mockImplementation(() => ({ moviePages: { [url]: page } }));
@@ -99,6 +114,33 @@ describe("findEvents", () => {
 
     expect(events).toHaveLength(1);
     expect(events[0].performances[0].notes).toBe("Presented by CAMP CLASSICS");
+  });
+
+  it("notes the organiser the page is hosted by", async () => {
+    readJSON.mockImplementation(() => ({
+      moviePages: { [hostedUrl]: hostedPage },
+    }));
+
+    const events = await findEvents(rhizomatic);
+
+    expect(events).toHaveLength(1);
+    expect(events[0].performances[0].notes).toBe(
+      "Presented by Fashion Film Club",
+    );
+  });
+
+  it("leaves out a host that is the venue itself", async () => {
+    readJSON.mockImplementation(() => ({
+      moviePages: { [hostedUrl]: hostedPage },
+    }));
+
+    const events = await findEvents({
+      ...rhizomatic,
+      alternativeNames: ["Fashion Film Club"],
+    });
+
+    expect(events).toHaveLength(1);
+    expect(events[0].performances[0].notes).toBe("");
   });
 
   // A venue promoting its own night tells a reader nothing by repeating itself
