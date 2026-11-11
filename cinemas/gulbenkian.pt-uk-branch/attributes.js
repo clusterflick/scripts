@@ -5,11 +5,11 @@ module.exports = {
   socials: {
     letterboxd: null,
     twitter: "CGF_UK",
-    instagram: null,
+    instagram: "fcgulbenkian",
   },
   url: "https://gulbenkian.pt/uk-branch/",
   address: "50 Hoxton Square, London, N1 6PB, UK",
-  geo: { lat: 51.5272473, lon: -0.0815035 },
+  geo: { lat: 51.52728897230588, lon: -0.08149737207729695 },
   structure: "solo",
   type: "Cultural Centre",
   programming: "host",
