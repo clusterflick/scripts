@@ -9,7 +9,7 @@ module.exports = {
   },
   url: "https://communityhalls.hackney.gov.uk/venues/2-haggerston-community-centre",
   address: "8 Lovelace Street, London, E8 4FF, UK",
-  geo: { lat: 51.537824, lon: -0.0725038 },
+  geo: { lat: 51.537812610480245, lon: -0.07232764975370716 },
   structure: "solo",
   type: "Community Centre",
   programming: "host",
