@@ -23,7 +23,7 @@
 // every performance of the showing. So a description only contributes a
 // sentence that is about the screening itself ("This screening will be
 // introduced by ..."), that isn't negated or in the past, and - when it names a
-// date - only to the performance on that date. See `getDescriptionOccasions`.
+// date - only to the performance on that date. See `getDescriptionReading`.
 // ---------------------------------------------------------------------------
 
 // The keys and the details each may carry. The schema mirrors this.
@@ -223,8 +223,37 @@ const getNames = (text) => {
 // An introduction or Q&A that was recorded plays wherever the film does, so it
 // is programming rather than someone in the room. "recordered" is a real
 // listing's spelling.
+//
+// The Garden writes the medium in brackets: "a (video) discussion with Harmony
+// Korine".
 const notInTheRoom =
-  /pre-?recorded|\brecord\w*\s+(?:intro|introduction|message|q\s*&\s*a|q\s*and\s*a|conversation)|\b(?:video|filmed|virtual|online|zoom)\s+(?:intro|introduction|message|q\s*&\s*a|q\s*and\s*a)/i;
+  /pre-?recorded|\brecord\w*\s+(?:intro|introduction|message|q\s*&\s*a|q\s*and\s*a|conversation|discussion)|\b(?:video|filmed|virtual|online|zoom)\)?\s+(?:intro|introduction|message|q\s*&\s*a|q\s*and\s*a|conversation|discussion)/i;
+
+// The form a description says is remote, read off the word the medium sits
+// against: "a (video) discussion" is a conversation by video, and a
+// "pre-recorded intro" an intro - so a title's "+ Q&A" survives a description
+// saying the introduction is pre-recorded.
+const remoteForms = [
+  ["intro", /^intro/i],
+  ["qAndA", /^q/i],
+  ["inConversation", /^(?:conversation|discussion)/i],
+];
+const remoteForm =
+  /(?:pre-?recorded|\brecord\w*|\b(?:video|filmed|virtual|online|zoom))\)?\s+(intro(?:duction)?|q\s*&\s*a|q\s*and\s*a|conversation|discussion)\b/gi;
+
+// A sentence about some other night, or hedging, says nothing about how this
+// one goes: "Subsequent screenings of On the Silver Globe will feature a video
+// introduction" (the Garden, whose first night is introduced in person), "an
+// introduction (possible video introduction)".
+const notThisScreening =
+  /\b(?:subsequent|other|later|earlier|some|possible|possibly|may|might|tbc)\b/i;
+
+const getRemoteKeys = (sentence) =>
+  notThisScreening.test(sentence)
+    ? []
+    : [...sentence.matchAll(remoteForm)].flatMap(([, form]) =>
+        remoteForms.filter(([, test]) => test.test(form)).map(([key]) => key),
+      );
 
 // Chain "preview" pricing and membership perks describe a ticket, not an event.
 const routinePreview =
@@ -289,8 +318,12 @@ const rules = [
 
   {
     key: "inConversation",
+    // As billed on a title ("+ conversation with Chris Petit", the Cinema
+    // Museum) or in a description ("followed by a conversation with ..."). A
+    // bare "A Conversation with" is left alone: it is as often a film's own
+    // title, as A Conversation with Gregory Peck is.
     pattern: new RegExp(
-      String.raw`\b(?:in|${conversationRole})\s+conversation\s+with\s+`,
+      String.raw`(?:\b(?:in|${conversationRole})\s+|(?:^|\s)\+\s*|\bfollowed by an?\s+)conversation\s+with\s+`,
       "i",
     ),
     names: "guests",
@@ -486,9 +519,9 @@ const dayMonth = new RegExp(
   String.raw`\b${ordinal}(?:\s+of)?\s+${monthPattern}(?![\p{L}])${year}`,
   "giu",
 );
-// "December 6th", "Sunday, December 6th"
+// "December 6th", "Sunday, December 6th", "September the 11th"
 const monthDay = new RegExp(
-  String.raw`\b${monthPattern}\s+${ordinal}(?![\p{L}\p{N}])${year}`,
+  String.raw`\b${monthPattern}\s+(?:the\s+)?${ordinal}(?![\p{L}\p{N}])${year}`,
   "giu",
 );
 
@@ -558,17 +591,31 @@ const isAboutPerformance = (sentence, { date }) => {
   );
 };
 
-const getDescriptionOccasions = (description, context) => {
-  if (!description || !anySignal.test(description)) return {};
-
-  return toSentences(description)
+const getScreeningSentences = (description, context) =>
+  toSentences(description)
     .filter((sentence) => anySignal.test(sentence))
     .filter((sentence) => screeningCue.test(sentence))
     .filter((sentence) => !negation.test(sentence))
     .filter((sentence) => !pastTense.test(sentence))
-    .filter((sentence) => isAboutPerformance(sentence, context))
-    .map((sentence) => getTitleOccasions(sentence, { fromDescription: true }))
-    .reduce((merged, occasions) => mergeOccasions(merged, occasions), {});
+    .filter((sentence) => isAboutPerformance(sentence, context));
+
+// The occasions a description describes, and the forms of appearance it says
+// happen remotely. A title is billing and can't say how someone appears - "Julien
+// Donkey-Boy + Discussion with Harmony Korine" - so when the description says
+// "a (video) discussion with Harmony Korine", that form is taken off the
+// title's reading too.
+const getDescriptionReading = (description, context) => {
+  if (!description || !anySignal.test(description)) {
+    return { occasions: {}, remote: [] };
+  }
+
+  const sentences = getScreeningSentences(description, context);
+  return {
+    occasions: sentences
+      .map((sentence) => getTitleOccasions(sentence, { fromDescription: true }))
+      .reduce((merged, occasions) => mergeOccasions(merged, occasions), {}),
+    remote: [...new Set(sentences.flatMap(getRemoteKeys))],
+  };
 };
 
 // ---------------------------------------------------------------------------
@@ -672,11 +719,19 @@ const createOccasions = (
     );
   }
 
-  return [
-    hasDescription ? getDescriptionOccasions(description, context) : {},
+  const reading = hasDescription
+    ? getDescriptionReading(description, context)
+    : { occasions: {}, remote: [] };
+
+  // What the venue's text says, less what it says happens remotely. Structured
+  // listing data is the venue's own tag and isn't second-guessed.
+  const fromText = mergeOccasions(
+    reading.occasions,
     getTitleOccasions(title.trim()),
-    getValidOccasions(occasions),
-  ].reduce((merged, next) => mergeOccasions(merged, next), {});
+  );
+  for (const key of reading.remote) delete fromText[key];
+
+  return mergeOccasions(fromText, getValidOccasions(occasions));
 };
 
 module.exports = {

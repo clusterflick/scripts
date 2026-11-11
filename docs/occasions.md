@@ -46,6 +46,15 @@ post-film discussion where every voice is welcome"), and a "panel discussion" or
 "in conversation with the final chapter of Taring Padi's Rakyat Pasti Menang",
 an exhibition - is a curator's phrase, not a guest.
 
+Someone appearing by video, online or in a recording isn't in the room, so a
+description saying so ("followed by a video Q&A with ...", "a (video) discussion
+with Harmony Korine") takes that form off what the title bills as well - a title
+is billing and can't say how someone appears. Only the form the medium is
+written against goes: a "pre-recorded introduction" leaves the title's "+ Q&A"
+alone. A sentence about other screenings ("Subsequent screenings will feature a
+video introduction") or a hedge ("possible video introduction") takes nothing
+off, and the listing's own tags are never second-guessed.
+
 "Introduce" counts only with the film or the screening as its object ("will
 introduce the films"), since programme copy introduces audiences to things.
 

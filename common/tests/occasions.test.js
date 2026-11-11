@@ -54,6 +54,18 @@ describe("createOccasions", () => {
       expect(createOccasions("Hamnet + pre-recorded Q&A")).toEqual({});
     });
 
+    test("names who a billed conversation is with (the Cinema Museum)", () => {
+      expect(
+        createOccasions(
+          "The Hotel presents London Orbital (2002) + conversation with Chris Petit",
+        ),
+      ).toEqual({ inConversation: { guests: ["Chris Petit"] } });
+    });
+
+    test("leaves a film called A Conversation with someone alone", () => {
+      expect(createOccasions("A Conversation with Gregory Peck")).toEqual({});
+    });
+
     test("a named appearance makes a bare guest appearance redundant", () => {
       expect(createOccasions("In person: Q&A with Mike Leigh")).toEqual({
         qAndA: { guests: ["Mike Leigh"] },
@@ -280,6 +292,85 @@ describe("createOccasions", () => {
       ).toEqual({});
     });
 
+    test("names who a conversation after the screening is with (the Cinema Museum)", () => {
+      expect(
+        createOccasions(
+          "London Orbital",
+          {},
+          "The screening will be followed by a conversation with Chris Petit, conducted by artist-filmmaker Aislinn Evans.",
+          at("2026-11-11T19:00Z"),
+        ),
+      ).toEqual({ inConversation: { guests: ["Chris Petit"] } });
+    });
+
+    describe("a form of appearance the description says is remote", () => {
+      // The Garden
+      const title = "Julien Donkey-Boy + Discussion with Harmony Korine";
+      const description =
+        "The film will be followed by a (video) discussion with Harmony Korine hosted by Leo Krenzer.";
+
+      test("is taken off what the title bills", () => {
+        expect(
+          createOccasions(title, {}, description, at("2026-11-11T19:00Z")),
+        ).toEqual({});
+      });
+
+      test("leaves the listing's own tags", () => {
+        expect(
+          createOccasions(
+            title,
+            { qAndA: true },
+            description,
+            at("2026-11-11T19:00Z"),
+          ),
+        ).toEqual({ qAndA: true });
+      });
+
+      test("leaves the other forms the title bills", () => {
+        expect(
+          createOccasions(
+            "Film + Intro + Q&A",
+            {},
+            "This screening will include a pre-recorded intro from the director.",
+            at("2026-11-11T19:00Z"),
+          ),
+        ).toEqual({ qAndA: true });
+      });
+
+      test("not from a sentence about the run's other screenings (the Garden)", () => {
+        expect(
+          createOccasions(
+            "On the Silver Globe + Intro",
+            {},
+            "Subsequent screenings of On the Silver Globe will feature a video introduction by writer Adam Żuławski.",
+            at("2026-11-11T19:00Z"),
+          ),
+        ).toEqual({ intro: true });
+      });
+
+      test("not from a sentence that only says it may be", () => {
+        expect(
+          createOccasions(
+            "Shorts + Intro",
+            {},
+            "Alongside the screening of these shorts will be an introduction (possible video introduction), writing activation in response to the short films.",
+            at("2026-11-11T19:00Z"),
+          ),
+        ).toEqual({ intro: true });
+      });
+
+      test("only on the performance the sentence is about", () => {
+        expect(
+          createOccasions(
+            title,
+            {},
+            "The screening on 12 November will be followed by a (video) discussion with Harmony Korine.",
+            at("2026-11-11T19:00Z"),
+          ),
+        ).toEqual({ inConversation: { guests: ["Harmony Korine"] } });
+      });
+    });
+
     test("a work put in conversation with the film isn't a guest (Ibraaz, Turang)", () => {
       // The second sentence names the performance's own date, so it is read.
       const description =
@@ -337,6 +428,27 @@ describe("createOccasions", () => {
         expect(
           createOccasions("Film", {}, sentence, at("2026-11-22T20:45Z")),
         ).toEqual({ qAndA: true });
+      });
+
+      test("reads a date written with 'the' (the Garden)", () => {
+        const description =
+          "The screenings on September the 11th and 27th will feature a video introduction by Andrzej Jaroszewicz.";
+        expect(
+          createOccasions(
+            "The Devil + Intro",
+            {},
+            description,
+            at("2026-09-11T19:00Z"),
+          ),
+        ).toEqual({});
+        expect(
+          createOccasions(
+            "The Devil + Intro",
+            {},
+            description,
+            at("2026-09-20T19:00Z"),
+          ),
+        ).toEqual({ intro: true });
       });
 
       test("checks the year when one is given", () => {
