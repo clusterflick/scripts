@@ -144,6 +144,7 @@ function normalizeTitle(title, options) {
     [" + Superworm", " and Superworm"],
     ["Superworm + ", "Superworm & "],
     ["Before Sunset (2004) + ", "Before Sunset (2004) & "],
+    ["I, Your Mother + ", "I, Your Mother & "],
     // TheMovieDB has no entry for the pair, so it matches the sequel on its
     // own. Name it as the double bill it is, which one venue already does.
     [
@@ -2133,6 +2134,8 @@ function normalizeTitle(title, options) {
     ["LBN at The Cinema", "La Bola Negra"],
     [/THE THREE DUMAS$/i, "The Three Dumas (2007)"],
     ["Two Gentleman Sharing", "Two Gentlemen Sharing"],
+    ["Secretary 2002", "Secretary (2002)"],
+    ["Barrell Children", "Barrel Children"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
