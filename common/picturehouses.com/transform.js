@@ -123,7 +123,7 @@ async function transform(
             movie.Title,
             {
               audioDescription: hasAttribute("audio d"),
-              relaxed: hasAttribute("relaxed"),
+              relaxed: hasAttribute("relaxed") || hasAttribute("autism fri"),
               babyFriendly:
                 hasAttribute("watch baby") ||
                 hasAttribute("toddler ti") ||
@@ -155,6 +155,7 @@ async function transform(
                     ![
                       "audio d",
                       "relaxed",
+                      "autism fri",
                       "hohsub",
                       "sub cinema",
                       "dogfriend",

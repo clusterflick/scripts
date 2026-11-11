@@ -1,4 +1,8 @@
-const { createAccessibility } = require("../utils");
+const {
+  createAccessibility,
+  createOccasions,
+  createPerformance,
+} = require("../utils");
 
 describe("createAccessibility", () => {
   describe("title-based detection", () => {
@@ -23,6 +27,9 @@ describe("createAccessibility", () => {
         { relaxed: true },
       ],
       ["Neurodiverse-Friendly Screening: The Wild Robot", { relaxed: true }],
+      ["Autism-Friendly: Pillion", { relaxed: true }],
+      ["Autism Friendly Screening: The Wild Robot", { relaxed: true }],
+      ["Sensory Friendly: The Wild Robot", { relaxed: true }],
     ])("detects relaxed from title '%s'", (title, expected) => {
       expect(createAccessibility(title, {})).toEqual(expected);
     });
@@ -32,6 +39,11 @@ describe("createAccessibility", () => {
       ["Parents + Baby: The Wild Robot", { babyFriendly: true }],
       ["Baby & 1: The Wild Robot", { babyFriendly: true }],
       ["Kids Club: The Wild Robot", { babyFriendly: true }],
+      ["Kids' Club: Space Jam (30th Anniversary)", { babyFriendly: true }],
+      [
+        "Kids’ Club: Tom and Jerry: The Forbidden Compass",
+        { babyFriendly: true },
+      ],
       ["FREE Kids Movie Club: The Wild Robot", { babyFriendly: true }],
       ["Leytonstone Library Kids Film Club", { babyFriendly: true }],
       ["Babykino: The Wild Robot", { babyFriendly: true }],
@@ -78,6 +90,7 @@ describe("createAccessibility", () => {
       ["Hard of Hearing: The Wild Robot", { hardOfHearing: true }],
       ["The Wild Robot SDH", { hardOfHearing: true }],
       ["The Wild Robot BSL", { hardOfHearing: true }],
+      ["DESCRIPTIVE SUBTITLES", { hardOfHearing: true, subtitled: true }],
       ["The Wild Robot CC", { hardOfHearing: true }],
       ["The Wild Robot OC", { hardOfHearing: true }],
     ])("detects hardOfHearing from title '%s'", (title, expected) => {
@@ -271,5 +284,72 @@ describe("createAccessibility", () => {
     test("does not match 'Bad Boys'", () => {
       expect(createAccessibility("Bad Boys", {})).toEqual({});
     });
+  });
+
+  describe("relaxed title matcher does not false-positive", () => {
+    test.each([
+      ["Free World Autism Awareness Day Screening: Amélie"],
+      ["ARKIVE MAKES SCENTS IMMERSIVE SENSORY CINEMA EXPERIENCE"],
+      ["Send Help"],
+    ])("does not detect relaxed from '%s'", (title) => {
+      expect(createAccessibility(title, {})).toEqual({});
+    });
+  });
+});
+
+describe("createPerformance accessibility", () => {
+  const base = {
+    date: new Date("2026-11-21T10:45:00Z"),
+    url: "https://example.com/book",
+    occasions: createOccasions("The Wild Robot"),
+  };
+  const read = (notesList, accessibility = {}) =>
+    createPerformance({ ...base, notesList, accessibility }).accessibility;
+
+  test.each([
+    [["Kids Club"], { babyFriendly: true }],
+    [["dementia friendly"], { relaxed: true }],
+    [["DESCRIPTIVE SUBTITLES"], { hardOfHearing: true, subtitled: true }],
+    [["Hard of hearing subtitles"], { hardOfHearing: true, subtitled: true }],
+    [["Dog Friendly"], { dogFriendly: true }],
+    [["Laser", "Kids Club"], { babyFriendly: true }],
+  ])("reads a label in the notes %j", (notesList, expected) => {
+    expect(read(notesList)).toEqual(expected);
+  });
+
+  test("reads a long note as prose, with the description rules", () => {
+    expect(
+      read([
+        "Dog Friendly: Customers are welcome to bring their well behaved dogs into the cinema for this special screening",
+      ]),
+    ).toEqual({ dogFriendly: true });
+    // A bare mention in prose is not a statement about this screening
+    expect(
+      read([
+        "Silver Screen: Everyone welcome, and guests with a baby or a relaxed attitude to trailers will enjoy the complimentary tea",
+      ]),
+    ).toEqual({});
+  });
+
+  test.each([
+    [["Ad and Trailer Free"]],
+    [["Wheelchair Accessible"]],
+    [["Part of UK Jewish Film Festival 2026"]],
+    [["English Language"]],
+  ])("reads nothing from %j", (notesList) => {
+    expect(read(notesList)).toEqual({});
+  });
+
+  test("adds to what the venue's own data carries, never removes", () => {
+    expect(read(["Kids Club"], { audioDescription: true })).toEqual({
+      audioDescription: true,
+      babyFriendly: true,
+    });
+  });
+
+  test("leaves a performance with no accessibility untouched", () => {
+    expect(
+      createPerformance({ ...base, notesList: ["Kids Club"] }).accessibility,
+    ).toBeUndefined();
   });
 });
