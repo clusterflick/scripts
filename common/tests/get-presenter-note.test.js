@@ -31,6 +31,15 @@ describe("getPresenterNote", () => {
     ).toEqual("Presented by The Witch Of Popcorn");
   });
 
+  test("reads a partner from 'Presented in collaboration with Y', keeping its wording", () => {
+    // The Lexi, Gugu's World
+    expect(
+      getPresenterNote(
+        "Presented in collaboration with Cine Brazil . These screenings mark the UK premiere of Brazil's submission to next year's Academy Awards",
+      ),
+    ).toEqual("Presented in collaboration with Cine Brazil");
+  });
+
   test("reads both names from a joint 'X in collaboration with Y' credit", () => {
     expect(
       getPresenterNote(

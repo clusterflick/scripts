@@ -2,6 +2,8 @@ const cheerio = require("cheerio");
 const {
   getText,
   createOverview,
+  createOccasions,
+  mergeOccasions,
   generateShowingId,
 } = require("../../common/utils");
 const attributes = require("./attributes");
@@ -103,11 +105,20 @@ async function transform({ moviePages }, sourcedEvents) {
         duration: sourcedEvent.overview.duration,
       },
       // The event's performances already carry the booking URL, status and the
-      // accessibility and format read off the listing; the room they screen in
-      // is the one thing only the venue's own page knows.
+      // accessibility, format and occasions read off the listing. The room
+      // they screen in is only on the venue's own page, and so is the copy
+      // that names who is introducing - "With an introduction from Bunga
+      // Siagian" is in Turang's page and not its Ticket Tailor event - so the
+      // page's occasions are added beneath the listing's.
       performances: sourcedEvent.performances.map((performance) => ({
         ...performance,
         screen: screen || undefined,
+        occasions: mergeOccasions(
+          createOccasions("", {}, overview, {
+            date: new Date(performance.time),
+          }),
+          performance.occasions,
+        ),
       })),
       matchingHints: { overview },
     });

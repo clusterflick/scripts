@@ -12,7 +12,9 @@ const {
   isPrivateHire,
   getText,
   convertNamesTextToList,
+  getPresenterNote,
 } = require("../../common/utils");
+const normalizeVenueName = require("../../common/normalize-venue-name");
 const { extractPeopleNames } = require("../../common/extract-people");
 const { parseDate } = require("./utils");
 
@@ -39,6 +41,37 @@ function extractDescriptionFromLdJson(html) {
   });
 
   return description;
+}
+
+// A partner credited in the description - "Presented in collaboration with
+// Cine Brazil" (the Lexi) - and nowhere else, so it is kept as a note, where
+// the website's club and festival pages can find it.
+//
+// Only a line that opens on "presented" is offered. getPresenterNote also reads
+// "X presents ...", which in a synopsis is as often a director presenting a
+// vision as anyone hiring the room. And as on OutSavvy, a venue crediting
+// itself tells a reader nothing.
+const PRESENTED_LINE =
+  /^(?:(?:this (?:event|screening|film) is|these screenings are) )?presented\b/i;
+
+function getPresentedNote(overview, attributes) {
+  const note = (overview || "")
+    .split("\n")
+    .map((line) => line.trim())
+    .filter((line) => PRESENTED_LINE.test(line))
+    .map((line) => getPresenterNote(line))
+    .find(Boolean);
+  if (!note) return undefined;
+
+  const presenter = note.replace(/^presented (?:in \w+ with|by)\s+/i, "");
+  const venueNames = [
+    attributes.name,
+    ...(attributes.alternativeNames || []),
+  ].filter(Boolean);
+  const isVenueItself = venueNames.some(
+    (name) => normalizeVenueName(name) === normalizeVenueName(presenter),
+  );
+  return isVenueItself ? undefined : note;
 }
 
 function getStatus(performance) {
@@ -129,6 +162,8 @@ async function transform(attributes, config, movieData, sourcedEvents) {
       ldJsonDescription || movie.Synopsis,
     );
 
+    const presentedNote = getPresentedNote(overview, attributes);
+
     return events.concat({
       showingId: generateShowingId(attributes, movie.ID),
       title,
@@ -143,7 +178,10 @@ async function transform(attributes, config, movieData, sourcedEvents) {
         const date = parseDate(performance);
         return createPerformance({
           date,
-          notesList: getNotesList(performance, tags.notes),
+          notesList: [
+            ...getNotesList(performance, tags.notes),
+            presentedNote,
+          ].filter(Boolean),
           url: performance.URL.toLowerCase().startsWith("http")
             ? performance.URL
             : `${attributes.domain}/${urlSlug}/${performance.URL}`,
