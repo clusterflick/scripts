@@ -98,4 +98,65 @@ describe(`${attributes.name}`, () => {
 
     expect(output).toHaveLength(0);
   });
+
+  // Markup from https://ti.to/queereast/girlfriends_uea_2026, whose organiser
+  // typed a location rather than picking a venue
+  describe("an event with a typed location and no venue record", () => {
+    const html = `
+      <h1 class="event-title">Girlfriends (University of East Anglia)</h1>
+      <div class="tito-event-homepage--basic-info tito-event-homepage--basic-info-cal">
+        <a href="https://checkout.tito.io/queereast/girlfriends_uea_2026?format=ics">
+          6:30–8pm, November 18th, 2026
+        </a>
+      </div>
+      <div class="tito-event-homepage--basic-info tito-event-homepage--basic-info-location">
+        <a href="https://maps.google.com/maps?q=University+of+East+Anglia+">
+          University of East Anglia
+        </a>
+      </div>
+      <div class="tito-description markdown"><p>Join Queer East for a screening of Girlfriends (2025)</p></div>
+      <div class="tito-links-section">
+        <h4 class="tito-venues-heading">Links</h4>
+        <ul class="tito-links"><li><a href="mailto:info@queereast.org.uk"><span>info@queereast.org.uk</span></a></li></ul>
+      </div>`;
+    const venues = {
+      queereast: {
+        moviePages: {
+          "https://ti.to/queereast/girlfriends_uea_2026": html,
+        },
+      },
+    };
+    const geo = { lat: 51.5162287, lon: -0.1213371 };
+
+    it("is matched to a cinema of that name", async () => {
+      readJSON.mockImplementation(() => venues);
+
+      const output = await findEvents({
+        name: "University of East Anglia",
+        alternativeNames: [],
+        address: "39-41 Parker St, London WC2B 5PQ, UK",
+        geo,
+      });
+
+      expect(output).toHaveLength(1);
+      expect(output[0].title).toBe("Girlfriends (University of East Anglia)");
+      expect(output[0].performances).toHaveLength(1);
+      expect(output[0].performances[0].time).toBe(
+        new Date("2026-11-18T18:30:00Z").getTime(),
+      );
+    });
+
+    it("is not matched to any other cinema", async () => {
+      readJSON.mockImplementation(() => venues);
+
+      const output = await findEvents({
+        name: "The Garden Cinema",
+        alternativeNames: [],
+        address: "39-41 Parker St, London WC2B 5PQ, UK",
+        geo,
+      });
+
+      expect(output).toHaveLength(0);
+    });
+  });
 });

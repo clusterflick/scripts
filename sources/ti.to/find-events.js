@@ -143,19 +143,33 @@ function extractEventDetails(html, url) {
     throw new Error(`No calendar info found on ${url}`);
   }
 
-  const locationHref = $(".tito-event-homepage--basic-info-location a").attr(
-    "href",
-  );
+  const locationLink = $(".tito-event-homepage--basic-info-location a");
+  const locationHref = locationLink.attr("href");
   if (!locationHref) {
     throw new Error(`No location link found on ${url}`);
   }
 
+  const description = getText($(".tito-description"));
+
+  // An organiser can type a location instead of picking a venue. The page
+  // then has no venue record: no address list, and a maps link that searches
+  // for the typed text rather than pointing at coordinates. The typed text is
+  // all there is, so the event is matched on that name alone.
   const venueAddress = getText($(".tito-venues li a span"));
   if (!venueAddress) {
-    throw new Error(`No .tito-venues address found on ${url}`);
+    const locationText = getText(locationLink);
+    if (!locationText) {
+      throw new Error(`No .tito-venues address or location text on ${url}`);
+    }
+    return {
+      title,
+      venueName: locationText,
+      venueAddress: locationText,
+      coordinates: null,
+      parsedDate: parseCalText(calText),
+      description,
+    };
   }
-
-  const description = getText($(".tito-description"));
 
   const coordinates = extractCoordinatesFromMapsUrl(locationHref);
 
