@@ -63,6 +63,57 @@ function parseMoviePage(html) {
   };
 }
 
+// A showtime box carries up to two markers: a "Hall Type Icon" image and a text
+// label in its middle row. The icon's file name is the only thing that says
+// what it means - the alt text is the same on all of them.
+//
+// The premium screens (MAXX, D-BOX, Infinity) are not accessibility and are
+// listed so that they are recognised rather than read. Anything unlisted
+// throws: an icon we have never seen could as easily be a new access marker as
+// a new screen, and guessing wrong either way goes unnoticed.
+const hallTypeIcons = {
+  "sensory-friendly": { relaxed: true },
+  "kids-club": { babyFriendly: true },
+  "dbox-orange": {},
+  maxx: {},
+  infinity_icon: {},
+};
+
+// "Subtitled" is the only label seen. It marks the showing the film's card
+// flags with its closed-caption icon - English-language films included - so it
+// is captioning for deaf and hard of hearing audiences as well as subtitles.
+const showtimeLabels = {
+  subtitled: { subtitled: true, hardOfHearing: true },
+};
+
+function getShowtimeAccessibility($box, $, context) {
+  let accessibility = {};
+
+  $box.find('img[alt="Hall Type Icon"]').each((i, el) => {
+    const src = $(el).attr("src") || "";
+    const name = src
+      .split("/")
+      .pop()
+      .replace(/\.[a-z]+$/i, "")
+      .replace(/^.*_svgs_/, "");
+    if (!(name in hallTypeIcons)) {
+      throw new Error(`Unknown hall type icon "${src}" for ${context}`);
+    }
+    accessibility = { ...accessibility, ...hallTypeIcons[name] };
+  });
+
+  const label = getText($box.find(".midSection").first());
+  if (label) {
+    const labelAccessibility = showtimeLabels[label.toLowerCase()];
+    if (!labelAccessibility) {
+      throw new Error(`Unknown showtime label "${label}" for ${context}`);
+    }
+    accessibility = { ...accessibility, ...labelAccessibility };
+  }
+
+  return accessibility;
+}
+
 function parseMovieCard($card, $, dateStr) {
   const eventId = $card
     .find('img[id^="favourite"]')
@@ -117,7 +168,11 @@ function parseMovieCard($card, $, dateStr) {
         date: performanceDate,
         url: () => bookingUrl,
         screen,
-        accessibility: createAccessibility(title, {}, synopsis),
+        accessibility: createAccessibility(
+          title,
+          getShowtimeAccessibility($box, $, `${title} at ${timeText}`),
+          synopsis,
+        ),
         format: createFormat(title, {}, synopsis),
         occasions: createOccasions(title, {}, synopsis, {
           date: performanceDate,

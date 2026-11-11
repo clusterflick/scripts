@@ -33,7 +33,8 @@ The common thread is that the screening accommodates young children who would
 otherwise be disruptive in a standard screening.
 
 **How venues label it:** "Parent & Baby", "Baby & 1", "Kids Club", "Babykino",
-"Movies for Juniors", "Big Shorts", "Baby Club"
+"Movies for Juniors", "Big Shorts", "Mighty Mornings", "Baby Club", "Newbies",
+"Watch With Baby"
 
 **Detection:** Set from structured venue data or from title patterns. Also
 detected from description text containing phrases like "parent and baby" or
@@ -74,7 +75,7 @@ This tag is distinct from `subtitled`, which is for language translation.
 non-dialogue cues.
 
 **How venues label it:** "Captioned", "HOH", "HoH", "Hard of Hearing", "CC",
-"OC", "SDH", "BSL"
+"OC", "SDH", "BSL", "Watchword" (ODEON's closed-caption glasses)
 
 **Detection:** Set from structured venue data or from title patterns. Also
 detected from description text containing phrases like "captioned" or "with
@@ -93,11 +94,12 @@ Typically features:
 - A calm, tolerant atmosphere
 
 **How venues label it:** "Relaxed Screening", "Autism Friendly", "Sensory
-Friendly", "ATF"
+Friendly", "Dementia Friendly", "ATF"
 
 **Detection:** Set from structured venue data or from title patterns like
-`Relaxed Screening` or `(Relaxed)`. Also detected from description text
-containing "relaxed screening".
+`Relaxed Screening`, `(Relaxed)`, `Autism Friendly` or `Sensory Friendly`. Also
+detected from description text containing "relaxed screening". A bare "ATF" is
+only read from structured data (Vue's attribute), never from a title.
 
 ### `subtitled`
 
@@ -133,7 +135,14 @@ the standard tags above. Common patterns:
    to `createAccessibility(title, accessibility, description)`. The shared
    function will scan for high-confidence accessibility phrases.
 
-Priority order: explicit venue data > title detection > description detection.
+4. **Notes-based**: `createPerformance()` reads the performance notes for every
+   venue, so nothing needs passing. A short note (60 characters or fewer) is a
+   label such as "Kids Club" or "dementia friendly" and is read with the title
+   patterns; a longer one is prose and is read with the description phrases.
+   Notes only ever add a tag.
+
+Priority order: explicit venue data > title detection > description detection >
+notes detection.
 
 ## Edge Cases
 

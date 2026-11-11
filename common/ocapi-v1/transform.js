@@ -122,7 +122,12 @@ async function transform(
               accessibility.audioDescription = true;
               return;
             }
-            if (attributeName === "closed captioned") {
+            // "Watchword" is ODEON's closed-caption glasses: the film's
+            // captions are shown in a headset, for that guest alone.
+            if (
+              attributeName === "closed captioned" ||
+              attributeName === "watchword"
+            ) {
               accessibility.hardOfHearing = true;
               return;
             }
@@ -143,10 +148,12 @@ async function transform(
             if (attributeName === "dog days") {
               accessibility.dogFriendly = true;
             }
+            // "Newbies" is ODEON's parent and baby screening.
             if (
               attributeName === "baby club" ||
               attributeName === "kids club" ||
-              attributeName === "odeon kids"
+              attributeName === "odeon kids" ||
+              attributeName === "newbies"
             ) {
               accessibility.babyFriendly = true;
               return;

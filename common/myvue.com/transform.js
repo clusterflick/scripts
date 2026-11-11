@@ -82,9 +82,16 @@ async function transform(attributes, { result: movieData }, sourcedEvents) {
               accessibility.subtitled = true;
               return;
             }
+            // Vue publishes both strands under two spellings - "big-shorts"
+            // and "bigshorts", "mighty-mornings" and "mightymornings" - and a
+            // session can carry either one alone.
             if (
-              value.toLowerCase() === "big-shorts" ||
-              value.toLowerCase() === "mighty-mornings"
+              [
+                "big-shorts",
+                "bigshorts",
+                "mighty-mornings",
+                "mightymornings",
+              ].includes(value.toLowerCase())
             ) {
               accessibility.babyFriendly = true;
               return;

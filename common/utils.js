@@ -625,11 +625,16 @@ const createPerformance = ({
     bookingUrl: typeof url === "function" ? url() : encodeURI(url),
     screen: getScreen(screen),
     status,
-    accessibility,
-    format,
     // The notes are this performance's own text, like its title, but they
     // only exist once joined here - so they are read here, for every venue,
-    // rather than at each call site.
+    // rather than at each call site. They can add a provision the venue's own
+    // data and title did not carry, never remove one.
+    accessibility: accessibility && {
+      ...getNotesAccessibility(notes),
+      ...accessibility,
+    },
+    format,
+    // Occasions are read from the notes for the same reason.
     // Each note is read on its own, so one note's "pre-recorded" can't cancel
     // another's Q&A.
     occasions: notes
@@ -868,6 +873,8 @@ const relaxedMatchers = [
   /Dementia Film Club/i,
   /Neurodiver(?:gent|se)[-\s]Friendly/i,
   /SEND[-\s]Friendly/i,
+  /Autism[-\s]Friendly/i,
+  /Sensory[-\s]Friendly/i,
 ];
 
 const babyFriendlyMatchers = [
@@ -875,7 +882,7 @@ const babyFriendlyMatchers = [
   /Baby\s*([&+]|and)\s*1/i,
   /Carers? ([&+]|and) Bab(?:y|ies)/i,
   /\bC&B:/i,
-  /Kids ((Movie|Film) )?Club/i,
+  /Kids['’]? ((Movie|Film) )?Club/i,
   /Babykino:/i,
   /Family Film Club/i,
 ];
@@ -898,6 +905,7 @@ const hardOfHearingMatchers = [
   /Hard of Hearing/i,
   /\bSDH\b/i,
   /\bBSL\b/i,
+  /Descriptive Subtitles/i,
   /\bCC\b/,
   /\bOC\b/,
 ];
@@ -995,6 +1003,28 @@ const getDescriptionAccessibility = (description) => {
   }
   return accessibility;
 };
+
+// Notes are the venue's own labels for a performance - "Kids Club", "dementia
+// friendly", "DESCRIPTIVE SUBTITLES" - and say as much about it as its title
+// does. A short note is a label and is read like a title. A long one is prose
+// (an attribute's description), so it gets the description rules, which only
+// trust phrases about the screening itself and respect a negation.
+const NOTE_LABEL_MAX_LENGTH = 60;
+
+const getNotesAccessibility = (notes = "") =>
+  notes
+    .split("\n")
+    .map((note) => note.trim())
+    .filter(Boolean)
+    .reduce(
+      (accessibility, note) => ({
+        ...accessibility,
+        ...(note.length <= NOTE_LABEL_MAX_LENGTH
+          ? getTitleAccessibility(note)
+          : getDescriptionAccessibility(note)),
+      }),
+      {},
+    );
 
 const createAccessibility = (title, accessibility, description = "") => {
   const titleAccessibility = getTitleAccessibility(title.trim());
@@ -1419,5 +1449,6 @@ module.exports = {
   cleanCrewName,
   isHelpfulCrewName,
   getDescriptionAccessibility,
+  getNotesAccessibility,
   getTitleAccessibility,
 };

@@ -168,7 +168,10 @@ async function transform(
           filmLevelAccessibility[url].audioDescription,
         babyFriendly: filters.includes("parent-baby"),
         hardOfHearing: filters.includes("hard-of-hearing"),
-        relaxed: filters.includes("relaxed"),
+        // Dementia-friendly screenings are relaxed screenings; the screening
+        // type stays in the notes to say who they are for
+        relaxed:
+          filters.includes("relaxed") || filters.includes("dementia-friendly"),
         subtitled: filters.includes("hard-of-hearing"),
       };
 

@@ -132,7 +132,9 @@ async function transform({ movieListPage, moviePages }, sourcedEvents) {
               title,
               {
                 audioDescription: tags.includes("80879"),
-                babyFriendly: tags.includes("80996"),
+                // 80996 is "Parent & Baby", 81005 is "Kids' Club" - named by
+                // the filters on the What's On page
+                babyFriendly: tags.includes("80996") || tags.includes("81005"),
                 hardOfHearing: tags.includes("80832"),
                 relaxed: tags.includes("80881"),
                 // The language line has been published misspelt as "German
