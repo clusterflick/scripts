@@ -14,6 +14,7 @@ const {
   extractPlanGrid,
   isFallbackListing,
 } = require("./utils");
+const fetchPlanGridPage = require("./fetch-plan-grid-page");
 
 // Fever files a city's plans under "what plan filters" (its categories), and
 // its Cinema filter can't be relied on to hold the screenings: a dinner served
@@ -141,11 +142,13 @@ async function fetchCataloguePlanIds(movieListPage) {
   if (hasMultiplePages) {
     let page = 2;
     while (true) {
-      const { results, next_page: nextPage } = await fetchCached(
-        `feverup-catalogue-page-${page}`,
-        fetchJson,
-        getPlanGridApiUrl(trackerId, page),
-      );
+      const { results, next_page: nextPage } = await fetchPlanGridPage({
+        getUrl: getPlanGridApiUrl,
+        trackerId,
+        page,
+        headers: REQUEST_HEADERS,
+        delayMs: REQUEST_DELAY_MS,
+      });
       cataloguePlans.push(...results);
       if (!nextPage) break;
       page = nextPage;
