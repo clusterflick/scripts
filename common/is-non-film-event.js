@@ -395,6 +395,8 @@ const nonFilmEvents = [
   /^Reflections Issue 5 Launch \[panel\]$/i,
   /^Seeing in your own lense and expanding the story \[workshop\]$/i,
   /^v=d\/t \(me\/here\) \[performance\]$/i,
+  /^EMPORIUM PRO WRESTLING PRESENTS\b/i,
+  /^Jbloc Chanukah Party$/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
