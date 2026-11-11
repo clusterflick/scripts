@@ -7,6 +7,7 @@ const findLetterboxdMatch = require("./find-letterboxd-match");
 const findImdbMatch = require("./find-imdb-match");
 const findBechdelMatch = require("./find-bechdel-match");
 const findMovieDbMatch = require("./find-moviedb-match");
+const checkMatchedData = require("./check-matched-data");
 const {
   withPlaywrightSession,
 } = require("../../common/get-page-with-playwright");
@@ -108,6 +109,11 @@ async function match(source) {
   console.log(
     `\nMatched ${meta.matched} of ${moviesToMatch.length} movies (and ${meta.withInfo} which contained info)`,
   );
+
+  // Before anything is written, so a broken source fails the run rather than
+  // publishing a file of matches with nothing in them
+  const { scored } = checkMatchedData(source, data);
+  console.log(`${scored} of ${meta.matched} matches carry a score`);
 
   return data;
 }
