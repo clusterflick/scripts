@@ -19,29 +19,45 @@
 2. Copy `.env.example` to `.env` and configure the following environment
    variables:
 
-   | Variable          | Description                                                                |
-   | ----------------- | -------------------------------------------------------------------------- |
-   | `MOVIEDB_API_KEY` | API key from [The Movie Database](https://www.themoviedb.org/settings/api) |
-   | `GEMINI_API_KEY`  | API key from [Google AI Studio](https://aistudio.google.com/app/apikey)    |
-   | `PAT`             | GitHub personal access token for accessing release data                    |
+   | Variable                             | Description                                                                                     |
+   | ------------------------------------ | ----------------------------------------------------------------------------------------------- |
+   | `MOVIEDB_API_KEY`                    | API key from [The Movie Database](https://www.themoviedb.org/settings/api)                      |
+   | `GEMINI_API_KEY`                     | API key from [Google AI Studio](https://aistudio.google.com/app/apikey), for ordinary LLM calls |
+   | `OPENAI_API_KEY`                     | OpenAI API key, needed by default: calls made with the capable model go to OpenAI               |
+   | `TYPESAFE_API_KEY`                   | TypeSafe API key, only needed when `CATEGORISER=jev` or `MATCHER=jev`                           |
+   | `CINEBUR_EMAIL` / `CINEBUR_PASSWORD` | A dedicated Cinebur account, needed to retrieve the `cinebur.com` source                        |
+   | `PAT`                                | GitHub personal access token for accessing release data                                         |
+
+   `.env.example` also lists the toggles that switch between interchangeable
+   implementations (`LLM_PROVIDER`, `CAPABLE_LLM_PROVIDER`, `CATEGORISER`,
+   `MATCHER`) and `IDENTIFY_BOT`. Each defaults to what production runs, so they
+   can be left unset.
 
 ## Workflow
 
 The typical data processing workflow is:
 
 ```
-retrieve → transform → combine → match
-                ↓
-              cache (optional, speeds up combine)
-              diff  (compares two transform releases)
+retrieve → transform-prepare → transform → combine → departed → match
+                                   ↓
+                                 diff + registry (compare two transform releases)
+                                 cache (optional, speeds up combine)
 ```
 
 1. **Retrieve** - Scrape raw data from cinema websites and external sources
-2. **Transform** - Normalize data and match movies against TMDB
-3. **Combine** - Merge all cinemas into a unified dataset with enriched metadata
-4. **Match** - Add ratings and links from external review sites
-5. **Cache** _(optional)_ - Pre-cache TMDB data to speed up future combine runs
-6. **Diff** - Compare two transform releases and record what changed
+2. **Transform prepare** - Build the inputs every venue's transform shares, once
+   per run
+3. **Transform** - Normalize data and match movies against TMDB
+4. **Diff** - Compare two transform releases and record what changed
+5. **Registry** - Record when each movie and venue was last seen
+6. **Cache** _(optional)_ - Pre-cache TMDB data to speed up future combine runs
+7. **Combine** - Merge all cinemas into a unified dataset with enriched metadata
+8. **Departed** - List movies that have finished their run, so their pages
+   survive
+9. **Match** - Add ratings and links from external review sites
+
+Outside the pipeline, **health** probes a chain's listing endpoint hourly, and
+**llm-usage-report** summarises one transform run's LLM calls.
 
 ## Available Scripts
 
@@ -93,15 +109,16 @@ on how the transform process works.
 
 ℹ️ **Note:** Before running this script, please make sure you have:
 
-- Set up a `.env` file containing your Movie DB API key (`MOVIEDB_API_KEY`) and
-  Gemini API key (`GEMINI_API_KEY`)
+- Set up a `.env` file containing your Movie DB API key (`MOVIEDB_API_KEY`),
+  Gemini API key (`GEMINI_API_KEY`) and OpenAI API key (`OPENAI_API_KEY`)
 - retrieved the necessary cinema and source data using the `retrieve` script
   (above)
-- prepared the inputs every cinema shares - the first-seen history and
-  yesterday's release - with `npm run transform-prepare`. It reads the last ten
-  days of combined data from `combined-data/` if present
-  (`./helpers/get-last-10-days-combined-data.sh`), and needs `PAT` to list
-  releases. Run it once, then transform as many cinemas as you like
+- prepared the inputs every cinema shares - the first-seen history, yesterday's
+  release and what every source finds at every cinema - with
+  `npm run transform-prepare`. It reads the last ten days of combined data from
+  `combined-data/` if present (`./helpers/get-last-10-days-combined-data.sh`),
+  and needs `PAT` to list releases. Run it once, then transform as many cinemas
+  as you like
 
 To run this script:
 
@@ -263,19 +280,96 @@ the file's absence to skip publishing.
 The same comparison backs `data-analysed`'s `compare:releases` report, so
 behaviour changes belong here rather than in either consumer.
 
+### Registry
+
+This function records `lastSeen` for every TMDB id in the current transform
+release, carrying forward ids that have stopped appearing, and `lastPerformance`
+for every venue that has had one. It reads `transformed-data/current` and the
+previous registry from `previous-registry/` (if present), and never the previous
+transform release.
+
+To run this script:
+
+```
+node index.js registry <current-tag>
+```
+
+Once complete, data will be saved in `diffed-data/seen-registry.json` and
+`diffed-data/venue-registry.json`.
+
+### Departed
+
+This function lists movies the registry knows about that `combine` did not
+produce - films that have finished their run - so the website can keep their
+pages. Run it after `combine` and `registry`; it reads
+`diffed-data/seen-registry.json`, `combined-data/combined-data.json` and
+`cached-data/moviedb-data.json`.
+
+To run this script:
+
+```
+node index.js departed
+```
+
+Once complete, data will be saved in `combined-data/departed-movies.json`,
+separate from the combined data so nothing reading that sees films that aren't
+screening.
+
+### Health
+
+This function probes a chain's listing endpoint without opening any per-title
+page, and writes one row per venue describing what it saw. It takes a chain
+group (e.g. `odeon.co.uk`) or a standalone venue that exports its own `health`
+probe.
+
+To run this script:
+
+```
+npm run health <group|venue>
+```
+
+Once complete, rows will be saved in `health-data/<group|venue>`. The rows are
+written before the job fails, so a failed probe still leaves its evidence.
+
+### LLM Usage Report
+
+Every transform records its LLM calls to `llm-usage-data/<cinema>`. This
+function folds a directory of those files - one transform run - into a single
+report with totals, cache hit rate and estimated cost by call site and by venue.
+
+To run this script:
+
+```
+npm run llm-usage-report <directory>
+```
+
+Once complete, the report will be saved in
+`llm-usage-report/llm-usage-report.json` with a plain-text
+`llm-usage-report/summary.txt`, which is also printed.
+
+## Further Documentation
+
+- [Adding a venue](./docs/adding-a-venue.md)
+- [Retrieve pipeline](./docs/retrieve.md)
+- [Transform pipeline](./docs/transform.md)
+- [Occasions](./docs/occasions.md)
+- [Accessibility](./docs/accessibility.md)
+- [Reviewing title normalisation test cases](./docs/reviewing-title-normalisation-test-cases.md)
+
 ## Utility Scripts
 
 These scripts help manage local data directories:
 
-| Script                           | Description                 |
-| -------------------------------- | --------------------------- |
-| `npm run clear:cache`            | Remove cached API responses |
-| `npm run clear:retrieved-data`   | Remove all retrieved data   |
-| `npm run clear:transformed-data` | Remove all transformed data |
-| `npm run clear:combined-data`    | Remove combined data        |
-| `npm run clear:matched-data`     | Remove matched data         |
-| `npm run clear:diffed-data`      | Remove diffed data          |
-| `npm run clear:all`              | Remove all of the above     |
+| Script                           | Description                                     |
+| -------------------------------- | ----------------------------------------------- |
+| `npm run clear:cache`            | Remove cached API and LLM responses             |
+| `npm run clear:retrieved-data`   | Remove all retrieved data                       |
+| `npm run clear:transformed-data` | Remove all transformed data and prepared inputs |
+| `npm run clear:combined-data`    | Remove combined data                            |
+| `npm run clear:matched-data`     | Remove matched data                             |
+| `npm run clear:diffed-data`      | Remove diffed data                              |
+| `npm run clear:llm-usage-data`   | Remove LLM usage data and reports               |
+| `npm run clear:all`              | Remove all of the above                         |
 
 ## Helper Scripts
 
@@ -298,7 +392,7 @@ for local development without running the full pipeline:
 
 The `-for` variants take one or more venue ids (e.g. `thelexicinema.co.uk`) and
 suggest close matches if an id isn't in the release. Use these to inspect what
-the pipeline actually produced for a venue without downloading all 400+.
+the pipeline actually produced for a venue without downloading every venue.
 
 **Requirements:** `curl`, `wget`, and `jq` (for the 10-days and `-for` scripts)
 
