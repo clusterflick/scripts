@@ -352,6 +352,9 @@ const knownRemovablePhrases = [
   "Film Screening & After Party",
   "Film screening and discussion",
   "Film screening & discussion",
+  // Ahead of "screening and discussion", which would otherwise take the
+  // front of it and leave the topic on the title
+  "screening and discussion on Palestine",
   // After the "Film screening" forms above, which would otherwise leave "Film"
   // behind.
   "screening and discussion",
@@ -801,6 +804,9 @@ const knownRemovablePhrases = [
   "Cinema Film Screening Konrad Wolf:",
   "Cinema Film Screening & Talk:",
   "Cinema Film Screening",
+  // Ahead of "Cinema Screening", which would otherwise take the end of it
+  // and leave "exclusive" on the title
+  "exclusive cinema screening",
   "Cinema Screening",
   "Cinema in the Square:",
   "The Cinema of Olaa Zhyzhko",
@@ -1973,6 +1979,7 @@ const knownRemovablePhrases = [
   "Best of 2026:",
   "New Year's Eve Party Screening",
   "at Selfridges",
+  "National Tree Week:",
 ];
 
 module.exports = knownRemovablePhrases;
