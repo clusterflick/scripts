@@ -2,6 +2,7 @@ module.exports = {
   id: "signaturebrew.co.uk-blackhorseroad",
   name: "Signature Brewery",
   alternativeNames: [
+    "Signature Brew",
     "Signature Brew Taproom",
     "Signature Brew Blackhorse Road",
   ],
