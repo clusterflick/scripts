@@ -90,6 +90,7 @@ const knownRemovablePhrases = [
   "at Picturehouse Central",
   "at Perivale Library",
   "at the Royal College of Art",
+  "London College of Communication",
   "at 235 Shaftesbury Avenue",
   "at Cadogan Hall",
   "at BMT",
@@ -351,6 +352,9 @@ const knownRemovablePhrases = [
   "Film Screening & After Party",
   "Film screening and discussion",
   "Film screening & discussion",
+  // After the "Film screening" forms above, which would otherwise leave "Film"
+  // behind.
+  "screening and discussion",
   "Film Lovers Queer Mix & Mingle:",
   "Fan First Premiere exclusively in IMAX",
   "ft. live original score",
@@ -1494,6 +1498,7 @@ const knownRemovablePhrases = [
   "Vampire Ball: Live Violin, Cocktails &",
   "VE Day Anniversary:",
   "viewing party",
+  "Pyjama Party",
   "VIP TV/FILM INDUSTRY SCREENING:",
   "Vision in Darkness and Light",
   "Visions of Ukraine:",

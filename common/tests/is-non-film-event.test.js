@@ -7,6 +7,7 @@ describe("isNonFilmEvent", () => {
     ["Bearpit Karaoke"],
     ["Paint your own Carafe or  Shot Glasses"],
     ["Sip and Paint Experience"],
+    ["SIP N PAINT"],
     ["THE WEEKND FANPARK"],
     ["Crick Bioimage Analysis Symposium 2026"],
     ["Business Networking | Healthcare & Wellness Industry"],
