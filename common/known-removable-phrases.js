@@ -1778,6 +1778,7 @@ const knownRemovablePhrases = [
   "Bloomsday Film Screening",
   ": London film screening",
   "Film Screening London",
+  "Film Screenings",
   "Film Screening",
   "Film premiere and",
   "Film Premiere:",
