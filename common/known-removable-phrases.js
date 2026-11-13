@@ -108,6 +108,7 @@ const knownRemovablePhrases = [
   ": Black & White Version",
   ": Black & White",
   ": Bleak Week",
+  ": Flower of Evil",
   ": The Final Cut",
   ": Restored and Uncut",
   ": stu spasm",

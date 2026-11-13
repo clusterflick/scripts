@@ -195,6 +195,13 @@ describe("isNonFilmEvent", () => {
     ["Reflections Issue 5 Launch [panel]"],
     ["Seeing in your own lense and expanding the story [workshop]"],
     ["v=d/t (me/here) [performance]"],
+    ["UnWorlding: Grand designs for a breaking point  [performance]"],
+    ["Fundraiser: Evening of Live Jazz with the Jon Howells Jazz Band"],
+    ["Musical Bodies [workshop]"],
+    ["Women's Toilets and Working-Class Girlhood [talk]"],
+    ["Women’s Toilets and Working-Class Girlhood [talk]"],
+    ["RSA House Christmas Market"],
+    ["BOARD GAMES + STRANGERS"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });
