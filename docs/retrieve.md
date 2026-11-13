@@ -537,6 +537,7 @@ used in two ways:
 | ------------------------------ | ----------------------------------------- | ---------------------------------------------------------------------- |
 | bbk.ac.uk                      | HTML list + detail pages                  | Cheerio scraping, filtered by tag                                      |
 | bfi.org.uk-bfi-festivals       | Playwright listing + film pages           | Flare lists an A-Z; LFF lists each day, films fetched by article id    |
+| cinematik.app                  | Programme sitemaps + booking pages        | JSON-LD per screening; only those Cinematik sells, not its link-outs   |
 | designmynight.com              | Paginated REST API + monthly availability | Deduplicates occurrences across months                                 |
 | dice.fm                        | Embedded JSON (`#__NEXT_DATA__`) + pages  | Also searches theatre category for films                               |
 | enchantedchristmascinema.co.uk | Home page + one page per venue            | Next.js RSC payload; a pop-up whose host venues change each season     |
