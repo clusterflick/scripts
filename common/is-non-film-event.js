@@ -352,7 +352,8 @@ const nonFilmEvents = [
   /^Beyond the Canvas$/i,
   /^Fictional Self: How Best I Could Be$/i,
   /^Pulling at Threads$/i,
-  /^UnWorlding: Grand designs for a breaking point$/i,
+  // Billed bare and with the venue's "[performance]" tag.
+  /^UnWorlding: Grand designs for a breaking point(?: \[performance\])?$/i,
   /^v=d\/t \(me\/here\)$/i,
   /^Breaking the silence: From the Streets to the Screen$/i,
   /^Book your ticket to the Media Mind 2026 Final!$/i,
@@ -398,6 +399,12 @@ const nonFilmEvents = [
   /^v=d\/t \(me\/here\) \[performance\]$/i,
   /^EMPORIUM PRO WRESTLING PRESENTS\b/i,
   /^Jbloc Chanukah Party$/i,
+  /^Fundraiser: Evening of Live Jazz with the Jon Howells Jazz Band$/i,
+  /^Musical Bodies \[workshop\]$/i,
+  // The venue mixes straight and curly apostrophes.
+  /^Women['’]s Toilets and Working-Class Girlhood \[talk\]$/i,
+  /^RSA House Christmas Market$/i,
+  /^Board Games \+ Strangers$/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
