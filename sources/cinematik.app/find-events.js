@@ -16,14 +16,21 @@ const attributes = require("./attributes");
 // Lumiere (Romford)" - unless the two are the same, when it is named once
 // ("Prince Charles Cinema"). The screen is what we know a cinema by, so it is
 // offered alongside the whole name rather than instead of it.
+//
+// Two chains name their brand and a place instead: "Cineworld: The O2", "Vue:
+// London - Islington (Angel Central)". What follows the colon there is where
+// the cinema is, not what it is called, and offered alone it can be another
+// venue's name - "The O2" is the arena, at the same address as the Cineworld
+// inside it. So those are only ever matched whole.
+const BRAND_AND_PLACE = new Set(["cineworld", "vue"]);
+
 const getVenueNames = (name = "") => {
   const whole = name.trim();
-  const screen = whole
-    .split(/\s*:\s*/)
-    .slice(1)
-    .join(": ")
-    .trim();
-  return [whole, screen].filter(Boolean);
+  const [operator, ...rest] = whole.split(/\s*:\s*/);
+  if (rest.length === 0 || BRAND_AND_PLACE.has(operator.toLowerCase())) {
+    return [whole];
+  }
+  return [whole, rest.join(": ").trim()].filter(Boolean);
 };
 
 const getCoordinates = (geo) => {

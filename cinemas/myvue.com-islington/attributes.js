@@ -1,6 +1,7 @@
 module.exports = {
   id: "myvue.com-islington",
   name: "Vue Islington",
+  alternativeNames: ["Vue Islington (Angel Central)"],
   domain: "https://www.myvue.com",
   socials: {
     letterboxd: "vuecinemas",
