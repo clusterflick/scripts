@@ -112,16 +112,17 @@ function assertLocalTimeMatches(url, startDate, localTimeText) {
   }
 }
 
-function parseBookPage(url, html) {
+function parseBookPage(url, html, origins) {
   const $ = cheerio.load(html);
   const event = getJsonLd($).find((data) => data["@type"] === "Event");
   if (!event) throw new Error(`No Event JSON-LD on ${url}`);
+  const eventSlug = getEventSlug(event, origins);
 
   // A screening Cinematik only links out to is the venue's own listing,
   // already read from the venue - keeping it would list it twice. Its page is
   // laid out differently again (BFI Southbank's lists a fortnight of times),
   // so nothing else on it is read.
-  if (!isSoldOnCinematik(event)) return null;
+  if (!isSoldOnCinematik(event, origins)) return { eventSlug, sold: false };
 
   assertSelector(html, TITLE_SELECTOR, `No title on ${url}`);
   assertSelector(html, LOCAL_TIME_SELECTOR, `No local time on ${url}`);
@@ -137,7 +138,7 @@ function parseBookPage(url, html) {
     .get()
     .filter(Boolean);
 
-  return { title, event, notices };
+  return { eventSlug, sold: true, title, event, notices };
 }
 
 // The note is rich text, a paragraph to a block, and taking its text whole runs
@@ -157,7 +158,15 @@ const getBlockText = (html) =>
 // elevenfiftyfive's "1155 Soundsystem" live vinyl set after the credits. The
 // note sits inside the date-tabbed screenings frame, so it is read for the
 // date it belongs to.
+// How an event page shows a screening, whether sold here or linked out, and
+// sold out or not: a chip on the newer layout, a "Book Now" row on Escapes'.
+const SCREENING_SELECTOR = ".showtime-chip, .spec--open-screening-book-cta";
+
 function parseEventPage(url, html) {
+  // Read only for events with a screening sold here, so it must show one - a
+  // page that doesn't means the selector has gone stale, and the check that
+  // relies on it (assertEventsHaveBookPages) would pass whatever it saw.
+  assertSelector(html, SCREENING_SELECTOR, `No screenings shown on ${url}`);
   const $ = cheerio.load(html);
   const [series] = getJsonLd($)
     .flat()
@@ -177,30 +186,64 @@ function parseEventPage(url, html) {
   };
 }
 
+// A sitemap lists each current event (`/events/<slug>`; one that has finished
+// keeps only its `/press` page) beside the booking pages of its screenings.
+const getCurrentEventSlugs = (urls) =>
+  urls
+    .map((url) => new URL(url).pathname.match(/^\/events\/([^/]+)$/)?.[1])
+    .filter(Boolean);
+
+// Screenings are found only through `/book/` pages, so if Cinematik began
+// selling from anywhere else, they would go missing without a sound - the
+// sitemap would still list the event, and only its screenings would be gone.
+// So every current event must have a booking page, or show no screenings at
+// all: one announced before its screenings are added is legitimate, and
+// throwing on it would hold back every venue's release for a listing that
+// isn't bookable anywhere yet.
+async function assertEventsHaveBookPages(origin, eventSlugs, bookedSlugs) {
+  for (const slug of eventSlugs.filter((slug) => !bookedSlugs.has(slug))) {
+    const url = `${origin}/events/${slug}`;
+    const $ = cheerio.load(await fetchText(url));
+    const count = $(SCREENING_SELECTOR).length;
+    if (count > 0) {
+      throw new Error(
+        `${url} shows ${count} screening(s), but its sitemap has no /book/ ` +
+          `page for it - Cinematik may be selling from somewhere else now`,
+      );
+    }
+  }
+}
+
 async function retrieve() {
   const bookPages = {};
   const eventPages = {};
   const sitemapUrls = [];
   let screeningCount = 0;
 
-  for (const origin of await fetchProgrammeOrigins()) {
-    const bookUrls = [];
+  const origins = await fetchProgrammeOrigins();
+  for (const origin of origins) {
+    const urls = [];
     for (const sitemapUrl of await fetchSitemapUrls(origin)) {
       sitemapUrls.push(sitemapUrl);
-      bookUrls.push(
-        ...(await fetchSitemap(sitemapUrl)).filter((url) =>
-          new URL(url).pathname.startsWith("/book/"),
-        ),
-      );
+      urls.push(...(await fetchSitemap(sitemapUrl)));
     }
+    const bookUrls = urls.filter((url) =>
+      new URL(url).pathname.startsWith("/book/"),
+    );
     screeningCount += bookUrls.length;
 
+    const bookedSlugs = new Set();
     for (const url of bookUrls) {
-      const page = parseBookPage(url, await fetchText(url));
-      if (!page) continue;
+      const { sold, ...page } = parseBookPage(
+        url,
+        await fetchText(url),
+        origins,
+      );
+      bookedSlugs.add(page.eventSlug);
+      if (!sold) continue;
 
       const date = format(new Date(page.event.startDate), "yyyy-MM-dd");
-      const eventUrl = `${origin}/events/${getEventSlug(page.event)}?date=${date}`;
+      const eventUrl = `${origin}/events/${page.eventSlug}?date=${date}`;
       if (!eventPages[eventUrl]) {
         eventPages[eventUrl] = parseEventPage(
           eventUrl,
@@ -210,6 +253,12 @@ async function retrieve() {
 
       bookPages[url] = { programme: origin, eventUrl, ...page };
     }
+
+    await assertEventsHaveBookPages(
+      origin,
+      getCurrentEventSlugs(urls),
+      bookedSlugs,
+    );
   }
 
   // Escapes alone runs a free screening across the country most months, so a
