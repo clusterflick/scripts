@@ -1020,6 +1020,8 @@ function normalizeTitle(title, options) {
     ["Romford Horror 2026 -", "Romford Horror 2026:"],
     ["Romford Horror Festival 2026 -", "Romford Horror 2026:"],
     ["Opening Night -", "Opening Night "],
+    ["Closing Night - ", "Closing Night: "],
+    ["Holiday Community Screening - ", "Holiday Community Screening: "],
     // The Guild co-presents several festivals and the credit is appended to the
     // festival's own name, so the same festival arrives under two titles. A
     // The year comes off with the credit rather than being left behind: this

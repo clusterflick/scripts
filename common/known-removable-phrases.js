@@ -1989,6 +1989,12 @@ const knownRemovablePhrases = [
   "Filmmaking, Logistics Labour, & Supply-Chain Activism",
   "TNB IAM 2026:",
   "INDIGENOUS CINEMA:",
+  // After "Community Screening and Q&A" and ": Community Screening"
+  "Community Screening",
+  "followed by post film discussion",
+  // Ticket tiers for the same screening
+  "The Classic Package",
+  "The VIP Package",
 ];
 
 module.exports = knownRemovablePhrases;
