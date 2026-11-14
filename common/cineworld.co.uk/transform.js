@@ -1,4 +1,11 @@
+const { removeAlreadyListedPerformances } = require("../utils");
 const boxofficeapiTransform = require("../boxofficeapi/transform");
+
+// Cineworld's pages are on www.cineworld.co.uk, but every screening books on
+// web.cineworld.co.uk. That is the venue's own host for telling its listings
+// from a source's: two films can start at one time there, so a source's
+// screening is only taken for one of them when the address is the same.
+const BOOKING_DOMAIN = "https://web.cineworld.co.uk";
 
 const accessibilityTags = {
   "showtime.accessibility.subtitled": { subtitled: true },
@@ -32,12 +39,24 @@ const getTagNote = (tag) => {
 };
 
 async function transform(attributes, data, sourcedEvents) {
-  return boxofficeapiTransform(
+  const movies = await boxofficeapiTransform(
     attributes,
     data,
     { accessibilityTags, getTagNote },
-    sourcedEvents,
+    {},
   );
+
+  // Sources that only link out to Cineworld's booking pages - Cinematik, for a
+  // distributor's release - find screenings Cineworld already lists, at the
+  // same address, so those copies are dropped. Anything a source finds that
+  // Cineworld doesn't list stays.
+  const listOfSourcedEvents = removeAlreadyListedPerformances(
+    movies,
+    Object.values(sourcedEvents).flatMap((events) => events),
+    { venueDomain: BOOKING_DOMAIN },
+  ).filter(({ performances }) => performances.length > 0);
+
+  return movies.concat(listOfSourcedEvents);
 }
 
 module.exports = transform;

@@ -22,7 +22,7 @@ silenceConsoleLog();
 
 describe(`${attributes.name}`, () => {
   setupPolly(isRecording, __dirname);
-  jest.useFakeTimers().setSystemTime(new Date("2026-11-13"));
+  jest.useFakeTimers().setSystemTime(new Date("2026-11-14T22:00:00Z"));
 
   describe.each([
     {
@@ -35,7 +35,8 @@ describe(`${attributes.name}`, () => {
     },
     {
       // Escapes' standard and Relaxed Screenings are separate events, so two
-      // showings of one film.
+      // showings of one film - and MASSIVE's Marie Antoinette, which Cinematik
+      // only links out to the venue's own booking for.
       name: "Lumiere Cinema Romford",
       alternativeNames: [
         "Lumiere Cinema",
@@ -46,15 +47,16 @@ describe(`${attributes.name}`, () => {
       address:
         "The Mercury Shopping Centre, Mercury Gardens, Romford, RM1 3EE, UK",
       geo: { lat: 51.57963148608159, lon: 0.18566149819018146 },
-      expectedMatches: 2,
+      expectedMatches: 3,
     },
     {
       // MASSIVE lists Marie Antoinette here, but only links out to the
-      // cinema's own box office - which the venue's listings already carry.
+      // cinema's own box office. It still comes through, booked there, and the
+      // venue's transform drops it if its own listing carries the same link.
       name: "Prince Charles Cinema",
       address: "7 Leicester Place, London, WC2H 7BY, UK",
       geo: { lat: 51.51149384362524, lon: -0.130186840699272 },
-      expectedMatches: 0,
+      expectedMatches: 1,
     },
   ])("$name", ({ name, alternativeNames, address, geo, expectedMatches }) => {
     it(
@@ -64,8 +66,8 @@ describe(`${attributes.name}`, () => {
 
         // Make sure the input looks roughly correct
         expect(bookPages).toBeTruthy();
-        expect(Object.keys(bookPages)).toHaveLength(122);
-        expect(Object.keys(eventPages)).toHaveLength(5);
+        expect(Object.keys(bookPages)).toHaveLength(283);
+        expect(Object.keys(eventPages)).toHaveLength(21);
 
         readJSON.mockImplementation(() => ({ bookPages, eventPages }));
 

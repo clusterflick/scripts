@@ -113,7 +113,11 @@ function createShowing(bookPages, eventPages) {
 
       return createPerformance({
         date,
-        url: bookPage.url,
+        // A screening Cinematik only links out to is booked where it links -
+        // the venue's own box office. That is also the address the venue's
+        // listing gives it, which is how its transform tells the two copies
+        // are one screening (removeAlreadyListedPerformances).
+        url: bookPage.sold ? bookPage.url : event.url,
         // The programme is who put the night on - the venue only hosts it. Its
         // note is billing the title leaves out (the 1155 Soundsystem's live
         // vinyl set after the credits), so it is carried as the notes.

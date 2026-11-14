@@ -86,10 +86,15 @@ const getJsonLd = ($) =>
     .map((_, el) => JSON.parse($(el).html()))
     .get();
 
-// The two page layouts Cinematik serves (Escapes' older one, and the newer one
-// the other programmes use) name the title and the local time differently.
+// The page layouts Cinematik serves (Escapes' older one, the newer one the
+// other programmes use, and the newer one again for a screening it only links
+// out to) name the title and the local time differently. A link-out page lists
+// every time of the venue's run, the one being booked marked active.
 const TITLE_SELECTOR = "h1.carousel-title, h1.event-title";
-const LOCAL_TIME_SELECTOR = ".carousel-date, .booking-hero-date";
+const LOCAL_TIME_SELECTOR =
+  ".carousel-date, .booking-hero-date, .screening-chip--active";
+const LOCAL_TIME =
+  /\b(?:Mon|Tue|Wed|Thu|Fri|Sat|Sun) \d{1,2}(?:st|nd|rd|th) [A-Z][a-z]{2}, \d\d:\d\d\b/;
 
 // The JSON-LD writes every time with a +00:00 offset. That is right for the
 // winter dates it was first read on, but whether it stays right through BST -
@@ -103,7 +108,8 @@ function assertLocalTimeMatches(url, startDate, localTimeText) {
     throw new Error(`Unreadable startDate "${startDate}" on ${url}`);
   }
   const expected = format(date, "EEE do MMM, HH:mm");
-  if (localTimeText.replace(/\s+/g, " ") !== expected) {
+  const shown = localTimeText.replace(/\s+/g, " ").match(LOCAL_TIME)?.[0];
+  if (shown !== expected) {
     throw new Error(
       `The time ${url} shows ("${localTimeText}") is not its JSON-LD ` +
         `startDate ${startDate} in London ("${expected}") - Cinematik's ` +
@@ -116,13 +122,21 @@ function parseBookPage(url, html, origins) {
   const $ = cheerio.load(html);
   const event = getJsonLd($).find((data) => data["@type"] === "Event");
   if (!event) throw new Error(`No Event JSON-LD on ${url}`);
+
   const eventSlug = getEventSlug(event, origins);
 
-  // A screening Cinematik only links out to is the venue's own listing,
-  // already read from the venue - keeping it would list it twice. Its page is
-  // laid out differently again (BFI Southbank's lists a fortnight of times),
-  // so nothing else on it is read.
-  if (!isSoldOnCinematik(event, origins)) return { eventSlug, sold: false };
+  // The sitemap is written overnight, so it still lists the screenings of the
+  // evening before - and their pages no longer show them, a link-out's chips
+  // having moved on to the next. One that has started is gone, so it is passed
+  // over rather than read; it still counts as its event's booking page.
+  const start = new Date(event.startDate);
+  if (start.getTime() <= Date.now()) return { eventSlug, past: true };
+
+  // A screening Cinematik only links out to is usually the venue's own
+  // listing, but not always - it may be a page the venue's listings don't
+  // show. Both are kept: whether the venue already lists it is the venue's
+  // transform to decide, which is the one place that can see both.
+  const sold = isSoldOnCinematik(event, origins);
 
   assertSelector(html, TITLE_SELECTOR, `No title on ${url}`);
   assertSelector(html, LOCAL_TIME_SELECTOR, `No local time on ${url}`);
@@ -138,7 +152,7 @@ function parseBookPage(url, html, origins) {
     .get()
     .filter(Boolean);
 
-  return { eventSlug, sold: true, title, event, notices };
+  return { eventSlug, sold, title, event, notices };
 }
 
 // The note is rich text, a paragraph to a block, and taking its text whole runs
@@ -163,7 +177,7 @@ const getBlockText = (html) =>
 const SCREENING_SELECTOR = ".showtime-chip, .spec--open-screening-book-cta";
 
 function parseEventPage(url, html) {
-  // Read only for events with a screening sold here, so it must show one - a
+  // Read only for events with a booking page, so it must show a screening - a
   // page that doesn't means the selector has gone stale, and the check that
   // relies on it (assertEventsHaveBookPages) would pass whatever it saw.
   assertSelector(html, SCREENING_SELECTOR, `No screenings shown on ${url}`);
@@ -234,13 +248,9 @@ async function retrieve() {
 
     const bookedSlugs = new Set();
     for (const url of bookUrls) {
-      const { sold, ...page } = parseBookPage(
-        url,
-        await fetchText(url),
-        origins,
-      );
+      const page = parseBookPage(url, await fetchText(url), origins);
       bookedSlugs.add(page.eventSlug);
-      if (!sold) continue;
+      if (page.past) continue;
 
       const date = format(new Date(page.event.startDate), "yyyy-MM-dd");
       const eventUrl = `${origin}/events/${page.eventSlug}?date=${date}`;
@@ -261,11 +271,10 @@ async function retrieve() {
     );
   }
 
-  // Escapes alone runs a free screening across the country most months, so a
-  // sweep of every programme finding nothing at all means the sitemaps have
-  // moved or stopped listing screenings, not that nothing is on. A sweep that
-  // finds screenings but none sold here is legitimate - between Escapes
-  // dates, everything listed may be a distributor linking out.
+  // Escapes alone runs a free screening across the country most months, and
+  // distributors' releases link out to dozens of venues, so a sweep of every
+  // programme finding nothing at all means the sitemaps have moved or stopped
+  // listing screenings, not that nothing is on.
   if (screeningCount === 0) {
     throw new Error(
       `No /book/ pages in any Cinematik sitemap ` +

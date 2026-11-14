@@ -10,6 +10,7 @@ const {
   getValidFormat,
   generateShowingId,
   isPrivateHire,
+  removeAlreadyListedPerformances,
 } = require("../../common/utils");
 const { calculate24Hours, parseDate } = require("./utils");
 const attributes = require("./attributes");
@@ -254,10 +255,17 @@ async function transform({ movieListPage }, sourcedEvents) {
   }
 
   // The venue lists its own London Film Festival screenings, which the
-  // festival source finds here as well
-  const listOfSourcedEvents = Object.values(
-    withoutScreeningsListedByVenue(movies, sourcedEvents),
-  ).flatMap((events) => events);
+  // festival source finds here as well. Sources that only link out to its
+  // booking pages - Cinematik, for a distributor's release - find screenings it
+  // already lists at the same address, so those copies are dropped too.
+  // Anything a source finds that the venue doesn't list stays.
+  const listOfSourcedEvents = removeAlreadyListedPerformances(
+    movies,
+    Object.values(
+      withoutScreeningsListedByVenue(movies, sourcedEvents),
+    ).flatMap((events) => events),
+    { venueDomain: attributes.domain },
+  ).filter(({ performances }) => performances.length > 0);
   return movies.concat(listOfSourcedEvents);
 }
 
