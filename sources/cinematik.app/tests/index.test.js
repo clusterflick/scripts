@@ -1,20 +1,29 @@
 /** @jest-environment setup-polly-jest/jest-environment-node */
 const {
   setupPolly,
+  disableCache,
   schemaValidate,
   silenceConsoleLog,
 } = require("../../../common/test-utils");
 const {
   readJSON,
+  sleep,
   removeMatchingHints,
   addTestCategory,
 } = require("../../../common/utils");
+const { dailyCache } = require("../../../common/cache");
 const { attributes, retrieve, findEvents } = require("..");
 
 jest.mock("../../../common/utils", () => ({
   ...jest.requireActual("../../../common/utils"),
   readJSON: jest.fn(),
+  // Pages are spaced out for Cinematik's sake, which a replay needn't be.
+  sleep: jest.fn(() => Promise.resolve()),
 }));
+
+// Every page is fetched through Polly rather than a day's cache.
+jest.mock("../../../common/cache");
+disableCache();
 
 const isRecording = false;
 
@@ -23,6 +32,11 @@ silenceConsoleLog();
 describe(`${attributes.name}`, () => {
   setupPolly(isRecording, __dirname);
   jest.useFakeTimers().setSystemTime(new Date("2026-11-14T22:00:00Z"));
+
+  beforeEach(() => {
+    dailyCache.mockClear();
+    sleep.mockClear();
+  });
 
   describe.each([
     {
@@ -68,6 +82,15 @@ describe(`${attributes.name}`, () => {
         expect(bookPages).toBeTruthy();
         expect(Object.keys(bookPages)).toHaveLength(283);
         expect(Object.keys(eventPages)).toHaveLength(21);
+
+        // Every booking and event page is cached and waited for - the
+        // listings (home page, robots.txt, sitemaps) are neither - and no
+        // key is near the 255-byte filename limit.
+        expect(dailyCache).toHaveBeenCalledTimes(315);
+        expect(sleep).toHaveBeenCalledTimes(315);
+        const keys = dailyCache.mock.calls.map(([key]) => key);
+        expect(new Set(keys).size).toBe(315);
+        expect(Math.max(...keys.map((key) => key.length))).toBeLessThan(120);
 
         readJSON.mockImplementation(() => ({ bookPages, eventPages }));
 

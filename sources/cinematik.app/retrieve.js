@@ -1,3 +1,4 @@
+const crypto = require("node:crypto");
 const zlib = require("node:zlib");
 const cheerio = require("cheerio");
 const { format } = require("date-fns");
@@ -6,8 +7,38 @@ const {
   fetchText,
   getText,
   assertSelector,
+  sleep,
+  withJitter,
 } = require("../../common/utils");
+const { dailyCache } = require("../../common/cache");
 const { isSoldOnCinematik, getEventSlug } = require("./utils");
+
+// A retrieve reads a page per screening, one after another - 315 of them when
+// first measured, growing with screenings nationwide. Each is rendered afresh
+// by Cinematik's own server (served `private, must-revalidate`, with no CDN in
+// front), so they are spaced out rather than asked for back to back.
+const PAGE_DELAY_MS = 500;
+
+// The pages are cached for the day, so a retry after a failure partway through
+// picks up where it stopped instead of asking for every page again. The
+// listings - home page, robots.txt, sitemaps - are not: they are a dozen
+// requests, and each attempt should see what is current. A key is a readable
+// start of the address plus a hash of all of it, since an event's slug repeats
+// its title and dates and the whole address can outrun a filename.
+const getPageCacheKey = (url) => {
+  const { host, pathname, search } = new URL(url);
+  const readable = `${host}${pathname}${search}`
+    .replace(/[^a-z0-9]+/gi, "-")
+    .slice(0, 80);
+  const hash = crypto.createHash("sha1").update(url).digest("hex").slice(0, 12);
+  return `cinematik-${readable}-${hash}`;
+};
+
+const fetchPage = (url) =>
+  dailyCache(getPageCacheKey(url), async () => {
+    await sleep(withJitter(PAGE_DELAY_MS));
+    return fetchText(url);
+  });
 
 // Cinematik runs several programmes, each on a site of its own: Escapes (free,
 // BFI-funded screenings), elevenfiftyfive and MASSIVE (distributors' event
@@ -217,7 +248,7 @@ const getCurrentEventSlugs = (urls) =>
 async function assertEventsHaveBookPages(origin, eventSlugs, bookedSlugs) {
   for (const slug of eventSlugs.filter((slug) => !bookedSlugs.has(slug))) {
     const url = `${origin}/events/${slug}`;
-    const $ = cheerio.load(await fetchText(url));
+    const $ = cheerio.load(await fetchPage(url));
     const count = $(SCREENING_SELECTOR).length;
     if (count > 0) {
       throw new Error(
@@ -248,7 +279,7 @@ async function retrieve() {
 
     const bookedSlugs = new Set();
     for (const url of bookUrls) {
-      const page = parseBookPage(url, await fetchText(url), origins);
+      const page = parseBookPage(url, await fetchPage(url), origins);
       bookedSlugs.add(page.eventSlug);
       if (page.past) continue;
 
@@ -257,7 +288,7 @@ async function retrieve() {
       if (!eventPages[eventUrl]) {
         eventPages[eventUrl] = parseEventPage(
           eventUrl,
-          await fetchText(eventUrl),
+          await fetchPage(eventUrl),
         );
       }
 
