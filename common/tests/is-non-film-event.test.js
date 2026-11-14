@@ -29,6 +29,7 @@ describe("isNonFilmEvent", () => {
     ["Wine Tasting Night (Tuesday 9th February)"],
     ["Publications Tour"],
     ["Community Linkup: Light and Magic"],
+    ["Amnesty Feminists Campaign Launch: In Partnership with Cheer Up Luv"],
     ["Tate Modern: Official Discovery Tour"],
     ["Advanced Photography Workshop + Photoshoot | London"],
     ["AdTech Networking Social for CEOs & Entrepreneurs Meetup"],

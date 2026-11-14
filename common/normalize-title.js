@@ -2148,6 +2148,10 @@ function normalizeTitle(title, options) {
       "Baby Shark Christmas Special: The Santa Contest",
       "Baby Shark Christmas Special The Santa Contest",
     ],
+    [
+      "MUNDURUKUYÜ – FOREST OF FISH WOMEN",
+      "MUNDURUKUYÜ – THE FOREST OF THE FISH WOMEN",
+    ],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
