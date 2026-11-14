@@ -408,6 +408,7 @@ const nonFilmEvents = [
   /^KCLCreaTech Live Coding Amapiano Workshop$/i,
   /^Clay Totems Workshop$/i,
   /^J'ai laissé mes seins à Paris$/i,
+  /^Amnesty Feminists Campaign Launch: In Partnership with Cheer Up Luv$/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>

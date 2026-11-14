@@ -1988,6 +1988,7 @@ const knownRemovablePhrases = [
   "National Tree Week:",
   "Filmmaking, Logistics Labour, & Supply-Chain Activism",
   "TNB IAM 2026:",
+  "INDIGENOUS CINEMA:",
 ];
 
 module.exports = knownRemovablePhrases;
