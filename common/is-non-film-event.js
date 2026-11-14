@@ -58,6 +58,7 @@ const nonFilmEvents = [
   /Live Concert/i,
   // An awards ceremony the venue hosts, not a screening.
   /Social Media Awards/i,
+  /National Drainage Awards/i,
   // The museum's own guided tour, sold under a series name and numbered by
   // edition, listed alongside the screenings in its cinemas.
   /alternative tour of the Science Museum/i,
