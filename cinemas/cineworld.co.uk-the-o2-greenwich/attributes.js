@@ -1,6 +1,7 @@
 module.exports = {
   id: "cineworld.co.uk-the-o2-greenwich",
   name: "Cineworld The O2 Greenwich",
+  alternativeNames: ["Cineworld The O2"],
   domain: "https://www.cineworld.co.uk",
   socials: {
     letterboxd: null,

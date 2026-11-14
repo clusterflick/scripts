@@ -9,6 +9,7 @@ const {
   createFormat,
   getValidFormat,
   generateShowingId,
+  removeAlreadyListedPerformances,
 } = require("../../common/utils");
 const { isNotSportShowing } = require("../../common/is-sport-showing");
 const { getExpectedClosure } = require("../../common/expected-closures");
@@ -160,9 +161,15 @@ async function transform(attributes, { result: movieData }, sourcedEvents) {
     );
   }
 
-  const listOfSourcedEvents = Object.values(sourcedEvents).flatMap(
-    (events) => events,
-  );
+  // Sources that only link out to Vue's own booking pages - Cinematik, for a
+  // distributor's release - find screenings Vue already lists, at the same
+  // address, so those copies are dropped. Anything a source finds that Vue
+  // doesn't list stays.
+  const listOfSourcedEvents = removeAlreadyListedPerformances(
+    movies,
+    Object.values(sourcedEvents).flatMap((events) => events),
+    { venueDomain: attributes.domain },
+  ).filter(({ performances }) => performances.length > 0);
 
   return movies.concat(listOfSourcedEvents).filter(isNotSportShowing);
 }

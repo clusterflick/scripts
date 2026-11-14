@@ -8,6 +8,7 @@ const {
   createOccasions,
   createFormat,
   generateShowingId,
+  removeAlreadyListedPerformances,
 } = require("../../common/utils");
 const { parseDate } = require("./utils");
 const attributes = require("./attributes");
@@ -225,9 +226,16 @@ async function transform({ moviePages }, sourcedEvents) {
     throw new Error("No movies found - the page structure may have changed");
   }
 
-  const listOfSourcedEvents = Object.values(sourcedEvents).flatMap(
-    (events) => events,
-  );
+  // Sources that only link out to the Garden's booking pages - Cinematik, for
+  // a distributor's release - find screenings it already lists, at the same
+  // address, so those copies are dropped. Its screenings book on a host of
+  // their own, and two films can start at one time there, so that is the host
+  // a source's screening has to match exactly to be taken for one of them.
+  const listOfSourcedEvents = removeAlreadyListedPerformances(
+    movies,
+    Object.values(sourcedEvents).flatMap((events) => events),
+    { venueDomain: "https://bookings.thegardencinema.co.uk" },
+  ).filter(({ performances }) => performances.length > 0);
   return movies.concat(listOfSourcedEvents);
 }
 

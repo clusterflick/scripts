@@ -9,6 +9,7 @@ const {
   getValidFormat,
   generateShowingId,
   getDescriptionAccessibility,
+  removeAlreadyListedPerformances,
 } = require("../utils");
 const { parseDate } = require("./utils");
 
@@ -139,8 +140,16 @@ function getTitleFor($, linkTitle) {
     : linkTitle;
 }
 
+// Each screening's own seat selection, which is where a reader books it. The
+// article page every screening used to link is the film's, with all of its
+// times on it; this is the address Cinematik links for a BFI screening too, so
+// a copy it finds is the same address as ours and is dropped as one.
+const getSeatSelectUrl = (domain, performanceId) =>
+  `${domain}seatSelect.asp?createBO::WSmap=1&BOparam::WSmap::loadBestAvailable::performance_ids=${performanceId}`;
+
 function getPerformancesFor(
   $,
+  domain,
   url,
   title,
   articleContext,
@@ -153,13 +162,15 @@ function getPerformancesFor(
   // (passed run, non-film index entry) omits `searchResults` entirely.
   const searchResults = articleContext.searchResults || [];
   const searchNames = articleContext.searchNames || [];
+  const idColumn = searchNames.indexOf("id");
   const startDateColumn = searchNames.indexOf("start_date");
   const screenColumn = searchNames.indexOf("venue_description");
   const availabilityColumn = searchNames.indexOf("availability_num");
   const keywordsColumn = searchNames.indexOf("keywords");
   if (
     searchResults.length > 0 &&
-    (startDateColumn === -1 ||
+    (idColumn === -1 ||
+      startDateColumn === -1 ||
       screenColumn === -1 ||
       availabilityColumn === -1 ||
       keywordsColumn === -1)
@@ -188,8 +199,12 @@ function getPerformancesFor(
     const keywords = (row[keywordsColumn] || "")
       .split(",")
       .map((k) => k.trim());
+    const performanceId = row[idColumn];
+    if (!performanceId) {
+      throw new Error(`BFI performance with no id on ${url} (${startDate})`);
+    }
     return createPerformance({
-      url,
+      url: getSeatSelectUrl(domain, performanceId),
       screen,
       notesList: season ? [`Part of ${season}`] : [],
       date: parseDate(startDate),
@@ -241,6 +256,7 @@ async function transform(attributes, { moviePages }, sourcedEvents) {
     const showingId = generateShowingId(attributes, articleId);
     const performances = getPerformancesFor(
       $,
+      domain,
       url,
       title,
       show.articleContext,
@@ -287,9 +303,15 @@ async function transform(attributes, { moviePages }, sourcedEvents) {
     );
   }
 
-  const listOfSourcedEvents = Object.values(sourcedEvents).flatMap(
-    (events) => events,
-  );
+  // Sources that only link out to a screening's seat selection - Cinematik,
+  // for a distributor's release - find screenings the BFI already lists, at
+  // the same address, so those copies are dropped. Anything a source finds that
+  // the BFI doesn't list stays.
+  const listOfSourcedEvents = removeAlreadyListedPerformances(
+    shows,
+    Object.values(sourcedEvents).flatMap((events) => events),
+    { venueDomain: domain },
+  ).filter(({ performances }) => performances.length > 0);
   return shows.concat(listOfSourcedEvents);
 }
 

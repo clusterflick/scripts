@@ -17,13 +17,21 @@ const filmPage = `<html><body>
 // A trimmed `searchNames` map with the columns transform reads. Rows are built
 // positionally against it, mirroring how BFI names its `searchResults` fields.
 const SEARCH_NAMES = [
+  "id",
   "start_date",
   "venue_description",
   "availability_num",
   "keywords",
 ];
-const makeRow = ({ startDate, screen, availabilityNum, keywords = "" }) => {
+const makeRow = ({
+  id = "BD2848F8-C59B-4270-81FB-FEC58BC86835",
+  startDate,
+  screen,
+  availabilityNum,
+  keywords = "",
+}) => {
   const row = [];
+  row[SEARCH_NAMES.indexOf("id")] = id;
   row[SEARCH_NAMES.indexOf("start_date")] = startDate;
   row[SEARCH_NAMES.indexOf("venue_description")] = screen;
   row[SEARCH_NAMES.indexOf("availability_num")] = availabilityNum;
@@ -63,11 +71,13 @@ const runTransform = async (rows, html = filmPage) => {
 };
 
 const P1 = {
+  id: "BD2848F8-C59B-4270-81FB-FEC58BC86835",
   startDate: "Saturday 11 July 2026 20:35",
   screen: "NFT4",
   availabilityNum: "5",
 };
 const P2 = {
+  id: "CCB1F070-56D0-4F44-B56D-5B8D309102B2",
   startDate: "Tuesday 14 July 2026 20:45",
   screen: "NFT4",
   availabilityNum: "0",
@@ -95,6 +105,55 @@ describe("BFI transform", () => {
     expect(p2).toBeTruthy();
     // availability_num of 0 (sold out) and -1 (error) both mark unbookable.
     expect(p2.status).toEqual({ soldOut: true });
+  });
+
+  it("books each performance at its own seat selection", async () => {
+    const performances = await runTransform([P1, P2]);
+
+    expect(performances.map(({ bookingUrl }) => bookingUrl).sort()).toEqual([
+      "https://whatson.bfi.org.uk/Online/seatSelect.asp?createBO::WSmap=1&BOparam::WSmap::loadBestAvailable::performance_ids=BD2848F8-C59B-4270-81FB-FEC58BC86835",
+      "https://whatson.bfi.org.uk/Online/seatSelect.asp?createBO::WSmap=1&BOparam::WSmap::loadBestAvailable::performance_ids=CCB1F070-56D0-4F44-B56D-5B8D309102B2",
+    ]);
+  });
+
+  it("drops a source's copy of a screening it books at the same seat selection", async () => {
+    const seatSelect = `https://whatson.bfi.org.uk/Online/seatSelect.asp?createBO::WSmap=1&BOparam::WSmap::loadBestAvailable::performance_ids=${P1.id}`;
+    const sourced = (bookingUrl) => ({
+      showingId: "cinematik.app-test-film",
+      title: "Test Film",
+      performances: [
+        { time: new Date("2026-07-11T20:35").getTime(), bookingUrl },
+      ],
+    });
+    const shows = await transform(
+      attributes,
+      {
+        moviePages: {
+          [showPath]: {
+            title: "Test Film",
+            html: filmPage,
+            articleContext: {
+              searchNames: SEARCH_NAMES,
+              searchResults: [P1].map(makeRow),
+            },
+          },
+        },
+      },
+      {
+        "cinematik.app": [
+          sourced(seatSelect),
+          sourced("https://whatson.bfi.org.uk/Online/private-screening"),
+        ],
+      },
+    );
+
+    const sourcedUrls = shows
+      .filter(({ showingId }) => showingId.startsWith("cinematik.app-"))
+      .flatMap(({ performances }) => performances)
+      .map(({ bookingUrl }) => bookingUrl);
+    expect(sourcedUrls).toEqual([
+      "https://whatson.bfi.org.uk/Online/private-screening",
+    ]);
   });
 
   it("keeps only the screen name from a venue with a location suffix", async () => {
