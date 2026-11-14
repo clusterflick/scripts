@@ -5,7 +5,7 @@ module.exports = {
   socials: {
     letterboxd: null,
     twitter: null,
-    instagram: null,
+    instagram: "cinematikapp",
   },
   url: "https://www.cinematik.app/events",
 };
