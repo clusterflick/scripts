@@ -293,6 +293,8 @@ const knownRemovablePhrases = [
   "Post show dinner available",
   " plus live music from naomi banks",
   " PLUS Sinners movie breakdown",
+  // Ahead of "Bottomless Brunch Party!", which would otherwise leave "Movie &"
+  "Movie & Bottomless Brunch Party!",
   "Bottomless Brunch Party!",
   "Buster Keaton Cineclub",
   "Kinoklub: ",
@@ -1852,6 +1854,8 @@ const knownRemovablePhrases = [
   " a premiere",
   // Ahead of "premiere", which would otherwise leave the plural's "s" behind.
   "Premieres",
+  // Ahead of "premiere", which would otherwise leave "and Networking" behind.
+  "Premiere and Networking",
   "premiere",
   "IMAX Preview",
   "IMAX exclusive previews",
@@ -1876,6 +1880,7 @@ const knownRemovablePhrases = [
   "A Preview of",
   "[Preview]",
   "Preview with Q & A with Filmmakers and Special Guest Israa",
+  "special preview",
   "preview",
   "live action",
   "Re-Edit",
@@ -1981,6 +1986,8 @@ const knownRemovablePhrases = [
   "New Year's Eve Party Screening",
   "at Selfridges",
   "National Tree Week:",
+  "Filmmaking, Logistics Labour, & Supply-Chain Activism",
+  "TNB IAM 2026:",
 ];
 
 module.exports = knownRemovablePhrases;

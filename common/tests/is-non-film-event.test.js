@@ -202,6 +202,9 @@ describe("isNonFilmEvent", () => {
     ["Women’s Toilets and Working-Class Girlhood [talk]"],
     ["RSA House Christmas Market"],
     ["BOARD GAMES + STRANGERS"],
+    ["KCLCreaTech Live Coding Amapiano Workshop"],
+    ["Clay Totems Workshop"],
+    ["J'ai laissé mes seins à Paris"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });
