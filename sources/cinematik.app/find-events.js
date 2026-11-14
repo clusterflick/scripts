@@ -10,7 +10,6 @@ const {
 } = require("../../common/utils");
 const { venueMatchesCinema } = require("../../common/source-utils");
 const attributes = require("./attributes");
-const { getEventSlug } = require("./utils");
 
 // A venue is named as its operator and its screen, joined by a colon -
 // "Genesis Entertainment Mile End Ltd: Genesis Cinema", "Romford Film Trust:
@@ -77,7 +76,7 @@ const atCinema = (cinema) => (bookPage) => {
 
 function createShowing(bookPages, eventPages) {
   const [first] = bookPages;
-  const slug = getEventSlug(first.event);
+  const slug = first.eventSlug;
   const eventPage = eventPages[first.eventUrl];
   if (!eventPage) {
     throw new Error(`No event page retrieved for ${first.eventUrl}`);
@@ -147,7 +146,7 @@ async function findEvents(cinema) {
   // each with its own title.
   const byEvent = new Map();
   for (const bookPage of bookPages.filter(atCinema(cinema))) {
-    const key = `${bookPage.programme}/${getEventSlug(bookPage.event)}`;
+    const key = `${bookPage.programme}/${bookPage.eventSlug}`;
     if (!byEvent.has(key)) byEvent.set(key, []);
     byEvent.get(key).push(bookPage);
   }
