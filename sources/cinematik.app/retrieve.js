@@ -11,31 +11,56 @@ const { isSoldOnCinematik, getEventSlug } = require("./utils");
 
 // Cinematik runs several programmes, each on a site of its own: Escapes (free,
 // BFI-funded screenings), elevenfiftyfive and MASSIVE (distributors' event
-// screenings), and Eido (event cinema, on its own domain). Each is a source in
-// its own right where it sells the ticket - a screen hired at Genesis that the
-// venue's own listings never mention - and an aggregator where it only links
-// out to the venue's box office. Which it is varies by screening, not by
-// programme, so the programmes are all read and the split is made per
+// screenings), Eido (event cinema, on its own domain), and Cinematik's own. Each
+// is a source in its own right where it sells the ticket - a screen hired at
+// Genesis that the venue's own listings never mention - and an aggregator where
+// it only links out to the venue's box office. Which it is varies by screening,
+// not by programme, so the programmes are all read and the split is made per
 // screening (see isSoldOnCinematik).
-const PROGRAMMES = [
-  { id: "elevenfiftyfive", origin: "https://elevenfiftyfive.cinematik.app" },
-  { id: "escapes", origin: "https://escapes.cinematik.app" },
-  { id: "massive", origin: "https://massive.cinematik.app" },
-  { id: "eido", origin: "https://www.eidocinema.com" },
-];
+const HOME_URL = "https://www.cinematik.app/";
+
+// Programmes come and go - a distributor's campaign site is set up for a
+// release - so they are read from the Programmes menu every programme's site
+// carries, rather than listed here, where a new one would be missed without a
+// sound. The home site is read too: it is itself one of them.
+const PROGRAMME_LINKS_SELECTOR = ".programmes-overlay-links a[href]";
+
+async function fetchProgrammeOrigins() {
+  const html = await fetchText(HOME_URL);
+  assertSelector(
+    html,
+    PROGRAMME_LINKS_SELECTOR,
+    `No Programmes menu on ${HOME_URL} - the programmes can't be listed`,
+  );
+  const $ = cheerio.load(html);
+  const origins = $(PROGRAMME_LINKS_SELECTOR)
+    .map((_, el) => new URL($(el).attr("href"), HOME_URL).origin)
+    .get();
+  return [...new Set([new URL(HOME_URL).origin, ...origins])];
+}
 
 // Each programme's robots.txt names its sitemap, and the sitemap lists a
 // `/book/` page for every upcoming screening - one page per screening, at
 // every venue. The event pages can't be used as the index: they render only
 // the screenings nearest a default location (40 of Escapes' 121 on the date
 // measured), and their JSON-LD stops at 50. A screening that has passed drops
-// out of the sitemap, and its page answers 410.
-const sitemapUrl = ({ id, origin }) => `${origin}/${id}-sitemap.xml.gz`;
+// out of the sitemap, and its page answers 410. The sitemap's name differs by
+// programme (escapes-sitemap.xml.gz, eido-sitemap.xml.gz), so it is read from
+// robots.txt rather than built.
+async function fetchSitemapUrls(origin) {
+  const robots = await fetchText(`${origin}/robots.txt`);
+  const urls = [...robots.matchAll(/^Sitemap:\s*(\S+)\s*$/gim)].map(
+    ([, url]) => url,
+  );
+  if (urls.length === 0) {
+    throw new Error(`No Sitemap in ${origin}/robots.txt:\n${robots}`);
+  }
+  return urls;
+}
 
 const isGzip = (buffer) => buffer[0] === 0x1f && buffer[1] === 0x8b;
 
-async function fetchSitemap(programme) {
-  const url = sitemapUrl(programme);
+async function fetchSitemap(url) {
   const response = await fetchWithRetry(url);
   if (!response.ok) {
     throw new Error(`Sitemap ${url} answered ${response.status}`);
@@ -155,12 +180,19 @@ function parseEventPage(url, html) {
 async function retrieve() {
   const bookPages = {};
   const eventPages = {};
+  const sitemapUrls = [];
   let screeningCount = 0;
 
-  for (const programme of PROGRAMMES) {
-    const bookUrls = (await fetchSitemap(programme)).filter((url) =>
-      new URL(url).pathname.startsWith("/book/"),
-    );
+  for (const origin of await fetchProgrammeOrigins()) {
+    const bookUrls = [];
+    for (const sitemapUrl of await fetchSitemapUrls(origin)) {
+      sitemapUrls.push(sitemapUrl);
+      bookUrls.push(
+        ...(await fetchSitemap(sitemapUrl)).filter((url) =>
+          new URL(url).pathname.startsWith("/book/"),
+        ),
+      );
+    }
     screeningCount += bookUrls.length;
 
     for (const url of bookUrls) {
@@ -168,7 +200,7 @@ async function retrieve() {
       if (!page) continue;
 
       const date = format(new Date(page.event.startDate), "yyyy-MM-dd");
-      const eventUrl = `${programme.origin}/events/${getEventSlug(page.event)}?date=${date}`;
+      const eventUrl = `${origin}/events/${getEventSlug(page.event)}?date=${date}`;
       if (!eventPages[eventUrl]) {
         eventPages[eventUrl] = parseEventPage(
           eventUrl,
@@ -176,7 +208,7 @@ async function retrieve() {
         );
       }
 
-      bookPages[url] = { programme: programme.id, eventUrl, ...page };
+      bookPages[url] = { programme: origin, eventUrl, ...page };
     }
   }
 
@@ -188,7 +220,7 @@ async function retrieve() {
   if (screeningCount === 0) {
     throw new Error(
       `No /book/ pages in any Cinematik sitemap ` +
-        `(${PROGRAMMES.map(sitemapUrl).join(", ")}) - the sitemaps may have changed`,
+        `(${sitemapUrls.join(", ")}) - the sitemaps may have changed`,
     );
   }
 
