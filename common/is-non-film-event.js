@@ -405,6 +405,9 @@ const nonFilmEvents = [
   /^Women['’]s Toilets and Working-Class Girlhood \[talk\]$/i,
   /^RSA House Christmas Market$/i,
   /^Board Games \+ Strangers$/i,
+  /^KCLCreaTech Live Coding Amapiano Workshop$/i,
+  /^Clay Totems Workshop$/i,
+  /^J'ai laissé mes seins à Paris$/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
