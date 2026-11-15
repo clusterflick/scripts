@@ -546,6 +546,7 @@ used in two ways:
 | freefilmfestivals.org          | HTML festival list + festival + events    | The Events Calendar pages; times and venue geo from schema.org JSON-LD |
 | japanesefilm.club              | HTML list + detail pages + venue pages    | Venue pages fetched for postcodes, as names collide UK-wide            |
 | outsavvy.com                   | HTML list + detail pages                  | Cheerio scraping                                                       |
+| rebelreelcineclub.com          | Squarespace shop JSON (`?format=json`)    | Date, time and venue read from free-text product titles; past dropped  |
 | stowfilmlounge.com             | Single HTML page                          | Simple `fetchText`                                                     |
 | thecliq.app-                   | GraphQL API                               | Queries clubs + events + batched event details                         |
 | ti.to                          | Playwright list + detail pages            | Per-venue-slug retrieval                                               |
