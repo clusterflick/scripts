@@ -199,6 +199,8 @@ describe("isNonFilmEvent", () => {
     ["UnWorlding: Grand designs for a breaking point  [performance]"],
     ["Fundraiser: Evening of Live Jazz with the Jon Howells Jazz Band"],
     ["Musical Bodies [workshop]"],
+    ["A House is not a Home [workshop]"],
+    ["Digital Eden [workshop]"],
     ["Women's Toilets and Working-Class Girlhood [talk]"],
     ["Women’s Toilets and Working-Class Girlhood [talk]"],
     ["RSA House Christmas Market"],
