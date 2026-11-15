@@ -1,0 +1,112 @@
+/** @jest-environment setup-polly-jest/jest-environment-node */
+const {
+  setupPolly,
+  schemaValidate,
+  silenceConsoleLog,
+} = require("../../../common/test-utils");
+const {
+  readJSON,
+  removeMatchingHints,
+  addTestCategory,
+} = require("../../../common/utils");
+const { attributes, retrieve, findEvents } = require("..");
+const { LONDON, SEARCH_RADIUS_METRES } = require("../utils");
+const { getAllCinemaAttributes } = require("../../../cinemas");
+const distanceInKmBetweenCoordinates = require("../../../common/distance-in-km-between-coordinates");
+
+// How far a sourced event can be from a venue and still match it, unless the
+// venue sets its own geoRadius - see findMatchingCinema.
+const DEFAULT_MATCH_RADIUS_KM = 0.35;
+
+jest.mock("../../../common/utils", () => ({
+  ...jest.requireActual("../../../common/utils"),
+  readJSON: jest.fn(),
+}));
+
+const isRecording = false;
+
+silenceConsoleLog();
+
+describe(attributes.name, () => {
+  setupPolly(isRecording, __dirname);
+  jest.useFakeTimers().setSystemTime(new Date("2026-11-15"));
+
+  describe.each([
+    {
+      name: "The Cabbage Patch",
+      geo: { lat: 51.449, lon: -0.329866 },
+      expectedMatches: 1,
+    },
+    {
+      // Billetto names the room first - "Richard Hoggart Building, Goldsmiths"
+      name: "Goldsmiths",
+      alternativeNames: [
+        "Richard Hoggart Building",
+        "Goldsmiths, University of London",
+      ],
+      geo: { lat: 51.47454075854443, lon: -0.035107215284682844 },
+      expectedMatches: 1,
+    },
+    {
+      name: "St John's Waterloo",
+      alternativeNames: ["St John's Church, Waterloo"],
+      geo: { lat: 51.504486, lon: -0.111997 },
+      expectedMatches: 1,
+    },
+    {
+      name: "Rio Cinema",
+      alternativeNames: ["The Rio"],
+      geo: { lat: 51.54970097438604, lon: -0.07550473771574956 },
+      expectedMatches: 0,
+    },
+  ])("$name", ({ name, alternativeNames, geo, expectedMatches }) => {
+    it(
+      "retrieve and find events",
+      async () => {
+        const { events } = await retrieve();
+
+        // Make sure the input looks roughly correct
+        expect(events).toBeTruthy();
+        expect(Object.keys(events)).toHaveLength(3);
+
+        readJSON.mockImplementation(() => ({ events }));
+
+        const cinema = { name, alternativeNames, geo };
+        const output = await findEvents(cinema);
+        expect(
+          output.every((movie) =>
+            Object.prototype.hasOwnProperty.call(movie, "matchingHints"),
+          ),
+        ).toBe(true);
+
+        const data = JSON.parse(JSON.stringify(output))
+          .map(removeMatchingHints)
+          .map(addTestCategory);
+
+        // Make sure the data looks roughly correct
+        expect(schemaValidate(data)).toBe(true);
+        expect(data).toHaveLength(expectedMatches);
+        expect(data).toMatchSnapshot();
+      },
+      isRecording ? 600_000 : undefined,
+    );
+  });
+});
+
+describe(`${attributes.name} search radius`, () => {
+  // The retrieve only asks for events within SEARCH_RADIUS_METRES of central
+  // London, so a venue outside it would never be offered a Billetto event -
+  // silently. Each venue needs to sit inside it by as far as a sourced event
+  // can be from it and still match.
+  it("takes in every venue we hold", () => {
+    const radiusKm = SEARCH_RADIUS_METRES / 1000;
+    const outside = getAllCinemaAttributes()
+      .filter(({ geo }) => geo)
+      .map(({ id, geo, geoRadius = DEFAULT_MATCH_RADIUS_KM }) => ({
+        id,
+        reach: distanceInKmBetweenCoordinates(LONDON, geo) + geoRadius,
+      }))
+      .filter(({ reach }) => reach > radiusKm);
+    expect(outside).toEqual([]);
+  });
+});
