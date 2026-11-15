@@ -13,7 +13,7 @@ module.exports = {
   },
   url: "https://brixtonjamm.org",
   address: "261 Brixton Road, London, SW9 6LH, UK",
-  geo: { lat: 51.4708, lon: -0.11186 },
+  geo: { lat: 51.47061773915119, lon: -0.11224879629505093 },
   structure: "solo",
   type: "Music Venue",
   programming: "host",
