@@ -140,7 +140,7 @@ describe("BFI transform", () => {
         },
       },
       {
-        "cinematik.app": [
+        "cinematik.app-": [
           sourced(seatSelect),
           sourced("https://whatson.bfi.org.uk/Online/private-screening"),
         ],

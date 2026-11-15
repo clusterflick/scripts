@@ -1,5 +1,5 @@
 module.exports = {
-  id: "cinematik.app",
+  id: "cinematik.app-",
   name: "Cinematik",
   domain: "https://www.cinematik.app",
   socials: {

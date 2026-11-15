@@ -1,7 +1,7 @@
 const attributes = require("./attributes");
 const { removeAlreadyListedPerformances } = require("../../common/utils");
 const cinesyncTransform = require("../../common/cinesync.io/transform");
-const withoutScreeningsListedByCinematik = require("../../sources/cinematik.app/without-screenings-listed-by-venue");
+const withoutScreeningsListedByCinematik = require("../../sources/cinematik.app-/without-screenings-listed-by-venue");
 
 async function transform(data, sourcedEvents) {
   const movies = await cinesyncTransform(attributes, data, {});

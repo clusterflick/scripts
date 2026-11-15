@@ -29,7 +29,7 @@ const venueMovie = (
 });
 
 const cinematikScreenings = (sourcedEvents) =>
-  sourcedEvents["cinematik.app"].map(({ performances }) =>
+  sourcedEvents["cinematik.app-"].map(({ performances }) =>
     performances.map(({ time }) => new Date(time).toISOString()),
   );
 
@@ -37,20 +37,20 @@ describe("withoutScreeningsListedByVenue", () => {
   it("drops a screening the venue lists at the same film, day and time", () => {
     const movies = [venueMovie("marie-antoinette", "2026-11-24T10:00:00Z")];
     const sourcedEvents = {
-      "cinematik.app": [
+      "cinematik.app-": [
         cinematikEvent("marie-antoinette", ["2026-11-24T10:00:00Z"]),
       ],
     };
 
     expect(withoutScreeningsListedByVenue(movies, sourcedEvents)).toStrictEqual(
-      { "cinematik.app": [] },
+      { "cinematik.app-": [] },
     );
   });
 
   it("keeps a screening the venue lists at another time that day", () => {
     const movies = [venueMovie("marie-antoinette", "2026-11-24T17:00:00Z")];
     const sourcedEvents = {
-      "cinematik.app": [
+      "cinematik.app-": [
         cinematikEvent("marie-antoinette", ["2026-11-24T10:00:00Z"]),
       ],
     };
@@ -66,7 +66,7 @@ describe("withoutScreeningsListedByVenue", () => {
     // The Lumiere starts Ebenezer and The Nice Ones alongside Marie Antoinette
     const movies = [venueMovie("ebenezer-2026", "2026-11-24T10:00:00Z")];
     const sourcedEvents = {
-      "cinematik.app": [
+      "cinematik.app-": [
         cinematikEvent("marie-antoinette", ["2026-11-24T10:00:00Z"]),
       ],
     };
@@ -81,7 +81,7 @@ describe("withoutScreeningsListedByVenue", () => {
   it("drops only the screenings the venue lists, keeping the rest", () => {
     const movies = [venueMovie("marie-antoinette", "2026-11-22T16:15:00Z")];
     const sourcedEvents = {
-      "cinematik.app": [
+      "cinematik.app-": [
         cinematikEvent("marie-antoinette", [
           "2026-11-22T16:15:00Z",
           "2026-11-25T17:00:00Z",
