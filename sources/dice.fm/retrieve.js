@@ -7,6 +7,22 @@ const {
 
 const searchUrl = "https://api.dice.fm/unified_search";
 const eventUrl = (id) => `https://api.dice.fm/events/${id}`;
+const promoterUrl = (slug) =>
+  `https://api.dice.fm/promoter_profiles/slug/${slug}`;
+
+// Promoters whose screenings the search never reaches. A screening run inside a
+// wider night is tagged as that night, and its name rarely says "film":
+// Riot Party's "Riot LDN Xmas Social" at The Brixton Courtyard (2026-12-10)
+// promised an erotic film screening in its description, but its only tag was
+// `culture:social`. The promoter's profile lists its upcoming events whatever
+// they are tagged, in the same section shape the search returns. Every event
+// it lists is fetched, and find-events.js still keeps only those at a venue we
+// hold. Add a promoter here when one of its screenings goes missing the same
+// way, and say who it is: a slug nobody can attribute can never be removed.
+const PROMOTERS = [
+  // Riot Party, https://dice.fm/promoters/riot-party-dd2q
+  "riot-party-dd2q",
+];
 const headers = {
   Accept: "application/json",
   "Content-Type": "application/json",
@@ -60,6 +76,7 @@ const overFetch = {
       body: JSON.stringify(body),
     }),
   event: (id) => fetchJson(eventUrl(id), { headers }),
+  promoter: (slug) => fetchJson(promoterUrl(slug), { headers }),
 };
 
 const settleOnSite = async (page) => {
@@ -126,6 +143,7 @@ const overBrowser = (page) => ({
       body: JSON.stringify(body),
     }),
   event: (id) => requestFromPage(page, eventUrl(id), { headers }),
+  promoter: (slug) => requestFromPage(page, promoterUrl(slug), { headers }),
 });
 
 const fetchSummaries = async (transport, tag) => {
@@ -143,6 +161,48 @@ const fetchSummaries = async (transport, tag) => {
   } while (cursor);
 
   return allSummaries;
+};
+
+// A promoter between nights legitimately has nothing upcoming, so no events is
+// not an error. A slug that no longer resolves is: the promoter has renamed or
+// gone, and PROMOTERS needs updating rather than quietly fetching nothing every
+// day. So is a profile without the sections we read, or one that can't list
+// everything in one answer, because nothing here reads a next page: the profile
+// we have seen (riot-party-dd2q, 2026-11-15) sent `load_more: false` with all
+// four of its events, and no further page has been seen to know how one is
+// asked for.
+const fetchPromoterSummaries = async (transport, slug) => {
+  let response;
+  try {
+    response = await transport.promoter(slug);
+  } catch (error) {
+    // A 403 is the session being refused, which `retrieve` escalates on.
+    if (error.status === 403) throw error;
+    throw new Error(
+      `DICE promoter "${slug}" could not be read (${error.message}). If ` +
+        `the promoter has gone, PROMOTERS in sources/dice.fm/retrieve.js ` +
+        `needs updating`,
+      { cause: error },
+    );
+  }
+
+  if (!Array.isArray(response.sections)) {
+    throw new Error(
+      `DICE promoter "${slug}" answered without "sections" - the profile ` +
+        `response may have changed`,
+    );
+  }
+
+  const truncated = response.sections.filter((section) => section.load_more);
+  if (truncated.length > 0) {
+    throw new Error(
+      `DICE promoter "${slug}" has more events than its profile lists at ` +
+        `once (load_more on "${truncated.map(({ key }) => key).join('", "')}"), ` +
+        `and paging through a profile isn't supported yet`,
+    );
+  }
+
+  return getSummariesFromResponse(response);
 };
 
 const nameContainsFilmKeyword = (name) => {
@@ -178,10 +238,16 @@ async function collectEvents(transport) {
     nameContainsFilmKeyword(summary.name),
   );
 
+  const promoterSummaries = [];
+  for (const slug of PROMOTERS) {
+    promoterSummaries.push(...(await fetchPromoterSummaries(transport, slug)));
+  }
+
   const summaries = [
     ...filmSummaries,
     ...filteredTheatreSummaries,
     ...filteredGigSummaries,
+    ...promoterSummaries,
   ];
 
   // An event can be listed under more than one tag, and it is the same event

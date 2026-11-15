@@ -90,6 +90,7 @@ const mockVenuesAddedSinceFixtures = [
   // Theatre, Royal College of Art", which it was found under neither by name
   // nor, before leading room parts were skipped, by "Royal College of Art".
   "rca.ac.uk-battersea",
+  "brixtonjamm.org",
 ];
 // A name added to a venue we already held does the same thing to the events
 // listed under it, so those names are held back too - by venue, as the venue

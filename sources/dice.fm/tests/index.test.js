@@ -1,6 +1,7 @@
 /** @jest-environment setup-polly-jest/jest-environment-node */
 const {
   setupPolly,
+  setupCacheMock,
   schemaValidate,
   silenceConsoleLog,
 } = require("../../../common/test-utils");
@@ -18,28 +19,43 @@ jest.mock("../../../common/utils", () => ({
 
 const isRecording = false;
 
+// DICE refused the plain fetch when this was recorded (2026-11-15), so Polly
+// holds only that 403, which is what sends the retrieve to Camoufox. Polly only
+// sees `fetch`, so the browser's result is replayed from the daily cache
+// instead: `cache/dice-fm-events-<date>` from a real retrieve, copied into
+// __manual-recordings__. Re-recording means a fresh retrieve and copying that
+// file across with the new date, as well as re-running with isRecording on.
+jest.mock("../../../common/cache");
+setupCacheMock(__dirname, "2026-11-15");
+
 silenceConsoleLog();
 
 describe(attributes.name, () => {
   setupPolly(isRecording, __dirname);
-  jest.useFakeTimers().setSystemTime(new Date("2026-08-21"));
+  jest.useFakeTimers().setSystemTime(new Date("2026-11-15"));
 
   describe.each([
     {
-      name: "Art'otel London Hoxton",
-      geo: { lat: 51.526156790963746, lon: -0.08333842748307863 },
-      expectedMatches: 13,
-    },
-    {
       name: "The Haggerston",
       geo: { lat: 51.54248341521672, lon: -0.07580767288892457 },
-      expectedMatches: 10,
+      expectedMatches: 9,
     },
     {
-      name: "Strongroom Bar",
-      alternativeNames: ["Strongroom Venue"],
-      geo: { lat: 51.52596690314433, lon: -0.08017930429849301 },
-      expectedMatches: 6,
+      name: "Hackney Picturehouse",
+      geo: { lat: 51.54474966715274, lon: -0.055025638908993514 },
+      expectedMatches: 4,
+    },
+    {
+      name: "The Clapham Grand",
+      geo: { lat: 51.463318751977546, lon: -0.16939900181385437 },
+      expectedMatches: 3,
+    },
+    {
+      // Riot Party's social, reached only through the promoter list
+      name: "Brixton Jamm",
+      alternativeNames: ["The Brixton Courtyard"],
+      geo: { lat: 51.4708, lon: -0.11186 },
+      expectedMatches: 1,
     },
   ])("$name", ({ name, alternativeNames, geo, expectedMatches }) => {
     it(
