@@ -40,6 +40,11 @@ const FILM_KEYWORDS = [
   // screen rather than as a "screening"
   "on screen",
   "the film",
+  // Two films back to back. Listings bill one as a "double bill" and describe
+  // the pair as "films", never saying "screening" - Midweek Cinema's "Double
+  // Bill: Lady Bird (2017) + The Souvenir (2019)" was dropped for it.
+  "double bill",
+  "double-bill",
 ];
 
 /**

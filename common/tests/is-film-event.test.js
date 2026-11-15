@@ -8,6 +8,8 @@ describe("isFilmEvent", () => {
     ["An evening of short films from the archive"],
     ["Open air cinema in the park"],
     ["Friday Knights Presents: Movie Club - Horror Marathon"],
+    ["Double Bill: Lady Bird (2017) + The Souvenir (2019)"],
+    ["Join us for a brilliant double-bill exploring coming of age"],
   ])("flags '%s' as a film event", (text) => {
     expect(isFilmEvent(text)).toBe(true);
   });

@@ -16,7 +16,13 @@ const { isFilmEvent } = require("../is-film-event");
 // Not for a cinema. A cinema's listings need no such test, and applying one
 // there would drop films whose blurb happens not to use any of these words -
 // see the note at the top of `common/is-film-event.js`.
+//
+// A source that knows the organiser behind a listing only ever puts on film
+// says so with `matchingHints.filmOrganiser`, and that listing is kept on the
+// organiser's word: a film club's own blurb need not use any of the words the
+// test looks for.
 const isFilmListing = ({ title, matchingHints }) =>
+  matchingHints?.filmOrganiser === true ||
   isFilmEvent(`${title} ${matchingHints?.overview || ""}`);
 
 async function transform(data, sourcedEvents) {

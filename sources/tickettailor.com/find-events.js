@@ -163,6 +163,17 @@ const SLUG_NOTES = {
   wimbledonfilmclub: "Presented by Wimbledon Film Club",
 };
 
+// The organisers whose whole programme is film, so every event they list is a
+// screening whatever its blurb says. A venue that is mostly not film filters
+// its sourced listings on film wording (`common/is-film-event.js`), and that
+// test can miss a film club's own copy - Midweek Cinema's "Double Bill: Lady
+// Bird (2017) + The Souvenir (2019)" describes a "double-bill" of "films" and
+// was dropped. Friday Knights is left out: it runs quizzes, a book club and
+// Mario Kart nights alongside its movie club.
+const FILM_ORGANISER_SLUGS = new Set(
+  Object.keys(SLUG_NOTES).filter((slug) => slug !== "fridayknights"),
+);
+
 function convertTicketTailorEvent(event, occurrences, description) {
   const { title, fullUrl, eventId, slug } = event;
 
@@ -201,7 +212,10 @@ function convertTicketTailorEvent(event, occurrences, description) {
     ),
     // Fall back to the title when a promoter left the description empty - an
     // empty overview makes the matching LLM discard the event outright.
-    matchingHints: { overview: description || title },
+    matchingHints: {
+      overview: description || title,
+      ...(FILM_ORGANISER_SLUGS.has(slug) ? { filmOrganiser: true } : {}),
+    },
   };
 }
 
