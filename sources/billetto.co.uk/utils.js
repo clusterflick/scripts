@@ -30,4 +30,14 @@ const getVenueNameParts = (venueName) => [
   ),
 ];
 
-module.exports = { parseLocalTime, getVenueNameParts };
+// Trafalgar Square, and the radius around it the retrieve searches - see
+// retrieve.js for how it was chosen.
+const LONDON = { lat: 51.508, lon: -0.1281 };
+const SEARCH_RADIUS_METRES = 40_000;
+
+module.exports = {
+  parseLocalTime,
+  getVenueNameParts,
+  LONDON,
+  SEARCH_RADIUS_METRES,
+};

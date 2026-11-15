@@ -1,5 +1,5 @@
 const { fetchJson } = require("../../common/utils.js");
-const { parseLocalTime } = require("./utils");
+const { parseLocalTime, LONDON, SEARCH_RADIUS_METRES } = require("./utils");
 
 // Billetto's own pages don't list events in their HTML - an organiser's page
 // and the category pages fill themselves in from Algolia in the browser, with
@@ -17,9 +17,10 @@ const SEARCH_URL = `https://${ALGOLIA.appId}-dsn.algolia.net/1/indexes/${ALGOLIA
 // filter the UK site's own pages put on every search.
 const UK = "organization_id:58";
 
-// The UK site is small - measured 2026-11-15, 489 upcoming events in all, 187
-// of them around London - so this asks for the whole country's film events
-// rather than drawing a radius that could leave out a venue at its edge.
+// Events are asked for within a radius of central London. Greater London's
+// boundary is at most 32.2km from Trafalgar Square, and the furthest venue we
+// hold (Upminster Windmill) 26.4km, so 40km takes in all of it with a margin -
+// and the tests fail if a venue is ever added beyond it.
 //
 // An organiser picks a type and a subcategory, and screenings aren't always
 // filed under film: that day's London screening of "The Killing of Awdah
@@ -32,8 +33,14 @@ const UK = "organization_id:58";
 // site leaves those out of its own listings the same way.
 const FILM_EVENTS = `${UK} AND (type:screening OR subcategory:film) AND NOT kind:subscription`;
 
-// Algolia's ceiling for a page. A page is far more than the UK's film events
-// run to, so paging is slack rather than an expectation.
+const AROUND_LONDON = {
+  aroundLatLng: `${LONDON.lat},${LONDON.lon}`,
+  aroundRadius: SEARCH_RADIUS_METRES,
+};
+
+// Algolia's ceiling for a page. A page is far more than London's film events
+// run to (3, measured 2026-11-15), so paging is slack rather than an
+// expectation.
 const HITS_PER_PAGE = 1000;
 const MAX_PAGES = 10;
 
@@ -53,6 +60,7 @@ async function fetchFilmEvents() {
   for (let page = 0; page < MAX_PAGES; page += 1) {
     const response = await search({
       filters: FILM_EVENTS,
+      ...AROUND_LONDON,
       hitsPerPage: HITS_PER_PAGE,
       page,
     });
@@ -65,16 +73,22 @@ async function fetchFilmEvents() {
 }
 
 // There are few enough film events that none at all is a believable answer,
-// so it can't be what says the query has broken. The UK site as a whole is
-// never empty, though, so that is asked first: an index renamed, or a filter
-// attribute that no longer matches, shows up as nothing anywhere rather than
-// as every venue quietly going without its screenings.
+// so it can't be what says the query has broken. Billetto always has
+// something on around London (187 events, measured 2026-11-15), so that is
+// asked first, within the same radius: an index renamed, or a filter or geo
+// parameter that no longer matches, shows up as nothing at all rather than as
+// every venue quietly going without its screenings.
 async function assertIndexAnswers() {
-  const { nbHits } = await search({ filters: UK, hitsPerPage: 0 });
+  const { nbHits } = await search({
+    filters: UK,
+    ...AROUND_LONDON,
+    hitsPerPage: 0,
+  });
   if (!nbHits) {
     throw new Error(
-      `Billetto's Algolia index "${ALGOLIA.indexName}" has no UK events - ` +
-        `the index or its organization_id filter may have changed`,
+      `Billetto's Algolia index "${ALGOLIA.indexName}" has no events around ` +
+        `London - the index, its organization_id filter or the geo search ` +
+        `may have changed`,
     );
   }
 }
