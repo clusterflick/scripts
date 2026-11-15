@@ -30,6 +30,7 @@ describe("isNonFilmEvent", () => {
     ["Publications Tour"],
     ["Community Linkup: Light and Magic"],
     ["Amnesty Feminists Campaign Launch: In Partnership with Cheer Up Luv"],
+    ["Masculinity in the Workplace - 2026 (In-person)"],
     ["Tate Modern: Official Discovery Tour"],
     ["Advanced Photography Workshop + Photoshoot | London"],
     ["AdTech Networking Social for CEOs & Entrepreneurs Meetup"],
@@ -246,6 +247,7 @@ describe("isNonFilmEvent", () => {
     ["Balik Bayan: MIXTAPE: Filipino Edition"],
     ["Prince Charles Cinema Film Quiz"],
     ["Film Club Animation Workshop"],
+    ["Masculinity Across Genres (Film Screening + Conversation)"],
   ])("does not flag '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(false);
   });

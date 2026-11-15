@@ -59,6 +59,26 @@ describe("stripDateSuffix", () => {
     expect(stripDateSuffix("– 10 July")).toEqual("– 10 July");
   });
 
+  test("drops an undashed date when the group holds several", () => {
+    expect(
+      stripDateSuffix("KB event Jan 6", [
+        "KB event Jan 6",
+        "KB event Apr 7",
+        "KB events Apr 28",
+      ]),
+    ).toEqual("KB event");
+  });
+
+  test("keeps an undashed date the whole group shares", () => {
+    expect(
+      stripDateSuffix("September 5", ["September 5", "September 5"]),
+    ).toEqual("September 5");
+  });
+
+  test("keeps an undashed date without the group", () => {
+    expect(stripDateSuffix("KB event Jan 6")).toEqual("KB event Jan 6");
+  });
+
   test("handles an empty title", () => {
     expect(stripDateSuffix()).toEqual("");
   });
