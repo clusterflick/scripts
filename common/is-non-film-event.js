@@ -415,6 +415,16 @@ const nonFilmEvents = [
   // A workshop series billed with the year and attendance mode on the end
   // ("- 2026 (In-person)"), so match the name rather than one edition of it.
   /^Masculinity in the Workplace\b/i,
+  // A wine tasting, with no film attached to it. The venue mixes straight and
+  // curly apostrophes.
+  /^An Idiot['’]s Guide to Wine$/i,
+  // A singalong, billed with the boxing it screens afterwards ("(+ AJ v Fury
+  // Screening)"), so match the night rather than one billing of it.
+  /^Anthems R Us: Singalong\b/i,
+  // A quiz night, billed with the venue it is on at ("- Brixton Jamm").
+  /^Big Mad Andy['’]s Peep Show Quiz\b/i,
+  /^Ways of Wellbeing: Art & Creative Health$/i,
+  /^Studio808 Showcase$/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>

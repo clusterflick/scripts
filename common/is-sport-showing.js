@@ -49,6 +49,11 @@ const sportShowings = [
   /^France v\/?s?\.? /i,
   /^Spain v\/?s?\.? /i,
   /Sports Day/i,
+  // A rugby international, billed by its promoter and the venue showing it
+  // ("Kesho Collective presents ... at Brixton Jamm").
+  /Ireland versus South Africa/i,
+  // A boxing match, billed with the party around it ("- SCREENING & PARTY").
+  /^Tyson Fury v\/?s?\.? Anthony Joshua\b/i,
 ];
 
 const isSportShowing = ({ title }) =>

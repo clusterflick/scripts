@@ -2145,6 +2145,7 @@ function normalizeTitle(title, options) {
     ["TNB IAM 2026 | ", "TNB IAM 2026: "],
     ["Maria Bregman's Film | ", "Maria Bregman's Film: "],
     ["Dune: Double Bill", "DUNE: Parts One & Two Double Bill"],
+    ["Riot LDN Xmas Social", "Riot London Christmas Social"],
     // The "special" prefix rule below drops everything before "... Special:",
     // which here is the name of the film rather than a label around it
     [
