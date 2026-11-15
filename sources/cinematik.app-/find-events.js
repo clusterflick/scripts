@@ -81,7 +81,7 @@ const atCinema = (cinema) => (bookPage) => {
   );
 };
 
-function createShowing(bookPages, eventPages) {
+function createShowing(cinema, bookPages, eventPages) {
   const [first] = bookPages;
   const slug = first.eventSlug;
   const eventPage = eventPages[first.eventUrl];
@@ -90,8 +90,19 @@ function createShowing(bookPages, eventPages) {
   }
   const work = eventPage.work || {};
 
+  // An event is a film's run in a programme, and a programme tours: Escapes
+  // put "I See Buildings Fall Like Lightning" on at eleven venues under one
+  // event slug, each with its own booking page. The slug alone handed all
+  // eleven the same showing id, which combine refuses. The cinema is what
+  // separates them, as it is for the Japanese Film Club's tours.
+  if (!cinema.id) {
+    throw new Error(
+      `Cannot build a showing id for ${first.eventUrl}: the cinema has no id`,
+    );
+  }
+
   return {
-    showingId: generateShowingId(attributes, slug),
+    showingId: generateShowingId(attributes, `${slug}-${cinema.id}`),
     title: first.title,
     url: first.eventUrl.replace(/\?.*$/, ""),
     overview: createOverview({
@@ -164,6 +175,7 @@ async function findEvents(cinema) {
 
   return [...byEvent.values()].map((pages) =>
     createShowing(
+      cinema,
       pages.sort((a, b) => a.event.startDate.localeCompare(b.event.startDate)),
       eventPages,
     ),
