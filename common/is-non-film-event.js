@@ -412,6 +412,9 @@ const nonFilmEvents = [
   /^Clay Totems Workshop$/i,
   /^J'ai laissé mes seins à Paris$/i,
   /^Amnesty Feminists Campaign Launch: In Partnership with Cheer Up Luv$/i,
+  // A workshop series billed with the year and attendance mode on the end
+  // ("- 2026 (In-person)"), so match the name rather than one edition of it.
+  /^Masculinity in the Workplace\b/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>

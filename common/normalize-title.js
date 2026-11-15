@@ -2155,6 +2155,20 @@ function normalizeTitle(title, options) {
       "MUNDURUKUYÜ – FOREST OF FISH WOMEN",
       "MUNDURUKUYÜ – THE FOREST OF THE FISH WOMEN",
     ],
+    // The venue bills the film by the first half of its title, in quotes,
+    // which is too little to tell it apart on TheMovieDB.
+    [
+      /^['‘]?looking for the wolf['’]?(?!: east asia)/i,
+      "Looking for the Wolf: East Asia Anti-Japan Armed Front",
+    ],
+    // The Cinema Museum holds dates for the Kennington Bioscope before it
+    // names the film, billing each as "KB event" and the date it is on (once
+    // as "KB events"). One placeholder per date would list as one film each,
+    // so they group as one, and the combined title drops the date.
+    [
+      /^kb events? (?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec) \d{1,2}$/i,
+      "KB event",
+    ],
   ];
 
   corrections.forEach(([phrase, replacement]) => {

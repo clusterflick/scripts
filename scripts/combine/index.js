@@ -465,15 +465,14 @@ async function combine() {
     const matched = group.find(({ isUnmatched }) => !isUnmatched);
     const container = { ...(matched || selectDisplayMovie(group)) };
     const originalTitle = container.title;
+    const groupTitles = group.map(({ title }) => title);
     container.title = stripDateSuffix(
       stripSerialBlockSuffix(
         standardizePrefixingForTheatrePerformances(
-          stripSharedPartSuffix(
-            container.title,
-            group.map(({ title }) => title),
-          ),
+          stripSharedPartSuffix(container.title, groupTitles),
         ),
       ),
+      groupTitles,
     );
 
     // If we've just updated the container title, add the old title into the

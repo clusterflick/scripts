@@ -1791,6 +1791,9 @@ const knownRemovablePhrases = [
   "Short Film Screenings",
   "Short Film Screening",
   "Bloomsday Film Screening",
+  // Ahead of "Film Screening", which would otherwise leave "Christmas with Aml
+  // Ameen" on the end of the film
+  "Christmas Film Screening with Aml Ameen",
   ": London film screening",
   "Film Screening London",
   "Film Screenings",
@@ -1990,6 +1993,7 @@ const knownRemovablePhrases = [
   "Filmmaking, Logistics Labour, & Supply-Chain Activism",
   "TNB IAM 2026:",
   "INDIGENOUS CINEMA:",
+  'Our Favourite "Straight" Film of 2026:',
   // After "Community Screening and Q&A" and ": Community Screening"
   "Community Screening",
   "followed by post film discussion",
