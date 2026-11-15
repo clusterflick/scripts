@@ -26,6 +26,8 @@ describe("isSportShowing", () => {
     ["Wimbledon Live Screenings & Activities"],
     ["NFL Redzone Live Screening"],
     ["Aston Villa vs Man City Live Screening"],
+    ["Kesho Collective presents Ireland versus South Africa at Brixton Jamm"],
+    ["Tyson Fury v Anthony Joshua - SCREENING & PARTY"],
     ["Bournemouth vs Liverpool Live Screening"],
     ["Man United vs Man City Live Screening"],
     ["Coventry v Brighton Live Screening"],
