@@ -6,11 +6,11 @@ module.exports = {
   socials: {
     letterboxd: null,
     twitter: null,
-    instagram: "stjohnswaterlooarts",
+    instagram: "stjohnswaterloo",
   },
   url: "https://stjohnswaterloo.org/whats-on/",
   address: "73 Waterloo Road, London, SE1 8TY, UK",
-  geo: { lat: 51.504486, lon: -0.111997 },
+  geo: { lat: 51.50446212122634, lon: -0.11226998941564567 },
   structure: "solo",
   type: "Place of Worship",
   programming: "host",
