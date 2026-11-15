@@ -402,6 +402,8 @@ const nonFilmEvents = [
   /^Jbloc Chanukah Party$/i,
   /^Fundraiser: Evening of Live Jazz with the Jon Howells Jazz Band$/i,
   /^Musical Bodies \[workshop\]$/i,
+  /^A House is not a Home \[workshop\]$/i,
+  /^Digital Eden \[workshop\]$/i,
   // The venue mixes straight and curly apostrophes.
   /^Women['’]s Toilets and Working-Class Girlhood \[talk\]$/i,
   /^RSA House Christmas Market$/i,
