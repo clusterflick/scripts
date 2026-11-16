@@ -2181,6 +2181,15 @@ function normalizeTitle(title, options) {
       "Michael Jackson: Live at Wembley 1988",
       "Michael Jackson: Live at Wembley July 16, 1988",
     ],
+    ["THE BIG SCREEN | ", "THE BIG SCREEN: "],
+    [
+      "EVERY TIME I SEE A / YELLOW BUCKET / I GO FUNNY",
+      "EVERY TIME I SEE A YELLOW BUCKET I GO FUNNY",
+    ],
+    ["Annie Hall + ", "Annie Hall & "],
+    ["Before Sunset + ", "Before Sunset & "],
+    ["Nirvana MTV Unplugged", "MTV Unplugged: Nirvana"],
+    ["Virgin Suicides + ", "Virgin Suicides & "],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
