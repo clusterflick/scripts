@@ -115,6 +115,16 @@ several films arrives once per film with a different cached snapshot each time,
 and the highest is kept - the maximum is order-independent, so re-running a
 release reproduces it.
 
+`combine` also publishes a film's `alternativeTitles`: the UK and US release
+titles TheMovieDB lists for it, where they are spelled differently from the
+displayed title. The display title is TheMovieDB's US one, so without them a
+reader searching "Zootropolis" finds nothing, though every venue here lists it
+by that name. Only untyped entries count (a working title, a "3D" variant or a
+nickname is typed), the original title is left to `originalTitle`, and a film
+with none carries no key. They are compared by spelling rather than through
+`normalizeTitle`, which deliberately maps UK titles onto US ones for matching.
+They are for search only, never displayed.
+
 `match` checks its own output before writing it (`scripts/match/check-matched-data.js`):
 a source that matched nothing, or whose matches carry no score, throws. A
 source can break without failing - Rotten Tomatoes renamed its score field in
