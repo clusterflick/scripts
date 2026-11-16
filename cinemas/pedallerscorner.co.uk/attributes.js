@@ -10,7 +10,7 @@ module.exports = {
   },
   url: "https://pedallerscorner.co.uk/",
   address: "129-131 Stoke Newington Road, London, N16 8BT, UK",
-  geo: { lat: 51.5562224, lon: -0.0746831 },
+  geo: { lat: 51.55621147775112, lon: -0.07478053124569226 },
   structure: "solo",
   type: "Café & Restaurant",
   programming: "host",
