@@ -425,6 +425,8 @@ const nonFilmEvents = [
   /^Big Mad Andy['’]s Peep Show Quiz\b/i,
   /^Ways of Wellbeing: Art & Creative Health$/i,
   /^Studio808 Showcase$/i,
+  // A food festival, billed with the date it is on ("- 29 November 2026").
+  /^Crepe City London\b/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
