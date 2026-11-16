@@ -35,6 +35,49 @@ const screenMapping = {
   503: "Amani Auditorium", // ebonylifeplacelondon.com
 };
 
+// Showing tags the transform reads for accessibility, format, occasions or the
+// adverts note, plus badges about the seat, the sound or the projection rather
+// than the programme. Any other badge a venue puts on a showing names what it
+// is part of - "London Baltic Film Festival", "Subtitled Wednesdays", "Andrea's
+// Film Club" - and goes in the notes, where festival and club matchers look.
+const tagsNotForNotes = new Set([
+  "no-trailers-or-adverts",
+  "ad-free",
+  "ad",
+  "relaxed",
+  "ld-friendly",
+  "carers--babies",
+  "baby",
+  "kids-club",
+  "baby-friendly",
+  "dog-friendly",
+  "hard-of-hearing",
+  "hoh",
+  "cc",
+  "captions",
+  "oc",
+  "subbed",
+  "subtitles",
+  "subtitled",
+  "intro",
+  "qa",
+  "reserved-seating",
+  "event-cinema",
+  "51",
+  "4k",
+  "laser",
+  "3d",
+]);
+
+// A showing's tags are its badges' names as class names: lowercased, anything
+// but letters, digits, spaces and hyphens dropped, and spaces made hyphens -
+// "Monday Classic Matinée" is "monday-classic-matine", "Q&A" is "qa".
+const toBadgeClass = (badge) =>
+  badge
+    .toLowerCase()
+    .replace(/[^a-z0-9 -]/g, "")
+    .replace(/ /g, "-");
+
 const isCastPlaceholder = (value) =>
   value?.toLowerCase()?.startsWith("cast to be announced");
 
@@ -73,8 +116,14 @@ async function transform(
     // `every-showings-*` (not `some-showings-*`) because we can't attribute a
     // "some" badge to specific showings.
     let everyShowingTags = [];
+    // Only the movie carries the badges' display names; a showing has just
+    // their class names, so map one back to the other.
+    const badgeNames = {};
     try {
       const movieMetaData = JSON.parse(movie.displayMetaData ?? "{}");
+      for (const badge of movieMetaData.someShowingsBadges ?? []) {
+        badgeNames[toBadgeClass(badge)] = badge.trim();
+      }
       everyShowingTags = (movieMetaData.classes ?? "")
         .split(" ")
         .filter((className) => className.startsWith("every-showings-"))
@@ -116,6 +165,12 @@ async function transform(
         ) {
           notesList.push("No adverts or trailers");
         }
+        // A tag with no badge named on the movie is left out: there's no name
+        // to give it, only a class name (seen on a showing left over from a
+        // past event).
+        [...new Set(tags)]
+          .filter((tag) => !tagsNotForNotes.has(tag) && badgeNames[tag])
+          .forEach((tag) => notesList.push(badgeNames[tag]));
 
         const status = {
           soldOut: showing.seatsRemaining === 0,
