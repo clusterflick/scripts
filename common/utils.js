@@ -692,8 +692,15 @@ const getBookingHost = (bookingUrl = "") => {
 // gel.now gives doors opening as the start, an hour early on some nights. A
 // fragment with a route in it can name the event itself (a booking app's
 // "#/event/123"), so only an empty one is dropped.
+//
+// A leading "www." is ignored too, as getBookingHost ignores it. The Cinema
+// Museum links "www.outsavvy.com/event/40777/..." for the Programmers of
+// Tomorrow all-dayer, which OutSavvy itself gives without the "www." - and an
+// hour early, so again only the link could have matched them.
 const getBookingKey = (bookingUrl) =>
-  basicNormalize(bookingUrl).replace(/#\/?$/, "");
+  basicNormalize(bookingUrl)
+    .replace(/^(https?:\/\/)www\./, "$1")
+    .replace(/#\/?$/, "");
 
 const removeAlreadyListedPerformances = (
   movies,

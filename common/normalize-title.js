@@ -145,6 +145,13 @@ function normalizeTitle(title, options) {
     ["Superworm + ", "Superworm & "],
     ["Before Sunset (2004) + ", "Before Sunset (2004) & "],
     ["I, Your Mother + ", "I, Your Mother & "],
+    // Category H's double bill at the Rio, billed with a plus, which the
+    // separator rule reads as the end of the title - so it matched the first
+    // film alone and The Hitcher went unlisted.
+    [
+      "A Girl Walks Home Alone at Night + ",
+      "A Girl Walks Home Alone at Night & ",
+    ],
     // TheMovieDB has no entry for the pair, so it matches the sequel on its
     // own. Name it as the double bill it is, which one venue already does.
     [
