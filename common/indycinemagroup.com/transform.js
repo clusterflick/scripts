@@ -35,6 +35,57 @@ const screenMapping = {
   503: "Amani Auditorium", // ebonylifeplacelondon.com
 };
 
+// The showing tags each accessibility feature and occasion is read from.
+const accessibilityTags = {
+  audioDescription: ["ad"],
+  relaxed: ["relaxed", "ld-friendly"],
+  babyFriendly: ["carers--babies", "baby", "kids-club", "baby-friendly"],
+  dogFriendly: ["dog-friendly"],
+  hardOfHearing: ["hard-of-hearing", "hoh", "cc", "captions", "oc"],
+  subtitled: ["subbed", "subtitles", "subtitled", "oc"],
+};
+const occasionTags = {
+  intro: ["intro"],
+  qAndA: ["qa"],
+};
+const noAdvertsTags = ["no-trailers-or-adverts", "ad-free"];
+
+const hasAnyTag = (tags, wanted) => wanted.some((tag) => tags.includes(tag));
+const readTags = (tags, tagsByKey) =>
+  Object.fromEntries(
+    Object.entries(tagsByKey).map(([key, wanted]) => [
+      key,
+      hasAnyTag(tags, wanted),
+    ]),
+  );
+
+// Any badge a venue puts on a showing that isn't read above, or as a format,
+// names what the showing is part of - "London Baltic Film Festival", "Subtitled
+// Wednesdays", "Andrea's Film Club" - and goes in the notes, where festival and
+// club matchers look. These are the exceptions: badges about the seat, the
+// sound or the projection rather than the programme, that nothing reads.
+const tagsNotForNotes = new Set([
+  ...Object.values(accessibilityTags).flat(),
+  ...Object.values(occasionTags).flat(),
+  ...noAdvertsTags,
+  "reserved-seating",
+  "event-cinema",
+  "51",
+  "4k",
+  "laser",
+]);
+const isProgrammeTag = (tag) =>
+  !tagsNotForNotes.has(tag) && Object.keys(getValidFormat(tag)).length === 0;
+
+// A showing's tags are its badges' names as class names: lowercased, anything
+// but letters, digits, spaces and hyphens dropped, and spaces made hyphens -
+// "Monday Classic Matinée" is "monday-classic-matine", "Q&A" is "qa".
+const toBadgeClass = (badge) =>
+  badge
+    .toLowerCase()
+    .replace(/[^a-z0-9 -]/g, "")
+    .replace(/ /g, "-");
+
 const isCastPlaceholder = (value) =>
   value?.toLowerCase()?.startsWith("cast to be announced");
 
@@ -73,8 +124,14 @@ async function transform(
     // `every-showings-*` (not `some-showings-*`) because we can't attribute a
     // "some" badge to specific showings.
     let everyShowingTags = [];
+    // Only the movie carries the badges' display names; a showing has just
+    // their class names, so map one back to the other.
+    const badgeNames = {};
     try {
       const movieMetaData = JSON.parse(movie.displayMetaData ?? "{}");
+      for (const badge of movieMetaData.someShowingsBadges ?? []) {
+        badgeNames[toBadgeClass(badge)] = badge.trim();
+      }
       everyShowingTags = (movieMetaData.classes ?? "")
         .split(" ")
         .filter((className) => className.startsWith("every-showings-"))
@@ -110,12 +167,15 @@ async function transform(
         ];
 
         const notesList = [];
-        if (
-          tags.includes("no-trailers-or-adverts") ||
-          tags.includes("ad-free")
-        ) {
+        if (hasAnyTag(tags, noAdvertsTags)) {
           notesList.push("No adverts or trailers");
         }
+        // A tag with no badge named on the movie is left out: there's no name
+        // to give it, only a class name (seen on a showing left over from a
+        // past event).
+        [...new Set(tags)]
+          .filter((tag) => isProgrammeTag(tag) && badgeNames[tag])
+          .forEach((tag) => notesList.push(badgeNames[tag]));
 
         const status = {
           soldOut: showing.seatsRemaining === 0,
@@ -129,27 +189,7 @@ async function transform(
 
         const accessibility = createAccessibility(
           movie.name,
-          {
-            audioDescription: tags.includes("ad"),
-            relaxed: tags.includes("relaxed") || tags.includes("ld-friendly"),
-            babyFriendly:
-              tags.includes("carers--babies") ||
-              tags.includes("baby") ||
-              tags.includes("kids-club") ||
-              tags.includes("baby-friendly"),
-            dogFriendly: tags.includes("dog-friendly"),
-            hardOfHearing:
-              tags.includes("hard-of-hearing") ||
-              tags.includes("hoh") ||
-              tags.includes("cc") ||
-              tags.includes("captions") ||
-              tags.includes("oc"),
-            subtitled:
-              tags.includes("subbed") ||
-              tags.includes("subtitles") ||
-              tags.includes("subtitled") ||
-              tags.includes("oc"),
-          },
+          readTags(tags, accessibilityTags),
           sanitizeRichText(movie.synopsis ?? ""),
         );
 
@@ -168,7 +208,7 @@ async function transform(
           ),
           occasions: createOccasions(
             movie.name,
-            { intro: tags.includes("intro"), qAndA: tags.includes("qa") },
+            readTags(tags, occasionTags),
             sanitizeRichText(movie.synopsis ?? ""),
             { date },
           ),
