@@ -2170,6 +2170,10 @@ function normalizeTitle(title, options) {
       /^kb events? (?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec) \d{1,2}$/i,
       "KB event",
     ],
+    [
+      "Michael Jackson: Live at Wembley 1988",
+      "Michael Jackson: Live at Wembley July 16, 1988",
+    ],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
