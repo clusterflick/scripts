@@ -427,6 +427,12 @@ const nonFilmEvents = [
   /^Studio808 Showcase$/i,
   // A food festival, billed with the date it is on ("- 29 November 2026").
   /^Crepe City London\b/i,
+  /^An African History of Africa with Zeinab Badawi$/i,
+  /^\(Free\) Bachata Class$/i,
+  /^Døcumatism: a public workshop$/i,
+  /^Secrets of the Brain: PMDD and neuroscience$/i,
+  /^Life Drawing at The Bedford Balham$/i,
+  /^Elif Shafak on the Power of Storytelling$/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>

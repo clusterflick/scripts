@@ -2000,6 +2000,12 @@ const knownRemovablePhrases = [
   // Ticket tiers for the same screening
   "The Classic Package",
   "The VIP Package",
+  "*SUNDAY 22 NOV*",
+  "season 3 ep 7",
+  "series 3 episode 7",
+  "_ Professionals Only",
+  "with an intro from Darren Richman",
+  "at The Bedford, Balham",
 ];
 
 module.exports = knownRemovablePhrases;

@@ -116,6 +116,63 @@ const getOriginalTitle = (movieInfo, title) => {
   return originalTitle;
 };
 
+// The countries whose English titles a London reader might search by. The
+// display title is TheMovieDB's default, its US English title, so a film the UK
+// knows by another name - "Zootropolis" for "Zootopia" - can't be found under
+// the name every venue here lists it by. The US is kept too: where the display
+// title falls back to `original_title`, the US title is its English name.
+const ALTERNATIVE_TITLE_COUNTRIES = ["GB", "US"];
+
+// A title as it's spelled, for telling two titles apart: case, accents,
+// punctuation and a leading "The" don't count.
+const spellingKey = (value) =>
+  value
+    .normalize("NFD")
+    .replace(/\p{Diacritic}/gu, "")
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}]+/gu, " ")
+    .trim()
+    .replace(/^the /, "");
+
+/**
+ * The film's other English titles, for searching by: the titles it was released
+ * under in the UK and US, where they differ from the title displayed.
+ *
+ * Only a release title counts - an entry TheMovieDB gives no `type`. A typed one
+ * is a working title, a short title, a "3D" or "IMAX" variant, an informal
+ * nickname: names that never went out on a poster, or that would match every
+ * search for a word they share. The original title is published separately, so
+ * it is left out here as well.
+ *
+ * Compared by spelling alone (`spellingKey`), so a difference of case,
+ * accents, punctuation or a leading "The" is not an alternative title. Not
+ * through `normalizeTitle`: that maps UK titles onto US ones so a listing
+ * matches ("Zootropolis" reads as "zootopia"), which would discard exactly the
+ * titles this is for.
+ *
+ * @param {object} movieInfo - A TMDB movie record
+ * @param {string} title - The display title
+ * @param {string} [originalTitle] - The published original title
+ * @returns {string[] | undefined} Undefined when there are none, so most
+ *   films carry nothing
+ */
+const getAlternativeTitles = (movieInfo, title, originalTitle) => {
+  const entries = movieInfo.alternative_titles?.titles ?? [];
+  const known = new Set(
+    [title, originalTitle].filter(Boolean).map(spellingKey),
+  );
+  const titles = [];
+  for (const { iso_3166_1: country, title: alternative, type } of entries) {
+    if (!ALTERNATIVE_TITLE_COUNTRIES.includes(country)) continue;
+    if (type || !alternative) continue;
+    const key = spellingKey(alternative);
+    if (!key || known.has(key)) continue;
+    known.add(key);
+    titles.push(alternative);
+  }
+  return titles.length > 0 ? titles : undefined;
+};
+
 // Independent of getOriginalTitle: a film can share its original-language
 // title with the display title (e.g. "Roma") and still be worth flagging as
 // non-English.
@@ -200,11 +257,14 @@ const buildMovieData = async (movieInfo, context) => {
     ? movieInfo.title
     : movieInfo.original_title;
 
+  const originalTitle = getOriginalTitle(movieInfo, title);
+
   return {
     id: `${movieInfo.id}`,
     title: title,
     normalizedTitle: normalizeTitle(title).replace(/^the /i, "").trim(),
-    originalTitle: getOriginalTitle(movieInfo, title),
+    originalTitle,
+    alternativeTitles: getAlternativeTitles(movieInfo, title, originalTitle),
     originalLanguage: getOriginalLanguage(movieInfo),
     classification: getClassification(movieInfo),
     overview: movieInfo.overview,
