@@ -41,6 +41,16 @@ const getPerformances = async (...anchors) => {
 };
 
 describe("Firmdale Hotels transform", () => {
+  // The listings name a day and month but no year, which parseDate fills in
+  // from today - so pin today to when these showings were upcoming.
+  beforeEach(() => {
+    jest.useFakeTimers().setSystemTime(new Date("2026-10-25T12:00:00Z"));
+  });
+
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
   it("reads a showing the CMS rendered as one link", async () => {
     const performances = await getPerformances(
       "THE SOHO HOTEL - SUNDAY 1ST NOVEMBER, 3:30PM",
