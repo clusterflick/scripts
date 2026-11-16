@@ -132,6 +132,32 @@ describe("removeAlreadyListedPerformances", () => {
     ).toEqual([{ title: "Point Break", performances: [] }]);
   });
 
+  // The Cinema Museum links OutSavvy with a "www." OutSavvy itself leaves
+  // off, and OutSavvy gives doors opening as the start.
+  test("matches a booking link that differs only by a www prefix", () => {
+    const path = "outsavvy.com/event/40777/programmers-of-tomorrow";
+    expect(
+      removeAlreadyListedPerformances(
+        [venueMovie(`https://www.${path}`)],
+        [sourcedEvent(`https://${path}`, { time: time - 2700000 })],
+        { venueDomain },
+      ),
+    ).toEqual([{ title: "Point Break", performances: [] }]);
+  });
+
+  test("keeps booking links on different subdomains", () => {
+    const sourced = sourcedEvent("https://tickets.example.com/event/1", {
+      time: time + 3600000,
+    });
+    expect(
+      removeAlreadyListedPerformances(
+        [venueMovie("https://www.example.com/event/1")],
+        [sourced],
+        { venueDomain },
+      ),
+    ).toEqual([sourced]);
+  });
+
   test("keeps booking links whose fragments name different events", () => {
     const sourced = sourcedEvent("https://tickets.example.com/#/event/2", {
       time: time + 3600000,

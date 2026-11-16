@@ -6,6 +6,7 @@ const {
   createAccessibility,
   createOccasions,
   createFormat,
+  removeAlreadyListedPerformances,
 } = require("../../common/utils");
 const parseDescription = require("../../common/eventive/parse-description");
 const {
@@ -74,7 +75,16 @@ async function transform({ movieListPage }, sourcedEvents) {
   const listOfSourcedEvents = Object.values(sourcedEvents).flatMap(
     (events) => events,
   );
-  return movies.concat(listOfSourcedEvents);
+
+  // Sands sells through its own Eventive site, and gel.now lists some of its
+  // screenings again with a link back there - to the season's page rather than
+  // the screening's ("/Seasons/the-man-with-the-plan-..." against
+  // "/schedule/<id>"), so it's the time and the booking host that match them.
+  return movies.concat(
+    removeAlreadyListedPerformances(movies, listOfSourcedEvents, {
+      venueDomain: attributes.domain,
+    }).filter(({ performances }) => performances.length > 0),
+  );
 }
 
 module.exports = transform;

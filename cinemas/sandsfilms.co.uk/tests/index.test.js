@@ -57,6 +57,34 @@ describe(attributes.name, () => {
       expect(sortAndFilterMovies(await transform(withUndated, {}))).toEqual(
         output,
       );
+
+      // gel.now lists some screenings again, linking the season's page on
+      // Sands' Eventive rather than the screening's - that copy is dropped,
+      // while a sourced screening Sands doesn't list is kept
+      const [listed] = output;
+      const [{ time }] = listed.performances;
+      const sourcedCopy = {
+        showingId: "gel.now-1",
+        title: listed.title,
+        url: "https://gel.now/events/1",
+        performances: [
+          {
+            time,
+            bookingUrl: `${attributes.url}/Seasons/a-season-6984ee5b0a5c`,
+          },
+        ],
+      };
+      const sourcedElsewhere = {
+        ...sourcedCopy,
+        showingId: "gel.now-2",
+        url: "https://gel.now/events/2",
+        performances: [{ time: time + 86400000, bookingUrl: sourcedCopy.url }],
+      };
+      expect(
+        await transform(retrieved, {
+          "gel.now": [sourcedCopy, sourcedElsewhere],
+        }),
+      ).toEqual([...(await transform(retrieved, {})), sourcedElsewhere]);
     },
     isRecording ? 240_000 : undefined,
   );
