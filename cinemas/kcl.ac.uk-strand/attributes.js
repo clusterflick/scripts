@@ -7,6 +7,7 @@ module.exports = {
     "Strand Building - King's College London",
     "Bush House",
     "KIN 205 (Nash Lecture Theatre, formerly K2.31)",
+    "King's Building KIN 204",
     "The Great Hall, Strand Campus, King's College London",
   ],
   domain: "https://www.kcl.ac.uk",
