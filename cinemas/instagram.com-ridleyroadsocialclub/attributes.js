@@ -10,7 +10,7 @@ module.exports = {
   },
   url: "https://www.instagram.com/ridleyroadsocialclub/",
   address: "First Floor, 89 Ridley Road, London, E8 2PD, UK",
-  geo: { lat: 51.5482465, lon: -0.0706484 },
+  geo: { lat: 51.54820957950573, lon: -0.07056190181367232 },
   structure: "solo",
   type: "Café & Restaurant",
   programming: "host",
