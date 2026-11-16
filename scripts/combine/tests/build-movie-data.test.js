@@ -67,6 +67,91 @@ describe("buildMovieData", () => {
   });
 });
 
+describe("alternativeTitles", () => {
+  const zootopia = (titles) =>
+    movieInfo({
+      id: 269149,
+      title: "Zootopia",
+      original_title: "Zootopia",
+      original_language: "en",
+      alternative_titles: { titles },
+    });
+
+  it("publishes the UK title a film was released under", async () => {
+    const movie = await buildMovieData(
+      zootopia([
+        { iso_3166_1: "GB", title: "Zootropolis", type: "" },
+        { iso_3166_1: "DE", title: "Zoomania", type: "" },
+      ]),
+      context(),
+    );
+    expect(movie.alternativeTitles).toEqual(["Zootropolis"]);
+  });
+
+  it("leaves out working titles, variants and other typed entries", async () => {
+    const movie = await buildMovieData(
+      zootopia([
+        { iso_3166_1: "US", title: "Zootopia 3D", type: "3D" },
+        { iso_3166_1: "US", title: "Savage Seas", type: "working title" },
+      ]),
+      context(),
+    );
+    expect(movie.alternativeTitles).toBeUndefined();
+  });
+
+  it("leaves out titles that only differ from the display title in how they're written", async () => {
+    const movie = await buildMovieData(
+      zootopia([
+        { iso_3166_1: "GB", title: "ZOOTOPIA", type: "" },
+        { iso_3166_1: "US", title: "The Zootopia", type: "" },
+      ]),
+      context(),
+    );
+    expect(movie.alternativeTitles).toBeUndefined();
+  });
+
+  it("leaves out the original title, which is published on its own", async () => {
+    const movie = await buildMovieData(
+      movieInfo({
+        alternative_titles: {
+          titles: [
+            {
+              iso_3166_1: "US",
+              title: "Le Fabuleux Destin d'Amélie Poulain",
+              type: "",
+            },
+            {
+              iso_3166_1: "GB",
+              title: "The Fabulous Destiny of Amélie Poulain",
+              type: "",
+            },
+          ],
+        },
+      }),
+      context(),
+    );
+    expect(movie.alternativeTitles).toEqual([
+      "The Fabulous Destiny of Amélie Poulain",
+    ]);
+  });
+
+  it("lists a title shared by the UK and US once", async () => {
+    const movie = await buildMovieData(
+      zootopia([
+        { iso_3166_1: "GB", title: "Zootropolis", type: "" },
+        { iso_3166_1: "US", title: "Zootropolis", type: "" },
+      ]),
+      context(),
+    );
+    expect(movie.alternativeTitles).toEqual(["Zootropolis"]);
+  });
+
+  it("is absent when TheMovieDB gives no alternative titles", async () => {
+    const movie = await buildMovieData(movieInfo(), context());
+    expect(movie.alternativeTitles).toBeUndefined();
+  });
+});
+
 describe("directors", () => {
   // TheMovieDB returns `credits.crew` in an unstable order between fetches.
   const crew = [
