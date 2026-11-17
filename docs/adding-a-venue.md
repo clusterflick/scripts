@@ -323,12 +323,12 @@ group needs a browser.
 
 ### Choosing a Job Group
 
-| What you're adding                                | Retrieve job group             | Transform job group              |
-| ------------------------------------------------- | ------------------------------ | -------------------------------- |
-| Source (ticketing platform)                       | `retrieve_sources_*`           | N/A (sources aren't transformed) |
-| Source-only venue (no website, relies on sources) | `retrieve_source_only`         | `transform_external_events_*`    |
-| Venue belonging to an existing chain              | The chain's existing job group | The chain's existing job group   |
-| Standalone venue with its own retriever           | `retrieve_remaining_cinemas_*` | `transform_remaining_*`          |
+| What you're adding                                | Retrieve job group             | Transform job group                              |
+| ------------------------------------------------- | ------------------------------ | ------------------------------------------------ |
+| Source (ticketing platform)                       | `retrieve_sources_*`           | N/A (sources aren't transformed)                 |
+| Source-only venue (no website, relies on sources) | `retrieve_source_only`         | `transform_external_events_*`                    |
+| Venue belonging to an existing chain              | The chain's existing job group | The `transform_chains_*` group holding the chain |
+| Standalone venue with its own retriever           | `retrieve_remaining_cinemas_*` | `transform_remaining_*`                          |
 
 For numbered groups, add to the **smallest** group rather than the last one —
 they are split to keep job runtimes even, and appending always to the end lets
@@ -442,11 +442,19 @@ array so the release waits for it to complete.
 
 **File:** `data-transformed/.github/workflows/transform.yml`
 
-Add a new step to the matching job group. Chain venues should go in the
-corresponding transform group — if the venue is in the BFI retrieve group, add
-it to the BFI transform group. Source-only venues go in the smallest
-`transform_external_events_*` group; there is a single `retrieve_source_only`
-group, so choose by size.
+Add a new step to the matching job group. Chain venues go in the
+`transform_chains_*` group that already holds their chain — the header comment
+above each group names its chains. Keeping a chain together lets its venues
+reuse the group's LLM cache. Source-only venues go in a
+`transform_external_events_*` group and standalone venues in a
+`transform_remaining_*` group.
+
+Transform groups are few and large: since `transform-prepare` took on the
+shared work, a venue costs seconds while each group costs about a minute of
+setup, so a new group is rarely worth it. Choose the group with the least
+work by time, not by step count — a source-only venue typically takes a
+second, but a venue like Lumiere Romford can take a minute. Check a recent run
+of the Transform Data workflow for how long each group's venue steps took.
 
 ```yaml
 - name: <venue-id>
