@@ -1,6 +1,9 @@
 module.exports = {
   id: "walthamforest.gov.uk",
   name: "Waltham Forest Town Hall",
+  // Stow Film Lounge lists screenings here by the square in front of the
+  // Town Hall, giving the Town Hall's address
+  alternativeNames: ["Fellowship Square"],
   domain: "https://www.walthamforest.gov.uk",
   socials: {
     letterboxd: null,
