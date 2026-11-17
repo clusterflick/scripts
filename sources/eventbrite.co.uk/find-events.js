@@ -174,7 +174,7 @@ function convertSeriesSessions(
   details,
   sessions,
   listingsById,
-  moviePages,
+  { isRemoved, getPage },
 ) {
   const { seriesId, venue } = details.props.pageProps.context.basicInfo;
 
@@ -202,12 +202,14 @@ function convertSeriesSessions(
       );
     }
 
+    // A session whose own listing was removed is built from the series, as one
+    // the search never reached is
     const listing = listingsById.get(`${session.id}`);
-    if (!listing) {
+    if (!listing || isRemoved(listing)) {
       return convertEventbriteEvent(sessionAsListing(session), details, {});
     }
     if (listing.is_cancelled || listing.is_online_event) return [];
-    return convertEventbriteEvent(listing, moviePages[listing.url]);
+    return convertEventbriteEvent(listing, getPage(listing));
   });
 }
 
@@ -230,6 +232,7 @@ async function findEvents(cinema) {
   let moviePages = {};
   let organizerEvents = [];
   let seriesEvents = {};
+  let removedEvents;
   try {
     const data = await readJSON(dataSrc);
     movieListPages = data.movieListPages;
@@ -238,6 +241,8 @@ async function findEvents(cinema) {
     organizerEvents = data.organizerEvents || [];
     // Nor does any release from before series line-ups were expanded.
     seriesEvents = data.seriesEvents || {};
+    // Nor any from before removed events were named - see hasNoPage below.
+    removedEvents = data.removedEvents && new Set(data.removedEvents);
   } catch {
     // Source data may not always be available or required
   }
@@ -250,8 +255,28 @@ async function findEvents(cinema) {
       .concat(organizerEvents),
   );
 
+  // Every event at a venue we hold has its page retrieved, except one whose
+  // page 404s: the organiser removed it, though the search index still lists
+  // it. That one is dropped. Any other event without a page is a gap in the
+  // retrieve, and throws - published without its page, it went out with no
+  // description, no sale status and no series. A release from before removed
+  // events were named can't tell the two apart, so there every event without a
+  // page is taken to be removed.
+  const isRemoved = (event) =>
+    removedEvents ? removedEvents.has(event.url) : !moviePages[event.url];
+  const getPage = (event) => {
+    const page = moviePages[event.url];
+    if (!page) {
+      throw new Error(
+        `No event page retrieved for ${event.url} - the retrieved data is incomplete`,
+      );
+    }
+    return page;
+  };
+
   const filteredEvents = events.filter((event) => {
     if (event.is_cancelled || event.is_online_event) return false;
+    if (isRemoved(event)) return false;
     if (isExcludedEvent(event)) return false;
 
     const venue = getEventVenue(event);
@@ -271,7 +296,7 @@ async function findEvents(cinema) {
 
   return filteredEvents
     .flatMap((event) => {
-      const details = moviePages[event.url];
+      const details = getPage(event);
 
       // A handful of listings pack a whole season of screenings into one event,
       // with the individual dates written out only in the body text.
@@ -295,7 +320,7 @@ async function findEvents(cinema) {
           details,
           seriesEvents[seriesId],
           listingsById,
-          moviePages,
+          { isRemoved, getPage },
         );
       }
 

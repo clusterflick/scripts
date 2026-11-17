@@ -337,6 +337,9 @@ async function retrieve() {
   );
   const moviePages = {};
   const unreachable = [];
+  // Named, so find-events can drop exactly these: the search index still lists
+  // them, and a missing page is otherwise a gap in what was retrieved
+  const removedEvents = [];
 
   const fetchEventPage = async (event) => {
     moviePages[event.url] = await getPageServerData(
@@ -361,6 +364,7 @@ async function retrieve() {
     // index still lists it. Some linger for weeks, so this is expected noise.
     if (error.status === 404) {
       console.log(`! Skipping removed event at ${event.url}`);
+      removedEvents.push(event.url);
       return;
     }
     collected.push(event);
@@ -424,7 +428,13 @@ async function retrieve() {
 
   const seriesEvents = await fetchAllSeriesSessions(moviePages);
 
-  return { movieListPages, moviePages, organizerEvents, seriesEvents };
+  return {
+    movieListPages,
+    moviePages,
+    organizerEvents,
+    seriesEvents,
+    removedEvents,
+  };
 }
 
 module.exports = retrieve;
