@@ -551,6 +551,31 @@ const assertSelector = (html, selector, message) => {
   }
 };
 
+// The link from each item of a listing, throwing on an item that has none.
+//
+// For a listing whose items are where its detail pages come from, and which
+// can be empty on purpose - a seasonal or occasional venue with nothing on.
+// That rules out throwing when nothing is found, and a retrieve that only
+// asserts the listing's container then passes just as quietly when the items'
+// links change: the container is still there, every item is still there, and
+// none of them matches the link selector any more, so no page is fetched and
+// the transform, finding none, sees a venue with nothing on. That is how
+// Omniplex's retrieve fetched no film pages in November 2026. An item with no
+// link is never nothing on, so it throws, and an empty listing still passes.
+//
+// `items` is a Cheerio selection, so a retrieve can narrow it first (Hyde
+// Park's cinema cards, among its other events).
+const getListingLinks = ($, items, linkSelector) =>
+  items.toArray().map((item) => {
+    const href = $(item).find(linkSelector).first().attr("href");
+    if (!href) {
+      throw new Error(
+        `A listing item has no "${linkSelector}" link — the page structure may have changed`,
+      );
+    }
+    return href;
+  });
+
 const screenNumberMapping = {
   one: 1,
   two: 2,
@@ -1447,6 +1472,7 @@ module.exports = {
   fetchJson,
   getText,
   assertSelector,
+  getListingLinks,
   createPerformance,
   getBookingHost,
   removeAlreadyListedPerformances,

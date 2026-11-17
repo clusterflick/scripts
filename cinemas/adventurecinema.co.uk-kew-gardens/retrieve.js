@@ -4,6 +4,7 @@ const {
   fetchWithRetry,
   fetchError,
   assertSelector,
+  getListingLinks,
 } = require("../../common/utils");
 const { url } = require("./attributes");
 
@@ -40,10 +41,15 @@ async function retrieve() {
   assertSelector(movieListPage, VENUE_PAGE_SELECTOR);
 
   const $ = cheerio.load(movieListPage);
-  const eventUrls = new Set();
-  $(".upcomingEvents a[href*='/event/']").each(function () {
-    eventUrls.add($(this).attr("href"));
-  });
+  // Out of season the section is gone, so no cards is nothing on - but a card
+  // is a show, so a card without its event link is the page changing
+  const eventUrls = new Set(
+    getListingLinks(
+      $,
+      $(".upcomingEvents .blockLinks__card"),
+      "a[href*='/event/']",
+    ),
+  );
 
   const moviePages = {};
   for (const eventUrl of [...eventUrls]) {

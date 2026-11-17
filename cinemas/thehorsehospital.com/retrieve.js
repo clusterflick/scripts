@@ -1,5 +1,9 @@
 const cheerio = require("cheerio");
-const { fetchText, assertSelector } = require("../../common/utils");
+const {
+  fetchText,
+  assertSelector,
+  getListingLinks,
+} = require("../../common/utils");
 const { url, domain } = require("./attributes");
 
 async function retrieve() {
@@ -7,11 +11,13 @@ async function retrieve() {
   assertSelector(movieListPage, ".eventlist--past,.eventlist--upcoming");
   const $ = cheerio.load(movieListPage);
 
-  const moviePageUrls = new Set();
-  $(".eventlist--upcoming .eventlist-title-link").each(function () {
-    const href = $(this).attr("href");
-    moviePageUrls.add(`${domain}${href}`);
-  });
+  const moviePageUrls = new Set(
+    getListingLinks(
+      $,
+      $(".eventlist--upcoming .eventlist-event"),
+      ".eventlist-title-link",
+    ).map((href) => `${domain}${href}`),
+  );
 
   const moviePages = {};
   for (const moviePageUrl of [...moviePageUrls]) {

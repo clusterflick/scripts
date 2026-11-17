@@ -1,5 +1,9 @@
 const cheerio = require("cheerio");
-const { fetchText, assertSelector } = require("../../common/utils");
+const {
+  fetchText,
+  assertSelector,
+  getListingLinks,
+} = require("../../common/utils");
 const { url } = require("./attributes");
 
 async function retrieve() {
@@ -8,13 +12,9 @@ async function retrieve() {
   const $ = cheerio.load(movieListPage);
 
   // Extract upcoming event URLs from the listing page
-  const moviePageUrls = new Set();
-  $(".upcoming .category_name a").each(function () {
-    const href = $(this).attr("href");
-    if (href) {
-      moviePageUrls.add(href);
-    }
-  });
+  const moviePageUrls = new Set(
+    getListingLinks($, $(".upcoming .mediaBlock"), ".category_name a"),
+  );
 
   const moviePages = {};
   for (const moviePageUrl of [...moviePageUrls]) {
