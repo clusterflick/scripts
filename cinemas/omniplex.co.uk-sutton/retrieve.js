@@ -3,8 +3,9 @@ const { fetchWin1252Text } = require("../../common/utils");
 const {
   extractAllowedDates,
   getMoviePageUrl,
+  isSiteChooser,
 } = require("../../common/omniplex.co.uk/utils");
-const { domain, cinemaId } = require("./attributes");
+const { domain, cinemaId, siteCode } = require("./attributes");
 
 async function retrieve() {
   const indexPage = await fetchWin1252Text(
@@ -25,17 +26,33 @@ async function retrieve() {
   // Christopher Nolan's name settles it in code. So each film's own page is
   // fetched once, from every link the showtimes pages carry: the transform then
   // has a page for every film it can find a card for.
+  //
+  // In November 2026 those links lost the cinema - "/cinema/movie/sutton/<film>"
+  // became "/cinema/movie/<film>", and the old address now redirects there - so
+  // match on the path alone ("/cinema/movies", the films index, is left out by
+  // its trailing slash). The page reads the cinema from the `sitecode` cookie
+  // instead, and without it is the chain's site chooser, which carries no
+  // credits at all. A chooser here means the cookie has stopped working, and
+  // storing it would drop every director and cast member without a word.
   const moviePageUrls = new Set();
   for (const html of [indexPage, ...Object.values(datePages)]) {
     const $ = cheerio.load(html);
-    $(`a[href*="/cinema/movie/${cinemaId}/"]`).each((i, el) => {
+    $('a[href^="/cinema/movie/"]').each((i, el) => {
       moviePageUrls.add(getMoviePageUrl(domain, $(el).attr("href")));
     });
   }
 
   const moviePages = {};
   for (const url of [...moviePageUrls].sort()) {
-    moviePages[url] = await fetchWin1252Text(url);
+    const html = await fetchWin1252Text(url, {
+      headers: { cookie: `sitecode=${siteCode}` },
+    });
+    if (isSiteChooser(cheerio.load(html))) {
+      throw new Error(
+        `Film page ${url} came back as the site chooser - the sitecode cookie (${siteCode}) was not accepted`,
+      );
+    }
+    moviePages[url] = html;
   }
 
   return { indexPage, datePages, moviePages };

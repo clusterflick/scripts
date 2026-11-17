@@ -15,4 +15,7 @@ module.exports = {
   type: "Cinema",
   programming: "cinema",
   cinemaId: "sutton",
+  // The code the chain's own site chooser gives Sutton - its film pages are
+  // addressed by film alone and read the cinema from a cookie holding this.
+  siteCode: "OMP_SUTT",
 };

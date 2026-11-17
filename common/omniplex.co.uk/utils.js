@@ -27,4 +27,16 @@ function getMoviePageUrl(domain, path) {
   return path.startsWith("http") ? path : `${domain}${path}`;
 }
 
-module.exports = { extractAllowedDates, getMoviePageUrl };
+// An unrecognised site slug does not 404: the page comes back 200 as the chain's
+// own site chooser - "Which is your local Omniplex?" - which is Omniplex
+// answering with its site list. That is the check that tells a venue with
+// nothing on from an id that has gone stale, so the probe looks for the chooser
+// before it looks for listings. A film page asked for without the cinema's
+// `sitecode` cookie is the chooser too, which the retrieve checks for.
+//
+// It is the chooser's *form* that says so, not its items: every page on the site
+// carries the same 44 `.site-selection-item` entries in a hidden overlay, and
+// only the page that is actually asking wraps them in `#siteList`.
+const isSiteChooser = ($) => $("#siteList").length > 0;
+
+module.exports = { extractAllowedDates, getMoviePageUrl, isSiteChooser };
