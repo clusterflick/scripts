@@ -6,7 +6,7 @@ const {
   startObservation,
   withChallengeRetry,
 } = require("../health-probe");
-const { extractAllowedDates } = require("./utils");
+const { extractAllowedDates, isSiteChooser } = require("./utils");
 
 // Two requests a venue, against a retrieve's fifty-five.
 //
@@ -27,17 +27,6 @@ const GRANULARITY = "film-and-date-totals";
 // Films are marked by their favourites toggle - `favourite<id>` - which is the
 // same id the transform builds a showing id from.
 const FAVOURITE_ID = /^favourite(.+)$/;
-
-// An unrecognised site slug does not 404: the page comes back 200 as the chain's
-// own site chooser - "Which is your local Omniplex?" - which is Omniplex
-// answering with its site list. That is the check that tells a venue with
-// nothing on from an id that has gone stale, so the probe looks for the chooser
-// before it looks for listings.
-//
-// It is the chooser's *form* that says so, not its items: every page on the site
-// carries the same 44 `.site-selection-item` entries in a hidden overlay, and
-// only the page that is actually asking wraps them in `#siteList`.
-const isSiteChooser = ($) => $("#siteList").length > 0;
 
 const unknownVenueId = (cinemaId) =>
   new ProbeFailure({ kind: "unknown-venue-id", cinemaId });

@@ -499,8 +499,8 @@ const fetchText = async (url, options, retryConfig) => {
   return response.text();
 };
 
-const fetchWin1252Text = async (url) => {
-  const response = await fetchWithRetry(url);
+const fetchWin1252Text = async (url, options, retryConfig) => {
+  const response = await fetchWithRetry(url, options, retryConfig);
   if (!response.ok) throw fetchError(url, response);
   const buffer = Buffer.from(await response.arrayBuffer());
   return iconv.decode(buffer, "win1252");
