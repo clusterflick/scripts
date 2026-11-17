@@ -1,5 +1,5 @@
 const cheerio = require("cheerio");
-const { fetchText, assertSelector } = require("../utils");
+const { fetchText, assertSelector, getListingLinks } = require("../utils");
 
 async function retrieve(attributes) {
   const { url } = attributes;
@@ -8,10 +8,7 @@ async function retrieve(attributes) {
   assertSelector(movieListPage, ".card-list");
   const $ = cheerio.load(movieListPage);
 
-  const moviePageUrls = new Set();
-  $(".card-list .card a").each(function () {
-    moviePageUrls.add($(this).attr("href"));
-  });
+  const moviePageUrls = new Set(getListingLinks($, $(".card-list .card"), "a"));
 
   const moviePages = {};
   for (const moviePageUrl of moviePageUrls) {

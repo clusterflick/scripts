@@ -211,6 +211,14 @@ Each venue uses different CSS selectors (`.item.films`, `.card-list .card a`,
 `.programme-tile`, `.whatson_panel`, etc.) but the fetch-parse-fetch structure
 is the same.
 
+Harvest the links item by item with `getListingLinks($, items, linkSelector)`
+from `common/utils.js`, which throws on an item without its link. Selecting the
+links directly, as above, finds none when the site changes how they're marked
+up, and the retrieve then fetches no detail pages and succeeds - Omniplex in
+November 2026. That matters most for a venue whose listing can be empty on
+purpose, where no check on the count is possible: an empty listing still passes,
+while a listing of items with no links throws.
+
 **Variant:** Admit One uses `fetchWin1252Text()` instead of `fetchText()` to
 handle legacy Windows-1252 encoded pages.
 

@@ -1,5 +1,10 @@
 const cheerio = require("cheerio");
-const { fetchText, getText, assertSelector } = require("../../common/utils");
+const {
+  fetchText,
+  getText,
+  assertSelector,
+  getListingLinks,
+} = require("../../common/utils");
 const { url, domain } = require("./attributes");
 
 // Rendered by the listing in place of the event list when nothing is scheduled
@@ -18,13 +23,13 @@ async function retrieve() {
 
   // Extract film event URLs from the listing page
   const moviePageUrls = new Set();
-  $(".event-card").each(function () {
-    const href = $(this).find(".event-card__content h3 a").attr("href");
-    if (href) {
-      const fullUrl = href.startsWith("http") ? href : `${domain}${href}`;
-      moviePageUrls.add(fullUrl);
-    }
-  });
+  for (const href of getListingLinks(
+    $,
+    $(".event-card"),
+    ".event-card__content h3 a",
+  )) {
+    moviePageUrls.add(href.startsWith("http") ? href : `${domain}${href}`);
+  }
 
   const moviePages = {};
   for (const moviePageUrl of [...moviePageUrls]) {

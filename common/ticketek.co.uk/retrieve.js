@@ -1,6 +1,6 @@
 const cheerio = require("cheerio");
 const getPageWithPlaywright = require("../../common/get-page-with-playwright");
-const { generateShowingId } = require("../../common/utils");
+const { generateShowingId, getListingLinks } = require("../../common/utils");
 
 async function retrieve(attributes) {
   const url = `https://premier.ticketek.co.uk/shows/show.aspx?sh=${attributes.siteId}`;
@@ -15,9 +15,8 @@ async function retrieve(attributes) {
   );
 
   const $ = cheerio.load(movieListPage);
-  const movieUrls = $(".event-buttons a")
-    .map((_, element) => $(element).attr("href"))
-    .get();
+  // Out of season the page is Ticketek's "doesn't exist" one, with no events
+  const movieUrls = getListingLinks($, $(".event-item"), ".event-buttons a");
 
   const moviePages = {};
   for (const movieUrl of movieUrls) {
