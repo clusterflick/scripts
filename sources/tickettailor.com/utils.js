@@ -13,8 +13,10 @@ function isAccessCodePage(html) {
 
 // An event running on several dates is listed once, with "Multiple dates and
 // times" in place of a date - the occurrences only appear on its date picker.
+// So is one running several times on a single day, as "Fri 27 Nov 2026,
+// Multiple times", whose date picker has that one date with each of its times.
 function isMultipleDates(dateText) {
-  return /multiple dates/i.test(dateText);
+  return /multiple (dates|times)/i.test(dateText);
 }
 
 // A full date-and-time chunk, e.g. "Mon 3 Aug 2026 19:00" or "Mon 20 Jul 2026 1:00 PM"

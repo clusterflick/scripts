@@ -1,4 +1,8 @@
-const { isAccessCodePage, parseDateText } = require("../utils");
+const {
+  isAccessCodePage,
+  isMultipleDates,
+  parseDateText,
+} = require("../utils");
 
 describe("isAccessCodePage", () => {
   it("recognises the access code form", () => {
@@ -14,6 +18,22 @@ describe("isAccessCodePage", () => {
       <div class="detail-content__description"><p>A film</p></div>
     </div></main>`;
     expect(isAccessCodePage(html)).toBe(false);
+  });
+});
+
+describe("isMultipleDates", () => {
+  it("recognises an event on several dates", () => {
+    expect(isMultipleDates("Multiple dates and times")).toBe(true);
+  });
+
+  it("recognises an event at several times on one date", () => {
+    expect(isMultipleDates("Fri 27 Nov 2026, Multiple times")).toBe(true);
+  });
+
+  it("does not flag a single showing", () => {
+    expect(isMultipleDates("Mon 3 Aug 2026 7:30 PM - 10:00 PM BST")).toBe(
+      false,
+    );
   });
 });
 
