@@ -24,14 +24,25 @@ flowchart TD
     D --> F["Load source module"]
     E --> G["Call retrieve()"]
     F --> G
-    G --> H[Return Raw Data]
-    H --> I[Transform Pipeline]
+    G --> H[Write Raw Data]
+    H --> J["Check: run the transform's parse over it"]
+    J --> I[Transform Pipeline]
 ```
 
 The entry point (`scripts/retrieve/index.js`) resolves the location name to
 either a cinema or source module, then calls its `retrieve()` function. The
 returned data is opaque to the orchestrator -- each module defines its own
 structure.
+
+Once written, the data is checked by the code that will read it
+(`scripts/retrieve/check-retrieved-data.js`): a cinema's `transform`, with no
+sourced events, or a source's `findEvents` for every cinema. If that throws, the
+retrieve fails, so the step's retries and the automatic re-run in
+`data-retrieved` get their chance, and no release is cut from data the transform
+can't read. So a retrieve need not repeat its transform's checks - a transform
+that throws on zero movies already fails the retrieve - but it does still need
+to throw where the transform can't tell: a listing that loses some of its films
+without the transform noticing is not caught by this.
 
 ### The Delegation Pattern
 

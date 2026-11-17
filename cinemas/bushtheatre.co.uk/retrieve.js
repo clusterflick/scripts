@@ -2,30 +2,31 @@ const cheerio = require("cheerio");
 const attributes = require("./attributes");
 const { fetchText, assertSelector } = require("../../common/utils");
 
+// This retrieve used to swallow every error and return an empty listing, added
+// in August 2026 while the site was answering 500. That hid every later
+// failure too - a block, a timeout, a changed page - as Bush Theatre having
+// nothing on. A venue that is known to be shut belongs in
+// common/expected-closures.js instead.
 async function retrieve() {
-  try {
-    const eventListPage = await fetchText(attributes.url);
-    assertSelector(eventListPage, ".events_listing .events_item__link");
-    const $ = cheerio.load(eventListPage);
+  const eventListPage = await fetchText(attributes.url);
+  assertSelector(eventListPage, ".events_listing .events_item__link");
+  const $ = cheerio.load(eventListPage);
 
-    const eventPageUrls = new Set();
-    $(".events_listing .events_item__link").each(function () {
-      const href = $(this).attr("href");
-      if (href) eventPageUrls.add(new URL(href, attributes.url).href);
-    });
+  const eventPageUrls = new Set();
+  $(".events_listing .events_item__link").each(function () {
+    const href = $(this).attr("href");
+    if (href) eventPageUrls.add(new URL(href, attributes.url).href);
+  });
 
-    const eventPages = [];
-    for (const eventPageUrl of eventPageUrls) {
-      eventPages.push(await fetchText(eventPageUrl));
-    }
-
-    return {
-      eventListPage,
-      eventPages,
-    };
-  } catch {
-    return { eventListPage: "", eventPages: [] };
+  const eventPages = [];
+  for (const eventPageUrl of eventPageUrls) {
+    eventPages.push(await fetchText(eventPageUrl));
   }
+
+  return {
+    eventListPage,
+    eventPages,
+  };
 }
 
 module.exports = retrieve;
