@@ -433,6 +433,8 @@ const nonFilmEvents = [
   /^Secrets of the Brain: PMDD and neuroscience$/i,
   /^Life Drawing at The Bedford Balham$/i,
   /^Elif Shafak on the Power of Storytelling$/i,
+  /^Book talk: From Sovereigns to Servants$/i,
+  /^ddddrronnnnne$/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>

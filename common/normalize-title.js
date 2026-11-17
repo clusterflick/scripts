@@ -145,6 +145,15 @@ function normalizeTitle(title, options) {
     ["Superworm + ", "Superworm & "],
     ["Before Sunset (2004) + ", "Before Sunset (2004) & "],
     ["I, Your Mother + ", "I, Your Mother & "],
+    // Double bills billed with a plus, which the separator rule reads as a
+    // separator and drops the second film at. The second film is named because
+    // the same venues bill an intro or a short after these films with a plus.
+    ["Thunder Road + Se7en", "Thunder Road & Se7en"],
+    [
+      "The Grand Budapest Hotel + Christmas Concert Film",
+      "The Grand Budapest Hotel & Christmas Concert Film",
+    ],
+    ["WILD AT HEART + Elvis in Concert", "WILD AT HEART & Elvis in Concert"],
     // Category H's double bill at the Rio, billed with a plus, which the
     // separator rule reads as the end of the title - so it matched the first
     // film alone and The Hitcher went unlisted.
@@ -2141,7 +2150,11 @@ function normalizeTitle(title, options) {
     // tour's screenings
     [/(People['’]s Emergency Briefing) Film(?: [-–] .+)?$/i, "$1"],
     ["Hadoota", "Hadota"],
-    ["Aakasamlo Oka Tara", "Aakasam Lo Oka Tara"],
+    ["Sathyavin Savithri", "Sathyavan Savithiri"],
+    [
+      "LEONARD COHEN LIVE 1970",
+      "Leonard Cohen: Live at the Isle of Wight 1970",
+    ],
     // The venue bills the film by its initials, run into the venue's name
     ["LBN at The Cinema", "La Bola Negra"],
     [/THE THREE DUMAS$/i, "The Three Dumas (2007)"],

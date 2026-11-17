@@ -2006,6 +2006,7 @@ const knownRemovablePhrases = [
   "_ Professionals Only",
   "with an intro from Darren Richman",
   "at The Bedford, Balham",
+  "Q+A with Anthony Geffen",
 ];
 
 module.exports = knownRemovablePhrases;
