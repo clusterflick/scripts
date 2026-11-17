@@ -219,20 +219,15 @@ async function fetchSessionsForPlan(planId, places, from, to) {
       getAvailabilityApiUrl(planId, place.id, from, to),
     );
 
+    // A date the availability lists has sessions, so one that can't be fetched
+    // throws: skipped, it took that date's screenings out of the release with
+    // nothing to say so. fetchJson has already retried what a retry can fix.
     for (const date of Object.keys(dates || {})) {
-      const url = getSessionsApiUrl(planId, place.id, date);
-      try {
-        const data = await fetchCached(
-          `feverup-sessions-${planId}-${place.id}-${date}`,
-          fetchJson,
-          url,
-        );
-        sessions[`${place.id}:${date}`] = data;
-      } catch (e) {
-        console.log(
-          `! Error fetching sessions for plan ${planId}, place ${place.id}, date ${date} - ${e.message}`,
-        );
-      }
+      sessions[`${place.id}:${date}`] = await fetchCached(
+        `feverup-sessions-${planId}-${place.id}-${date}`,
+        fetchJson,
+        getSessionsApiUrl(planId, place.id, date),
+      );
     }
   }
   return sessions;
