@@ -42,6 +42,8 @@ describe("isNonFilmEvent", () => {
     ["Secrets of the Brain: PMDD and neuroscience"],
     ["Life Drawing at The Bedford, Balham"],
     ["Elif Shafak on the Power of Storytelling"],
+    ["Book talk: From Sovereigns to Servants"],
+    ["ddddrronnnnne"],
     ["Tate Modern: Official Discovery Tour"],
     ["Advanced Photography Workshop + Photoshoot | London"],
     ["AdTech Networking Social for CEOs & Entrepreneurs Meetup"],
