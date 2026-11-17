@@ -1951,6 +1951,7 @@ function normalizeTitle(title, options) {
     ["Bloody Marys + ", ""],
     [/^(.*): The Hunger Games Season/i, "The Hunger Games: $1"],
     ["The Hunger Games: The Hunger Games", "The Hunger Games"],
+    ["The HungerGames", "The Hunger Games"],
     [
       "Clapham International Film Festival - ",
       "Clapham International Film Festival: ",
