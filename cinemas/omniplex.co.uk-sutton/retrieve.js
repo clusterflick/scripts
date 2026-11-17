@@ -2,6 +2,8 @@ const cheerio = require("cheerio");
 const { fetchWin1252Text } = require("../../common/utils");
 const {
   extractAllowedDates,
+  findMovieCards,
+  getMovieCardTitleLink,
   getMoviePageUrl,
   isSiteChooser,
 } = require("../../common/omniplex.co.uk/utils");
@@ -24,22 +26,39 @@ async function retrieve() {
   // against. Without them a title shared by several films - there are nine
   // called "The Odyssey", two from 2026 - can only be settled by a model, when
   // Christopher Nolan's name settles it in code. So each film's own page is
-  // fetched once, from every link the showtimes pages carry: the transform then
-  // has a page for every film it can find a card for.
+  // fetched once, from the title link of every card the transform will read,
+  // found the way the transform finds them.
   //
-  // In November 2026 those links lost the cinema - "/cinema/movie/sutton/<film>"
-  // became "/cinema/movie/<film>", and the old address now redirects there - so
-  // match on the path alone ("/cinema/movies", the films index, is left out by
-  // its trailing slash). The page reads the cinema from the `sitecode` cookie
-  // instead, and without it is the chain's site chooser, which carries no
-  // credits at all. A chooser here means the cookie has stopped working, and
-  // storing it would drop every director and cast member without a word.
+  // Whatever shape those links take, then, the transform has a page for every
+  // card - in November 2026 they lost the cinema ("/cinema/movie/sutton/<film>"
+  // became "/cinema/movie/<film>") and a retrieve matching the old pattern
+  // fetched nothing. What can still break is the card markup itself, and that
+  // throws here rather than in the transform: a card with no title link, or a
+  // venue publishing dates with no cards on any of them.
+  //
+  // The film page reads the cinema from the `sitecode` cookie, and without it
+  // is the chain's site chooser, which carries no credits at all. A chooser
+  // here means the cookie has stopped working, and storing it would drop every
+  // director and cast member without a word.
   const moviePageUrls = new Set();
-  for (const html of [indexPage, ...Object.values(datePages)]) {
+  let cardCount = 0;
+  for (const [date, html] of Object.entries(datePages)) {
     const $ = cheerio.load(html);
-    $('a[href^="/cinema/movie/"]').each((i, el) => {
-      moviePageUrls.add(getMoviePageUrl(domain, $(el).attr("href")));
-    });
+    for (const $card of findMovieCards($)) {
+      cardCount++;
+      const moviePath = getMovieCardTitleLink($card).attr("href");
+      if (!moviePath) {
+        throw new Error(
+          `A film card on ${date} has no title link - the showtimes page has changed`,
+        );
+      }
+      moviePageUrls.add(getMoviePageUrl(domain, moviePath));
+    }
+  }
+  if (dates.length > 0 && cardCount === 0) {
+    throw new Error(
+      `Omniplex lists ${dates.length} dates but none of their pages has a film card - the showtimes page has changed`,
+    );
   }
 
   const moviePages = {};

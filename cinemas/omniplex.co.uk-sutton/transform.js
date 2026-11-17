@@ -10,7 +10,11 @@ const {
   createFormat,
   generateShowingId,
 } = require("../../common/utils");
-const { getMoviePageUrl } = require("../../common/omniplex.co.uk/utils");
+const {
+  findMovieCards,
+  getMovieCardTitleLink,
+  getMoviePageUrl,
+} = require("../../common/omniplex.co.uk/utils");
 const attributes = require("./attributes");
 
 function extractDurationInMinutes(text) {
@@ -26,19 +30,6 @@ function extractDurationInMinutes(text) {
 function extractClassification(imgSrc) {
   const m = imgSrc?.match(/UK_([^.]+)\.png/);
   return m ? m[1] : undefined;
-}
-
-// Walk up from the favourite-button img until we find an ancestor that owns
-// .showTimeBox descendants. The img is in the info column; showtimes are in a
-// sibling column — their first common ancestor is the movie-level inner grid.
-function findMovieCard($anchor) {
-  let $el = $anchor.parent();
-  for (let depth = 0; depth < 10; depth++) {
-    if (!$el.length) return null;
-    if ($el.find(".showTimeBox").length > 0) return $el;
-    $el = $el.parent();
-  }
-  return null;
 }
 
 // A film's own page labels its credits in plain paragraphs -
@@ -121,7 +112,7 @@ function parseMovieCard($card, $, dateStr) {
     ?.replace("favourite", "");
   if (!eventId) return null;
 
-  const $titleLink = $card.find("p.font-medium a").first();
+  const $titleLink = getMovieCardTitleLink($card);
   const title = getText($titleLink);
   const moviePath = $titleLink.attr("href");
   if (!title || !moviePath) return null;
@@ -208,10 +199,7 @@ async function transform({ datePages, moviePages }, sourcedEvents) {
   for (const [date, html] of Object.entries(datePages)) {
     const $ = cheerio.load(html);
 
-    $('img[id^="favourite"]').each((i, el) => {
-      const $movieCard = findMovieCard($(el));
-      if (!$movieCard) return;
-
+    findMovieCards($).forEach(($movieCard) => {
       const movie = parseMovieCard($movieCard, $, date);
       if (!movie) return;
       const {

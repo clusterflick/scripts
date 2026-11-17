@@ -39,4 +39,37 @@ function getMoviePageUrl(domain, path) {
 // only the page that is actually asking wraps them in `#siteList`.
 const isSiteChooser = ($) => $("#siteList").length > 0;
 
-module.exports = { extractAllowedDates, getMoviePageUrl, isSiteChooser };
+// Walk up from the favourite-button img until we find an ancestor that owns
+// .showTimeBox descendants. The img is in the info column; showtimes are in a
+// sibling column — their first common ancestor is the movie-level inner grid.
+function findMovieCard($anchor) {
+  let $el = $anchor.parent();
+  for (let depth = 0; depth < 10; depth++) {
+    if (!$el.length) return null;
+    if ($el.find(".showTimeBox").length > 0) return $el;
+    $el = $el.parent();
+  }
+  return null;
+}
+
+// Every film card on a showtimes page. The retrieve fetches a film page for
+// each card's title link and the transform looks each one up again, so both
+// find the cards here: when they found films in different ways - the retrieve
+// by scanning for a link pattern - a change to Omniplex's links passed the
+// retrieve with no film pages at all and only failed in the transform.
+function findMovieCards($) {
+  return $('img[id^="favourite"]')
+    .toArray()
+    .map((el) => findMovieCard($(el)))
+    .filter(Boolean);
+}
+
+const getMovieCardTitleLink = ($card) => $card.find("p.font-medium a").first();
+
+module.exports = {
+  extractAllowedDates,
+  findMovieCards,
+  getMovieCardTitleLink,
+  getMoviePageUrl,
+  isSiteChooser,
+};
