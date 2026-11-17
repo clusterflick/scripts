@@ -209,6 +209,10 @@ describe("eventbrite deferred retry", () => {
 
       expect(error).toBeUndefined();
       expect(Object.keys(value.moviePages)).toHaveLength(1);
+      // Named, so find-events drops it rather than publishing it without a page
+      expect(value.removedEvents).toEqual([
+        "https://www.eventbrite.co.uk/e/event-2",
+      ]);
       // A 404 is definitive, so it must not be retried by the sweep.
       const event2Calls = global.fetch.mock.calls.filter(([url]) =>
         url.endsWith("event-2"),
