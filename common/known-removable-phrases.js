@@ -2007,6 +2007,9 @@ const knownRemovablePhrases = [
   "with an intro from Darren Richman",
   "at The Bedford, Balham",
   "Q+A with Anthony Geffen",
+  "with John Leguizamo Live Intro",
+  "The 90s on Screen",
+  "The Staff's Favourite Film of 2026:",
 ];
 
 module.exports = knownRemovablePhrases;

@@ -435,6 +435,15 @@ const nonFilmEvents = [
   /^Elif Shafak on the Power of Storytelling$/i,
   /^Book talk: From Sovereigns to Servants$/i,
   /^ddddrronnnnne$/i,
+  /^Playing Outside Christmas Market$/i,
+  /^Patterns of Residential London: Research & Practice$/i,
+  /^Why Future Talent Matters Panel Discussion$/i,
+  /^Ballet Nights New Year's Day Concert\b/i,
+  /^Are We Making a Difference\?$/i,
+  /^Talent acquisition \d{4}: Prepare for what's next$/i,
+  /^IN-HOUSE – Case by Case: Psychoanalysis and the Political Discourse$/i,
+  /^Women's Resilience Summit\b/i,
+  /^Members['’] Film Quiz\b/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>

@@ -89,6 +89,7 @@ const ignoredIds = [
   64180, // I Dream of You... -- https://www.themoviedb.org/movie/64180
   1377955, // Why So Serious -- https://www.themoviedb.org/movie/1377955-why-so-serious
   1800344, // Reactor -- https://www.themoviedb.org/movie/1800344-reactor
+  1712985, // The Letter -- https://www.themoviedb.org/movie/1712985-the-letter
 ];
 
 /**
