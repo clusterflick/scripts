@@ -1,19 +1,37 @@
 const cheerio = require("cheerio");
-const { fetchText, fetchJson } = require("../utils");
+const { fetchText, fetchJson, assertSelector } = require("../utils");
 const { getFilmSlug } = require("./utils");
 
 const NO_SCREENINGS_TEXT = "no upcoming screenings";
 
+// The listing runs 15 screenings a page, about five pages in a busy season, so
+// this is far past any real season. It is what stops the loop if the site ever
+// answers every page number with the same page.
+const MAX_PAGES = 50;
+
+// The listing is paged until a page says "No upcoming screenings available.",
+// which is also the whole of the first page out of season. Any other page holds
+// screening cards. A page with neither - a challenge served with a 200, or new
+// copy for the empty listing - is neither kept nor taken for the end: kept, its
+// missing screenings were never noticed, and the loop went on past it.
 async function retrieve({ domain, url }) {
   const screeningPages = [];
-  let page = 1;
 
-  while (true) {
-    const html = await fetchText(`${url}/screenings/list?page=${page}`);
-    const isLastPage = html.toLowerCase().includes(NO_SCREENINGS_TEXT);
-    if (isLastPage) break;
+  for (let page = 1; ; page++) {
+    if (page > MAX_PAGES) {
+      throw new Error(
+        `Rooftop Cinema Club's listing at ${url} was still listing screenings after ${MAX_PAGES} pages - is it ignoring the page number?`,
+      );
+    }
+    const pageUrl = `${url}/screenings/list?page=${page}`;
+    const html = await fetchText(pageUrl);
+    if (html.toLowerCase().includes(NO_SCREENINGS_TEXT)) break;
+    assertSelector(
+      html,
+      ".screening-card",
+      `${pageUrl} has neither screenings nor "No upcoming screenings" - the listing may have changed`,
+    );
     screeningPages.push(html.trim());
-    page++;
   }
 
   // Sold-out cards only show doors-open time on the listing page.
