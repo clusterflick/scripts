@@ -1,11 +1,21 @@
 /** @jest-environment setup-polly-jest/jest-environment-node */
-const { setupPolly, schemaValidate } = require("../../../common/test-utils");
+const {
+  setupPolly,
+  schemaValidate,
+  disableCache,
+} = require("../../../common/test-utils");
 const {
   sortAndFilterMovies,
   removeMatchingHints,
   addTestCategory,
 } = require("../../../common/utils");
 const { retrieve, transform, attributes } = require("..");
+
+// Passthrough the daily cache the Camoufox session reads through, so the
+// listing is served by the recording below rather than read from or written to
+// cache files on disk.
+jest.mock("../../../common/cache");
+disableCache();
 
 const isRecording = false;
 
