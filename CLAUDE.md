@@ -125,14 +125,14 @@ with none carries no key. They are compared by spelling rather than through
 `normalizeTitle`, which deliberately maps UK titles onto US ones for matching.
 They are for search only, never displayed.
 
-`match` checks its own output before writing it (`scripts/match/check-matched-data.js`):
-a source that matched nothing, or whose matches carry no score, throws. A
-source can break without failing - Rotten Tomatoes renamed its score field in
-November 2026 and every match went out with a null score for days - and since
-the release needs every source, a throw keeps yesterday's good scores live
-rather than publishing empty ones. A partial fall is not thrown on; it is a
-trend, followed on manage.clusterflick.com. A new source needs its score added
-to `SCORE_OF` there.
+`match` checks its own output before writing it
+(`scripts/match/check-matched-data.js`): a source that matched nothing, or whose
+matches carry no score, throws. A source can break without failing - Rotten
+Tomatoes renamed its score field in November 2026 and every match went out with
+a null score for days - and since the release needs every source, a throw keeps
+yesterday's good scores live rather than publishing empty ones. A partial fall
+is not thrown on; it is a trend, followed on manage.clusterflick.com. A new
+source needs its score added to `SCORE_OF` there.
 
 `diff` runs between `transform` and `combine`, comparing two `transform`
 releases (`transformed-data/current` vs `transformed-data/previous`) to write
@@ -260,18 +260,19 @@ Each performance carries `occasions`: what makes it more than a screening - an
 intro, a Q&A, a live score, a premiere. It mirrors accessibility and format,
 read from structured listing data, then the title and notes, then the
 description, with one difference: a key is `true` when that is all that is
-known, or an object of details when there are some (`{ intro: { guests:
-["Benjamin Crais"] } }`). Never `false`, and never `{}` as a value.
+known, or an object of details when there are some
+(`{ intro: { guests: ["Benjamin Crais"] } }`). Never `false`, and never `{}` as
+a value.
 
-It is recorded here rather than on the website because the description is
-here. The ICA's "The Eel" says nothing in its title; its page says "This
-screening will be introduced by Benjamin Crais". Deciding which occasions are
-rare enough to promote stays on the website, which can see the whole city.
+It is recorded here rather than on the website because the description is here.
+The ICA's "The Eel" says nothing in its title; its page says "This screening
+will be introduced by Benjamin Crais". Deciding which occasions are rare enough
+to promote stays on the website, which can see the whole city.
 
 Descriptions are read only a sentence at a time, and only sentences about the
 screening itself that aren't negated or in the past; a sentence naming a date
-applies only to the performance on it. See `docs/occasions.md` before changing
-a rule, and add the venue's own words to `common/tests/occasions.test.js`.
+applies only to the performance on it. See `docs/occasions.md` before changing a
+rule, and add the venue's own words to `common/tests/occasions.test.js`.
 
 ## Module Pattern
 
@@ -385,9 +386,9 @@ swap that has to be reversible by an env var rather than a revert:
 - `MATCHER` - `llm` (default) or `jev`, in `common/review-results.js`, for the
   step that chooses between TheMovieDB search results
 
-`IDENTIFY_BOT` - `false` (default) or `true`, in `common/utils.js` - is a
-toggle of another kind: it changes what we send rather than which implementation
-runs, and is an env var for the same reason. Turned on, every request through
+`IDENTIFY_BOT` - `false` (default) or `true`, in `common/utils.js` - is a toggle
+of another kind: it changes what we send rather than which implementation runs,
+and is an env var for the same reason. Turned on, every request through
 `fetchWithRetry` carries `From: hello@clusterflick.com`, so a site owner reading
 their logs can reach us and find clusterflick.com/bot. It is only on direct
 fetches, which already announce themselves as `User-Agent: node`. Browser

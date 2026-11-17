@@ -1918,6 +1918,10 @@ function normalizeTitle(title, options) {
     ["SEYTAN + ", "SEYTAN & "],
     ["Sons/", "Sons /"],
     ["Halloween Cinema - ", "Halloween Cinema: "],
+    // St John's Shirley bills its matinee "Family Film – The Polar Express".
+    // Anchored and needing the dash, so "Family Film Club: ..." is left to
+    // the phrase list.
+    [/^Family Film\s*[–—]\s*/i, ""],
     [" – Join us for", " - Join us for"],
     ["Sinners (2024)", "Sinners (2025)"],
     [
