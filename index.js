@@ -259,6 +259,23 @@ const setupDirectory = async (type) => {
     const output = await retrieve(location, ...parameters);
     await setupDirectory("retrieved-data");
     await writeJSON(getPath("retrieved-data"), output);
+
+    // Written first, because that is what the check reads - see
+    // scripts/retrieve/check-retrieved-data. A failing check fails the step,
+    // so the file is never uploaded.
+    const {
+      checkRetrievedData,
+    } = require("./scripts/retrieve/check-retrieved-data");
+    console.log("Checking the transform can read it ...");
+    try {
+      const start = Date.now();
+      const { checked } = await checkRetrievedData(location);
+      const duration = Math.round((Date.now() - start) / 1000);
+      if (checked) console.log(` - ✅ Checked (${duration}s)`);
+    } catch (e) {
+      console.log(` - ❌ The transform can't read what was retrieved`);
+      throw e;
+    }
     return;
   }
 

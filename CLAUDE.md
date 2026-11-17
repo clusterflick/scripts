@@ -68,6 +68,21 @@ retrieve  ->  transform  ->  combine  ->  match
 
 All pipeline commands run with `TZ=Europe/London`.
 
+`retrieve` checks its own output before the step succeeds
+(`scripts/retrieve/check-retrieved-data.js`): it runs the venue's `transform`,
+or for a source its `findEvents` against every cinema, over the file it just
+wrote, and throws if that throws. Only the parse runs - no matching, no LLM -
+and its result is thrown away; the raw data is stored as before. A retrieve can
+succeed with data its transform can't read, and that only surfaced in
+`transform`, past the step's retries and the automatic re-run: on 17 November
+2026 the Royal Albert Hall's empty feed, a Ticket Tailor date findEvents
+couldn't parse and Omniplex film pages that were never fetched each cut a
+release that failed an hour later. It runs the transform's own code rather than
+a check of its own because a separate check drifts from the transform, which is
+how Omniplex broke. A venue is parsed with no sourced events; one whose
+transform needs a source's data to read its own is listed in
+`NEEDS_SOURCED_EVENTS` there and not checked.
+
 `transform-prepare` runs once per run, before any venue's `transform`. Each
 venue is its own process, and the first-seen history (ten days of combined data,
 ~175MB to parse), yesterday's transformed release and what every source finds at
