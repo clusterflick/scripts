@@ -161,6 +161,14 @@ that have stopped appearing. It is a fold over one release plus its own previous
 output — it never reads the previous `transform` release, so it stays correct
 when the diff has nothing to report.
 
+It began on 10 August 2026, so films that finished their run before then had no
+entry and no departed page: Search Console reported their old links as 404s.
+`helpers/backfill-seen-registry.js` reads the older `data-transformed` releases
+and adds them. It can't fold them over the published registry, which would walk
+`lastSeen` backwards for every film in both, so it folds them on their own,
+oldest first, and `mergeBackfill` adds the result, keeping the registry's entry
+wherever it has one.
+
 The same stage publishes `venue-registry.json` from the same pass over the
 release: `lastPerformance` for every venue that had one, so a venue with nothing
 on can still say when it last screened something. Two artifacts rather than two
