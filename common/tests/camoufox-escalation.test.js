@@ -63,6 +63,41 @@ describe("getPageEscalating", () => {
   });
 });
 
+describe("getPageEscalating in the browser", () => {
+  // Stands in for a session that has already escalated: hands the browser
+  // callback a page whose selector never appears.
+  const readUnsettled = (options) =>
+    getPageEscalating(
+      async (url, cacheKey, readWithBrowser) =>
+        readWithBrowser(
+          {
+            waitForSelector: async () => {
+              throw new Error("Timeout 90000ms exceeded");
+            },
+          },
+          { status: () => 403 },
+        ),
+      "https://example.com/",
+      "key",
+      { selector: "#content", ...options },
+    );
+
+  it("throws the wait's own error without an onUnsettled", async () => {
+    await expect(readUnsettled()).rejects.toThrow("Timeout 90000ms exceeded");
+  });
+
+  it("hands a page that never settles to onUnsettled", async () => {
+    const classified = new Error("classified");
+    const onUnsettled = jest.fn(async () => classified);
+    await expect(readUnsettled({ onUnsettled })).resolves.toBe(classified);
+    expect(onUnsettled).toHaveBeenCalledWith(
+      expect.objectContaining({ waitForSelector: expect.any(Function) }),
+      expect.objectContaining({ status: expect.any(Function) }),
+      expect.any(Error),
+    );
+  });
+});
+
 describe("retryThroughCamoufox", () => {
   const refused = () =>
     Object.assign(new Error("403 Forbidden"), { status: 403 });
