@@ -197,6 +197,106 @@ function buildRegistry({
 }
 
 /**
+ * Add movies from releases older than a registry to that registry.
+ *
+ * The seen registry only began on 10 August 2026, so every film that finished
+ * its run before then has no entry, and no departed page - its old links still
+ * 404. The cure is to fold the older releases in, but buildRegistry cannot do
+ * that on its own: it stamps every present movie with the release being folded,
+ * so an old release folded over today's registry would walk `lastSeen`
+ * backwards for every film showing in both. That is why the older releases are
+ * folded on their own, oldest first, into a `backfill` registry, and only then
+ * merged in here.
+ *
+ * The published registry wins wherever it has an entry, because its `lastSeen`
+ * is always the later one; only `lastPerformance` can be improved, by taking
+ * the maximum, as buildRegistry does. A backfilled movie the registry lacks is
+ * added unless it falls outside the retention window measured from the
+ * registry's own release - the next daily fold would only prune it again.
+ *
+ * The metadata stays the registry's: it describes the release the registry was
+ * last folded from, which a backfill does not change, apart from the departed
+ * count that now includes the added movies.
+ *
+ * @param {object} options
+ * @param {object} options.registry - The published registry to add to
+ * @param {object} options.backfill - A registry folded from older releases
+ * @param {number} [options.retentionDays] - Days before an absent entry is dropped
+ * @returns {{ registry: object, added: number, improved: number, expired: number }}
+ */
+function mergeBackfill({ registry, backfill, retentionDays = RETENTION_DAYS }) {
+  const release = registry?.metadata?.release;
+  const releaseDate = parseTagDate(release);
+  if (releaseDate === null) {
+    throw new Error(
+      `Could not parse a date out of the registry's release tag "${release}"; expected YYYYMMDD.HHMMSS`,
+    );
+  }
+
+  const movies = { ...registry.movies };
+  let added = 0;
+  let improved = 0;
+  let expired = 0;
+
+  for (const [id, entry] of Object.entries(backfill.movies ?? {})) {
+    const existing = movies[id];
+
+    if (existing) {
+      const times = [existing.lastPerformance, entry.lastPerformance].filter(
+        (time) => typeof time === "number",
+      );
+      const latest = times.length > 0 ? Math.max(...times) : undefined;
+      if (latest !== existing.lastPerformance) {
+        movies[id] = { ...existing, lastPerformance: latest };
+        improved++;
+      }
+      continue;
+    }
+
+    const lastSeenDate = parseTagDate(entry.lastSeen);
+    if (lastSeenDate === null) {
+      throw new Error(
+        `Backfilled entry ${id} has an unparseable lastSeen tag "${entry.lastSeen}"`,
+      );
+    }
+    if (lastSeenDate > releaseDate) {
+      // A backfill is by definition older than the registry. A later entry
+      // means the two were mixed up, and merging would claim a film was seen
+      // in a release the registry has not folded.
+      throw new Error(
+        `Backfilled entry ${id} was seen in ${entry.lastSeen}, after the registry's own release ${release}`,
+      );
+    }
+    if (releaseDate - lastSeenDate > retentionDays * MS_PER_DAY) {
+      expired++;
+      continue;
+    }
+
+    movies[id] = entry;
+    added++;
+  }
+
+  const total = Object.keys(movies).length;
+  return {
+    registry: {
+      ...registry,
+      metadata: {
+        ...registry.metadata,
+        departedCount: total - (registry.metadata.showingCount ?? 0),
+      },
+      // Sorted as buildRegistry sorts, so a merged registry diffs cleanly
+      // against the next daily one.
+      movies: Object.fromEntries(
+        Object.entries(movies).sort(([a], [b]) => Number(a) - Number(b)),
+      ),
+    },
+    added,
+    improved,
+    expired,
+  };
+}
+
+/**
  * Fold a release of transformed data into the venue registry.
  *
  * The same fold as buildRegistry, with two deliberate differences.
@@ -294,6 +394,7 @@ module.exports = {
   buildVenueRegistry,
   getLatestPerformance,
   getPresent,
+  mergeBackfill,
   parseTagDate,
   readPreviousRegistry,
 };

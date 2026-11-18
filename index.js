@@ -137,7 +137,9 @@ const setupDirectory = async (type) => {
     );
     // A separate artifact rather than another key: the two have different
     // retention rules, and nothing that reads one should have to parse the
-    // other. Only the venue registry is safe for a backfill to rewrite.
+    // other. Only the venue registry is safe for a backfill to fold straight
+    // into; the movie registry takes older releases through mergeBackfill
+    // (helpers/backfill-seen-registry.js).
     await writeJSON(
       path.join(process.cwd(), "diffed-data", "venue-registry.json"),
       buildVenueRegistry({
