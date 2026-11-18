@@ -2010,6 +2010,8 @@ const knownRemovablePhrases = [
   "with John Leguizamo Live Intro",
   "The 90s on Screen",
   "The Staff's Favourite Film of 2026:",
+  "> Wednesday Screenings",
+  "at the Royal Albert Hall",
 ];
 
 module.exports = knownRemovablePhrases;

@@ -444,6 +444,10 @@ const nonFilmEvents = [
   /^IN-HOUSE – Case by Case: Psychoanalysis and the Political Discourse$/i,
   /^Women's Resilience Summit\b/i,
   /^Members['’] Film Quiz\b/i,
+  /^One More Dance: BORDERLESS EVENTS\b/i,
+  /^Outvertising Live\b/i,
+  /^Choir Party by Candlelight\b/i,
+  /^Natty Bo and The Top Cats\b/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
