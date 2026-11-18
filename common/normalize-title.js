@@ -1956,6 +1956,7 @@ function normalizeTitle(title, options) {
     [/^(.*): The Hunger Games Season/i, "The Hunger Games: $1"],
     ["The Hunger Games: The Hunger Games", "The Hunger Games"],
     ["The HungerGames", "The Hunger Games"],
+    [/Come and Watch ['"]([^'"]+)['"] in the Royal Box/i, "$1"],
     [
       "Clapham International Film Festival - ",
       "Clapham International Film Festival: ",
