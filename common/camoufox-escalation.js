@@ -51,10 +51,19 @@ const fetchWithoutBrowser =
 // waited for too, or a listing can be read with its later entries missing. The
 // browser has already navigated by the time this runs, so it paces the page
 // after this one.
+//
+// `onUnsettled` turns a page that never showed the selector into the caller's
+// own kind of error, as in `withSitePage` - a health probe classifies it, so a
+// challenge Camoufox couldn't clear is recorded as one rather than a timeout.
 const readWithBrowser =
-  ({ selector, pace }) =>
-  async (page) => {
-    await page.waitForSelector(selector, { state: "attached" });
+  ({ selector, pace, onUnsettled }) =>
+  async (page, response) => {
+    try {
+      await page.waitForSelector(selector, { state: "attached" });
+    } catch (error) {
+      if (!onUnsettled) throw error;
+      return onUnsettled(page, response, error);
+    }
     await page.waitForLoadState("load");
     const content = await page.content();
     await pace();
@@ -64,14 +73,15 @@ const readWithBrowser =
 // Fetch `url` through a `withCamoufoxSession` `getPage`, cheaply until the site
 // first refuses and through the browser from then on. `selector` is something
 // only the real page carries; `pace` is an optional pause before each page
-// fetched, for a site that challenges a crawl arriving back to back.
+// fetched, for a site that challenges a crawl arriving back to back;
+// `onUnsettled` is described at `readWithBrowser`.
 const getPageEscalating = (
   getPage,
   url,
   cacheKey,
-  { selector, fetchOptions, pace = noPause },
+  { selector, fetchOptions, pace = noPause, onUnsettled },
 ) => {
-  const options = { selector, fetchOptions, pace };
+  const options = { selector, fetchOptions, pace, onUnsettled };
   return getPage(url, cacheKey, readWithBrowser(options), {
     withoutBrowser: fetchWithoutBrowser(options),
   });

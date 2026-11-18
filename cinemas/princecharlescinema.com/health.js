@@ -1,8 +1,10 @@
 const cheerio = require("cheerio");
 const { format } = require("date-fns");
 const { getText, isPrivateHire } = require("../../common/utils");
+const { withCamoufoxSession } = require("../../common/get-page-with-camoufox");
+const { getPageEscalating } = require("../../common/camoufox-escalation");
 const {
-  probeText,
+  classifyPage,
   probeError,
   startObservation,
   withChallengeRetry,
@@ -18,14 +20,40 @@ const attributes = require("./attributes");
 // the saving: what it avoids is the transform, not the request.
 const GRANULARITY = "performance";
 
+// Read the way the retrieve reads it: a plain fetch first, and Camoufox once
+// Cloudflare refuses it, which it has done to GitHub's runners every cycle since
+// 17th November 2026 - see `retrieve.js`. A page that never gets past the
+// challenge in the browser either is classified, so it is recorded as the
+// challenge it is rather than as a probe error.
+const LISTING_URL = `${attributes.domain}/whats-on/`;
+const LISTING_SELECTOR = ".jacro-event";
+
+const getListing = () =>
+  withCamoufoxSession(
+    (getPage) =>
+      getPageEscalating(getPage, LISTING_URL, `health--${attributes.id}`, {
+        selector: LISTING_SELECTOR,
+        onUnsettled: (page, response) =>
+          classifyPage(
+            page,
+            response,
+            `No \`${LISTING_SELECTOR}\` on ${LISTING_URL}`,
+          ),
+      }),
+    // An hourly probe must not replay the first answer of the day.
+    { disableCache: true },
+  );
+
 // Reuses the venue's own `parseDate`, which carries the year-boundary rule (a
 // December date scraped in January belongs to next year). Duplicating that here
 // would be a second place for it to drift.
 const tally = (html) => {
   const $ = cheerio.load(html);
-  const entries = $(".jacro-event");
+  const entries = $(LISTING_SELECTOR);
   if (entries.length === 0) {
-    throw probeError("No `.jacro-event` entries on the what's-on page");
+    throw probeError(
+      `No \`${LISTING_SELECTOR}\` entries on the what's-on page`,
+    );
   }
 
   const films = new Set();
@@ -69,10 +97,8 @@ async function health(venues) {
   let byDate;
   let films;
   try {
-    const html = await withChallengeRetry(
-      () => probeText(`${attributes.domain}/whats-on/`),
-      venue.id,
-    );
+    // Around the whole session, so a retry gets a fresh browser.
+    const html = await withChallengeRetry(getListing, venue.id);
     countRequest();
     ({ films, byDate } = tally(html));
   } catch (error) {
