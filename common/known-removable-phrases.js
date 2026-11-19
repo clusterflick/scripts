@@ -874,6 +874,7 @@ const knownRemovablePhrases = [
   "Deeper Into Movies:",
   "Drink-Along Movie Night",
   "Halloween Movie Night",
+  "Movie Night and Party",
   "Movie Nights",
   "Movie Night",
   "Daniel Craig:",
@@ -2002,6 +2003,7 @@ const knownRemovablePhrases = [
   "The Classic Package",
   "The VIP Package",
   "*SUNDAY 22 NOV*",
+  "*SATURDAY 21 NOV*",
   "season 3 ep 7",
   "series 3 episode 7",
   "_ Professionals Only",
@@ -2016,6 +2018,7 @@ const knownRemovablePhrases = [
   "@THE BFI",
   "@ THE BFI",
   "Cine Brazil:",
+  "Brad Bird:",
 ];
 
 module.exports = knownRemovablePhrases;

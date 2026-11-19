@@ -2214,6 +2214,11 @@ function normalizeTitle(title, options) {
     ["Deejay Academy London Premiere", "Deejay Academy: The Deal"],
     [/^LONDON:\s+/i, ""],
     ["Straight Cirle", "Straight Circle"],
+    [
+      /Spider-Man:?\s+["'(]Brand New["')]\s+Brand New Day/i,
+      "Spider-Man: Brand New Day",
+    ],
+    ["FILIPI�ANA", "Filipiñana"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {

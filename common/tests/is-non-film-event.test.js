@@ -240,6 +240,8 @@ describe("isNonFilmEvent", () => {
     ["Poetry Slam Final"],
     ["Statewatch's 35th anniversary - 3rd December"],
     ["DGC Dance Show 27: KPOP Dance Showcase"],
+    ['"88" - Canty, Daisy Lafarge, Noum & Vaiapraia'],
+    ["Community Crafts: Xmas Card Making Workshop"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });

@@ -456,6 +456,8 @@ const nonFilmEvents = [
   // A numbered dance show series, billed with each edition's theme ("27: KPOP
   // Dance Showcase"), so match the series rather than one edition of it.
   /^DGC Dance Show \d+\b/i,
+  /^"88" - Canty,? Daisy Lafarge,? Noum & Vaiapraia$/i,
+  /^Community Crafts: Xmas Card Making Workshop$/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
