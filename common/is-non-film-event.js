@@ -448,6 +448,8 @@ const nonFilmEvents = [
   /^Outvertising Live\b/i,
   /^Choir Party by Candlelight\b/i,
   /^Natty Bo and The Top Cats\b/i,
+  /^Grads: Festive Graduate Social\b/i,
+  /^CUZ WE OUTSIDE\b/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>

@@ -2209,6 +2209,8 @@ function normalizeTitle(title, options) {
     ["Before Sunset + ", "Before Sunset & "],
     ["Nirvana MTV Unplugged", "MTV Unplugged: Nirvana"],
     ["Virgin Suicides + ", "Virgin Suicides & "],
+    ["Cine Brazil - ", "Cine Brazil: "],
+    ["Deejay Academy London Premiere", "Deejay Academy: The Deal"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
