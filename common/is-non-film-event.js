@@ -450,6 +450,12 @@ const nonFilmEvents = [
   /^Natty Bo and The Top Cats\b/i,
   /^Grads: Festive Graduate Social\b/i,
   /^CUZ WE OUTSIDE\b/i,
+  /^Poetry Slam Final$/i,
+  // An anniversary event, billed with the date it is on ("- 3rd December").
+  /^Statewatch['’]s 35th anniversary\b/i,
+  // A numbered dance show series, billed with each edition's theme ("27: KPOP
+  // Dance Showcase"), so match the series rather than one edition of it.
+  /^DGC Dance Show \d+\b/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
