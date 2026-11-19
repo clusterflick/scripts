@@ -126,18 +126,30 @@ describe(`${attributes.name} descriptions`, () => {
     expect(output[0].matchingHints.overview).toBe("Steel pan\nPlus Q&A");
   });
 
-  it("throws when two Description modules carry text", async () => {
+  it("reads every Description module carrying text, in page order", async () => {
     readJSON.mockImplementation(() => ({
       events: [event],
       eventPages: {
         [url]:
           module("Description", "<p>One</p>") +
+          module("Description", video) +
           module("Description", "<p>Two</p>"),
       },
     }));
 
+    const output = await findEvents(cinema);
+    expect(output).toHaveLength(1);
+    expect(output[0].matchingHints.overview).toBe("One\n\nTwo");
+  });
+
+  it("throws when no Description module carries text", async () => {
+    readJSON.mockImplementation(() => ({
+      events: [event],
+      eventPages: { [url]: module("Description", video) },
+    }));
+
     await expect(findEvents(cinema)).rejects.toThrow(
-      '2 "Description" modules with text',
+      'no "Description" module with text',
     );
   });
 });

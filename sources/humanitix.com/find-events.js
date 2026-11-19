@@ -21,29 +21,36 @@ const attributes = require("./attributes");
  * organiser's bio - so the description is picked out by the heading of the
  * module it sits in rather than by the rich text's own markup.
  *
- * An organiser can add more than one module under that heading, and one
- * holding only an embedded video has no text to read, so only modules with
- * text count towards the one expected.
+ * An organiser can add more than one module under that heading. One holding
+ * only an embedded video has no text to read, so it is skipped. Several with
+ * text are all description and are read in page order: on 19th November 2026
+ * SABOTAGE carried its blurb in one and a Fringe review in a second, and
+ * neither is the bio this heading exists to keep out.
  */
 function getDescription(event, html) {
   const $ = cheerio.load(html);
-  const $module = $(".EventModuleRichText").filter(
+  const $modules = $(".EventModuleRichText").filter(
     (i, el) =>
       getText($(el).find("h2")) === "Description" &&
       getText($(el).find(".RichContent")) !== "",
   );
-  if ($module.length !== 1) {
+  if ($modules.length === 0) {
     throw new Error(
-      `humanitix event ${event._id} has ${$module.length} "Description" modules with text on its page, expected 1`,
+      `humanitix event ${event._id} has no "Description" module with text on its page`,
     );
   }
 
-  // Paragraphs are separate elements with nothing between them, so they would
-  // otherwise run together into one line of text.
-  const $content = $module.find(".RichContent");
-  $content.find("br").replaceWith("\n");
-  $content.find("p, li").after("\n");
-  return getText($content);
+  return $modules
+    .map((i, el) => {
+      // Paragraphs are separate elements with nothing between them, so they
+      // would otherwise run together into one line of text.
+      const $content = $(el).find(".RichContent");
+      $content.find("br").replaceWith("\n");
+      $content.find("p, li").after("\n");
+      return getText($content);
+    })
+    .get()
+    .join("\n\n");
 }
 
 function convertHumanitixEvent(event, eventPages) {
