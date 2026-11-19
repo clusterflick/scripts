@@ -2209,6 +2209,8 @@ function normalizeTitle(title, options) {
     ["Before Sunset + ", "Before Sunset & "],
     ["Nirvana MTV Unplugged", "MTV Unplugged: Nirvana"],
     ["Virgin Suicides + ", "Virgin Suicides & "],
+    ["Cine Brazil - ", "Cine Brazil: "],
+    ["Deejay Academy London Premiere", "Deejay Academy: The Deal"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
@@ -2236,6 +2238,13 @@ function normalizeTitle(title, options) {
   // leaves the bare "double bill" to group with anything billed that way.
   if (title === "free film screening: double bill") {
     return "free film screening double bill";
+  }
+
+  // The event's own name ends in "screening", which the trailing-billing rule
+  // would strip to the bare "the little". The venue is billed after it with
+  // and without a space ("@THE BFI", "@ THE BFI").
+  if (/^the little screening(?:\s*@\s*the bfi)?$/.test(title)) {
+    return "little screening";
   }
 
   // The listing names no film, so "Movie Night" is the event itself rather

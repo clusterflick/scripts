@@ -1854,6 +1854,7 @@ const knownRemovablePhrases = [
   "MINI MORNING MOVIE PREMIERE",
   "Movie Premiere",
   "Short Film Premiere",
+  "International Film Premiere",
   "Film Premiere",
   " a premiere",
   // Ahead of "premiere", which would otherwise leave the plural's "s" behind.
@@ -2012,6 +2013,9 @@ const knownRemovablePhrases = [
   "The Staff's Favourite Film of 2026:",
   "> Wednesday Screenings",
   "at the Royal Albert Hall",
+  "@THE BFI",
+  "@ THE BFI",
+  "Cine Brazil:",
 ];
 
 module.exports = knownRemovablePhrases;

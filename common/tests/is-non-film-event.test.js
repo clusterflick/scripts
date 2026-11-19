@@ -235,6 +235,8 @@ describe("isNonFilmEvent", () => {
     ["KCLCreaTech Live Coding Amapiano Workshop"],
     ["Clay Totems Workshop"],
     ["J'ai laissé mes seins à Paris"],
+    ["Grads: Festive Graduate Social"],
+    ["CUZ WE OUTSIDE 30+ DAY PARTY VOL 4"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });
