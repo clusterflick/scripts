@@ -71,6 +71,9 @@ function extractMovieTitleFromTicketName(ticketName) {
       normalizeTitle.includes("table for") ||
       normalizeTitle.includes("advance adult") ||
       normalizeTitle.includes("advance child") ||
+      // A bundle priced by who it lets in ("Family Pack Deals (Admits 2
+      // adults & 2 children)") is a ticket, not a film
+      normalizeTitle.match(/\badmits \d/) ||
       normalizeTitle === "advance" ||
       normalizeTitle === "patreon" ||
       normalizeTitle.match(/^entry\b/i)) // e.g. "Entry" or "Entry with Pizza"

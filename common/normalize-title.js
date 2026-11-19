@@ -2102,6 +2102,7 @@ function normalizeTitle(title, options) {
     // The colon would otherwise read as the "OUT:" series label and take the
     // film's own "Out" with it, and the other billings are the same film
     [/^Rooted Out(?:: Chapter (?:One|1)| \+ Q&A)?$/i, "Rooted Out Chapter One"],
+    [/^Rooted Out: Chapter /i, "Rooted Out Chapter "],
     [
       "Vampire Ball: Live Viola, Cocktails +",
       "Vampire Ball: Live Viola, Cocktails &",
@@ -2211,6 +2212,8 @@ function normalizeTitle(title, options) {
     ["Virgin Suicides + ", "Virgin Suicides & "],
     ["Cine Brazil - ", "Cine Brazil: "],
     ["Deejay Academy London Premiere", "Deejay Academy: The Deal"],
+    [/^LONDON:\s+/i, ""],
+    ["Straight Cirle", "Straight Circle"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {

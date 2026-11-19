@@ -237,6 +237,9 @@ describe("isNonFilmEvent", () => {
     ["J'ai laissé mes seins à Paris"],
     ["Grads: Festive Graduate Social"],
     ["CUZ WE OUTSIDE 30+ DAY PARTY VOL 4"],
+    ["Poetry Slam Final"],
+    ["Statewatch's 35th anniversary - 3rd December"],
+    ["DGC Dance Show 27: KPOP Dance Showcase"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });
