@@ -2240,6 +2240,13 @@ function normalizeTitle(title, options) {
     return "free film screening double bill";
   }
 
+  // The event's own name ends in "screening", which the trailing-billing rule
+  // would strip to the bare "the little". The venue is billed after it with
+  // and without a space ("@THE BFI", "@ THE BFI").
+  if (/^the little screening(?:\s*@\s*the bfi)?$/.test(title)) {
+    return "little screening";
+  }
+
   // The listing names no film, so "Movie Night" is the event itself rather
   // than a label wrapped around one - stripping it as the phrase list would
   // leaves the bare "community". Matched on the "presents" billing rather than
