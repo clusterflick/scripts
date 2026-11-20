@@ -244,6 +244,8 @@ describe("isNonFilmEvent", () => {
     ["Community Crafts: Xmas Card Making Workshop"],
     ["SAD Returns"],
     ["SSVII: UNNATURAL CHANNEL - LIVE"],
+    ["In-House Showcase"],
+    ["Kernel Mag Launch Party"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });

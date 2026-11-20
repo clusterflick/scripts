@@ -460,6 +460,8 @@ const nonFilmEvents = [
   /^Community Crafts: Xmas Card Making Workshop$/i,
   /^SAD Returns$/i,
   /^SSVII: UNNATURAL CHANNEL\b/i,
+  /^In-House Showcase$/i,
+  /^Kernel Mag Launch Party$/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
