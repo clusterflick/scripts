@@ -842,7 +842,7 @@ function normalizeTitle(title, options) {
     ["Le Litre de lait + Les Contrebandières", "Les Contrebandières"],
     ["CHRISTOPHER BRETT BAILEY + ", "CHRISTOPHER BRETT BAILEY presents "],
     ["ELF MOVIE", "Elf"],
-    ["Screening + Q&A:", "Screening & Q&A:"],
+    [/Screening\s*\+\s*Q&A:/i, "Screening & Q&A:"],
     ["Marcin Wierzchowski - ", "Marcin Wierzchowski: "],
     [
       "Sapphic Cinema and BFI Melodrama -",
