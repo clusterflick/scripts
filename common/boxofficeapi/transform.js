@@ -16,6 +16,20 @@ const {
 const getUrl = (data, moviePageUrl) =>
   data.ticketing[0]?.urls[0] ?? moviePageUrl;
 
+// Every Everyman showtime names its screen, but Cineworld leaves the `screen`
+// key off many of its showtimes - same-day ones included, so it is not just
+// screens yet to be allocated - and that performance has no screen. A `screen`
+// that is present without a name is a structure change, so throw.
+const getScreenName = ({ id, screen }) => {
+  if (screen === undefined) return undefined;
+  if (typeof screen?.name !== "string" || !screen.name.trim()) {
+    throw new Error(
+      `Showtime ${id} has a screen without a name: ${JSON.stringify(screen)}`,
+    );
+  }
+  return screen.name;
+};
+
 // `accessibilityTags` maps a lower-cased showtime tag to the accessibility
 // flags it sets. It is per chain because the chains don't tag the same way -
 // a tag one chain leaves in the notes may be a dependable marker at another.
@@ -105,6 +119,7 @@ async function transform(
           date,
           notesList,
           url: getUrl(performance.data, moviePageUrl),
+          screen: getScreenName(performance),
           status: { soldOut: performance.occupancy.rate === 100 },
           accessibility: createAccessibility(
             movie.title,
