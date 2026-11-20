@@ -22,6 +22,7 @@ const identifyMultipleMovies = require("./identify-multiple-movies");
 const identifyShorts = require("./identify-shorts");
 const isAlreadyListed = require("./is-already-listed");
 const isNoLongerSourcedHere = require("./is-no-longer-sourced-here");
+const isCancelledEventPage = require("./is-cancelled-event-page");
 const {
   createOccasions,
   getTitleOccasions,
@@ -295,6 +296,17 @@ async function transform(
           " - Dropped (redirected to not found):",
           movie.title,
           response.url,
+        );
+        continue;
+      }
+
+      // The page's structured data says the event is off, however the page
+      // itself words it. Read before the scripts are stripped below.
+      if (isCancelledEventPage(content, movie.url)) {
+        console.log(
+          " - Dropped (structured data says cancelled):",
+          movie.title,
+          movie.url,
         );
         continue;
       }
