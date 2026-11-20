@@ -458,6 +458,8 @@ const nonFilmEvents = [
   /^DGC Dance Show \d+\b/i,
   /^"88" - Canty,? Daisy Lafarge,? Noum & Vaiapraia$/i,
   /^Community Crafts: Xmas Card Making Workshop$/i,
+  /^SAD Returns$/i,
+  /^SSVII: UNNATURAL CHANNEL\b/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>

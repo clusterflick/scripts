@@ -242,6 +242,8 @@ describe("isNonFilmEvent", () => {
     ["DGC Dance Show 27: KPOP Dance Showcase"],
     ['"88" - Canty, Daisy Lafarge, Noum & Vaiapraia'],
     ["Community Crafts: Xmas Card Making Workshop"],
+    ["SAD Returns"],
+    ["SSVII: UNNATURAL CHANNEL - LIVE"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });

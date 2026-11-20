@@ -2043,7 +2043,7 @@ function normalizeTitle(title, options) {
     // TheMovieDB carries the subtitle that venues leave off
     [/^Prahaar: The Untold Story of Ujjwal Nikam$/i, "Prahaar"],
     [/^(The Einstein of Sex): Life and Work of Dr\.? M\.? Hirschfeld$/i, "$1"],
-    [/^Bob Dylan\s*[-–]\s*(?=Don'?t Look Back$)/i, ""],
+    [/^Bob Dylan\s*[-–:]\s*(?=Don'?t Look Back$)/i, ""],
     [
       "Freeway: Confessions of a Trickbaby",
       "Freeway II: Confessions of a Trickbaby",
@@ -2219,6 +2219,7 @@ function normalizeTitle(title, options) {
       "Spider-Man: Brand New Day",
     ],
     ["FILIPI�ANA", "Filipiñana"],
+    ["DIAL CODE: SANTA CLAUSE", "Dial Code: Santa Claus"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
