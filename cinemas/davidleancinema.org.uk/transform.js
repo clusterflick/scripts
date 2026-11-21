@@ -1,4 +1,4 @@
-const { parseISO } = require("date-fns");
+const { format, isValid, parse, parseISO } = require("date-fns");
 const cheerio = require("cheerio");
 const {
   basicNormalize,
@@ -121,18 +121,147 @@ function parseWebsiteEventPage(html, url) {
   };
 }
 
-// Each website page links the Ticketsolve performances it covers, which is the
-// join back to the feed. A show can have several pages (its "& Q&A" screening,
-// say) carrying the same film details. WordPress suffixes the slug of each
-// later page ("the-incomer-2"), so the shortest URL is the show's original
-// page. A past event with no booking links joins to nothing.
+// A page's date line, e.g. "Tuesday 15 December at 2:30pm & 7:30pm*", as the
+// "MM-dd HH:mm" of each time it names. The year is left out because the page
+// leaves it out; a feed spans months, not a year, so the day and time are
+// enough to find the performance.
+function getPageTimes($, url) {
+  const dateLines = $(".event-date")
+    .toArray()
+    .map((el) =>
+      $(el)
+        .find("p")
+        .toArray()
+        .map((p) => getText($(p)))
+        .join(" "),
+    );
+  if (dateLines.length !== 1) {
+    throw new Error(
+      `Expected one date line on ${url}, found ${dateLines.length}`,
+    );
+  }
+  const [dateLine] = dateLines;
+  const match = dateLine.match(/^\w+day\s+(\d{1,2})\s+(\w+)\s+at\s+(.+)$/i);
+  if (!match) {
+    throw new Error(`Unable to read the date line "${dateLine}" on ${url}`);
+  }
+  const [, day, month, timesText] = match;
+  // 2000 is a leap year, so a page for 29 February still reads
+  const monthDay = parse(`${day} ${month}`, "d MMMM", new Date(2000, 0, 1));
+  if (!isValid(monthDay)) {
+    throw new Error(`Unable to read the date "${day} ${month}" on ${url}`);
+  }
+  // Written by hand, so "2:30pm", "2.30pm", "2:00 pm" and "2pm" all occur, joined
+  // by "&" or "and", with a note on one ("2.30pm (HOH)"), and "2.30 & 7.30pm"
+  // leaves the first time's am/pm to the last.
+  const times = timesText
+    .replace(/\([^)]*\)|\*/g, "")
+    .split(/&|\band\b/i)
+    .map((timeText) => {
+      const time = timeText
+        .trim()
+        .match(/^(\d{1,2})(?:[:.](\d{2}))?\s*(am|pm)?$/i);
+      if (!time) {
+        throw new Error(`Unable to read the time "${timeText}" on ${url}`);
+      }
+      const [, hour, minute = "00", meridiem] = time;
+      return { hour: Number(hour), minute, meridiem: meridiem?.toLowerCase() };
+    });
+  for (let i = times.length - 2; i >= 0; i -= 1) {
+    times[i].meridiem ??= times[i + 1].meridiem;
+  }
+  return times.map(({ hour, minute, meridiem }) => {
+    if (!meridiem) {
+      throw new Error(`No am or pm in the date line "${dateLine}" on ${url}`);
+    }
+    const hour24 = (hour % 12) + (meridiem === "pm" ? 12 : 0);
+    return `${format(monthDay, "MM-dd")} ${String(hour24).padStart(2, "0")}:${minute}`;
+  });
+}
+
+// Words of a title for comparing the page's with the feed's, which differ in
+// case, in what follows the film's name ("& Q&A", "- Dementia Friendly") and
+// occasionally in spelling (the feed's "NT LIVE: GOLDERN BOY").
+// Filler words are left out, so "The Front Page" and "The Incomer" don't agree
+// on "the"; a title is never all filler ("1 in 2" keeps "1" and "2").
+const FILLER_WORDS = new Set(["a", "an", "and", "at", "in", "of", "q", "the"]);
+const titleWords = (title) =>
+  new Set(
+    basicNormalize(title)
+      .toLowerCase()
+      .split(/[^\p{L}\p{N}]+/u)
+      .filter((word) => word && !FILLER_WORDS.has(word)),
+  );
+
+const titlesAgree = (a, b) => {
+  const wordsOfB = titleWords(b);
+  return [...titleWords(a)].some((word) => wordsOfB.has(word));
+};
+
+// The shows a page is about, by the performances on the day and time it names.
+// The venue has a single screen, so a day and time is one performance. The
+// title is a cross-check: a time landing on a show sharing no word with the
+// page's title means one of the two is wrong, and the details would go on the
+// wrong film. The times are typed by hand and sometimes wrong - Bad Apples'
+// babes-in-arms page said "1:00 am" for an 11am screening - so a time that
+// lands on nothing falls back to the one show on that day the title agrees
+// with.
+function getShowIdsByDate($, url, { showIdsByTime, showIdsByDay, showNames }) {
+  const pageTitle = getText($("h1.wp-block-post-title").first());
+  return getPageTimes($, url).flatMap((time) => {
+    const showId = showIdsByTime[time];
+    if (showId) {
+      if (!titlesAgree(pageTitle, showNames[showId])) {
+        throw new Error(
+          `The page "${pageTitle}" (${url}) falls on a performance of "${showNames[showId]}" - one of them has the wrong date or title`,
+        );
+      }
+      return [showId];
+    }
+    const sameDay = [...(showIdsByDay[time.slice(0, 5)] ?? [])].filter((id) =>
+      titlesAgree(pageTitle, showNames[id]),
+    );
+    if (sameDay.length > 1) {
+      throw new Error(
+        `The page "${pageTitle}" (${url}) gives a time with no performance, and its day has several shows it could be`,
+      );
+    }
+    return sameDay;
+  });
+}
+
+// Each website page has to be joined back to the Ticketsolve show it covers.
+// The page's booking links named it until 21 November 2026, when they vanished
+// from every page at once - so a page with them is joined by them, and one
+// without by the day and time it gives. A show can have several pages (its "&
+// Q&A" screening, say) carrying the same film details. WordPress suffixes the
+// slug of each later page ("the-incomer-2"), so the shortest URL is the show's
+// original page. A past event joins to nothing.
 const byShortestUrl = (a, b) => a.length - b.length || a.localeCompare(b);
 
-function getWebsiteDetailsByShowId(eventPages) {
+function getWebsiteDetailsByShowId(eventPages, $feed) {
+  const showIdsByTime = {};
+  const showIdsByDay = {};
+  const showNames = {};
+  $feed("venues > venue > shows > show").each((index, showEl) => {
+    const $show = $feed(showEl);
+    const showId = $show.attr("id");
+    showNames[showId] = getTextAt($show, "name");
+    $show.find("events > event").each((index, eventEl) => {
+      const rawDate = getTextAt($feed(eventEl), "date_time_iso");
+      const time = format(parseISO(rawDate), "MM-dd HH:mm");
+      // Two shows at one time (one relisted under a new id, say) leave the
+      // time naming neither, for the same day's titles to decide between
+      showIdsByTime[time] =
+        time in showIdsByTime && showIdsByTime[time] !== showId ? null : showId;
+      (showIdsByDay[time.slice(0, 5)] ??= new Set()).add(showId);
+    });
+  });
+
   const detailsByShowId = {};
   for (const url of Object.keys(eventPages).sort(byShortestUrl)) {
     const $ = cheerio.load(eventPages[url]);
-    const showIds = $(".ticket-buttons a")
+    const linkedShowIds = $(".ticket-buttons a")
       .toArray()
       .map(
         (el) =>
@@ -141,6 +270,10 @@ function getWebsiteDetailsByShowId(eventPages) {
             ?.match(/\/shows\/(\d+)\/events\//)?.[1],
       )
       .filter(Boolean);
+    const showIds =
+      linkedShowIds.length > 0
+        ? linkedShowIds
+        : getShowIdsByDate($, url, { showIdsByTime, showIdsByDay, showNames });
     for (const showId of new Set(showIds)) {
       detailsByShowId[showId] ??= parseWebsiteEventPage(eventPages[url], url);
     }
@@ -301,11 +434,11 @@ async function transform(
   const $ = cheerio.load(movieListPage, { xmlMode: true });
   const shows = $("venues > venue > shows > show").toArray();
 
-  const websiteDetails = getWebsiteDetailsByShowId(eventPages);
+  const websiteDetails = getWebsiteDetailsByShowId(eventPages, $);
   const showIds = shows.map((el) => $(el).attr("id"));
   if (!showIds.some((showId) => websiteDetails[showId])) {
     throw new Error(
-      "No website event page links to a Ticketsolve show - the page structure may have changed",
+      "No website event page matches a Ticketsolve show - the page structure may have changed",
     );
   }
 
