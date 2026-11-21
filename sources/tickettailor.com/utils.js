@@ -89,6 +89,12 @@ function extractEventIdFromUrl(url) {
 // Every event linked from a club's listing page, deduped by event id - a club
 // running the same event on several dates lists it once per date, all pointing
 // at the same event page.
+//
+// Those listings needn't agree on whether the event has a date picker. The
+// Mildmay Pantomime (November 2026) was listed on four dates: two with a single
+// time, two reading "Sat 12 Dec 2026 · Multiple times". Its one date picker
+// holds all four, so the event needs it if any of its listings says so - going
+// by the first listing alone left it unfetched.
 function extractEventLinks(html) {
   const $ = cheerio.load(html);
   const links = new Map();
@@ -99,18 +105,30 @@ function extractEventLinks(html) {
     if (!href) return;
 
     const eventId = extractEventIdFromUrl(href);
-    if (links.has(eventId)) return;
-
-    links.set(eventId, {
+    const hasMultipleDates = isMultipleDates(
+      $event.find(".event-meta__date").text(),
+    );
+    links.set(
       eventId,
-      url: `https://www.tickettailor.com${href.split(/[?#]/)[0]}`,
-      hasMultipleDates: isMultipleDates(
-        $event.find(".event-meta__date").text(),
-      ),
-    });
+      mergeEventLinks(links.get(eventId), {
+        eventId,
+        url: `https://www.tickettailor.com${href.split(/[?#]/)[0]}`,
+        hasMultipleDates,
+      }),
+    );
   });
 
   return [...links.values()];
+}
+
+// Two listings of one event: the first seen, needing its date picker if either
+// does.
+function mergeEventLinks(existing, link) {
+  if (!existing) return link;
+  return {
+    ...existing,
+    hasMultipleDates: existing.hasMultipleDates || link.hasMultipleDates,
+  };
 }
 
 module.exports = {
@@ -119,6 +137,7 @@ module.exports = {
   isMultipleDates,
   extractEventIdFromUrl,
   extractEventLinks,
+  mergeEventLinks,
   parseDateText,
   parseWithFormats,
   TIME_FORMATS,

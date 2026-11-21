@@ -1,4 +1,5 @@
 const {
+  extractEventLinks,
   isAccessCodePage,
   isMultipleDates,
   parseDateText,
@@ -67,5 +68,45 @@ describe("parseDateText", () => {
     expect(() => parseDateText("Sometime soon")).toThrow(
       'Unable to parse start date from date text: "Sometime soon"',
     );
+  });
+});
+
+describe("extractEventLinks", () => {
+  const listing = (date, dateText) => `
+    <div class="events-listing__item">
+      <h3 class="event__title">
+        <a href="/events/mildmayclubandinstituteltd/2469748?date=${date}">
+          The Mildmay Pantomime 2026
+        </a>
+      </h3>
+      <div class="event-meta__date">${dateText}</div>
+    </div>`;
+
+  // The Mildmay Pantomime, November 2026: the first listings have one time
+  // each, the later ones several, and the date picker holds all of them.
+  it("needs the date picker if any listing of the event says so", () => {
+    const html = [
+      listing("2026-12-10", "Thu 10 Dec 2026 7:00 PM - 10:30 PM GMT"),
+      listing("2026-12-11", "Fri 11 Dec 2026 7:00 PM - 10:00 PM GMT"),
+      listing("2026-12-12", "Sat 12 Dec 2026 · Multiple times"),
+      listing("2026-12-13", "Sun 13 Dec 2026 · Multiple times"),
+    ].join("");
+    expect(extractEventLinks(html)).toEqual([
+      {
+        eventId: "2469748",
+        url: "https://www.tickettailor.com/events/mildmayclubandinstituteltd/2469748",
+        hasMultipleDates: true,
+      },
+    ]);
+  });
+
+  it("does not need the date picker when every listing has one time", () => {
+    const html = [
+      listing("2026-12-10", "Thu 10 Dec 2026 7:00 PM - 10:30 PM GMT"),
+      listing("2026-12-11", "Fri 11 Dec 2026 7:00 PM - 10:00 PM GMT"),
+    ].join("");
+    expect(extractEventLinks(html)).toEqual([
+      expect.objectContaining({ eventId: "2469748", hasMultipleDates: false }),
+    ]);
   });
 });
