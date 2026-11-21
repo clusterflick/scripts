@@ -462,6 +462,8 @@ const nonFilmEvents = [
   /^SSVII: UNNATURAL CHANNEL\b/i,
   /^In-House Showcase$/i,
   /^Kernel Mag Launch Party$/i,
+  /^sounding towards - - Closing Party$/i,
+  /^Free Event: Songs on the Water$/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
