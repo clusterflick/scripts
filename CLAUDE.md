@@ -277,23 +277,6 @@ a question about a trend is answered there, and a question about which venue
 drove one run's number is answered by that run's report, for the fortnight its
 artifact survives. Nothing in this repo reads either back.
 
-## Venue Accessibility
-
-What a venue's building and screens offer (step-free screens, wheelchair spaces,
-toilets, loops), as distinct from what a screening offers, which is
-`performance.accessibility`. It is reviewed data committed under
-`accessibility/`, one record per venue keyed by venue id, rather than a pipeline
-output: every change is a fact someone approves, so a pull request against it is
-the review and CI validates it (`common/accessibility/tests/records.test.js`).
-
-Three rules carry the design. A status other than `unknown` comes from a source,
-never an inference. A source's tier comes from
-`common/accessibility/source-policy.js`, which fails closed on a host it doesn't
-list. A record reaches the website only once verified with a quote for every
-source, and the quotes are checked against the fetched pages. Every venue whose
-`programming` is `cinema` or `venue` needs a record. Read
-`docs/venue-accessibility.md` before changing any of it.
-
 ## Occasions
 
 Each performance carries `occasions`: what makes it more than a screening - an
