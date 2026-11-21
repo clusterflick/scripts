@@ -123,6 +123,23 @@ function getEventStatus(details) {
   return { soldOut: salesStatus.messageCode === "tickets_sold_out" };
 }
 
+/**
+ * Whether an event's own page says it has been cancelled.
+ *
+ * The listing's `is_cancelled` can't be relied on alone. Bar Trash's Soylent
+ * Green at Beer Merchants Tap was cancelled in November 2026 and the organiser
+ * calendar still returned it with `is_cancelled: false` - its page's
+ * `basicInfo.status` still read `live` too - and it went on being published.
+ * The page's sales status is what changed: `event_cancelled`, the code behind
+ * the "Cancelled" badge the page shows.
+ */
+function isCancelledOnPage(details) {
+  return (
+    details?.props?.pageProps?.context?.salesStatus?.messageCode ===
+    "event_cancelled"
+  );
+}
+
 // "Festival" and "Fest" as a word ("DzFest - The Algerian Festival"), but not
 // "Festive", which is a Christmas season rather than an event of its own.
 const FESTIVAL_NAME_PATTERN = /festival|fest\b/i;
@@ -159,5 +176,6 @@ module.exports = {
   getEventVenue,
   getEventDescription,
   getEventStatus,
+  isCancelledOnPage,
   getFestivalCollectionNotes,
 };

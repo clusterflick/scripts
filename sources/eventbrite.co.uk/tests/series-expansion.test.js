@@ -150,6 +150,39 @@ describe("eventbrite series expansion", () => {
     expect(output).toHaveLength(4);
   });
 
+  // The salesStatus Eventbrite's page for Bar Trash's cancelled Soylent Green
+  // carried in November 2026, while its listing still read is_cancelled: false.
+  const cancelledSalesStatus = {
+    salesStatus: "sales_ended",
+    startSalesDate: null,
+    messageCode: "event_cancelled",
+    messageType: "canonical",
+    message: "Cancelled",
+  };
+
+  it("skips an event whose page says it was cancelled though its listing doesn't", async () => {
+    const details = seriesDetails();
+    details.props.pageProps.context.basicInfo.isSeries = false;
+    withRetrieved({ details });
+    expect(await findEvents(griffinAttributes)).toHaveLength(1);
+
+    details.props.pageProps.context.salesStatus = cancelledSalesStatus;
+    withRetrieved({ details });
+    expect(await findEvents(griffinAttributes)).toEqual([]);
+  });
+
+  it("skips a reached session whose page says it was cancelled, and keeps the rest of the series", async () => {
+    const details = seriesDetails();
+    details.props.pageProps.context.salesStatus = cancelledSalesStatus;
+    withRetrieved({ details });
+
+    const output = await findEvents(griffinAttributes);
+
+    expect(output.map(({ showingId }) => showingId)).toEqual(
+      griffin.sessions.slice(1).map(({ id }) => `eventbrite.co.uk-${id}`),
+    );
+  });
+
   it("throws on a session status nobody has decided how to publish", async () => {
     const sessions = clone(griffin.sessions);
     sessions[2].status = "draft";

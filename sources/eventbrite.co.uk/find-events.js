@@ -15,6 +15,7 @@ const {
   getEventDescription,
   getEventStatus,
   getFestivalCollectionNotes,
+  isCancelledOnPage,
 } = require("./utils");
 const attributes = require("./attributes");
 const { venueMatchesCinema } = require("../../common/source-utils");
@@ -209,7 +210,9 @@ function convertSeriesSessions(
       return convertEventbriteEvent(sessionAsListing(session), details, {});
     }
     if (listing.is_cancelled || listing.is_online_event) return [];
-    return convertEventbriteEvent(listing, getPage(listing));
+    const page = getPage(listing);
+    if (isCancelledOnPage(page)) return [];
+    return convertEventbriteEvent(listing, page);
   });
 }
 
@@ -298,9 +301,16 @@ async function findEvents(cinema) {
     .flatMap((event) => {
       const details = getPage(event);
 
+      // A listing can still say it is on when its page says it was cancelled -
+      // see isCancelledOnPage. A series' sessions each carry their own status,
+      // read as they are expanded, so this is the listing's own page only.
+      const isCancelled = isCancelledOnPage(details);
+
       // A handful of listings pack a whole season of screenings into one event,
       // with the individual dates written out only in the body text.
-      if (isLineUpEvent(event)) return expandLineUpEvent(event, details);
+      if (isLineUpEvent(event)) {
+        return isCancelled ? [] : expandLineUpEvent(event, details);
+      }
 
       // Others are a series, whose sessions are read from the series rather
       // than from however many of them the search happened to reach. That
@@ -324,6 +334,7 @@ async function findEvents(cinema) {
         );
       }
 
+      if (isCancelled) return [];
       return convertEventbriteEvent(event, details);
     })
     .filter(isNotNonFilmEvent);
