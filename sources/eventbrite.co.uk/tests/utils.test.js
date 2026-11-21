@@ -1,5 +1,6 @@
 const {
   getEventStatus,
+  isCancelledOnPage,
   getFestivalCollectionNotes,
   getVenueName,
 } = require("../utils");
@@ -51,6 +52,40 @@ describe("getEventStatus", () => {
     ["a page carrying no sales status", { props: { pageProps: {} } }],
   ])("claims nothing from %s", (_, details) => {
     expect(getEventStatus(details)).toEqual({});
+  });
+});
+
+describe("isCancelledOnPage", () => {
+  it.each([
+    [
+      "cancelled",
+      {
+        salesStatus: "sales_ended",
+        messageCode: "event_cancelled",
+        message: "Cancelled",
+      },
+      true,
+    ],
+    ["on sale", { salesStatus: "on_sale", messageCode: null }, false],
+    [
+      "sold out, then closed",
+      { salesStatus: "sales_ended", messageCode: "tickets_sold_out" },
+      false,
+    ],
+    [
+      "closed for any other reason",
+      { salesStatus: "sales_ended", messageCode: "tickets_with_sales_ended" },
+      false,
+    ],
+  ])("reports %s as cancelled: %p", (_, salesStatus, cancelled) => {
+    expect(isCancelledOnPage(pageWithSalesStatus(salesStatus))).toBe(cancelled);
+  });
+
+  it.each([
+    ["no page at all", undefined],
+    ["a page carrying no sales status", { props: { pageProps: {} } }],
+  ])("claims nothing from %s", (_, details) => {
+    expect(isCancelledOnPage(details)).toBe(false);
   });
 });
 
