@@ -225,10 +225,36 @@ function convertTicketTailorEvent(event, occurrences, description) {
 // The same for every cinema asked about, so built once per retrieved file -
 // see memoiseOnData.
 const parseAllEvents = memoiseOnData((clubPages) =>
-  Object.entries(clubPages).flatMap(([slug, html]) =>
-    parseEventsFromPage(html, slug),
+  collapseMultipleDateEvents(
+    Object.entries(clubPages).flatMap(([slug, html]) =>
+      parseEventsFromPage(html, slug),
+    ),
   ),
 );
+
+// An event is listed once per date, and the listings needn't agree: the
+// Mildmay Pantomime had two dates with a single time and two reading
+// "Multiple times". Its date picker holds every date, the single-time ones
+// included, so an event with any multi-time listing is read from the picker
+// once - reading each listing would repeat the picker's performances per
+// multi-time date, and its single-time dates on top.
+function collapseMultipleDateEvents(events) {
+  const multipleDateIds = new Set(
+    events
+      .filter(({ hasMultipleDates }) => hasMultipleDates)
+      .map(({ eventId }) => eventId),
+  );
+  const seen = new Set();
+  return events.flatMap((event) => {
+    if (!multipleDateIds.has(event.eventId)) return [event];
+    if (seen.has(event.eventId)) return [];
+    seen.add(event.eventId);
+    const { slug, title, fullUrl, eventId, locationText } = event;
+    return [
+      { slug, title, fullUrl, eventId, locationText, hasMultipleDates: true },
+    ];
+  });
+}
 
 async function findEvents(cinema) {
   const dataSrc = path.join(

@@ -1,7 +1,11 @@
 const {
   withPlaywrightSession,
 } = require("../../common/get-page-with-playwright");
-const { extractEventLinks, ACCESS_CODE_SELECTOR } = require("./utils");
+const {
+  extractEventLinks,
+  mergeEventLinks,
+  ACCESS_CODE_SELECTOR,
+} = require("./utils");
 
 // Each venue/organization has its own Ticket Tailor page - add new slugs here
 const VENUE_SLUGS = [
@@ -99,7 +103,10 @@ async function retrieve() {
       for (const link of extractEventLinks(html)) {
         // Clubs co-promoting a screening list the same event, so key on the
         // event id to fetch each page once.
-        if (!eventLinks.has(link.eventId)) eventLinks.set(link.eventId, link);
+        eventLinks.set(
+          link.eventId,
+          mergeEventLinks(eventLinks.get(link.eventId), link),
+        );
       }
     }
     console.log(`    - Found ${eventLinks.size} event pages to retrieve`);
