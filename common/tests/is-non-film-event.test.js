@@ -246,6 +246,8 @@ describe("isNonFilmEvent", () => {
     ["SSVII: UNNATURAL CHANNEL - LIVE"],
     ["In-House Showcase"],
     ["Kernel Mag Launch Party"],
+    ["sounding towards - - Closing Party"],
+    ["Free Event: Songs on the Water"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });
