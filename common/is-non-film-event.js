@@ -465,6 +465,9 @@ const nonFilmEvents = [
   /^Kernel Mag Launch Party$/i,
   /^sounding towards - - Closing Party$/i,
   /^Free Event: Songs on the Water$/i,
+  /^Fundraiser: Gift Wrapping Service\b/i,
+  /^Johnny Marr: In Conversation$/i,
+  /^Candlelight Carols$/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>

@@ -512,6 +512,7 @@ function normalizeTitle(title, options) {
     [" - Poets and Lovers", ": Poets and Lovers"],
     [/Last Supper (– )?Part 1/i, "Last Supper"],
     ["The Last Supper", "Last Supper"],
+    ["The Elves (1989)", "Elves (1989)"],
     ["Veera Dheera Sooran: Part 2", "Veera Dheera Sooran"],
     // The three films of the documentary are known as "Part I", "Part II" and
     // "Part III", but venues bill them with a digit or a bare numeral, and the
