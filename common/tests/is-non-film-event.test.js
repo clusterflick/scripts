@@ -248,6 +248,9 @@ describe("isNonFilmEvent", () => {
     ["Kernel Mag Launch Party"],
     ["sounding towards - - Closing Party"],
     ["Free Event: Songs on the Water"],
+    ["Fundraiser: Gift Wrapping Service @ Lovely & Local Makers Market"],
+    ["Johnny Marr: In Conversation"],
+    ["Candlelight Carols"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });
