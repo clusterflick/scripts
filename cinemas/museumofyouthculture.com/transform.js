@@ -7,6 +7,7 @@ const {
   createPerformance,
   generateShowingId,
 } = require("../../common/utils");
+const { getExpectedClosure } = require("../../common/expected-closures");
 const attributes = require("./attributes");
 const { parseEvents, isFilmEvent } = require("./utils");
 
@@ -15,6 +16,21 @@ const getLumaSlug = (url) =>
 
 async function transform({ movieListPage }, sourcedEvents) {
   const sourced = Object.values(sourcedEvents).flat();
+
+  // The retrieve saves no page while the venue's listings are out of reach.
+  // Stand down only for a declared closure, and say which one, so the missing
+  // page is explained in the log rather than silent. What the sources find
+  // here is unaffected.
+  if (movieListPage === null) {
+    const closure = getExpectedClosure(attributes.id);
+    if (!closure) {
+      throw new Error(`No listings page was retrieved for ${attributes.id}`);
+    }
+    console.log(
+      `      - ⚠️  No listings for ${attributes.id} - closed until ${closure.until} for ${closure.reason}`,
+    );
+    return sourced;
+  }
 
   // An event booked through Luma reaches us from the source too, with the time
   // it actually starts rather than this page's "6-9pm". Keeping both would list

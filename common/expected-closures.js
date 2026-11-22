@@ -129,6 +129,23 @@ const expectedClosures = [
     // cancelled today would stay up.
     reason: "SiteGround refusing all requests, listings unreachable",
   },
+  {
+    venue: "museumofyouthculture.com",
+    from: "2026-11-22",
+    until: "2026-11-22",
+    // Not a closure, and like the two entries above the evidence is our own
+    // observation. Since this morning every page of museumofyouthculture.com -
+    // the home page included, with or without www - answers a 302 to
+    // `/cgi-sys/suspendedpage.cgi`, cPanel's "Account Suspended. This Account
+    // has been suspended. Contact your hosting provider for more information."
+    // The museum may well be open; its website is what the host has taken down.
+    //
+    // One day, for the same reason as Fulham Pier's: nothing observed says when
+    // the account is reinstated, and this buys the run that is blocked now. The
+    // venue's last release listed no films of its own, and events it books
+    // through Luma still arrive from that source.
+    reason: "website suspended by its host, listings unreachable",
+  },
 ];
 
 // The closure covering this venue today, or undefined if it has none - so a
