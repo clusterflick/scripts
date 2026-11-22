@@ -468,6 +468,7 @@ const nonFilmEvents = [
   /^Fundraiser: Gift Wrapping Service\b/i,
   /^Johnny Marr: In Conversation$/i,
   /^Candlelight Carols$/i,
+  /^Change Act presents: A UK Disability History Month Cabaret$/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>

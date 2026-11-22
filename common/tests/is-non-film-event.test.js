@@ -251,6 +251,7 @@ describe("isNonFilmEvent", () => {
     ["Fundraiser: Gift Wrapping Service @ Lovely & Local Makers Market"],
     ["Johnny Marr: In Conversation"],
     ["Candlelight Carols"],
+    ["Change, Act presents: A UK Disability History Month Cabaret"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });
