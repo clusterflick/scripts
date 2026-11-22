@@ -883,6 +883,7 @@ function normalizeTitle(title, options) {
     // rather than a string per spelling.
     [/\s*(?:&|and)\s+pirate hat making workshop/i, ""],
     ["Film Club |", "Film Club: "],
+    ["NEƎR | ", "NEƎR: "],
     ["地道星期日影院 |", "地道星期日影院: "],
     ["IN-HOUSE - ", "IN-HOUSE: "],
     ["RIO FOREVER /", "RIO FOREVER: "],
@@ -899,6 +900,10 @@ function normalizeTitle(title, options) {
     [/\bFinal Shows? - /i, "Final Shows: "],
     [/^Cineworld Screening - /i, ""],
     ["Guest Event - ", "Guest Event: "],
+    [
+      "Guest Event: The Bevis Frond",
+      "Little Eden: A Film About The Bevis Frond",
+    ],
     ["Throwback - ", "Throwback: "],
     ["Toddler - ", "Toddler: "],
     ["Popcorn Nights - ", "Popcorn Nights: "],

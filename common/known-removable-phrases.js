@@ -353,6 +353,7 @@ const knownRemovablePhrases = [
   "Film Screening & Producer Q&A",
   "Screening & conversation with director Pete Cohen",
   "Film Screening & After Party",
+  "Screening & Bauble Painting",
   "Film screening and discussion",
   "Film screening & discussion",
   // Ahead of "screening and discussion", which would otherwise take the
