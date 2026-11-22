@@ -80,6 +80,15 @@ describe("classifyFetchResponse", () => {
     ).toMatchObject({ kind: "block", via: "response-text" });
   });
 
+  it("recognises a hosting platform's block of a whole network", () => {
+    expect(
+      classify(
+        403,
+        "<title>Your connection has been blocked</title> Requests from your network were blocked across our hosting platform after unusual activity.",
+      ),
+    ).toMatchObject({ kind: "block", via: "response-text" });
+  });
+
   it("never judges a good page on its text", () => {
     expect(classify(200, "<h1>Just a Moment (2026)</h1>")).toBeNull();
   });

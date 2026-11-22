@@ -40,8 +40,14 @@ const isBunnyShieldChallengeFetchResponse = (response) =>
 //
 // Covers Cloudflare's stock wording and the self-branded pages sites serve in
 // its place. Takes page text/HTML, since the response carries no signal.
+//
+// "Your connection has been blocked" is a host's own page, served through
+// Cloudflare without its headers: Alexandra Palace's refused the self-hosted
+// runners' whole network in November 2026 ("Requests from your network were
+// blocked across our hosting platform"), so a fresh IP from the same network
+// fared no better and nor did any client.
 const BOT_BLOCK_TEXT =
-  /has been blocked from accessing|Sorry, you have been blocked|You are unable to access/i;
+  /has been blocked from accessing|Sorry, you have been blocked|You are unable to access|Your connection has been blocked/i;
 
 const isBotBlockText = (html) => Boolean(html) && BOT_BLOCK_TEXT.test(html);
 

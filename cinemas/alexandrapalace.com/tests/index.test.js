@@ -1,5 +1,9 @@
 /** @jest-environment setup-polly-jest/jest-environment-node */
-const { setupPolly, schemaValidate } = require("../../../common/test-utils");
+const {
+  setupPolly,
+  schemaValidate,
+  setupCacheMock,
+} = require("../../../common/test-utils");
 const {
   sortAndFilterMovies,
   removeMatchingHints,
@@ -8,6 +12,12 @@ const {
 const { retrieve, transform, attributes } = require("..");
 
 const isRecording = false;
+
+// The pages come through a browser, which Polly can't see, so they replay from
+// `__manual-recordings__` - the pages Polly recorded before the retrieve moved
+// to one, under the cache keys it now uses.
+jest.mock("../../../common/cache");
+setupCacheMock(__dirname, "2026-08-23");
 
 describe(attributes.name, () => {
   setupPolly(isRecording, __dirname);
