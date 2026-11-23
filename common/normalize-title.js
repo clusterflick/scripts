@@ -436,6 +436,10 @@ function normalizeTitle(title, options) {
       "Thunderbirds 4k Restoration Double Bill 2026",
       "Thunderbirds 4K Double Bill - Atlantic Inferno / Attack of the Alligators!",
     ],
+    [
+      "Thunderbirds Double Bill - Atlantic Inferno / A",
+      "Thunderbirds 4K Double Bill - Atlantic Inferno / Attack of the Alligators!",
+    ],
     // The series' name, billed ahead of a dash. Removed here rather than in the
     // phrase list, which runs after the separator rule has already cut the
     // title at the dash and kept the series name instead of the film.
@@ -983,6 +987,10 @@ function normalizeTitle(title, options) {
     // the film arrives under a name it only has in this one season.
     ["Pressure at 50", "Pressure"],
     ["Pressure at England", "Pressure"],
+    // A corrections entry rather than a removable phrase: the "Nth
+    // anniversary" rule below runs before the phrase list and takes "50th
+    // anniversary" off, leaving "celebration" for no phrase to match.
+    [/^50th anniversary celebration: /i, ""],
     // Billed by an abbreviation and the date of the screening.
     [/^CAT Screening London \| .*$/i, "The Cat in the Hat"],
     [/^AB3 Screening London \| .*$/i, "The Angry Birds Movie 3"],
@@ -1094,7 +1102,9 @@ function normalizeTitle(title, options) {
       /(^\d{4} )?(classic |MUBI )?secret scre(e|a)(n|m)(ing)?( \d+)?/i,
       "mystery movie",
     ],
-    [/secret (classic )?bollywood cinema/i, "mystery movie"],
+    // The whole billing, community name and all ("Mauritian Secret Bollywood
+    // Cinema"), since nothing around the strand name is the film.
+    [/^.*secret (classic )?bollywood cinema.*$/i, "mystery movie"],
     // The Nickel bills its unnamed films under a strand name and then the kind
     // of film it is: "Blue Monday" is the night, "Mystery XXX Cinema" is the
     // same unnamed film its other strands sell. Without this the strand name
@@ -1980,6 +1990,10 @@ function normalizeTitle(title, options) {
     [
       /Special Screening of Bitters$/i,
       "Special Screening of Bitter Sweet Ballad",
+    ],
+    [
+      "Screening of Sunrise on the Reaping",
+      "Screening of The Hunger Games: Sunrise on the Reaping",
     ],
     ["The Playhouse Buster Keaton", "The Play house Buster Keaton"],
     ["Art is my Therapy - ", "Art is my Therapy: "],
