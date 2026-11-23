@@ -472,6 +472,7 @@ const nonFilmEvents = [
   /^Winter Solstice Singing Party$/i,
   /^CLINT BOON - The Manchester Chronicles$/i,
   /^Stow-Ho House Presents A 4th Birthday Celebration$/i,
+  /^Mistletoe & Vinyl - The Story of the Christmas No\. 1 with Marc Burrows$/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>

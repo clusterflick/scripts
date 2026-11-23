@@ -2021,6 +2021,10 @@ const knownRemovablePhrases = [
   "Cine Brazil:",
   "Brad Bird:",
   "film & Micro Moon live",
+  "Live Film Concert",
+  "RAYE:",
+  "Prison as a tool of empire:",
+  "The Sound Mirror Symposium:",
 ];
 
 module.exports = knownRemovablePhrases;
