@@ -469,6 +469,9 @@ const nonFilmEvents = [
   /^Johnny Marr: In Conversation$/i,
   /^Candlelight Carols$/i,
   /^Change Act presents: A UK Disability History Month Cabaret$/i,
+  /^Winter Solstice Singing Party$/i,
+  /^CLINT BOON - The Manchester Chronicles$/i,
+  /^Stow-Ho House Presents A 4th Birthday Celebration$/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>

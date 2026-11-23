@@ -252,6 +252,9 @@ describe("isNonFilmEvent", () => {
     ["Johnny Marr: In Conversation"],
     ["Candlelight Carols"],
     ["Change, Act presents: A UK Disability History Month Cabaret"],
+    ["Winter Solstice Singing Party"],
+    ["CLINT BOON - The Manchester Chronicles"],
+    ["Stow-Ho House Presents A 4th Birthday Celebration"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });

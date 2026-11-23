@@ -2020,6 +2020,7 @@ const knownRemovablePhrases = [
   "@ THE BFI",
   "Cine Brazil:",
   "Brad Bird:",
+  "film & Micro Moon live",
 ];
 
 module.exports = knownRemovablePhrases;
