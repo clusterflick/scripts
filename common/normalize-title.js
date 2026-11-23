@@ -544,6 +544,10 @@ function normalizeTitle(title, options) {
     // losing the film. The season changes with the programme, so match the
     // credit rather than carrying a string per season.
     [/\s+-\s+G\.O\.A\.T\.? Film Club presents\b.*$/i, ""],
+    // The collective's WeGotTickets subtitle is usually the film, but can be
+    // its own name instead ("Prison as a tool of empire: Films4Freedom"),
+    // which would otherwise be all that is left once the series is stripped.
+    [/:\s*Films4Freedom$/i, ""],
     // The club bills itself ahead of the film, often with whoever it is
     // co-hosting with ("& London Trans Pride", "& Cine Brazil"). The partner
     // changes from screening to screening, so match the club's own name and
@@ -1904,7 +1908,9 @@ function normalizeTitle(title, options) {
     [" TFFF ", " "],
     ["Harry Potter Philosopher", "Harry Potter and the Philosopher"],
     ["Maybe Tomorrow + Allies in Exile", "Maybe Tomorrow & Allies in Exile"],
-    [/^Documentary (screenings? |gala: )?/i, ""],
+    // "of" is part of the billing too ("Documentary Screening of Qitaf (The
+    // Harvest)"); left behind, it becomes the first word of the title.
+    [/^Documentary (screenings? (?:of )?|gala: )?/i, ""],
     // Billed with the word "documentary" after the title, which is not part
     // of it.
     [/^Mission Accomplished documentary$/i, "Mission Accomplished"],
