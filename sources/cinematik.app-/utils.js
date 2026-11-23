@@ -1,3 +1,5 @@
+const { format } = require("date-fns");
+
 // The sites Cinematik's programmes run on - read from its Programmes menu on
 // each retrieve - are where it sells tickets itself, so a JSON-LD address is
 // judged against them. Only `www.cinematik.app` has been seen giving one: every
@@ -38,27 +40,45 @@ const getEventSlug = (event, origins) => {
 };
 
 // Once a screening has happened, its booking page redirects to its event's
-// page, which says so in a notice ("The screening for I See Buildings Fall Like
-// Lightning has now happened. Hope to you see you at the next one!") and
-// carries the event's EventSeries JSON-LD, the screening's own Event gone. The
-// sitemap is written once a day, so a screening earlier the same day is still
-// listed - first seen on 23 November 2026, a matinee at The Welfare,
-// Ystradgynlais. Only that page is recognised: the notice and the series
-// together, so any other page without an Event still fails the retrieve.
-const PASSED_NOTICE = /\bhas now happened\b/i;
+// page: the event's EventSeries JSON-LD, with the screening's own Event gone
+// and the screening dropped from the series' `subEvent` list. The sitemap is
+// written once a day, so a screening earlier the same day is still listed -
+// first seen on 23 November 2026, at The Welfare, Ystradgynlais and then Curzon
+// Oxford.
+//
+// A browser also shows a notice ("The screening for ... has now happened"), but
+// that is a Rails flash, carried in a cookie set on the redirect, and a fetch
+// that follows the redirect without a cookie jar never sees it - so it can't be
+// what tells the page apart. What can is all of: the series is there, it no
+// longer lists this screening, and the date the screening's address ends in is
+// not in the future. Any other page without an Event still fails the retrieve.
+const BOOK_PATH_DATE = /-(\d{4}-\d{2}-\d{2})$/;
 
-const getPassedScreeningEventSlug = ($, jsonLd, origins) => {
-  const notice = $(".notice")
-    .map((_, el) => $(el).text())
-    .get()
-    .find((text) => PASSED_NOTICE.test(text));
-  if (!notice) return undefined;
+const getPassedScreeningEventSlug = (
+  url,
+  jsonLd,
+  origins,
+  now = new Date(),
+) => {
   const series = jsonLd.flat().find((data) => data["@type"] === "EventSeries");
-  const slug = getSlugFromEventUrl(series?.url, origins);
+  if (!series) return undefined;
+
+  const { pathname } = new URL(url);
+  const date = pathname.match(BOOK_PATH_DATE)?.[1];
+  if (!date || date > format(now, "yyyy-MM-dd")) return undefined;
+
+  const listed = (series.subEvent ?? []).some(
+    (subEvent) =>
+      typeof subEvent.url === "string" &&
+      new URL(subEvent.url).pathname === pathname,
+  );
+  if (listed) return undefined;
+
+  const slug = getSlugFromEventUrl(series.url, origins);
   if (!slug) {
     throw new Error(
-      `A screening's page says it "has now happened" but names no event ` +
-        `(EventSeries: ${series?.url})`,
+      `${url} redirected to an event page that names no event ` +
+        `(EventSeries: ${series.url})`,
     );
   }
   return slug;

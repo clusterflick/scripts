@@ -158,7 +158,7 @@ function parseBookPage(url, html, origins) {
   const jsonLd = getJsonLd($);
   const event = jsonLd.find((data) => data["@type"] === "Event");
   if (!event) {
-    const passedSlug = getPassedScreeningEventSlug($, jsonLd, origins);
+    const passedSlug = getPassedScreeningEventSlug(url, jsonLd, origins);
     if (passedSlug) return { eventSlug: passedSlug, past: true };
     throw new Error(`No Event JSON-LD on ${url}`);
   }
