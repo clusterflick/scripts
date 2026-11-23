@@ -9,7 +9,7 @@ module.exports = {
   },
   url: "https://thirtythrees.co.uk",
   address: "33 Salisbury Road, Harringay, London, N4 1JY, UK",
-  geo: { lat: 51.58163, lon: -0.0976443 },
+  geo: { lat: 51.58167397219386, lon: -0.09764896177639674 },
   structure: "solo",
   type: "Café & Restaurant",
   programming: "host",

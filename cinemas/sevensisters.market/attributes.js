@@ -10,7 +10,7 @@ module.exports = {
   },
   url: "https://sevensisters.market",
   address: "245-253 High Road, Tottenham, London, N15 5BT, UK",
-  geo: { lat: 51.5834032, lon: -0.0726974 },
+  geo: { lat: 51.58342955166117, lon: -0.0727240016947747 },
   structure: "solo",
   type: "Food Hall & Market",
   programming: "host",
