@@ -11,7 +11,11 @@ const {
   withJitter,
 } = require("../../common/utils");
 const { dailyCache } = require("../../common/cache");
-const { isSoldOnCinematik, getEventSlug } = require("./utils");
+const {
+  isSoldOnCinematik,
+  getEventSlug,
+  getPassedScreeningEventSlug,
+} = require("./utils");
 
 // A retrieve reads a page per screening, one after another - 315 of them when
 // first measured, growing with screenings nationwide. Each is rendered afresh
@@ -151,8 +155,13 @@ function assertLocalTimeMatches(url, startDate, localTimeText) {
 
 function parseBookPage(url, html, origins) {
   const $ = cheerio.load(html);
-  const event = getJsonLd($).find((data) => data["@type"] === "Event");
-  if (!event) throw new Error(`No Event JSON-LD on ${url}`);
+  const jsonLd = getJsonLd($);
+  const event = jsonLd.find((data) => data["@type"] === "Event");
+  if (!event) {
+    const passedSlug = getPassedScreeningEventSlug($, jsonLd, origins);
+    if (passedSlug) return { eventSlug: passedSlug, past: true };
+    throw new Error(`No Event JSON-LD on ${url}`);
+  }
 
   const eventSlug = getEventSlug(event, origins);
 
