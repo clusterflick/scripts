@@ -2438,8 +2438,10 @@ function normalizeTitle(title, options) {
     title = hasSlavicPremier[1];
   }
 
+  // The second screening is billed both as "Втора прожекция на "…"" and,
+  // in capitals with the city, as "ВТОРА ПРОЖЕКЦИЯ * Лондон: "…"".
   const hasSlavicSecondScreening = title.match(
-    /Втора прожекция на "([^"]+)" /i,
+    /Втора прожекция(?: на|\s*\*\s*Лондон:) "([^"]+)" /i,
   );
   if (hasSlavicSecondScreening) {
     title = hasSlavicSecondScreening[1];
