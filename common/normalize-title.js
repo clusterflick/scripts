@@ -217,6 +217,7 @@ function normalizeTitle(title, options) {
       "KinoTage: $1",
     ],
     ["Reel Talk - ", "Reel Talk: "],
+    ["On Demand - ", "On Demand: "],
     ["Saturday Film Nights - ", "Saturday Film Nights: "],
     ["Average Rob -", "Average Rob:"],
     ["Roger Waters -", "Roger Waters:"],

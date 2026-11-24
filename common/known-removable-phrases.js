@@ -1219,6 +1219,7 @@ const knownRemovablePhrases = [
   "OffBeat:",
   "Off-Circuit Repeat",
   "Official Selection:",
+  "On Demand:",
   "Oscars Lunch:",
   // Ahead of "OUT:", which would otherwise take the end of "There Is A Light
   // That Never Goes Out" along with the colon.
