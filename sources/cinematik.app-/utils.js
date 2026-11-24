@@ -52,6 +52,12 @@ const getEventSlug = (event, origins) => {
 // what tells the page apart. What can is all of: the series is there, it no
 // longer lists this screening, and the date the screening's address ends in is
 // not in the future. Any other page without an Event still fails the retrieve.
+//
+// The redirect starts as the screening does, but the series goes on listing it
+// for a while after: at 18:04 on 24 November 2026 the 18:00 screenings at
+// Brynamman and the Alhambra redirected while still in `subEvent`, and
+// Abbeygate's failed that evening's retrieve. So a screening the series still
+// lists counts as passed too, once the start it lists it with has gone by.
 const BOOK_PATH_DATE = /-(\d{4}-\d{2}-\d{2})$/;
 
 const getPassedScreeningEventSlug = (
@@ -67,12 +73,14 @@ const getPassedScreeningEventSlug = (
   const date = pathname.match(BOOK_PATH_DATE)?.[1];
   if (!date || date > format(now, "yyyy-MM-dd")) return undefined;
 
-  const listed = (series.subEvent ?? []).some(
+  const listed = (series.subEvent ?? []).find(
     (subEvent) =>
       typeof subEvent.url === "string" &&
       new URL(subEvent.url).pathname === pathname,
   );
-  if (listed) return undefined;
+  if (listed && !(new Date(listed.startDate).getTime() <= now.getTime())) {
+    return undefined;
+  }
 
   const slug = getSlugFromEventUrl(series.url, origins);
   if (!slug) {

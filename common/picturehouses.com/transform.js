@@ -53,12 +53,14 @@ function getSynopsis(data) {
   return getText($(".synopsisDiv"));
 }
 
-// `SoldoutStatus` is a three-state flag. Picturehouse's own film page shows
-// "SELLING FAST" for 1 and "SOLD OUT" for 2, and the seat counts agree: 0 has
-// 25+ seats left, 1 has 1-24, 2 has none. The requested cinema's showings give
-// it as a string and every other cinema's as a number, so compare the value
-// rather than its truthiness. Only 2 is sold out; anything unlisted throws.
-const soldOutStatuses = { 0: false, 1: false, 2: true };
+// `SoldoutStatus` is a four-state flag. Picturehouse's own film page shows
+// "SELLING FAST" for 1, "LAST FEW" for 3 and "SOLD OUT" for 2, and the seat
+// counts agree: 0 has 25+ seats left, 1 has 5-24, 3 has 2-4, 2 has none. 3 was
+// first seen on 24 November 2026, and its page still links through to booking.
+// The requested cinema's showings give it as a string and every other cinema's
+// as a number, so compare the value rather than its truthiness. Only 2 is sold
+// out; anything unlisted throws.
+const soldOutStatuses = { 0: false, 1: false, 2: true, 3: false };
 
 function isSoldOut({ SoldoutStatus: soldOutStatus, SessionId: sessionId }) {
   const soldOut = soldOutStatuses[String(soldOutStatus)];
