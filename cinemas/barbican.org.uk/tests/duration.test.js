@@ -6,6 +6,11 @@ describe("convertDurationStringToMinutes", () => {
     expect(convertDurationStringToMinutes("")).toBeUndefined();
   });
 
+  it("returns undefined when the venue says the runtime is to be confirmed", () => {
+    expect(convertDurationStringToMinutes("TBC")).toBeUndefined();
+    expect(convertDurationStringToMinutes("TBA")).toBeUndefined();
+  });
+
   describe("hours and minutes", () => {
     it.each([
       ["1hr 33mins", 93],

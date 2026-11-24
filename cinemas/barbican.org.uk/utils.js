@@ -53,6 +53,10 @@ const convertDurationStringToMinutes = (duration) => {
     .replace("programme length:", "")
     .trim();
 
+  // The venue saying the runtime isn't known yet is a statement that there is
+  // no duration, not a format we fail to read.
+  if (/^tb[ca]$/.test(normalized)) return undefined;
+
   const hrsAndMins = normalized.match(
     /^(?:(\d+)\s*ho?u?r?s?[,\s]+)?(\d+)\s*mi?n?s?/,
   );
