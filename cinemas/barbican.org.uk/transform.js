@@ -95,9 +95,10 @@ function processListingPage(data) {
     url: $('link[rel="canonical"]').attr("href"),
     venue: getText($("#venue").parent()),
     overview: createOverview({
-      duration: summary.runtime
-        ? convertDurationStringToMinutes(summary.runtime)
-        : footnotes.duration || aboutDirectorDuration.duration,
+      duration:
+        convertDurationStringToMinutes(summary.runtime) ||
+        footnotes.duration ||
+        aboutDirectorDuration.duration,
       year: releaseYear || footnotes.year,
       directors:
         summary.director ||
