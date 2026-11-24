@@ -2121,6 +2121,9 @@ function normalizeTitle(title, options) {
     ["Sebastiane: the Reunion!", "Sebastiane"],
     ["Strange Case of Dr Jekyll and Mr Hyde", "Dr Jekyll and Mr Hyde"],
     ["Bohurupi - The Golden Daku", "Bohurupi: The Golden Daku"],
+    ["Mayan (Malayalam)", "Mayan - Chapter 1"],
+    ["Mayan - Chapter 1", "Mayan: Chapter 1"],
+    [/Snuff Bottle Connectio$/i, "Snuff Bottle Connection"],
     [
       "Army of Lovers (or Revolt of the Perverts)",
       "Army of Lovers or Revolt of the Perverts",

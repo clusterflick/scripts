@@ -473,6 +473,10 @@ const nonFilmEvents = [
   /^CLINT BOON - The Manchester Chronicles$/i,
   /^Stow-Ho House Presents A 4th Birthday Celebration$/i,
   /^Mistletoe & Vinyl - The Story of the Christmas No\. 1 with Marc Burrows$/i,
+  /^Pavel Doronin presents Genius Loci w\/ Oskar Jones \+ Liqvitsky$/i,
+  /^Fundraiser: Blair Jollands - Band Of Ghosts$/i,
+  /^Kris Kringle Members['’] Mingle$/i,
+  /^The Xmass Market by Mumble Forum$/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
