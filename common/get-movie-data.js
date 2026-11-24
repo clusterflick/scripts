@@ -91,6 +91,7 @@ const ignoredIds = [
   1800344, // Reactor -- https://www.themoviedb.org/movie/1800344-reactor
   1712985, // The Letter -- https://www.themoviedb.org/movie/1712985-the-letter
   394607, // Mayan -- https://www.themoviedb.org/movie/394607-mayan
+  1735311, // The Nutcracker -- https://www.themoviedb.org/movie/1735311
 ];
 
 /**
