@@ -15,6 +15,8 @@ const {
   isSoldOnCinematik,
   getEventSlug,
   getPassedScreeningEventSlug,
+  isHappenedScreeningPage,
+  showsOnlyFinishedScreenings,
 } = require("./utils");
 
 // A retrieve reads a page per screening, one after another - 315 of them when
@@ -153,6 +155,20 @@ function assertLocalTimeMatches(url, startDate, localTimeText) {
   }
 }
 
+// A booking page, or `null` for one whose event is over (see
+// isHappenedScreeningPage). A 410 isn't cached: it is rare, and the page that
+// tells it apart is only read here.
+async function fetchBookPage(url) {
+  try {
+    return await fetchPage(url);
+  } catch (error) {
+    if (error.status !== 410) throw error;
+    const html = await (await fetchWithRetry(url)).text();
+    if (isHappenedScreeningPage(url, html)) return null;
+    throw error;
+  }
+}
+
 function parseBookPage(url, html, origins) {
   const $ = cheerio.load(html);
   const jsonLd = getJsonLd($);
@@ -219,9 +235,12 @@ const SCREENING_SELECTOR = ".showtime-chip, .spec--open-screening-book-cta";
 function parseEventPage(url, html) {
   // Read only for events with a booking page, so it must show a screening - a
   // page that doesn't means the selector has gone stale, and the check that
-  // relies on it (assertEventsHaveBookPages) would pass whatever it saw.
-  assertSelector(html, SCREENING_SELECTOR, `No screenings shown on ${url}`);
+  // relies on it (assertEventsHaveBookPages) would pass whatever it saw. The
+  // one exception is a page whose list is full of screenings already over.
   const $ = cheerio.load(html);
+  if (!showsOnlyFinishedScreenings($)) {
+    assertSelector(html, SCREENING_SELECTOR, `No screenings shown on ${url}`);
+  }
   const [series] = getJsonLd($)
     .flat()
     .filter((data) => data["@type"] === "EventSeries");
@@ -288,7 +307,12 @@ async function retrieve() {
 
     const bookedSlugs = new Set();
     for (const url of bookUrls) {
-      const page = parseBookPage(url, await fetchPage(url), origins);
+      // Its event is over too, and gone from the site, so there is nothing to
+      // read and no event to mark as booked: assertEventsHaveBookPages finds
+      // nothing showing at the address the sitemap still lists.
+      const html = await fetchBookPage(url);
+      if (html === null) continue;
+      const page = parseBookPage(url, html, origins);
       bookedSlugs.add(page.eventSlug);
       if (page.past) continue;
 

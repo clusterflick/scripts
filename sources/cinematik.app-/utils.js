@@ -1,3 +1,4 @@
+const cheerio = require("cheerio");
 const { format } = require("date-fns");
 
 // The sites Cinematik's programmes run on - read from its Programmes menu on
@@ -92,8 +93,46 @@ const getPassedScreeningEventSlug = (
   return slug;
 };
 
+// Once the last of an event's screenings has started, the event page goes (it
+// redirects to the programme's home page) and its screenings' booking pages
+// answer 410 Gone with the notice a redirect would have carried as a flash:
+// "The screening for I See Buildings Fall Like Lightning (Relaxed Screenings)
+// has now happened", from every one of Escapes' relaxed screenings at 19:00 on
+// 24 November 2026, which the day's sitemap still listed. A 410 is read as that
+// only with the notice, and only for a date not in the future; anything else
+// still fails the retrieve.
+const HAPPENED_NOTICE = /\bThe screening for .+ has now happened\b/;
+
+const isHappenedScreeningPage = (url, html, now = new Date()) => {
+  const date = new URL(url).pathname.match(BOOK_PATH_DATE)?.[1];
+  if (!date || date > format(now, "yyyy-MM-dd")) return false;
+  const text = cheerio.load(html).root().text().replace(/\s+/g, " ");
+  return HAPPENED_NOTICE.test(text);
+};
+
+// An Escapes event page lists its first 40 screenings in start order, finished
+// ones included, each greyed out with "Closed" (or "Cancelled") where a
+// bookable one says "Book Now". So a run with more than 40 screenings stops
+// showing any bookable one once its first 40 have passed: I See Buildings Fall
+// Like Lightning's page did, at 19:00 on 24 November 2026, with 42 still to
+// come in its JSON-LD. That page is full rather than stale, and tells itself
+// apart by every row it lists being over.
+const FINISHED_STATUSES = new Set(["closed", "cancelled"]);
+
+const showsOnlyFinishedScreenings = ($) => {
+  const statuses = $(".info-row")
+    .map((_, row) => $(row).find(".uppercase").text().trim().toLowerCase())
+    .get();
+  return (
+    statuses.length > 0 &&
+    statuses.every((status) => FINISHED_STATUSES.has(status))
+  );
+};
+
 module.exports = {
   isSoldOnCinematik,
+  showsOnlyFinishedScreenings,
   getEventSlug,
   getPassedScreeningEventSlug,
+  isHappenedScreeningPage,
 };
