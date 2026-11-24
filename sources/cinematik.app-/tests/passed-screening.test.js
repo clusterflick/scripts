@@ -14,17 +14,24 @@ const EVENT_URL =
 // https://escapes.cinematik.app/book/i-see-buildings-fall-like-lightning-the-ystradgynlais-miners-welfare-and-community-hall-trust-limited-the-welfare-ystradgynlais-2026-11-23
 // redirected to on 23 November 2026, after that screening: The Welfare no
 // longer among its screenings, the evening's Curzon Oxford one still there.
-const series = (subEventPaths) => [
+// Each screening is a path, or [path, startDate] where the start matters.
+const series = (subEvents) => [
   [
     {
       "@context": "https://schema.org",
       "@type": "EventSeries",
       name: "I See Buildings Fall Like Lightning - 23–24 Nov 2026",
       url: EVENT_URL,
-      subEvent: subEventPaths.map((path) => ({
-        "@type": "Event",
-        url: `https://www.cinematik.app/book/i-see-buildings-fall-like-lightning-${path}`,
-      })),
+      subEvent: subEvents.map((subEvent) => {
+        const [path, startDate = "2026-11-23T19:30:00+00:00"] = [
+          subEvent,
+        ].flat();
+        return {
+          "@type": "Event",
+          url: `https://www.cinematik.app/book/i-see-buildings-fall-like-lightning-${path}`,
+          startDate,
+        };
+      }),
     },
   ],
 ];
@@ -46,6 +53,29 @@ describe("getPassedScreeningEventSlug", () => {
 
   it("recognises nothing while the series still lists the screening", () => {
     const jsonLd = series(["curzon-cinemas-limited-curzon-oxford-2026-11-23"]);
+    expect(
+      getPassedScreeningEventSlug(OXFORD, jsonLd, origins, onTheDay),
+    ).toBeUndefined();
+  });
+
+  // At 18:04 on 24 November 2026 the series still listed its 18:00
+  // screenings, whose booking pages already redirected to it.
+  it("reads the event when the series still lists a screening that has started", () => {
+    const jsonLd = series([
+      [
+        "curzon-cinemas-limited-curzon-oxford-2026-11-23",
+        "2026-11-23T17:00:00+00:00",
+      ],
+    ]);
+    expect(getPassedScreeningEventSlug(OXFORD, jsonLd, origins, onTheDay)).toBe(
+      "i-see-buildings-fall-like-lightning-2026-11-23-2026-11-24",
+    );
+  });
+
+  it("recognises nothing for a listed screening with no readable start", () => {
+    const jsonLd = series([
+      ["curzon-cinemas-limited-curzon-oxford-2026-11-23", "TBC"],
+    ]);
     expect(
       getPassedScreeningEventSlug(OXFORD, jsonLd, origins, onTheDay),
     ).toBeUndefined();

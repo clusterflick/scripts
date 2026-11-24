@@ -53,8 +53,9 @@ describe("Picturehouse transform sold out status", () => {
         showing("122686", "0"),
         showing("122687", "1"),
         showing("122688", "2"),
+        showing("122689", "3"),
       ),
-    ).resolves.toEqual([false, false, true]);
+    ).resolves.toEqual([false, false, true, false]);
   });
 
   it("reads the numeric statuses given to other cinemas", async () => {
@@ -63,13 +64,14 @@ describe("Picturehouse transform sold out status", () => {
         showing("122686", 0),
         showing("122687", 1),
         showing("122688", 2),
+        showing("122689", 3),
       ),
-    ).resolves.toEqual([false, false, true]);
+    ).resolves.toEqual([false, false, true, false]);
   });
 
   it("fails on a status it does not recognise", async () => {
-    await expect(getSoldOut(showing("122686", "3"))).rejects.toThrow(
-      'Unexpected SoldoutStatus "3" for session 122686',
+    await expect(getSoldOut(showing("122686", "4"))).rejects.toThrow(
+      'Unexpected SoldoutStatus "4" for session 122686',
     );
   });
 });
