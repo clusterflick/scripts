@@ -10,12 +10,19 @@ const { id, url } = require("./attributes");
 // plain fetch first and the session escalates to Camoufox when the real page
 // doesn't come back - see `common/camoufox-escalation.js`.
 //
-// The Search & Filter results container is on the listing whether or not
+// The Search & Filter query container is on the listing whether or not
 // anything is showing, and a challenge page can't carry it - so it is what
 // tells the real page apart, and what the browser waits for while the
 // challenge clears. The listing's own cards can't do that job, since a
 // listing with nothing on has none.
-const PAGE_SELECTOR = ".search-filter-results";
+//
+// On 25th November 2026 the site moved to Search & Filter 3, which renamed
+// the container from `.search-filter-results` and the filter parameter from
+// `_sft_event_type` (see `attributes.js`). The old parameter is ignored rather
+// than refused, so the listing then returned every kind of event - only the
+// missing container showed anything had changed. `.search-filter-query-posts`
+// is named in the plugin's script config but isn't in the markup.
+const PAGE_SELECTOR = ".search-filter-query";
 
 // The "Back to listings" link closes the content column of every event page,
 // so it is only there once the page has been parsed past the description the

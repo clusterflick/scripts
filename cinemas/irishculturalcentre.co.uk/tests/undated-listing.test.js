@@ -12,7 +12,7 @@ const card = (slug, title, date, time) =>
   </div>`;
 
 const listing = (...cards) =>
-  `<div class="search-filter-results">${cards.join("")}</div>`;
+  `<div class="search-filter-query">${cards.join("")}</div>`;
 
 const eventPage =
   '<div><h1>Title</h1><p>Description</p><a class="back-link">Back</a></div>';
