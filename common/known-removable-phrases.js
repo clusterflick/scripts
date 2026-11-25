@@ -79,6 +79,7 @@ const knownRemovablePhrases = [
   "at the Horse Hospital",
   "at The Moniker",
   "at The Haggerston",
+  "Screening- Havering Council SEND Cinematic Network Event",
   "at The Divine",
   "at Odeon Luxe and Dine",
   "at Rio Cinema!",

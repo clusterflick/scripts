@@ -477,6 +477,11 @@ const nonFilmEvents = [
   /^Fundraiser: Blair Jollands - Band Of Ghosts$/i,
   /^Kris Kringle Members['’] Mingle$/i,
   /^The Xmass Market by Mumble Forum$/i,
+  /^PAUL SMITH PRE-DRINKS$/i,
+  // Billed with the date it falls on ("[14th March]", "(October)").
+  /^Cheese & Port Afternoon\b/i,
+  /^Kids Christmas Party With Crazy Legs$/i,
+  /^UNHCR x FIF: Advancing Financial Inclusion for Forcibly Displaced People$/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
