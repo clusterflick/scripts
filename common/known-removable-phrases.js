@@ -1585,6 +1585,7 @@ const knownRemovablePhrases = [
   "with Peter Suschitzky",
   // The cause the screening is held for, billed after the film's name.
   "Save Soil",
+  "Charity Screening for Battersea Cats and Dogs Home",
   // Film clubs on Luma bill themselves ahead of the film they are showing,
   // and each spells its own name its own way.
   "AI Movie Club x",
