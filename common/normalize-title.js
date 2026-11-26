@@ -1168,6 +1168,7 @@ function normalizeTitle(title, options) {
     ["Homage |", "Homage: "],
     [/^\s*Twin Cheeks\s*$/i, "Twin Cheeks: Who Killed The Homecoming King?"],
     ["FRANCESCA WOODMAN", "The Woodmans"],
+    [/^Screening\s+\|\s+/i, "Screening: "],
     [/^Screening(?!(?:\s+of\b|\s*\+|\s*&))(?=\s)/i, "Screening of "],
     ["Traitors - Live Final", "Traitors Finale"],
     ["TRAITORS 2026 FINAL SCREENING PARTY", "Traitors Finale"],
