@@ -2245,11 +2245,18 @@ function normalizeTitle(title, options) {
     [/^LONDON:\s+/i, ""],
     ["Straight Cirle", "Straight Circle"],
     [
-      /Spider-Man:?\s+["'(]Brand New["')]\s+Brand New Day/i,
+      /Spider-Man:?\s+["'(“‘]Brand New["')”’]\s+Brand New Day/i,
       "Spider-Man: Brand New Day",
     ],
     ["FILIPI�ANA", "Filipiñana"],
     ["DIAL CODE: SANTA CLAUSE", "Dial Code: Santa Claus"],
+    ["GIANT – The Play", "Giant"],
+    [/Maggie O'Farrell:\s+Broadcast/i, "Maggie O'Farrell in conversation"],
+    [
+      "North Kensington Library Film Club: Holocaust Memorial Day",
+      "Munyurangabo (2007)",
+    ],
+    ["Santiago: The Camino Therapy", "Compostelle"],
   ];
 
   corrections.forEach(([phrase, replacement]) => {
