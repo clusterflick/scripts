@@ -595,10 +595,11 @@ function normalizeTitle(title, options) {
     // subtitle, spelled with brackets or a colon, with or without a space
     // around the dash, and with the number spelled out as a word, so the same
     // film arrives under a name per spelling. One pattern rather than a string
-    // per spelling, and here rather than in the phrase list, which the
-    // separator rule beats to "De Gaulle: Part 2".
+    // per spelling (Roman numerals too, after a dash: "De Gaulle - Part I:"),
+    // and here rather than in the phrase list, which the separator rule beats
+    // to "De Gaulle: Part 2".
     [
-      /^de gaulle\s*:?\s*\(?part (?:\d+|one|two)\)?\s*[-–:]?\s*/i,
+      /^de gaulle\s*[-–:]?\s*\(?part (?:\d+|one|two|ii?\b)\)?\s*[-–:]?\s*/i,
       "De Gaulle: ",
     ],
     ["Mulholland Dr.", "Mulholland Drive"], // Otherwise we match the TV pilot of the same name

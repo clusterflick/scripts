@@ -40,6 +40,7 @@ const nonFilmEvents = [
   /Raver Tots Wembley/i,
   /Photography Workshop/i,
   /Adtech Networking/i,
+  /Arts and Culture Networking/i,
   /Entrepreneurs Meetup/i,
   // The matrimonial series runs under a different community each time
   // ("BENGALI MUSLIM MARRIAGE EVENT", "BLACK & AFRICAN MUSLIM MARRIAGE"),
