@@ -2126,6 +2126,10 @@ function normalizeTitle(title, options) {
     ["Mayan - Chapter 1", "Mayan: Chapter 1"],
     [/Snuff Bottle Connectio$/i, "Snuff Bottle Connection"],
     [
+      /Double Bill: Snuff Bottle Connection$/i,
+      "Double Bill: Snuff Bottle Connection & The Hot, The Cool and The Vicious",
+    ],
+    [
       "Army of Lovers (or Revolt of the Perverts)",
       "Army of Lovers or Revolt of the Perverts",
     ],
