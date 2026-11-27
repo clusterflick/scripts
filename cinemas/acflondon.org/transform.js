@@ -48,9 +48,26 @@ async function transform({ moviePages }, sourcedEvents) {
   for (const [moviePageUrl, moviePage] of Object.entries(moviePages)) {
     const $ = cheerio.load(moviePage);
 
-    // Skip events not at ACF London. A page without a location at all can't
-    // be told apart from one at ACF, so that is a changed page, not a skip.
-    const locationBlock = $(".location-block");
+    // Skip events not at ACF London. The location sits in the booking block,
+    // beside the "Book Tickets" link. A page without that block at all is a
+    // changed page, not a skip.
+    const bookingBlock = $(".event-booking");
+    if (bookingBlock.length === 0) {
+      throw new Error(
+        `No booking block found on ${moviePageUrl} - the page structure may have changed`,
+      );
+    }
+    // A booking block with nothing in it - no location and nothing to book -
+    // is how ACF lists a partner event it isn't hosting ("Ice Station 2026",
+    // November 2026, held at the RGS). Nothing places it at ACF, so it is
+    // skipped rather than listed there.
+    const locationBlock = bookingBlock.find(".location-block");
+    if (locationBlock.length === 0 && getText(bookingBlock) === "") {
+      console.log(
+        ` - Skipped (no location or booking on the page): ${moviePageUrl}`,
+      );
+      continue;
+    }
     if (locationBlock.length === 0) {
       throw new Error(
         `No location found on ${moviePageUrl} - the page structure may have changed`,
