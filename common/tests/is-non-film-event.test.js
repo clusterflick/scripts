@@ -256,6 +256,7 @@ describe("isNonFilmEvent", () => {
     ["Winter Solstice Singing Party"],
     ["CLINT BOON - The Manchester Chronicles"],
     ["Stow-Ho House Presents A 4th Birthday Celebration"],
+    ["Jean-Michel Jarre: Machines"],
   ])("flags '%s' as a non-film event", (title) => {
     expect(isNonFilmEvent({ title })).toBe(true);
   });

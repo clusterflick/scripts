@@ -484,6 +484,7 @@ const nonFilmEvents = [
   /^Kids Christmas Party With Crazy Legs$/i,
   /^UNHCR x FIF: Advancing Financial Inclusion for Forcibly Displaced People$/i,
   /^BIG FAT QUIZBOX$/i,
+  /^Jean-Michel Jarre: Machines$/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
