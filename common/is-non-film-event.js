@@ -485,6 +485,7 @@ const nonFilmEvents = [
   /^UNHCR x FIF: Advancing Financial Inclusion for Forcibly Displaced People$/i,
   /^BIG FAT QUIZBOX$/i,
   /^Jean-Michel Jarre: Machines$/i,
+  /^Fried Chicken, Fizz & Film$/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
