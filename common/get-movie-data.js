@@ -2,6 +2,7 @@ const { MovieDb } = require("moviedb-promise");
 const slugify = require("slugify");
 const normalizeTitle = require("./normalize-title");
 const normalizeName = require("./normalize-name");
+const isBilledAsShortFilm = require("./is-billed-as-short-film");
 const {
   basicNormalize,
   compareAsSimilar,
@@ -505,7 +506,7 @@ async function getBestMatch(titleQuery, rawResults = [], movie) {
   return undefined;
 }
 
-const tryFindingMatchUsingLlm = async (movie) => {
+const tryFindingMatchUsingLlm = async (movie, billedAsShort) => {
   const result = await runLlmFunction(() => askLlm(movie));
   if (result === null) return null;
 
@@ -536,6 +537,9 @@ const tryFindingMatchUsingLlm = async (movie) => {
       movie: updatedMovie,
       year: matches[0].year,
       isUsingLlmData: true,
+      // The LLM's title is the bare name, so the listing's own billing is
+      // carried across rather than read again from it.
+      billedAsShort,
     });
   }
 
@@ -627,12 +631,50 @@ async function withoutContradictedDirectors(results, movie, normalizedTitle) {
   return kept;
 }
 
+// The categoriser's line between a short and a feature.
+const shortFilmMaxRuntimeMins = 40;
+
+// A listing billed as a short film is never a feature - see
+// is-billed-as-short-film.js for the listing this was written for. So a
+// same-titled candidate TheMovieDB says runs 40 minutes or more is removed
+// before getBestMatch or either reviewer sees it. Narrowly, as with
+// withoutContradictedDirectors:
+//  - only a candidate sharing the listing's title. Any other has to be chosen
+//    on crew or by a reviewer, and both are told more than the title.
+//  - only when TheMovieDB gives a runtime. No runtime is no evidence either
+//    way, and it stays.
+async function withoutFeatureLength(results, movie, normalizedTitle) {
+  const kept = [];
+  for (const result of results) {
+    if (matchesMovieTitle(normalizedTitle)(result)) {
+      let movieInfo;
+      try {
+        movieInfo = await getMovieInfoAndCacheResults(result);
+      } catch (error) {
+        // As in matchesExpectedCastCrew: a removed entry has no runtime to
+        // rule it out on, anything else is an outage and must not be swallowed.
+        if (!isMissingMovieDbEntry(error)) throw error;
+      }
+      if (movieInfo?.runtime >= shortFilmMaxRuntimeMins) {
+        // Loud for the same reason a contradicted director is.
+        console.log(
+          ` - Ruling out ${result.id} "${result.title}" for "${movie.title}": billed as a short film, but it runs ${movieInfo.runtime} minutes`,
+        );
+        continue;
+      }
+    }
+    kept.push(result);
+  }
+  return kept;
+}
+
 const searchForBestMatch = async ({
   normalizedTitle,
   movie,
   year: yearValue,
   isUsingLlmData = false,
   ruleOutContradictedDirectors = false,
+  billedAsShort = isBilledAsShortFilm(movie.title, normalizedTitle),
 }) => {
   // The candidates a reviewer may choose from. Filtered only when the caller
   // vouches that the listing's director is programme billing rather than a
@@ -641,6 +683,20 @@ const searchForBestMatch = async ({
     ruleOutContradictedDirectors
       ? withoutContradictedDirectors(results, movie, normalizedTitle)
       : results;
+
+  // Every title search, with a short's feature-length namesakes removed.
+  const search = async (cacheKey, payload) => {
+    const response = await searchMovieAndCacheResults(cacheKey, payload);
+    if (!billedAsShort) return response;
+    return {
+      ...response,
+      results: await withoutFeatureLength(
+        response.results,
+        movie,
+        normalizedTitle,
+      ),
+    };
+  };
 
   const slug = getSearchSlug(normalizedTitle);
   const matchByDirector = await findMovieByDirector(normalizedTitle, movie);
@@ -654,7 +710,7 @@ const searchForBestMatch = async ({
 
   // If there's no year provided, just search for the title
   if (!yearValue) {
-    const searchTitle = await searchMovieAndCacheResults(
+    const searchTitle = await search(
       `moviedb-search-title-${cacheKeySuffix}`,
       getPayload(),
     );
@@ -666,7 +722,7 @@ const searchForBestMatch = async ({
 
     if (bestTitleMatch) return bestTitleMatch;
 
-    const searchTitleIncludingAdult = await searchMovieAndCacheResults(
+    const searchTitleIncludingAdult = await search(
       `moviedb-search-title-including-adult-${cacheKeySuffix}`,
       getPayload({ include_adult: true }),
     );
@@ -692,7 +748,7 @@ const searchForBestMatch = async ({
         if (bestLlmMatchFromResults) return bestLlmMatchFromResults;
       }
 
-      const bestLlmMatch = await tryFindingMatchUsingLlm(movie);
+      const bestLlmMatch = await tryFindingMatchUsingLlm(movie, billedAsShort);
       if (bestLlmMatch) return bestLlmMatch;
     }
 
@@ -707,7 +763,7 @@ const searchForBestMatch = async ({
   const year = parseInt(yearValue, 10);
 
   // Try to find a movie released on the year provided
-  const searchPrimaryYear = await searchMovieAndCacheResults(
+  const searchPrimaryYear = await search(
     `moviedb-search-primary-year-${cacheKeySuffix}`,
     getPayload({ primary_release_year: year }),
   );
@@ -724,7 +780,7 @@ const searchForBestMatch = async ({
     bestMatchPrimaryYear &&
     bestMatchPrimaryYear.title.toLowerCase().startsWith("making ")
   ) {
-    const searchPreviousYear = await searchMovieAndCacheResults(
+    const searchPreviousYear = await search(
       `moviedb-search-previous-year-${cacheKeySuffix}`,
       getPayload({ primary_release_year: year - 1 }),
     );
@@ -741,7 +797,7 @@ const searchForBestMatch = async ({
 
     // If we don't have a match, check adult results
   } else {
-    const searchPrimaryYearIncludingAdult = await searchMovieAndCacheResults(
+    const searchPrimaryYearIncludingAdult = await search(
       `moviedb-search-primary-year-including-adult-${cacheKeySuffix}`,
       getPayload({ primary_release_year: year, include_adult: true }),
     );
@@ -756,7 +812,7 @@ const searchForBestMatch = async ({
   }
 
   // Try to find a movie with some release related to that year
-  const seachRelatedYear = await searchMovieAndCacheResults(
+  const seachRelatedYear = await search(
     `moviedb-search-related-year-${cacheKeySuffix}`,
     getPayload({ year }),
   );
@@ -769,7 +825,7 @@ const searchForBestMatch = async ({
 
   // Sometimes the movie listing has the year off by 1, so try to find a movie
   // with some release related to the next year
-  const searchNextYear = await searchMovieAndCacheResults(
+  const searchNextYear = await search(
     `moviedb-search-next-year-${cacheKeySuffix}`,
     getPayload({ year: year + 1 }),
   );
@@ -783,7 +839,7 @@ const searchForBestMatch = async ({
   // If we have crew information for the movie, maybe the year is wrong so let's
   // try matching without it
   if (hasCrewFor(movie, normalizedTitle)) {
-    const searchWithoutYear = await searchMovieAndCacheResults(
+    const searchWithoutYear = await search(
       `moviedb-search-without-year-${cacheKeySuffix}`,
       getPayload(),
     );
@@ -809,7 +865,7 @@ const searchForBestMatch = async ({
       if (bestLlmMatchFromResults) return bestLlmMatchFromResults;
     }
 
-    const bestLlmMatch = await tryFindingMatchUsingLlm(movie);
+    const bestLlmMatch = await tryFindingMatchUsingLlm(movie, billedAsShort);
     if (bestLlmMatch) return bestLlmMatch;
   }
 
