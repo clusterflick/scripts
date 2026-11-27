@@ -31,6 +31,12 @@ describe("isBilledAsShortFilm", () => {
     ["BFI Melodrama “2046” plus Short Film “I Am Alive”"],
     ["#ClimateScam with short film Climate Anxiety"],
     ["Bend It Like Beckham + Short Film"],
+    ["From Hilde, With Love - preceded by a short film"],
+    ["From Hilde, With Love, followed by Kate Bush's short film"],
+    ["From Hilde, With Love alongside a new short film"],
+    ["From Hilde, With Love (with short film)"],
+    ["From Hilde, With Love and a Short Film"],
+    ["From Hilde, With Love & Short Film"],
     // The marker names the event, not the film
     [
       "Tibet Film Festival London Short Film Competition and UK Premiere of My Sweet Pala",

@@ -22,11 +22,19 @@
 // Each exclusion leaves a listing matched as it is today; a wrong inclusion
 // would rule out a correct match, so the exclusions are allowed to run wide.
 const MARKER = /short[\s-]*films?/i;
-// A "+" or "plus" anywhere before the marker ("+ Kate Bush Short Film"), but
-// "with" only directly before it - "Burnt Toast with Marmite: Short Film
-// Premiere" is the short's own name.
-const MARKER_AS_EXTRA =
-  /(\+|\bplus\b)[^+]*?short[\s-]*films?|\bwith\s+(an?\s+)?short[\s-]*films?/i;
+// The guard can only go wrong where the title normalises to the feature's name
+// while the marker is about something shown alongside it, so any wording that
+// attaches a short to the bill counts. A "+", "plus" or "preceded by" anywhere
+// before the marker ("+ Kate Bush Short Film", "preceded by Jo's short film"),
+// but "with", "and" and "&" only directly before it - "Burnt Toast with
+// Marmite: Short Film Premiere" is the short's own name.
+const MARKER_AS_EXTRA = new RegExp(
+  [
+    String.raw`(\+|\bplus\b|\b(preceded|followed|accompanied|supported)\s+by\b|\balongside\b|\bpaired\s+with\b)[^+]*?short[\s-]*films?`,
+    String.raw`(\bwith|\band|&)\s+(an?\s+|the\s+)?short[\s-]*films?`,
+  ].join("|"),
+  "i",
+);
 const MARKER_AS_EVENT_NAME = /short[\s-]*films?\s+(festival|competition)/i;
 
 /**
