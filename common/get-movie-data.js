@@ -372,6 +372,32 @@ const matchesMovieTitle =
 // from movieInfo.
 const isReleasedMovie = ({ release_date: date }) => !!date;
 
+// When a search leaves one candidate, its title alone was being taken as the
+// match unless the listing's own director or cast fields named someone. Names
+// pulled from the description (`matchingHints.crew`) were checked only once
+// there were two or three candidates. So ArtHouse Crouch End's "Saddled - Short
+// Film - UK Première", "the first short film by Ruben Giovannoni", was matched
+// to Brian Kamerer's 2023 feature of the same name: the only "Saddled" on
+// TheMovieDB, and nothing to do with it.
+//
+// A lone candidate whose credits name none of the hinted people is not taken
+// on its title. It is not ruled out either - the hints are any names in the
+// description, a guest or a producer as readily as a director - so the search
+// carries on as it does for any other unmatched listing, and a reviewer, which
+// reads the description, can still choose it.
+async function takeOnlyResultIfCrewMatches(result, movie, titleQuery) {
+  if (await matchesExpectedCastCrew(result, movie)) return result;
+
+  if (!hasCrewFor(movie, titleQuery) && hasCrewHintsFor(movie)) {
+    // Loud, because it changes what a lone title match does, and anyone asking
+    // why a listing was left to the reviewer needs to be able to see it.
+    console.log(
+      ` - Not taking ${result.id} "${result.title}" for "${movie.title}" on its title alone: its credits name none of ${movie.matchingHints.crew.join(", ")}`,
+    );
+  }
+  return undefined;
+}
+
 async function getBestMatch(titleQuery, rawResults = [], movie) {
   if (rawResults.length === 0) return undefined;
 
@@ -384,12 +410,15 @@ async function getBestMatch(titleQuery, rawResults = [], movie) {
   if (resultsWithReleaseDate.length === 1) {
     const result = resultsWithReleaseDate[0];
     // ... and there's no crew info, pick the result if it matches the title
-    if (!hasCrewForMovie && matchesMovieTitle(titleQuery)(result)) {
+    if (
+      !hasCrewForMovie &&
+      !hasCrewHintsForMovie &&
+      matchesMovieTitle(titleQuery)(result)
+    ) {
       return result;
     }
     // ... and there's crew info, use it to match the result
-    const hasCastCrewMatch = await matchesExpectedCastCrew(result, movie);
-    return hasCastCrewMatch ? result : undefined;
+    return await takeOnlyResultIfCrewMatches(result, movie, titleQuery);
   }
 
   // If there's only a few results remaining ...
@@ -417,10 +446,9 @@ async function getBestMatch(titleQuery, rawResults = [], movie) {
   if (resultsWithSameTitle.length === 1) {
     const result = resultsWithSameTitle[0];
     // ... and there's no crew info, pick the result
-    if (!hasCrewForMovie) return result;
+    if (!hasCrewForMovie && !hasCrewHintsForMovie) return result;
     // ... and there's crew info, use it to match the result
-    const hasCastCrewMatch = await matchesExpectedCastCrew(result, movie);
-    return hasCastCrewMatch ? result : undefined;
+    return await takeOnlyResultIfCrewMatches(result, movie, titleQuery);
   }
 
   // As we still have more than 1 result and there's crew info, use it to match
