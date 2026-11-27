@@ -573,6 +573,7 @@ used in two ways:
 | tickettailor.com               | Playwright per-venue-slug pages           | Hardcoded venue slugs list                                             |
 | tufnellparkfilmclub.com        | Single HTML page                          | Squarespace event list, Cheerio scraping                               |
 | wegottickets.com               | Session-backed search + detail pages      | POST search held against a PHP session cookie; film and pop-up genres  |
+| wix.com                        | Embedded JSON (`wix-warmup-data`) + pages | Per-site listing pages; description from each event page, not listing  |
 
 ---
 
