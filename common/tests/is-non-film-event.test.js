@@ -60,6 +60,7 @@ describe("isNonFilmEvent", () => {
     ["Tate Modern: Official Discovery Tour"],
     ["Advanced Photography Workshop + Photoshoot | London"],
     ["AdTech Networking Social for CEOs & Entrepreneurs Meetup"],
+    ["Arts and Culture Networking (RSA London | FREE or DONATE"],
     ["BENGALI MUSLIM MARRIAGE EVENT | 1-to-1 Single LONDON Meetup | 5th Sept"],
     [
       "BLACK & AFRICAN MUSLIM MARRIAGE | 1-to-1 Single LONDON Meetup | 5th Sept",
