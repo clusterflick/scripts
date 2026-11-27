@@ -1561,6 +1561,12 @@ function normalizeTitle(title, options) {
       /\bThe Magic of It All\s*-\s*The Story of Strawbs\b/i,
       "The Magic of It All: The Story of Strawbs",
     ],
+    // The " - " would otherwise be read as a separator and cut the session,
+    // grouping each night's different programme of shorts into one listing
+    [
+      /^Super Shorts (London|New York|Los Angeles)\s*-\s*(?=Session\b)/i,
+      "Super Shorts $1: ",
+    ],
     // The billing carries the title of another film, which would otherwise stay
     // on the key
     [/\bRosenthal: The Great Showman\b/i, "Rosenthal"],
