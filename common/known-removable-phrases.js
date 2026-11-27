@@ -1432,6 +1432,7 @@ const knownRemovablePhrases = [
   "SinoUK:",
   "Soundtracking:",
   "Spielberg at 80:",
+  "Maida Vale at 15:",
   "Spike Lee's",
   "Spotlight:",
   "St Patrick's Day:",

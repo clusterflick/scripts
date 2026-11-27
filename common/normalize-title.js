@@ -1139,6 +1139,19 @@ function normalizeTitle(title, options) {
     // ("November 19th- Love Actually"), so match up to the first one however
     // it sits.
     [/^\d+ (?:sofas?|chairs?),? \d+ persons?\b[^-–—]*[-–—]\s*/i, ""],
+    // The same venue bills its champagne night with the date on the front and
+    // the evening after the film, unseparated ("10th December , The Holiday
+    // Champagne Evening"), so neither the date nor the add-on is read off.
+    // Put it in the "Film - Champagne Evening" shape the dash rule reads.
+    [
+      /^\d{1,2}(?:st|nd|rd|th)\s+[a-z]+\s*,\s*(.+?)\s+Champagne Evening$/i,
+      "$1 - Champagne Evening",
+    ],
+    // The Conrad season credits each film after its title ("Lord Jim, reż. L.
+    // Adamik, 2002, Polska"). Where an English title follows a slash the
+    // separator rule drops the credit with it; without one it survives as part
+    // of the title. Keep the year, which tells this Lord Jim from the 1965 one.
+    [/,\s*reż\.\s*[^,]+,\s*(\d{4}),\s*[\p{L} ]+$/iu, " ($1)"],
     [/scre(e|a)(n|m) unseen/i, "mystery movie"],
     [
       /(Orange Box )?Secret Film Screenings?(:? Summer Series)?/i,
@@ -1394,6 +1407,7 @@ function normalizeTitle(title, options) {
     ["CARNIVAL OF BLOOD + ", "CARNIVAL OF BLOOD & "],
     ["The Room + ", "The Room & "],
     ["The Mystery of Chess Boxing + ", "The Mystery of Chess Boxing & "],
+    ["Snuff Bottle Connection + ", "Snuff Bottle Connection & "],
     ["Hitman In The Hand Of Buddha + ", "Hitman In The Hand Of Buddha & "],
     ["Just Drifting + ", "Just Drifting & "],
     ["with Greg Sestero in Audience + ", "with Greg Sestero in Audience & "],
