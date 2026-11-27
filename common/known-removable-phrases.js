@@ -1229,12 +1229,9 @@ const knownRemovablePhrases = [
   "Official Selection:",
   "On Demand:",
   "Oscars Lunch:",
-  // Ahead of "OUT:", which would otherwise take the end of "There Is A Light
-  // That Never Goes Out" along with the colon.
   ": The Lost Film of the UK AIDS Memorial Quilt at Hyde Park, 1994",
   "OUT at Clapham:",
   "OUT @ Clapham:",
-  "OUT:",
   "OAC:",
   "OCT 7TH FILMS:",
   "OFN: ",
@@ -1801,6 +1798,8 @@ const knownRemovablePhrases = [
   "IWD Film Screening",
   "' Short Film Screening",
   "Short Film Screenings",
+  // Ahead of "Short Film Screening", which would leave "a curated" behind.
+  "A Curated Short Film Screening",
   "Short Film Screening",
   "Bloomsday Film Screening",
   // Ahead of "Film Screening", which would otherwise leave "Christmas with Aml
@@ -1865,6 +1864,8 @@ const knownRemovablePhrases = [
   "the premiere",
   "MINI MORNING MOVIE PREMIERE",
   "Movie Premiere",
+  // Ahead of "Short Film Premiere", which would leave "uk" behind.
+  "UK Short Film Premiere",
   "Short Film Premiere",
   "International Film Premiere",
   "Film Premiere",

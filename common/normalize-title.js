@@ -332,6 +332,10 @@ function normalizeTitle(title, options) {
       "People's Emergency Briefing Film Screening",
       "People's Emergency Briefing Film",
     ],
+    // The awareness week is billed after the film ("UNFOLD Short Film
+    // Screening - Mental Health Awareness Week"), so it comes off before the
+    // dash below is read as ending a label and the strand kept as the title.
+    [/\s+-\s+Mental Health Awareness Week$/i, ""],
     ["Film Screening - ", "Film Screening: "],
     ["Limited Run - ", "Limited Run: "],
     ["Community Cinema Screening - ", "Community Cinema Screening: "],
@@ -862,7 +866,15 @@ function normalizeTitle(title, options) {
     ["Sapphic Cinema - ", "Sapphic Cinema: "],
     ["Pride Special - ", "Pride Special: "],
     ["Cinema Club - ", "Cinema Club: "],
+    // The film is "Stories of Hope", screened in sessions billed after the
+    // colon ("An Afternoon Suicide Prevention Short Film Premiere", "London
+    // Borough of Havering ... - Evening session"), so each session would
+    // otherwise group as a film of its own.
+    [/^Stories of Hope:.*$/i, "Stories of Hope"],
     ["Suicide Prevention Short Film Premiere", "Suicide Prevention"],
+    // The billing leads and the film follows, with or without a colon - only
+    // the colon spelling reached the phrase list's "Discussion:".
+    [/^Short Film Premiere (?:&|and) Discussion:?\s*/i, ""],
     ["Film Premiere - ", "Film Premiere: "],
     // Anchored, because a premiere billed after the title ("TURN IT DOWN —
     // World Premiere - An absurd neighbour story") is followed by a tagline.
@@ -2610,6 +2622,14 @@ function normalizeTitle(title, options) {
   // Rocky Horror Picture Show"). Anchored rather than a phrase-list entry,
   // because "Nirvana: Live! Tonight! Sold Out!!" is a film's own title.
   title = title.replace(/^sold out!\s*/i, "");
+
+  // The LGBTQ+ strand leads the title with "OUT:" - on its own or after the
+  // dog-friendly billing ("Dog-Friendly Screening-OUT: The Summer With
+  // Carmen"). Anchored rather than a phrase-list entry, because a title can
+  // end its first part on the word: "You Fuckers Figure It Out: A Jason Molina
+  // Story", "7 Miles Out: Journey to The Hacienda", "Inside Out: A Curated
+  // Short Film Screening".
+  title = title.replace(/(?:^|(?<=-))out:\s*/i, "");
 
   knownRemovablePhrases.forEach((phrase) => {
     title = title.replace(phrase.toLowerCase(), "");
