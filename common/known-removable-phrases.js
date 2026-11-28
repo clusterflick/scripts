@@ -2037,6 +2037,7 @@ const knownRemovablePhrases = [
   "RAYE:",
   "Prison as a tool of empire:",
   "The Sound Mirror Symposium:",
+  "the Afghan Musical Film",
 ];
 
 module.exports = knownRemovablePhrases;

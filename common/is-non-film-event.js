@@ -487,6 +487,9 @@ const nonFilmEvents = [
   /^Jean-Michel Jarre: Machines$/i,
   // Matched after basicNormalize, which takes the comma out.
   /^Fried Chicken,? Fizz & Film$/i,
+  /^Merse: Chapter & Verse$/i,
+  /^✨?\s*2027 NEW YEAR DEBUT CONCERT by Cadenza LDN Music$/i,
+  /^LUNGSchoir presents 'A Starry Night'/i,
 ];
 
 const isNonFilmEvent = ({ title }) =>
