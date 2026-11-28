@@ -2038,7 +2038,6 @@ const knownRemovablePhrases = [
   "Prison as a tool of empire:",
   "The Sound Mirror Symposium:",
   "the Afghan Musical Film",
-  "reż. R. Brooks, 1965, UK, USA",
 ];
 
 module.exports = knownRemovablePhrases;

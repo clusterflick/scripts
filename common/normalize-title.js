@@ -1151,7 +1151,8 @@ function normalizeTitle(title, options) {
     // Adamik, 2002, Polska"). Where an English title follows a slash the
     // separator rule drops the credit with it; without one it survives as part
     // of the title. Keep the year, which tells this Lord Jim from the 1965 one.
-    [/,\s*reż\.\s*[^,]+,\s*(\d{4}),\s*[\p{L} ]+$/iu, " ($1)"],
+    // A co-production lists each country, comma-separated ("1965, UK, USA").
+    [/,\s*reż\.\s*[^,]+,\s*(\d{4}),\s*[\p{L} ]+(?:,\s*[\p{L} ]+)*$/iu, " ($1)"],
     [/scre(e|a)(n|m) unseen/i, "mystery movie"],
     [
       /(Orange Box )?Secret Film Screenings?(:? Summer Series)?/i,
